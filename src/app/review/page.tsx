@@ -1,19 +1,36 @@
 "use client";
 
-// ponytail: cohesive review hub with 4 decks and sm-2 grading
+// ponytail: cohesive multi-modal review hub with 4 decks, selectable review styles, and unified SM-2 grading
 
-import React, { useState, useEffect, useRef } from "react";
-import { RotateCcw, Flame, CheckCircle2, Clock, Zap, Layers, ChevronRight, Check } from "lucide-react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import {
+  RotateCcw,
+  Flame,
+  CheckCircle2,
+  Clock,
+  Layers,
+  Sparkles,
+  Check,
+  X,
+  RefreshCw,
+  HelpCircle,
+} from "lucide-react";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
 import { useAppStore } from "@/lib/store";
 import { getDueCards, getWeakestCards, type ReviewGrade } from "@/lib/srs";
+import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
 import compendium from "@/data/compendium.json";
-import type { CompendiumData, SRSCard, WordEntity } from "@/lib/types";
+import type { CompendiumData, ReviewMode, SRSCard, WordEntity } from "@/lib/types";
 
 const data = compendium as unknown as CompendiumData;
 
 type DeckType = "due" | "shift" | "weakest" | "recent";
+
+interface PendingDeckStart {
+  deck: DeckType;
+  customCards?: SRSCard[];
+}
 
 export default function ReviewPage() {
   const [activeDeck, setActiveDeck] = useState<DeckType | null>(null);
@@ -21,7 +38,21 @@ export default function ReviewPage() {
   const [sessionCards, setSessionCards] = useState<SRSCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
+
+  // Review Style Mode State
+  const preferredReviewMode = useAppStore((s) => s.preferredReviewMode);
+  const setPreferredReviewMode = useAppStore((s) => s.setPreferredReviewMode);
+  const [reviewMode, setReviewMode] = useState<ReviewMode>(preferredReviewMode || "flashcard");
+  const [isModeSelectorOpen, setIsModeSelectorOpen] = useState(false);
+  const [pendingDeck, setPendingDeck] = useState<PendingDeckStart | null>(null);
+  const [rememberPreference, setRememberPreference] = useState(true);
+
+  // Mode-Specific Interactive State
   const [inputGuess, setInputGuess] = useState("");
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedTiles, setSelectedTiles] = useState<string[]>([]);
+  const [availableTiles, setAvailableTiles] = useState<string[]>([]);
+  const [currentAutoGrade, setCurrentAutoGrade] = useState<ReviewGrade | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -32,12 +63,37 @@ export default function ReviewPage() {
   const dueCards = getDueCards(srsCards);
   const weakestCards = getWeakestCards(srsCards);
 
-  // Deck selector handlers
-  const startDeck = (deck: DeckType, customCards?: SRSCard[]) => {
+  // Sync preferred review mode from store when hydrated
+  useEffect(() => {
+    if (preferredReviewMode) {
+      setReviewMode(preferredReviewMode);
+    }
+  }, [preferredReviewMode]);
+
+  // Request deck start: opens mode chooser
+  const requestDeckStart = (deck: DeckType, customCards?: SRSCard[]) => {
+    setPendingDeck({ deck, customCards });
+    setIsModeSelectorOpen(true);
+  };
+
+  // Execute deck start with selected mode
+  const selectModeAndStart = (mode: ReviewMode) => {
+    if (!pendingDeck) return;
+    setReviewMode(mode);
+    if (rememberPreference) {
+      setPreferredReviewMode(mode);
+    }
+
+    const { deck, customCards } = pendingDeck;
     setActiveDeck(deck);
     setCurrentIndex(0);
     setIsRevealed(false);
     setInputGuess("");
+    setSelectedOption(null);
+    setSelectedTiles([]);
+    setCurrentAutoGrade(null);
+    setIsModeSelectorOpen(false);
+    setPendingDeck(null);
 
     if (customCards) {
       setSessionCards(customCards);
@@ -69,6 +125,34 @@ export default function ReviewPage() {
     }
   };
 
+  const currentCard = sessionCards[currentIndex];
+  const currentWord: WordEntity | undefined = currentCard ? data.words[currentCard.word_id] : undefined;
+
+  // MCQ Options for current card
+  const mcqOptions = useMemo(() => {
+    if (!currentWord) return [];
+    return generateMCQOptions(currentWord, data.wordList, 4);
+  }, [currentWord?.id]);
+
+  // Tiles for current card
+  const tileData = useMemo(() => {
+    if (!currentWord) return { tiles: [], targetChunks: [], targetAnswer: "" };
+    return generateWordTiles(currentWord, data.wordList);
+  }, [currentWord?.id]);
+
+  // Reset interactive state per card
+  useEffect(() => {
+    setIsRevealed(false);
+    setInputGuess("");
+    setSelectedOption(null);
+    setSelectedTiles([]);
+    setCurrentAutoGrade(null);
+    if (tileData) {
+      setAvailableTiles(tileData.tiles);
+    }
+  }, [currentCard?.word_id, currentIndex, tileData]);
+
+  // SM-2 Review Grade Handler
   const handleGrade = (grade: ReviewGrade) => {
     const card = sessionCards[currentIndex];
     if (card) {
@@ -77,6 +161,10 @@ export default function ReviewPage() {
 
     setIsRevealed(false);
     setInputGuess("");
+    setSelectedOption(null);
+    setSelectedTiles([]);
+    setCurrentAutoGrade(null);
+
     if (currentIndex + 1 < sessionCards.length) {
       setCurrentIndex((i) => i + 1);
     } else {
@@ -84,29 +172,91 @@ export default function ReviewPage() {
     }
   };
 
-  // Auto-focus input when a card is shown unrevealed
+  // MCQ Selection Handler
+  const handleSelectMCQ = (option: string) => {
+    if (isRevealed || !currentWord) return;
+    setSelectedOption(option);
+    const isCorrect = option.toLowerCase() === currentWord.target_word.toLowerCase();
+    setCurrentAutoGrade(isCorrect ? 4 : 1);
+    setIsRevealed(true);
+  };
+
+  // Tile Selection Handlers
+  const handlePickTile = (tile: string, index: number) => {
+    if (isRevealed) return;
+    const nextAvailable = [...availableTiles];
+    nextAvailable.splice(index, 1);
+    setAvailableTiles(nextAvailable);
+    setSelectedTiles((prev) => [...prev, tile]);
+  };
+
+  const handleUnpickTile = (tile: string, index: number) => {
+    if (isRevealed) return;
+    const nextSelected = [...selectedTiles];
+    nextSelected.splice(index, 1);
+    setSelectedTiles(nextSelected);
+    setAvailableTiles((prev) => [...prev, tile]);
+  };
+
+  const handleResetTiles = () => {
+    if (isRevealed || !tileData) return;
+    setSelectedTiles([]);
+    setAvailableTiles(tileData.tiles);
+  };
+
+  const handleCheckTiles = () => {
+    if (isRevealed || !currentWord) return;
+    const assembled = selectedTiles.join("");
+    const isCorrect = assembled.toLowerCase() === currentWord.target_word.toLowerCase();
+    setCurrentAutoGrade(isCorrect ? 4 : 1);
+    setIsRevealed(true);
+  };
+
+  // Auto-focus input when in typing mode unrevealed
   useEffect(() => {
-    if (activeDeck && !isRevealed) {
+    if (activeDeck && !isRevealed && reviewMode === "typing") {
       const timer = setTimeout(() => {
         inputRef.current?.focus();
       }, 50);
       return () => clearTimeout(timer);
     }
-  }, [activeDeck, currentIndex, isRevealed]);
+  }, [activeDeck, currentIndex, isRevealed, reviewMode]);
 
   // Global review keyboard controls:
-  // - Escape: Exit review session cleanly
-  // - Enter or Space (unrevealed): Show Answer
-  // - 1, 2, 3, 4 (revealed): Grade card (Again = 1, Hard = 3, Good = 4, Easy = 5)
-  // - Enter or Space (revealed): Quick Advance with Good (4)
+  // - In Modal: 1-4 chooses style, Esc cancels
+  // - In Session:
+  //   - Escape: Exit review session cleanly
+  //   - Unrevealed:
+  //     - Flashcard: Space/Enter reveals
+  //     - MCQ: 1-4 selects options
+  //     - Tiles: Enter checks, Space reveals
+  //     - Typing: Enter reveals, Space reveals if empty
+  //   - Revealed: 1-4 grades, Space/Enter quick-advances with auto-grade or Good (4)
   useEffect(() => {
-    if (!activeDeck || sessionCards.length === 0) return;
-
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      // If user is inside an input other than our review input (e.g. search / decoder modal), ignore
-      if (e.target instanceof HTMLInputElement && e.target !== inputRef.current) {
+      // 1. Mode selector modal hotkeys
+      if (isModeSelectorOpen) {
+        if (e.key === "1") {
+          e.preventDefault();
+          selectModeAndStart("flashcard");
+        } else if (e.key === "2") {
+          e.preventDefault();
+          selectModeAndStart("mcq");
+        } else if (e.key === "3") {
+          e.preventDefault();
+          selectModeAndStart("tiles");
+        } else if (e.key === "4") {
+          e.preventDefault();
+          selectModeAndStart("typing");
+        } else if (e.key === "Escape") {
+          e.preventDefault();
+          setIsModeSelectorOpen(false);
+        }
         return;
       }
+
+      // 2. No active session
+      if (!activeDeck || sessionCards.length === 0) return;
 
       // Escape exits session
       if (e.key === "Escape") {
@@ -115,21 +265,61 @@ export default function ReviewPage() {
         return;
       }
 
+      // If user is inside an input other than our review input, ignore
+      if (e.target instanceof HTMLInputElement && e.target !== inputRef.current) {
+        return;
+      }
+
+      // 3. Card is UNREVEALED
       if (!isRevealed) {
-        // Front of card: Show Answer
-        if (e.key === "Enter") {
-          e.preventDefault();
-          setIsRevealed(true);
-        } else if (e.key === " " || e.code === "Space") {
-          // If the user has typed text into the input, let them type space
-          if (e.target === inputRef.current && inputGuess.trim().length > 0) {
-            return;
+        if (reviewMode === "flashcard") {
+          if (e.key === "Enter" || e.key === " " || e.code === "Space") {
+            e.preventDefault();
+            setIsRevealed(true);
           }
-          e.preventDefault();
-          setIsRevealed(true);
+        } else if (reviewMode === "mcq") {
+          if (e.key === "1" || e.code === "Digit1" || e.code === "Numpad1") {
+            e.preventDefault();
+            if (mcqOptions[0]) handleSelectMCQ(mcqOptions[0]);
+          } else if (e.key === "2" || e.code === "Digit2" || e.code === "Numpad2") {
+            e.preventDefault();
+            if (mcqOptions[1]) handleSelectMCQ(mcqOptions[1]);
+          } else if (e.key === "3" || e.code === "Digit3" || e.code === "Numpad3") {
+            e.preventDefault();
+            if (mcqOptions[2]) handleSelectMCQ(mcqOptions[2]);
+          } else if (e.key === "4" || e.code === "Digit4" || e.code === "Numpad4") {
+            e.preventDefault();
+            if (mcqOptions[3]) handleSelectMCQ(mcqOptions[3]);
+          } else if (e.key === "Enter" || e.key === " " || e.code === "Space") {
+            e.preventDefault();
+            setIsRevealed(true);
+          }
+        } else if (reviewMode === "tiles") {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            if (selectedTiles.length > 0) {
+              handleCheckTiles();
+            } else {
+              setIsRevealed(true);
+            }
+          } else if (e.key === " " || e.code === "Space") {
+            e.preventDefault();
+            setIsRevealed(true);
+          }
+        } else if (reviewMode === "typing") {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            setIsRevealed(true);
+          } else if (e.key === " " || e.code === "Space") {
+            if (e.target === inputRef.current && inputGuess.trim().length > 0) {
+              return;
+            }
+            e.preventDefault();
+            setIsRevealed(true);
+          }
         }
       } else {
-        // Back of card: 1, 2, 3, 4 grading
+        // 4. Card is REVEALED: SM-2 1-4 grading & quick advance
         if (e.key === "1" || e.code === "Digit1" || e.code === "Numpad1") {
           e.preventDefault();
           handleGrade(1);
@@ -144,17 +334,25 @@ export default function ReviewPage() {
           handleGrade(5);
         } else if (e.key === "Enter" || e.key === " " || e.code === "Space") {
           e.preventDefault();
-          handleGrade(4);
+          handleGrade(currentAutoGrade || 4);
         }
       }
     };
 
     window.addEventListener("keydown", handleGlobalKeyDown);
     return () => window.removeEventListener("keydown", handleGlobalKeyDown);
-  }, [activeDeck, sessionCards, isRevealed, inputGuess, currentIndex]);
-
-  const currentCard = sessionCards[currentIndex];
-  const currentWord: WordEntity | undefined = currentCard ? data.words[currentCard.word_id] : undefined;
+  }, [
+    isModeSelectorOpen,
+    activeDeck,
+    sessionCards,
+    isRevealed,
+    reviewMode,
+    mcqOptions,
+    selectedTiles,
+    inputGuess,
+    currentAutoGrade,
+    currentIndex,
+  ]);
 
   const masteredCount = Object.values(wordMastery).filter((m) => m === "mastered").length;
   const activeCount = Object.keys(srsCards).length - masteredCount;
@@ -180,16 +378,59 @@ export default function ReviewPage() {
           <span className="text-amber-400 font-bold">{activeCount} In Active SRS 🔄</span>
           <span className="text-cyan-400 font-bold">{dueCards.length} Due Today ⚡</span>
         </div>
-        <span className="text-slate-500">SM-2 Spaced Retrieval</span>
+        <div className="flex items-center gap-2 text-slate-400">
+          <span>Default Style:</span>
+          <span className="text-cyan-300 font-semibold uppercase">
+            {reviewMode === "flashcard"
+              ? "Quick Flip"
+              : reviewMode === "mcq"
+              ? "MCQ"
+              : reviewMode === "tiles"
+              ? "Tiles"
+              : "Typing"}
+          </span>
+        </div>
       </div>
 
       {/* ACTIVE REVIEW SESSION MODAL / CARD */}
       {activeDeck && currentCard && currentWord ? (
         <div className="p-6 sm:p-8 rounded-2xl bg-[#1C1D2B] border-2 border-cyan-500/40 shadow-2xl space-y-6 animate-in fade-in duration-150">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-              Review Card {currentIndex + 1} of {sessionCards.length}
-            </span>
+          {/* Card Header: Counter, Style Switcher, Exit */}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+                Card {currentIndex + 1} of {sessionCards.length}
+              </span>
+
+              {/* Mid-Session Style Switcher */}
+              <div className="flex items-center gap-1.5 bg-black/40 border border-white/10 px-2 py-0.5 rounded-lg">
+                <span className="text-[11px] font-mono text-slate-400">Style:</span>
+                <select
+                  value={reviewMode}
+                  onChange={(e) => {
+                    const mode = e.target.value as ReviewMode;
+                    setReviewMode(mode);
+                    setPreferredReviewMode(mode);
+                  }}
+                  className="bg-transparent text-xs font-mono text-cyan-300 outline-none cursor-pointer"
+                  title="Switch Review Style mid-session"
+                >
+                  <option value="flashcard" className="bg-[#1C1D2B] text-slate-200">
+                    📇 Quick Flip
+                  </option>
+                  <option value="mcq" className="bg-[#1C1D2B] text-slate-200">
+                    🔘 Multiple Choice
+                  </option>
+                  <option value="tiles" className="bg-[#1C1D2B] text-slate-200">
+                    🧩 Tile Builder
+                  </option>
+                  <option value="typing" className="bg-[#1C1D2B] text-slate-200">
+                    ✍️ Typing (Last)
+                  </option>
+                </select>
+              </div>
+            </div>
+
             <button
               type="button"
               tabIndex={-1}
@@ -205,7 +446,7 @@ export default function ReviewPage() {
           </div>
 
           {/* Front Prompt */}
-          <div className="text-center space-y-2 py-4">
+          <div className="text-center space-y-2 py-2">
             <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest">
               Shift Rule: {currentWord.shift_rule}
             </span>
@@ -215,8 +456,149 @@ export default function ReviewPage() {
             <p className="text-sm text-slate-400 italic">&quot;{currentWord.english_meaning}&quot;</p>
           </div>
 
-          {/* User Input or Direct Reveal */}
-          {!isRevealed ? (
+          {/* MODE 1: QUICK FLIP (FLASHCARD) */}
+          {reviewMode === "flashcard" && !isRevealed && (
+            <div className="space-y-4 max-w-md mx-auto text-center py-4">
+              <p className="text-xs text-slate-400">
+                Recall the German twin in your mind, then flip to verify.
+              </p>
+              <button
+                type="button"
+                onClick={() => setIsRevealed(true)}
+                className="w-full py-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition cursor-pointer active:scale-95 shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2"
+              >
+                <span>Show Answer / Flip Card</span>
+                <span className="text-xs font-mono px-2 py-0.5 rounded bg-black/20 text-slate-950 font-bold">
+                  Space / Enter
+                </span>
+              </button>
+            </div>
+          )}
+
+          {/* MODE 2: MULTIPLE CHOICE (MCQ) */}
+          {reviewMode === "mcq" && (
+            <div className="space-y-4 max-w-lg mx-auto py-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {mcqOptions.map((opt, idx) => {
+                  const isTarget = opt.toLowerCase() === currentWord.target_word.toLowerCase();
+                  const isSelected = selectedOption === opt;
+
+                  let buttonStyle = "bg-[#161722] hover:bg-white/10 border-white/10 text-slate-200";
+                  if (isRevealed) {
+                    if (isTarget) {
+                      buttonStyle = "bg-emerald-500/20 border-emerald-500 text-emerald-300 font-bold shadow-lg shadow-emerald-500/10";
+                    } else if (isSelected && !isTarget) {
+                      buttonStyle = "bg-rose-500/20 border-rose-500 text-rose-300 line-through";
+                    } else {
+                      buttonStyle = "bg-[#161722]/60 border-white/5 text-slate-500 opacity-60";
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={opt}
+                      type="button"
+                      disabled={isRevealed}
+                      onClick={() => handleSelectMCQ(opt)}
+                      className={`p-3.5 rounded-xl border text-left flex items-center justify-between transition active:scale-95 cursor-pointer ${buttonStyle}`}
+                    >
+                      <span className="font-semibold text-sm">{opt}</span>
+                      <div className="flex items-center gap-1.5">
+                        {isRevealed && isTarget && <Check className="w-4 h-4 text-emerald-400" />}
+                        {isRevealed && isSelected && !isTarget && <X className="w-4 h-4 text-rose-400" />}
+                        <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-white/5 text-slate-400 border border-white/10">
+                          [{idx + 1}]
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {!isRevealed && (
+                <div className="text-center text-[11px] font-mono text-slate-400 pt-1">
+                  Press keys <span className="text-cyan-300 font-bold">[1]</span>,{" "}
+                  <span className="text-cyan-300 font-bold">[2]</span>,{" "}
+                  <span className="text-cyan-300 font-bold">[3]</span>, or{" "}
+                  <span className="text-cyan-300 font-bold">[4]</span> to select
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* MODE 3: TILE BUILDER */}
+          {reviewMode === "tiles" && (
+            <div className="space-y-4 max-w-lg mx-auto py-2">
+              {/* Selected Tiles Assembly Rack */}
+              <div className="p-3.5 rounded-xl bg-[#161722] border border-white/15 min-h-[60px] flex flex-wrap items-center justify-center gap-2">
+                {selectedTiles.length === 0 ? (
+                  <span className="text-xs text-slate-500 italic">Tap tiles below to assemble word...</span>
+                ) : (
+                  selectedTiles.map((tile, idx) => (
+                    <button
+                      key={`${tile}-${idx}`}
+                      type="button"
+                      disabled={isRevealed}
+                      onClick={() => handleUnpickTile(tile, idx)}
+                      className="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-rose-500/20 border border-cyan-500/40 hover:border-rose-500/40 text-cyan-200 font-bold font-mono text-sm transition cursor-pointer"
+                      title="Tap to remove"
+                    >
+                      {tile}
+                    </button>
+                  ))
+                )}
+              </div>
+
+              {/* Available Tile Bank */}
+              {!isRevealed && (
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    {availableTiles.map((tile, idx) => (
+                      <button
+                        key={`${tile}-${idx}`}
+                        type="button"
+                        onClick={() => handlePickTile(tile, idx)}
+                        className="px-3.5 py-2 rounded-xl bg-[#222436] hover:bg-cyan-500/15 border border-white/10 hover:border-cyan-400 text-slate-200 font-bold font-mono text-sm transition cursor-pointer active:scale-95 shadow"
+                      >
+                        {tile}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center justify-center gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={handleResetTiles}
+                      disabled={selectedTiles.length === 0}
+                      className="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-slate-400 transition cursor-pointer disabled:opacity-40"
+                    >
+                      Reset Rack
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleCheckTiles}
+                      disabled={selectedTiles.length === 0}
+                      className="px-6 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs font-mono transition cursor-pointer disabled:opacity-40 shadow-md shadow-cyan-500/20"
+                    >
+                      Check Answer [Enter]
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsRevealed(true)}
+                      className="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-slate-400 transition cursor-pointer"
+                    >
+                      Show [Space]
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* MODE 4: DERIVATION TYPING (LAST) */}
+          {reviewMode === "typing" && !isRevealed && (
             <div className="space-y-4 max-w-md mx-auto">
               <input
                 ref={inputRef}
@@ -232,7 +614,7 @@ export default function ReviewPage() {
                     setIsRevealed(true);
                   }
                 }}
-                placeholder="Type German derivation (or press Space / Enter to reveal)..."
+                placeholder="Type German derivation (or press Space / Enter)..."
                 className="w-full px-4 py-3 rounded-xl bg-[#161722] border border-white/15 text-amber-300 text-center font-bold text-lg outline-none focus:border-cyan-400"
               />
               <GermanCharBar onInsert={(c) => setInputGuess((prev) => prev + c)} />
@@ -244,8 +626,10 @@ export default function ReviewPage() {
                 Show Answer [Enter / Space]
               </button>
             </div>
-          ) : (
-            /* Back: Revealed Answer with Static Shift Annotation & Grading Buttons */
+          )}
+
+          {/* REVEALED CARD CONTENT & SM-2 GRADING (COMMON TO ALL MODES) */}
+          {isRevealed && (
             <div className="space-y-6 animate-in fade-in duration-150">
               <div className="p-4 rounded-xl bg-[#161722] border border-white/10 text-center space-y-3">
                 <ShiftPair
@@ -336,11 +720,11 @@ export default function ReviewPage() {
             </div>
 
             <button
-              onClick={() => startDeck("due")}
+              onClick={() => requestDeckStart("due")}
               disabled={dueCards.length === 0}
               className={`px-5 py-2.5 rounded-xl font-bold text-sm transition ${
                 dueCards.length > 0
-                  ? "bg-cyan-500 hover:bg-cyan-400 text-slate-950 cursor-pointer"
+                  ? "bg-cyan-500 hover:bg-cyan-400 text-slate-950 cursor-pointer shadow-lg shadow-cyan-500/20"
                   : "bg-white/5 text-slate-600 cursor-not-allowed border border-white/5"
               }`}
             >
@@ -375,8 +759,8 @@ export default function ReviewPage() {
               </div>
 
               <button
-                onClick={() => startDeck("shift")}
-                className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition"
+                onClick={() => requestDeckStart("shift")}
+                className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition cursor-pointer"
               >
                 Review Shift Family
               </button>
@@ -398,9 +782,9 @@ export default function ReviewPage() {
               </div>
 
               <button
-                onClick={() => startDeck("weakest")}
+                onClick={() => requestDeckStart("weakest")}
                 disabled={weakestCards.length === 0}
-                className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition disabled:opacity-40"
+                className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition disabled:opacity-40 cursor-pointer"
               >
                 Review Weakest
               </button>
@@ -422,10 +806,149 @@ export default function ReviewPage() {
               </div>
 
               <button
-                onClick={() => startDeck("recent")}
-                className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition"
+                onClick={() => requestDeckStart("recent")}
+                className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition cursor-pointer"
               >
                 Review Recent
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* REVIEW STYLE SELECTION MODAL */}
+      {isModeSelectorOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-xl rounded-2xl bg-[#1C1D2B] border border-cyan-500/40 shadow-2xl p-6 sm:p-8 space-y-6">
+            <div className="space-y-1">
+              <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold">
+                Select Review Style
+              </span>
+              <h2 className="text-2xl font-extrabold text-slate-100">How do you want to review?</h2>
+              <p className="text-xs text-slate-400">
+                All styles review the same SM-2 cards queue and update intervals globally.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              {/* Option 1: Quick Flip (Flashcards) */}
+              <button
+                type="button"
+                onClick={() => selectModeAndStart("flashcard")}
+                className="w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border border-cyan-500/30 hover:border-cyan-400 transition cursor-pointer flex items-center justify-between group"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">📇</span>
+                    <span className="font-bold text-slate-100 group-hover:text-cyan-300 transition">
+                      Quick Flip (Flashcard)
+                    </span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                      Recommended
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400">
+                    Zero typing. Recall in your mind, press Space to reveal, rate 1–4.
+                  </p>
+                </div>
+                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-cyan-400/50">
+                  Press [1]
+                </span>
+              </button>
+
+              {/* Option 2: Multiple Choice (MCQ) */}
+              <button
+                type="button"
+                onClick={() => selectModeAndStart("mcq")}
+                className="w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border border-white/10 hover:border-cyan-400 transition cursor-pointer flex items-center justify-between group"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🔘</span>
+                    <span className="font-bold text-slate-100 group-hover:text-cyan-300 transition">
+                      Multiple Choice (MCQ)
+                    </span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      Active Recognition
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400">
+                    Pick the German word from 4 options. Press 1–4 keys or click.
+                  </p>
+                </div>
+                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-cyan-400/50">
+                  Press [2]
+                </span>
+              </button>
+
+              {/* Option 3: Tile Builder */}
+              <button
+                type="button"
+                onClick={() => selectModeAndStart("tiles")}
+                className="w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border border-white/10 hover:border-cyan-400 transition cursor-pointer flex items-center justify-between group"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🧩</span>
+                    <span className="font-bold text-slate-100 group-hover:text-cyan-300 transition">
+                      Tile Builder
+                    </span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      Morpheme Assembly
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400">
+                    Tap letter & syllable tiles into place to assemble the German cognate.
+                  </p>
+                </div>
+                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-cyan-400/50">
+                  Press [3]
+                </span>
+              </button>
+
+              {/* Option 4: Derivation Typing (Last) */}
+              <button
+                type="button"
+                onClick={() => selectModeAndStart("typing")}
+                className="w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border border-white/10 hover:border-cyan-400 transition cursor-pointer flex items-center justify-between group"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">✍️</span>
+                    <span className="font-bold text-slate-100 group-hover:text-cyan-300 transition">
+                      Derivation Typing
+                    </span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                      Deep Active Recall
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400">
+                    Type the German word letter-by-letter with umlaut shortcuts.
+                  </p>
+                </div>
+                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-cyan-400/50">
+                  Press [4]
+                </span>
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between pt-2 border-t border-white/10">
+              <label className="flex items-center gap-2 text-xs text-slate-400 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={rememberPreference}
+                  onChange={(e) => setRememberPreference(e.target.checked)}
+                  className="rounded border-white/20 bg-white/5 text-cyan-500 focus:ring-0"
+                />
+                Remember as default style
+              </label>
+
+              <button
+                type="button"
+                onClick={() => setIsModeSelectorOpen(false)}
+                className="text-xs font-mono text-slate-400 hover:text-white px-3 py-1.5 rounded hover:bg-white/5 transition cursor-pointer"
+              >
+                Cancel [Esc]
               </button>
             </div>
           </div>

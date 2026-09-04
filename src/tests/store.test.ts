@@ -133,4 +133,16 @@ describe("App Store & User Progress State", () => {
     expect(state.wordMastery["Schiff"]).toBe("mastered");
     expect(state.tolerance.umlautTolerance).toBe(true);
   });
+
+  it("persists and updates preferred review mode", () => {
+    const store = useAppStore.getState();
+    expect(store.preferredReviewMode).toBe("flashcard");
+
+    store.setPreferredReviewMode("mcq");
+    expect(useAppStore.getState().preferredReviewMode).toBe("mcq");
+
+    const localRaw = localStorage.getItem(STORAGE_KEY);
+    expect(localRaw).toBeTruthy();
+    expect(JSON.parse(localRaw!).preferredReviewMode).toBe("mcq");
+  });
 });

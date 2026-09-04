@@ -2,6 +2,8 @@ export type Gender = "der" | "die" | "das";
 
 export type MasteryState = "unexplored" | "explored" | "encountered" | "mastered";
 
+export type ReviewMode = "flashcard" | "mcq" | "tiles" | "typing";
+
 export interface WordEntity {
   id: string;
   target_word: string;

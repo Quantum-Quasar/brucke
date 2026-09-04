@@ -3,7 +3,7 @@
 // ponytail: lightweight zustand store with localStorage persistence and word-level state
 
 import { create } from "zustand";
-import type { MasteryState, SRSCard } from "./types";
+import type { MasteryState, ReviewMode, SRSCard } from "./types";
 import { createInitialCard, gradeCard, isMastered, type ReviewGrade } from "./srs";
 
 export interface ToleranceSettings {
@@ -21,6 +21,7 @@ export interface AppState {
   weeklyActivity: boolean[]; // 7 days Mon-Sun
   activeWordDrawerId: string | null;
   tolerance: ToleranceSettings;
+  preferredReviewMode: ReviewMode;
 
   // Actions
   markWordExplored: (wordId: string) => void;
@@ -28,6 +29,7 @@ export interface AppState {
   markWordMastered: (wordId: string) => void;
   completeLesson: (lessonId: number) => void;
   recordReview: (wordId: string, grade: ReviewGrade) => void;
+  setPreferredReviewMode: (mode: ReviewMode) => void;
   openWordDrawer: (wordId: string) => void;
   closeWordDrawer: () => void;
   setUmlautTolerance: (enabled: boolean) => void;
@@ -92,6 +94,7 @@ export function saveState(state: AppState) {
     srsCards: state.srsCards,
     weeklyActivity: state.weeklyActivity,
     tolerance: state.tolerance,
+    preferredReviewMode: state.preferredReviewMode,
   };
   const serialized = JSON.stringify(toPersist);
 
@@ -115,11 +118,20 @@ export const useAppStore = create<AppState>((set, get) => ({
   srsCards: initialSaved.srsCards || {},
   weeklyActivity: initialSaved.weeklyActivity || [true, true, false, false, false, false, false],
   activeWordDrawerId: null,
+  preferredReviewMode: (initialSaved.preferredReviewMode as ReviewMode) || "flashcard",
   tolerance: initialSaved.tolerance || {
     umlautTolerance: false,
     capitalizationTolerance: false,
     umlautDismissals: 0,
     capitalizationDismissals: 0,
+  },
+
+  setPreferredReviewMode: (mode) => {
+    set((s) => {
+      const next = { ...s, preferredReviewMode: mode };
+      saveState(next);
+      return next;
+    });
   },
 
   markWordExplored: (wordId) => {
@@ -251,6 +263,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       srsCards: {},
       weeklyActivity: [false, false, false, false, false, false, false],
       activeWordDrawerId: null,
+      preferredReviewMode: "flashcard" as ReviewMode,
       tolerance: {
         umlautTolerance: false,
         capitalizationTolerance: false,
@@ -282,6 +295,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         wordMastery: { ...s.wordMastery, ...(saved.wordMastery || {}) },
         srsCards: { ...s.srsCards, ...(saved.srsCards || {}) },
         weeklyActivity: Array.isArray(saved.weeklyActivity) ? saved.weeklyActivity : s.weeklyActivity,
+        preferredReviewMode: saved.preferredReviewMode || s.preferredReviewMode,
         tolerance: saved.tolerance ? { ...s.tolerance, ...saved.tolerance } : s.tolerance,
       }));
     }
