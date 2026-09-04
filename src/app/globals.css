@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+:root {
+  --bg-canvas: #12131c;
+  --bg-surface: #1c1d2b;
+  --bg-surface-elevated: #242638;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-strong: #2e3046;
+  --text-main: #f0edea;
+  --text-muted: #8e90a6;
+  --text-dim: #606275;
+  --color-amber: #e5a93c;
+  --color-cyan: #3de0d2;
+  --color-sage: #68d391;
+  --color-coral: #f56565;
+  --color-der: #4a90e2;
+  --color-die: #e25a75;
+  --color-das: #48bb78;
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbars for the notebook aesthetic */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #12131c;
+}
+::-webkit-scrollbar-thumb {
+  background: #2e3046;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3e415c;
+}
+
+/* Tabular figures for data tables and progress */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Notebook subtle grid texture */
+.bg-notebook-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
