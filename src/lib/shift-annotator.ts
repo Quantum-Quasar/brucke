@@ -30,7 +30,13 @@ const SHIFT_RULES_PATTERNS = [
   { en: "gh", de: "ch", label: "GH → CH" },
 ];
 
+const alignCache = new Map<string, AnnotatedShiftPair>();
+
 export function alignShiftPair(english: string, german: string, fallbackRule?: string): AnnotatedShiftPair {
+  const cacheKey = `${english}|${german}|${fallbackRule || ""}`;
+  const cached = alignCache.get(cacheKey);
+  if (cached) return cached;
+
   const enLower = english.toLowerCase();
   const deLower = german.toLowerCase();
 
@@ -59,18 +65,22 @@ export function alignShiftPair(english: string, german: string, fallbackRule?: s
         germanSegments.push({ text: german.slice(deIdx + rule.de.length), isChanged: false });
       }
 
-      return {
+      const result: AnnotatedShiftPair = {
         englishSegments,
         germanSegments,
         shiftRule: fallbackRule || rule.label,
       };
+      alignCache.set(cacheKey, result);
+      return result;
     }
   }
 
   // Fallback: No obvious single consonant shift (e.g. direct cognate)
-  return {
+  const fallbackResult: AnnotatedShiftPair = {
     englishSegments: [{ text: english, isChanged: false }],
     germanSegments: [{ text: german, isChanged: false }],
     shiftRule: fallbackRule || "Cognate",
   };
+  alignCache.set(cacheKey, fallbackResult);
+  return fallbackResult;
 }

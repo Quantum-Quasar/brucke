@@ -92,6 +92,8 @@ export function loadSavedState(): Partial<AppState> {
   return {};
 }
 
+let lastSerialized = "";
+
 export function saveState(state: AppState) {
   if (typeof window === "undefined") return;
   const toPersist = {
@@ -106,15 +108,30 @@ export function saveState(state: AppState) {
     hasSeenGenderIntro: state.hasSeenGenderIntro,
   };
   const serialized = JSON.stringify(toPersist);
+  if (serialized === lastSerialized) return;
+  lastSerialized = serialized;
 
   // 1. Save to localStorage
   try {
     localStorage.setItem(STORAGE_KEY, serialized);
   } catch {}
 
-  // 2. Also save to cookie for durable local browser persistence
+  // 2. Also save to cookie for durable local browser persistence (safe size guard < 3800 bytes)
   try {
-    setCookie(STORAGE_COOKIE_KEY, serialized, 365);
+    if (serialized.length <= 3800) {
+      setCookie(STORAGE_COOKIE_KEY, serialized, 365);
+    } else {
+      const leanCookie = JSON.stringify({
+        completedLessons: state.completedLessons,
+        currentLessonId: state.currentLessonId,
+        wordMastery: state.wordMastery,
+        hasCompletedOnboarding: state.hasCompletedOnboarding,
+        hasSeenGenderIntro: state.hasSeenGenderIntro,
+      });
+      if (leanCookie.length <= 3800) {
+        setCookie(STORAGE_COOKIE_KEY, leanCookie, 365);
+      }
+    }
   } catch {}
 }
 
@@ -173,7 +190,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   markWordExplored: (wordId) => {
     set((s) => {
       const current = s.wordMastery[wordId];
-      if (current === "encountered" || current === "mastered") return s;
+      if (current === "explored" || current === "encountered" || current === "mastered") return s;
       const updated = { ...s.wordMastery, [wordId]: "explored" as MasteryState };
       const next = { ...s, wordMastery: updated };
       saveState(next);
@@ -184,7 +201,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   markWordEncountered: (wordId) => {
     set((s) => {
       const current = s.wordMastery[wordId];
-      if (current === "mastered") return s;
+      if (current === "mastered" || (current === "encountered" && s.srsCards[wordId])) return s;
       const updated = { ...s.wordMastery, [wordId]: "encountered" as MasteryState };
       // Also register card in SRS if not present
       const srsCards = { ...s.srsCards };
@@ -199,6 +216,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   markWordMastered: (wordId) => {
     set((s) => {
+      if (s.wordMastery[wordId] === "mastered") return s;
       const updated = { ...s.wordMastery, [wordId]: "mastered" as MasteryState };
       const next = { ...s, wordMastery: updated };
       saveState(next);
@@ -208,6 +226,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   completeLesson: (lessonId) => {
     set((s) => {
+      if (s.completedLessons.includes(lessonId) && s.currentLessonId >= lessonId + 1) return s;
       const completed = s.completedLessons.includes(lessonId)
         ? s.completedLessons
         : [...s.completedLessons, lessonId];

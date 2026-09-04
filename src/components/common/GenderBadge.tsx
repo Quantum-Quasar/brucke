@@ -13,7 +13,7 @@ interface GenderBadgeProps {
   className?: string;
 }
 
-export const GenderBadge: React.FC<GenderBadgeProps> = ({
+export const GenderBadge: React.FC<GenderBadgeProps> = React.memo(({
   gender,
   size = "md",
   showLabel = false,
@@ -45,4 +45,6 @@ export const GenderBadge: React.FC<GenderBadgeProps> = ({
       )}
     </span>
   );
-};
+});
+
+GenderBadge.displayName = "GenderBadge";

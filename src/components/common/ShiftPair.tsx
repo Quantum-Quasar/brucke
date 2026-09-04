@@ -18,7 +18,7 @@ interface ShiftPairProps {
   showDetailsOnClick?: boolean;
 }
 
-export const ShiftPair: React.FC<ShiftPairProps> = ({
+export const ShiftPair: React.FC<ShiftPairProps> = React.memo(({
   english,
   german,
   gender,
@@ -116,4 +116,6 @@ export const ShiftPair: React.FC<ShiftPairProps> = ({
       </span>
     </div>
   );
-};
+});
+
+ShiftPair.displayName = "ShiftPair";
