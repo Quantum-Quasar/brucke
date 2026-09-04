@@ -14,6 +14,7 @@ import {
   X,
   RefreshCw,
   HelpCircle,
+  Volume2,
 } from "lucide-react";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
@@ -22,12 +23,13 @@ import { GenderGuideBanner } from "@/components/common/GenderGuideBanner";
 import { useAppStore } from "@/lib/store";
 import { getDueCards, getWeakestCards, type ReviewGrade } from "@/lib/srs";
 import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
+import { playGermanAudio } from "@/lib/audio";
 import compendium from "@/data/compendium.json";
 import type { CompendiumData, ReviewMode, SRSCard, WordEntity } from "@/lib/types";
 
 const data = compendium as unknown as CompendiumData;
 
-type DeckType = "due" | "shift" | "weakest" | "recent";
+type DeckType = "due" | "shift" | "weakest" | "recent" | "compounds";
 
 interface PendingDeckStart {
   deck: DeckType;
@@ -72,21 +74,78 @@ export default function ReviewPage() {
     }
   }, [preferredReviewMode]);
 
-  // Request deck start: opens mode chooser
-  const requestDeckStart = (deck: DeckType, customCards?: SRSCard[]) => {
-    setPendingDeck({ deck, customCards });
-    setIsModeSelectorOpen(true);
-  };
+  // Comprehensive words map combining standard vocabulary, compound calques, and false friend traps
+  const allWordsMap: Record<string, WordEntity> = useMemo(() => {
+    const map: Record<string, WordEntity> = { ...data.words };
+    data.compounds.forEach((c) => {
+      const cleanWord = c.compound.replace(/^(der|die|das)\s+/i, "");
+      map[`compound_${c.id}`] = {
+        id: `compound_${c.id}`,
+        target_word: cleanWord,
+        english_cognate: c.literal_morphemes,
+        english_meaning: `${c.real_meaning} (lit. "${c.literal_morphemes}")`,
+        gender: c.gender,
+        ipa: "/kɔmˈpoːzɪtʊm/",
+        sound_shift_ids: [],
+        shift_rule: "Compound Calque",
+        context_phrase: c.compound,
+        context_translation: `${c.english_counterpart} (${c.literal_morphemes})`,
+        etymology_derivation: c.lore,
+      };
+    });
+    data.falseFriends.forEach((f) => {
+      map[`trap_${f.id}`] = {
+        id: `trap_${f.id}`,
+        target_word: f.german_word,
+        english_cognate: `≠ ${f.looks_like}`,
+        english_meaning: f.actual_meaning,
+        gender: null,
+        ipa: "/faɫʃɐ fʁɔʏ̯nt/",
+        sound_shift_ids: [],
+        shift_rule: "False Friend Trap",
+        context_phrase: `${f.german_word} means "${f.actual_meaning}"`,
+        context_translation: `NOT English "${f.looks_like}"!`,
+        etymology_derivation: f.trap_note,
+      };
+    });
+    return map;
+  }, []);
 
-  // Execute deck start with selected mode
-  const selectModeAndStart = (mode: ReviewMode) => {
-    if (!pendingDeck) return;
-    setReviewMode(mode);
-    if (rememberPreference) {
-      setPreferredReviewMode(mode);
-    }
+  const compoundCards: SRSCard[] = useMemo(() => {
+    const items: SRSCard[] = [];
+    data.compounds.forEach((c) => {
+      const id = `compound_${c.id}`;
+      items.push(
+        srsCards[id] || {
+          word_id: id,
+          interval: 1,
+          repetitions: 0,
+          ease_factor: 2.5,
+          due_date: new Date().toISOString().split("T")[0],
+          lapses: 0,
+          last_reviewed: null,
+        }
+      );
+    });
+    data.falseFriends.forEach((f) => {
+      const id = `trap_${f.id}`;
+      items.push(
+        srsCards[id] || {
+          word_id: id,
+          interval: 1,
+          repetitions: 0,
+          ease_factor: 2.5,
+          due_date: new Date().toISOString().split("T")[0],
+          lapses: 0,
+          last_reviewed: null,
+        }
+      );
+    });
+    return items;
+  }, [srsCards]);
 
-    const { deck, customCards } = pendingDeck;
+  // 1-Click direct deck start
+  const startDeck = (deck: DeckType, customCards?: SRSCard[]) => {
     setActiveDeck(deck);
     setCurrentIndex(0);
     setIsRevealed(false);
@@ -94,8 +153,6 @@ export default function ReviewPage() {
     setSelectedOption(null);
     setSelectedTiles([]);
     setCurrentAutoGrade(null);
-    setIsModeSelectorOpen(false);
-    setPendingDeck(null);
 
     if (customCards) {
       setSessionCards(customCards);
@@ -108,27 +165,52 @@ export default function ReviewPage() {
       setSessionCards(weakestCards);
     } else if (deck === "shift") {
       const shiftCards = Object.values(srsCards).filter((c) => {
-        const w = data.words[c.word_id];
+        const w = allWordsMap[c.word_id];
         return w && w.sound_shift_ids.includes(selectedShiftId);
       });
       setSessionCards(shiftCards);
     } else if (deck === "recent") {
       const recentWords = data.wordList.slice(0, 20);
-      const recentCards = recentWords.map((w) => srsCards[w.id] || {
-        word_id: w.id,
-        interval: 1,
-        repetitions: 0,
-        ease_factor: 2.5,
-        due_date: new Date().toISOString().split("T")[0],
-        lapses: 0,
-        last_reviewed: null,
-      });
+      const recentCards = recentWords.map(
+        (w) =>
+          srsCards[w.id] || {
+            word_id: w.id,
+            interval: 1,
+            repetitions: 0,
+            ease_factor: 2.5,
+            due_date: new Date().toISOString().split("T")[0],
+            lapses: 0,
+            last_reviewed: null,
+          }
+      );
       setSessionCards(recentCards);
+    } else if (deck === "compounds") {
+      setSessionCards(compoundCards);
+    }
+  };
+
+  // 1-Click start into user's current reviewMode
+  const requestDeckStart = (deck: DeckType, customCards?: SRSCard[]) => {
+    startDeck(deck, customCards);
+  };
+
+  // Execute deck start with selected mode (e.g. from modal style chooser)
+  const selectModeAndStart = (mode: ReviewMode) => {
+    setReviewMode(mode);
+    if (rememberPreference) {
+      setPreferredReviewMode(mode);
+    }
+    setIsModeSelectorOpen(false);
+
+    if (pendingDeck) {
+      const { deck, customCards } = pendingDeck;
+      setPendingDeck(null);
+      startDeck(deck, customCards);
     }
   };
 
   const currentCard = sessionCards[currentIndex];
-  const currentWord: WordEntity | undefined = currentCard ? data.words[currentCard.word_id] : undefined;
+  const currentWord: WordEntity | undefined = currentCard ? allWordsMap[currentCard.word_id] : undefined;
 
   // MCQ Options for current card
   const mcqOptions = useMemo(() => {
@@ -307,6 +389,21 @@ export default function ReviewPage() {
           } else if (e.key === " " || e.code === "Space") {
             e.preventDefault();
             setIsRevealed(true);
+          } else if (e.key === "Backspace") {
+            e.preventDefault();
+            if (selectedTiles.length > 0) {
+              const lastIdx = selectedTiles.length - 1;
+              const lastTile = selectedTiles[lastIdx];
+              handleUnpickTile(lastTile, lastIdx);
+            }
+          } else if (/^[a-zA-ZäöüÄÖÜß]$/.test(e.key)) {
+            const matchIdx = availableTiles.findIndex((t) =>
+              t.toLowerCase().startsWith(e.key.toLowerCase())
+            );
+            if (matchIdx !== -1) {
+              e.preventDefault();
+              handlePickTile(availableTiles[matchIdx], matchIdx);
+            }
           }
         } else if (reviewMode === "typing") {
           if (e.key === "Enter") {
@@ -321,7 +418,17 @@ export default function ReviewPage() {
           }
         }
       } else {
-        // 4. Card is REVEALED: SM-2 1-4 grading & quick advance
+        // 4. Card is REVEALED: Pronunciation audio hotkey
+        if (e.key === "r" || e.key === "R" || e.key === "a" || e.key === "A") {
+          e.preventDefault();
+          if (currentWord) {
+            const spoken = currentWord.gender ? `${currentWord.gender} ${currentWord.target_word}` : currentWord.target_word;
+            playGermanAudio(spoken);
+          }
+          return;
+        }
+
+        // SM-2 1-4 grading & quick advance
         if (e.key === "1" || e.code === "Digit1" || e.code === "Numpad1") {
           e.preventDefault();
           handleGrade(1);
@@ -351,6 +458,8 @@ export default function ReviewPage() {
     reviewMode,
     mcqOptions,
     selectedTiles,
+    availableTiles,
+    currentWord,
     inputGuess,
     currentAutoGrade,
     currentIndex,
@@ -383,16 +492,30 @@ export default function ReviewPage() {
         <div className="flex items-center gap-4">
           <GenderGuideBanner compact />
           <div className="flex items-center gap-2 text-slate-400">
-            <span>Default Style:</span>
-            <span className="text-cyan-300 font-semibold uppercase">
-              {reviewMode === "flashcard"
-                ? "Quick Flip"
-                : reviewMode === "mcq"
-                ? "MCQ"
-                : reviewMode === "tiles"
-                ? "Tiles"
-                : "Typing"}
-            </span>
+            <span>Style:</span>
+            <select
+              value={reviewMode}
+              onChange={(e) => {
+                const mode = e.target.value as ReviewMode;
+                setReviewMode(mode);
+                setPreferredReviewMode(mode);
+              }}
+              className="bg-[#1C1D2B] border border-white/15 hover:border-cyan-400 rounded px-2 py-0.5 text-xs font-mono text-cyan-300 outline-none cursor-pointer transition"
+              title="Set default review style"
+            >
+              <option value="flashcard" className="bg-[#1C1D2B] text-slate-200">📇 Quick Flip</option>
+              <option value="mcq" className="bg-[#1C1D2B] text-slate-200">🔘 MCQ</option>
+              <option value="tiles" className="bg-[#1C1D2B] text-slate-200">🧩 Tiles</option>
+              <option value="typing" className="bg-[#1C1D2B] text-slate-200">✍️ Typing</option>
+            </select>
+            <button
+              type="button"
+              onClick={() => setIsModeSelectorOpen(true)}
+              className="text-[11px] font-mono text-slate-400 hover:text-cyan-300 underline underline-offset-2 ml-1 cursor-pointer"
+              title="Learn about review styles"
+            >
+              Guide
+            </button>
           </div>
         </div>
       </div>
@@ -460,7 +583,9 @@ export default function ReviewPage() {
                 Shift Rule: {currentWord.shift_rule}
               </span>
               {currentWord.gender && (
-                <GenderBadge gender={currentWord.gender} size="sm" showLabel />
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded border border-white/10 bg-white/5 text-slate-400">
+                  Gender: [ der / die / das ? ]
+                </span>
               )}
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-100">
@@ -653,7 +778,21 @@ export default function ReviewPage() {
                   wordId={currentWord.id}
                   className="text-lg px-4 py-2"
                 />
-                <div className="text-xs font-mono text-slate-400">{currentWord.ipa}</div>
+                <div className="flex items-center justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const spoken = currentWord.gender ? `${currentWord.gender} ${currentWord.target_word}` : currentWord.target_word;
+                      playGermanAudio(spoken);
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-400/10 hover:bg-amber-400/20 text-amber-400 border border-amber-400/20 text-xs font-mono transition cursor-pointer"
+                    title="Listen to German pronunciation [R]"
+                  >
+                    <Volume2 className="w-3.5 h-3.5" />
+                    <span>Listen [R]</span>
+                  </button>
+                  <span className="text-xs font-mono text-slate-400">{currentWord.ipa}</span>
+                </div>
                 <p className="text-xs text-slate-300 max-w-md mx-auto">{currentWord.etymology_derivation}</p>
                 <div className="p-2.5 rounded-lg bg-black/30 text-xs text-amber-200 italic max-w-md mx-auto">
                   &quot;{currentWord.context_phrase}&quot;
@@ -745,10 +884,10 @@ export default function ReviewPage() {
             </button>
           </div>
 
-          {/* 3 Secondary Decks */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* 4 Secondary Decks */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* By Shift Deck */}
-            <div className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 space-y-3 flex flex-col justify-between">
+            <div className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 space-y-3 flex flex-col justify-between hover:border-cyan-500/30 transition">
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-cyan-400">
                   <Layers className="w-4 h-4" />
@@ -780,7 +919,7 @@ export default function ReviewPage() {
             </div>
 
             {/* Weakest Words Deck */}
-            <div className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 space-y-3 flex flex-col justify-between">
+            <div className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 space-y-3 flex flex-col justify-between hover:border-amber-500/30 transition">
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-amber-400">
                   <Flame className="w-4 h-4" />
@@ -804,7 +943,7 @@ export default function ReviewPage() {
             </div>
 
             {/* Recent Lessons Deck */}
-            <div className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 space-y-3 flex flex-col justify-between">
+            <div className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 space-y-3 flex flex-col justify-between hover:border-emerald-500/30 transition">
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-emerald-400">
                   <CheckCircle2 className="w-4 h-4" />
@@ -823,6 +962,29 @@ export default function ReviewPage() {
                 className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition cursor-pointer"
               >
                 Review Recent
+              </button>
+            </div>
+
+            {/* Compound Calques & Traps Deck */}
+            <div className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 space-y-3 flex flex-col justify-between hover:border-purple-500/40 transition">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-purple-400">
+                  <Sparkles className="w-4 h-4" />
+                  <h4 className="text-sm font-bold text-slate-100">Compounds & Traps</h4>
+                </div>
+                <p className="text-xs text-slate-400">
+                  Review literal calques (Handschuh, Flugzeug) and false friends (Gift, bald).
+                </p>
+                <div className="text-xs font-mono text-purple-400 pt-1">
+                  {data.compounds.length + data.falseFriends.length} Compounds & Traps
+                </div>
+              </div>
+
+              <button
+                onClick={() => startDeck("compounds")}
+                className="w-full py-2 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-xs font-semibold text-purple-200 transition cursor-pointer"
+              >
+                Review Compounds
               </button>
             </div>
           </div>

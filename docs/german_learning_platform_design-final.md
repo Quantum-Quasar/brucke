@@ -1169,3 +1169,36 @@ tier agressively. and no mentions of it in earlier builds
    - **Phase 2 (After Lesson 3: The Review Introduction)**: Unlock the **Review Hub** only after the learner has accumulated ~15–20 words in their learning queue. Introduce review styles progressively (e.g. Quick Flip recall first, then MCQ recognition, then Tile Builder, then Typing).
    - **Phase 3 (After Lesson 5: The Phonetic Map)**: Unlock **The Atlas Constellation** once learners have encountered multiple sound shift rules ($P \rightarrow FF/F$, $T \rightarrow SS/S$) and can appreciate how words radiate outward from rules.
    - **Phase 4 (Extended Engagement)**: Unlock gamified consistency features (e.g. Streaks, Weekly consistency rings, Calque deep dives, Community leaderboards) gradually as habit-reinforcing mechanisms.
+
+---
+
+## 16. Review Hub Ergonomics & Multi-Modal Pedagogy
+
+To maximize recall depth, minimize cognitive friction, and provide rich audio feedback without external bloat, the review engine and cross-module bridges implement the following specifications:
+
+### 1. Active Recall Integrity (Anti-Spoiler Shield)
+- **Problem**: Testing a German noun requires simultaneous active recall of the root word stem and its grammatical gender article (*der*, *die*, or *das*). Rendering gender article badges or colored gender pills on the front of flashcards leaks the answer before the learner has retrieved it from memory.
+- **Solution**: The front prompt displays an unrevealed, neutral placeholder: `Gender: [ der / die / das ? ]`. Only upon revealing the card does the glowing, color-coded `GenderBadge` (`der` = Azure Blue, `die` = Vivid Rose, `das` = Emerald Green) animate into view.
+
+### 2. 1-Click Review Start & Fluid Mid-Session Style Switcher
+- **Problem**: Prompting learners with a pre-session review mode modal dialog before every single deck start introduces repetitive friction and decision fatigue.
+- **Solution**: Clicking any deck (*Due Today*, *By Shift Family*, *Weakest Words*, *Recent Lessons*, or *Compounds & Traps*) immediately launches the review session in the learner's default preferred style.
+- **Ergonomics**: Learners can switch review styles on the fly at any point during a live session via a sticky dropdown (`Style: [Quick Flip ▾]`) in the card header, or customize their default style via the Review Hub stats bar or style guide modal.
+
+### 3. Compound Calques & False Friend Traps Deck (5th Playable Deck)
+- **Content**: Integrates the platform's 32 compound calques (*Handschuh*, *Kühlschrank*, *Flugzeug*, *Kummerspeck*) and 16 deceptive false friend traps (*Gift*, *bald*, *bekommen*, *brave*) into a dedicated review deck.
+- **Pedagogical Function**: Reinforces German morphological transparency (why German describes functions directly) and protects learners from high-frequency false cognate traps using the unified SM-2 spacing algorithm.
+
+### 4. Desktop Keyboard Input for Tile Builder
+- **Tactile Typing**: In Tile Builder mode, learners on desktop can type matching letters to automatically pick available tiles from the bank without touching the mouse.
+- **Correction**: Pressing `Backspace` unpicks and returns the last selected tile to the rack.
+- **Submission**: Pressing `Enter` checks the assembled answer; `Space` reveals the solution.
+
+### 5. Zero-Dependency Native Speech Synthesis Engine
+- **Architecture**: Leverages the browser-native Web Speech API (`window.speechSynthesis`) with `de-DE` locale detection, German voice priority filtering, and learner-tailored pacing (`rate: 0.92`).
+- **Surface Area**: One-tap pronunciation buttons are embedded across `ShiftPair` components, the `WordCardDrawer`, `ReviewPage`, and `LessonReader`.
+- **Keyboard Shortcut**: In the Review Hub, pressing `[R]` or `[A]` on a revealed card immediately replays the pronunciation (including the grammatical article).
+
+### 6. Trail-to-Atlas Constellation Bridges
+- **Interconnected Learning**: Lessons and the Sound Shift Atlas form a continuous discovery loop. In `LessonReader`, Part 03 (Transformation Table) and Part 05 (Summary) feature dedicated exploration bridge cards directing learners to `/atlas/[family]` for the shift families introduced in the lesson.
+

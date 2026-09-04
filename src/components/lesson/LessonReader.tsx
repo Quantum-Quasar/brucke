@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, BookOpen, Sparkles, HelpCircle, Check, Info } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Sparkles, HelpCircle, Check, Info, Compass } from "lucide-react";
 import { ProgressBar5, type LessonSegment } from "./ProgressBar5";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { ExerciseWidget } from "./ExerciseWidgets";
@@ -23,6 +23,9 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   const [completedSegments, setCompletedSegments] = useState<LessonSegment[]>([]);
   const [retryQueue, setRetryQueue] = useState<ExerciseItem[]>([]);
   const [isLessonFinished, setIsLessonFinished] = useState(false);
+
+  const primaryShiftId = lesson.shift_categories && lesson.shift_categories[0];
+  const primaryShift = primaryShiftId ? data.shifts[primaryShiftId] : null;
 
   const completeLesson = useAppStore((s) => s.completeLesson);
   const markWordEncountered = useAppStore((s) => s.markWordEncountered);
@@ -206,6 +209,47 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                 </div>
               </div>
 
+              {/* Atlas Constellation Bridge */}
+              {primaryShift ? (
+                <div className="p-4 rounded-xl bg-cyan-950/30 border border-cyan-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 font-semibold">
+                      <Compass className="w-3.5 h-3.5" />
+                      <span>Atlas Constellation · {primaryShift.symbol}</span>
+                    </div>
+                    <p className="text-xs text-slate-300">
+                      View all {primaryShift.word_ids.length} cognates in the historical Sound Shift Atlas.
+                    </p>
+                  </div>
+                  <Link
+                    href={`/atlas/${primaryShift.id}`}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-xs font-mono text-cyan-300 transition whitespace-nowrap"
+                  >
+                    <span>Open Atlas</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
+              ) : (
+                <div className="p-4 rounded-xl bg-cyan-950/20 border border-cyan-500/15 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 font-semibold">
+                      <Compass className="w-3.5 h-3.5" />
+                      <span>Sound Shift Atlas</span>
+                    </div>
+                    <p className="text-xs text-slate-300">
+                      Explore all 7 historical sound shift families connecting English and German.
+                    </p>
+                  </div>
+                  <Link
+                    href="/atlas"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-xs font-mono text-cyan-300 transition whitespace-nowrap"
+                  >
+                    <span>Explore Atlas</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
+              )}
+
               <div className="pt-4 border-t border-white/5 flex items-center justify-between">
                 <button
                   type="button"
@@ -322,6 +366,27 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                   <div className="p-4 rounded-xl bg-black/30 border border-white/5 space-y-1">
                     <div className="text-xs font-mono text-cyan-400 uppercase tracking-wider">Curiosity Teaser</div>
                     <p className="text-sm text-cyan-200 italic">{lesson.summary.curiosity_teaser}</p>
+                  </div>
+
+                  {/* Atlas Deep-Dive Trail Bridge */}
+                  <div className="p-4 rounded-xl bg-white/5 border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div className="space-y-0.5">
+                      <div className="text-xs font-mono text-cyan-400 uppercase tracking-wider flex items-center gap-1.5 font-semibold">
+                        <Compass className="w-3.5 h-3.5" /> Sound Shift Atlas Bridge
+                      </div>
+                      <p className="text-xs text-slate-300">
+                        {primaryShift
+                          ? `Explore all ${primaryShift.word_ids.length} cognates governed by ${primaryShift.symbol} across High German history.`
+                          : "Explore all 7 historical shift families connecting English and German."}
+                      </p>
+                    </div>
+                    <Link
+                      href={primaryShift ? `/atlas/${primaryShift.id}` : "/atlas"}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold transition whitespace-nowrap"
+                    >
+                      <span>{primaryShift ? `Open ${primaryShift.symbol} Atlas` : "Open Sound Shift Atlas"}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
                   </div>
 
                   <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-4">

@@ -5,9 +5,10 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { X, ExternalLink, Compass, BookOpen, Search, CheckCircle2, Circle, Disc, Minus } from "lucide-react";
+import { X, ExternalLink, Compass, BookOpen, Search, CheckCircle2, Circle, Disc, Minus, Volume2 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { GenderBadge } from "@/components/common/GenderBadge";
+import { playGermanAudio } from "@/lib/audio";
 import compendium from "@/data/compendium.json";
 import type { CompendiumData, WordEntity } from "@/lib/types";
 
@@ -104,6 +105,15 @@ export const WordCardDrawer: React.FC = () => {
             <div className="flex items-center gap-3">
               <GenderBadge gender={word.gender} size="lg" showLabel />
               <h2 className="text-3xl font-bold text-amber-400 tracking-tight">{word.target_word}</h2>
+              <button
+                type="button"
+                onClick={() => playGermanAudio(word.target_word)}
+                className="p-1.5 rounded-lg bg-amber-400/10 hover:bg-amber-400/20 text-amber-400 border border-amber-400/20 transition"
+                title={`Listen to "${word.target_word}"`}
+                aria-label={`Listen to German pronunciation of ${word.target_word}`}
+              >
+                <Volume2 className="w-4 h-4" />
+              </button>
             </div>
             <div className="flex items-center gap-3 mt-2 text-sm text-slate-400 font-mono">
               <span>{word.ipa}</span>

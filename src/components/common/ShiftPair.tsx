@@ -1,9 +1,11 @@
 "use client";
 
 import React from "react";
+import { Volume2 } from "lucide-react";
 import { alignShiftPair } from "@/lib/shift-annotator";
 import { useAppStore } from "@/lib/store";
 import { GenderBadge } from "@/components/common/GenderBadge";
+import { playGermanAudio } from "@/lib/audio";
 import type { Gender } from "@/lib/types";
 
 interface ShiftPairProps {
@@ -89,6 +91,20 @@ export const ShiftPair: React.FC<ShiftPairProps> = ({
             </span>
           ))}
         </span>
+      </button>
+
+      {/* Audio Pronunciation Button */}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          const spoken = gender ? `${gender} ${german}` : german;
+          playGermanAudio(spoken);
+        }}
+        className="p-1 rounded text-slate-500 hover:text-cyan-300 hover:bg-white/5 transition cursor-pointer"
+        title={`Listen to German pronunciation for "${german}"`}
+      >
+        <Volume2 className="w-3.5 h-3.5" />
       </button>
 
       {/* Mastery Badge */}
