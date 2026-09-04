@@ -167,4 +167,16 @@ describe("App Store & User Progress State", () => {
     expect(localRaw).toBeTruthy();
     expect(JSON.parse(localRaw!).hasCompletedOnboarding).toBe(true);
   });
+
+  it("manages and persists gender introduction dismissal", () => {
+    const store = useAppStore.getState();
+    expect(store.hasSeenGenderIntro).toBe(false);
+
+    store.dismissGenderIntro();
+    expect(useAppStore.getState().hasSeenGenderIntro).toBe(true);
+
+    const localRaw = localStorage.getItem(STORAGE_KEY);
+    expect(localRaw).toBeTruthy();
+    expect(JSON.parse(localRaw!).hasSeenGenderIntro).toBe(true);
+  });
 });

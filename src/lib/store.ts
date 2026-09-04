@@ -24,6 +24,7 @@ export interface AppState {
   preferredReviewMode: ReviewMode;
   hasCompletedOnboarding: boolean;
   isOnboardingOpen: boolean;
+  hasSeenGenderIntro: boolean;
 
   // Actions
   markWordExplored: (wordId: string) => void;
@@ -35,6 +36,7 @@ export interface AppState {
   completeOnboarding: () => void;
   openOnboarding: () => void;
   closeOnboarding: () => void;
+  dismissGenderIntro: () => void;
   openWordDrawer: (wordId: string) => void;
   closeWordDrawer: () => void;
   setUmlautTolerance: (enabled: boolean) => void;
@@ -101,6 +103,7 @@ export function saveState(state: AppState) {
     tolerance: state.tolerance,
     preferredReviewMode: state.preferredReviewMode,
     hasCompletedOnboarding: state.hasCompletedOnboarding,
+    hasSeenGenderIntro: state.hasSeenGenderIntro,
   };
   const serialized = JSON.stringify(toPersist);
 
@@ -127,6 +130,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   preferredReviewMode: (initialSaved.preferredReviewMode as ReviewMode) || "flashcard",
   hasCompletedOnboarding: initialSaved.hasCompletedOnboarding || false,
   isOnboardingOpen: false,
+  hasSeenGenderIntro: initialSaved.hasSeenGenderIntro || false,
   tolerance: initialSaved.tolerance || {
     umlautTolerance: false,
     capitalizationTolerance: false,
@@ -148,6 +152,14 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   closeOnboarding: () => {
     set({ isOnboardingOpen: false });
+  },
+
+  dismissGenderIntro: () => {
+    set((s) => {
+      const next = { ...s, hasSeenGenderIntro: true };
+      saveState(next);
+      return next;
+    });
   },
 
   setPreferredReviewMode: (mode) => {
@@ -290,6 +302,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       preferredReviewMode: "flashcard" as ReviewMode,
       hasCompletedOnboarding: false,
       isOnboardingOpen: false,
+      hasSeenGenderIntro: false,
       tolerance: {
         umlautTolerance: false,
         capitalizationTolerance: false,
@@ -329,6 +342,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           preferredReviewMode: saved.preferredReviewMode || s.preferredReviewMode,
           hasCompletedOnboarding: completed,
           isOnboardingOpen: !completed, // Automatically trigger onboarding on first visit
+          hasSeenGenderIntro: typeof saved.hasSeenGenderIntro === "boolean" ? saved.hasSeenGenderIntro : s.hasSeenGenderIntro,
           tolerance: saved.tolerance ? { ...s.tolerance, ...saved.tolerance } : s.tolerance,
         };
       });

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { X, ExternalLink, Compass, BookOpen, Search, CheckCircle2, Circle, Disc, Minus } from "lucide-react";
 import { useAppStore } from "@/lib/store";
+import { GenderBadge } from "@/components/common/GenderBadge";
 import compendium from "@/data/compendium.json";
 import type { CompendiumData, WordEntity } from "@/lib/types";
 
@@ -100,15 +101,11 @@ export const WordCardDrawer: React.FC = () => {
         <div className="p-6 space-y-6">
           {/* Main Word + Pronunciation */}
           <div>
-            <div className="flex items-baseline gap-3">
-              {word.gender && (
-                <span className="text-sm font-mono uppercase font-bold text-blue-400 px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20">
-                  {word.gender}
-                </span>
-              )}
+            <div className="flex items-center gap-3">
+              <GenderBadge gender={word.gender} size="lg" showLabel />
               <h2 className="text-3xl font-bold text-amber-400 tracking-tight">{word.target_word}</h2>
             </div>
-            <div className="flex items-center gap-3 mt-1.5 text-sm text-slate-400 font-mono">
+            <div className="flex items-center gap-3 mt-2 text-sm text-slate-400 font-mono">
               <span>{word.ipa}</span>
               <span>·</span>
               <span className="italic text-slate-300">&quot;{word.english_meaning}&quot;</span>

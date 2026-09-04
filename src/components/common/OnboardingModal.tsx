@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { ShiftPair } from "@/components/common/ShiftPair";
+import { GenderBadge } from "@/components/common/GenderBadge";
 
 export const OnboardingModal: React.FC = () => {
   const isOpen = useAppStore((s) => s.isOnboardingOpen);
@@ -28,28 +29,20 @@ export const OnboardingModal: React.FC = () => {
 
   const shiftDemos = [
     {
+      english: "hand",
+      german: "Hand",
+      gender: "die" as const,
+      rule: "direct twin",
+      wordId: "hand",
+      insight: "English 'hand' is identical to German 'Hand', prominently paired with the vivid rose/feminine article 'die'.",
+    },
+    {
       english: "water",
       german: "Wasser",
       gender: "das" as const,
       rule: "t → ss / s",
       wordId: "wasser",
-      insight: "English 't' between vowels consistently shifted to German 'ss'. You already know water, better (besser), and bite (beißen).",
-    },
-    {
-      english: "hope",
-      german: "hoffen",
-      gender: null,
-      rule: "p → ff / f",
-      wordId: "hoffen",
-      insight: "English 'p' shifted to German 'ff' or 'pf'. Consider open (offen), ship (Schiff), and help (helfen).",
-    },
-    {
-      english: "make",
-      german: "machen",
-      gender: null,
-      rule: "k → ch",
-      wordId: "machen",
-      insight: "English 'k' softened into German 'ch'. Think of book (Buch), cook (kochen), and awake (wachen).",
+      insight: "English 't' between vowels consistently shifted to German 'ss'. Neuter nouns are marked with emerald green 'das'.",
     },
     {
       english: "brother",
@@ -57,7 +50,15 @@ export const OnboardingModal: React.FC = () => {
       gender: "der" as const,
       rule: "th → d",
       wordId: "bruder",
-      insight: "German never developed the 'th' sound; English kept it. Every English 'th' becomes a German 'd': that (das), think (denken).",
+      insight: "German never developed 'th'; every English 'th' shifted to 'd'. Masculine nouns take azure blue 'der'.",
+    },
+    {
+      english: "hope",
+      german: "hoffen",
+      gender: null,
+      rule: "p → ff / f",
+      wordId: "hoffen",
+      insight: "English 'p' shifted to German 'ff' or 'pf'. Verbs do not have grammatical gender and take the universal -en ending.",
     },
   ];
 
@@ -230,6 +231,53 @@ export const OnboardingModal: React.FC = () => {
                   <p className="text-xs text-slate-400 leading-relaxed">
                     Beginner exercises use tactile morpheme tiles and cognate matching. You discover through deduction before ever cold typing.
                   </p>
+                </div>
+              </div>
+
+              {/* Principle 4: Grammatical Gender Colors */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-[#161722] border border-cyan-500/30 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="text-amber-400 font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                    04 • The 3 Colors of German Gender
+                  </div>
+                  <span className="text-[10px] font-mono text-cyan-300">der · die · das</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  In German, <strong>every noun has an inherent grammatical gender</strong>. Rather than memorizing dry rules,
+                  Brücke binds high-contrast color badges to every noun so your visual memory encodes gender automatically:
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                  <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/30 flex flex-col justify-between gap-1.5">
+                    <div className="flex items-center justify-between">
+                      <GenderBadge gender="der" size="sm" showLabel />
+                      <span className="text-[11px] font-bold text-blue-300">Blue</span>
+                    </div>
+                    <p className="text-xs font-mono text-slate-300">
+                      der Bruder <span className="text-slate-400 font-sans text-[11px]">(brother)</span>
+                    </p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 flex flex-col justify-between gap-1.5">
+                    <div className="flex items-center justify-between">
+                      <GenderBadge gender="die" size="sm" showLabel />
+                      <span className="text-[11px] font-bold text-rose-300">Rose / Red</span>
+                    </div>
+                    <p className="text-xs font-mono text-slate-300">
+                      die Hand <span className="text-slate-400 font-sans text-[11px]">(hand)</span>
+                    </p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col justify-between gap-1.5">
+                    <div className="flex items-center justify-between">
+                      <GenderBadge gender="das" size="sm" showLabel />
+                      <span className="text-[11px] font-bold text-emerald-300">Green</span>
+                    </div>
+                    <p className="text-xs font-mono text-slate-300">
+                      das Wasser <span className="text-slate-400 font-sans text-[11px]">(water)</span>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

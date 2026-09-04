@@ -3,6 +3,7 @@
 import React from "react";
 import { alignShiftPair } from "@/lib/shift-annotator";
 import { useAppStore } from "@/lib/store";
+import { GenderBadge } from "@/components/common/GenderBadge";
 import type { Gender } from "@/lib/types";
 
 interface ShiftPairProps {
@@ -46,13 +47,6 @@ export const ShiftPair: React.FC<ShiftPairProps> = ({
 
   const indicator = getMasteryIndicator();
 
-  const getGenderColor = (g?: Gender | null) => {
-    if (g === "der") return "text-blue-400 bg-blue-500/10 border-blue-500/30";
-    if (g === "die") return "text-rose-400 bg-rose-500/10 border-rose-500/30";
-    if (g === "das") return "text-emerald-400 bg-emerald-500/10 border-emerald-500/30";
-    return "";
-  };
-
   return (
     <div
       className={`inline-flex flex-wrap items-center gap-2.5 px-3 py-1.5 rounded-lg border transition-all duration-200 ${indicator.border} ${className}`}
@@ -79,15 +73,11 @@ export const ShiftPair: React.FC<ShiftPairProps> = ({
       <button
         type="button"
         onClick={() => showDetailsOnClick && openWordDrawer(targetId)}
-        className={`group inline-flex items-center gap-1.5 font-semibold text-sm transition-transform active:scale-95 ${
+        className={`group inline-flex items-center gap-2 font-semibold text-sm transition-transform active:scale-95 ${
           showDetailsOnClick ? "cursor-pointer hover:underline decoration-amber-400/50 underline-offset-4" : ""
         }`}
       >
-        {gender && (
-          <span className={`text-[10px] font-mono px-1 py-0.2 rounded border uppercase tracking-wider font-semibold ${getGenderColor(gender)}`}>
-            {gender}
-          </span>
-        )}
+        <GenderBadge gender={gender} size="sm" />
 
         <span className="text-amber-400 group-hover:text-amber-300">
           {annotation.germanSegments.map((seg, i) => (

@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
+import { GenderBadge } from "@/components/common/GenderBadge";
+import { GenderGuideBanner } from "@/components/common/GenderGuideBanner";
 import { useAppStore } from "@/lib/store";
 import { getDueCards, getWeakestCards, type ReviewGrade } from "@/lib/srs";
 import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
@@ -378,19 +380,25 @@ export default function ReviewPage() {
           <span className="text-amber-400 font-bold">{activeCount} In Active SRS 🔄</span>
           <span className="text-cyan-400 font-bold">{dueCards.length} Due Today ⚡</span>
         </div>
-        <div className="flex items-center gap-2 text-slate-400">
-          <span>Default Style:</span>
-          <span className="text-cyan-300 font-semibold uppercase">
-            {reviewMode === "flashcard"
-              ? "Quick Flip"
-              : reviewMode === "mcq"
-              ? "MCQ"
-              : reviewMode === "tiles"
-              ? "Tiles"
-              : "Typing"}
-          </span>
+        <div className="flex items-center gap-4">
+          <GenderGuideBanner compact />
+          <div className="flex items-center gap-2 text-slate-400">
+            <span>Default Style:</span>
+            <span className="text-cyan-300 font-semibold uppercase">
+              {reviewMode === "flashcard"
+                ? "Quick Flip"
+                : reviewMode === "mcq"
+                ? "MCQ"
+                : reviewMode === "tiles"
+                ? "Tiles"
+                : "Typing"}
+            </span>
+          </div>
         </div>
       </div>
+
+      {/* Gender Guide Banner (Dismissible on first encounter) */}
+      <GenderGuideBanner />
 
       {/* ACTIVE REVIEW SESSION MODAL / CARD */}
       {activeDeck && currentCard && currentWord ? (
@@ -447,9 +455,14 @@ export default function ReviewPage() {
 
           {/* Front Prompt */}
           <div className="text-center space-y-2 py-2">
-            <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest">
-              Shift Rule: {currentWord.shift_rule}
-            </span>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest">
+                Shift Rule: {currentWord.shift_rule}
+              </span>
+              {currentWord.gender && (
+                <GenderBadge gender={currentWord.gender} size="sm" showLabel />
+              )}
+            </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-100">
               {currentWord.english_cognate}
             </h2>

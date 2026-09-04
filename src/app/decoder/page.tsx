@@ -7,6 +7,8 @@ import { useSearchParams } from "next/navigation";
 import { Search, Sparkles, AlertCircle, ExternalLink, ArrowRight, X } from "lucide-react";
 import { decodeWord, type DecoderResult } from "@/lib/decoder-engine";
 import { ShiftPair } from "@/components/common/ShiftPair";
+import { GenderBadge } from "@/components/common/GenderBadge";
+import { GenderGuideBanner } from "@/components/common/GenderGuideBanner";
 import { useAppStore } from "@/lib/store";
 
 function DecoderContent() {
@@ -58,6 +60,9 @@ function DecoderContent() {
           Type any English word. See the historical consonant shift transform it into its authentic German twin in real time.
         </p>
       </div>
+
+      {/* Gender Guide Banner */}
+      <GenderGuideBanner />
 
       {/* Main Interactive Input Box */}
       <div className="p-6 sm:p-8 rounded-3xl bg-[#1C1D2B] border-2 border-white/10 shadow-2xl space-y-6">
@@ -136,9 +141,9 @@ function DecoderContent() {
               </p>
               <div className="p-3.5 rounded-xl bg-black/40 border border-white/5 space-y-1">
                 <div className="text-[11px] font-mono text-slate-400">German word:</div>
-                <div className="text-xl font-bold text-amber-400">
-                  {result.gender && <span className="text-sm font-mono text-blue-400 mr-2">{result.gender}</span>}
-                  {result.germanTranslation}
+                <div className="text-xl font-bold text-amber-400 flex items-center gap-2">
+                  <GenderBadge gender={result.gender} size="md" />
+                  <span>{result.germanTranslation}</span>
                 </div>
                 <p className="text-xs text-cyan-300 pt-1">{result.etymologicalBridge}</p>
               </div>
