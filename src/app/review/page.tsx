@@ -2,7 +2,7 @@
 
 // ponytail: cohesive review hub with 4 decks and sm-2 grading
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { RotateCcw, Flame, CheckCircle2, Clock, Zap, Layers, ChevronRight, Check } from "lucide-react";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
@@ -22,6 +22,8 @@ export default function ReviewPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
   const [inputGuess, setInputGuess] = useState("");
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const srsCards = useAppStore((s) => s.srsCards);
   const wordMastery = useAppStore((s) => s.wordMastery);
@@ -82,6 +84,75 @@ export default function ReviewPage() {
     }
   };
 
+  // Auto-focus input when a card is shown unrevealed
+  useEffect(() => {
+    if (activeDeck && !isRevealed) {
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [activeDeck, currentIndex, isRevealed]);
+
+  // Global review keyboard controls:
+  // - Escape: Exit review session cleanly
+  // - Enter or Space (unrevealed): Show Answer
+  // - 1, 2, 3, 4 (revealed): Grade card (Again = 1, Hard = 3, Good = 4, Easy = 5)
+  // - Enter or Space (revealed): Quick Advance with Good (4)
+  useEffect(() => {
+    if (!activeDeck || sessionCards.length === 0) return;
+
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // If user is inside an input other than our review input (e.g. search / decoder modal), ignore
+      if (e.target instanceof HTMLInputElement && e.target !== inputRef.current) {
+        return;
+      }
+
+      // Escape exits session
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setActiveDeck(null);
+        return;
+      }
+
+      if (!isRevealed) {
+        // Front of card: Show Answer
+        if (e.key === "Enter") {
+          e.preventDefault();
+          setIsRevealed(true);
+        } else if (e.key === " " || e.code === "Space") {
+          // If the user has typed text into the input, let them type space
+          if (e.target === inputRef.current && inputGuess.trim().length > 0) {
+            return;
+          }
+          e.preventDefault();
+          setIsRevealed(true);
+        }
+      } else {
+        // Back of card: 1, 2, 3, 4 grading
+        if (e.key === "1" || e.code === "Digit1" || e.code === "Numpad1") {
+          e.preventDefault();
+          handleGrade(1);
+        } else if (e.key === "2" || e.code === "Digit2" || e.code === "Numpad2") {
+          e.preventDefault();
+          handleGrade(3);
+        } else if (e.key === "3" || e.code === "Digit3" || e.code === "Numpad3") {
+          e.preventDefault();
+          handleGrade(4);
+        } else if (e.key === "4" || e.code === "Digit4" || e.code === "Numpad4") {
+          e.preventDefault();
+          handleGrade(5);
+        } else if (e.key === "Enter" || e.key === " " || e.code === "Space") {
+          e.preventDefault();
+          handleGrade(4);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+  }, [activeDeck, sessionCards, isRevealed, inputGuess, currentIndex]);
+
   const currentCard = sessionCards[currentIndex];
   const currentWord: WordEntity | undefined = currentCard ? data.words[currentCard.word_id] : undefined;
 
@@ -114,16 +185,22 @@ export default function ReviewPage() {
 
       {/* ACTIVE REVIEW SESSION MODAL / CARD */}
       {activeDeck && currentCard && currentWord ? (
-        <div className="p-6 sm:p-8 rounded-2xl bg-[#1C1D2B] border-2 border-cyan-500/40 shadow-2xl space-y-6">
+        <div className="p-6 sm:p-8 rounded-2xl bg-[#1C1D2B] border-2 border-cyan-500/40 shadow-2xl space-y-6 animate-in fade-in duration-150">
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
             <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
               Review Card {currentIndex + 1} of {sessionCards.length}
             </span>
             <button
+              type="button"
+              tabIndex={-1}
               onClick={() => setActiveDeck(null)}
-              className="text-xs text-slate-400 hover:text-white px-2 py-1 rounded bg-white/5"
+              onKeyDown={(e) => {
+                if (e.key === " " || e.key === "Enter") e.preventDefault();
+              }}
+              className="text-xs font-mono text-slate-400 hover:text-white px-2.5 py-1 rounded bg-white/5 border border-white/5 hover:bg-white/10 transition cursor-pointer"
+              title="Exit Session (Esc)"
             >
-              Exit Session
+              Exit Session [Esc]
             </button>
           </div>
 
@@ -142,18 +219,27 @@ export default function ReviewPage() {
           {!isRevealed ? (
             <div className="space-y-4 max-w-md mx-auto">
               <input
+                ref={inputRef}
                 type="text"
                 value={inputGuess}
                 onChange={(e) => setInputGuess(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && setIsRevealed(true)}
-                placeholder="Type German derivation (or press Space to reveal)..."
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    setIsRevealed(true);
+                  } else if ((e.key === " " || e.code === "Space") && inputGuess.trim() === "") {
+                    e.preventDefault();
+                    setIsRevealed(true);
+                  }
+                }}
+                placeholder="Type German derivation (or press Space / Enter to reveal)..."
                 className="w-full px-4 py-3 rounded-xl bg-[#161722] border border-white/15 text-amber-300 text-center font-bold text-lg outline-none focus:border-cyan-400"
               />
               <GermanCharBar onInsert={(c) => setInputGuess((prev) => prev + c)} />
               <button
                 type="button"
                 onClick={() => setIsRevealed(true)}
-                className="w-full py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition cursor-pointer"
+                className="w-full py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition cursor-pointer active:scale-95 shadow-lg shadow-cyan-500/20"
               >
                 Show Answer [Enter / Space]
               </button>
@@ -178,42 +264,55 @@ export default function ReviewPage() {
               </div>
 
               {/* SM-2 Grade Buttons */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => handleGrade(1)}
-                  className="p-3 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-semibold text-xs flex flex-col items-center gap-1 transition active:scale-95"
-                >
-                  <span className="text-sm font-bold">Again (1d)</span>
-                  <span className="text-[10px] font-mono text-rose-400/80">Forgot [1]</span>
-                </button>
+              <div className="space-y-2 pt-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleGrade(1)}
+                    className="p-3.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-semibold text-xs flex flex-col items-center gap-1.5 transition active:scale-95 cursor-pointer"
+                  >
+                    <span className="text-sm font-bold">Again (1d)</span>
+                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold border border-rose-500/30">
+                      Press [1]
+                    </span>
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() => handleGrade(3)}
-                  className="p-3 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-semibold text-xs flex flex-col items-center gap-1 transition active:scale-95"
-                >
-                  <span className="text-sm font-bold">Hard (3d)</span>
-                  <span className="text-[10px] font-mono text-amber-400/80">Struggled [2]</span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => handleGrade(3)}
+                    className="p-3.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-semibold text-xs flex flex-col items-center gap-1.5 transition active:scale-95 cursor-pointer"
+                  >
+                    <span className="text-sm font-bold">Hard (3d)</span>
+                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
+                      Press [2]
+                    </span>
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() => handleGrade(4)}
-                  className="p-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 font-semibold text-xs flex flex-col items-center gap-1 transition active:scale-95"
-                >
-                  <span className="text-sm font-bold">Good (6d)</span>
-                  <span className="text-[10px] font-mono text-emerald-400/80">Standard [3]</span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => handleGrade(4)}
+                    className="p-3.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border-2 border-emerald-500/50 text-emerald-300 font-semibold text-xs flex flex-col items-center gap-1.5 transition active:scale-95 cursor-pointer shadow-lg shadow-emerald-500/10"
+                  >
+                    <span className="text-sm font-bold">Good (6d)</span>
+                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+                      Press [3] / Space
+                    </span>
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() => handleGrade(5)}
-                  className="p-3 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 font-semibold text-xs flex flex-col items-center gap-1 transition active:scale-95"
-                >
-                  <span className="text-sm font-bold">Easy (14d)</span>
-                  <span className="text-[10px] font-mono text-cyan-400/80">Intuitive [4]</span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => handleGrade(5)}
+                    className="p-3.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 font-semibold text-xs flex flex-col items-center gap-1.5 transition active:scale-95 cursor-pointer"
+                  >
+                    <span className="text-sm font-bold">Easy (14d)</span>
+                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
+                      Press [4]
+                    </span>
+                  </button>
+                </div>
+                <div className="text-center text-[11px] font-mono text-slate-400">
+                  Keyboard shortcuts: press <span className="text-amber-300 font-bold">1</span>, <span className="text-amber-300 font-bold">2</span>, <span className="text-emerald-300 font-bold">3</span>, or <span className="text-cyan-300 font-bold">4</span> (or <span className="text-white font-bold">Space/Enter</span> for Good)
+                </div>
               </div>
             </div>
           )}

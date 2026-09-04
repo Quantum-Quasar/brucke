@@ -6,9 +6,23 @@ import { TopNav } from "@/components/navigation/TopNav";
 import { BottomNav } from "@/components/navigation/BottomNav";
 import { WordCardDrawer } from "@/components/common/WordCardDrawer";
 import { DecoderModal } from "@/components/navigation/DecoderModal";
+import { useAppStore, STORAGE_KEY } from "@/lib/store";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isDecoderOpen, setIsDecoderOpen] = useState(false);
+
+  // Hydrate local progress from localStorage and cookies on client mount
+  useEffect(() => {
+    useAppStore.getState().hydrateFromStorage();
+
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY) {
+        useAppStore.getState().hydrateFromStorage();
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
 
   // Global hotkey listener for Cmd+K / Ctrl+K
   useEffect(() => {

@@ -36,32 +36,73 @@ export interface AppState {
   dismissCapitalizationPrompt: () => void;
   logDailyActivity: () => void;
   resetProgress: () => void;
+  hydrateFromStorage: () => void;
 }
 
-const STORAGE_KEY = "brucke_app_state_v1";
+export const STORAGE_KEY = "brucke_app_state_v1";
+export const STORAGE_COOKIE_KEY = "brucke_progress";
 
-function loadSavedState(): Partial<AppState> {
+export function getCookie(name: string): string | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(new RegExp("(^|;\\s*)" + name + "=([^;]*)"));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
+export function setCookie(name: string, value: string, days = 365) {
+  if (typeof document === "undefined") return;
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+}
+
+export function deleteCookie(name: string) {
+  if (typeof document === "undefined") return;
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
+}
+
+export function loadSavedState(): Partial<AppState> {
   if (typeof window === "undefined") return {};
+
+  // 1. Try localStorage
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch {
-    return {};
-  }
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === "object") return parsed;
+    }
+  } catch {}
+
+  // 2. Fallback to cookie storage
+  try {
+    const rawCookie = getCookie(STORAGE_COOKIE_KEY);
+    if (rawCookie) {
+      const parsed = JSON.parse(rawCookie);
+      if (parsed && typeof parsed === "object") return parsed;
+    }
+  } catch {}
+
+  return {};
 }
 
-function saveState(state: AppState) {
+export function saveState(state: AppState) {
   if (typeof window === "undefined") return;
+  const toPersist = {
+    completedLessons: state.completedLessons,
+    currentLessonId: state.currentLessonId,
+    wordMastery: state.wordMastery,
+    srsCards: state.srsCards,
+    weeklyActivity: state.weeklyActivity,
+    tolerance: state.tolerance,
+  };
+  const serialized = JSON.stringify(toPersist);
+
+  // 1. Save to localStorage
   try {
-    const toPersist = {
-      completedLessons: state.completedLessons,
-      currentLessonId: state.currentLessonId,
-      wordMastery: state.wordMastery,
-      srsCards: state.srsCards,
-      weeklyActivity: state.weeklyActivity,
-      tolerance: state.tolerance,
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(toPersist));
+    localStorage.setItem(STORAGE_KEY, serialized);
+  } catch {}
+
+  // 2. Also save to cookie for durable local browser persistence
+  try {
+    setCookie(STORAGE_COOKIE_KEY, serialized, 365);
   } catch {}
 }
 
@@ -218,8 +259,38 @@ export const useAppStore = create<AppState>((set, get) => ({
       },
     };
     if (typeof window !== "undefined") {
-      localStorage.removeItem(STORAGE_KEY);
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {}
+      try {
+        deleteCookie(STORAGE_COOKIE_KEY);
+      } catch {}
     }
     set(emptyState);
   },
+
+  hydrateFromStorage: () => {
+    if (typeof window === "undefined") return;
+    const saved = loadSavedState();
+    if (saved && Object.keys(saved).length > 0) {
+      set((s) => ({
+        ...s,
+        completedLessons: Array.isArray(saved.completedLessons) && saved.completedLessons.length > 0
+          ? saved.completedLessons
+          : s.completedLessons,
+        currentLessonId: saved.currentLessonId ? Math.max(s.currentLessonId, saved.currentLessonId) : s.currentLessonId,
+        wordMastery: { ...s.wordMastery, ...(saved.wordMastery || {}) },
+        srsCards: { ...s.srsCards, ...(saved.srsCards || {}) },
+        weeklyActivity: Array.isArray(saved.weeklyActivity) ? saved.weeklyActivity : s.weeklyActivity,
+        tolerance: saved.tolerance ? { ...s.tolerance, ...saved.tolerance } : s.tolerance,
+      }));
+    }
+  },
 }));
+
+// Auto-hydrate on client load if running in browser
+if (typeof window !== "undefined") {
+  setTimeout(() => {
+    useAppStore.getState().hydrateFromStorage();
+  }, 0);
+}
