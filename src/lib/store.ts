@@ -22,6 +22,8 @@ export interface AppState {
   activeWordDrawerId: string | null;
   tolerance: ToleranceSettings;
   preferredReviewMode: ReviewMode;
+  hasCompletedOnboarding: boolean;
+  isOnboardingOpen: boolean;
 
   // Actions
   markWordExplored: (wordId: string) => void;
@@ -30,6 +32,9 @@ export interface AppState {
   completeLesson: (lessonId: number) => void;
   recordReview: (wordId: string, grade: ReviewGrade) => void;
   setPreferredReviewMode: (mode: ReviewMode) => void;
+  completeOnboarding: () => void;
+  openOnboarding: () => void;
+  closeOnboarding: () => void;
   openWordDrawer: (wordId: string) => void;
   closeWordDrawer: () => void;
   setUmlautTolerance: (enabled: boolean) => void;
@@ -95,6 +100,7 @@ export function saveState(state: AppState) {
     weeklyActivity: state.weeklyActivity,
     tolerance: state.tolerance,
     preferredReviewMode: state.preferredReviewMode,
+    hasCompletedOnboarding: state.hasCompletedOnboarding,
   };
   const serialized = JSON.stringify(toPersist);
 
@@ -119,11 +125,29 @@ export const useAppStore = create<AppState>((set, get) => ({
   weeklyActivity: initialSaved.weeklyActivity || [true, true, false, false, false, false, false],
   activeWordDrawerId: null,
   preferredReviewMode: (initialSaved.preferredReviewMode as ReviewMode) || "flashcard",
+  hasCompletedOnboarding: initialSaved.hasCompletedOnboarding || false,
+  isOnboardingOpen: false,
   tolerance: initialSaved.tolerance || {
     umlautTolerance: false,
     capitalizationTolerance: false,
     umlautDismissals: 0,
     capitalizationDismissals: 0,
+  },
+
+  completeOnboarding: () => {
+    set((s) => {
+      const next = { ...s, hasCompletedOnboarding: true, isOnboardingOpen: false };
+      saveState(next);
+      return next;
+    });
+  },
+
+  openOnboarding: () => {
+    set({ isOnboardingOpen: true });
+  },
+
+  closeOnboarding: () => {
+    set({ isOnboardingOpen: false });
   },
 
   setPreferredReviewMode: (mode) => {
@@ -264,6 +288,8 @@ export const useAppStore = create<AppState>((set, get) => ({
       weeklyActivity: [false, false, false, false, false, false, false],
       activeWordDrawerId: null,
       preferredReviewMode: "flashcard" as ReviewMode,
+      hasCompletedOnboarding: false,
+      isOnboardingOpen: false,
       tolerance: {
         umlautTolerance: false,
         capitalizationTolerance: false,
@@ -286,18 +312,29 @@ export const useAppStore = create<AppState>((set, get) => ({
     if (typeof window === "undefined") return;
     const saved = loadSavedState();
     if (saved && Object.keys(saved).length > 0) {
-      set((s) => ({
-        ...s,
-        completedLessons: Array.isArray(saved.completedLessons) && saved.completedLessons.length > 0
-          ? saved.completedLessons
-          : s.completedLessons,
-        currentLessonId: saved.currentLessonId ? Math.max(s.currentLessonId, saved.currentLessonId) : s.currentLessonId,
-        wordMastery: { ...s.wordMastery, ...(saved.wordMastery || {}) },
-        srsCards: { ...s.srsCards, ...(saved.srsCards || {}) },
-        weeklyActivity: Array.isArray(saved.weeklyActivity) ? saved.weeklyActivity : s.weeklyActivity,
-        preferredReviewMode: saved.preferredReviewMode || s.preferredReviewMode,
-        tolerance: saved.tolerance ? { ...s.tolerance, ...saved.tolerance } : s.tolerance,
-      }));
+      set((s) => {
+        const completed = typeof saved.hasCompletedOnboarding === "boolean"
+          ? saved.hasCompletedOnboarding
+          : s.hasCompletedOnboarding;
+
+        return {
+          ...s,
+          completedLessons: Array.isArray(saved.completedLessons) && saved.completedLessons.length > 0
+            ? saved.completedLessons
+            : s.completedLessons,
+          currentLessonId: saved.currentLessonId ? Math.max(s.currentLessonId, saved.currentLessonId) : s.currentLessonId,
+          wordMastery: { ...s.wordMastery, ...(saved.wordMastery || {}) },
+          srsCards: { ...s.srsCards, ...(saved.srsCards || {}) },
+          weeklyActivity: Array.isArray(saved.weeklyActivity) ? saved.weeklyActivity : s.weeklyActivity,
+          preferredReviewMode: saved.preferredReviewMode || s.preferredReviewMode,
+          hasCompletedOnboarding: completed,
+          isOnboardingOpen: !completed, // Automatically trigger onboarding on first visit
+          tolerance: saved.tolerance ? { ...s.tolerance, ...saved.tolerance } : s.tolerance,
+        };
+      });
+    } else {
+      // Clean slate first-time user: trigger onboarding!
+      set((s) => ({ ...s, isOnboardingOpen: !s.hasCompletedOnboarding }));
     }
   },
 }));

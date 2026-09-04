@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Compass, RotateCcw, Search, Sparkles } from "lucide-react";
+import { BookOpen, Compass, RotateCcw, Search, Sparkles, HelpCircle } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import compendium from "@/data/compendium.json";
 
@@ -16,6 +16,7 @@ interface TopNavProps {
 export const TopNav: React.FC<TopNavProps> = ({ onOpenDecoderModal }) => {
   const pathname = usePathname();
   const wordMastery = useAppStore((s) => s.wordMastery);
+  const openOnboarding = useAppStore((s) => s.openOnboarding);
 
   const masteredCount = Object.values(wordMastery).filter((m) => m === "mastered").length;
   const encounteredCount = Object.values(wordMastery).filter((m) => m === "encountered").length;
@@ -75,6 +76,17 @@ export const TopNav: React.FC<TopNavProps> = ({ onOpenDecoderModal }) => {
             <span className="text-amber-400 font-bold">{encounteredCount}●</span>
             <span className="text-slate-500">/ {totalWords}</span>
           </div>
+
+          {/* Tour / Guide button */}
+          <button
+            type="button"
+            onClick={openOnboarding}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-slate-400 hover:text-amber-300 transition cursor-pointer"
+            title="App Tour & Linguistic Philosophy"
+          >
+            <HelpCircle className="w-3.5 h-3.5 text-amber-400/80" />
+            <span className="hidden sm:inline">Tour</span>
+          </button>
 
           {/* Cmd+K trigger button */}
           <button

@@ -6,6 +6,7 @@ import { TopNav } from "@/components/navigation/TopNav";
 import { BottomNav } from "@/components/navigation/BottomNav";
 import { WordCardDrawer } from "@/components/common/WordCardDrawer";
 import { DecoderModal } from "@/components/navigation/DecoderModal";
+import { OnboardingModal } from "@/components/common/OnboardingModal";
 import { useAppStore, STORAGE_KEY } from "@/lib/store";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Global Cross-Layer Drawers & Modals */}
         <WordCardDrawer />
         <DecoderModal isOpen={isDecoderOpen} onClose={() => setIsDecoderOpen(false)} />
+        <OnboardingModal />
       </body>
     </html>
   );

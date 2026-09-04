@@ -145,4 +145,26 @@ describe("App Store & User Progress State", () => {
     expect(localRaw).toBeTruthy();
     expect(JSON.parse(localRaw!).preferredReviewMode).toBe("mcq");
   });
+
+  it("manages and persists first-time onboarding completion", () => {
+    const store = useAppStore.getState();
+
+    // Default or after reset
+    store.openOnboarding();
+    expect(useAppStore.getState().isOnboardingOpen).toBe(true);
+
+    store.closeOnboarding();
+    expect(useAppStore.getState().isOnboardingOpen).toBe(false);
+
+    // Complete onboarding (e.g. user finishes or clicks skip)
+    store.completeOnboarding();
+    const updated = useAppStore.getState();
+    expect(updated.hasCompletedOnboarding).toBe(true);
+    expect(updated.isOnboardingOpen).toBe(false);
+
+    // Persisted to storage
+    const localRaw = localStorage.getItem(STORAGE_KEY);
+    expect(localRaw).toBeTruthy();
+    expect(JSON.parse(localRaw!).hasCompletedOnboarding).toBe(true);
+  });
 });
