@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           name="description"
           content="Hundreds of German words you already know without realizing it. Learn German smarter with historical consonant shifts."
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className="min-h-screen bg-[#12131C] text-[#F0EDEA] flex flex-col antialiased selection:bg-amber-500/30 selection:text-amber-200">
         <TopNav onOpenDecoderModal={() => setIsDecoderOpen(true)} />

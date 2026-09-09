@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import { LESSONS } from "../data/lessons";
 
 describe("Progressive Bite-Sized Exercise Architecture", () => {
-  it("provides 5 fully interactive foundational lessons", () => {
-    expect(LESSONS.length).toBeGreaterThanOrEqual(5);
+  it("provides 10 fully interactive foundational lessons", () => {
+    expect(LESSONS.length).toBeGreaterThanOrEqual(10);
   });
 
   it("scaffolds exercises so initial problems are never cold typing", () => {

@@ -1,14 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { BookOpen, CheckCircle, ChevronRight, Lock, Sparkles } from "lucide-react";
+import { ChevronRight, Lock } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { COURSE_ROADMAP } from "@/data/lessons";
 
 export default function TrailIndexPage() {
+  const [mounted, setMounted] = useState(false);
   const completedLessons = useAppStore((s) => s.completedLessons);
   const currentLessonId = useAppStore((s) => s.currentLessonId);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const phases = [
     {
@@ -61,24 +66,12 @@ export default function TrailIndexPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {phaseLessons.map((item) => {
-                  const isCompleted = completedLessons.includes(item.id);
-                  const isCurrent = item.id === currentLessonId;
-                  const isAvailable = item.id <= 5 || item.unlocked;
+                  const isCompleted = mounted && completedLessons.includes(item.id);
+                  const isCurrent = mounted && item.id === currentLessonId;
+                  const isAvailable = item.id <= 10 || item.unlocked;
 
-                  return (
-                    <Link
-                      key={item.id}
-                      href={isAvailable ? `/trail/${item.id}` : "#"}
-                      className={`p-4 rounded-xl border transition flex items-center justify-between ${
-                        isCompleted
-                          ? "bg-emerald-950/20 border-emerald-500/30 hover:border-emerald-500/50"
-                          : isCurrent
-                          ? "bg-amber-500/10 border-amber-500/50 hover:border-amber-400 shadow-md shadow-amber-500/5"
-                          : isAvailable
-                          ? "bg-[#1C1D2B] border-white/10 hover:border-white/25"
-                          : "bg-white/5 border-white/5 opacity-50 cursor-not-allowed"
-                      }`}
-                    >
+                  const cardContent = (
+                    <>
                       <div className="flex items-center gap-3">
                         <span
                           className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono text-xs font-bold ${
@@ -112,7 +105,27 @@ export default function TrailIndexPage() {
                           <Lock className="w-3.5 h-3.5 text-slate-600" />
                         )}
                       </div>
+                    </>
+                  );
+
+                  const cardStyle = `p-4 rounded-xl border transition flex items-center justify-between ${
+                    isCompleted
+                      ? "bg-emerald-950/20 border-emerald-500/30 hover:border-emerald-500/50"
+                      : isCurrent
+                      ? "bg-amber-500/10 border-amber-500/50 hover:border-amber-400 shadow-md shadow-amber-500/5"
+                      : isAvailable
+                      ? "bg-[#1C1D2B] border-white/10 hover:border-white/25"
+                      : "bg-white/5 border-white/5 opacity-50 cursor-not-allowed"
+                  }`;
+
+                  return isAvailable ? (
+                    <Link key={item.id} href={`/trail/${item.id}`} className={cardStyle}>
+                      {cardContent}
                     </Link>
+                  ) : (
+                    <div key={item.id} className={cardStyle} title="Coming in future curriculum update">
+                      {cardContent}
+                    </div>
                   );
                 })}
               </div>

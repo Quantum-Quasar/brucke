@@ -6,6 +6,7 @@ import { Search, X, ArrowRight, Sparkles, AlertCircle, ExternalLink } from "luci
 import { decodeWord, type DecoderResult } from "@/lib/decoder-engine";
 import { useAppStore } from "@/lib/store";
 import { ShiftPair } from "@/components/common/ShiftPair";
+import { GenderBadge } from "@/components/common/GenderBadge";
 
 interface DecoderModalProps {
   isOpen: boolean;
@@ -27,6 +28,19 @@ export const DecoderModal: React.FC<DecoderModalProps> = ({ isOpen, onClose }) =
       setResult(null);
     }
   }, [isOpen]);
+
+  // Dismiss modal cleanly via Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   useEffect(() => {
     if (!query.trim()) {
@@ -146,9 +160,9 @@ export const DecoderModal: React.FC<DecoderModalProps> = ({ isOpen, onClose }) =
               </p>
               <div className="p-3 rounded-lg bg-black/30 border border-white/5 space-y-1">
                 <div className="text-xs text-slate-400">German equivalent:</div>
-                <div className="text-lg font-bold text-amber-400">
-                  {result.gender && <span className="text-sm text-blue-400 mr-1.5 font-mono">{result.gender}</span>}
-                  {result.germanTranslation}
+                <div className="text-lg font-bold text-amber-400 flex items-center gap-2">
+                  {result.gender && <GenderBadge gender={result.gender} />}
+                  <span>{result.germanTranslation}</span>
                 </div>
                 <p className="text-xs text-cyan-300">{result.etymologicalBridge}</p>
               </div>

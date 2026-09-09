@@ -1,5 +1,17 @@
 // ponytail: native browser speech synthesis with zero external dependencies
 
+let cachedVoices: SpeechSynthesisVoice[] = [];
+if (typeof window !== "undefined" && "speechSynthesis" in window) {
+  try {
+    cachedVoices = window.speechSynthesis.getVoices();
+    window.speechSynthesis.onvoiceschanged = () => {
+      try {
+        cachedVoices = window.speechSynthesis.getVoices();
+      } catch {}
+    };
+  } catch {}
+}
+
 /**
  * Plays German pronunciation using the native Web Speech API.
  * Uses 'de-DE' locale at a comfortable 0.92x rate for clear phoneme perception.
@@ -19,7 +31,7 @@ export function playGermanAudio(text: string): boolean {
     utterance.rate = 0.92;
     utterance.pitch = 1.0;
 
-    const voices = window.speechSynthesis.getVoices();
+    const voices = cachedVoices.length > 0 ? cachedVoices : window.speechSynthesis.getVoices();
     const deVoice = voices.find((v) => v.lang.startsWith("de"));
     if (deVoice) {
       utterance.voice = deVoice;

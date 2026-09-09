@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Compass, Search, Sparkles, Filter, ChevronRight } from "lucide-react";
+import { Compass, Search, ChevronRight } from "lucide-react";
 import { DonutChart } from "@/components/common/DonutChart";
 import { useAppStore } from "@/lib/store";
 import compendium from "@/data/compendium.json";
@@ -11,8 +11,13 @@ import type { CompendiumData, ShiftFamily } from "@/lib/types";
 const data = compendium as unknown as CompendiumData;
 
 export default function AtlasPage() {
+  const [mounted, setMounted] = useState(false);
   const [filterQuery, setFilterQuery] = useState("");
   const wordMastery = useAppStore((s) => s.wordMastery);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const shiftList = Object.values(data.shifts);
 
@@ -34,11 +39,13 @@ export default function AtlasPage() {
   let totalExplored = 0;
   let totalWords = data.wordList.length;
 
-  for (const w of data.wordList) {
-    const m = wordMastery[w.id];
-    if (m === "mastered") totalMastered++;
-    else if (m === "encountered") totalEncountered++;
-    else if (m === "explored") totalExplored++;
+  if (mounted) {
+    for (const w of data.wordList) {
+      const m = wordMastery[w.id];
+      if (m === "mastered") totalMastered++;
+      else if (m === "encountered") totalEncountered++;
+      else if (m === "explored") totalExplored++;
+    }
   }
   const totalUnseen = totalWords - (totalMastered + totalEncountered + totalExplored);
 
@@ -84,9 +91,9 @@ export default function AtlasPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredShifts.map((family) => {
           const words = family.word_ids.map((id) => data.words[id]).filter(Boolean);
-          const mastered = words.filter((w) => wordMastery[w.id] === "mastered").length;
-          const encountered = words.filter((w) => wordMastery[w.id] === "encountered").length;
-          const explored = words.filter((w) => wordMastery[w.id] === "explored").length;
+          const mastered = mounted ? words.filter((w) => wordMastery[w.id] === "mastered").length : 0;
+          const encountered = mounted ? words.filter((w) => wordMastery[w.id] === "encountered").length : 0;
+          const explored = mounted ? words.filter((w) => wordMastery[w.id] === "explored").length : 0;
           const unexplored = words.length - (mastered + encountered + explored);
 
           const previewWords = words.slice(0, 3);

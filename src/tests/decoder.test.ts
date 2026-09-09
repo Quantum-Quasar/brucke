@@ -71,4 +71,30 @@ describe("Decoder Cognate Engine", () => {
       expect(conv.germanTranslation).toContain("Gespräch");
     }
   });
+
+  it("handles empty strings, whitespace, and case insensitivity cleanly", () => {
+    expect(decodeWord("").type).toBe("no_match");
+    expect(decodeWord("   ").type).toBe("no_match");
+
+    // Case insensitivity
+    const upperHope = decodeWord("HOPE");
+    expect(upperHope.type).toBe("match");
+    if (upperHope.type === "match") {
+      expect(upperHope.word.target_word).toBe("hoffen");
+    }
+
+    const mixedWasser = decodeWord("wAsSeR");
+    expect(mixedWasser.type).toBe("match");
+    if (mixedWasser.type === "match") {
+      expect(mixedWasser.word.english_cognate).toBe("water");
+    }
+  });
+
+  it("returns clean no_match result for arbitrary non-matching queries", () => {
+    const res = decodeWord("xyz123randomword");
+    expect(res.type).toBe("no_match");
+    if (res.type === "no_match") {
+      expect(res.query).toBe("xyz123randomword");
+    }
+  });
 });

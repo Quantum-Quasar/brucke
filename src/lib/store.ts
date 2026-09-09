@@ -19,6 +19,7 @@ export interface AppState {
   wordMastery: Record<string, MasteryState>;
   srsCards: Record<string, SRSCard>;
   weeklyActivity: boolean[]; // 7 days Mon-Sun
+  lastActivityWeek?: string;
   activeWordDrawerId: string | null;
   tolerance: ToleranceSettings;
   preferredReviewMode: ReviewMode;
@@ -29,6 +30,7 @@ export interface AppState {
   // Actions
   markWordExplored: (wordId: string) => void;
   markWordEncountered: (wordId: string) => void;
+  markWordsEncountered: (wordIds: string[]) => void;
   markWordMastered: (wordId: string) => void;
   completeLesson: (lessonId: number) => void;
   recordReview: (wordId: string, grade: ReviewGrade) => void;
@@ -51,6 +53,15 @@ export interface AppState {
 export const STORAGE_KEY = "brucke_app_state_v1";
 export const STORAGE_COOKIE_KEY = "brucke_progress";
 
+export function getWeekString(date = new Date()): string {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  return `${d.getUTCFullYear()}-W${weekNo}`;
+}
+
 export function getCookie(name: string): string | null {
   if (typeof document === "undefined") return null;
   const match = document.cookie.match(new RegExp("(^|;\\s*)" + name + "=([^;]*)"));
@@ -60,7 +71,8 @@ export function getCookie(name: string): string | null {
 export function setCookie(name: string, value: string, days = 365) {
   if (typeof document === "undefined") return;
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+  const isSecure = typeof location !== "undefined" && location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax${isSecure}`;
 }
 
 export function deleteCookie(name: string) {
@@ -102,6 +114,7 @@ export function saveState(state: AppState) {
     wordMastery: state.wordMastery,
     srsCards: state.srsCards,
     weeklyActivity: state.weeklyActivity,
+    lastActivityWeek: state.lastActivityWeek,
     tolerance: state.tolerance,
     preferredReviewMode: state.preferredReviewMode,
     hasCompletedOnboarding: state.hasCompletedOnboarding,
@@ -142,7 +155,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   currentLessonId: initialSaved.currentLessonId || 1,
   wordMastery: initialSaved.wordMastery || {},
   srsCards: initialSaved.srsCards || {},
-  weeklyActivity: initialSaved.weeklyActivity || [true, true, false, false, false, false, false],
+  weeklyActivity: initialSaved.weeklyActivity || [false, false, false, false, false, false, false],
+  lastActivityWeek: (initialSaved as any)?.lastActivityWeek || getWeekString(),
   activeWordDrawerId: null,
   preferredReviewMode: (initialSaved.preferredReviewMode as ReviewMode) || "flashcard",
   hasCompletedOnboarding: initialSaved.hasCompletedOnboarding || false,
@@ -214,6 +228,33 @@ export const useAppStore = create<AppState>((set, get) => ({
     });
   },
 
+  markWordsEncountered: (wordIds) => {
+    set((s) => {
+      const updatedMastery = { ...s.wordMastery };
+      const srsCards = { ...s.srsCards };
+      let changed = false;
+
+      for (const wordId of wordIds) {
+        const current = updatedMastery[wordId];
+        if (current !== "mastered") {
+          if (current !== "encountered") {
+            updatedMastery[wordId] = "encountered";
+            changed = true;
+          }
+          if (!srsCards[wordId]) {
+            srsCards[wordId] = createInitialCard(wordId);
+            changed = true;
+          }
+        }
+      }
+
+      if (!changed) return s;
+      const next = { ...s, wordMastery: updatedMastery, srsCards };
+      saveState(next);
+      return next;
+    });
+  },
+
   markWordMastered: (wordId) => {
     set((s) => {
       if (s.wordMastery[wordId] === "mastered") return s;
@@ -235,6 +276,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       saveState(next);
       return next;
     });
+    get().logDailyActivity();
   },
 
   recordReview: (wordId, grade) => {
@@ -254,6 +296,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       saveState(next);
       return next;
     });
+    get().logDailyActivity();
   },
 
   openWordDrawer: (wordId) => {
@@ -301,10 +344,13 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   logDailyActivity: () => {
     set((s) => {
-      const day = (new Date().getDay() + 6) % 7; // Monday = 0
-      const updated = [...s.weeklyActivity];
+      const now = new Date();
+      const currentWeek = getWeekString(now);
+      const isNewWeek = Boolean(s.lastActivityWeek && s.lastActivityWeek !== currentWeek);
+      const day = (now.getDay() + 6) % 7; // Monday = 0
+      const updated = isNewWeek ? [false, false, false, false, false, false, false] : [...s.weeklyActivity];
       updated[day] = true;
-      const next = { ...s, weeklyActivity: updated };
+      const next = { ...s, weeklyActivity: updated, lastActivityWeek: currentWeek };
       saveState(next);
       return next;
     });
@@ -337,6 +383,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         deleteCookie(STORAGE_COOKIE_KEY);
       } catch {}
     }
+    lastSerialized = "";
     set(emptyState);
   },
 
@@ -358,6 +405,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           wordMastery: { ...s.wordMastery, ...(saved.wordMastery || {}) },
           srsCards: { ...s.srsCards, ...(saved.srsCards || {}) },
           weeklyActivity: Array.isArray(saved.weeklyActivity) ? saved.weeklyActivity : s.weeklyActivity,
+          lastActivityWeek: (saved as any).lastActivityWeek || s.lastActivityWeek,
           preferredReviewMode: saved.preferredReviewMode || s.preferredReviewMode,
           hasCompletedOnboarding: completed,
           isOnboardingOpen: !completed, // Automatically trigger onboarding on first visit

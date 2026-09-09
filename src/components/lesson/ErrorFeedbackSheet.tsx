@@ -2,10 +2,9 @@
 
 // ponytail: focused bottom modal sheet presenting letter-by-letter diff and mechanical shift explanation
 
-import React from "react";
-import { AlertCircle, ArrowRight, Check } from "lucide-react";
+import React, { useEffect } from "react";
+import { AlertCircle, ArrowRight } from "lucide-react";
 import { computeLetterDiff } from "@/lib/letter-diff";
-import { ShiftPair } from "@/components/common/ShiftPair";
 
 interface ErrorFeedbackSheetProps {
   userInput: string;
@@ -25,6 +24,17 @@ export const ErrorFeedbackSheet: React.FC<ErrorFeedbackSheetProps> = ({
   onContinue,
 }) => {
   const diff = computeLetterDiff(userInput, expectedAnswer);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " " || e.code === "Space") {
+        e.preventDefault();
+        onContinue();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onContinue]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">

@@ -179,4 +179,27 @@ describe("App Store & User Progress State", () => {
     expect(localRaw).toBeTruthy();
     expect(JSON.parse(localRaw!).hasSeenGenderIntro).toBe(true);
   });
+
+  it("resets progress completely, clears storage, and allows subsequent re-persistence without cache collision", () => {
+    const store = useAppStore.getState();
+    store.completeLesson(1);
+    store.markWordMastered("Wasser");
+
+    // Verify written
+    expect(localStorage.getItem(STORAGE_KEY)).toBeTruthy();
+    expect(getCookie(STORAGE_COOKIE_KEY)).toBeTruthy();
+
+    // Reset
+    store.resetProgress();
+    expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
+    expect(getCookie(STORAGE_COOKIE_KEY) || null).toBeNull();
+    expect(useAppStore.getState().completedLessons).toEqual([]);
+    expect(useAppStore.getState().wordMastery).toEqual({});
+
+    // Perform action again after reset to ensure lastSerialized didn't block saving
+    store.completeLesson(1);
+    const postResetLocal = localStorage.getItem(STORAGE_KEY);
+    expect(postResetLocal).toBeTruthy();
+    expect(JSON.parse(postResetLocal!).completedLessons).toContain(1);
+  });
 });

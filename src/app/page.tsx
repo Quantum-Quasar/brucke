@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, RotateCcw, BookOpen, Compass, Sparkles, Check, ChevronRight } from "lucide-react";
+import { ArrowRight, RotateCcw, BookOpen, Compass, Sparkles, ChevronRight } from "lucide-react";
 import { DailyInsightCard } from "@/components/common/DailyInsightCard";
 import { useAppStore } from "@/lib/store";
 import { getDueCards } from "@/lib/srs";
@@ -13,6 +13,7 @@ import type { CompendiumData } from "@/lib/types";
 const data = compendium as unknown as CompendiumData;
 
 export default function HomePage() {
+  const [mounted, setMounted] = useState(false);
   const currentLessonId = useAppStore((s) => s.currentLessonId);
   const completedLessons = useAppStore((s) => s.completedLessons);
   const wordMastery = useAppStore((s) => s.wordMastery);
@@ -21,18 +22,26 @@ export default function HomePage() {
   const logDailyActivity = useAppStore((s) => s.logDailyActivity);
 
   useEffect(() => {
+    setMounted(true);
     logDailyActivity();
   }, [logDailyActivity]);
 
   const dueCards = getDueCards(srsCards);
+  const effectiveDueCards = mounted ? dueCards : [];
   const currentLesson = LESSONS.find((l) => l.id === currentLessonId) || LESSONS[0];
 
-  const masteredCount = Object.values(wordMastery).filter((m) => m === "mastered").length;
-  const encounteredCount = Object.values(wordMastery).filter((m) => m === "encountered").length;
+  const masteredCount = mounted ? Object.values(wordMastery).filter((m) => m === "mastered").length : 0;
+  const encounteredCount = mounted ? Object.values(wordMastery).filter((m) => m === "encountered").length : 0;
   const totalWords = data.wordList.length;
 
   const daysLabels = ["M", "T", "W", "T", "F", "S", "S"];
-  const activeDaysCount = weeklyActivity.filter(Boolean).length;
+  const displayWeekly = mounted ? weeklyActivity : [false, false, false, false, false, false, false];
+  const activeDaysCount = displayWeekly.filter(Boolean).length;
+  const progressPercent = Math.min(100, Math.round(((mounted ? completedLessons.length : 0) / 30) * 100));
+
+  // Rotate daily insight based on calendar day
+  const insightIndex = new Date().getDate() % (data.dailyInsights?.length || 1);
+  const todayInsight = data.dailyInsights?.[insightIndex] || data.dailyInsights?.[0];
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
@@ -51,7 +60,7 @@ export default function HomePage() {
         {/* Weekly Consistency Dots */}
         <div className="space-y-1.5 self-stretch sm:self-auto sm:text-right">
           <div className="flex items-center gap-2 justify-start sm:justify-end">
-            {weeklyActivity.map((active, i) => (
+            {displayWeekly.map((active, i) => (
               <div key={i} className="flex flex-col items-center gap-1">
                 <div
                   className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] transition ${
@@ -79,7 +88,7 @@ export default function HomePage() {
       {/* SMART PRIORITY REORDERING */}
       {/* Priority slot: Review Card if cards are due, otherwise Current Lesson leads */}
       <div className="space-y-4">
-        {dueCards.length > 0 ? (
+        {effectiveDueCards.length > 0 ? (
           /* Priority 1: Due Reviews Card */
           <div className="p-6 rounded-2xl bg-gradient-to-r from-[#1C1D2B] to-[#25233A] border-2 border-cyan-500/40 shadow-lg shadow-cyan-500/5 space-y-4">
             <div className="flex items-center justify-between">
@@ -88,7 +97,7 @@ export default function HomePage() {
                 <span>Reviews Due Now</span>
               </span>
               <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-cyan-400/15 text-cyan-300 font-bold border border-cyan-400/30">
-                {dueCards.length} Words Due ⚡
+                {effectiveDueCards.length} Words Due ⚡
               </span>
             </div>
 
@@ -103,7 +112,7 @@ export default function HomePage() {
               href="/review"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-sm transition"
             >
-              <span>Start Review ({dueCards.length})</span>
+              <span>Start Review ({effectiveDueCards.length})</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -130,12 +139,12 @@ export default function HomePage() {
             <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
               <div
                 className="h-full bg-amber-400 rounded-full transition-all duration-300"
-                style={{ width: `${Math.min(100, ((currentLessonId - 1) / 30) * 100)}%` }}
+                style={{ width: `${progressPercent}%` }}
               />
             </div>
             <div className="flex justify-between text-[11px] font-mono text-slate-500">
-              <span>{completedLessons.length} lessons completed</span>
-              <span>{Math.round(((currentLessonId - 1) / 30) * 100)}% Course Progress</span>
+              <span>{mounted ? completedLessons.length : 0} lessons completed</span>
+              <span>{progressPercent}% Course Progress</span>
             </div>
           </div>
 
@@ -144,7 +153,7 @@ export default function HomePage() {
               href={`/trail/${currentLesson.id}`}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition"
             >
-              <span>{completedLessons.includes(currentLesson.id) ? "Revisit Lesson" : "Resume Lesson"}</span>
+              <span>{mounted && completedLessons.includes(currentLesson.id) ? "Revisit Lesson" : "Resume Lesson"}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -152,7 +161,7 @@ export default function HomePage() {
       </div>
 
       {/* Daily Cultural Insight */}
-      <DailyInsightCard insight={data.dailyInsights[0]} />
+      <DailyInsightCard insight={todayInsight} />
 
       {/* Quick Launchpad to Atlas and Decoder */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

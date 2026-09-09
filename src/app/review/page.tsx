@@ -24,6 +24,7 @@ import { useAppStore } from "@/lib/store";
 import { getDueCards, getWeakestCards, type ReviewGrade } from "@/lib/srs";
 import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
 import { playGermanAudio } from "@/lib/audio";
+import { computeLetterDiff } from "@/lib/letter-diff";
 import compendium from "@/data/compendium.json";
 import type { CompendiumData, ReviewMode, SRSCard, WordEntity } from "@/lib/types";
 
@@ -31,12 +32,8 @@ const data = compendium as unknown as CompendiumData;
 
 type DeckType = "due" | "shift" | "weakest" | "recent" | "compounds";
 
-interface PendingDeckStart {
-  deck: DeckType;
-  customCards?: SRSCard[];
-}
-
 export default function ReviewPage() {
+  const [mounted, setMounted] = useState(false);
   const [activeDeck, setActiveDeck] = useState<DeckType | null>(null);
   const [selectedShiftId, setSelectedShiftId] = useState<string>("p_to_pf_f");
   const [sessionCards, setSessionCards] = useState<SRSCard[]>([]);
@@ -48,8 +45,11 @@ export default function ReviewPage() {
   const setPreferredReviewMode = useAppStore((s) => s.setPreferredReviewMode);
   const [reviewMode, setReviewMode] = useState<ReviewMode>(preferredReviewMode || "flashcard");
   const [isModeSelectorOpen, setIsModeSelectorOpen] = useState(false);
-  const [pendingDeck, setPendingDeck] = useState<PendingDeckStart | null>(null);
   const [rememberPreference, setRememberPreference] = useState(true);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Mode-Specific Interactive State
   const [inputGuess, setInputGuess] = useState("");
@@ -164,10 +164,20 @@ export default function ReviewPage() {
     } else if (deck === "weakest") {
       setSessionCards(weakestCards);
     } else if (deck === "shift") {
-      const shiftCards = Object.values(srsCards).filter((c) => {
-        const w = allWordsMap[c.word_id];
-        return w && w.sound_shift_ids.includes(selectedShiftId);
-      });
+      const family = data.shifts[selectedShiftId];
+      const familyWordIds = family ? family.word_ids : [];
+      const shiftCards = familyWordIds.map(
+        (wid: string) =>
+          srsCards[wid] || {
+            word_id: wid,
+            interval: 1,
+            repetitions: 0,
+            ease_factor: 2.5,
+            due_date: new Date().toISOString().split("T")[0],
+            lapses: 0,
+            last_reviewed: null,
+          }
+      );
       setSessionCards(shiftCards);
     } else if (deck === "recent") {
       const recentWords = data.wordList.slice(0, 20);
@@ -201,12 +211,6 @@ export default function ReviewPage() {
       setPreferredReviewMode(mode);
     }
     setIsModeSelectorOpen(false);
-
-    if (pendingDeck) {
-      const { deck, customCards } = pendingDeck;
-      setPendingDeck(null);
-      startDeck(deck, customCards);
-    }
   };
 
   const currentCard = sessionCards[currentIndex];
@@ -293,6 +297,16 @@ export default function ReviewPage() {
     const assembled = selectedTiles.join("");
     const isCorrect = assembled.toLowerCase() === currentWord.target_word.toLowerCase();
     setCurrentAutoGrade(isCorrect ? 4 : 1);
+    setIsRevealed(true);
+  };
+
+  const handleCheckTyping = () => {
+    if (isRevealed || !currentWord) return;
+    const guess = inputGuess.trim();
+    if (guess.length > 0) {
+      const isCorrect = guess.toLowerCase() === currentWord.target_word.toLowerCase();
+      setCurrentAutoGrade(isCorrect ? 4 : 1);
+    }
     setIsRevealed(true);
   };
 
@@ -408,13 +422,13 @@ export default function ReviewPage() {
         } else if (reviewMode === "typing") {
           if (e.key === "Enter") {
             e.preventDefault();
-            setIsRevealed(true);
+            handleCheckTyping();
           } else if (e.key === " " || e.code === "Space") {
             if (e.target === inputRef.current && inputGuess.trim().length > 0) {
               return;
             }
             e.preventDefault();
-            setIsRevealed(true);
+            handleCheckTyping();
           }
         }
       } else {
@@ -485,9 +499,9 @@ export default function ReviewPage() {
       {/* Stats Bar */}
       <div className="p-4 rounded-xl bg-[#161722] border border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
         <div className="flex items-center gap-6">
-          <span className="text-emerald-400 font-bold">{masteredCount} Mastered ✓</span>
-          <span className="text-amber-400 font-bold">{activeCount} In Active SRS 🔄</span>
-          <span className="text-cyan-400 font-bold">{dueCards.length} Due Today ⚡</span>
+          <span className="text-emerald-400 font-bold">{mounted ? masteredCount : 0} Mastered ✓</span>
+          <span className="text-amber-400 font-bold">{mounted ? activeCount : 0} In Active SRS 🔄</span>
+          <span className="text-cyan-400 font-bold">{mounted ? dueCards.length : 0} Due Today ⚡</span>
         </div>
         <div className="flex items-center gap-4">
           <GenderGuideBanner compact />
@@ -746,10 +760,10 @@ export default function ReviewPage() {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
-                    setIsRevealed(true);
+                    handleCheckTyping();
                   } else if ((e.key === " " || e.code === "Space") && inputGuess.trim() === "") {
                     e.preventDefault();
-                    setIsRevealed(true);
+                    handleCheckTyping();
                   }
                 }}
                 placeholder="Type German derivation (or press Space / Enter)..."
@@ -758,7 +772,7 @@ export default function ReviewPage() {
               <GermanCharBar onInsert={(c) => setInputGuess((prev) => prev + c)} />
               <button
                 type="button"
-                onClick={() => setIsRevealed(true)}
+                onClick={handleCheckTyping}
                 className="w-full py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition cursor-pointer active:scale-95 shadow-lg shadow-cyan-500/20"
               >
                 Show Answer [Enter / Space]
@@ -778,6 +792,30 @@ export default function ReviewPage() {
                   wordId={currentWord.id}
                   className="text-lg px-4 py-2"
                 />
+
+                {/* Character-level Diff for Typing Mode */}
+                {reviewMode === "typing" && inputGuess.trim().length > 0 && (
+                  <div className="p-3 rounded-xl bg-black/40 border border-white/10 text-center space-y-1 max-w-md mx-auto">
+                    <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">
+                      Your Attempt:
+                    </span>
+                    <div className="text-base font-mono tracking-wide flex items-center justify-center gap-0.5">
+                      {computeLetterDiff(inputGuess.trim(), currentWord.target_word).userChars.map((c, i) => (
+                        <span
+                          key={i}
+                          className={
+                            c.status === "correct"
+                              ? "text-emerald-400 font-bold"
+                              : "text-rose-400 font-bold underline decoration-rose-500 decoration-2 bg-rose-500/15 px-0.5 rounded"
+                          }
+                        >
+                          {c.char}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex items-center justify-center gap-3">
                   <button
                     type="button"
@@ -807,7 +845,7 @@ export default function ReviewPage() {
                     onClick={() => handleGrade(1)}
                     className="p-3.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-semibold text-xs flex flex-col items-center gap-1.5 transition active:scale-95 cursor-pointer"
                   >
-                    <span className="text-sm font-bold">Again (1d)</span>
+                    <span className="text-sm font-bold">Again</span>
                     <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold border border-rose-500/30">
                       Press [1]
                     </span>
@@ -818,7 +856,7 @@ export default function ReviewPage() {
                     onClick={() => handleGrade(3)}
                     className="p-3.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-semibold text-xs flex flex-col items-center gap-1.5 transition active:scale-95 cursor-pointer"
                   >
-                    <span className="text-sm font-bold">Hard (3d)</span>
+                    <span className="text-sm font-bold">Hard</span>
                     <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
                       Press [2]
                     </span>
@@ -829,7 +867,7 @@ export default function ReviewPage() {
                     onClick={() => handleGrade(4)}
                     className="p-3.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border-2 border-emerald-500/50 text-emerald-300 font-semibold text-xs flex flex-col items-center gap-1.5 transition active:scale-95 cursor-pointer shadow-lg shadow-emerald-500/10"
                   >
-                    <span className="text-sm font-bold">Good (6d)</span>
+                    <span className="text-sm font-bold">Good</span>
                     <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
                       Press [3] / Space
                     </span>
@@ -840,7 +878,7 @@ export default function ReviewPage() {
                     onClick={() => handleGrade(5)}
                     className="p-3.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 font-semibold text-xs flex flex-col items-center gap-1.5 transition active:scale-95 cursor-pointer"
                   >
-                    <span className="text-sm font-bold">Easy (14d)</span>
+                    <span className="text-sm font-bold">Easy</span>
                     <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
                       Press [4]
                     </span>
@@ -863,7 +901,7 @@ export default function ReviewPage() {
                 <Clock className="w-5 h-5 text-cyan-400" />
                 <h3 className="text-xl font-bold text-slate-100">Due Today Deck</h3>
                 <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
-                  {dueCards.length} Cards ⚡
+                  {mounted ? dueCards.length : 0} Cards ⚡
                 </span>
               </div>
               <p className="text-xs text-slate-400">
@@ -929,7 +967,7 @@ export default function ReviewPage() {
                   Focus on words that caused repeated lapses or hesitation.
                 </p>
                 <div className="text-xs font-mono text-amber-400 pt-1">
-                  {weakestCards.length} Words with Lapses
+                  {mounted ? weakestCards.length : 0} Words with Lapses
                 </div>
               </div>
 

@@ -14,7 +14,7 @@ export function LessonDetailClient({ lessonId }: { lessonId: number }) {
       <div className="max-w-2xl mx-auto px-4 py-20 text-center space-y-4">
         <h2 className="text-2xl font-bold text-slate-100">Lesson {lessonId} Coming Soon</h2>
         <p className="text-slate-400 text-sm">
-          This lesson outline is in Phase 2/3 of the curriculum. The first 5 foundational lessons are currently fully interactive!
+          This lesson outline is in Phase 2/3 of the curriculum. The first 10 foundational lessons are currently fully interactive!
         </p>
         <Link
           href="/trail"

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, BookOpen, Sparkles, HelpCircle, Check, Info, Compass } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Sparkles, Info, Compass } from "lucide-react";
 import { ProgressBar5, type LessonSegment } from "./ProgressBar5";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { ExerciseWidget } from "./ExerciseWidgets";
@@ -28,12 +28,12 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   const primaryShift = primaryShiftId ? data.shifts[primaryShiftId] : null;
 
   const completeLesson = useAppStore((s) => s.completeLesson);
-  const markWordEncountered = useAppStore((s) => s.markWordEncountered);
+  const markWordsEncountered = useAppStore((s) => s.markWordsEncountered);
 
   // Register all lesson words as encountered when viewing
   React.useEffect(() => {
-    lesson.word_ids.forEach((id) => markWordEncountered(id));
-  }, [lesson, markWordEncountered]);
+    markWordsEncountered(lesson.word_ids);
+  }, [lesson.word_ids, markWordsEncountered]);
 
   const handleExerciseError = (exercise: ExerciseItem) => {
     if (!retryQueue.some((e) => e.id === exercise.id)) {
@@ -237,7 +237,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                       <span>Sound Shift Atlas</span>
                     </div>
                     <p className="text-xs text-slate-300">
-                      Explore all 7 historical sound shift families connecting English and German.
+                      Explore all 9 historical sound shift families connecting English and German.
                     </p>
                   </div>
                   <Link
@@ -377,7 +377,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                       <p className="text-xs text-slate-300">
                         {primaryShift
                           ? `Explore all ${primaryShift.word_ids.length} cognates governed by ${primaryShift.symbol} across High German history.`
-                          : "Explore all 7 historical shift families connecting English and German."}
+                          : "Explore all 9 historical shift families connecting English and German."}
                       </p>
                     </div>
                     <Link

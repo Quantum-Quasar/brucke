@@ -18,6 +18,17 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+  const [currentQuestionFailed, setCurrentQuestionFailed] = useState(false);
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -30,7 +41,7 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
     id: `drill_${w.id}_${idx}`,
     type: "derive",
     prompt: `Apply the ${family.symbol} shift to derive the German word for "${w.english_cognate}":`,
-    english_hint: `${w.english_cognate} → ${w.target_word}`,
+    english_hint: `${w.english_cognate} (${family.symbol})`,
     shift_hint: family.symbol,
     target_answer: w.target_word,
     explanation: w.etymology_derivation,
@@ -39,7 +50,10 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
   const currentExercise = exercises[currentIndex];
 
   const handleSuccess = () => {
-    setScore((s) => s + 1);
+    if (!currentQuestionFailed) {
+      setScore((s) => s + 1);
+    }
+    setCurrentQuestionFailed(false);
     if (currentIndex + 1 < exercises.length) {
       setCurrentIndex((prev) => prev + 1);
     } else {
@@ -50,6 +64,7 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
   const handleRestart = () => {
     setCurrentIndex(0);
     setScore(0);
+    setCurrentQuestionFailed(false);
     setIsFinished(false);
   };
 
@@ -81,7 +96,7 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
               key={currentExercise.id}
               exercise={currentExercise}
               onSuccess={handleSuccess}
-              onError={() => {}}
+              onError={() => setCurrentQuestionFailed(true)}
             />
           </div>
         ) : (

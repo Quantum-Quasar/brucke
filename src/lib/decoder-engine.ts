@@ -218,11 +218,19 @@ export function decodeWord(rawInput: string): DecoderResult {
     };
   }
 
-  // 6. Substring partial search in 218 words
-  const partial = data.wordList.find(
-    (w) => w.english_cognate.toLowerCase().includes(lemma) || w.english_meaning.toLowerCase().includes(lemma) || lemma.includes(w.english_cognate.toLowerCase())
-  );
-  if (partial && lemma.length >= 3) {
+  // 6. Substring / multi-word search in 218 words
+  const queryTokens = lemma.split(/\s+/);
+  const partial = data.wordList.find((w) => {
+    const cog = w.english_cognate.toLowerCase();
+    const mean = w.english_meaning.toLowerCase();
+    return (
+      (lemma.length >= 3 && cog.includes(lemma)) ||
+      (lemma.length >= 3 && mean.includes(lemma)) ||
+      queryTokens.includes(cog) ||
+      queryTokens.includes(mean)
+    );
+  });
+  if (partial) {
     return {
       type: "match",
       word: partial,

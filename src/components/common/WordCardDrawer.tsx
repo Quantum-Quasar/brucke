@@ -2,7 +2,7 @@
 
 // ponytail: native css slide-over drawer and mobile bottom sheet with zero heavy drawer libs
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { X, ExternalLink, Compass, BookOpen, Search, CheckCircle2, Circle, Disc, Minus, Volume2 } from "lucide-react";
@@ -19,6 +19,16 @@ export const WordCardDrawer: React.FC = () => {
   const activeWordId = useAppStore((s) => s.activeWordDrawerId);
   const closeDrawer = useAppStore((s) => s.closeWordDrawer);
   const mastery = useAppStore((s) => (activeWordId ? s.wordMastery[activeWordId] || "unexplored" : "unexplored"));
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && activeWordId) {
+        closeDrawer();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeWordId, closeDrawer]);
 
   if (!activeWordId) return null;
 

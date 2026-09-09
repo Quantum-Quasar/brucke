@@ -2,7 +2,7 @@
 
 // ponytail: informative, dismissible gender guide banner and compact legend
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Info, X, HelpCircle } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { GenderBadge } from "./GenderBadge";
@@ -15,6 +15,10 @@ export const GenderGuideBanner: React.FC<GenderGuideBannerProps> = ({ compact = 
   const hasSeenGenderIntro = useAppStore((s) => s.hasSeenGenderIntro);
   const dismissGenderIntro = useAppStore((s) => s.dismissGenderIntro);
   const [isExpanded, setIsExpanded] = useState(!hasSeenGenderIntro);
+
+  useEffect(() => {
+    setIsExpanded(!hasSeenGenderIntro);
+  }, [hasSeenGenderIntro]);
 
   if (compact && !isExpanded) {
     return (

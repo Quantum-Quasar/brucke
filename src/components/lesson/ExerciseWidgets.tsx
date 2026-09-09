@@ -3,7 +3,7 @@
 // ponytail: comprehensive bite-sized exercise widget with tile assembly, matching cards, empty input protection, and error sheet
 
 import React, { useState, useEffect, useRef } from "react";
-import { Check, X, ArrowRight, RotateCcw, AlertCircle, Sparkles } from "lucide-react";
+import { Check, AlertCircle, Sparkles } from "lucide-react";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
 import { ErrorFeedbackSheet } from "./ErrorFeedbackSheet";
 import { SuccessFeedbackSheet } from "./SuccessFeedbackSheet";
@@ -24,7 +24,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
   isRetry = false,
 }) => {
   const [userInput, setUserInput] = useState("");
-  const [selectedTiles, setSelectedTiles] = useState<string[]>([]);
+  const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
   const [status, setStatus] = useState<"idle" | "correct" | "incorrect">("idle");
   const [feedbackNote, setFeedbackNote] = useState<string | null>(null);
   const [showErrorSheet, setShowErrorSheet] = useState(false);
@@ -48,7 +48,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
 
   useEffect(() => {
     setUserInput("");
-    setSelectedTiles([]);
+    setSelectedIndices([]);
     setSelectedEnglish(null);
     setMatchedPairs([]);
     setStatus("idle");
@@ -78,13 +78,10 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [userInput, selectedTiles, matchedPairs, status, showErrorSheet, showSuccessSheet, exercise]);
+  }, [userInput, selectedIndices, matchedPairs, status, showErrorSheet, showSuccessSheet, exercise]);
 
-  // Handle digraph auto-substitution (ae -> ä, oe -> ö, ue -> ü, ss -> ß)
   const handleInputChange = (val: string) => {
-    let replaced = val;
-    replaced = replaced.replace(/ae/g, "ä").replace(/oe/g, "ö").replace(/ue/g, "ü");
-    setUserInput(replaced);
+    setUserInput(val);
     setFeedbackNote(null);
   };
 
@@ -94,11 +91,15 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     // 1. Morpheme tiles or Syntax builder
     const expected = exercise.target_answer.trim();
     if (exercise.type === "morpheme_tiles") {
+      const options = exercise.tile_options || [];
+      const selectedTiles = selectedIndices.map((i) => options[i] || "");
       const cleanTiles = selectedTiles.map((t) => t.replace(/^-/, ""));
       const joinedDirect = cleanTiles.join("").trim();
       const joinedSpace = selectedTiles.join(" ").trim();
       answerToCheck = expected.includes(" ") ? joinedSpace : joinedDirect;
     } else if (exercise.type === "syntax_builder") {
+      const options = exercise.word_bank || [];
+      const selectedTiles = selectedIndices.map((i) => options[i] || "");
       answerToCheck = selectedTiles.join(" ").trim();
     } else if (exercise.type === "matching_pairs") {
       // Handled interactively on match
@@ -180,14 +181,16 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     }
   };
 
-  const toggleTile = (tile: string) => {
+  const pickTileIndex = (idx: number) => {
+    if (status !== "idle" || selectedIndices.includes(idx)) return;
+    setFeedbackNote(null);
+    setSelectedIndices((prev) => [...prev, idx]);
+  };
+
+  const unpickTilePosition = (rackPosition: number) => {
     if (status !== "idle") return;
     setFeedbackNote(null);
-    if (selectedTiles.includes(tile)) {
-      setSelectedTiles((prev) => prev.filter((t) => t !== tile));
-    } else {
-      setSelectedTiles((prev) => [...prev, tile]);
-    }
+    setSelectedIndices((prev) => prev.filter((_, i) => i !== rackPosition));
   };
 
   // Matching pair selection
@@ -276,16 +279,16 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
         <div className="space-y-4">
           {/* Target Assembly Slot */}
           <div className="min-h-[58px] p-3 rounded-xl bg-[#161722] border-2 border-dashed border-white/20 flex flex-wrap gap-2 items-center justify-center">
-            {selectedTiles.length === 0 ? (
+            {selectedIndices.length === 0 ? (
               <span className="text-xs font-mono text-slate-500 italic">Tap tiles below to assemble word...</span>
             ) : (
-              selectedTiles.map((tile, i) => (
+              selectedIndices.map((tileIdx, pos) => (
                 <button
-                  key={`${tile}-${i}`}
-                  onClick={() => toggleTile(tile)}
+                  key={`${exercise.tile_options![tileIdx]}-${tileIdx}-${pos}`}
+                  onClick={() => unpickTilePosition(pos)}
                   className="px-4 py-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/50 text-base font-bold hover:bg-amber-500/30 transition active:scale-95"
                 >
-                  {tile}
+                  {exercise.tile_options![tileIdx]}
                 </button>
               ))
             )}
@@ -294,12 +297,12 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
           {/* Tile Options Bank */}
           <div className="flex flex-wrap justify-center gap-2.5 pt-1">
             {exercise.tile_options.map((tile, i) => {
-              const isUsed = selectedTiles.includes(tile);
+              const isUsed = selectedIndices.includes(i);
               return (
                 <button
                   key={`${tile}-${i}`}
                   type="button"
-                  onClick={() => toggleTile(tile)}
+                  onClick={() => pickTileIndex(i)}
                   disabled={isUsed || status !== "idle"}
                   className={`px-4 py-2.5 rounded-xl border text-sm font-semibold transition active:scale-95 ${
                     isUsed
@@ -418,16 +421,16 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       {exercise.type === "syntax_builder" && exercise.word_bank && (
         <div className="space-y-3">
           <div className="min-h-[58px] p-3 rounded-xl bg-[#161722] border border-dashed border-white/20 flex flex-wrap gap-2 items-center">
-            {selectedTiles.length === 0 ? (
+            {selectedIndices.length === 0 ? (
               <span className="text-xs font-mono text-slate-500 italic pl-2">Tap tiles below in correct sentence sequence...</span>
             ) : (
-              selectedTiles.map((tile, i) => (
+              selectedIndices.map((tileIdx, pos) => (
                 <button
-                  key={`${tile}-${i}`}
-                  onClick={() => toggleTile(tile)}
+                  key={`${exercise.word_bank![tileIdx]}-${tileIdx}-${pos}`}
+                  onClick={() => unpickTilePosition(pos)}
                   className="px-3.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 text-sm font-medium hover:bg-amber-500/30 transition"
                 >
-                  {tile}
+                  {exercise.word_bank![tileIdx]}
                 </button>
               ))
             )}
@@ -435,11 +438,11 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
 
           <div className="flex flex-wrap gap-2 pt-1">
             {exercise.word_bank.map((tile, i) => {
-              const isUsed = selectedTiles.includes(tile);
+              const isUsed = selectedIndices.includes(i);
               return (
                 <button
                   key={`${tile}-${i}`}
-                  onClick={() => toggleTile(tile)}
+                  onClick={() => pickTileIndex(i)}
                   disabled={isUsed || status !== "idle"}
                   className={`px-3.5 py-2 rounded-xl border text-sm font-medium transition active:scale-95 ${
                     isUsed
@@ -499,8 +502,16 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
           explanation={exercise.explanation}
           onContinue={() => {
             setShowErrorSheet(false);
-            // Advance to next exercise on dismissing error popup
-            setTimeout(() => onSuccess(), 100);
+            if (isRetry) {
+              // In retry mode, stay on current exercise and reset input so user can try again
+              setStatus("idle");
+              setFeedbackNote(null);
+              setUserInput("");
+              setSelectedIndices([]);
+            } else {
+              // In normal flow, exercise was appended to retry queue, advance
+              setTimeout(() => onSuccess(), 100);
+            }
           }}
         />
       )}
