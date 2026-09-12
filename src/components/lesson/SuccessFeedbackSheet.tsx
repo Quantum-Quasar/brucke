@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { CheckCircle2, ArrowRight, Sparkles, BookOpen } from "lucide-react";
+import { CheckCircle2, ArrowRight, Sparkles, BookOpen, AlertCircle } from "lucide-react";
 import type { VocabHint } from "@/lib/types";
 
 interface SuccessFeedbackSheetProps {
@@ -10,6 +10,9 @@ interface SuccessFeedbackSheetProps {
   explanation?: string;
   vocabHints?: VocabHint[];
   shiftRule?: string;
+  variant?: "exact" | "almost";
+  userAttempt?: string;
+  warningNote?: string;
   onContinue: () => void;
 }
 
@@ -19,9 +22,13 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
   explanation,
   vocabHints,
   shiftRule,
+  variant = "exact",
+  userAttempt,
+  warningNote,
   onContinue,
 }) => {
   const continueBtnRef = React.useRef<HTMLButtonElement>(null);
+  const isAlmost = variant === "almost";
 
   // Auto-focus continue button so Enter / Space works immediately without requiring mouse
   useEffect(() => {
@@ -45,19 +52,66 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="w-full sm:max-w-md bg-[#181C26] border-t sm:border border-emerald-500/40 sm:rounded-2xl rounded-t-2xl shadow-2xl p-6 space-y-5 animate-in slide-in-from-bottom duration-200">
+      <div
+        className={`w-full sm:max-w-md bg-[#181C26] border-t sm:border sm:rounded-2xl rounded-t-2xl shadow-2xl p-6 space-y-5 animate-in slide-in-from-bottom duration-200 ${
+          isAlmost
+            ? "border-amber-500/50 shadow-amber-500/10"
+            : "border-emerald-500/40 shadow-emerald-500/10"
+        }`}
+      >
         {/* Header */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-emerald-400">
-            <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />
-            <h4 className="text-base font-bold text-slate-100 font-mono">Correct!</h4>
+          <div
+            className={`flex items-center gap-2 ${
+              isAlmost ? "text-amber-400" : "text-emerald-400"
+            }`}
+          >
+            {isAlmost ? (
+              <Sparkles className="w-5 h-5 shrink-0 text-amber-400" />
+            ) : (
+              <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />
+            )}
+            <h4
+              className={`text-base font-bold font-mono ${
+                isAlmost ? "text-amber-300" : "text-slate-100"
+              }`}
+            >
+              {isAlmost ? "Almost Right — Accepted!" : "Spot On!"}
+            </h4>
           </div>
           {shiftRule && (
-            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-bold">
+            <span
+              className={`text-[11px] font-mono px-2 py-0.5 rounded font-bold border ${
+                isAlmost
+                  ? "bg-amber-500/15 text-amber-300 border-amber-500/30"
+                  : "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
+              }`}
+            >
               {shiftRule}
             </span>
           )}
         </div>
+
+        {/* Almost Right Comparison Callout (Yellow) */}
+        {isAlmost && userAttempt && (
+          <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/25 space-y-2">
+            <div className="flex items-center gap-1.5 text-amber-400 font-mono font-bold uppercase tracking-wider text-[11px]">
+              <AlertCircle className="w-3.5 h-3.5" /> Note the difference
+            </div>
+            <div className="flex items-center justify-between text-xs font-mono bg-black/30 p-2.5 rounded-lg border border-amber-500/20">
+              <div>
+                <span className="text-slate-500 block text-[10px] uppercase">Your Input</span>
+                <span className="text-slate-300 line-through decoration-amber-400/80">{userAttempt}</span>
+              </div>
+              <ArrowRight className="w-4 h-4 text-amber-400" />
+              <div className="text-right">
+                <span className="text-slate-500 block text-[10px] uppercase">Standard Form</span>
+                <span className="text-amber-300 font-bold">{targetAnswer}</span>
+              </div>
+            </div>
+            {warningNote && <p className="text-xs text-amber-200/90 leading-relaxed">{warningNote}</p>}
+          </div>
+        )}
 
         {/* Answer and Meaning Card */}
         <div className="p-4 rounded-xl bg-[#12141F] border border-white/5 space-y-2.5">
@@ -112,7 +166,11 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
           ref={continueBtnRef}
           type="button"
           onClick={onContinue}
-          className="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-98 text-slate-950 font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/20 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+          className={`w-full py-3.5 rounded-xl font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-98 focus:outline-none focus:ring-2 ${
+            isAlmost
+              ? "bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-amber-500/20 focus:ring-amber-300"
+              : "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20 focus:ring-emerald-300"
+          }`}
         >
           <span>Continue [Enter]</span>
           <ArrowRight className="w-4 h-4" />

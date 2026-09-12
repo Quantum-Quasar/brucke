@@ -7,6 +7,7 @@ import { Check, AlertCircle, Sparkles } from "lucide-react";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
 import { ErrorFeedbackSheet } from "./ErrorFeedbackSheet";
 import { SuccessFeedbackSheet } from "./SuccessFeedbackSheet";
+import { evaluateAnswerAccuracy } from "@/lib/letter-diff";
 import { useAppStore } from "@/lib/store";
 import type { ExerciseItem } from "@/lib/types";
 
@@ -25,7 +26,10 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
 }) => {
   const [userInput, setUserInput] = useState("");
   const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
-  const [status, setStatus] = useState<"idle" | "correct" | "incorrect">("idle");
+  const [status, setStatus] = useState<"idle" | "correct" | "almost" | "incorrect">("idle");
+  const [sheetVariant, setSheetVariant] = useState<"exact" | "almost">("exact");
+  const [verifiedAttemptText, setVerifiedAttemptText] = useState("");
+  const [almostWarningNote, setAlmostWarningNote] = useState<string | undefined>(undefined);
   const [feedbackNote, setFeedbackNote] = useState<string | null>(null);
   const [showErrorSheet, setShowErrorSheet] = useState(false);
   const [showSuccessSheet, setShowSuccessSheet] = useState(false);
@@ -52,6 +56,9 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     setSelectedEnglish(null);
     setMatchedPairs([]);
     setStatus("idle");
+    setSheetVariant("exact");
+    setVerifiedAttemptText("");
+    setAlmostWarningNote(undefined);
     setFeedbackNote(null);
     setShowErrorSheet(false);
     setShowSuccessSheet(false);
@@ -203,66 +210,57 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       return;
     }
 
-    // Check exact match
-    if (answerToCheck === expected) {
+    // Three-tier evaluation: Spot On (Green), Almost Right (Yellow), Obviously Wrong (Red)
+    const evaluation = evaluateAnswerAccuracy(answerToCheck, expected);
+
+    if (evaluation.accuracy === "exact") {
       setStatus("correct");
-      setFeedbackNote("Correct!");
+      setFeedbackNote("Spot On! Perfect.");
+      setSheetVariant("exact");
+      setVerifiedAttemptText(answerToCheck);
+      setAlmostWarningNote(undefined);
       setShowSuccessSheet(true);
       return;
     }
 
-    // Check Case-insensitive / Umlaut tolerance
-    const normalizeUmlauts = (s: string) =>
-      s.replace(/ä/g, "a").replace(/ö/g, "o").replace(/ü/g, "u").replace(/ß/g, "ss");
-
-    const isUmlautError =
-      normalizeUmlauts(answerToCheck.toLowerCase()) === normalizeUmlauts(expected.toLowerCase()) &&
-      answerToCheck.toLowerCase() !== expected.toLowerCase();
-
-    const isCaseError =
-      answerToCheck.toLowerCase() === expected.toLowerCase() && answerToCheck !== expected;
-
-    if (isUmlautError) {
-      if (tolerance.umlautTolerance) {
-        setStatus("correct");
-        setFeedbackNote(`Accepted! Note: standard spelling uses umlaut: "${expected}"`);
-        setShowSuccessSheet(true);
-        return;
-      } else {
-        setStatus("incorrect");
-        onError("umlaut");
-        setFailedAttemptText(answerToCheck);
-        setShowErrorSheet(true);
-        return;
-      }
+    if (evaluation.accuracy === "almost") {
+      setStatus("almost");
+      setFeedbackNote(evaluation.warningNote || `Almost right! Note standard spelling: "${expected}"`);
+      setSheetVariant("almost");
+      setVerifiedAttemptText(answerToCheck);
+      setAlmostWarningNote(evaluation.warningNote);
+      setShowSuccessSheet(true);
+      return;
     }
 
-    if (isCaseError) {
-      if (tolerance.capitalizationTolerance) {
-        setStatus("correct");
-        setFeedbackNote(`Accepted! Note: German nouns are capitalized: "${expected}"`);
-        setShowSuccessSheet(true);
-        return;
-      } else {
-        setStatus("incorrect");
-        onError("capitalization");
-        setFailedAttemptText(answerToCheck);
-        setShowErrorSheet(true);
-        return;
-      }
-    }
-
-    // Otherwise standard error
+    // Otherwise standard error (obviously wrong)
     setStatus("incorrect");
-    onError("spelling");
+    onError(
+      evaluation.reason === "umlaut"
+        ? "umlaut"
+        : evaluation.reason === "case"
+        ? "capitalization"
+        : "spelling"
+    );
     setFailedAttemptText(answerToCheck);
     setShowErrorSheet(true);
   };
 
   const handleShiftOptionSelect = (option: string) => {
-    if (option === exercise.target_answer) {
+    const evaluation = evaluateAnswerAccuracy(option, exercise.target_answer);
+    if (evaluation.accuracy === "exact") {
       setStatus("correct");
-      setFeedbackNote("Correct!");
+      setFeedbackNote("Spot On! Perfect.");
+      setSheetVariant("exact");
+      setVerifiedAttemptText(option);
+      setAlmostWarningNote(undefined);
+      setShowSuccessSheet(true);
+    } else if (evaluation.accuracy === "almost") {
+      setStatus("almost");
+      setFeedbackNote(evaluation.warningNote || "Almost right!");
+      setSheetVariant("almost");
+      setVerifiedAttemptText(option);
+      setAlmostWarningNote(evaluation.warningNote);
       setShowSuccessSheet(true);
     } else {
       setStatus("incorrect");
@@ -403,7 +401,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
                   key={`${tile}-${i}`}
                   type="button"
                   onClick={() => pickTileIndex(i)}
-                  disabled={isUsed || status === "correct"}
+                  disabled={isUsed || status === "correct" || status === "almost"}
                   className={`px-4 py-2.5 rounded-xl border text-sm font-semibold transition active:scale-95 flex items-center gap-2 ${
                     isUsed
                       ? "opacity-25 border-white/5 bg-white/5 text-slate-600 cursor-not-allowed"
@@ -530,7 +528,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
                   handleVerify();
                 }
               }}
-              readOnly={status === "correct"}
+              readOnly={status === "correct" || status === "almost"}
               placeholder={exercise.english_hint ? `Type German (e.g. ${exercise.english_hint})` : "Type answer..."}
               className="w-full px-4 py-3.5 rounded-xl bg-[#161722] border border-white/15 text-amber-300 text-xl font-bold placeholder-slate-500 outline-none focus:border-amber-400/60 transition shadow-inner"
             />
@@ -590,7 +588,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
                 <button
                   key={`${tile}-${i}`}
                   onClick={() => pickTileIndex(i)}
-                  disabled={isUsed || status === "correct"}
+                  disabled={isUsed || status === "correct" || status === "almost"}
                   className={`px-3.5 py-2 rounded-xl border text-sm font-medium transition active:scale-95 flex items-center gap-2 ${
                     isUsed
                       ? "opacity-25 border-white/5 bg-white/5 text-slate-600 cursor-not-allowed"
@@ -616,6 +614,8 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
               className={`text-xs font-medium flex items-center gap-1.5 ${
                 status === "correct"
                   ? "text-emerald-400"
+                  : status === "almost"
+                  ? "text-amber-400 font-semibold"
                   : status === "incorrect"
                   ? "text-rose-400"
                   : "text-amber-400"
@@ -623,6 +623,8 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
             >
               {status === "correct" ? (
                 <Check className="w-4 h-4 text-emerald-400" />
+              ) : status === "almost" ? (
+                <Sparkles className="w-4 h-4 text-amber-400" />
               ) : (
                 <AlertCircle className="w-4 h-4" />
               )}
@@ -631,7 +633,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
           )}
         </div>
 
-        {status !== "correct" && exercise.type !== "shift_select" && exercise.type !== "matching_pairs" && (
+        {status !== "correct" && status !== "almost" && exercise.type !== "shift_select" && exercise.type !== "matching_pairs" && (
           <button
             type="button"
             onClick={handleVerify}
@@ -667,7 +669,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
         />
       )}
 
-      {/* Success Breakdown Pop-up / Bottom Sheet */}
+      {/* Success / Almost Right Breakdown Pop-up / Bottom Sheet */}
       {showSuccessSheet && (
         <SuccessFeedbackSheet
           targetAnswer={exercise.target_answer}
@@ -675,6 +677,9 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
           explanation={exercise.explanation}
           vocabHints={exercise.vocab_hints}
           shiftRule={exercise.shift_hint}
+          variant={sheetVariant}
+          userAttempt={verifiedAttemptText}
+          warningNote={almostWarningNote}
           onContinue={() => {
             setShowSuccessSheet(false);
             setStatus("idle");

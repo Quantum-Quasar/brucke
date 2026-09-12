@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { useAppStore } from "../lib/store";
+import { evaluateAnswerAccuracy } from "../lib/letter-diff";
 import type { ExerciseItem } from "../lib/types";
 
 describe("Keyboard Navigation & Interactive Exercise Controls", () => {
@@ -7,37 +8,33 @@ describe("Keyboard Navigation & Interactive Exercise Controls", () => {
     useAppStore.getState().resetProgress();
   });
 
-  it("verifies prediction correctness for derivation exercises when Enter is pressed", () => {
-    const exercise: ExerciseItem = {
-      id: "ex_test_derive",
-      type: "derive",
-      prompt: "Apply the T -> SS/S shift to derive the German cognate of 'water':",
-      target_answer: "Wasser",
-    };
+  it("verifies prediction correctness with three-tier feedback (spot on green, almost right yellow, incorrect red)", () => {
+    const expected = "Wasser";
 
-    const normalizeUmlauts = (s: string) =>
-      s.replace(/ä/g, "a").replace(/ö/g, "o").replace(/ü/g, "u").replace(/ß/g, "ss");
+    // 1. Exact match -> Spot on (Green)
+    const exact = evaluateAnswerAccuracy("Wasser", expected);
+    expect(exact.accuracy).toBe("exact");
 
-    const checkAnswer = (input: string) => {
-      const trimmed = input.trim();
-      if (trimmed === exercise.target_answer) return { status: "correct" };
-      if (trimmed.toLowerCase() === exercise.target_answer.toLowerCase()) {
-        return { status: "correct", note: "capitalization_warning" };
-      }
-      if (normalizeUmlauts(trimmed.toLowerCase()) === normalizeUmlauts(exercise.target_answer.toLowerCase())) {
-        return { status: "correct", note: "umlaut_warning" };
-      }
-      return { status: "incorrect" };
-    };
+    // 2. Case error (German noun lowercase) -> Almost right (Yellow)
+    const caseClose = evaluateAnswerAccuracy("wasser", expected);
+    expect(caseClose.accuracy).toBe("almost");
+    expect(caseClose.reason).toBe("case");
+    expect(caseClose.warningNote).toContain("capitalized");
 
-    // User types 'Wasser' and hits Enter
-    expect(checkAnswer("Wasser")).toEqual({ status: "correct" });
+    // 3. Umlaut substitution -> Almost right (Yellow)
+    const umlautClose = evaluateAnswerAccuracy("Apfel", "Äpfel");
+    expect(umlautClose.accuracy).toBe("almost");
+    expect(umlautClose.reason).toBe("umlaut");
+    expect(umlautClose.warningNote).toContain("umlaut");
 
-    // User types 'wasser' (case insensitive match)
-    expect(checkAnswer("wasser").status).toBe("correct");
+    // 4. Minor typo (1 edit distance on length >= 4) -> Almost right (Yellow)
+    const typoClose = evaluateAnswerAccuracy("wassser", expected);
+    expect(typoClose.accuracy).toBe("almost");
+    expect(typoClose.reason).toBe("typo");
 
-    // User types typo 'water'
-    expect(checkAnswer("water").status).toBe("incorrect");
+    // 5. Obviously wrong -> Incorrect (Red)
+    const wrong = evaluateAnswerAccuracy("water", expected);
+    expect(wrong.accuracy).toBe("incorrect");
   });
 
   it("verifies morpheme tile selection with numeric shortcuts (1-N) and undo via Backspace", () => {

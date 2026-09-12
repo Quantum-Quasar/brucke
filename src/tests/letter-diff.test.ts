@@ -24,4 +24,24 @@ describe("Letter-by-Letter Diff", () => {
     expect(diff.isMatch).toBe(false);
     expect(diff.expectedChars.some((c) => c.status === "missing")).toBe(true);
   });
+
+  it("calculates Levenshtein distance accurately", () => {
+    const { getLevenshteinDistance } = require("../lib/letter-diff");
+    expect(getLevenshteinDistance("kitten", "sitting")).toBe(3);
+    expect(getLevenshteinDistance("Wasser", "Wasser")).toBe(0);
+    expect(getLevenshteinDistance("Wasser", "wassser")).toBe(2);
+    expect(getLevenshteinDistance("wasser", "wassser")).toBe(1);
+  });
+
+  it("evaluates accuracy with three-tier feedback (exact, almost, incorrect)", () => {
+    const { evaluateAnswerAccuracy } = require("../lib/letter-diff");
+    expect(evaluateAnswerAccuracy("Wasser", "Wasser")).toEqual({ accuracy: "exact" });
+    expect(evaluateAnswerAccuracy("wasser", "Wasser").accuracy).toBe("almost");
+    expect(evaluateAnswerAccuracy("wasser", "Wasser").reason).toBe("case");
+    expect(evaluateAnswerAccuracy("Apfel", "Äpfel").accuracy).toBe("almost");
+    expect(evaluateAnswerAccuracy("Apfel", "Äpfel").reason).toBe("umlaut");
+    expect(evaluateAnswerAccuracy("waser", "Wasser").accuracy).toBe("almost");
+    expect(evaluateAnswerAccuracy("waser", "Wasser").reason).toBe("typo");
+    expect(evaluateAnswerAccuracy("water", "Wasser").accuracy).toBe("incorrect");
+  });
 });
