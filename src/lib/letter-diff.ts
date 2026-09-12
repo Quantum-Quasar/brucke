@@ -92,8 +92,9 @@ export interface EvaluationResult {
 }
 
 export function evaluateAnswerAccuracy(userInput: string, expected: string): EvaluationResult {
-  const user = userInput.trim();
-  const target = expected.trim();
+  const stripPunctuation = (s: string) => s.replace(/[.,!?;:]+$/, "").trim();
+  const user = stripPunctuation(userInput);
+  const target = stripPunctuation(expected);
 
   // 1. Exact match -> Spot on! (Green)
   if (user === target) {

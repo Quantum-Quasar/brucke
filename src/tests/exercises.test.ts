@@ -85,4 +85,25 @@ describe("Progressive Bite-Sized Exercise Architecture", () => {
     expect(mitHint).toBeDefined();
     expect(mitHint?.translation).toBe("with");
   });
+
+  it("guarantees no syntax_builder tiles or answers have trailing periods or punctuation spoilers", () => {
+    for (const lesson of LESSONS) {
+      const syntaxExercises = lesson.exercises.filter((e) => e.type === "syntax_builder");
+      for (const ex of syntaxExercises) {
+        expect(ex.word_bank).toBeDefined();
+        for (const tile of ex.word_bank!) {
+          expect(tile).not.toMatch(/[.,!?;:]$/);
+        }
+        expect(ex.target_answer).not.toMatch(/[.,!?;:]$/);
+      }
+      const morphemeExercises = lesson.exercises.filter((e) => e.type === "morpheme_tiles");
+      for (const ex of morphemeExercises) {
+        if (ex.tile_options) {
+          for (const tile of ex.tile_options) {
+            expect(tile).not.toMatch(/[.,!?;:]$/);
+          }
+        }
+      }
+    }
+  });
 });

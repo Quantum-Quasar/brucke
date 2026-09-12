@@ -1833,6 +1833,14 @@ This section documents the foundational architectural learnings, root causes, an
 - **Root Cause**: Assuming all catalog words were already instantiated in the SRS database.
 - **Hardened Architecture**: Specialized drill decks (Shift Family, Compounds & Traps, Recent) must auto-seed initial `SRSCard` records across all compendium words belonging to that group, ensuring immediate drill availability from Day 1.
 
+#### 5. Sentence Construction (Syntax Builder): Punctuation & Full-Stop Anti-Spoiler Guard
+- **The Failure Mode**: In sentence-building / syntax-builder tile exercises (`exercise.type === "syntax_builder"`), attaching terminal punctuation or full stops (`.`) to the final word tile (e.g. `["Ich", "kann", "nicht", "schlafen."]`) immediately reveals to the learner which word must be placed at the very end of the sentence, completely bypassing active grammatical recall of German word order (Satzklammer / modal brackets / verb-second rules).
+- **Root Cause**: Unsanitized sentence tokenization leaving sentence-terminating punctuation attached to tokens in `word_bank`.
+- **Hardened Architecture**:
+  1. All word bank tiles in `word_bank` and `tile_options` MUST have trailing punctuation (`.`, `!`, `?`, `,`, `;`, `:`) stripped prior to rendering in both the available tile bank and the selected assembly slot.
+  2. Answer verification engines (`evaluateAnswerAccuracy`) must normalize and strip terminal punctuation from both user-assembled text and expected targets, ensuring punctuation-invariant grading.
+  3. Curriculum authoring suites and automated tests must strictly assert that no tiles or target sentence definitions contain spoiler punctuation.
+
 ---
 
 ### 22.3 State Management, Batching & Lifecycle Synchronization

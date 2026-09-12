@@ -50,6 +50,15 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     return [pairs[pairs.length - 1], ...pairs.slice(0, pairs.length - 1)];
   }, [exercise.matching_pairs]);
 
+  // Anti-spoiler: strip trailing periods / full stops and punctuation from tiles so the last word is never leaked
+  const sanitizedWordBank = React.useMemo(() => {
+    return (exercise.word_bank || []).map((w) => w.replace(/[.,!?;:]+$/, ""));
+  }, [exercise.word_bank]);
+
+  const sanitizedTileOptions = React.useMemo(() => {
+    return (exercise.tile_options || []).map((t) => t.replace(/[.,!?;:]+$/, ""));
+  }, [exercise.tile_options]);
+
   useEffect(() => {
     setUserInput("");
     setSelectedIndices([]);
@@ -103,7 +112,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       }
 
       // 3. Morpheme tiles (1-9 to pick, Backspace to undo)
-      if (exercise.type === "morpheme_tiles" && exercise.tile_options && status === "idle") {
+      if (exercise.type === "morpheme_tiles" && sanitizedTileOptions.length > 0 && status === "idle") {
         if (e.key === "Backspace") {
           e.preventDefault();
           if (selectedIndices.length > 0) {
@@ -112,7 +121,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
           return;
         }
         const num = parseInt(e.key, 10);
-        if (!isNaN(num) && num >= 1 && num <= exercise.tile_options.length) {
+        if (!isNaN(num) && num >= 1 && num <= sanitizedTileOptions.length) {
           e.preventDefault();
           const targetIdx = num - 1;
           if (!selectedIndices.includes(targetIdx)) {
@@ -123,7 +132,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       }
 
       // 4. Satzklammer Syntax builder (1-9 to pick, Backspace to undo)
-      if (exercise.type === "syntax_builder" && exercise.word_bank && status === "idle") {
+      if (exercise.type === "syntax_builder" && sanitizedWordBank.length > 0 && status === "idle") {
         if (e.key === "Backspace") {
           e.preventDefault();
           if (selectedIndices.length > 0) {
@@ -132,7 +141,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
           return;
         }
         const num = parseInt(e.key, 10);
-        if (!isNaN(num) && num >= 1 && num <= exercise.word_bank.length) {
+        if (!isNaN(num) && num >= 1 && num <= sanitizedWordBank.length) {
           e.preventDefault();
           const targetIdx = num - 1;
           if (!selectedIndices.includes(targetIdx)) {
@@ -189,14 +198,14 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     // 1. Morpheme tiles or Syntax builder
     const expected = exercise.target_answer.trim();
     if (exercise.type === "morpheme_tiles") {
-      const options = exercise.tile_options || [];
+      const options = sanitizedTileOptions;
       const selectedTiles = selectedIndices.map((i) => options[i] || "");
       const cleanTiles = selectedTiles.map((t) => t.replace(/^-/, ""));
       const joinedDirect = cleanTiles.join("").trim();
       const joinedSpace = selectedTiles.join(" ").trim();
       answerToCheck = expected.includes(" ") ? joinedSpace : joinedDirect;
     } else if (exercise.type === "syntax_builder") {
-      const options = exercise.word_bank || [];
+      const options = sanitizedWordBank;
       const selectedTiles = selectedIndices.map((i) => options[i] || "");
       answerToCheck = selectedTiles.join(" ").trim();
     } else if (exercise.type === "matching_pairs") {
@@ -369,23 +378,23 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       )}
 
       {/* 1. Morpheme Tile Assembly (Scaffolded Beginner) */}
-      {exercise.type === "morpheme_tiles" && exercise.tile_options && (
+      {exercise.type === "morpheme_tiles" && sanitizedTileOptions.length > 0 && (
         <div className="space-y-4">
           {/* Target Assembly Slot */}
           <div className="min-h-[58px] p-3 rounded-xl bg-[#161722] border-2 border-dashed border-white/20 flex flex-wrap gap-2 items-center justify-center">
             {selectedIndices.length === 0 ? (
               <span className="text-xs font-mono text-slate-500 italic">
-                Tap tiles or press 1–{exercise.tile_options.length} to assemble word...
+                Tap tiles or press 1–{sanitizedTileOptions.length} to assemble word...
               </span>
             ) : (
               selectedIndices.map((tileIdx, pos) => (
                 <button
-                  key={`${exercise.tile_options![tileIdx]}-${tileIdx}-${pos}`}
+                  key={`${sanitizedTileOptions[tileIdx]}-${tileIdx}-${pos}`}
                   onClick={() => unpickTilePosition(pos)}
                   className="px-4 py-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/50 text-base font-bold hover:bg-amber-500/30 transition active:scale-95 flex items-center gap-1.5"
                   title="Click or press Backspace to unpick"
                 >
-                  <span>{exercise.tile_options![tileIdx]}</span>
+                  <span>{sanitizedTileOptions[tileIdx]}</span>
                   <span className="text-[10px] text-amber-400/60 font-mono font-normal">×</span>
                 </button>
               ))
@@ -394,7 +403,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
 
           {/* Tile Options Bank */}
           <div className="flex flex-wrap justify-center gap-2.5 pt-1">
-            {exercise.tile_options.map((tile, i) => {
+            {sanitizedTileOptions.map((tile, i) => {
               const isUsed = selectedIndices.includes(i);
               return (
                 <button
@@ -559,22 +568,22 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       )}
 
       {/* 5. Satzklammer Syntax Builder Tiles */}
-      {exercise.type === "syntax_builder" && exercise.word_bank && (
+      {exercise.type === "syntax_builder" && sanitizedWordBank.length > 0 && (
         <div className="space-y-3">
           <div className="min-h-[58px] p-3 rounded-xl bg-[#161722] border border-dashed border-white/20 flex flex-wrap gap-2 items-center">
             {selectedIndices.length === 0 ? (
               <span className="text-xs font-mono text-slate-500 italic pl-2">
-                Tap tiles or press 1–{exercise.word_bank.length} in sentence sequence...
+                Tap tiles or press 1–{sanitizedWordBank.length} in sentence sequence...
               </span>
             ) : (
               selectedIndices.map((tileIdx, pos) => (
                 <button
-                  key={`${exercise.word_bank![tileIdx]}-${tileIdx}-${pos}`}
+                  key={`${sanitizedWordBank[tileIdx]}-${tileIdx}-${pos}`}
                   onClick={() => unpickTilePosition(pos)}
                   className="px-3.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 text-sm font-medium hover:bg-amber-500/30 transition flex items-center gap-1.5"
                   title="Click or press Backspace to unpick"
                 >
-                  <span>{exercise.word_bank![tileIdx]}</span>
+                  <span>{sanitizedWordBank[tileIdx]}</span>
                   <span className="text-[10px] text-amber-400/60 font-mono font-normal">×</span>
                 </button>
               ))
@@ -582,7 +591,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
           </div>
 
           <div className="flex flex-wrap gap-2 pt-1">
-            {exercise.word_bank.map((tile, i) => {
+            {sanitizedWordBank.map((tile, i) => {
               const isUsed = selectedIndices.includes(i);
               return (
                 <button

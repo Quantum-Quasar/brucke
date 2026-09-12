@@ -64,5 +64,10 @@ describe("Letter-by-Letter Diff", () => {
     expect(articleResult.accuracy).toBe("almost");
     expect(articleResult.reason).toBe("article");
     expect(articleResult.warningNote).toContain("gender article");
+
+    // Punctuation and full stop normalization (e.g. "Ich kann kommen." vs "Ich kann kommen")
+    expect(evaluateAnswerAccuracy("Ich kann kommen", "Ich kann kommen.")).toEqual({ accuracy: "exact" });
+    expect(evaluateAnswerAccuracy("Ich kann kommen.", "Ich kann kommen")).toEqual({ accuracy: "exact" });
+    expect(evaluateAnswerAccuracy("Ein Glas Wasser bitte!", "Ein Glas Wasser bitte")).toEqual({ accuracy: "exact" });
   });
 });
