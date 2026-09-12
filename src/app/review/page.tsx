@@ -32,6 +32,11 @@ const data = compendium as unknown as CompendiumData;
 
 type DeckType = "due" | "shift" | "weakest" | "recent" | "compounds";
 
+interface PendingDeckStart {
+  deck: DeckType;
+  customCards?: SRSCard[];
+}
+
 export default function ReviewPage() {
   const [mounted, setMounted] = useState(false);
   const [activeDeck, setActiveDeck] = useState<DeckType | null>(null);
@@ -45,6 +50,7 @@ export default function ReviewPage() {
   const setPreferredReviewMode = useAppStore((s) => s.setPreferredReviewMode);
   const [reviewMode, setReviewMode] = useState<ReviewMode>(preferredReviewMode || "flashcard");
   const [isModeSelectorOpen, setIsModeSelectorOpen] = useState(false);
+  const [pendingDeck, setPendingDeck] = useState<PendingDeckStart | null>(null);
   const [rememberPreference, setRememberPreference] = useState(true);
 
   useEffect(() => {
@@ -199,18 +205,24 @@ export default function ReviewPage() {
     }
   };
 
-  // 1-Click start into user's current reviewMode
+  // Request deck start: prompts the 4 review style options
   const requestDeckStart = (deck: DeckType, customCards?: SRSCard[]) => {
-    startDeck(deck, customCards);
+    setPendingDeck({ deck, customCards });
+    setIsModeSelectorOpen(true);
   };
 
-  // Execute deck start with selected mode (e.g. from modal style chooser)
+  // Execute deck start with selected mode (e.g. from modal style chooser or hotkeys 1-4)
   const selectModeAndStart = (mode: ReviewMode) => {
     setReviewMode(mode);
     if (rememberPreference) {
       setPreferredReviewMode(mode);
     }
     setIsModeSelectorOpen(false);
+
+    if (pendingDeck) {
+      startDeck(pendingDeck.deck, pendingDeck.customCards);
+      setPendingDeck(null);
+    }
   };
 
   const currentCard = sessionCards[currentIndex];
@@ -349,6 +361,7 @@ export default function ReviewPage() {
         } else if (e.key === "Escape") {
           e.preventDefault();
           setIsModeSelectorOpen(false);
+          setPendingDeck(null);
         }
         return;
       }
@@ -524,11 +537,14 @@ export default function ReviewPage() {
             </select>
             <button
               type="button"
-              onClick={() => setIsModeSelectorOpen(true)}
+              onClick={() => {
+                setPendingDeck(null);
+                setIsModeSelectorOpen(true);
+              }}
               className="text-[11px] font-mono text-slate-400 hover:text-cyan-300 underline underline-offset-2 ml-1 cursor-pointer"
-              title="Learn about review styles"
+              title="Select review style"
             >
-              Guide
+              Change Style
             </button>
           </div>
         </div>
@@ -1019,7 +1035,7 @@ export default function ReviewPage() {
               </div>
 
               <button
-                onClick={() => startDeck("compounds")}
+                onClick={() => requestDeckStart("compounds")}
                 className="w-full py-2 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-xs font-semibold text-purple-200 transition cursor-pointer"
               >
                 Review Compounds
@@ -1037,9 +1053,23 @@ export default function ReviewPage() {
               <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold">
                 Select Review Style
               </span>
-              <h2 className="text-2xl font-extrabold text-slate-100">How do you want to review?</h2>
+              <h2 className="text-2xl font-extrabold text-slate-100">
+                {pendingDeck
+                  ? `How do you want to review ${
+                      pendingDeck.deck === "due"
+                        ? "Due Cards"
+                        : pendingDeck.deck === "shift"
+                        ? "Shift Family"
+                        : pendingDeck.deck === "weakest"
+                        ? "Weakest Words"
+                        : pendingDeck.deck === "recent"
+                        ? "Recent Lessons"
+                        : "Compounds & Traps"
+                    }?`
+                  : "How do you want to review?"}
+              </h2>
               <p className="text-xs text-slate-400">
-                All styles review the same SM-2 cards queue and update intervals globally.
+                Pick your preferred exercise style below. All 4 styles advance the same SM-2 interval queue.
               </p>
             </div>
 
@@ -1048,7 +1078,11 @@ export default function ReviewPage() {
               <button
                 type="button"
                 onClick={() => selectModeAndStart("flashcard")}
-                className="w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border border-cyan-500/30 hover:border-cyan-400 transition cursor-pointer flex items-center justify-between group"
+                className={`w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border transition cursor-pointer flex items-center justify-between group ${
+                  reviewMode === "flashcard"
+                    ? "border-cyan-400 bg-cyan-950/20 shadow-md shadow-cyan-500/10 ring-1 ring-cyan-400/40"
+                    : "border-white/10 hover:border-cyan-400"
+                }`}
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -1056,9 +1090,15 @@ export default function ReviewPage() {
                     <span className="font-bold text-slate-100 group-hover:text-cyan-300 transition">
                       Quick Flip (Flashcard)
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-                      Recommended
-                    </span>
+                    {reviewMode === "flashcard" ? (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                        Default Style
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-white/5 text-slate-400 border border-white/10">
+                        Recommended
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-slate-400">
                     Zero typing. Recall in your mind, press Space to reveal, rate 1–4.
@@ -1073,23 +1113,33 @@ export default function ReviewPage() {
               <button
                 type="button"
                 onClick={() => selectModeAndStart("mcq")}
-                className="w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border border-white/10 hover:border-cyan-400 transition cursor-pointer flex items-center justify-between group"
+                className={`w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border transition cursor-pointer flex items-center justify-between group ${
+                  reviewMode === "mcq"
+                    ? "border-amber-400 bg-amber-950/20 shadow-md shadow-amber-500/10 ring-1 ring-amber-400/40"
+                    : "border-white/10 hover:border-amber-400"
+                }`}
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">🔘</span>
-                    <span className="font-bold text-slate-100 group-hover:text-cyan-300 transition">
+                    <span className="font-bold text-slate-100 group-hover:text-amber-300 transition">
                       Multiple Choice (MCQ)
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                      Active Recognition
-                    </span>
+                    {reviewMode === "mcq" ? (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                        Default Style
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300/80 border border-amber-500/20">
+                        Active Recognition
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-slate-400">
                     Pick the German word from 4 options. Press 1–4 keys or click.
                   </p>
                 </div>
-                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-cyan-400/50">
+                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-amber-400/50">
                   Press [2]
                 </span>
               </button>
@@ -1098,23 +1148,33 @@ export default function ReviewPage() {
               <button
                 type="button"
                 onClick={() => selectModeAndStart("tiles")}
-                className="w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border border-white/10 hover:border-cyan-400 transition cursor-pointer flex items-center justify-between group"
+                className={`w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border transition cursor-pointer flex items-center justify-between group ${
+                  reviewMode === "tiles"
+                    ? "border-emerald-400 bg-emerald-950/20 shadow-md shadow-emerald-500/10 ring-1 ring-emerald-400/40"
+                    : "border-white/10 hover:border-emerald-400"
+                }`}
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">🧩</span>
-                    <span className="font-bold text-slate-100 group-hover:text-cyan-300 transition">
+                    <span className="font-bold text-slate-100 group-hover:text-emerald-300 transition">
                       Tile Builder
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                      Morpheme Assembly
-                    </span>
+                    {reviewMode === "tiles" ? (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        Default Style
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300/80 border border-emerald-500/20">
+                        Morpheme Assembly
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-slate-400">
                     Tap letter & syllable tiles into place to assemble the German cognate.
                   </p>
                 </div>
-                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-cyan-400/50">
+                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-emerald-400/50">
                   Press [3]
                 </span>
               </button>
@@ -1123,23 +1183,33 @@ export default function ReviewPage() {
               <button
                 type="button"
                 onClick={() => selectModeAndStart("typing")}
-                className="w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border border-white/10 hover:border-cyan-400 transition cursor-pointer flex items-center justify-between group"
+                className={`w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border transition cursor-pointer flex items-center justify-between group ${
+                  reviewMode === "typing"
+                    ? "border-purple-400 bg-purple-950/20 shadow-md shadow-purple-500/10 ring-1 ring-purple-400/40"
+                    : "border-white/10 hover:border-purple-400"
+                }`}
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">✍️</span>
-                    <span className="font-bold text-slate-100 group-hover:text-cyan-300 transition">
+                    <span className="font-bold text-slate-100 group-hover:text-purple-300 transition">
                       Derivation Typing
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                      Deep Active Recall
-                    </span>
+                    {reviewMode === "typing" ? (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                        Default Style
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/15 text-purple-300/80 border border-purple-500/20">
+                        Deep Active Recall
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-slate-400">
                     Type the German word letter-by-letter with umlaut shortcuts.
                   </p>
                 </div>
-                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-cyan-400/50">
+                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-purple-400/50">
                   Press [4]
                 </span>
               </button>
@@ -1158,7 +1228,10 @@ export default function ReviewPage() {
 
               <button
                 type="button"
-                onClick={() => setIsModeSelectorOpen(false)}
+                onClick={() => {
+                  setIsModeSelectorOpen(false);
+                  setPendingDeck(null);
+                }}
                 className="text-xs font-mono text-slate-400 hover:text-white px-3 py-1.5 rounded hover:bg-white/5 transition cursor-pointer"
               >
                 Cancel [Esc]

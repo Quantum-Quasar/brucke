@@ -59,4 +59,16 @@ describe("Review Session Keyboard Navigation & SM-2 Shortcuts", () => {
     expect(updatedCard.repetitions).toBe(1);
     expect(updatedCard.last_reviewed).toBeTruthy();
   });
+
+  it("supports and persists all four review styles (flashcard, mcq, tiles, typing)", () => {
+    const store = useAppStore.getState();
+    expect(store.preferredReviewMode).toBe("flashcard");
+
+    const modes = ["mcq", "tiles", "typing", "flashcard"] as const;
+    for (const mode of modes) {
+      store.setPreferredReviewMode(mode);
+      expect(useAppStore.getState().preferredReviewMode).toBe(mode);
+    }
+  });
 });
+
