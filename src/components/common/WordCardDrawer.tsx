@@ -4,8 +4,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { X, ExternalLink, Compass, BookOpen, Search, CheckCircle2, Circle, Disc, Minus, Volume2 } from "lucide-react";
+import { X, ExternalLink, Compass, BookOpen, CheckCircle2, Circle, Disc, Minus, Volume2 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { GenderBadge } from "@/components/common/GenderBadge";
 import { playGermanAudio } from "@/lib/audio";
@@ -15,7 +14,6 @@ import type { CompendiumData, WordEntity } from "@/lib/types";
 const data = compendium as unknown as CompendiumData;
 
 export const WordCardDrawer: React.FC = () => {
-  const router = useRouter();
   const activeWordId = useAppStore((s) => s.activeWordDrawerId);
   const closeDrawer = useAppStore((s) => s.closeWordDrawer);
   const mastery = useAppStore((s) => (activeWordId ? s.wordMastery[activeWordId] || "unexplored" : "unexplored"));
@@ -179,20 +177,6 @@ export const WordCardDrawer: React.FC = () => {
                   <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-cyan-400 transition" />
                 </Link>
               )}
-
-              <button
-                onClick={() => {
-                  closeDrawer();
-                  router.push(`/decoder?q=${encodeURIComponent(word.english_cognate)}`);
-                }}
-                className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 text-sm text-slate-200 transition group text-left w-full cursor-pointer"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Search className="w-4 h-4 text-slate-400" />
-                  <span>Try in Decoder ({word.english_cognate})</span>
-                </div>
-                <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition" />
-              </button>
             </div>
           </div>
 

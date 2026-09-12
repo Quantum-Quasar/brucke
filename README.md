@@ -92,14 +92,7 @@ Visit `http://localhost:3000` in your browser.
    - Anti-spoiler gender shields: Front card prompts with `[ der / die / das ? ]` instead of leaking the article before recall.
    - Desktop keyboard navigation (`1`–`4`, `Space`, `Enter`, `Backspace`, `[R]` audio replay, `Esc`).
 
-4. **The Decoder (`/decoder` & Header Modal)**:
-   - Universal query search resolving German $\leftrightarrow$ English words.
-   - English lemmatization (handles inflections like `drank`, `drinking`).
-   - False friend trap alerts (*Gift* = poison, not present).
-   - Transparent compound calque breakdowns (*Handschuh* = hand + shoe $\rightarrow$ glove).
-   - Latinate bridge explanations for shared Greco-Latin vocabulary.
-
-5. **3-Color Grammatical Gender System**:
+4. **3-Color Grammatical Gender System**:
    - `der` (Masculine): Azure Blue
    - `die` (Feminine): Vivid Rose
    - `das` (Neuter): Emerald Green
@@ -113,7 +106,6 @@ Visit `http://localhost:3000` in your browser.
 src/
 ├── app/                  # Next.js App Router (100% SSG static pre-rendered routes)
 │   ├── atlas/            # Sound Shift Atlas pages
-│   ├── decoder/          # Decoder tool page
 │   ├── review/           # Multi-modal SRS Review Hub
 │   ├── trail/            # Lesson curriculum pages
 │   ├── layout.tsx        # App layout and global shell
@@ -122,13 +114,12 @@ src/
 │   ├── atlas/            # Radial constellation and drill components
 │   ├── common/           # GenderBadge, ShiftPair, WordCardDrawer, CharBar, Onboarding
 │   ├── lesson/           # 5-step wizard, exercise widgets, retry queue, feedback sheets
-│   └── navigation/       # Desktop TopNav, mobile BottomNav, quick search modal
+│   └── navigation/       # Desktop TopNav, mobile BottomNav
 ├── data/
 │   ├── compendium.json   # 218 core words, 9 shifts, 32 compounds, 16 traps, 28 insights
 │   └── lessons.ts        # Curriculum definitions and exercise structures
 ├── lib/
 │   ├── audio.ts          # Native speech pronunciation engine
-│   ├── decoder-engine.ts # Search, cognate matching, Latinate bridges
 │   ├── gender.ts         # 3-color gender metadata & styling
 │   ├── lemmatizer.ts     # English inflection normalizer
 │   ├── letter-diff.ts    # Letter-by-letter diff comparison
@@ -137,7 +128,7 @@ src/
 │   ├── srs.ts            # SuperMemo SM-2 interval scheduler
 │   ├── store.ts          # Zustand store with dual persistence
 │   └── types.ts          # Core domain TypeScript interfaces
-└── tests/                # 12 test suites, 63 automated tests (Vitest / Bun)
+└── tests/                # 11 test suites, 61 automated tests (Vitest / Bun)
 ```
 
 ---

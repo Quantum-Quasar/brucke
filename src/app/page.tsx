@@ -163,7 +163,7 @@ export default function HomePage() {
       {/* Daily Cultural Insight */}
       <DailyInsightCard insight={todayInsight} />
 
-      {/* Quick Launchpad to Atlas and Decoder */}
+      {/* Quick Launchpad to Atlas and Review */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Atlas preview card */}
         <Link
@@ -182,19 +182,19 @@ export default function HomePage() {
           </div>
         </Link>
 
-        {/* Decoder preview card */}
+        {/* Review preview card */}
         <Link
-          href="/decoder"
-          className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 hover:border-amber-500/40 transition group space-y-3"
+          href="/review"
+          className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 hover:border-rose-500/40 transition group space-y-3"
         >
           <div className="flex items-center justify-between">
-            <Sparkles className="w-5 h-5 text-amber-400 group-hover:scale-110 transition" />
-            <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition" />
+            <RotateCcw className="w-5 h-5 text-rose-400 group-hover:scale-110 transition" />
+            <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-rose-400 transition" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-100">The Real-Time Decoder</h3>
+            <h3 className="text-base font-bold text-slate-100">The Review Chamber</h3>
             <p className="text-xs text-slate-400 mt-1">
-              Instant shift search for 500+ English words with lemmatization and Latinate bridges.
+              Spaced repetition review across 4 custom styles: Quick Flip, MCQ, Tile Builder, and Typing.
             </p>
           </div>
         </Link>

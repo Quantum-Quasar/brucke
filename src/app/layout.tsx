@@ -1,17 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import "./globals.css";
 import { TopNav } from "@/components/navigation/TopNav";
 import { BottomNav } from "@/components/navigation/BottomNav";
 import { WordCardDrawer } from "@/components/common/WordCardDrawer";
-import { DecoderModal } from "@/components/navigation/DecoderModal";
 import { OnboardingModal } from "@/components/common/OnboardingModal";
 import { useAppStore, STORAGE_KEY } from "@/lib/store";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const [isDecoderOpen, setIsDecoderOpen] = useState(false);
-
   // Hydrate local progress from localStorage and cookies on client mount
   useEffect(() => {
     useAppStore.getState().hydrateFromStorage();
@@ -25,18 +22,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
-  // Global hotkey listener for Cmd+K / Ctrl+K
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setIsDecoderOpen((prev) => !prev);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
   return (
     <html lang="en" className="dark">
       <head>
@@ -48,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className="min-h-screen bg-[#12131C] text-[#F0EDEA] flex flex-col antialiased selection:bg-amber-500/30 selection:text-amber-200">
-        <TopNav onOpenDecoderModal={() => setIsDecoderOpen(true)} />
+        <TopNav />
 
         {/* Main Content Viewport */}
         <main className="flex-1 pb-20 md:pb-8">{children}</main>
@@ -57,7 +42,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Global Cross-Layer Drawers & Modals */}
         <WordCardDrawer />
-        <DecoderModal isOpen={isDecoderOpen} onClose={() => setIsDecoderOpen(false)} />
         <OnboardingModal />
       </body>
     </html>

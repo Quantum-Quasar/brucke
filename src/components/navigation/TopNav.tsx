@@ -3,17 +3,13 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Compass, RotateCcw, Search, Sparkles, HelpCircle } from "lucide-react";
+import { BookOpen, Compass, RotateCcw, Sparkles, HelpCircle } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import compendium from "@/data/compendium.json";
 
 const totalWords = (compendium as unknown as { wordList: unknown[] }).wordList.length;
 
-interface TopNavProps {
-  onOpenDecoderModal: () => void;
-}
-
-export const TopNav: React.FC<TopNavProps> = ({ onOpenDecoderModal }) => {
+export const TopNav: React.FC = () => {
   const pathname = usePathname();
   const wordMastery = useAppStore((s) => s.wordMastery);
   const openOnboarding = useAppStore((s) => s.openOnboarding);
@@ -25,7 +21,6 @@ export const TopNav: React.FC<TopNavProps> = ({ onOpenDecoderModal }) => {
     { href: "/trail", label: "Trail", icon: BookOpen },
     { href: "/atlas", label: "Atlas", icon: Compass },
     { href: "/review", label: "Review", icon: RotateCcw },
-    { href: "/decoder", label: "Decoder", icon: Search },
   ];
 
   return (
@@ -67,7 +62,7 @@ export const TopNav: React.FC<TopNavProps> = ({ onOpenDecoderModal }) => {
           })}
         </nav>
 
-        {/* Right side: Stats & Search Modal Hotkey */}
+        {/* Right side: Stats & Guide */}
         <div className="flex items-center gap-3">
           {/* Stats pill */}
           <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono">
@@ -86,19 +81,6 @@ export const TopNav: React.FC<TopNavProps> = ({ onOpenDecoderModal }) => {
           >
             <HelpCircle className="w-3.5 h-3.5 text-amber-400/80" />
             <span className="hidden sm:inline">Tour</span>
-          </button>
-
-          {/* Cmd+K trigger button */}
-          <button
-            type="button"
-            onClick={onOpenDecoderModal}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-slate-400 hover:text-slate-200 transition cursor-pointer"
-          >
-            <Search className="w-3.5 h-3.5 text-slate-400" />
-            <span className="hidden sm:inline">Search Cognates</span>
-            <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-black/40 text-[10px] font-mono text-slate-400 border border-white/10">
-              ⌘K
-            </kbd>
           </button>
         </div>
       </div>

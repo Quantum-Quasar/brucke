@@ -69,15 +69,6 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 - **Active Recall Shield**: Front card hides gender article badges, displaying neutral placeholder `Gender: [ der / die / das ? ]` to avoid leaking answers before recall. Full color badge and pronunciation reveal on card flip.
 - **1-Click Launch**: Decks launch immediately without pre-session modal interruptions; styles can be changed mid-session via a sticky header dropdown.
 
-### Pillar 4: The Decoder (`/decoder` and Navigation Modal)
-- **Universal Morphological Engine**: Resolves English $\leftrightarrow$ German queries in real time.
-- **Features**:
-  - English lemmatization (normalizes `drank`, `drinking`, `drinks` $\rightarrow$ `drink`).
-  - Consonant shift rule explanation.
-  - False friend trap detection with cautionary alerts (*Gift* means poison, not present).
-  - Compound calque breakdown (*Handschuh* = *Hand* + *Schuh* $\rightarrow$ glove).
-  - Latinate bridge suggestions (explaining shared Greco-Latin roots like *television* $\leftrightarrow$ *Fernseher*).
-
 ---
 
 ## 4. Supporting Systems & Ergonomics
@@ -121,10 +112,8 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 │   │   ├── atlas/
 │   │   │   ├── page.tsx       # Atlas index: grid of 9 consonant shift families
 │   │   │   └── [family]/page.tsx # Server component exporting generateStaticParams()
-│   │   ├── review/
-│   │   │   └── page.tsx       # Multi-modal SRS Review Hub with 4 styles & 5 decks
-│   │   └── decoder/
-│   │       └── page.tsx       # Standalone interactive cognate decoder page
+│   │   └── review/
+│   │       └── page.tsx       # Multi-modal SRS Review Hub with 4 styles & 5 decks
 │   ├── components/
 │   │   ├── common/
 │   │   │   ├── ShiftPair.tsx          # Memoized cognate pair with letter highlights & audio
@@ -148,9 +137,8 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 │   │   │   ├── RadialConstellation.tsx       # SVG radial spoke graph with animated nodes
 │   │   │   └── BranchDrillModal.tsx          # 5-question shift practice drill modal
 │   │   └── navigation/
-│   │       ├── TopNav.tsx             # Desktop top navigation header with quick decoder button
-│   │       ├── BottomNav.tsx          # Mobile bottom tab navigation bar
-│   │       └── DecoderModal.tsx       # Global search modal overlay
+│   │       ├── TopNav.tsx             # Desktop top navigation header
+│   │       └── BottomNav.tsx          # Mobile bottom tab navigation bar
 │   ├── lib/
 │   │   ├── types.ts           # Core TypeScript interfaces & domain types
 │   │   ├── store.ts           # Zustand store, mastery state machine, dual persistence
@@ -158,19 +146,17 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 │   │   ├── gender.ts          # Color mapping & metadata for der / die / das
 │   │   ├── shift-annotator.ts # Memoized letter-by-letter consonant shift aligner
 │   │   ├── review-modes.ts    # Question generator for MCQ, Tile Builder, and Typing
-│   │   ├── decoder-engine.ts  # Cognate lookup, false friend detection, Latinate bridges
 │   │   ├── lemmatizer.ts      # English inflection normalizer (verbs, nouns, participles)
 │   │   ├── letter-diff.ts     # Character-by-character typo alignment & diffing
 │   │   └── audio.ts           # Web Speech API German speech synthesis wrapper
 │   ├── data/
 │   │   ├── compendium.json    # 218 words, 9 shifts, 32 compounds, 16 false friends, 28 insights
-│   │   └── lessons.ts         # Lessons 1–5 rich definitions, exercises, and clues
-│   └── tests/                 # 12 test suites, 63 automated tests (Vitest / Bun)
+│   │   └── lessons.ts         # Lessons 1–10 rich definitions, exercises, and clues
+│   └── tests/                 # 11 test suites, 61 automated tests (Vitest / Bun)
 │       ├── store.test.ts
 │       ├── exercises.test.ts
 │       ├── letter-diff.test.ts
 │       ├── lemmatizer.test.ts
-│       ├── decoder.test.ts
 │       ├── review-modes.test.ts
 │       ├── gender.test.ts
 │       ├── compendium.test.ts

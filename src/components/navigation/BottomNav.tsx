@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Compass, RotateCcw, Search } from "lucide-react";
+import { BookOpen, Compass, RotateCcw } from "lucide-react";
 
 export const BottomNav: React.FC = () => {
   const pathname = usePathname();
@@ -12,7 +12,6 @@ export const BottomNav: React.FC = () => {
     { href: "/trail", label: "Trail", icon: BookOpen },
     { href: "/atlas", label: "Atlas", icon: Compass },
     { href: "/review", label: "Review", icon: RotateCcw },
-    { href: "/decoder", label: "Decoder", icon: Search },
   ];
 
   return (

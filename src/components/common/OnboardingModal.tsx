@@ -7,7 +7,6 @@ import {
   Compass,
   BookOpen,
   RotateCcw,
-  Search,
   ArrowRight,
   ArrowLeft,
   Sparkles,
@@ -283,7 +282,7 @@ export const OnboardingModal: React.FC = () => {
             </div>
           )}
 
-          {/* STEP 3: THE FOUR PILLARS */}
+          {/* STEP 3: THE THREE PILLARS */}
           {step === 2 && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <div className="space-y-2">
@@ -292,10 +291,10 @@ export const OnboardingModal: React.FC = () => {
                   Navigation Tour
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight">
-                  Explore the Four Pillars
+                  Explore the Three Pillars
                 </h2>
                 <p className="text-sm text-slate-300 leading-relaxed">
-                  Everything in Brücke connects across four specialized tabs accessible via the navigation bar:
+                  Everything in Brücke connects across three specialized tabs accessible via the navigation bar:
                 </p>
               </div>
 
@@ -350,24 +349,6 @@ export const OnboardingModal: React.FC = () => {
                     </div>
                     <p className="text-xs text-slate-400 leading-relaxed">
                       Etymological spaced repetition with 4 review styles: <strong>Quick Flip</strong> flashcards, <strong>MCQ</strong> quizzes, <strong>Tile Builder</strong>, and <strong>Typing</strong>.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Pillar 4: Decoder */}
-                <div className="p-3.5 rounded-xl bg-[#161722] border border-white/10 flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 shrink-0">
-                    <Search className="w-4 h-4" />
-                  </div>
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-bold text-slate-100">Cognate Decoder</h4>
-                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white/5 text-slate-400 border border-white/10">
-                        Hotkey ⌘K
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      Search any English or German word to reveal direct cognate rules, inflection lemmas, false friends, or Latinate bridge connections.
                     </p>
                   </div>
                 </div>
