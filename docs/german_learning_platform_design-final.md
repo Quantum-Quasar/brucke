@@ -19,7 +19,7 @@ Every design and architectural choice directly serves a specific psychological s
 
 | Stage | What the User Feels | Design Consequence |
 |---|---|---|
-| **First 30 Seconds** | *"Wait, that's real German? I just deduced that myself?"* | Onboarding is an instant interactive Decoder tool. Zero signup walls or feature tours. |
+| **First 30 Seconds** | *"Wait, that's real German? I just deduced that myself?"* | Onboarding is an instant interactive Sound Shift Walkthrough directly launching into Lesson 1. Zero signup walls or feature tours. |
 | **First 3 Lessons** | *"There is an actual system to this language. It's not arbitrary."* | Present the sound shift pattern *before* the vocabulary, showing how words radiate from one rule. |
 | **Lessons 4–8** | *"I can predict words before the app even displays them."* | Exercises emphasize *rule application* and derivation rather than passive recognition. |
 | **Lessons 9–18** | *"German grammar actually makes sense when seen as historical logic."* | Grammar points (cases, word brackets, prefixes) are explained as natural thought evolution (e.g., `-st` from archaic *thou*). |
@@ -28,31 +28,27 @@ Every design and architectural choice directly serves a specific psychological s
 
 ---
 
-## 3. Product Architecture: Four Navigation Pillars
+## 3. Product Architecture: Three Navigation Pillars
 
-The platform has three content layers interconnected by a unified navigation bar and cross-layer word entity links:
+The platform has two core exploration layers interconnected by a unified navigation bar, cross-layer word entity links, and an integrated Review Hub:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                     LAYER 3: THE ATLAS                       │
+│                     LAYER 2: THE ATLAS                       │
 │    100% Open Constellation Map from Day 1                    │
 │    Explore any word tree, shift family, or custom exercise   │
-├──────────────────────────────────────────────────────────────┤
-│                     LAYER 2: THE DECODER                     │
-│    Dedicated Reference Tab & Real-Time Shift Engine          │
-│    Test any English word to derive German cognates           │
 ├──────────────────────────────────────────────────────────────┤
 │                     LAYER 1: THE TRAIL                       │
 │    30-Lesson Structured Progression                          │
 │    Conversational mentor voice · Soft-gated exercises        │
 └──────────────────────────────────────────────────────────────┘
 
-Cross-Cutting: REVIEW HUB (4th navigation tab)
+Cross-Cutting: REVIEW HUB (3rd navigation tab)
   Etymologically-grouped spaced repetition with 4 selectable decks
 ```
 
-**Bottom Navigation (4 tabs):**
-`📖 Trail` · `🗺️ Atlas` · `🔄 Review` · `🔍 Decoder`
+**Bottom Navigation (3 tabs):**
+`📖 Trail` · `🗺️ Atlas` · `🔄 Review`
 
 Review is elevated to a primary navigation tab because after the first week it becomes the most-used daily feature. Burying it behind the dashboard dilutes its importance.
 
@@ -65,9 +61,8 @@ Every German word across the entire platform is a **tappable entity** that opens
 - Its mastery state (Unexplored / Explored / Encountered / Mastered)
 - "Appears in: Lesson 3" → links to that lesson section
 - "Part of: P→F/FF constellation" → links to that Atlas branch
-- "Try in Decoder" → opens Decoder pre-filled with the English cognate
 
-This single pattern stitches all three layers together. Without it, the three layers feel like three separate apps and the "rabbit hole" promise of the Atlas breaks.
+This single pattern stitches both layers together into an interconnected linguistic web, ensuring the "rabbit hole" promise of the Atlas is fulfilled.
 
 ---
 
@@ -139,7 +134,7 @@ In all lesson content, word tables, and Atlas views, English→German pairs use 
 
 ### Onboarding-Only: The Linguistic Morph Animation
 
-The one place where animation IS used is the **Decoder onboarding hero** (Section 7.1). When a first-time user types an English word and sees it transform into German, the animated morph creates the critical "wow" moment. This is the only context where the animation adds more than it costs.
+The one place where animation IS used is the **Onboarding walkthrough hero** (Section 7.1). When a first-time user steps through the initial derivation and sees English transform into German, the animated morph creates the critical "wow" moment. This is the only context where the animation adds more than it costs.
 
 ```
 Step 1:  h o [ p ] e
@@ -147,7 +142,7 @@ Step 2:  h o [ p → ff ] e n  (cyan transition glow, 400ms ease-out)
 Step 3:  h o f f e n  🔊     (amber resolution)
 ```
 
-**Progressive reduction for returning users:** The morph plays at full speed for the first 5 Decoder uses. After that, it shortens to 200ms. After 15 uses, it resolves instantly with a subtle cyan→amber color flash. Users can toggle animation speed in settings (Full / Reduced / Off).
+**Progressive reduction for returning users:** The morph plays at full speed during onboarding. In subsequent exercises and review, transitions resolve briskly with subtle cyan→amber color indicators. Users can toggle animation speed in settings (Full / Reduced / Off).
 
 ---
 
@@ -296,79 +291,49 @@ The app provides an optimized interaction mode tailored to whether the user is o
   - `Space`: Replay pronunciation audio for the active word.
   - `Tab` / `Shift+Tab`: Cycle through interactive elements.
   - `Esc`: Dismiss side notes or modal overlays.
-  - `Cmd+K` / `Ctrl+K`: Global hotkey to summon The Decoder from anywhere.
 
 ---
 
 ## 7. Screen-by-Screen UI Walkthroughs
 
-### 7.1 Onboarding: The Decoder (Interactive Hero)
+### 7.1 Onboarding: Interactive Sound Shift Walkthrough & Direct Trail Launch
 
-This is the ONE screen that uses the animated Linguistic Morph (see Section 4). The animation creates the critical first "wow" moment.
+This is the ONE screen that uses the animated Linguistic Morph (see Section 4). The animation creates the critical first "wow" moment by demonstrating that German words are systematic transformations of English words the learner already knows.
 
 ```
 ┌────────────────────────────────────────────────────────┐
 │                                                        │
-│                                                        │
-│        Type any English word:                          │
+│                  WELCOME TO STAMMBAUM                  │
+│             German isn't foreign. It's family.         │
 │                                                        │
 │        ┌──────────────────────────────────────┐        │
-│        │  hope                                │        │
+│        │  English: hope                       │        │
 │        └──────────────────────────────────────┘        │
 │                                                        │
 │                     ↓ Shift: P → FF                    │
 │                                                        │
 │                  h o f f e n   🔊                      │
-│                  (animated morph on first uses)        │
+│                  (animated morph on first encounter)   │
 │                                                        │
 │        That's real German.                             │
 │        You just derived it using historical shifts.    │
 │                                                        │
-│        ── Try these examples ──                        │
-│        [ help ]    [ think ]    [ water ]    [ bath ]  │
+│        ── The Three Pillars ──                         │
+│        📖 The Trail  ·  🗺️ The Atlas  ·  🔄 Review Hub  │
 │                                                        │
 │        ┌──────────────────────────────────────┐        │
 │        │  Start Course (Lesson 1) →           │        │
 │        └──────────────────────────────────────┘        │
-│        [ Or jump into the Atlas map ]                  │
+│        [ Or explore The Atlas map ]                    │
 │                                                        │
 └────────────────────────────────────────────────────────┘
 ```
 
-#### Decoder No-Match Handling
+#### The First-Encounter Derivation Flow
 
-~60% of English vocabulary is Latin/French-origin with no Germanic cognate shift. A user typing "beautiful", "important", or "conversation" must not hit a dead end in the critical first 30 seconds.
-
-**When no shift cognate exists, show a graceful response that itself teaches something:**
-
-```
-┌────────────────────────────────────────────────────────┐
-│                                                        │
-│        ┌──────────────────────────────────────┐        │
-│        │  beautiful                           │        │
-│        └──────────────────────────────────────┘        │
-│                                                        │
-│        This word comes from Latin (via French),        │
-│        not Germanic roots — so it doesn't have a       │
-│        shift cognate.                                  │
-│                                                        │
-│        But the German word for "beautiful" is          │
-│        schön — which IS related to English             │
-│        "sheen"! ✨                                     │
-│                                                        │
-│        ── Try these Germanic words instead ──          │
-│        [ water ]    [ think ]    [ brother ]           │
-│                                                        │
-└────────────────────────────────────────────────────────┘
-```
-
-**Implementation:** Track what users type that produces no result → use that data to prioritize expanding the Decoder dictionary and crafting more "bridge" responses.
-
-#### Decoder English Inflection Stripping (Query Normalization)
-Before executing a cognate lookup, the Decoder passes raw user input through a lightweight English morphological pre-processor:
-1. **Regular Suffix Stripping:** Automatically removes grammatical endings like plural `-s`/`-es` (*waters* → *water*, *apples* → *apple*), continuous participle `-ing` (*drinking* → *drink*, *hoping* → *hope*), past tense `-ed` (*walked* → *walk*), and adverbial `-ly*.
-2. **Irregular Strong Verb Mapping:** Maps frequent irregular English past-tense and participle forms (*drank* → *drink*, *thought* → *think*, *broke* → *break*, *sang* → *sing*, *gave* → *give*) back to their base lemma so user queries resolve to their German counterparts instead of hitting a false no-match.
-3. **Leading Article / Particle Removal:** Strips leading English articles (*the*, *a*, *an*) and infinitive markers (*to*).
+1. **Instant Proof of Concept:** Within the first 10 seconds, the learner witnesses a direct cognate shift (`hope` → `hoffen`, `think` → `denken`). No grammar tables, no signup walls.
+2. **Tri-Color Gender Introduction:** Introduces grammatical gender articles (`der` = Azure Blue, `die` = Vivid Rose, `das` = Emerald Green) early so learners recognize the visual grammar cues from Day 1.
+3. **Immediate Trail Launch:** The modal immediately funnels the learner directly into Lesson 1 of The Trail, keeping cognitive momentum uninterrupted.
 
 ### 7.2 Home Dashboard
 
@@ -403,7 +368,7 @@ The dashboard uses **smart priority reordering**: the most urgent action floats 
 │  └──────────────────────────────────────────────────┘  │
 │                                                        │
 │ ────────────────────────────────────────────────────── │
-│  📖 Trail       🗺️ Atlas       🔄 Review    🔍 Decoder │
+│       📖 Trail          🗺️ Atlas          🔄 Review       │
 └────────────────────────────────────────────────────────┘
 ```
 
@@ -472,7 +437,7 @@ The dashboard uses **smart priority reordering**: the most urgent action floats 
 
 ### 7.4 Word Detail Card (Cross-Layer Navigation Entity)
 
-Appears when any German word is tapped anywhere in the app — in a lesson, in the Atlas, in the Decoder, in review. Renders as a bottom sheet on mobile, side panel on desktop.
+Appears when any German word is tapped anywhere in the app — in a lesson, in the Atlas, or in review. Renders as a bottom sheet on mobile, side panel on desktop.
 
 ```
 ┌──────────────────────────────────────┐
@@ -488,7 +453,6 @@ Appears when any German word is tapped anywhere in the app — in a lesson, in t
 │  ── CONNECTIONS ──                   │
 │  📖 Appears in: Lesson 3 (P→F/FF) → │
 │  🗺️ Atlas: P→F/FF Constellation   → │
-│  🔍 Try in Decoder                 → │
 │                                      │
 │  ── FAMILY ──                        │
 │  Hoffnung (hope, noun)               │
@@ -531,7 +495,7 @@ The Review tab shows the 4 selectable review decks with clear visual hierarchy. 
 │  ✓ 42 Mastered · 🔄 68 Active · ⏳ 37 Upcoming        │
 │                                                        │
 │ ────────────────────────────────────────────────────── │
-│  📖 Trail       🗺️ Atlas       🔄 Review    🔍 Decoder │
+│       📖 Trail          🗺️ Atlas          🔄 Review       │
 └────────────────────────────────────────────────────────┘
 ```
 
@@ -689,7 +653,7 @@ To ensure genuine retention without punitive friction:
 
 ### Elevated Navigation: Dedicated Review Tab
 
-The review system is a **primary navigation tab** (`🔄 Review`), not a button buried on the dashboard. After the first week of use, spaced-repetition review becomes the most important daily activity. It deserves equal navigation weight with Trail, Atlas, and Decoder.
+The review system is a **primary navigation tab** (`🔄 Review`), not a button buried on the dashboard. After the first week of use, spaced-repetition review becomes the most important daily activity. It deserves equal navigation weight with Trail and Atlas.
 
 See Section 7.5 for the full Review Hub screen wireframe.
 
@@ -774,7 +738,7 @@ For an open-source, free product, organic content *is* the growth strategy. No p
 - Target: 2–3 per week. Each video is a standalone "did you know?" that markets the product without feeling like an ad
 
 ### Landing Page Structure
-1. **The Decoder** — interactive, same as onboarding. Let visitors try it immediately with zero friction
+1. **Interactive Shift Hero** — same as onboarding. Let visitors see and interact with live sound shift transformations immediately with zero friction
 2. Three example word pairs with shift annotations
 3. *"Not flashcards. Not grammar tables. Understanding."* — 2-sentence positioning
 4. Course preview (first 3 lesson titles)
@@ -788,7 +752,7 @@ For an open-source, free product, organic content *is* the growth strategy. No p
 ### North Star Metric
 **Aha-moments per session.** Not DAU, not retention, not streak length. The product works when users regularly experience "oh, THAT'S why that word is like that." If that's happening, retention follows naturally.
 
-Measurable proxies: lesson completion rate, insight card tap-through rate, Decoder usage frequency, word count growth per week.
+Measurable proxies: lesson completion rate, insight card tap-through rate, review completion rate, word count growth per week.
 
 ---
 
@@ -915,7 +879,7 @@ The database model is built from the start to support future Germanic language t
 | **Audio Engine** | **None for MVP**<br>*Post-MVP: One-Time AI Batch Generation (Stored in DB/Storage)* | The first iteration (MVP) will have **zero audio whatsoever**. In post-MVP, audio will be generated in a one-time batch run using an advanced AI text-to-speech model capable of understanding German accentuation and phonology, with recordings stored directly in the database/storage. Human native speaker recording is explicitly excluded. |
 | **Lesson Content Authoring** | **MDX Files** | Allows embedding interactive React exercise components directly inside authored lesson markdown. |
 | **Micro-Animations** | **Framer Motion** | Declarative transitions for the onboarding morph animation, SVG donut charts in the Atlas, and subtle UI state transitions. Used sparingly — no morphing in lessons. |
-| **Analytics & Telemetry** | **PostHog (Self-Hosted / Cloud)** | Privacy-friendly event tracking for lesson completions and Decoder queries. |
+| **Analytics & Telemetry** | **PostHog (Self-Hosted / Cloud)** | Privacy-friendly event tracking for lesson completions and review sessions. |
 | **Offline / PWA** | **Service Worker + next-pwa** | Cache lesson content, current + next lesson, and due review deck for offline use. Sync on reconnect. |
 
 ---
@@ -928,7 +892,7 @@ The database model is built from the start to support future Germanic language t
 |---|---|---|
 | **Trail Lessons** | 30 Lessons | 5 structured sections each (Hook, Pattern, Table, Practice, Summary). |
 | **Curriculum Vocabulary** | ~300 Core Words | High-frequency German words explicitly taught in the course. |
-| **The Decoder Dictionary** | ~500+ Words | Extended lexicon mapping English words to shifted German cognates with English inflection stripping. Includes graceful no-match responses for ~100 common Latin/French-origin English words. |
+| **Atlas Cognate Lexicon** | ~500+ Words | Extended lexicon mapping English words to shifted German cognates across the 9 sound shift families and compound calques. |
 | **Daily Insight Cards** | ~100 Cards | Bite-sized etymological cards with share-ready image generation. |
 | **Atlas Constellations** | ~15 Constellations | Focused visual shift families (P→F, TH→D, T→S, K→CH, D→T, V↔B, Y↔G, etc.). Rendered as radial spoke layouts (desktop) / vertical trees (mobile). |
 | **Exercise Library** | ~250 Interactive Items | 6–8 varied exercise items per lesson, plus adaptive bonus challenges. |
@@ -1028,15 +992,15 @@ individual word etymologies.
 
 ## 19. Phased Build Roadmap
 
-### Phase 1: Interactive Core & The Decoder (Weeks 1–3)
+### Phase 1: Interactive Core & Sound Shift Engine (Weeks 1–3)
 - [ ] Initialize Next.js App Router repository with Tailwind CSS dark theme tokens and the full semantic + state color system.
-- [ ] Build **The Decoder** search & derivation engine with ~100 initial cognate pairs + no-match graceful fallback responses for ~50 common Latin/French-origin words.
+- [ ] Build core sound shift derivation engine with ~100 initial cognate pairs across primary High German consonant shifts.
 - [ ] Develop the `<ShiftPair>` Static Shift Annotation component (changed letter highlighting with grey/cyan).
 - [ ] Build the `<FootNote>` component (footnote markers + bottom sheet on mobile, margin notes on desktop).
 - [ ] Develop device-adaptive exercise components (drag/tap tiles + full desktop keyboard listeners + German character bar for mobile + Alt+key shortcuts for desktop).
 - [ ] Author Lessons 1–4 in MDX.
 - [ ] Build the Word Detail Card (cross-layer bottom sheet / side panel).
-- [ ] Implement 4-tab bottom navigation (Trail, Atlas, Review, Decoder).
+- [ ] Implement 3-tab bottom navigation (Trail, Atlas, Review).
 
 ### Phase 2: The Atlas & Review Hub (Weeks 4–6)
 - [ ] Develop radial spoke constellation component (desktop) and expandable vertical tree (mobile) for Atlas shift families.
@@ -1060,7 +1024,7 @@ individual word etymologies.
 - [ ] Implement PWA service worker for offline lesson content, review deck sync, and audio caching.
 - [ ] Author and polish Lessons 19–30 (completing curriculum Phase 3).
 - [ ] Add `<LinguistNote>` content for all lessons after etymological review pass.
-- [ ] Expand Decoder dictionary to 500+ words with more no-match bridge responses.
+- [ ] Expand Atlas cognate lexicon to 500+ words across all shift constellations.
 - [ ] Cross-family connection links in Atlas (dotted arcs between constellations).
 - [ ] Atlas filter/search functionality.
 
@@ -1098,6 +1062,614 @@ individual word etymologies.
 
 ---
 
+## 21. Lesson Progression Architecture & Repetition Framework
+
+This section defines the structural engine behind lesson ordering, vocabulary sequencing, repetition density, and difficulty ramping across the full 30-lesson curriculum. Every decision here is optimized for three priorities: **retention** (the learner remembers what they learned), **ease** (the learner never hits a difficulty wall), and **curiosity** (the learner wants to continue).
+
+### 21.1 The Core Problem: Three Competing Structuring Models
+
+Three natural approaches to structuring an etymological language curriculum each have distinct strengths and distinct failure modes:
+
+| Model | Principle | Strength | Failure Mode |
+|---|---|---|---|
+| **Shift-Family Grouping** | Teach all P→F words together, then all TH→D words | Clean mental model — the learner sees the full pattern | Dumps too many words at once; no difficulty curve within a family; obscure words (Affe) taught alongside obvious ones (hoffen) |
+| **Difficulty Ladder** | Teach easiest/most-frequent words first regardless of shift family | Smooth learning curve; high-frequency words create immediate usefulness | Destroys pattern recognition — the entire thesis of this app. Isolated words without a governing rule feel like random flashcards |
+| **Connection Web** | Teach a word, then teach everything connected to it | Creates cascading "aha" moments; shows language as a living network | Rabbit holes lead to uncontrolled difficulty spikes; cognitive load is unpredictable |
+
+**None of these work alone. The solution is a Spiral Shift Model that combines all three.**
+
+### 21.2 The Spiral Shift Model
+
+Each consonant shift family is **NOT taught once and exhausted**. Instead, each shift is *introduced* with its 3–4 most transparent, high-frequency cognates, then *revisited* in later lessons with harder words, compounds, grammar integration, and edge cases. The shift family's vocabulary spirals outward across the full 30-lesson arc in distinct layers:
+
+```
+Layer 1 — Core Introduction (Phase 1):
+  Lesson 3:   P→F introduced with hoffen, helfen, schlafen, Schiff
+               → 4 transparent, high-frequency cognates
+               → Learner sees the rule clearly with obvious examples
+
+Layer 2 — Grammar Integration (Phase 2):
+  Lesson 12:  Satzklammer exercise uses "einschlafen" (ein- + schlafen)
+               → Previously learned root reappears inside a new grammar concept
+               → Review is invisible — the grammar lesson needs the word
+
+Layer 3 — Word Formation & Compounds (Phase 3):
+  Lesson 19:  Compound noun engineering uses Hoffnung, hoffnungsvoll, hoffnungslos
+               → Root word "hoffen" becomes the base for derivation
+               → Learner sees how one root radiates into a word family
+
+Layer 4 — Deep Derivation & Verb Families (Phase 3):
+  Lesson 25:  Verb family exploration maps helfen → Hilfe → behilflich
+               → Vowel changes and derivation patterns from the root
+               → The shift family's full depth is revealed
+
+Layer 5 — Synthesis (Phase 3):
+  Lesson 30:  Capstone passage contains hoffen, helfen, schlafen in context
+               → Full reading comprehension using accumulated vocabulary
+               → The learner sees how far they've come
+```
+
+**Each shift family touches at least 4 separate lessons** across the curriculum, never appearing only once. This means the P→F shift isn't "done" after Lesson 3 — it's a thread that runs through the entire course.
+
+**Why this works:**
+1. **Pattern recognition is preserved** — shift-family grouping within each spiral layer
+2. **Difficulty is controlled** — high-frequency transparent words first, obscure and compound words later
+3. **Connections emerge naturally** — when you revisit `hoffen` in Lesson 19 to teach `Hoffnung`, the root connection IS the lesson
+4. **Repetition is structural, not bolted on** — words reappear because the curriculum architecture demands them, not because a review algorithm forcibly inserts them
+
+### 21.3 Cognitive Load Budget Per Lesson
+
+Research on vocabulary acquisition (Nation, 2001; Webb, 2007) and working memory constraints (Miller, 1956) converges on practical limits. This app's etymological pairing approach (English cognate → shift rule → German word) carries roughly double the information density per word compared to a standard flashcard app, so budgets are set conservatively:
+
+| Parameter | Budget | Rationale |
+|---|---|---|
+| **New vocabulary words** | 5–7 per lesson | Each word arrives with its English cognate pair + shift rule, effectively doubling cognitive load per item |
+| **New structural concepts** | 1–2 max per lesson | A new consonant shift OR a new grammar point, but rarely both simultaneously in the same lesson |
+| **Review vocabulary in exercises** | 4–8 previously learned words | Woven into exercises, example sentences, and contrast drills — NOT a separate "review" block |
+| **Total active vocabulary per lesson** | 10–15 words | Combined new + review keeps sessions feeling dense but never overwhelming |
+| **Estimated lesson duration** | 10–15 minutes | Short enough for daily habit, long enough for meaningful learning |
+
+**Exception:** The first 2 lessons slightly exceed the new-word budget by front-loading core structural vocabulary (pronouns, modal verbs, basic sentence frames) that become the substrate for ALL subsequent lessons. This initial investment pays off immediately because every future exercise needs `ich`, `kann`, `nicht`, `du`, etc.
+
+### 21.4 The 7-Encounter Repetition Framework
+
+Vocabulary acquisition research consistently shows that a word requires **7–12 meaningful encounters** in varied contexts before it transitions to long-term productive memory (Nation, 2001). Crucially, not all encounters are equal — passive recognition (seeing a flashcard) is the weakest type; active production in a novel context is the strongest.
+
+Each curriculum word is architected to appear across **at least 7 distinct encounter types** throughout the 30-lesson arc. This is the structural repetition layer — it happens *within the lessons themselves*, independent of the SRS Review system:
+
+| Encounter | Type | What Happens | When (Offset from Introduction Lesson N) | Retention Mechanism |
+|---|---|---|---|---|
+| **1** | **Introduction** | Word first appears in the lesson's Shift Transformation Table with static annotation | Lesson N | Pattern recognition via shift rule |
+| **2** | **Guided Practice** | Derivation exercise in the same lesson ("Apply P→FF: hope → ___") | Lesson N | Active production with scaffolding |
+| **3** | **Interleaved Drill** | Mixed exercise that combines this word's shift with a different, previously learned shift | Lesson N+1 to N+2 | Discrimination — learner must identify WHICH rule applies, not just apply a known rule |
+| **4** | **Sentence Context** | Word appears as vocabulary inside a grammar lesson's example sentence | Lesson N+3 to N+8 | Contextual meaning in a real sentence structure |
+| **5** | **Derivation / Compound** | Root word reappears as the base of a compound or morphological derivation | Lesson N+8 to N+16 | Morphological depth — learner sees how roots radiate into word families |
+| **6** | **Contrastive Review** | Word is explicitly compared with a confusable word or a different shift's output | Lesson N+10 to N+20 | Error prevention and fine discrimination |
+| **7** | **Synthesis Passage** | Word appears inside a multi-word authentic German sentence or reading passage | Lessons 27–30 | Holistic fluency and reading comprehension |
+
+**This framework operates IN ADDITION TO the SRS Review tab.** The Review tab handles algorithmic spaced repetition (SM-2 intervals). The 7 encounters above are structurally embedded in the curriculum itself — they happen even if the user never opens the Review tab. Together, the two systems guarantee that no word is ever "taught and forgotten."
+
+### 21.5 Concrete Encounter Arc Examples
+
+#### Example A: `hoffen` (hope) — Full 7-Encounter Arc
+
+| # | Lesson | Encounter Type | Exact Context |
+|---|---|---|---|
+| 1 | L3 (P→F/FF Shift) | Introduction | Shift Table: ho·p·e → ho·ff·en 🔊 |
+| 2 | L3 (P→F/FF Shift) | Guided Practice | Exercise: "Apply the P→FF shift to 'hope': ___" → `hoffen` |
+| 3 | L5 (T→S/SS Shift) | Interleaved Drill | Mixed matching exercise: "Match each pair: hope→?, water→?, think→?" — learner must recall hoffen from 2 lessons ago while learning new T→S words |
+| 4 | L12 (Satzklammer) | Sentence Context | "Ich hoffe, dass du morgen kommst." — used as example sentence to demonstrate the subordinate clause bracket structure |
+| 5 | L19 (Compound Nouns) | Compound/Derivation | Deconstruct: `Hoffnung` = hoffen + -ung (hope → hope-noun). Build: `hoffnungsvoll` = Hoffnung + -voll (hopeful), `hoffnungslos` = Hoffnung + -los (hopeless) |
+| 6 | L23 (Further Shifts) | Contrastive Review | "You know hoffen uses P→FF. What about 'open'? → öffnen, same rule!" — extends the pattern to a new word using the familiar rule |
+| 7 | L30 (Capstone) | Synthesis Passage | Appears in the final decoded German paragraph the learner reads and analyzes |
+
+#### Example B: `Wasser` (water) — Full 7-Encounter Arc
+
+| # | Lesson | Encounter Type | Exact Context |
+|---|---|---|---|
+| 1 | L5 (T→S/SS Shift) | Introduction | Shift Table: wa·t·er → Wa·ss·er 🔊 |
+| 2 | L5 (T→S/SS Shift) | Guided Practice | Exercise: "Apply the T→SS shift to 'water': ___" → `Wasser` |
+| 3 | L7 (D→T Shift) | Interleaved Drill | Mixed discrimination: "Which shift? Wasser (T→SS) vs. Tochter (D→T)" — forces the learner to distinguish two different rules |
+| 4 | L11 (Article Systems) | Sentence Context | "Das Wasser ist kalt." — introduces the neuter article `das` using a known, comfortable word |
+| 5 | L19 (Compound Nouns) | Compound/Derivation | Deconstruct: `Wasserhahn` (water tap = Wasser + Hahn), `Wasserfall` (waterfall = Wasser + Fall) |
+| 6 | L21 (Plural Systems) | Contrastive Review | "Wasser → no plural marker change (das Wasser, die Wasser)" — uses the known word to illustrate an unusual plural pattern |
+| 7 | L30 (Capstone) | Synthesis Passage | Appears in the final reading passage |
+
+#### Example C: `denken` (think) — Full 7-Encounter Arc
+
+| # | Lesson | Encounter Type | Exact Context |
+|---|---|---|---|
+| 1 | L4 (TH→D Shift) | Introduction | Shift Table: th·ink → d·enken 🔊 |
+| 2 | L4 (TH→D Shift) | Guided Practice | Exercise: "Apply the TH→D shift to 'think': ___" → `denken` |
+| 3 | L5 (T→S/SS Shift) | Interleaved Drill | Mixed matching: "think→?, water→?, hope→?" — three different shifts in one exercise |
+| 4 | L9 (Conjugation Roots) | Sentence Context | "Ich denke, du denkst, er denkt" — denken conjugated as the demonstration verb for personal endings |
+| 5 | L14 (Inseparable Prefixes) | Compound/Derivation | "nachdenken" (to reflect = nach + denken), "bedenken" (to consider = be + denken) |
+| 6 | L28 (Vowel Mutations) | Contrastive Review | "denken → Gedanke (thought, noun) — vowel shift e→a in the derivation" |
+| 7 | L30 (Capstone) | Synthesis Passage | Used in final reading passage |
+
+### 21.6 Difficulty Dimensions & Sequencing Logic
+
+Not all words within a shift family are equally easy. Difficulty is a composite of five measurable dimensions, and **words are sequenced within each shift family from easiest to hardest across these dimensions**:
+
+| Dimension | Easy End (Introduce First) | Hard End (Introduce Later) | How to Measure |
+|---|---|---|---|
+| **Cognate Transparency** | water → Wasser (visually/phonetically obvious) | forget → vergessen (opaque without explanation) | Subjective rating 1–5 by content author |
+| **Phonetic Distance** | brother → Bruder (close mouth shapes) | knight → Knecht (unfamiliar German phoneme cluster) | IPA edit distance |
+| **Morphological Simplicity** | Single shift only (P→F, nothing else changes) | Multiple simultaneous changes (prefix + shift + vowel mutation) | Count of transformations |
+| **Word Frequency in German** | Top 500 (es, was, gut, machen) | Below 3000 (Affe, reifen, Knecht) | Leipzig/SUBTLEX-DE frequency corpus rank |
+| **Concept Familiarity** | Concrete nouns, daily-use verbs (water, eat, sleep) | Abstract nouns, literary terms (longing, repentance) | Concreteness rating |
+
+**Sequencing Algorithm Applied to Each Shift Family:**
+
+1. **Layer 1 — Introduction (Phase 1 lessons):** Select the 3–4 words from the shift family that score EASIEST across all 5 dimensions simultaneously. These form the lesson's core Shift Transformation Table. Example: P→F introduces hoffen (frequent, transparent, single shift), helfen (frequent, transparent), schlafen (transparent, common concept) — NOT Affe (infrequent, less transparent).
+
+2. **Layer 2 — Grammar Integration (Phase 2 lessons):** When a grammar lesson needs example vocabulary, pull from previously introduced shift families. Select words that fit the grammar point naturally. Example: Teaching conjugation (L9) uses `denken` because it's already known AND has a clean regular conjugation pattern.
+
+3. **Layer 3 — Deepening (Phase 3 lessons):** Introduce the HARDER words from each shift family — lower frequency, more morphological complexity, less transparent cognates. Example: `Affe` (P→FF, but less transparent), `reifen` (P→F with vowel difference), and compound words built from known roots.
+
+4. **Layer 4 — Synthesis (Capstone lessons):** All previously introduced words appear in authentic multi-sentence reading passages. No new shift rules — only new contexts for known vocabulary.
+
+### 21.7 Shift Family Introduction Order & Rationale
+
+The order in which consonant shift families are introduced across the curriculum follows a strict pedagogical logic. This is not arbitrary — each position is justified:
+
+| Order | Lesson | Shift Family | Why This Position |
+|---|---|---|---|
+| 0th | L1–L2 | Core Germanic verbs + Modal auxiliaries | **Substrate vocabulary.** Pronouns (ich, du, er), modals (kann, will, muss), and basic verbs (lernen, finden, kommen) are needed to BUILD every future exercise sentence. Without "Ich kann ___ " as a frame, no exercise in L3+ works. This is infrastructure, not a shift lesson. |
+| 1st | L3 | P → F/FF | **Highest cognate transparency.** "hope → hoffen" is almost self-evident even without explanation. This is the shift most likely to produce the "wait, that's real German?" reaction. Confidence-builder. |
+| 2nd | L4 | TH → D | **Very transparent AND connects to ultra-high-frequency function words.** the→die, thou→du, think→denken, thank→danken. This shift delivers the highest ROI per lesson — function words alone give the learner 5+ words they'll use in every sentence. |
+| 3rd | L5 | T → S/SS | **Contains the most famous cognate pair in Germanic linguistics** (water→Wasser). Also introduces essential vocabulary: es (it), was (what), aus (out). High frequency, high transparency. |
+| 4th | L6 | K → CH | **Introduces the challenging "ch" phoneme** that English lacks. Deliberately delayed until the learner has 3 successful shifts under their belt and enough confidence to handle a new sound. Ich-Laut [ç] vs. Ach-Laut [x] is a pronunciation milestone. |
+| 5th | L7 | D → T | **Counter-intuitive — English D becomes German T**, which is the opposite direction from TH→D. Requires the learner to hold two opposing shift patterns simultaneously. Only possible after 4 shifts have trained the concept of "sound shifting" itself. |
+| 6th | L8 | Latin Bridge (-ieren) | **Deliberate cognitive rest stop.** After 5 consecutive consonant shift lessons, the learner gets an easy win. Latin-origin -ieren words (organisieren, studieren, funktionieren) require ZERO shift logic — they're almost identical to English. This acts as a palate cleanser before Phase 2 (grammar) begins. Psychologically, it says: "See, German isn't always hard." |
+
+### 21.8 Interleaving Schedule: New vs. Review Content Ratio
+
+The ratio of new content to review content shifts progressively across the three curriculum phases. This **inverted pyramid** is one of the most important structural decisions in the curriculum:
+
+| Phase | Lessons | New Content | Review / Repetition | What This Means in Practice |
+|---|---|---|---|---|
+| **Phase 1** (Foundational) | L1–L8 | **70% new**, 30% review | After L3, every exercise set mixes 2–3 items from previously learned shifts | Early lessons are mostly introduction because the review pool is still small. By L5, enough words exist for meaningful cross-shift exercises |
+| **Phase 2** (Structural) | L9–L18 | **50% new**, 50% review | Grammar lessons use previously learned vocabulary as example sentences. Every exercise set includes 4–5 review words | The growing vocabulary pool enables rich interleaving. Grammar concepts like conjugation and Satzklammer REQUIRE using known words, so review is baked into the lesson's topic |
+| **Phase 3** (Fluency) | L19–L30 | **30% new**, 70% review | Compound and derivation lessons inherently revisit root words. Synthesis passages pack in many known words. Fewer new vocabulary items per lesson | By this phase, **deepening existing knowledge matters more than adding new words**. The learner's vocabulary web becomes denser, not wider |
+
+**Why the inverted pyramid matters:** Most language apps maintain a constant rate of new word introduction (5 new words every lesson, relentlessly, forever). This leads to the "mile wide, inch deep" problem — users can recognize 500 words on a flashcard but can't produce 50 in a sentence. The decreasing new-word rate in Phase 3 ensures **depth over breadth**.
+
+### 21.9 Cross-Shift Discrimination Exercises
+
+One of the highest-value exercise types is **discrimination**: presenting words from DIFFERENT shift families and asking the user to identify which rule applies. This prevents the most common failure mode in pattern-based learning — the user can apply P→F when explicitly told "this is a P→F exercise" but freezes when given a novel word without the label.
+
+**Discrimination exercises are introduced the moment the learner knows 2+ shift families:**
+
+| Lesson | Discrimination Scope | Example Exercise |
+|---|---|---|
+| L4 | P→F vs. TH→D (2 families) | "Which shift: hope→hoffen (?) vs. think→denken (?)" |
+| L5 | P→F vs. TH→D vs. T→S (3 families) | "Sort these pairs by their shift rule" |
+| L6+ | All previously learned families | "Identify the shift: machen, hoffen, Wasser, denken" |
+| L8 | Meta-discrimination: consonant shift vs. Latin loan | "Which of these words can you derive from English using a shift rule, and which is a Latin borrowing?" |
+| L14+ | Shift + grammar discrimination | "Which shift connects 'forget' and 'vergessen'? Bonus: what does the ver- prefix mean?" |
+
+**Example discrimination exercise (as it would appear in-app):**
+
+```
+Which shift rule connects each pair?
+
+1. hope → hoffen      [ P→F/FF | TH→D | T→S/SS | K→CH ]    ← Answer: P→FF
+2. think → denken     [ P→F/FF | TH→D | T→S/SS | K→CH ]    ← Answer: TH→D
+3. water → Wasser     [ P→F/FF | TH→D | T→S/SS | K→CH ]    ← Answer: T→SS
+4. make → machen      [ P→F/FF | TH→D | T→S/SS | K→CH ]    ← Answer: K→CH
+```
+
+This exercise type is cheap to author (it reuses all existing vocabulary) and extremely high-value for retention because it forces **active retrieval of the rule**, not just the word.
+
+### 21.10 Connection Bridges Between Lessons
+
+Every lesson explicitly connects its content to previously learned material through opening and closing bridges. These bridges serve two functions: (1) warm-up recall of known words and (2) curiosity hooks for upcoming content.
+
+**Opening Bridge (Warm-Up — first 1–2 minutes of every lesson):**
+
+A quick, low-stakes recall of 2–3 previously learned words presented in a new context. This primes the learner's memory and creates a sense of continuity:
+
+```
+Lesson 5 Opening:
+"You know hoffen (P→F) and denken (TH→D).
+Now: what happens when English 'T' meets the same historical force?"
+```
+
+```
+Lesson 12 Opening:
+"You can already say 'Ich kann schlafen' (I can sleep).
+But what happens when German puts the verb somewhere unexpected?"
+```
+
+**Closing Bridge (Curiosity Chain — final element of every lesson):**
+
+The last screen plants a seed for the next lesson. The bridge explicitly links the upcoming content to something the user already knows, using the varied teaser formats from Section 12.3:
+
+```
+Lesson 5 Closing:
+"You've decoded T→S words like Wasser and essen.
+Next: a shift that turned English 'K' into a sound English doesn't even have.
+Can you guess what 'make' becomes in German?"
+```
+
+```
+Lesson 7 Closing:
+"You've now seen 5 consonant shift families.
+Next lesson is different — a free gift. Hundreds of German words
+that look EXACTLY like English. No shift needed."
+```
+
+These bridges convert lesson boundaries from stop-points ("I'm done for today") into pull-points ("I want to see what's next").
+
+### 21.11 Vocabulary Reuse Density Map
+
+To guarantee every word reaches its 7+ encounter minimum, the curriculum maintains a **reuse density map** — a matrix tracking every lesson in which each core word appears. This map is built during content authoring and verified before publication.
+
+**Abbreviated example (core Phase 1 vocabulary):**
+
+```
+Legend:  I = Introduction       D = Discrimination drill    S = Sentence context
+         C = Compound/derivation  VF = Verb family           Syn = Synthesis
+         G = Grammar example     Rev = Contrastive review
+
+Word         | L1  L2  L3  L4  L5  L6  L7  L8 | L9  L10 L11 L12 | L13-L18  | L19-L29  | L30
+-------------|----------------------------------|-----------------|----------|----------|----
+hoffen       |          I           D           |             S   | G        | C, Rev   | Syn
+helfen       |          I       D               |     S           |          | VF       | Syn
+schlafen     |          I           D           |     S       G   |          | C        | Syn
+Wasser       |                  I       D       |         S       | G        | C        | Syn
+denken       |              I       D           | G               | G        | C, Rev   | Syn
+machen       |                      I       D   | G       S       | G, G     | C        | Syn
+trinken      |                          I       | G               |          | VF       | Syn
+Bruder       |              I       D           |         S       | G        |          | Syn
+du           |  I       D   S   S   S   S   S   | S   S   S   S   | S, S, S  | S, S     | Syn
+kann         |      I   S   S   S   S   S   S   | S   S   S   S   | S, S     | S        | Syn
+```
+
+**Minimum encounter thresholds:**
+- **Core vocabulary (top 50 words in the curriculum):** 8–10 lesson appearances minimum
+- **Standard vocabulary (all other taught words):** 5–7 lesson appearances minimum
+- **Function words (ich, du, er, kann, nicht, ist, etc.):** Near-ubiquitous — appear in nearly every lesson as structural scaffolding
+- **Tier 4 / Enrichment words (Affe, Knecht, etc.):** 2–3 lesson appearances only — they exist primarily in the Atlas for self-directed exploration
+
+**No word in the curriculum should have fewer than 5 lesson appearances** (excluding the SRS Review system). If a word doesn't naturally fit into 5 lessons, it should be reconsidered for inclusion in the curriculum and potentially moved to Atlas-only status.
+
+### 21.12 The "Invisible Review" Principle
+
+The single most important pedagogical constraint in this curriculum: **the user should NOT feel like they're doing review.** Unlike Duolingo's explicit "Practice" buttons or Anki's deck grinding sessions, repetition in this curriculum is *invisible* — words reappear because the lesson's topic naturally demands them.
+
+**Examples of invisible review (the learner doesn't perceive these as repetition):**
+
+| Lesson | New Topic | Words Invisibly Reviewed | Why They Appear |
+|---|---|---|---|
+| L9 (Conjugation) | Personal verb endings (-e, -st, -t) | denken, machen, trinken, helfen | You CAN'T teach conjugation without verbs. The grammar lesson NEEDS previously learned verbs as examples. |
+| L12 (Satzklammer) | Sentence bracket structure | hoffen, schlafen, können | Building "Ich hoffe, dass du morgen kommst" requires the known verb hoffen. The grammar forces the review. |
+| L14 (Inseparable Prefixes) | ver-, be-, er- prefixes | vergessen (forget), verstehen (understand) | vergessen was previewed in L5 (T→S/SS) as a complex word. Now its prefix is explained. The same word, a new angle. |
+| L19 (Compound Nouns) | How German builds compounds | hoffen→Hoffnung, Wasser→Wasserfall | Compound lessons INHERENTLY revisit root words. Every compound deconstruction is a root review. |
+| L22 (Comparatives) | Umlaut comparatives (kalt→kälter) | kalt (L7, D→T shift), groß (L5, T→S shift) | Comparative grammar needs adjectives. The learner reviews kalt while learning the -er comparative pattern. |
+
+**The review IS the lesson. The lesson IS the review.** This is only possible because the curriculum is etymologically structured — every advanced concept (compounds, conjugation, cases, prefixes) inherently references root vocabulary from earlier shift lessons. A traditionally structured language course can't do this because its vocabulary is thematically organized (food words, travel words, etc.) with no structural connections between themes.
+
+### 21.13 Word Frequency Prioritization & Tiering
+
+Within each lesson and shift family, words are sequenced by **German word frequency** using a standard frequency corpus (Leipzig Corpora Collection or SUBTLEX-DE). This ensures the learner acquires the most useful words first, regardless of which shift family they belong to:
+
+| Priority Tier | Frequency Range | When Introduced | Examples | SRS Treatment |
+|---|---|---|---|---|
+| **Tier 1: Essential** | Top 500 most common German words | Phase 1 core words (L1–L8) | es, was, aus, gut, trinken, du, machen | Always in "Due Today" review deck |
+| **Tier 2: Common** | Ranks 500–1,500 | Phase 1–2 exercises and grammar examples | hoffen, helfen, Wasser, kochen, machen | Always in "Due Today" review deck |
+| **Tier 3: Useful** | Ranks 1,500–3,000 | Phase 2–3 deepening and compounds | schlafen, brechen, reifen | In "Due Today" after first correct practice |
+| **Tier 4: Enrichment** | Ranks 3,000+ | Phase 3 only, or Atlas exploration | Affe, Knecht, reifen | **Never auto-added to "Due Today"** — enters SRS only if the user explicitly practices them in Atlas sandbox |
+
+**Tier 4 words are never mandatory.** They exist in the Atlas for curious explorers and may appear in optional exercises, but they are never tested in the SRS Review's "Due Today" deck unless the user explicitly seeks them out. This prevents the review queue from filling with obscure words that crowd out essential vocabulary.
+
+### 21.14 Handling Words With Multiple Simultaneous Shifts
+
+Some German words exhibit multiple historical changes at once (consonant shift + vowel mutation + prefix change). These "compound-transformation" words are **deliberately delayed** until the user has mastered each component transformation individually. They become multi-lesson payoff arcs — puzzles that are progressively solved across the curriculum:
+
+**Example: `vergessen` (forget)**
+
+```
+Full transformation breakdown:
+  English:    forget
+  German:     vergessen
+
+  Component 1:  for-  →  ver-    (prefix shift)      ← Taught in L14 (Inseparable Prefixes)
+  Component 2:  -g-   →  -g-     (no change)
+  Component 3:  -t    →  -ss-    (T → SS shift)       ← Taught in L5 (T→S/SS Shift)
+  Component 4:  -e-   →  -e-     (vowel preserved)
+  Component 5:  -en   suffix     (German infinitive)   ← Taught in L1 (Germanic Core)
+```
+
+**How vergessen spirals through the curriculum:**
+
+| Lesson | Role | What the Learner Sees |
+|---|---|---|
+| L5 (T→S/SS) | Preview teaser | "Here's a tricky one: 'forget' → 'vergessen.' The T→SS shift is there (t→ss), but there's more going on. We'll decode the 'ver-' part later." |
+| L14 (Inseparable Prefixes) | Component 2 explained | "Remember vergessen? Now you know: ver- = English 'for-' (as in 'forsake', 'forget'). ver- + gessen → vergessen." |
+| L15 (Conversational Past) | Grammar integration | "Ich habe vergessen." — used in past tense sentence construction |
+| L30 (Capstone) | Full synthesis | Appears in reading passage, fully understood |
+
+This creates a **multi-lesson payoff arc.** The word `vergessen` starts as a mystery in L5 ("this one's more complex — trust the process"), gets incrementally decoded through L14, and by L30 the learner can fully analyze every component. That cumulative understanding is far more satisfying and durable than seeing the word once with all transformations explained simultaneously.
+
+### 21.15 Lesson-Internal Structure: The 5-Segment Flow
+
+Within each lesson, the 5-segment structure (Hook → Pattern → Table → Practice → Summary) is designed to follow a specific cognitive rhythm:
+
+| Segment | Duration | Cognitive Mode | What Happens | Review Content |
+|---|---|---|---|---|
+| **1. Hook** | ~1 min | Curiosity / Recognition | Opening bridge recalls 2–3 known words. A surprising connection or question draws the learner in. | 2–3 words from previous lessons |
+| **2. Pattern** | ~2 min | Understanding / Explanation | The shift rule is explained in conversational tone. Historical context is given without jargon. | None — pure new content |
+| **3. Table** | ~2 min | Scanning / Pattern Recognition | The Shift Transformation Table presents 4–6 word pairs with static annotations. Audio is available. | None — all new shift examples |
+| **4. Practice** | ~5–7 min | Active Production / Retrieval | 6–8 exercises presented one at a time. Mix of new words from this lesson + 2–3 review words from previous lessons. | 30–50% of exercises use previously learned words |
+| **5. Summary** | ~1 min | Consolidation / Anticipation | Key takeaway. Retry queue for missed exercises. Curiosity chain teaser for next lesson. Atlas bridge link. | Missed items re-tested; teaser previews next lesson |
+
+**The Practice segment (segment 4) is where invisible review happens.** Even in a lesson about P→F, 2–3 of the 6–8 exercises will use words from previous shifts (e.g., a discrimination drill mixing P→F with TH→D). The learner perceives this as "a harder challenge" rather than "review."
+
+### 21.16 Exercise Type Distribution Per Lesson
+
+Not all exercise types appear in every lesson. The distribution is carefully matched to the lesson phase and the learner's growing capability:
+
+| Exercise Type | Phase 1 (L1–L8) | Phase 2 (L9–L18) | Phase 3 (L19–30) | Purpose |
+|---|---|---|---|---|
+| **Derive It** (rule application) | ●●● Heavy | ●● Moderate | ● Light | Core skill in early lessons; becomes automatic later |
+| **Identify the Shift** (pattern recognition) | ●● From L4 | ●●● Heavy | ●● Moderate | Discrimination is the critical mid-curriculum skill |
+| **Reverse Cognate Discovery** | ● Light | ●● Moderate | ●● Moderate | Harder direction — requires bidirectional mapping |
+| **Sentence Syntax Reconstruction** | — None | ●●● Heavy | ●●● Heavy | Requires grammar knowledge from Phase 2 |
+| **Acoustic Match** | ● Light | ●● Moderate | ●● Moderate | Builds phonetic awareness throughout |
+| **Morpheme Assembly** | — None | ●● From L9 | ●● Moderate | Requires conjugation knowledge |
+| **Compound Deconstruction** | — None | — None | ●●● Heavy | Requires root vocabulary from Phase 1–2 |
+
+**Key principle:** Exercise types are unlocked progressively as the learner acquires the prerequisite skills. Compound Deconstruction exercises can't appear until the learner knows enough root words to deconstruct. Sentence Syntax exercises can't appear until the learner understands German word order (L12+).
+
+### 21.17 The Repetition Decay Curve: When to Stop Repeating
+
+Not every word needs equal repetition forever. High-frequency function words (ich, du, kann, nicht) will be encountered so frequently in example sentences that they self-reinforce without deliberate repetition. The repetition framework therefore applies **diminishing intentional review** for words that have reached a saturation threshold:
+
+| Word Category | Intentional Lesson Appearances | When Repetition Becomes Passive |
+|---|---|---|
+| **Function words** (ich, du, er, kann, nicht, ist) | L1–L3 (explicit introduction) | After L3: appear in nearly every sentence naturally. No intentional review needed. |
+| **Tier 1 vocabulary** (top 50 content words) | 8–10 intentional appearances | After 6+ appearances: shift to passive appearances in example sentences |
+| **Tier 2 vocabulary** (standard curriculum words) | 5–7 intentional appearances | After 5 appearances: rely on SRS Review tab for further spaced repetition |
+| **Tier 3–4 vocabulary** (lower frequency) | 2–4 intentional appearances | After introduction: rely entirely on SRS and Atlas exploration |
+
+**"Passive appearance"** means the word shows up in an example sentence or exercise, but the exercise isn't TESTING that specific word — it's testing a different word or grammar concept. The learner sees `hoffen` in "Ich hoffe, dass..." while focusing on the subordinate clause structure. The review happens without cognitive effort directed at it.
+
+### 21.18 Anti-Patterns This Framework Explicitly Avoids
+
+| Anti-Pattern | Why It's Harmful | How This Framework Prevents It |
+|---|---|---|
+| **Teach and forget** | Word appears once in its introduction lesson, never again until the SRS algorithm surfaces it | The 7-Encounter Framework guarantees 7+ structural lesson appearances for every word |
+| **Difficulty cliff** | Lessons 1–5 feel easy, Lesson 6 suddenly introduces too many new concepts | Frequency-first sequencing + cognitive load budgets (5–7 new words max) + the Latin Bridge rest stop at L8 |
+| **Shift soup** | Too many shift families mixed before any single one is solidified | Each shift gets at least 1 dedicated lesson before interleaving begins. Discrimination exercises start with only 2 families (L4), adding one per lesson |
+| **Review fatigue** | Explicit, separate review blocks that feel like homework | Invisible Review principle: repetition is woven into new lesson content. The learner practices old words while learning new concepts |
+| **Equal word weight** | Treating `Affe` (rare, rank 5000+) identically to `Wasser` (essential, rank 200) | Frequency tiering: Tier 4 words are Atlas-only, never auto-added to SRS "Due Today" |
+| **Pattern-matching without discrimination** | User can apply P→F when told "this is a P→F exercise" but can't identify which rule applies to a novel word | Cross-shift discrimination drills from L4 onward, increasing in scope every lesson |
+| **Cognitive overload on compound words** | Teaching `vergessen` (3 simultaneous transformations) before the learner knows any of the components | Multi-shift words are deliberately delayed; each component is taught separately before the compound is assembled |
+| **Flat difficulty curve** | Every lesson introduces 5 new words at constant pace from L1 to L30 | Inverted pyramid: Phase 1 is 70% new, Phase 3 is 30% new / 70% deepening. The rate of new words decreases as depth increases |
+| **Streak anxiety / guilt loops** | "You missed 3 days — your streak is broken!" messaging | No streaks, no punishment. Weekly consistency dots with zero negative messaging. Review backlog capping (see user preferences) |
+
+### 21.19 Curriculum Implementation Checklist
+
+When authoring the full lesson content (MDX files), each lesson must satisfy these structural requirements before publication:
+
+- [ ] **New word count:** 5–7 new vocabulary words (exception: L1–L2 may exceed)
+- [ ] **Review word count:** At least 2–3 words from previous lessons appear in exercises
+- [ ] **Opening bridge:** First screen recalls 2–3 known words in a new context
+- [ ] **Closing bridge:** Last screen previews next lesson with a curiosity hook
+- [ ] **Exercise mix:** Practice segment contains at least 1 discrimination exercise (from L4 onward)
+- [ ] **Vocabulary reuse map updated:** Every new word has planned appearances in at least 5 future lessons
+- [ ] **Frequency tier assigned:** Every new word tagged with Tier 1–4
+- [ ] **Audio assets listed:** Every new word has an audio clip asset path
+- [ ] **Multi-shift words flagged:** If a word involves 2+ transformations, its payoff arc across multiple lessons is planned
+- [ ] **Footnote / Linguist's Note present:** At least one etymological side note per lesson for depth-seekers
+
+---
+
+## 23. Trail Architecture Decision: Linear Spine, No Branching
+
+### 23.1 The Decision
+
+The Trail is a **strictly linear lesson chain** (L1 → L2 → L3 → ... → L30). There are no branch lessons (1a, 1b, 1c), no parallel tracks, no conditional unlocks within the trail. The three-system architecture provides complete coverage without redundancy:
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                                                                  │
+│  LINEAR TRAIL (The Trail)          → "What should I learn next?" │
+│    Clean progression, no decisions    One path, always clear     │
+│                                                                  │
+│  SELF-DIRECTED DEPTH (The Atlas)   → "I want more of P→F"       │
+│    Already branched by design         Constellation = depth      │
+│    "⚡ Practice This Branch"          Harder words live here     │
+│                                                                  │
+│  SPACED REVIEW (Review Hub)        → "What do I need to reinforce?"│
+│    Algorithmic, no user decisions     SRS handles timing          │
+│                                                                  │
+│  Three systems, three distinct jobs, zero redundancy.            │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+### 23.2 Why Branching Was Rejected
+
+A branched lesson map (Duolingo-style skill tree or Candy Crush-style forking paths) was evaluated and rejected for five concrete reasons:
+
+| Reason | Detail |
+|---|---|
+| **1. Duolingo already tried and reversed it** | Duolingo maintained a branched skill tree from 2012–2022. In 2022–2023, they redesigned to a linear path because their retention data showed branching caused decision paralysis — users stalled at branch points wondering "which one should I do first?" and often did neither. If a company with 500M users and a full data science team concluded branching hurts retention, that's strong evidence. |
+| **2. The Atlas already IS the branching system** | Branch lessons would contain: the same consonant shift applied to harder, less frequent words. That is exactly what the Atlas constellation already provides. The P→F constellation contains `Affe`, `reifen`, `Pfad` with a "⚡ Practice This Branch" sandbox button. Adding branch trail lessons duplicates this functionality with a worse interface. |
+| **3. Delayed unlock notifications are guilt mechanics in disguise** | The spec explicitly rejects streak anxiety and punitive engagement. A "Branch 1a unlocked!" notification 2–3 days later creates the same psychological pressure: "I was supposed to do this and I haven't." It is the exact engagement pattern the product philosophy opposes. |
+| **4. Solo builder content burden** | Branched maps roughly triple the content authoring burden (30 main lessons + potentially 40–60 branch lessons). They also require significantly more complex state management and map visualization UI. For a solo builder with a quality-first timeline, this is a losing trade. |
+| **5. The Spiral Model already handles depth** | The trimmed words from L3 don't disappear — they resurface naturally in Phase 2–3 lessons through the Spiral Shift Model (Section 21.2). `Affe` appears when teaching compound nouns. `reifen` appears in verb families. The harder words come back when the learner is ready, embedded in new concepts rather than as standalone "more of the same" drills. |
+
+### 23.3 The Atlas Bridge Card (Post-Lesson Depth Prompt)
+
+The one good kernel from the branching idea — surfacing deeper content at the right moment — is captured through an **Atlas Bridge Card** that appears at the end of every shift-introduction lesson (L3–L8). This creates a natural off-ramp into the Atlas without any branching complexity:
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                                                              │
+│  ✓ Lesson 3 Complete — The P → F / FF Shift                 │
+│                                                              │
+│  You learned 5 P→F core words in the Trail.                 │
+│  The Atlas has 6 more words in this constellation            │
+│  waiting to be explored.                                     │
+│                                                              │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  🗺️ Explore P→F/FF in the Atlas →                    │   │
+│  └──────────────────────────────────────────────────────┘   │
+│                                                              │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  📖 Continue to Lesson 4 →                            │   │
+│  └──────────────────────────────────────────────────────┘   │
+│                                                              │
+│  (The Atlas is always available from the bottom nav too.)    │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+```
+
+**Behavioral rules:**
+
+- The Atlas Bridge Card appears **only after shift-introduction lessons** (L3–L8, L23). Grammar and synthesis lessons (L9–L22, L24–L30) don't have a corresponding constellation to explore.
+- The "Continue to Lesson N+1" button is **always visually dominant** (primary CTA). The Atlas link is secondary. The learner should never feel pressured to detour.
+- The card shows the **actual count** of unexplored words remaining in that constellation (e.g., "6 more words"), creating curiosity without obligation.
+- If the learner has already explored the relevant Atlas constellation (all words in the branch are at least "Explored" state), the Atlas Bridge Card is suppressed — no need to suggest what they've already done.
+- The card does NOT use notification-style language ("New content unlocked!"). It uses informational language ("The Atlas has more words waiting").
+
+### 23.4 Trail Map Visual Design
+
+The Trail screen renders as a **vertical scrollable path** with lesson nodes connected by a continuous line. Each node shows:
+
+```
+┌──────────────────────────────────────────┐
+│  THE TRAIL                               │
+│                                          │
+│     ◉ L1 — The Germanic Core        ✓   │
+│     │                                    │
+│     ◉ L2 — Modal Auxiliaries         ✓   │
+│     │                                    │
+│     ◉ L3 — The P → F/FF Shift       ✓   │
+│     │   └─ 🗺️ Atlas: P→F (3/9)          │
+│     │                                    │
+│     ◉ L4 — The TH → D Shift         ●   │
+│     │   └─ 🗺️ Atlas: TH→D (0/7)         │
+│     │                                    │
+│     ○ L5 — The T → S/SS Shift       ·   │
+│     │                                    │
+│     ○ L6 — The K → CH Shift         ·   │
+│     │                                    │
+│     ⋮                                    │
+│                                          │
+│  ✓ = Complete  ● = Current  · = Upcoming │
+│  🗺️ = Atlas shortcut (shift lessons only)│
+│                                          │
+└──────────────────────────────────────────┘
+```
+
+- **Atlas shortcut links** appear inline beneath completed/current shift lessons showing the constellation progress (e.g., "3/9 words explored"). These are unobtrusive — a single line below the lesson node, not a branching fork.
+- Lessons that don't introduce a new shift family (L1, L2, L9–L22, L24–L30) show no Atlas shortcut.
+- The map scrolls to the current lesson on load. No horizontal scrolling, no 3D effects, no branching forks.
+
+---
+
+## 24. Concrete Lesson Enhancement Plan (MVP Comparison)
+
+This section documents actionable changes derived from comparing the existing MVP lesson data (`lessons.ts`, 10 fully authored lessons) against the Section 21 Progression Framework. The MVP's content quality, lesson ordering, and etymological explanations are strong. These enhancements apply the framework's structural constraints on top of that content.
+
+### 24.1 Per-Lesson Word Trimming
+
+Each lesson's core Transformation Table should contain **5–6 words maximum**. Words beyond this budget are deferred to Atlas-only status (Tier 3–4) or to Phase 3 deepening lessons. The deferred words remain in the Atlas constellation — they are not deleted from the platform.
+
+| Lesson | Current `table_word_ids` (MVP) | Recommended Core (5–6) | Deferred to Atlas / Phase 3 | Rationale |
+|---|---|---|---|---|
+| **L1** (Germanic Core) | lernen, finden, kommen, gehen, singen, schwimmen, bringen (7) | lernen, finden, kommen, singen, bringen (5) | gehen → keep but move to exercises only; schwimmen → Atlas | schwimmen is less transparent (sch- prefix); 5 core words is enough to demonstrate -en |
+| **L3** (P→F/FF) | hoffen, helfen, schlafen, Schiff, Affe, reifen (6) | hoffen, helfen, schlafen, Schiff (4) + Apfel as PF- example (5) | Affe → Atlas Tier 4 (rare, rank 5000+); reifen → Phase 3 L25 (verb families); Pfeffer, Pfad → Atlas | Affe is low frequency; reifen has vowel complexity; Apfel stays as the PF- variant demo |
+| **L4** (TH→D) | denken, danken, drei, Bruder, Ding, Bad (6) | denken, danken, Bruder, du, drei (5) | Bad → L24 (prepositions, "Baden-Baden"); Ding → Atlas; dünn, Donner → Atlas Tier 3 | du is more essential than Bad (it's a function word used in every sentence); Donner is fun trivia but low utility |
+| **L5** (T→S/SS) | Wasser, essen, besser, hassen, aus, was (6) | Wasser, essen, besser, was, aus (5) | hassen → Phase 3 (low frequency, negative valence); zwei, zu → L5 exercises as bonus; groß, Straße → Atlas | hassen is emotionally loaded for a beginner lesson; was/aus are ultra-high-frequency function words that deserve table spotlight |
+| **L6** (K→CH) | machen, kochen, brechen, sprechen, suchen, buch, milch, woche (8) | machen, kochen, sprechen, Buch, Milch (5) | brechen → Phase 3 L25 (verb families); suchen → exercises only; Woche, Küche → Atlas | 8 words is far over budget; machen/kochen/sprechen are the highest-frequency verbs; Buch/Milch demonstrate the noun K→CH pattern |
+| **L7** (D→T) | tag, tür, trinken, garten, tochter, kalt, gut, wort (8) | Tag, Tür, trinken, gut, kalt (5) | Garten → L24 (prepositions); Tochter → Atlas (double-shift with GH→CH); Wort → exercises; Traum, Tisch, tief → Atlas | 8→11 words is the worst overload; tief is a double-shift word that belongs in L23; Tag/gut/kalt are ultra-high-frequency |
+| **L8** (Latin -ieren) | studieren, organisieren, reparieren, funktionieren, kapieren, akzeptieren (6) | studieren, organisieren, funktionieren, reparieren, akzeptieren (5) | kapieren → exercises as bonus challenge | kapieren is colloquial; the other 5 are the most internationally transparent |
+
+### 24.2 Cross-Shift Discrimination Exercises to Add
+
+Each lesson from L4 onward must include **at least 1 discrimination exercise** that mixes words from the current lesson's shift with words from previously learned shifts:
+
+| Lesson | Discrimination Exercise Spec |
+|---|---|
+| **L4** (TH→D) | Add 1 exercise: "Match each pair to its shift rule: hope→hoffen (?), think→denken (?)" — 2 families (P→F vs. TH→D) |
+| **L5** (T→S/SS) | Add 1 exercise: "Which shift? Sort these 4 pairs: hoffen (P→F), denken (TH→D), Wasser (T→SS), Bruder (TH→D)" — 3 families |
+| **L6** (K→CH) | Add 1 exercise: "Identify the shift for each: machen (?), schlafen (?), essen (?), danken (?)" — 4 families |
+| **L7** (D→T) | Add 1 exercise: "Which shift connects each pair?" with 5 options from all 5 learned shift families |
+| **L8** (Latin -ieren) | Add 1 meta-discrimination: "Which of these words can you derive using a consonant shift, and which is a Latin loan? studieren, Wasser, machen, funktionieren" |
+
+These exercises reuse existing vocabulary (zero new words needed) and are the highest-value addition for long-term retention.
+
+### 24.3 Opening Bridges to Add
+
+Each lesson from L3 onward must begin with an **Opening Bridge** — a 1–2 sentence warm-up that recalls 2–3 words from previous lessons before introducing the new concept:
+
+| Lesson | Current Hook Opening (MVP) | Recommended Opening Bridge (Prepend to Hook) |
+|---|---|---|
+| **L3** | "Between 500 and 700 AD, a phonetic wave swept northward..." | **Bridge:** "You already know `lernen` (to learn) and `Ich kann kommen` (I can come). Now: what if we told you that 'hope' is already a German word — it just changed one letter?" |
+| **L4** | "Notice how native German speakers learning English often struggle with the 'th' sound?" | **Bridge:** "Quick recall — what's 'hope' in German? (`hoffen` — P→FF). What about 'ship'? (`Schiff`). Good. Now: why doesn't German have a 'th' sound at all?" |
+| **L5** | "When ancient Germanic 'T' shifted in High German, it became a hissing sibilant..." | **Bridge:** "You've decoded `hoffen` (P→F) and `denken` (TH→D). Two shift patterns down. Now: what happens when English 'T' meets the same historical force?" |
+| **L6** | "During the High German Consonant Shift, ancient Germanic voiceless stop 'k' softened..." | **Bridge:** "Three shifts mastered: P→F (`hoffen`), TH→D (`denken`), T→SS (`Wasser`). Now for a shift that introduces a sound English doesn't have..." |
+| **L7** | "Linguistic shifts happen in chains..." | **Bridge:** "When TH hardened to D (think→`denken`), the existing D had to move too. Where did it go? Can you predict what 'day' becomes?" |
+| **L8** | "During the High Middle Ages, French courtly culture swept across European nobility..." | **Bridge:** "You've conquered 5 consonant shifts. This lesson is different — a free gift. Hundreds of German words that look almost identical to English. No shift needed." |
+| **L9** | "English speakers often view verb conjugation tables as an unnatural obstacle..." | **Bridge:** "You know `machen` (K→CH), `trinken` (D→T), `denken` (TH→D). But so far you've only seen their dictionary forms. What happens when 'thou' enters the picture?" |
+| **L10** | "Every beginner wonders: Why does German change 'der' to 'den'..." | **Bridge:** "In English, 'he' becomes 'him' when receiving an action. You already do this naturally. German does the exact same thing — and the proof is in a sound you already know." |
+
+Opening bridges serve three functions: (1) activate prior knowledge, (2) create continuity between lessons, and (3) give the learner a small confidence boost before new material.
+
+### 24.4 Frequency Tier Assignments for All Curriculum Words
+
+Every word in the curriculum must be tagged with a frequency tier (see Section 21.13). Below is the initial assignment for Phase 1 vocabulary:
+
+| Tier | Words | SRS Policy |
+|---|---|---|
+| **Tier 1** (Top 500) | es, was, aus, gut, du, ich, kann, will, muss, sein, haben, machen, kommen, gehen, finden, trinken, drei | Always in "Due Today" |
+| **Tier 2** (500–1500) | lernen, singen, bringen, hoffen, helfen, denken, danken, Bruder, essen, besser, kochen, sprechen, Wasser, Tag, Tür, kalt, Buch, Milch | Always in "Due Today" |
+| **Tier 3** (1500–3000) | schlafen, Schiff, reifen, schwimmen, Bad, hassen, brechen, suchen, Woche, Garten, Tochter, Wort, Traum, Tisch | In "Due Today" after first correct practice |
+| **Tier 4** (3000+) | Affe, Donner, dünn, Straße, Knecht, Pfad, Pfeffer | **Never auto-added** — Atlas exploration only |
+
+### 24.5 Multi-Lesson Payoff Arcs to Plan
+
+The following compound-transformation words require deliberate multi-lesson arcs (see Section 21.14):
+
+| Word | Transformations | Arc Plan |
+|---|---|---|
+| **vergessen** (forget) | ver- prefix + T→SS | L5: Preview teaser ("we'll decode ver- later") → L14: Prefix explained → L15: "Ich habe vergessen" → L30: Synthesis |
+| **tief** (deep) | D→T + P→F (double shift) | L7: Mentioned in exercises as discovery → L23: Fully analyzed as double-shift example → L30: Synthesis |
+| **Tochter** (daughter) | D→T + GH→CH (double shift) | L7: Atlas-only initially → L23: Formally analyzed with GH→CH shift → L30: Synthesis |
+| **einschlafen** (fall asleep) | ein- prefix + schlafen (P→F) | L3: schlafen introduced → L13: Separable prefix ein- explained → L12: Used in Satzklammer examples |
+| **nachdenken** (reflect) | nach- prefix + denken (TH→D) | L4: denken introduced → L13: Separable prefix nach- explained → L25: Verb family explored |
+
+### 24.6 Vocabulary Reuse Density Targets for Phase 1 Words
+
+The following reuse density targets ensure the 7-Encounter minimum is met. Content authors must verify these before publishing each lesson's MDX:
+
+```
+Target minimum lesson appearances (including exercises, sentences, and grammar examples):
+
+hoffen:    L3(I), L5(D), L12(S), L19(C), L23(Rev), L30(Syn)     = 6 ✓ (+ SRS)
+helfen:    L3(I), L5(D), L9(G), L19(C), L25(VF), L30(Syn)       = 6 ✓
+denken:    L4(I), L5(D), L9(G), L14(C), L28(Rev), L30(Syn)       = 6 ✓
+Wasser:    L5(I), L7(D), L11(S), L19(C), L21(Rev), L30(Syn)      = 6 ✓
+machen:    L6(I), L7(D), L9(G), L12(S), L15(G), L19(C), L30(Syn) = 7 ✓
+trinken:   L7(I), L9(G), L10(S), L15(G), L25(VF), L30(Syn)       = 6 ✓
+Tag:       L7(I), L9(D), L11(S), L22(G), L30(Syn)                 = 5 ✓
+kalt:      L7(I), L10(S), L22(G-comparative), L30(Syn)            = 4 ⚠ (needs 1 more)
+du:        L1(I), L3(S), L4(S), L5(S), L6(S), L7(S), L9(G), ...  = 10+ ✓
+
+Legend: I=Intro, D=Discrimination, S=Sentence, G=Grammar, C=Compound,
+        VF=Verb Family, Rev=Contrastive Review, Syn=Synthesis
+```
+
+Words marked ⚠ need at least one more planned appearance before the curriculum is finalized.
+
+---
+
 ## only for reference, old qna answers
 
 
@@ -1116,8 +1688,8 @@ grammar way more than Duolingo does. But maybe not like in academically. Right? 
 ? What writing style and voice should the lesson explanations use?
 > Conversational mentor slash teaching voice and also dialogue format like language transfer both seems good. I don't really know what you are mentioning with clean modern explanation essay. But yeah, those two seem good. What are your
 thoughts about it? Like maybe I will think about which to go with.
-? How prominent should "The Decoder" interactive tool be in the interface?
-> (Recommended) Dedicated tab in the bottom navigation (Always accessible reference tool)
+? How prominent should interactive shift tools be in the interface?
+> Integrated directly into The Trail and The Atlas as primary exploration surfaces.
 ? What theme support should be prioritized for the UI?
 > (Recommended) Dark mode only at launch (Strong brand identity, simpler to build and polish)
 ? How should users complete vocabulary and word-derivation exercises?
@@ -1159,7 +1731,7 @@ tier agressively. and no mentions of it in earlier builds
 ## 15. Future Roadmap (v3.0 / v4.0): Progressive Feature Disclosure & Gated Mechanics
 
 > **Architectural Note for Future Iterations (Post-MVP Roadmap):**
-> In the initial MVP, all tools (Trail, Atlas, Review Hub, Decoder) are available immediately to maximize exploratory flexibility. However, for broader learner retention in future versions (v3/v4 models), the platform should transition to **Progressive Feature Disclosure** so first-time users are not overwhelmed by receiving the entire linguistic system and all review machinery at once.
+> In the initial MVP, all tools (Trail, Atlas, Review Hub) are available immediately to maximize exploratory flexibility. However, for broader learner retention in future versions (v3/v4 models), the platform should transition to **Progressive Feature Disclosure** so first-time users are not overwhelmed by receiving the entire linguistic system and all review machinery at once.
 
 ### Key Progressive Disclosure Milestones (v3 / v4 Vision):
 1. **Preventing Cognitive Overload**:
@@ -1201,4 +1773,204 @@ To maximize recall depth, minimize cognitive friction, and provide rich audio fe
 
 ### 6. Trail-to-Atlas Constellation Bridges
 - **Interconnected Learning**: Lessons and the Sound Shift Atlas form a continuous discovery loop. In `LessonReader`, Part 03 (Transformation Table) and Part 05 (Summary) feature dedicated exploration bridge cards directing learners to `/atlas/[family]` for the shift families introduced in the lesson.
+
+---
+
+## 22. Codebase Audit Learnings & Production Engineering Hardening
+
+During the comprehensive codebase audit and testing cycle across the 9 core functional dimensions of `/home/shaurya/gemini-tmp/german-app-2/`, 39 distinct engineering flaws, edge-case vulnerabilities, and UX bottlenecks were identified and resolved. 
+
+This section documents the foundational architectural learnings, root causes, and permanent engineering standards derived from that audit to guide all future feature development, curriculum expansion, and multi-language extensions.
+
+---
+
+### 22.1 Interactive Exercise Engines & Algorithmic Correctness
+
+#### 1. Immutable Index-Based Tile Selection vs. Value-Based Tracking
+- **The Failure Mode**: In morpheme assembly, syntax builders, and tile-picking exercises (`ExerciseWidgets.tsx`), selected tiles were originally tracked as an array of string values (`selectedTiles: string[]`). When an exercise contained duplicate morphemes or identical words (e.g. repeated syllables like `ge-`, repeated prepositions, or repeated auxiliary words), clicking a single tile either selected or unpicked every identical tile instance simultaneously, completely corrupting user input state.
+- **Root Cause**: Non-unique string identifiers in state arrays.
+- **Hardened Architecture**: The tile selection engine MUST track selections using the tile's immutable index in the source bank (`selectedIndices: number[]`). Dedicated helper functions `pickTileIndex(index: number)` and `unpickTilePosition(position: number)` manage selection state cleanly. The rendered UI reflects the token at `availableTokens[index]`, ensuring duplicate morphemes remain distinct entities with independent selection lifecycles.
+
+#### 2. Retry Queue Anti-Pass Guard
+- **The Failure Mode**: When learners submitted an incorrect answer and entered the retry queue (`isRetry = true`), clicking "Continue" on the `ErrorFeedbackSheet` invoked the parent component's `onSuccess()` callback. This allowed learners to pass exercises simply by dismissing the error sheet without ever providing the correct solution.
+- **Root Cause**: Reusing a single progression callback for both initial success and error feedback dismissal.
+- **Hardened Architecture**: The retry cycle must strictly isolate error dismissal from progression. In retry mode, `onContinue` MUST reset the local widget state (`isSubmitted = false`, clearing selections or input text) and keep the learner on the current question until an honest correct submission is validated.
+
+#### 3. Derivation Typing Mode: Normalization, Auto-Grading & Character Diffing
+- **The Failure Mode**: The Derivation Typing mode in the Review Hub (`review/page.tsx`) existed as a visual stub: the text input accepted keystrokes, but submission evaluation was unhandled, leading to frozen cards with no automated grading or corrective feedback.
+- **Root Cause**: Unfinished review mode implementation lacking target matching logic.
+- **Hardened Architecture**: Text-based derivation exercises must implement:
+  1. **Accent-aware, trimmed normalization**: Compares user input against target word stems, accounting for optional punctuation and whitespace.
+  2. **Automated SM-2 Grading**: Clean exact matches automatically submit a grade of `4` (Good); mismatches submit a grade of `1` (Again).
+  3. **Character-Level Letter Diff (`computeLetterDiff`)**: Upon reveal, the interface splits input and target into colored character-by-character diff pills (green for correct matches, coral red for insertions/substitutions, muted grey for omissions), clearly illustrating phonetic shift mistakes to the learner.
+
+#### 4. Caret Stability in Reactive Text Inputs
+- **The Failure Mode**: Real-time regex string replacements (such as digraph or umlaut substitutions) executed synchronously inside an input's `onChange` event forced the browser's cursor/caret to jump to the end of the text string on every keystroke, preventing mid-word corrections.
+- **Root Cause**: Overwriting `input.value` in React state resets the browser's native `selectionStart` / `selectionEnd` tracking.
+- **Hardened Architecture**: Defer text normalization transformations to input blur or form submission events, or maintain selection ranges explicitly using refs if live replacement is mandatory.
+
+---
+
+### 22.2 Pedagogical Integrity & Anti-Spoiler Protections
+
+#### 1. Branch Drill Hints: Phonetic Rule Guidance vs. Answer Leaks
+- **The Failure Mode**: In `BranchDrillModal.tsx`, the `english_hint` field for P→F/FF exercises explicitly displayed the target German translation (e.g. `"hope → hoffen"`), completely defeating active recall.
+- **Root Cause**: Hardcoding translation examples into hint properties intended for mechanical guidance.
+- **Hardened Architecture**: Hints across all drills, quizzes, and exercises must NEVER disclose the target German word. They must describe only the phonetic shift mechanism and English context (e.g. `"hope (P → PF/FF)"` or `"Notice how medial P shifts to double FF after short vowels"`).
+
+#### 2. Clean Mastery Scoring: Eliminating False 5/5 on Retries
+- **The Failure Mode**: In Atlas branch drills, learners who repeatedly failed questions during a 5-question round could still achieve a perfect "5/5 Mastery" score if they eventually answered each question correctly on subsequent retry loops.
+- **Root Cause**: Incrementing the score counter on question resolution without checking previous failure flags for that question index.
+- **Hardened Architecture**: Drill sessions must maintain a `currentQuestionFailed: boolean` flag. The session score increments ONLY if the question was answered correctly on its initial presentation without prior failure in that round.
+
+#### 3. SRS Interval Transparency
+- **The Failure Mode**: Flashcard rating buttons hardcoded static interval assumptions: `"Again (1d)"`, `"Hard (3d)"`, `"Good (6d)"`, `"Easy (14d)"`. In the SM-2 algorithm, intervals are calculated dynamically based on card history, repetitions, and ease factors. A failed mature card resets to 1 day; an early card scales differently.
+- **Root Cause**: Static UI text masking dynamic mathematical algorithms.
+- **Hardened Architecture**: Rating buttons must display qualitative labels (`Again`, `Hard`, `Good`, `Easy`) or compute and render dynamic next-interval projections directly from the live SM-2 engine.
+
+#### 4. Shift Family Review Deck Pre-Seeding
+- **The Failure Mode**: Selecting the "Shift Family" deck in the Review Hub filtered only against existing `srsCards` in user state. If a user had not yet practiced words from that specific shift in earlier lessons, the deck opened as completely empty (0 cards).
+- **Root Cause**: Assuming all catalog words were already instantiated in the SRS database.
+- **Hardened Architecture**: Specialized drill decks (Shift Family, Compounds & Traps, Recent) must auto-seed initial `SRSCard` records across all compendium words belonging to that group, ensuring immediate drill availability from Day 1.
+
+---
+
+### 22.3 State Management, Batching & Lifecycle Synchronization
+
+#### 1. Batched Storage Mutations: Eliminating N+1 Serialization
+- **The Failure Mode**: When loading a lesson in `LessonReader.tsx`, encountering words executed `lesson.word_ids.forEach(id => markWordEncountered(id))`. In a 7-word lesson, this triggered 7 consecutive synchronous state updates and 7 full JSON serialization cycles to `localStorage` and `document.cookie` within milliseconds.
+- **Root Cause**: Lack of bulk-mutation endpoints in the Zustand store.
+- **Hardened Architecture**: The state store must provide batched mutation methods (`markWordsEncountered(wordIds: string[])`) so multiple entities are committed and persisted in a single atomic transaction.
+
+#### 2. ISO Calendar Week Activity Tracking & Honest Defaults
+- **The Failure Mode**: The weekly activity dot array defaulted to `[true, true, true, true, true, true, true]`, falsely displaying 7 active days to brand new users. Furthermore, it lacked calendar week awareness, causing past week activity to persist indefinitely or overwrite cyclically.
+- **Root Cause**: Hardcoded dummy default data and missing date-boundary logic.
+- **Hardened Architecture**:
+  1. Default activity state must initialize honestly as `[false, false, false, false, false, false, false]`.
+  2. The store must track an ISO week identifier (`getWeekString()`, e.g. `"2026-W37"`).
+  3. Whenever `logDailyActivity()` executes, it compares the stored week string against the current date. Upon a week rollover, it resets the array to all-false before logging today's activity.
+
+#### 3. Automated Activity Logging on Core Milestones
+- **The Failure Mode**: Daily activity logging was previously handled via ad-hoc, component-level triggers, leading to situations where completing lessons or review sessions failed to record daily activity if the user navigated away prematurely.
+- **Root Cause**: Disconnected side effects.
+- **Hardened Architecture**: Core progression actions (`completeLesson()`, `recordReview()`) MUST internally invoke `logDailyActivity()`, guaranteeing continuous engagement tracking across all user entry points.
+
+#### 4. Asynchronous Hydration Synchronization
+- **The Failure Mode**: Components that initialized local `useState` toggles from store state (e.g. `GenderGuideBanner`'s `isExpanded` derived from `hasSeenGenderIntro`) rendered before `hydrateFromStorage()` completed, freezing the UI in an un-hydrated default state.
+- **Root Cause**: One-time initial state assignment failing to respond to asynchronous persistence hydration.
+- **Hardened Architecture**: Components with local UI state derived from persisted store values must synchronize via `useEffect` subscriptions or derive state directly from store selectors without intermediate local state duplicates.
+
+#### 5. Deterministic Progress Calculation
+- **The Failure Mode**: Course progress percentage was computed as `(currentLessonId - 1) / 30`. This produced false 0% progress on Lesson 1 even if finished, and completely broke if lessons were completed out of order.
+- **Root Cause**: Conflating current position with cumulative completion.
+- **Hardened Architecture**: Progress percentage MUST be derived deterministically from the completed set: `completedLessons.length / totalLessons`.
+
+---
+
+### 22.4 Next.js SSR / SSG Hydration Architecture for Local-First Persistence
+
+#### 1. The Static Export Hydration Mismatch
+- **The Problem**: In Next.js SSG / App Router static export builds, pages are pre-rendered at build time with empty/default Zustand state. On client load, `hydrateFromStorage()` reads persisted data from `localStorage`. If components render persisted metrics directly (mastered counts, review card counts, activity indicators, lesson lock states), React throws hydration mismatch warnings (`Text content did not match`).
+- **The Architectural Solution**: All UI components rendering client-persisted metrics must implement a client-mount guard:
+  ```tsx
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  ```
+  Before mounting (`!mounted`), render deterministic skeleton placeholders or default zero-states; render live persisted metrics only after the client has mounted.
+
+---
+
+### 22.5 Accessibility (WCAG 2.1 AA) & Keyboard-First Ergonomics
+
+#### 1. Viewport Scalability Compliance (WCAG 1.4.4)
+- **The Failure Mode**: The viewport meta tag in `src/app/layout.tsx` contained `maximum-scale=1`, which prohibited users from pinch-zooming on mobile devices.
+- **Root Cause**: Outdated mobile web pattern intended to prevent accidental double-tap zoom.
+- **Hardened Architecture**: Never restrict user pinch-to-zoom in viewport metadata. Viewports must allow user scaling up to at least 200% to remain compliant with WCAG 1.4.4.
+
+#### 2. Universal Dialog & Drawer Dismissal via Escape
+- **The Failure Mode**: Modals and drawer overlays (`BranchDrillModal`, `WordCardDrawer`) could only be closed by clicking their explicit close buttons or clicking the backdrop, trapping keyboard-only users.
+- **Root Cause**: Missing global keydown listeners.
+- **Hardened Architecture**: Every modal dialog, drawer, and slide-over sheet must attach a global `keydown` event listener for `Escape` (`e.key === "Escape"`), cleanly closing the element and returning focus to the trigger.
+
+#### 3. Keyboard Advancing for Feedback Sheets
+- **The Failure Mode**: In lesson exercises, `ErrorFeedbackSheet` required a mouse click on "Continue" to proceed, breaking the rhythm of desktop keyboard-only navigation.
+- **Root Cause**: Omitting keyboard shortcuts on transient overlay sheets.
+- **Hardened Architecture**: Interactive feedback sheets must support `Enter` and `Space` keyboard listeners to immediately advance or retry.
+
+#### 4. Semantic HTML for Locked Navigation Nodes
+- **The Failure Mode**: Locked lessons on the Trail rendered as `<a href="#">` with disabled visual styling. This created empty anchor jumps, confused screen readers with pseudo-links, and polluted browser history when clicked.
+- **Root Cause**: Reusing anchor tags for non-navigable elements.
+- **Hardened Architecture**: Inaccessible or locked items must render as semantic `<div>` elements with `aria-disabled="true"` and appropriate non-interactive styling, preserving `<a>` tags exclusively for navigable routes.
+
+---
+
+### 22.6 Design System Consistency & Visual Channel Separation
+
+#### 1. Centralized Gender Badge System
+- **The Failure Mode**: During early UI prototyping, Latin-bridge gender articles were using an arbitrary hardcoded `text-blue-400` rather than the platform's standardized tri-color gender system.
+- **Root Cause**: Ad-hoc styling in modal subcomponents.
+- **Hardened Architecture**: All references to German noun genders MUST strictly utilize the centralized `<GenderBadge>` component (`der` = Azure Blue, `die` = Vivid Rose, `das` = Emerald Green) across all tools and views.
+
+#### 2. Dynamic Dashboard Insight Rotation
+- **The Failure Mode**: The dashboard insight card was perpetually pinned to index 0.
+- **Root Cause**: Hardcoded array index access.
+- **Hardened Architecture**: Engagement widgets with scheduled content must dynamically rotate based on date modulo mathematics (`new Date().getDate() % insights.length`) to ensure fresh daily exploration without requiring backend cron jobs.
+
+---
+
+### 22.7 Security, Error Boundaries & Production Infrastructure
+
+#### 1. Client-Side Error Boundaries
+- **The Failure Mode**: An unhandled runtime error in any child exercise widget would crash the entire single-page application to a blank screen.
+- **Root Cause**: Absence of a root `error.tsx` client boundary in Next.js App Router.
+- **Hardened Architecture**: The application must maintain a root client error boundary (`src/app/error.tsx`) with user-friendly recovery controls ("Try Again" via `reset()`) and safe fallback navigation to the dashboard.
+
+#### 2. HTTPS Cookie Security Flagging
+- **The Failure Mode**: Fallback cookie persistence strings lacked the `Secure` attribute, leaving stored state vulnerable to transmission over insecure channels in production.
+- **Root Cause**: Omitting security flags in client-side document.cookie assignment.
+- **Hardened Architecture**: Cookie persistence strings must inspect `window.location.protocol` and append `; Secure; SameSite=Lax` whenever operating on HTTPS.
+
+#### 3. Tailwind CSS v4 Engine Compatibility
+- **The Failure Mode**: Including external `autoprefixer` when running Tailwind CSS v4 generated redundant build overhead. Furthermore, utility classes like `animate-spin-slow` failed silently without explicit CSS keyframes.
+- **Root Cause**: Tailwind v4 includes an integrated Rust-based Lightning CSS compiler that handles vendor prefixing natively; custom animations require explicit `@keyframes` definitions.
+- **Hardened Architecture**: Keep dependencies minimal (pure Tailwind v4 without legacy PostCSS wrappers) and declare custom animation keyframes directly in `globals.css`.
+
+---
+
+### 22.8 Complete Audit Verification & Implementation Registry
+
+| Category | Component / File | Issue Discovered in Audit | Permanent Engineering Fix |
+|---|---|---|---|
+| **State** | `src/lib/store.ts` | N+1 synchronous storage writes on lesson view | Added `markWordsEncountered(wordIds: string[])` atomic batch update |
+| **State** | `src/lib/store.ts` | Fake `weeklyActivity` default `[true, true, ...]` | Replaced with honest `[false, false, ...]`; added ISO week rollover reset |
+| **State** | `src/lib/store.ts` | Disconnected activity logging on completion | Automated `logDailyActivity()` inside `completeLesson` and `recordReview` |
+| **Security** | `src/lib/store.ts` | Insecure cookie string on HTTPS | Enforced `; Secure; SameSite=Lax` flag on secure origins |
+| **Exercises** | `src/components/lesson/ExerciseWidgets.tsx` | Duplicate tile collision bug in morpheme builder | Migrated from `selectedTiles: string[]` to `selectedIndices: number[]` |
+| **Exercises** | `src/components/lesson/ExerciseWidgets.tsx` | Retry queue bypass (error sheet auto-passed) | Isolated retry continue from `onSuccess`; resets input state on retry |
+| **Exercises** | `src/components/lesson/ExerciseWidgets.tsx` | Caret jump on keystroke normalization | Removed disruptive reactive regex replace during `onChange` |
+| **Atlas** | `src/components/atlas/BranchDrillModal.tsx` | Drill hint leaked answer (`"hope → hoffen"`) | Replaced spoiler with rule mechanism hint (`"hope (P → PF/FF)"`) |
+| **Atlas** | `src/components/atlas/BranchDrillModal.tsx` | False 5/5 score via question retries | Added `currentQuestionFailed` state; score increments only on first-attempt pass |
+| **Accessibility** | `src/components/atlas/BranchDrillModal.tsx` | Modal trapped keyboard users | Bound global `Escape` key listener to modal container |
+| **Review** | `src/app/review/page.tsx` | Shift family review deck empty on unreviewed words | Pre-seeds initial `SRSCard`s across all words in the selected family |
+| **Review** | `src/app/review/page.tsx` | Derivation Typing mode was non-functional stub | Implemented `handleCheckTyping`, auto-grading, and `computeLetterDiff` display |
+| **Review** | `src/app/review/page.tsx` | Misleading hardcoded interval labels (`"Good (6d)"`) | Replaced with clean qualitative labels (`Again`, `Hard`, `Good`, `Easy`) |
+| **Hydration** | `src/app/review/page.tsx` | SSR/SSG hydration mismatch on deck counts | Protected deck stats and counters behind `mounted` state guard |
+| **Performance** | `src/components/lesson/LessonReader.tsx` | Per-word encounter calls during render | Migrated to batched `markWordsEncountered(lesson.word_ids)` |
+| **Data** | `src/components/lesson/LessonReader.tsx` | Outdated text citing "7 shifts" instead of 9 | Corrected copy to reflect complete 9 sound shift families |
+| **Hydration** | `src/app/page.tsx` | SSR/SSG hydration mismatch on stats bar | Added `mounted` state guard to dashboard user metrics |
+| **UX** | `src/app/page.tsx` | Dashboard insight stuck on first item | Implemented date modulo rotation (`new Date().getDate() % insights.length`) |
+| **Logic** | `src/app/page.tsx` | Broken progress formula `(currentLessonId - 1) / 30` | Derived completion directly: `completedLessons.length / 30` |
+| **Hydration** | `src/app/atlas/page.tsx` | SSR/SSG hydration mismatch on mastery counts | Added `mounted` state guard to card progress badges |
+| **Accessibility** | `src/app/layout.tsx` | `maximum-scale=1` blocked mobile pinch-zoom | Removed `maximum-scale=1` to restore WCAG 1.4.4 compliance |
+| **Accessibility** | `src/components/lesson/ErrorFeedbackSheet.tsx` | Sheet dismissal required mouse click | Added `Enter` and `Space` keyboard listeners to continue |
+| **Accessibility** | `src/components/common/WordCardDrawer.tsx` | Drawer trapped keyboard users | Added global `Escape` key listener to dismiss drawer |
+| **Design** | Latin Bridge & Gender Guide | Inconsistent `text-blue-400` on Latin bridge | Replaced with centralized `<GenderBadge>` component |
+| **State** | `src/components/common/GenderGuideBanner.tsx` | Banner toggle out of sync on hydration | Synced `isExpanded` with `hasSeenGenderIntro` via `useEffect` |
+| **Semantics** | `src/app/trail/page.tsx` | Locked lessons used `<a href="#">` | Replaced with non-interactive `<div aria-disabled="true">` |
+| **Hydration** | `src/app/trail/page.tsx` | SSR/SSG hydration mismatch on lesson path | Added `mounted` state guard to Trail completion indicators |
+| **Resiliency** | `src/app/error.tsx` | Missing root error boundary | Created client error boundary with "Try Again" and dashboard bridge |
+| **Styling** | `src/app/globals.css` | Missing `.animate-spin-slow` keyframe definition | Added custom keyframe animation definition to CSS bundle |
+| **Tooling** | `package.json` | Redundant `autoprefixer` devDependency | Removed unnecessary dependency; relying on Tailwind v4 native engine |
 
