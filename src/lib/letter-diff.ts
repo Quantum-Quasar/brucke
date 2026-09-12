@@ -88,7 +88,7 @@ export type AnswerAccuracy = "exact" | "almost" | "incorrect";
 export interface EvaluationResult {
   accuracy: AnswerAccuracy;
   warningNote?: string;
-  reason?: "case" | "umlaut" | "typo";
+  reason?: "case" | "umlaut" | "typo" | "infinitive" | "article";
 }
 
 export function evaluateAnswerAccuracy(userInput: string, expected: string): EvaluationResult {
@@ -124,7 +124,74 @@ export function evaluateAnswerAccuracy(userInput: string, expected: string): Eva
     };
   }
 
-  // 4. Minor single-character typo for words with length >= 4 -> Yellow
+  // 4. Missing verb infinitive ending (-en or -n, e.g. "trink" instead of "trinken") -> Yellow
+  if (targetLower.endsWith("en")) {
+    const stem = targetLower.slice(0, -2);
+    if (
+      userLower === stem ||
+      normalizeUmlauts(userLower) === normalizeUmlauts(stem)
+    ) {
+      return {
+        accuracy: "almost",
+        reason: "infinitive",
+        warningNote: `Almost right! German verbs use the infinitive ending "-en": "${target}" (you wrote the stem "${user}")`,
+      };
+    }
+    const conjugatedE = targetLower.slice(0, -1); // e.g. "trinke" instead of "trinken"
+    if (
+      userLower === conjugatedE ||
+      normalizeUmlauts(userLower) === normalizeUmlauts(conjugatedE)
+    ) {
+      return {
+        accuracy: "almost",
+        reason: "infinitive",
+        warningNote: `Almost right! Note the infinitive ending is "-en": "${target}" (you wrote "${user}")`,
+      };
+    }
+  } else if (targetLower.endsWith("n")) {
+    const stem = targetLower.slice(0, -1);
+    if (
+      userLower === stem ||
+      normalizeUmlauts(userLower) === normalizeUmlauts(stem)
+    ) {
+      return {
+        accuracy: "almost",
+        reason: "infinitive",
+        warningNote: `Almost right! German verbs use the infinitive ending "-n": "${target}" (you wrote the stem "${user}")`,
+      };
+    }
+  }
+
+  // Also check if user typed infinitive when target was bare stem (e.g. "trinken" when target was "trink")
+  if (userLower.endsWith("en") && userLower.slice(0, -2) === targetLower) {
+    return {
+      accuracy: "almost",
+      reason: "infinitive",
+      warningNote: `Almost right! The prompt called for the bare stem: "${target}"`,
+    };
+  }
+
+  // 5. Gender article inclusion or omission (e.g. "Wasser" vs "das Wasser") -> Yellow
+  const stripArticle = (s: string) => s.replace(/^(der|die|das|ein|eine|einen)\s+/i, "").trim();
+  const targetStripped = stripArticle(targetLower);
+  const userStripped = stripArticle(userLower);
+
+  if (userLower === targetStripped && userLower !== targetLower) {
+    return {
+      accuracy: "almost",
+      reason: "article",
+      warningNote: `Almost right! Remember the gender article: "${target}"`,
+    };
+  }
+  if (userStripped === targetLower && userStripped !== userLower) {
+    return {
+      accuracy: "almost",
+      reason: "article",
+      warningNote: `Almost right! The prompt only required the word: "${target}"`,
+    };
+  }
+
+  // 6. Minor single-character typo for words with length >= 4 -> Yellow
   if (target.length >= 4 && getLevenshteinDistance(userLower, targetLower) === 1) {
     return {
       accuracy: "almost",
@@ -133,6 +200,6 @@ export function evaluateAnswerAccuracy(userInput: string, expected: string): Eva
     };
   }
 
-  // 5. Otherwise incorrect -> Red
+  // 7. Otherwise incorrect -> Red
   return { accuracy: "incorrect" };
 }

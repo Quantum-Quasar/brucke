@@ -43,5 +43,26 @@ describe("Letter-by-Letter Diff", () => {
     expect(evaluateAnswerAccuracy("waser", "Wasser").accuracy).toBe("almost");
     expect(evaluateAnswerAccuracy("waser", "Wasser").reason).toBe("typo");
     expect(evaluateAnswerAccuracy("water", "Wasser").accuracy).toBe("incorrect");
+
+    // Infinitive stem checking (e.g. "trink" vs "trinken", "wander" vs "wandern")
+    const stemResult = evaluateAnswerAccuracy("trink", "trinken");
+    expect(stemResult.accuracy).toBe("almost");
+    expect(stemResult.reason).toBe("infinitive");
+    expect(stemResult.warningNote).toContain("infinitive ending \"-en\"");
+
+    const conjugatedResult = evaluateAnswerAccuracy("trinke", "trinken");
+    expect(conjugatedResult.accuracy).toBe("almost");
+    expect(conjugatedResult.reason).toBe("infinitive");
+
+    const nEndingResult = evaluateAnswerAccuracy("wander", "wandern");
+    expect(nEndingResult.accuracy).toBe("almost");
+    expect(nEndingResult.reason).toBe("infinitive");
+    expect(nEndingResult.warningNote).toContain("infinitive ending \"-n\"");
+
+    // Article omission / inclusion checking (e.g. "Wasser" vs "das Wasser")
+    const articleResult = evaluateAnswerAccuracy("Wasser", "das Wasser");
+    expect(articleResult.accuracy).toBe("almost");
+    expect(articleResult.reason).toBe("article");
+    expect(articleResult.warningNote).toContain("gender article");
   });
 });

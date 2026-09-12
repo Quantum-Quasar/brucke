@@ -32,7 +32,13 @@ describe("Keyboard Navigation & Interactive Exercise Controls", () => {
     expect(typoClose.accuracy).toBe("almost");
     expect(typoClose.reason).toBe("typo");
 
-    // 5. Obviously wrong -> Incorrect (Red)
+    // 5. Infinitive ending omission (e.g. "trink" instead of "trinken") -> Almost right (Yellow)
+    const infinitiveClose = evaluateAnswerAccuracy("trink", "trinken");
+    expect(infinitiveClose.accuracy).toBe("almost");
+    expect(infinitiveClose.reason).toBe("infinitive");
+    expect(infinitiveClose.warningNote).toContain("infinitive ending");
+
+    // 6. Obviously wrong -> Incorrect (Red)
     const wrong = evaluateAnswerAccuracy("water", expected);
     expect(wrong.accuracy).toBe("incorrect");
   });
