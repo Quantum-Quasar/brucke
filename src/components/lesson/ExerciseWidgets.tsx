@@ -16,6 +16,7 @@ interface ExerciseWidgetProps {
   onSuccess: () => void;
   onError: (errorType: "spelling" | "umlaut" | "capitalization") => void;
   isRetry?: boolean;
+  onQueueRetry?: () => void;
 }
 
 export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
@@ -23,6 +24,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
   onSuccess,
   onError,
   isRetry = false,
+  onQueueRetry,
 }) => {
   const [userInput, setUserInput] = useState("");
   const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
@@ -239,6 +241,11 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       setVerifiedAttemptText(answerToCheck);
       setAlmostWarningNote(evaluation.warningNote);
       setShowSuccessSheet(true);
+
+      // If the spelling was wrong (typo or missing umlaut), queue for repeat at the end
+      if (evaluation.reason === "typo" || evaluation.reason === "umlaut") {
+        onQueueRetry?.();
+      }
       return;
     }
 
@@ -251,6 +258,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
         ? "capitalization"
         : "spelling"
     );
+    onQueueRetry?.();
     setFailedAttemptText(answerToCheck);
     setShowErrorSheet(true);
   };
@@ -271,9 +279,13 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       setVerifiedAttemptText(option);
       setAlmostWarningNote(evaluation.warningNote);
       setShowSuccessSheet(true);
+      if (evaluation.reason === "typo" || evaluation.reason === "umlaut") {
+        onQueueRetry?.();
+      }
     } else {
       setStatus("incorrect");
       onError("spelling");
+      onQueueRetry?.();
       setFailedAttemptText(option);
       setShowErrorSheet(true);
     }
@@ -324,6 +336,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       setFeedbackNote(`"${selectedEnglish}" does not match "${de}". Try again!`);
       setSelectedEnglish(null);
       onError("spelling");
+      onQueueRetry?.();
     }
   };
 

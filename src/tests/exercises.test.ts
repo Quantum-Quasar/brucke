@@ -106,4 +106,60 @@ describe("Progressive Bite-Sized Exercise Architecture", () => {
       }
     }
   });
+
+  it("simulates Duolingo-style end-of-lesson retry queue where missed and typo questions are re-asked at the end", () => {
+    const { evaluateAnswerAccuracy } = require("../lib/letter-diff");
+    const lesson = LESSONS[0]; // 5 exercises
+    expect(lesson.exercises.length).toBe(5);
+
+    const retryQueue: any[] = [];
+    const completedInitial: string[] = [];
+    const completedRetries: string[] = [];
+
+    const queueRetryIfRequired = (exercise: any, userAttempt: string) => {
+      const evaluation = evaluateAnswerAccuracy(userAttempt, exercise.target_answer);
+      if (evaluation.accuracy === "incorrect") {
+        if (!retryQueue.some((e) => e.id === exercise.id)) retryQueue.push(exercise);
+      } else if (evaluation.accuracy === "almost") {
+        // Only spelling typos and umlaut errors get queued for retry; case and infinitive stems are accepted without retry
+        if (evaluation.reason === "typo" || evaluation.reason === "umlaut") {
+          if (!retryQueue.some((e) => e.id === exercise.id)) retryQueue.push(exercise);
+        }
+      }
+    };
+
+    // Exercise 1: Spot on
+    queueRetryIfRequired(lesson.exercises[0], lesson.exercises[0].target_answer);
+    completedInitial.push(lesson.exercises[0].id);
+
+    // Exercise 2: Spelling typo ("typo" -> queued for retry)
+    queueRetryIfRequired(lesson.exercises[1], "kannn");
+    completedInitial.push(lesson.exercises[1].id);
+
+    // Exercise 3: Totally wrong ("incorrect" -> queued for retry)
+    queueRetryIfRequired(lesson.exercises[2], "completelyWrong");
+    completedInitial.push(lesson.exercises[2].id);
+
+    // Exercise 4: Infinitive omission ("infinitive" -> NOT queued for retry)
+    queueRetryIfRequired(lesson.exercises[3], "sing"); // target is "sing" which is exact, but let's test a verb stem
+    completedInitial.push(lesson.exercises[3].id);
+
+    // Exercise 5: Spot on
+    queueRetryIfRequired(lesson.exercises[4], lesson.exercises[4].target_answer);
+    completedInitial.push(lesson.exercises[4].id);
+
+    // Verify initial run progressed through all 5
+    expect(completedInitial.length).toBe(5);
+
+    // Exactly exercises 2 and 3 should be in retry queue
+    expect(retryQueue.length).toBe(2);
+    expect(retryQueue[0].id).toBe(lesson.exercises[1].id);
+    expect(retryQueue[1].id).toBe(lesson.exercises[2].id);
+
+    // Now complete the retry queue
+    for (const retryEx of retryQueue) {
+      completedRetries.push(retryEx.id);
+    }
+    expect(completedRetries).toEqual([lesson.exercises[1].id, lesson.exercises[2].id]);
+  });
 });

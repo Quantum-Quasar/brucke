@@ -22,6 +22,8 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   const router = useRouter();
   const [currentSegment, setCurrentSegment] = useState<LessonSegment>("hook");
   const [practiceIndex, setPracticeIndex] = useState(0);
+  const [retryIndex, setRetryIndex] = useState(0);
+  const [inRetryPhase, setInRetryPhase] = useState(false);
   const [completedSegments, setCompletedSegments] = useState<LessonSegment[]>([]);
   const [retryQueue, setRetryQueue] = useState<ExerciseItem[]>([]);
   const [isLessonFinished, setIsLessonFinished] = useState(false);
@@ -60,6 +62,9 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
         if (e.key === "Enter" || e.key === " " || e.code === "Space") {
           e.preventDefault();
           setPracticeIndex(0);
+          setRetryIndex(0);
+          setInRetryPhase(false);
+          setRetryQueue([]);
           markSegmentDone("table", "practice");
         } else if (e.key === "Backspace" || e.key === "ArrowLeft") {
           e.preventDefault();
@@ -87,8 +92,35 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   }, [lesson.word_ids, markWordsEncountered]);
 
   const handleExerciseError = (exercise: ExerciseItem) => {
-    if (!retryQueue.some((e) => e.id === exercise.id)) {
-      setRetryQueue((prev) => [...prev, exercise]);
+    setRetryQueue((prev) => {
+      if (prev.some((e) => e.id === exercise.id)) return prev;
+      return [...prev, exercise];
+    });
+  };
+
+  const handlePracticeSuccess = () => {
+    if (!inRetryPhase) {
+      if (practiceIndex + 1 < lesson.exercises.length) {
+        setPracticeIndex((prev) => prev + 1);
+      } else {
+        // Initial run complete. If any items in retry queue, enter reinforcement phase!
+        if (retryQueue.length > 0) {
+          setInRetryPhase(true);
+          setRetryIndex(0);
+        } else {
+          markSegmentDone("practice", "summary");
+        }
+      }
+    } else {
+      // In retry phase
+      if (retryIndex + 1 < retryQueue.length) {
+        setRetryIndex((prev) => prev + 1);
+      } else {
+        // All retries cleared!
+        setRetryQueue([]);
+        setInRetryPhase(false);
+        markSegmentDone("practice", "summary");
+      }
     }
   };
 
@@ -103,7 +135,9 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
     setCurrentSegment(nextSeg);
   };
 
-  const currentExercise = lesson.exercises[practiceIndex];
+  const currentExercise = inRetryPhase
+    ? retryQueue[retryIndex]
+    : lesson.exercises[practiceIndex];
 
   return (
     <article className="max-w-4xl mx-auto px-4 py-8 space-y-8">
@@ -313,6 +347,9 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                   type="button"
                   onClick={() => {
                     setPracticeIndex(0);
+                    setRetryIndex(0);
+                    setInRetryPhase(false);
+                    setRetryQueue([]);
                     markSegmentDone("table", "practice");
                   }}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition cursor-pointer active:scale-95 shadow-lg shadow-emerald-500/20"
@@ -324,57 +361,94 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
             </div>
           )}
 
-          {/* STEP 4: Interactive Practice Card (ONE AT A TIME) */}
+          {/* STEP 4: Interactive Practice Card (ONE AT A TIME + SEAMLESS RETRY QUEUE) */}
           {currentSegment === "practice" && currentExercise && (
             <div className="space-y-4 animate-in fade-in duration-200">
               {/* Exercise Step Tracker */}
               <div className="flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold">
-                    Problem {practiceIndex + 1} of {lesson.exercises.length}
-                  </span>
+                  {inRetryPhase ? (
+                    <>
+                      <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                      <span className="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold">
+                        🔁 Reinforcement · Problem {retryIndex + 1} of {retryQueue.length}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold">
+                      Problem {practiceIndex + 1} of {lesson.exercises.length}
+                    </span>
+                  )}
                 </div>
 
                 {/* Duolingo-style mini step dots */}
                 <div className="flex items-center gap-1.5">
-                  {lesson.exercises.map((ex, idx) => (
-                    <span
-                      key={ex.id}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
-                        idx === practiceIndex
-                          ? "w-6 bg-emerald-400"
-                          : idx < practiceIndex
-                          ? "w-3 bg-emerald-600"
-                          : "w-3 bg-white/15"
-                      }`}
-                    />
-                  ))}
+                  {inRetryPhase
+                    ? retryQueue.map((ex, idx) => (
+                        <span
+                          key={`retry-dot-${ex.id}-${idx}`}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${
+                            idx === retryIndex
+                              ? "w-6 bg-amber-400"
+                              : idx < retryIndex
+                              ? "w-3 bg-amber-600"
+                              : "w-3 bg-white/15"
+                          }`}
+                        />
+                      ))
+                    : lesson.exercises.map((ex, idx) => (
+                        <span
+                          key={ex.id}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${
+                            idx === practiceIndex
+                              ? "w-6 bg-emerald-400"
+                              : idx < practiceIndex
+                              ? "w-3 bg-emerald-600"
+                              : "w-3 bg-white/15"
+                          }`}
+                        />
+                      ))}
                 </div>
               </div>
 
+              {/* Informative Reinforcement Banner when in Retry Phase */}
+              {inRetryPhase && (
+                <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-between text-xs text-amber-200">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span>
+                      Let&apos;s nail the {retryQueue.length} exercise{retryQueue.length > 1 ? "s" : ""} you missed or had spelling slips on!
+                    </span>
+                  </div>
+                  <span className="font-mono text-amber-400 font-bold hidden sm:inline">
+                    Step {retryIndex + 1}/{retryQueue.length}
+                  </span>
+                </div>
+              )}
+
               {/* The Single Bite-Sized Exercise */}
               <ExerciseWidget
-                key={currentExercise.id}
+                key={inRetryPhase ? `retry_${currentExercise.id}_${retryIndex}` : `init_${currentExercise.id}_${practiceIndex}`}
                 exercise={currentExercise}
-                onSuccess={() => {
-                  if (practiceIndex + 1 < lesson.exercises.length) {
-                    setPracticeIndex((prev) => prev + 1);
-                  } else {
-                    markSegmentDone("practice", "summary");
-                  }
-                }}
+                isRetry={inRetryPhase}
+                onSuccess={handlePracticeSuccess}
                 onError={() => handleExerciseError(currentExercise)}
+                onQueueRetry={() => handleExerciseError(currentExercise)}
               />
 
               <div className="flex items-center justify-between px-1 pt-1">
                 <button
                   type="button"
-                  onClick={() => setCurrentSegment("table")}
+                  onClick={() => {
+                    setInRetryPhase(false);
+                    setRetryIndex(0);
+                    setCurrentSegment("table");
+                  }}
                   className="text-xs font-mono text-slate-500 hover:text-slate-300 transition cursor-pointer"
                 >
                   ← Review Transformation Table
                 </button>
-                {practiceIndex > 0 && (
+                {!inRetryPhase && practiceIndex > 0 && (
                   <button
                     type="button"
                     onClick={() => setPracticeIndex((prev) => Math.max(0, prev - 1))}
