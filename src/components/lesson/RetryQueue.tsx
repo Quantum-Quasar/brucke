@@ -24,6 +24,20 @@ export const RetryQueue: React.FC<RetryQueueProps> = ({ queue, onCompleteQueue }
 
   const currentExercise = queue[currentIndex];
 
+  // Auto-listen for Enter / Space when all retries are cleared
+  React.useEffect(() => {
+    if (!currentExercise) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Enter" || e.key === " " || e.code === "Space") {
+          e.preventDefault();
+          onCompleteQueue();
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [currentExercise, onCompleteQueue]);
+
   if (!currentExercise) {
     return (
       <div className="p-8 rounded-2xl bg-[#1C1D2B] border border-emerald-500/30 text-center space-y-4">
@@ -36,7 +50,7 @@ export const RetryQueue: React.FC<RetryQueueProps> = ({ queue, onCompleteQueue }
           onClick={onCompleteQueue}
           className="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition cursor-pointer"
         >
-          Finish Lesson →
+          Finish Lesson → [Enter]
         </button>
       </div>
     );

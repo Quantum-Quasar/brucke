@@ -24,6 +24,15 @@ export const ErrorFeedbackSheet: React.FC<ErrorFeedbackSheetProps> = ({
   onContinue,
 }) => {
   const diff = computeLetterDiff(userInput, expectedAnswer);
+  const continueBtnRef = React.useRef<HTMLButtonElement>(null);
+
+  // Auto-focus continue button on mount so keyboard Enter / Space immediately advances
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      continueBtnRef.current?.focus();
+    }, 40);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -100,11 +109,12 @@ export const ErrorFeedbackSheet: React.FC<ErrorFeedbackSheetProps> = ({
 
         {/* Continue Button */}
         <button
+          ref={continueBtnRef}
           type="button"
           onClick={onContinue}
-          className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-98 text-slate-950 font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"
+          className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-98 text-slate-950 font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20 focus:outline-none focus:ring-2 focus:ring-amber-300"
         >
-          <span>Got It — Continue</span>
+          <span>Got It — Continue [Enter]</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

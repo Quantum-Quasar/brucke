@@ -22,13 +22,23 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
+      if (!isOpen) return;
+      if (e.key === "Escape") {
+        e.preventDefault();
         onClose();
+      } else if (isFinished) {
+        if (e.key === "Enter" || e.key === " " || e.code === "Space") {
+          e.preventDefault();
+          onClose();
+        } else if (e.key === "r" || e.key === "R") {
+          e.preventDefault();
+          handleRestart();
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, isFinished, onClose]);
 
   if (!isOpen) return null;
 
@@ -113,13 +123,13 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
                 onClick={handleRestart}
                 className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 text-sm font-semibold transition"
               >
-                Retry Drill
+                Retry Drill [R]
               </button>
               <button
                 onClick={onClose}
                 className="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition"
               >
-                Back to Atlas
+                Back to Atlas [Enter]
               </button>
             </div>
           </div>

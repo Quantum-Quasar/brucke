@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, BookOpen, Sparkles, Info, Compass } from "lucide-react";
 import { ProgressBar5, type LessonSegment } from "./ProgressBar5";
 import { ShiftPair } from "@/components/common/ShiftPair";
@@ -18,6 +19,7 @@ interface LessonReaderProps {
 }
 
 export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
+  const router = useRouter();
   const [currentSegment, setCurrentSegment] = useState<LessonSegment>("hook");
   const [practiceIndex, setPracticeIndex] = useState(0);
   const [completedSegments, setCompletedSegments] = useState<LessonSegment[]>([]);
@@ -29,6 +31,55 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
 
   const completeLesson = useAppStore((s) => s.completeLesson);
   const markWordsEncountered = useAppStore((s) => s.markWordsEncountered);
+
+  // Global keyboard navigation across lesson reading segments (Hook, Pattern, Table, Summary)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const active = document.activeElement;
+      const isInput =
+        active instanceof HTMLInputElement ||
+        active instanceof HTMLTextAreaElement ||
+        (active as HTMLElement)?.isContentEditable;
+
+      if (isInput) return;
+
+      if (currentSegment === "hook") {
+        if (e.key === "Enter" || e.key === " " || e.code === "Space") {
+          e.preventDefault();
+          markSegmentDone("hook", "pattern");
+        }
+      } else if (currentSegment === "pattern") {
+        if (e.key === "Enter" || e.key === " " || e.code === "Space") {
+          e.preventDefault();
+          markSegmentDone("pattern", "table");
+        } else if (e.key === "Backspace" || e.key === "ArrowLeft") {
+          e.preventDefault();
+          setCurrentSegment("hook");
+        }
+      } else if (currentSegment === "table") {
+        if (e.key === "Enter" || e.key === " " || e.code === "Space") {
+          e.preventDefault();
+          setPracticeIndex(0);
+          markSegmentDone("table", "practice");
+        } else if (e.key === "Backspace" || e.key === "ArrowLeft") {
+          e.preventDefault();
+          setCurrentSegment("pattern");
+        }
+      } else if (currentSegment === "summary") {
+        if (retryQueue.length === 0 || isLessonFinished) {
+          if (e.key === "Enter" || e.key === " " || e.code === "Space") {
+            e.preventDefault();
+            handleCompleteAll();
+            const nextUrl = lesson.id < 5 ? `/trail/${lesson.id + 1}` : "/trail";
+            router.push(nextUrl);
+          }
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentSegment, retryQueue.length, isLessonFinished, lesson.id, router]);
 
   // Register all lesson words as encountered when viewing
   React.useEffect(() => {
@@ -124,7 +175,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                   onClick={() => markSegmentDone("hook", "pattern")}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition cursor-pointer active:scale-95 shadow-lg shadow-cyan-500/20"
                 >
-                  <span>Next: The Pattern</span>
+                  <span>Next: The Pattern [Enter]</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -158,14 +209,14 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                   onClick={() => setCurrentSegment("hook")}
                   className="text-xs font-mono text-slate-400 hover:text-white transition cursor-pointer"
                 >
-                  ← Back to Hook
+                  ← Back to Hook [Backspace]
                 </button>
                 <button
                   type="button"
                   onClick={() => markSegmentDone("pattern", "table")}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition cursor-pointer active:scale-95 shadow-lg shadow-amber-500/20"
                 >
-                  <span>Next: Transformation Table</span>
+                  <span>Next: Transformation Table [Enter]</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -256,7 +307,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                   onClick={() => setCurrentSegment("pattern")}
                   className="text-xs font-mono text-slate-400 hover:text-white transition cursor-pointer"
                 >
-                  ← Back to Pattern
+                  ← Back to Pattern [Backspace]
                 </button>
                 <button
                   type="button"
@@ -266,7 +317,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                   }}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition cursor-pointer active:scale-95 shadow-lg shadow-emerald-500/20"
                 >
-                  <span>Start Exercises ({lesson.exercises.length} problems)</span>
+                  <span>Start Exercises ({lesson.exercises.length} problems) [Enter]</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -402,7 +453,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                       href={lesson.id < 5 ? `/trail/${lesson.id + 1}` : "/trail"}
                       className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition cursor-pointer shadow-lg shadow-amber-500/20"
                     >
-                      <span>{lesson.id < 5 ? `Next Lesson (${lesson.id + 1}) →` : "Back to Trail →"}</span>
+                      <span>{lesson.id < 5 ? `Next Lesson (${lesson.id + 1}) → [Enter]` : "Back to Trail → [Enter]"}</span>
                     </Link>
                   </div>
                 </div>

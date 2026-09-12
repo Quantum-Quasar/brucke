@@ -21,10 +21,20 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
   shiftRule,
   onContinue,
 }) => {
-  // Listen for Enter key to advance immediately
+  const continueBtnRef = React.useRef<HTMLButtonElement>(null);
+
+  // Auto-focus continue button so Enter / Space works immediately without requiring mouse
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      continueBtnRef.current?.focus();
+    }, 40);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Listen for Enter or Space key to advance immediately
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter") {
+      if (e.key === "Enter" || e.key === " " || e.code === "Space") {
         e.preventDefault();
         onContinue();
       }
@@ -99,9 +109,10 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
 
         {/* Continue Button */}
         <button
+          ref={continueBtnRef}
           type="button"
           onClick={onContinue}
-          className="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-98 text-slate-950 font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/20"
+          className="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-98 text-slate-950 font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/20 focus:outline-none focus:ring-2 focus:ring-emerald-300"
         >
           <span>Continue [Enter]</span>
           <ArrowRight className="w-4 h-4" />
