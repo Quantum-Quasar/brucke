@@ -105,8 +105,8 @@ const shifts: Record<string, ShiftFamily> = {
 const words: Record<string, WordEntity> = {};
 const wordList: WordEntity[] = [];
 
-// Split by section 2
-const sec2Match = content.match(/## 2\. Exhaustive Core Vocabulary Dictionary \(All 218 Words\)([\s\S]*?)## 3\./);
+// Split by section 2 (header counts are kept in sync by hand; the regex accepts any count)
+const sec2Match = content.match(/## 2\. Exhaustive Core Vocabulary Dictionary \(All \d+ Words\)([\s\S]*?)## 3\./);
 if (sec2Match) {
   const tableContent = sec2Match[1];
   const lines = tableContent.split("\n");
@@ -171,7 +171,6 @@ if (sec2Match) {
       context_phrase,
       context_translation,
       etymology_derivation: etymology,
-      lesson_index: num <= 30 ? 1 : num <= 60 ? 2 : num <= 100 ? 3 : num <= 150 ? 4 : 5,
     };
 
     words[id] = wordEntity;
@@ -188,7 +187,7 @@ if (sec2Match) {
 
 // 3. Parse Compounds
 const compounds: CompoundCalque[] = [];
-const sec3Match = content.match(/## 3\. Complete Morphological Compound Calques \(All 32 Compounds\)([\s\S]*?)## 4\./);
+const sec3Match = content.match(/## 3\. Complete Morphological Compound Calques \(All \d+ Compounds\)([\s\S]*?)## 4\./);
 if (sec3Match) {
   const lines = sec3Match[1].split("\n");
   for (const line of lines) {
@@ -229,7 +228,7 @@ if (sec3Match) {
 
 // 4. Parse False Friends
 const falseFriends: FalseFriend[] = [];
-const sec4Match = content.match(/## 4\. Complete False Friend Traps \(All 16 Falsche Freunde\)([\s\S]*?)## 5\./);
+const sec4Match = content.match(/## 4\. Complete False Friend Traps \(All \d+ Falsche Freunde\)([\s\S]*?)## 5\./);
 if (sec4Match) {
   const lines = sec4Match[1].split("\n");
   for (const line of lines) {
@@ -254,7 +253,7 @@ if (sec4Match) {
 
 // 5. Parse Daily Insights
 const dailyInsights: DailyInsight[] = [];
-const sec5Match = content.match(/## 5\. Complete Daily Cultural Etymologies \(All 28 Days\)([\s\S]*)$/);
+const sec5Match = content.match(/## 5\. Complete Daily Cultural Etymologies \(All \d+ Days\)([\s\S]*)$/);
 if (sec5Match) {
   const lines = sec5Match[1].split("\n");
   for (const line of lines) {
@@ -281,9 +280,8 @@ if (sec5Match) {
 // Ensure directory exists
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 
-const compendium: CompendiumData = {
+const compendium = {
   words,
-  wordList,
   shifts,
   compounds,
   falseFriends,
@@ -291,6 +289,7 @@ const compendium: CompendiumData = {
 };
 
 fs.writeFileSync(outputPath, JSON.stringify(compendium, null, 2), "utf-8");
+fs.writeFileSync(path.resolve(__dirname, "../src/data/insights.json"), JSON.stringify(dailyInsights, null, 2), "utf-8");
 console.log(`[Brücke Compendium Parser] Compiled:
  - ${wordList.length} Core Words
  - ${Object.keys(shifts).length} Shift Families

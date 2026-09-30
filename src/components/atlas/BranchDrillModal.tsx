@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import { X, Zap, CheckCircle2 } from "lucide-react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
+import { X, Check } from "lucide-react";
 import { ExerciseWidget } from "@/components/lesson/ExerciseWidgets";
-import compendium from "@/data/compendium.json";
-import type { CompendiumData, ShiftFamily, ExerciseItem } from "@/lib/types";
-
-const data = compendium as unknown as CompendiumData;
+import { compendium as data } from "@/data/compendium";
+import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
+import type { ShiftFamily, ExerciseItem } from "@/lib/types";
+import { useDialogFocus } from "@/lib/use-dialog-focus";
 
 interface BranchDrillModalProps {
   family: ShiftFamily;
@@ -19,10 +19,17 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [currentQuestionFailed, setCurrentQuestionFailed] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useDialogFocus({
+    open: isOpen,
+    containerRef: dialogRef,
+    onEscape: onClose,
+  });
+
+  useEffect(() => {
+    if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return;
       if (e.key === "Escape") {
         e.preventDefault();
         onClose();
@@ -40,22 +47,63 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, isFinished, onClose]);
 
+  const exercises: ExerciseItem[] = useMemo(() => {
+    const words = family.word_ids
+      .map((id) => data.words[id])
+      .filter(Boolean)
+      .slice(0, 5);
+
+    return words.map((w, idx) => {
+      if (idx === 0) {
+        return {
+          id: `drill_${w.id}_${idx}`,
+          type: "shift_select",
+          prompt: `Which German word shifted from English "${w.english_cognate}" via ${family.symbol}?`,
+          english_hint: `${w.english_cognate} (${family.symbol})`,
+          shift_hint: family.symbol,
+          target_answer: w.target_word,
+          options: generateMCQOptions(w, data.wordList, 4),
+          explanation: w.etymology_derivation,
+        };
+      }
+      if (idx === 1) {
+        const tileData = generateWordTiles(w);
+        return {
+          id: `drill_${w.id}_${idx}`,
+          type: "morpheme_tiles",
+          prompt: `Assemble the German cognate for "${w.english_cognate}" using the tiles below:`,
+          english_hint: `${w.english_cognate} (${family.symbol})`,
+          shift_hint: family.symbol,
+          target_answer: w.target_word,
+          tile_options: tileData.tiles,
+          explanation: w.etymology_derivation,
+        };
+      }
+      if (idx === 3) {
+        return {
+          id: `drill_${w.id}_${idx}`,
+          type: "shift_select",
+          prompt: `Identify the shifted German cognate for "${w.english_cognate}":`,
+          english_hint: `${w.english_cognate} (${family.symbol})`,
+          shift_hint: family.symbol,
+          target_answer: w.target_word,
+          options: generateMCQOptions(w, data.wordList, 4),
+          explanation: w.etymology_derivation,
+        };
+      }
+      return {
+        id: `drill_${w.id}_${idx}`,
+        type: "derive",
+        prompt: `Apply the ${family.symbol} shift to derive the German word for "${w.english_cognate}":`,
+        english_hint: `${w.english_cognate} (${family.symbol})`,
+        shift_hint: family.symbol,
+        target_answer: w.target_word,
+        explanation: w.etymology_derivation,
+      };
+    });
+  }, [family]);
+
   if (!isOpen) return null;
-
-  const words = family.word_ids
-    .map((id) => data.words[id])
-    .filter(Boolean)
-    .slice(0, 5);
-
-  const exercises: ExerciseItem[] = words.map((w, idx) => ({
-    id: `drill_${w.id}_${idx}`,
-    type: "derive",
-    prompt: `Apply the ${family.symbol} shift to derive the German word for "${w.english_cognate}":`,
-    english_hint: `${w.english_cognate} (${family.symbol})`,
-    shift_hint: family.symbol,
-    target_answer: w.target_word,
-    explanation: w.etymology_derivation,
-  }));
 
   const currentExercise = exercises[currentIndex];
 
@@ -79,27 +127,39 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-[#1C1D2B] border border-cyan-500/30 rounded-2xl shadow-2xl p-6 space-y-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="branch-drill-title"
+        className="relative w-full max-w-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/30 rounded-lg shadow-2xl p-5 space-y-5 font-sans text-[var(--text-color)]"
+      >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+        <div className="flex items-center justify-between border-b border-[var(--sub-color)]/20 pb-3">
           <div className="flex items-center gap-2">
-            <Zap className="w-5 h-5 text-cyan-400" />
-            <h3 className="text-base font-bold text-slate-100 font-mono">
-              Branch Sandbox Drill: {family.symbol}
+            <span className="text-xs font-mono font-bold text-[var(--main-color)] px-1.5 py-0.5 rounded bg-[var(--sub-alt-color)]">
+              {family.symbol}
+            </span>
+            <h3 id="branch-drill-title" className="text-sm font-bold font-mono">
+              Branch Practice: {family.name}
             </h3>
           </div>
-          <button onClick={onClose} className="p-1 rounded-lg text-slate-400 hover:text-white">
-            <X className="w-5 h-5" />
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1 rounded text-[var(--sub-color)] hover:text-[var(--text-color)] transition cursor-pointer"
+          >
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Drill Content */}
         {!isFinished && currentExercise ? (
           <div className="space-y-4">
-            <div className="flex items-center justify-between text-xs font-mono text-slate-400">
-              <span>Question {currentIndex + 1} of {exercises.length}</span>
-              <span className="text-cyan-400 font-bold">Unpenalized Sandbox</span>
+            <div className="flex items-center justify-between text-xs font-mono text-[var(--sub-color)]">
+              <span>question {currentIndex + 1} of {exercises.length}</span>
+              <span className="text-[var(--main-color)]">unpenalized sandbox</span>
             </div>
 
             <ExerciseWidget
@@ -111,25 +171,27 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
           </div>
         ) : (
           <div className="py-6 text-center space-y-4">
-            <div className="w-14 h-14 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-8 h-8" />
+            <div className="w-12 h-12 rounded-full bg-[var(--sub-alt-color)] text-[var(--main-color)] flex items-center justify-center mx-auto border border-[var(--sub-color)]/20">
+              <Check className="w-6 h-6" />
             </div>
-            <h4 className="text-2xl font-bold text-slate-100">Sandbox Complete!</h4>
-            <p className="text-sm text-slate-400">
-              You scored <span className="text-amber-400 font-bold">{score}</span> out of {exercises.length} on the {family.symbol} shift family.
+            <h4 className="text-lg font-bold">Practice Complete</h4>
+            <p className="text-xs text-[var(--sub-color)] font-mono">
+              Score: <span className="text-[var(--main-color)] font-bold">{score}</span> / {exercises.length} correct on {family.symbol}
             </p>
-            <div className="flex items-center justify-center gap-3 pt-2">
+            <div className="flex items-center justify-center gap-2.5 pt-2 font-mono text-xs">
               <button
+                type="button"
                 onClick={handleRestart}
-                className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 text-sm font-semibold transition"
+                className="px-3 py-1.5 rounded bg-[var(--sub-alt-color)] text-[var(--text-color)] hover:bg-[var(--sub-alt-color)]/80 transition cursor-pointer"
               >
-                Retry Drill [R]
+                retry [r]
               </button>
               <button
+                type="button"
                 onClick={onClose}
-                className="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition"
+                className="px-4 py-1.5 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-bold transition cursor-pointer hover:opacity-90"
               >
-                Back to Atlas [Enter]
+                back to atlas [enter]
               </button>
             </div>
           </div>

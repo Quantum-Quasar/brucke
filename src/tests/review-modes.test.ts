@@ -1,9 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { generateMCQOptions, generateWordTiles, shuffleArray } from "@/lib/review-modes";
-import compendium from "@/data/compendium.json";
-import type { CompendiumData, WordEntity } from "@/lib/types";
-
-const data = compendium as unknown as CompendiumData;
+import { compendium as data } from "@/data/compendium";
+import type { WordEntity } from "@/lib/types";
 const words = data.wordList;
 
 describe("Review Modes Engine & Question Generators", () => {

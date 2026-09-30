@@ -40,17 +40,18 @@ export const RetryQueue: React.FC<RetryQueueProps> = ({ queue, onCompleteQueue }
 
   if (!currentExercise) {
     return (
-      <div className="p-8 rounded-2xl bg-[#1C1D2B] border border-emerald-500/30 text-center space-y-4">
-        <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto">
+      <div className="p-8 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--main-color)]/30 text-center space-y-4 font-mono">
+        <div className="w-12 h-12 rounded bg-[var(--main-color)]/10 text-[var(--main-color)] flex items-center justify-center mx-auto border border-[var(--main-color)]/20">
           <CheckCircle className="w-6 h-6" />
         </div>
-        <h3 className="text-xl font-bold text-slate-100">All Retries Cleared!</h3>
-        <p className="text-sm text-slate-400">You have successfully mastered every practice problem from this lesson.</p>
+        <h3 className="text-lg font-bold text-[var(--text-color)]">all retries cleared</h3>
+        <p className="text-xs text-[var(--sub-color)]">you have successfully resolved every flagged practice problem.</p>
         <button
           onClick={onCompleteQueue}
-          className="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition cursor-pointer"
+          className="px-6 py-2.5 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs transition cursor-pointer flex items-center gap-2 mx-auto"
         >
-          Finish Lesson → [Enter]
+          <span>finish lesson</span>
+          <span className="keycap text-[10px]">enter</span>
         </button>
       </div>
     );
@@ -80,21 +81,21 @@ export const RetryQueue: React.FC<RetryQueueProps> = ({ queue, onCompleteQueue }
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between px-1">
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
-          <span className="text-xs font-mono uppercase tracking-wider text-amber-400 font-semibold">
-            End-of-Lesson Retry Queue ({currentIndex + 1} of {queue.length})
+        <div className="flex items-center gap-2 font-mono">
+          <span className="w-2 h-2 rounded-full bg-[var(--main-color)]" />
+          <span className="text-xs uppercase tracking-wider text-[var(--main-color)] font-semibold">
+            retry queue ({currentIndex + 1} / {queue.length})
           </span>
         </div>
       </div>
 
       {/* Tolerance Prompt Modal / Banner */}
       {showToleranceModal === "umlaut" && (
-        <div className="p-4 rounded-xl bg-amber-950/30 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-in fade-in">
+        <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-in fade-in font-mono">
           <div className="flex items-start gap-2.5">
-            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-            <p className="text-xs text-amber-200">
-              Umlaut error detected again. Would you like to enable <span className="font-bold">Umlaut Tolerance</span>? (Allows typing without blocking retries).
+            <AlertTriangle className="w-4 h-4 text-[var(--main-color)] shrink-0 mt-0.5" />
+            <p className="text-xs text-[var(--sub-color)]">
+              umlaut error detected again. enable <span className="text-[var(--text-color)] font-bold">umlaut tolerance</span>?
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -103,29 +104,29 @@ export const RetryQueue: React.FC<RetryQueueProps> = ({ queue, onCompleteQueue }
                 setUmlautTolerance(true);
                 setShowToleranceModal(null);
               }}
-              className="px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs"
+              className="px-3 py-1 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs cursor-pointer"
             >
-              Enable
+              enable
             </button>
             <button
               onClick={() => {
                 dismissUmlautPrompt();
                 setShowToleranceModal(null);
               }}
-              className="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 text-xs"
+              className="px-3 py-1 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 text-[var(--sub-color)] hover:text-[var(--text-color)] text-xs cursor-pointer"
             >
-              Keep Practicing
+              keep strict
             </button>
           </div>
         </div>
       )}
 
       {showToleranceModal === "capitalization" && (
-        <div className="p-4 rounded-xl bg-amber-950/30 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-in fade-in">
+        <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-in fade-in font-mono">
           <div className="flex items-start gap-2.5">
-            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-            <p className="text-xs text-amber-200">
-              Capitalization error detected again. Would you like to enable <span className="font-bold">Noun Capitalization Tolerance</span>?
+            <AlertTriangle className="w-4 h-4 text-[var(--main-color)] shrink-0 mt-0.5" />
+            <p className="text-xs text-[var(--sub-color)]">
+              capitalization error detected again. enable <span className="text-[var(--text-color)] font-bold">capitalization tolerance</span>?
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -134,18 +135,18 @@ export const RetryQueue: React.FC<RetryQueueProps> = ({ queue, onCompleteQueue }
                 setCapitalizationTolerance(true);
                 setShowToleranceModal(null);
               }}
-              className="px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs"
+              className="px-3 py-1 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs cursor-pointer"
             >
-              Enable
+              enable
             </button>
             <button
               onClick={() => {
                 dismissCapitalizationPrompt();
                 setShowToleranceModal(null);
               }}
-              className="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 text-xs"
+              className="px-3 py-1 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 text-[var(--sub-color)] hover:text-[var(--text-color)] text-xs cursor-pointer"
             >
-              Keep Practicing
+              keep strict
             </button>
           </div>
         </div>

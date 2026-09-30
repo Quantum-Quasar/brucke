@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { LESSONS } from "../data/lessons";
+import { evaluateAnswerAccuracy } from "../lib/letter-diff";
 
 describe("Progressive Bite-Sized Exercise Architecture", () => {
   it("provides 10 fully interactive foundational lessons", () => {
@@ -108,7 +109,6 @@ describe("Progressive Bite-Sized Exercise Architecture", () => {
   });
 
   it("simulates Duolingo-style end-of-lesson retry queue where missed and typo questions are re-asked at the end", () => {
-    const { evaluateAnswerAccuracy } = require("../lib/letter-diff");
     const lesson = LESSONS[0]; // 5 exercises
     expect(lesson.exercises.length).toBe(5);
 

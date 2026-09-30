@@ -6,11 +6,11 @@
 
 ## 1. Project Locations & Working Directories
 
-| Role | Absolute Path | Description |
+| Role | Path | Description |
 |---|---|---|
-| **Primary Codebase (Working Dir)** | `/home/shaurya/gemini-tmp/german-app-2` | Complete Next.js 16 + React 19 + TypeScript + Bun application. All source code, tests, and build scripts live here. |
-| **Master Design & Reference Archive** | `/home/shaurya/stuff/german app` | Master design document (`german_learning_platform_design-final.md`), historical survey transcripts, and early notes. |
-| **Synchronized Design Document** | `/home/shaurya/gemini-tmp/german-app-2/docs/german_learning_platform_design-final.md` | In-repo copy of the 16-section master design specification, kept in sync with the reference archive. |
+| **Primary Codebase (Working Dir)** | `.` (project root) | Complete Next.js 16 + React 19 + TypeScript + Bun application. All source code, tests, and build scripts live here. |
+| **Master Design & Reference Archive** | `docs/` | Master design document (`german_learning_platform_design-final.md`), historical survey transcripts, and early notes. |
+| **Synchronized Design Document** | `docs/german_learning_platform_design-final.md` | In-repo copy of the 16-section master design specification, kept in sync with the reference archive. |
 
 ---
 
@@ -23,7 +23,7 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 
 ### Core Philosophy: The "Pony-tail" Lean Architecture
 - **Zero Heavy Framework Bloat**: No Radix UI, Headless UI, Framer Motion, Axios, or Lodash. Standard web platform APIs, Tailwind CSS v4, and minimal custom primitives.
-- **100% Client-Side Fast + SSG**: All 21 routes build to pre-rendered static HTML (`● SSG`). Zero server execution latency at runtime.
+- **100% Client-Side Fast + SSG**: All app routes build to pre-rendered static HTML (`● SSG`). Zero server execution latency at runtime.
 - **Offline Durability**: Local state persists across sessions via dual-storage: primary `localStorage` with a fallback cookie backup.
 
 ---
@@ -31,7 +31,7 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 ## 3. Four Core Functional Pillars
 
 ### Pillar 1: The Trail (`/trail` and `/trail/[id]`)
-- **Curriculum Scope**: 30-lesson syllabus structured into 5 evolutionary phases. Lessons 1–5 are currently fully interactive.
+- **Curriculum Scope**: 30-lesson syllabus structured into 5 evolutionary phases. Lessons 1–10 are currently fully interactive.
 - **5-Segment Card-by-Card Wizard (`LessonReader.tsx`)**:
   1. **Part 01: The Hook**: Historical intuition and living English cognate framing.
   2. **Part 02: The Pattern**: Mechanical shift rules, suffix patterns (`-en`), with margin philological notes.
@@ -67,7 +67,7 @@ English and German are sibling West Germanic languages sharing over 60% of core 
   - `tiles` (Tile Builder): Assemble morphemes into words (mouse click or desktop keyboard typing + Backspace).
   - `typing` (Derivation Typing): Type full derivation with on-screen umlaut bar.
 - **Active Recall Shield**: Front card hides gender article badges, displaying neutral placeholder `Gender: [ der / die / das ? ]` to avoid leaking answers before recall. Full color badge and pronunciation reveal on card flip.
-- **1-Click Launch**: Decks launch immediately without pre-session modal interruptions; styles can be changed mid-session via a sticky header dropdown.
+- **Review Style Prompt**: Deck launch opens a four-style selector before the session; styles can also be changed mid-session via the header dropdown.
 
 ---
 
@@ -122,7 +122,7 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 │   │   │   ├── WordCardDrawer.tsx     # Slide-over word detail sheet with etymology & audio
 │   │   │   ├── GermanCharBar.tsx      # One-click umlaut & eszett input chips
 │   │   │   ├── DailyInsightCard.tsx   # Dashboard cultural insight widget
-│   │   │   ├── OnboardingModal.tsx    # 3-step interactive first-time onboarding modal
+│   │   │   ├── OnboardingModal.tsx    # 4-step interactive first-time onboarding modal
 │   │   │   └── DonutChart.tsx         # SVG progress breakdown ring
 │   │   ├── lesson/
 │   │   │   ├── LessonDetailClient.tsx # Client boundary for [id]/page.tsx
@@ -152,7 +152,7 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 │   ├── data/
 │   │   ├── compendium.json    # 218 words, 9 shifts, 32 compounds, 16 false friends, 28 insights
 │   │   └── lessons.ts         # Lessons 1–10 rich definitions, exercises, and clues
-│   └── tests/                 # 11 test suites, 61 automated tests (Vitest / Bun)
+│   └── tests/                 # 21 test suites, 119 automated tests (Vitest / Bun)
 │       ├── store.test.ts
 │       ├── exercises.test.ts
 │       ├── letter-diff.test.ts
@@ -183,7 +183,7 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 
 1. **100% Pre-rendered Static Site Generation (SSG)**:
    - Dynamic parameter routes `/atlas/[family]` (9 pages) and `/trail/[id]` (5 pages) export `generateStaticParams()`.
-   - All 21 routes build to static HTML. Navigation between lessons and atlas families is instantaneous with zero runtime server latency.
+   - All app routes build to static HTML. Navigation between lessons and atlas families is instantaneous with zero runtime server latency.
 2. **Shift Alignment Memoization**:
    - `alignShiftPair` in `src/lib/shift-annotator.ts` uses an in-memory `Map` cache. Redundant letter parsing is eliminated; test suite executes in < 200ms.
 3. **Storage I/O Deduplication & Cookie Guard**:
@@ -202,7 +202,8 @@ All commands should be executed from `/home/shaurya/gemini-tmp/german-app-2`:
 # 1. Run Data Compilation Pipeline
 bun run parse-data
 
-# 2. Run All Automated Test Suites (63 tests / 12 suites)
+# 2. Run All Automated Test Suites (119 tests / 21 suites)
+bun run test
 bun test
 
 # 3. Compile Production Build (Turbopack + SSG verification)
@@ -219,7 +220,7 @@ bun run dev
 When auditing the codebase, verify:
 - [ ] **Architecture Integrity**: No external UI component frameworks or CSS-in-JS libraries installed.
 - [ ] **Pedagogical Integrity**:
-  - Lessons 1–5 never start with cold typing exercises.
+  - Lessons 1–10 never start with cold typing exercises.
   - Review Hub front cards never display gender badges before recall.
   - Auxiliary words (like `mit`) contain clear `vocab_hints`.
 - [ ] **Accessibility & Keyboard Flow**:
@@ -229,5 +230,5 @@ When auditing the codebase, verify:
   - State changes in Zustand persist to `localStorage`.
   - Cookie backup stays within safe browser limits (< 4096 bytes).
 - [ ] **Build & Tests**:
-  - `bun test` passes with 0 failures across all 63 tests.
-  - `bun run build` generates 21 static pages without TypeScript or Turbopack errors.
+  - `bun run test` (Vitest) and `bun test` pass with 0 failures across all 119 tests.
+  - `bun run build` generates 28 static pages without TypeScript or Turbopack errors.

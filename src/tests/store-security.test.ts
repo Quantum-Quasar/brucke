@@ -1,0 +1,123 @@
+import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
+import { loadSavedState, saveState, useAppStore, STORAGE_KEY, STORAGE_COOKIE_KEY, getCookie } from "../lib/store";
+
+class LocalStorageMock {
+  private store: Record<string, string> = {};
+  getItem(key: string) {
+    return this.store[key] || null;
+  }
+  setItem(key: string, value: string) {
+    this.store[key] = String(value);
+  }
+  removeItem(key: string) {
+    delete this.store[key];
+  }
+  clear() {
+    this.store = {};
+  }
+}
+
+describe("Store Persistence Security & Header Quota Bounds", () => {
+  beforeAll(() => {
+    const mockStorage = new LocalStorageMock();
+    const mockElement = {
+      style: { setProperty: () => {}, colorScheme: "" },
+      classList: { add: () => {}, remove: () => {} },
+      setAttribute: () => {},
+      removeAttribute: () => {},
+    };
+    (globalThis as any).window = globalThis;
+    (globalThis as any).localStorage = mockStorage;
+    (globalThis as any).document = { cookie: "", documentElement: mockElement };
+  });
+
+  afterAll(() => {
+    delete (globalThis as any).window;
+    delete (globalThis as any).localStorage;
+    delete (globalThis as any).document;
+  });
+
+  beforeEach(() => {
+    (globalThis as any).localStorage.clear();
+    (globalThis as any).document.cookie = "";
+  });
+
+  it("safely recovers from corrupted/poisoned localStorage without throwing", () => {
+    const corruptedPayload = JSON.stringify({
+      completedLessons: "not-an-array",
+      wordMastery: null,
+      srsCards: 12345,
+      weeklyActivity: "invalid",
+      settings: { playSoundOnClick: "../../etc/passwd" },
+    });
+    localStorage.setItem(STORAGE_KEY, corruptedPayload);
+
+    const state = loadSavedState();
+    expect(Array.isArray(state.completedLessons)).toBe(true);
+    expect(state.completedLessons).toEqual([]);
+    expect(typeof state.wordMastery).toBe("object");
+    expect(state.wordMastery).not.toBeNull();
+    expect(typeof state.srsCards).toBe("object");
+    expect(Array.isArray(state.weeklyActivity)).toBe(true);
+  });
+
+  it("strictly enforces cookie URL-encoded byte size <= 2048 to prevent HTTP 431 errors", () => {
+    const largeState = {
+      ...useAppStore.getState(),
+      wordMastery: Object.fromEntries(
+        Array.from({ length: 300 }, (_, i) => [`long_german_compound_word_identifier_${i}`, "mastered"])
+      ) as any,
+    };
+    saveState(largeState);
+
+    const rawCookieVal = getCookie(STORAGE_COOKIE_KEY);
+    expect(rawCookieVal).toBeTruthy();
+    const encodedLength = encodeURIComponent(rawCookieVal!).length;
+    // Cookie must be safely within RFC 6265 bounds (<= 2048 bytes)
+    expect(encodedLength).toBeLessThanOrEqual(2048);
+  });
+
+  it("rejects non-backup objects instead of reporting success", () => {
+    const store = useAppStore.getState();
+    expect(store.importBackupState({ foo: 1 })).toBe(false);
+    expect(store.importBackupState([])).toBe(false);
+    expect(store.importBackupState("invalid")).toBe(false);
+    expect(store.importBackupState(null)).toBe(false);
+  });
+
+  it("ignores __proto__ keys and cards in imported backups", () => {
+    const store = useAppStore.getState();
+    // JSON.parse produces own "__proto__" data properties, unlike object literals
+    const hostile = JSON.parse(
+      JSON.stringify({
+        wordMastery: {},
+        srsCards: [
+          { id: "card_ok", word_id: "w_ok", interval: 1, repetition: 1, efactor: 2.5, dueDate: "2026-01-01" },
+        ],
+      })
+    );
+    Object.defineProperty(hostile.wordMastery, "__proto__", {
+      value: "mastered",
+      enumerable: true,
+      writable: true,
+      configurable: true,
+    });
+    hostile.srsCards.unshift({
+      id: "__proto__",
+      word_id: "evil",
+      interval: 999,
+      repetition: 99,
+      efactor: 9,
+      dueDate: "1970-01-01",
+    });
+
+    expect(store.importBackupState(hostile)).toBe(true);
+
+    const state = useAppStore.getState();
+    // single-object prototypes must not have been swapped by the "__proto__" card id
+    expect(Object.getPrototypeOf(state.srsCards)).toBe(Object.prototype);
+    expect(Object.getPrototypeOf(state.wordMastery)).toBe(Object.prototype);
+    expect(state.srsCards["card_ok"].word_id).toBe("w_ok");
+    expect((state.srsCards as any).evil).toBeUndefined();
+  });
+});

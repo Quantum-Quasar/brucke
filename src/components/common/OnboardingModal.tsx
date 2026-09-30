@@ -2,7 +2,8 @@
 
 // ponytail: polished, multi-step onboarding wizard introducing Brücke philosophy, notation, and menu tour
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import {
   Compass,
   BookOpen,
@@ -17,14 +18,23 @@ import {
 import { useAppStore } from "@/lib/store";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { GenderBadge } from "@/components/common/GenderBadge";
+import { useDialogFocus } from "@/lib/use-dialog-focus";
 
 export const OnboardingModal: React.FC = () => {
   const isOpen = useAppStore((s) => s.isOnboardingOpen);
+  const hasCompletedOnboarding = useAppStore((s) => s.hasCompletedOnboarding);
   const completeOnboarding = useAppStore((s) => s.completeOnboarding);
-  const closeOnboarding = useAppStore((s) => s.closeOnboarding);
+  const router = useRouter();
 
   const [step, setStep] = useState(0);
   const [activeShiftDemo, setActiveShiftDemo] = useState(0);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useDialogFocus({
+    open: isOpen,
+    containerRef: dialogRef,
+    onEscape: completeOnboarding,
+  });
 
   const shiftDemos = [
     {
@@ -61,6 +71,14 @@ export const OnboardingModal: React.FC = () => {
     },
   ];
 
+  const finishOnboarding = () => {
+    const shouldStartLesson = !hasCompletedOnboarding;
+    completeOnboarding();
+    if (shouldStartLesson) {
+      router.push("/trail/1");
+    }
+  };
+
   // Global hotkeys for onboarding modal:
   // - Escape: skips onboarding cleanly
   // - ArrowRight / Enter: next step (or finish)
@@ -73,11 +91,14 @@ export const OnboardingModal: React.FC = () => {
         e.preventDefault();
         completeOnboarding();
       } else if (e.key === "ArrowRight" || (e.key === "Enter" && !e.shiftKey)) {
+        // let focused buttons/links keep their native Enter activation
+        const target = e.target as HTMLElement | null;
+        if (e.key === "Enter" && target?.closest("button, a, input, select, textarea")) return;
         e.preventDefault();
         if (step < 3) {
           setStep((s) => s + 1);
         } else {
-          completeOnboarding();
+          finishOnboarding();
         }
       } else if (e.key === "ArrowLeft") {
         e.preventDefault();
@@ -89,32 +110,35 @@ export const OnboardingModal: React.FC = () => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, step, completeOnboarding]);
+  }, [isOpen, step, completeOnboarding, finishOnboarding, router]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl rounded-3xl bg-[#1C1D2B] border border-cyan-500/30 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
-        {/* Modal Top Bar: Step Progress & Semi-hidden Skip Button */}
-        <div className="px-6 sm:px-8 pt-6 pb-4 flex items-center justify-between border-b border-white/5 bg-[#161722]/50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-in fade-in duration-200">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Brücke onboarding"
+        className="w-full max-w-2xl rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/30 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+      >
+        {/* Modal Top Bar: Step Progress & Skip Button */}
+        <div className="px-6 py-4 flex items-center justify-between border-b border-[var(--sub-color)]/20 bg-[var(--sub-alt-color)]">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 font-mono text-xs font-bold">
-              Bü
-            </div>
-            <span className="text-xs font-mono text-slate-400 uppercase tracking-widest font-semibold">
-              Welcome to Brücke • Step {step + 1} of 4
+            <span className="text-xs font-mono uppercase tracking-widest text-[var(--main-color)] font-semibold">
+              brücke • step {step + 1} / 4
             </span>
           </div>
 
-          {/* Semi-hidden, low-contrast skip button */}
           <button
             type="button"
             onClick={completeOnboarding}
-            className="text-[11px] font-mono text-slate-500/70 hover:text-slate-300 transition px-2.5 py-1 rounded bg-white/[0.02] hover:bg-white/5 border border-white/[0.04] cursor-pointer"
+            className="text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] transition flex items-center gap-1.5 cursor-pointer"
             title="Skip onboarding tour (Esc)"
           >
-            Skip intro [Esc]
+            <span>skip</span>
+            <span className="keycap text-[10px]">esc</span>
           </button>
         </div>
 
@@ -124,24 +148,23 @@ export const OnboardingModal: React.FC = () => {
           {step === 0 && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <div className="space-y-2">
-                <span className="text-xs font-mono text-amber-400 uppercase tracking-wider font-semibold flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  The Core Philosophy
+                <span className="text-xs font-mono text-[var(--main-color)] uppercase tracking-wider font-semibold">
+                  core principle
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight">
-                  You Don&apos;t Start From Zero.
+                <h2 className="text-2xl font-bold font-mono text-[var(--text-color)] tracking-tight">
+                  you don&apos;t start from zero
                 </h2>
-                <p className="text-sm text-slate-300 leading-relaxed">
-                  English and German are sibling languages born from the same ancestral tribe in northern Europe.
-                  Over <strong className="text-amber-300 font-semibold">60% of core spoken English vocabulary</strong> has
-                  an unbroken Germanic twin. You aren&apos;t memorizing random sounds — you are unlocking patterns you already know.
+                <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                  english and german are sibling languages born from the same ancestral branch.
+                  over <strong className="text-[var(--text-color)] font-semibold">60% of core spoken english vocabulary</strong> has
+                  an unbroken germanic twin. you aren&apos;t memorizing random sounds — you are unlocking sound shifts you already know.
                 </p>
               </div>
 
               {/* Interactive Sound Shift Demo */}
-              <div className="p-4 rounded-2xl bg-[#161722] border border-white/10 space-y-3">
-                <div className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-                  Interactive Preview: The High German Consonant Shift
+              <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-3">
+                <div className="text-xs font-mono text-[var(--sub-color)] uppercase tracking-wider">
+                  high german consonant shift demo:
                 </div>
 
                 {/* Shift Selector Pills */}
@@ -151,19 +174,19 @@ export const OnboardingModal: React.FC = () => {
                       key={demo.english}
                       type="button"
                       onClick={() => setActiveShiftDemo(idx)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-mono transition cursor-pointer ${
+                      className={`px-3 py-1.5 rounded text-xs font-mono transition cursor-pointer ${
                         activeShiftDemo === idx
-                          ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold"
-                          : "bg-white/5 text-slate-400 hover:text-slate-200 border border-white/5"
+                          ? "bg-[var(--main-color)] text-[var(--bg-color)] font-bold"
+                          : "bg-[var(--bg-color)] text-[var(--sub-color)] hover:text-[var(--text-color)] border border-[var(--sub-color)]/20"
                       }`}
                     >
-                      {demo.english} → {demo.german} ({demo.rule})
+                      {demo.english} → {demo.german}
                     </button>
                   ))}
                 </div>
 
                 {/* Active Demo Card */}
-                <div className="p-4 rounded-xl bg-black/30 border border-white/5 text-center space-y-2">
+                <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 text-center space-y-2">
                   <ShiftPair
                     english={shiftDemos[activeShiftDemo].english}
                     german={shiftDemos[activeShiftDemo].german}
@@ -172,7 +195,7 @@ export const OnboardingModal: React.FC = () => {
                     wordId={shiftDemos[activeShiftDemo].wordId}
                     className="text-lg px-3 py-1.5"
                   />
-                  <p className="text-xs text-slate-300 max-w-md mx-auto italic">
+                  <p className="text-xs font-mono text-[var(--sub-color)] max-w-md mx-auto italic">
                     &quot;{shiftDemos[activeShiftDemo].insight}&quot;
                   </p>
                 </div>
@@ -184,97 +207,93 @@ export const OnboardingModal: React.FC = () => {
           {step === 1 && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <div className="space-y-2">
-                <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider font-semibold flex items-center gap-1.5">
-                  <Layers className="w-3.5 h-3.5" />
-                  How Brücke Teaches
+                <span className="text-xs font-mono text-[var(--main-color)] uppercase tracking-wider font-semibold">
+                  methodology
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight">
-                  Linguistic Notation & Living Anchors
+                <h2 className="text-2xl font-bold font-mono text-[var(--text-color)] tracking-tight">
+                  linguistic notation & anchors
                 </h2>
-                <p className="text-sm text-slate-300 leading-relaxed">
-                  We designed Brücke to make language learning transparent, intuitive, and grounded in living English words.
+                <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                  brücke makes language learning transparent, intuitive, and grounded in living english cognates.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {/* Principle 1 */}
-                <div className="p-4 rounded-2xl bg-[#161722] border border-white/10 space-y-2">
-                  <div className="text-cyan-400 font-mono text-xs font-bold uppercase tracking-wider">
-                    01 • Shift Glow
+                <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-2">
+                  <div className="text-[var(--main-color)] font-mono text-xs font-bold uppercase tracking-wider">
+                    01 • sound shift
                   </div>
-                  <h3 className="text-sm font-bold text-slate-100">Static Shift Notation</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Shifted letters glow in <span className="text-cyan-400 font-bold">Electric Cyan</span> while the Germanic
-                    root remains in <span className="text-amber-300 font-bold">Amber</span>. Your eyes instantly parse the historical shift.
+                  <h3 className="text-xs font-bold font-mono text-[var(--text-color)]">systematic rules</h3>
+                  <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                    shifted consonants are highlighted so your eyes immediately parse historical sound transformations.
                   </p>
                 </div>
 
                 {/* Principle 2 */}
-                <div className="p-4 rounded-2xl bg-[#161722] border border-white/10 space-y-2">
-                  <div className="text-amber-400 font-mono text-xs font-bold uppercase tracking-wider">
-                    02 • Living Anchors
+                <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-2">
+                  <div className="text-[var(--main-color)] font-mono text-xs font-bold uppercase tracking-wider">
+                    02 • living anchors
                   </div>
-                  <h3 className="text-sm font-bold text-slate-100">Living English Words</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    No dead academic roots. We connect German words to everyday English: <strong className="text-slate-200">mit</strong> to <em className="text-amber-200">midwife</em> (&ldquo;with-woman&rdquo;)
-                    and <strong className="text-slate-200">will</strong> to <em className="text-amber-200">voluntary</em>.
+                  <h3 className="text-xs font-bold font-mono text-[var(--text-color)]">everyday english</h3>
+                  <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                    we connect german words to everyday english: <strong className="text-[var(--text-color)]">mit</strong> to <em className="text-[var(--main-color)]">midwife</em> and <strong className="text-[var(--text-color)]">will</strong> to <em className="text-[var(--main-color)]">voluntary</em>.
                   </p>
                 </div>
 
                 {/* Principle 3 */}
-                <div className="p-4 rounded-2xl bg-[#161722] border border-white/10 space-y-2">
-                  <div className="text-emerald-400 font-mono text-xs font-bold uppercase tracking-wider">
-                    03 • Low Friction
+                <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-2">
+                  <div className="text-[var(--main-color)] font-mono text-xs font-bold uppercase tracking-wider">
+                    03 • deduction
                   </div>
-                  <h3 className="text-sm font-bold text-slate-100">Scaffolded Discovery</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Beginner exercises use tactile morpheme tiles and cognate matching. You discover through deduction before ever cold typing.
+                  <h3 className="text-xs font-bold font-mono text-[var(--text-color)]">scaffolded discovery</h3>
+                  <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                    exercises use morpheme tiles and cognate matching so you deduce through logic before cold typing.
                   </p>
                 </div>
               </div>
 
               {/* Principle 4: Grammatical Gender Colors */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#161722] border border-cyan-500/30 space-y-3">
+              <div className="p-4 sm:p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="text-amber-400 font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                    04 • The 3 Colors of German Gender
+                  <div className="text-[var(--main-color)] font-mono text-xs font-bold uppercase tracking-wider">
+                    04 • the 3 genders
                   </div>
-                  <span className="text-[10px] font-mono text-cyan-300">der · die · das</span>
+                  <span className="text-xs font-mono text-[var(--sub-color)]">der · die · das</span>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  In German, <strong>every noun has an inherent grammatical gender</strong>. Rather than memorizing dry rules,
-                  Brücke binds high-contrast color badges to every noun so your visual memory encodes gender automatically:
+                <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                  in german, <strong className="text-[var(--text-color)]">every noun has an inherent grammatical gender</strong>.
+                  brücke pairs high-contrast badges with nouns so visual memory encodes gender:
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
-                  <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/30 flex flex-col justify-between gap-1.5">
+                  <div className="p-3 rounded-lg bg-[var(--bg-color)] border border-blue-500/30 flex flex-col justify-between gap-1.5">
                     <div className="flex items-center justify-between">
                       <GenderBadge gender="der" size="sm" showLabel />
-                      <span className="text-[11px] font-bold text-blue-300">Blue</span>
+                      <span className="text-[11px] font-mono font-bold text-blue-400">masculine</span>
                     </div>
-                    <p className="text-xs font-mono text-slate-300">
-                      der Bruder <span className="text-slate-400 font-sans text-[11px]">(brother)</span>
+                    <p className="text-xs font-mono text-[var(--text-color)]">
+                      der Bruder <span className="text-[var(--sub-color)] font-sans text-[11px]">(brother)</span>
                     </p>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 flex flex-col justify-between gap-1.5">
+                  <div className="p-3 rounded-lg bg-[var(--bg-color)] border border-rose-500/30 flex flex-col justify-between gap-1.5">
                     <div className="flex items-center justify-between">
                       <GenderBadge gender="die" size="sm" showLabel />
-                      <span className="text-[11px] font-bold text-rose-300">Rose / Red</span>
+                      <span className="text-[11px] font-mono font-bold text-rose-400">feminine</span>
                     </div>
-                    <p className="text-xs font-mono text-slate-300">
-                      die Hand <span className="text-slate-400 font-sans text-[11px]">(hand)</span>
+                    <p className="text-xs font-mono text-[var(--text-color)]">
+                      die Hand <span className="text-[var(--sub-color)] font-sans text-[11px]">(hand)</span>
                     </p>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col justify-between gap-1.5">
+                  <div className="p-3 rounded-lg bg-[var(--bg-color)] border border-emerald-500/30 flex flex-col justify-between gap-1.5">
                     <div className="flex items-center justify-between">
                       <GenderBadge gender="das" size="sm" showLabel />
-                      <span className="text-[11px] font-bold text-emerald-300">Green</span>
+                      <span className="text-[11px] font-mono font-bold text-emerald-400">neuter</span>
                     </div>
-                    <p className="text-xs font-mono text-slate-300">
-                      das Wasser <span className="text-slate-400 font-sans text-[11px]">(water)</span>
+                    <p className="text-xs font-mono text-[var(--text-color)]">
+                      das Wasser <span className="text-[var(--sub-color)] font-sans text-[11px]">(water)</span>
                     </p>
                   </div>
                 </div>
@@ -286,69 +305,68 @@ export const OnboardingModal: React.FC = () => {
           {step === 2 && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <div className="space-y-2">
-                <span className="text-xs font-mono text-emerald-400 uppercase tracking-wider font-semibold flex items-center gap-1.5">
-                  <Compass className="w-3.5 h-3.5" />
-                  Navigation Tour
+                <span className="text-xs font-mono text-[var(--main-color)] uppercase tracking-wider font-semibold">
+                  system overview
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight">
-                  Explore the Three Pillars
+                <h2 className="text-2xl font-bold font-mono text-[var(--text-color)] tracking-tight">
+                  three pillars
                 </h2>
-                <p className="text-sm text-slate-300 leading-relaxed">
-                  Everything in Brücke connects across three specialized tabs accessible via the navigation bar:
+                <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                  navigation is organized into three primary workspaces:
                 </p>
               </div>
 
               <div className="space-y-2.5">
                 {/* Pillar 1: Trail */}
-                <div className="p-3.5 rounded-xl bg-[#161722] border border-white/10 flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shrink-0">
+                <div className="p-3.5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 flex items-start gap-3 font-mono">
+                  <div className="p-2 rounded bg-[var(--bg-color)] text-[var(--main-color)] border border-[var(--sub-color)]/20 shrink-0">
                     <BookOpen className="w-4 h-4" />
                   </div>
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-bold text-slate-100">The Trail</h4>
-                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white/5 text-slate-400 border border-white/10">
-                        30 Lessons
+                      <h4 className="text-sm font-bold text-[var(--text-color)]">trail</h4>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-color)] text-[var(--sub-color)] border border-[var(--sub-color)]/20">
+                        30 lessons
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      Structured learning journey with conversational mentor notes, bite-sized Duolingo-style step wizards, and mistake retry queues.
+                    <p className="text-xs text-[var(--sub-color)] leading-relaxed">
+                      structured step-by-step curriculum with transformation exercises and mistake retry queues.
                     </p>
                   </div>
                 </div>
 
                 {/* Pillar 2: Atlas */}
-                <div className="p-3.5 rounded-xl bg-[#161722] border border-white/10 flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 shrink-0">
+                <div className="p-3.5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 flex items-start gap-3 font-mono">
+                  <div className="p-2 rounded bg-[var(--bg-color)] text-[var(--main-color)] border border-[var(--sub-color)]/20 shrink-0">
                     <Compass className="w-4 h-4" />
                   </div>
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-bold text-slate-100">The Atlas</h4>
-                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white/5 text-slate-400 border border-white/10">
-                        Constellation Map
+                      <h4 className="text-sm font-bold text-[var(--text-color)]">atlas</h4>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-color)] text-[var(--sub-color)] border border-[var(--sub-color)]/20">
+                        constellations
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      Explore 9 consonant shift families and 32 compound calques (e.g. <em>Flugzeug = fly + tool</em>) with 4-tier mastery donut charts.
+                    <p className="text-xs text-[var(--sub-color)] leading-relaxed">
+                      explore 9 consonant shift families and 32 compound calques with 4-tier mastery donut charts.
                     </p>
                   </div>
                 </div>
 
                 {/* Pillar 3: Review */}
-                <div className="p-3.5 rounded-xl bg-[#161722] border border-white/10 flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 shrink-0">
+                <div className="p-3.5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 flex items-start gap-3 font-mono">
+                  <div className="p-2 rounded bg-[var(--bg-color)] text-[var(--main-color)] border border-[var(--sub-color)]/20 shrink-0">
                     <RotateCcw className="w-4 h-4" />
                   </div>
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-bold text-slate-100">Review Hub</h4>
-                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white/5 text-slate-400 border border-white/10">
-                        Multi-Modal SM-2
+                      <h4 className="text-sm font-bold text-[var(--text-color)]">review</h4>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-color)] text-[var(--sub-color)] border border-[var(--sub-color)]/20">
+                        sm-2
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      Etymological spaced repetition with 4 review styles: <strong>Quick Flip</strong> flashcards, <strong>MCQ</strong> quizzes, <strong>Tile Builder</strong>, and <strong>Typing</strong>.
+                    <p className="text-xs text-[var(--sub-color)] leading-relaxed">
+                      spaced repetition with 4 review styles: quick flip, mcq, tile builder, and derivation typing.
                     </p>
                   </div>
                 </div>
@@ -359,35 +377,31 @@ export const OnboardingModal: React.FC = () => {
           {/* STEP 4: READY TO BEGIN */}
           {step === 3 && (
             <div className="space-y-6 text-center py-4 animate-in fade-in duration-200">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500/20 to-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-3xl mx-auto shadow-lg shadow-cyan-500/10">
-                ✨
-              </div>
-
-              <div className="space-y-2 max-w-md mx-auto">
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight">
-                  You Are Ready To Begin.
+              <div className="space-y-2 max-w-md mx-auto font-mono">
+                <h2 className="text-2xl font-bold text-[var(--text-color)] tracking-tight">
+                  ready to begin
                 </h2>
-                <p className="text-sm text-slate-300 leading-relaxed">
-                  Start with Lesson 1 on <strong>The Trail</strong> to meet your first ten German cognates.
-                  Progress is saved automatically to your device.
+                <p className="text-xs text-[var(--sub-color)] leading-relaxed">
+                  start with lesson 1 on the trail to encounter your first ten german cognates.
+                  all progress is stored locally in your browser.
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#161722] border border-white/10 max-w-md mx-auto text-xs font-mono text-slate-400 space-y-1 text-left">
-                <div className="flex items-center gap-2 text-cyan-400 font-bold">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>Your Brücke Toolkit:</span>
+              <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 max-w-md mx-auto text-xs font-mono text-[var(--sub-color)] space-y-1.5 text-left">
+                <div className="flex items-center gap-2 text-[var(--main-color)] font-bold">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>quick guide:</span>
                 </div>
-                <div className="pl-6 text-slate-300">• <strong>The Trail</strong>: Structured lesson sequence</div>
-                <div className="pl-6 text-slate-300">• <strong>⌘K</strong>: Instant cognate search from anywhere</div>
-                <div className="pl-6 text-slate-300">• <strong>Tour Button</strong>: Revisit this guide anytime in the header</div>
+                <div className="pl-6 text-[var(--text-color)]">• <strong>trail</strong>: structured lesson sequence</div>
+                <div className="pl-6 text-[var(--text-color)]">• <strong>palette</strong>: switch between 187 monkeytype themes</div>
+                <div className="pl-6 text-[var(--text-color)]">• <strong>esc / space / 1-4</strong>: full keyboard navigation</div>
               </div>
             </div>
           )}
         </div>
 
         {/* Modal Footer Controls */}
-        <div className="px-6 sm:px-8 py-4 bg-[#161722] border-t border-white/10 flex items-center justify-between gap-4">
+        <div className="px-6 py-4 bg-[var(--sub-alt-color)] border-t border-[var(--sub-color)]/20 flex items-center justify-between gap-4 font-mono">
           {/* Step indicators */}
           <div className="flex items-center gap-1.5">
             {[0, 1, 2, 3].map((i) => (
@@ -395,8 +409,8 @@ export const OnboardingModal: React.FC = () => {
                 key={i}
                 type="button"
                 onClick={() => setStep(i)}
-                className={`h-2 rounded-full transition-all cursor-pointer ${
-                  step === i ? "w-6 bg-cyan-400" : "w-2 bg-white/20 hover:bg-white/40"
+                className={`h-1.5 rounded transition-all cursor-pointer ${
+                  step === i ? "w-5 bg-[var(--main-color)]" : "w-1.5 bg-[var(--sub-color)]/30 hover:bg-[var(--sub-color)]/60"
                 }`}
                 title={`Go to step ${i + 1}`}
               />
@@ -404,15 +418,15 @@ export const OnboardingModal: React.FC = () => {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             {step > 0 && (
               <button
                 type="button"
                 onClick={() => setStep((s) => s - 1)}
-                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-mono text-slate-300 transition flex items-center gap-1.5 cursor-pointer"
+                className="px-3 py-1.5 rounded bg-[var(--bg-color)] hover:border-[var(--sub-color)] border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] transition flex items-center gap-1.5 cursor-pointer"
               >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Back</span>
+                <ArrowLeft className="w-3 h-3" />
+                <span>back</span>
               </button>
             )}
 
@@ -420,19 +434,19 @@ export const OnboardingModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setStep((s) => s + 1)}
-                className="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs font-mono transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-md shadow-cyan-500/20"
+                className="px-4 py-1.5 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs font-mono transition flex items-center gap-1.5 cursor-pointer"
               >
-                <span>Next Step</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>next</span>
+                <ArrowRight className="w-3 h-3" />
               </button>
             ) : (
               <button
                 type="button"
-                onClick={completeOnboarding}
-                className="px-6 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs font-mono transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-lg shadow-amber-500/20"
+                onClick={finishOnboarding}
+                className="px-5 py-1.5 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs font-mono transition flex items-center gap-1.5 cursor-pointer"
               >
-                <span>Start Exploring Brücke</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>{hasCompletedOnboarding ? "close guide" : "start lesson 1"}</span>
+                <ArrowRight className="w-3 h-3" />
               </button>
             )}
           </div>

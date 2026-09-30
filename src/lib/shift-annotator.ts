@@ -30,7 +30,21 @@ const SHIFT_RULES_PATTERNS = [
   { en: "gh", de: "ch", label: "GH → CH" },
 ];
 
+const MAX_ALIGN_CACHE = 500;
 const alignCache = new Map<string, AnnotatedShiftPair>();
+
+// ponytail: inspectable cache bounds
+export function getAlignCacheSize(): number {
+  return alignCache.size;
+}
+
+function sliceSegments(word: string, idx: number, len: number): TextSegment[] {
+  const segs: TextSegment[] = [];
+  if (idx > 0) segs.push({ text: word.slice(0, idx), isChanged: false });
+  segs.push({ text: word.slice(idx, idx + len), isChanged: true });
+  if (idx + len < word.length) segs.push({ text: word.slice(idx + len), isChanged: false });
+  return segs;
+}
 
 export function alignShiftPair(english: string, german: string, fallbackRule?: string): AnnotatedShiftPair {
   const cacheKey = `${english}|${german}|${fallbackRule || ""}`;
@@ -45,31 +59,15 @@ export function alignShiftPair(english: string, german: string, fallbackRule?: s
     const deIdx = deLower.indexOf(rule.de);
 
     if (enIdx !== -1 && deIdx !== -1) {
-      // Build English segments
-      const englishSegments: TextSegment[] = [];
-      if (enIdx > 0) {
-        englishSegments.push({ text: english.slice(0, enIdx), isChanged: false });
-      }
-      englishSegments.push({ text: english.slice(enIdx, enIdx + rule.en.length), isChanged: true });
-      if (enIdx + rule.en.length < english.length) {
-        englishSegments.push({ text: english.slice(enIdx + rule.en.length), isChanged: false });
-      }
-
-      // Build German segments
-      const germanSegments: TextSegment[] = [];
-      if (deIdx > 0) {
-        germanSegments.push({ text: german.slice(0, deIdx), isChanged: false });
-      }
-      germanSegments.push({ text: german.slice(deIdx, deIdx + rule.de.length), isChanged: true });
-      if (deIdx + rule.de.length < german.length) {
-        germanSegments.push({ text: german.slice(deIdx + rule.de.length), isChanged: false });
-      }
-
       const result: AnnotatedShiftPair = {
-        englishSegments,
-        germanSegments,
+        englishSegments: sliceSegments(english, enIdx, rule.en.length),
+        germanSegments: sliceSegments(german, deIdx, rule.de.length),
         shiftRule: fallbackRule || rule.label,
       };
+      if (alignCache.size >= MAX_ALIGN_CACHE) {
+        const oldestKey = alignCache.keys().next().value;
+        if (oldestKey) alignCache.delete(oldestKey);
+      }
       alignCache.set(cacheKey, result);
       return result;
     }
@@ -81,6 +79,10 @@ export function alignShiftPair(english: string, german: string, fallbackRule?: s
     germanSegments: [{ text: german, isChanged: false }],
     shiftRule: fallbackRule || "Cognate",
   };
+  if (alignCache.size >= MAX_ALIGN_CACHE) {
+    const oldestKey = alignCache.keys().next().value;
+    if (oldestKey) alignCache.delete(oldestKey);
+  }
   alignCache.set(cacheKey, fallbackResult);
   return fallbackResult;
 }

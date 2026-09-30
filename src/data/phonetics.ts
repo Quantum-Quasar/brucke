@@ -1,0 +1,58 @@
+/**
+ * Accurate IPA transcriptions for Compound Calques and False Friend Traps.
+ * Replaces generic placeholders with authoritative Duden/Wiktionary German phonetic values.
+ */
+
+export const COMPOUND_IPA: Record<string, string> = {
+  kühlschrank: "/ˈkyːlˌʃʁaŋk/",
+  handschuh: "/ˈhantˌʃuː/",
+  kummerspeck: "/ˈkʊmɐˌʃpɛk/",
+  backpfeife: "/ˈbakˌp͡faɪ̯fə/",
+  gegenstand: "/ˈɡeːɡn̩ˌʃtant/",
+  begriff: "/bəˈɡʁɪf/",
+  wahrnehmung: "/ˈvaːɐ̯ˌneːmʊŋ/",
+  leidenschaft: "/ˈlaɪ̯dn̩ˌʃaft/",
+  wasserstoff: "/ˈvasɐˌʃtɔf/",
+  krankenhaus: "/ˈkʁaŋkn̩ˌhaʊ̯s/",
+  krankenschwester: "/ˈkʁaŋkn̩ˌʃvɛstɐ/",
+  staubsauger: "/ˈʃtaʊ̯pˌzaʊ̯ɡɐ/",
+  flugzeug: "/ˈfluːkˌt͡sɔʏ̯k/",
+  feuerzeug: "/ˈfɔɪ̯ɐˌt͡sɔʏ̯k/",
+  fahrzeug: "/ˈfaːɐ̯ˌt͡sɔʏ̯k/",
+  schlagzeug: "/ˈʃlaːkˌt͡sɔʏ̯k/",
+  spielzeug: "/ˈʃpiːlˌt͡sɔʏ̯k/",
+  spätkauf: "/ˈʃpɛːtˌkaʊ̯f/",
+  fernseher: "/ˈfɛʁnˌzeːɐ/",
+  aufzug: "/ˈaʊ̯fˌt͡suːk/",
+  apfelkuchen: "/ˈap͡fl̩ˌkuːxn̩/",
+  kindergarten: "/ˈkɪndɐˌɡaʁtn̩/",
+  glühbirne: "/ˈɡlyːˌbɪʁnə/",
+  fingerhut: "/ˈfɪŋɐˌhuːt/",
+  zahnarzt: "/ˈt͡saːnˌʔaːɐ̯t͡st/",
+  eisenbahn: "/ˈaɪ̯zn̩ˌbaːn/",
+  autobahn: "/ˈaʊ̯toˌbaːn/",
+  donnerstag: "/ˈdɔnɐsˌtaːk/",
+  mittwoch: "/ˈmɪtvɔx/",
+  übermorgen: "/ˈyːbɐˌmɔʁɡn̩/",
+  vorgestern: "/ˈfoːɐ̯ˌɡɛstɐn/",
+  nachbar: "/ˈnaxbaːɐ̯/",
+};
+
+export const FALSE_FRIEND_IPA: Record<string, string> = {
+  gift: "/ɡɪft/",
+  bekommen: "/bəˈkɔmən/",
+  chef: "/ʃɛf/",
+  handy: "/ˈhɛndi/",
+  aktuell: "/aktuˈɛl/",
+  rat: "/ʁaːt/",
+  brav: "/bʁaːf/",
+  fabrik: "/faˈbʁiːk/",
+  gymnasium: "/ɡʏmˈnaːzi̯ʊm/",
+  rente: "/ˈʁɛntə/",
+  dom: "/doːm/",
+  art: "/aːɐ̯t/",
+  fast: "/fast/",
+  bald: "/balt/",
+  eventuell: "/evɛntuˈɛl/",
+  kaution: "/kaʊ̯ˈtsi̯oːn/",
+};

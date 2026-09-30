@@ -59,28 +59,33 @@ export function getLevenshteinDistance(a: string, b: string): number {
   if (a.length === 0) return b.length;
   if (b.length === 0) return a.length;
 
-  const matrix: number[][] = [];
-  for (let i = 0; i <= b.length; i++) {
-    matrix[i] = [i];
-  }
-  for (let j = 0; j <= a.length; j++) {
-    matrix[0][j] = j;
-  }
+  // ponytail: length difference upper bound guard
+  const lenDiff = Math.abs(a.length - b.length);
+  if (lenDiff > 20) return lenDiff;
+
+  // ponytail: O(N) space using two rolling rows instead of full O(M*N) 2D matrix
+  let prev = Array.from({ length: a.length + 1 }, (_, i) => i);
+  let curr = new Array(a.length + 1);
 
   for (let i = 1; i <= b.length; i++) {
+    curr[0] = i;
+    const bChar = b.charAt(i - 1);
     for (let j = 1; j <= a.length; j++) {
-      if (b.charAt(i - 1) === a.charAt(j - 1)) {
-        matrix[i][j] = matrix[i - 1][j - 1];
+      if (bChar === a.charAt(j - 1)) {
+        curr[j] = prev[j - 1];
       } else {
-        matrix[i][j] = Math.min(
-          matrix[i - 1][j - 1] + 1, // substitution
-          matrix[i][j - 1] + 1,     // insertion
-          matrix[i - 1][j] + 1      // deletion
+        curr[j] = Math.min(
+          prev[j - 1] + 1, // substitution
+          curr[j - 1] + 1, // insertion
+          prev[j] + 1      // deletion
         );
       }
     }
+    const temp = prev;
+    prev = curr;
+    curr = temp;
   }
-  return matrix[b.length][a.length];
+  return prev[a.length];
 }
 
 export type AnswerAccuracy = "exact" | "almost" | "incorrect";
@@ -91,24 +96,38 @@ export interface EvaluationResult {
   reason?: "case" | "umlaut" | "typo" | "infinitive" | "article";
 }
 
-export function evaluateAnswerAccuracy(userInput: string, expected: string): EvaluationResult {
+export interface EvaluationOptions {
+  umlautTolerance?: boolean;
+  capitalizationTolerance?: boolean;
+}
+
+export function evaluateAnswerAccuracy(
+  userInput: string,
+  expected: string,
+  options?: EvaluationOptions
+): EvaluationResult {
   const stripPunctuation = (s: string) => s.replace(/[.,!?;:]+$/, "").trim();
   const user = stripPunctuation(userInput);
   const target = stripPunctuation(expected);
+
+  // ponytail: guard against huge pasted text
+  if (Math.abs(user.length - target.length) > 10 || user.length > 200) {
+    return { accuracy: "incorrect" };
+  }
 
   // 1. Exact match -> Spot on! (Green)
   if (user === target) {
     return { accuracy: "exact" };
   }
 
-  const normalizeUmlauts = (s: string) =>
-    s.replace(/ä/g, "a").replace(/ö/g, "o").replace(/ü/g, "u").replace(/ß/g, "ss");
-
   const userLower = user.toLowerCase();
   const targetLower = target.toLowerCase();
 
-  // 2. Case difference (e.g. German noun not capitalized) -> Yellow
+  // 2. Case difference (e.g. German noun not capitalized)
   if (userLower === targetLower) {
+    if (options?.capitalizationTolerance) {
+      return { accuracy: "exact" };
+    }
     return {
       accuracy: "almost",
       reason: "case",
@@ -116,8 +135,32 @@ export function evaluateAnswerAccuracy(userInput: string, expected: string): Eva
     };
   }
 
-  // 3. Umlaut difference (e.g. a instead of ä, or ss instead of ß) -> Yellow
-  if (normalizeUmlauts(userLower) === normalizeUmlauts(targetLower)) {
+  const normalizeUmlauts = (s: string) =>
+    s.replace(/ä/g, "a").replace(/ö/g, "o").replace(/ü/g, "u").replace(/ß/g, "ss");
+
+  const normalizeDigraphs = (s: string) =>
+    s.replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss");
+
+  const matchesUmlauts =
+    normalizeUmlauts(userLower) === normalizeUmlauts(targetLower) ||
+    normalizeDigraphs(userLower) === normalizeDigraphs(targetLower) ||
+    normalizeUmlauts(userLower.replace(/ae/g, "a").replace(/oe/g, "o").replace(/ue/g, "u")) ===
+      normalizeUmlauts(targetLower.replace(/ae/g, "a").replace(/oe/g, "o").replace(/ue/g, "u"));
+
+  // 3. Umlaut difference (e.g. a/ae instead of ä, or ss instead of ß)
+  if (matchesUmlauts) {
+    if (options?.umlautTolerance) {
+      // If umlauts are tolerated, check if capitalization tolerance is also respected or if case matches
+      const caseMatches = user === userLower ? target === targetLower : true;
+      if (options.capitalizationTolerance || caseMatches) {
+        return { accuracy: "exact" };
+      }
+      return {
+        accuracy: "almost",
+        reason: "case",
+        warningNote: `Almost right! Note that German nouns are capitalized: "${target}"`,
+      };
+    }
     return {
       accuracy: "almost",
       reason: "umlaut",

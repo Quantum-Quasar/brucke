@@ -8,10 +8,8 @@
 
 **Brücke** is an open-source web application designed to help English speakers learn German rapidly by decoding the underlying linguistic mechanics that connect both languages. 
 
-Rather than relying on rote memorization or gamified streaks without substance, Brücke leverages the **Second High German Consonant Shift (Grimm's Law / 500–800 AD)** to reveal that English speakers already understand hundreds of German words.
+Rather than relying on rote memorization or gamified streaks without substance, Brücke leverages the **Second High German Consonant Shift (500–800 AD)** to reveal that English speakers already understand hundreds of German words.
 
-- **Primary Working Directory**: `/home/shaurya/gemini-tmp/german-app-2`
-- **Design & Reference Directory**: `/home/shaurya/stuff/german app`
 - **Comprehensive Audit Manifest**: See [`AUDIT_MANIFEST.md`](./AUDIT_MANIFEST.md) for full architectural specifications, data schemas, and audit instructions.
 - **Design Specification**: See [`docs/german_learning_platform_design-final.md`](./docs/german_learning_platform_design-final.md).
 
@@ -25,8 +23,8 @@ Rather than relying on rote memorization or gamified streaks without substance, 
 - **Styling**: Tailwind CSS v4 (native CSS tokens, dark mode default)
 - **State Management**: [Zustand](https://github.com/pmndrs/zustand) 5 (dual `localStorage` + size-guarded cookie persistence)
 - **Icons**: Lucide React
-- **Testing**: Vitest / `bun test` (12 test suites, 63 automated tests, < 200ms runtime)
-- **Audio Engine**: Zero-dependency browser-native Web Speech API (`window.speechSynthesis`)
+- **Testing**: Vitest / `bun test` (21 test suites, 119 automated tests)
+- **Audio Engine**: Zero-dependency browser-native Web Speech API (`window.speechSynthesis`) + Web Audio click synthesizer
 
 ---
 
@@ -48,15 +46,16 @@ bun run parse-data
 
 ### Run Automated Tests
 
-Executes 63 unit and integration tests across 12 suites:
+Executes 119 unit and integration tests across 21 suites:
 
 ```bash
+bun run test
 bun test
 ```
 
 ### Production Build
 
-Pre-renders all 21 pages to static HTML (`● SSG`):
+Pre-renders all 28 pages to static HTML (`● SSG`):
 
 ```bash
 bun run build
@@ -74,12 +73,16 @@ Visit `http://localhost:3000` in your browser.
 
 ## Core Features
 
-1. **The Trail (`/trail` & `/trail/[id]`)**:
-   - 30-lesson structured curriculum across 5 evolutionary phases.
-   - 5-part card-by-card wizard (Hook, Pattern, Transformation Table, Bite-Sized Practice, Summary & Retries).
+1. **The Trail Map (`/` — the homepage)**:
+   - Baba Is You-style node map: 30 topic clusters on one linear spine, with skip-able extra-practice nodes ("sprigs") and support-material branches hanging off each cluster.
+   - All adjacent nodes unlock at once when a node is completed; the spine itself stays strictly ordered.
+   - Climb the map bottom-to-top; the pulsing theme-colored selector marks your recommended node.
+   - 1–3 lessons per topic; topics 1–10 fully authored, 11–30 shipped as titled shells with authoring plans (`src/data/curriculum.ts`).
+   - Custom DOM+SVG renderer (no game libraries) with `content-visibility` windowing per topic cluster, sized for hundreds of future lessons.
+   - 5-part card-by-card lesson wizard (Hook, Pattern, Transformation Table, Bite-Sized Practice, Summary & Retries) at `/trail/[id]`.
    - Scaffolded exercises (morpheme tiles, matching pairs, shift select, syntax builder, derivation typing).
    - Pre-exercise vocabulary hints (`vocab_hints`) for auxiliary words (e.g., `mit`).
-   - End-of-lesson Retry Queue ensuring mastery before progression.
+   - End-of-lesson Retry Queue ensuring mastery before progression; a flawless first-try run earns a **purple star** (gold otherwise).
 
 2. **Sound Shift Atlas (`/atlas` & `/atlas/[family]`)**:
    - Radial spatial spoke visualization for 9 consonant shift families ($TH \rightarrow D$, $P \rightarrow FF/PF$, $T \rightarrow SS/S/Z$, etc.).
@@ -105,19 +108,23 @@ Visit `http://localhost:3000` in your browser.
 ```
 src/
 ├── app/                  # Next.js App Router (100% SSG static pre-rendered routes)
+│   ├── page.tsx          # Homepage = the Baba-style trail map
 │   ├── atlas/            # Sound Shift Atlas pages
 │   ├── review/           # Multi-modal SRS Review Hub
-│   ├── trail/            # Lesson curriculum pages
+│   ├── trail/            # /trail redirects to /; /trail/[id] lesson wizard
+│   ├── settings/ about/  # Settings & About (linked from the bottom dock)
 │   ├── layout.tsx        # App layout and global shell
-│   └── page.tsx          # Dashboard & Daily Insight home
 ├── components/
 │   ├── atlas/            # Radial constellation and drill components
 │   ├── common/           # GenderBadge, ShiftPair, WordCardDrawer, CharBar, Onboarding
 │   ├── lesson/           # 5-step wizard, exercise widgets, retry queue, feedback sheets
-│   └── navigation/       # Desktop TopNav, mobile BottomNav
+│   ├── navigation/       # Game-style bottom dock (all destinations), slim TopNav, Footer
+│   └── trail/            # TrailMap, MapNode, LessonNodeDrawer (the homepage map)
 ├── data/
 │   ├── compendium.json   # 218 core words, 9 shifts, 32 compounds, 16 traps, 28 insights
-│   └── lessons.ts        # Curriculum definitions and exercise structures
+│   ├── curriculum.ts     # 30 topic clusters: cores, sprigs, branches + authoring plans
+│   ├── lessons.ts        # Authored lesson content (ids 1–10 = the first 10 topic cores)
+│   └── ...               # themes, fonts, settings, phonetics, insights
 ├── lib/
 │   ├── audio.ts          # Native speech pronunciation engine
 │   ├── gender.ts         # 3-color gender metadata & styling
@@ -126,9 +133,10 @@ src/
 │   ├── review-modes.ts   # Question generators for review styles
 │   ├── shift-annotator.ts# Sound shift letter aligner with memoization
 │   ├── srs.ts            # SuperMemo SM-2 interval scheduler
-│   ├── store.ts          # Zustand store with dual persistence
+│   ├── store.ts          # Zustand store with dual persistence (+ lessonStars)
+│   ├── trail-map.ts      # Map graph, responsive layout engine, unlock/recommend logic
 │   └── types.ts          # Core domain TypeScript interfaces
-└── tests/                # 11 test suites, 61 automated tests (Vitest / Bun)
+└── tests/                # 22 test suites (Vitest / Bun)
 ```
 
 ---

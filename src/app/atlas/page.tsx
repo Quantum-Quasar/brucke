@@ -5,10 +5,7 @@ import Link from "next/link";
 import { Compass, Search, ChevronRight } from "lucide-react";
 import { DonutChart } from "@/components/common/DonutChart";
 import { useAppStore } from "@/lib/store";
-import compendium from "@/data/compendium.json";
-import type { CompendiumData, ShiftFamily } from "@/lib/types";
-
-const data = compendium as unknown as CompendiumData;
+import { compendium as data } from "@/data/compendium";
 
 export default function AtlasPage() {
   const [mounted, setMounted] = useState(false);
@@ -50,45 +47,47 @@ export default function AtlasPage() {
   const totalUnseen = totalWords - (totalMastered + totalEncountered + totalExplored);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-6 font-sans">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold flex items-center gap-1.5">
-            <Compass className="w-3.5 h-3.5" /> 100% Open Constellation Map
+          <span className="text-xs font-mono text-[var(--main-color)] font-semibold uppercase tracking-wider flex items-center gap-1.5">
+            <Compass className="w-3.5 h-3.5" /> phonological atlas
           </span>
-          <h1 className="text-3xl font-extrabold text-slate-100 tracking-tight mt-1">The Atlas</h1>
-          <p className="text-slate-400 text-sm mt-1">
-            Follow any rabbit hole. Explore all 9 historical consonant shifts and word trees freely from Day 1.
+          <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-color)] tracking-tight mt-0.5">
+            Sound Shift Families
+          </h1>
+          <p className="text-xs sm:text-sm text-[var(--sub-color)] mt-0.5">
+            The 9 historical sound shift families linking English cognates to High German vocabulary.
           </p>
         </div>
 
         {/* Search / Filter input */}
         <div className="relative w-full sm:w-64">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-[var(--sub-color)] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={filterQuery}
             onChange={(e) => setFilterQuery(e.target.value)}
-            placeholder="Filter constellations..."
-            className="w-full pl-9 pr-4 py-2 rounded-xl bg-[#1C1D2B] border border-white/10 text-xs text-slate-200 placeholder-slate-500 outline-none focus:border-cyan-500/50 transition font-mono"
+            placeholder="Filter sound shifts..."
+            className="w-full pl-8 pr-3 py-1.5 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/25 text-xs text-[var(--text-color)] placeholder-[var(--sub-color)] outline-none focus:border-[var(--main-color)] transition font-mono"
           />
         </div>
       </div>
 
       {/* Global Mastery Banner */}
-      <div className="p-4 rounded-xl bg-[#161722] border border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
-        <div className="flex items-center gap-6">
-          <span className="text-emerald-400 font-semibold">{totalMastered} Mastered ✓</span>
-          <span className="text-amber-400 font-semibold">{totalEncountered} In Course ●</span>
-          <span className="text-cyan-400 font-semibold">{totalExplored} Explored ○</span>
-          <span className="text-slate-500 font-semibold">{totalUnseen} Unseen ·</span>
+      <div className="p-3.5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+          <span className="text-[var(--main-color)] font-semibold">{totalMastered} mastered</span>
+          <span className="text-[var(--text-color)] font-semibold">{totalEncountered} in course</span>
+          <span className="text-[var(--sub-color)] font-semibold">{totalExplored} explored</span>
+          <span className="text-[var(--sub-color)]/60 font-semibold">{totalUnseen} unseen</span>
         </div>
-        <span className="text-slate-400">{totalWords} Total Words Indexed</span>
+        <span className="text-[var(--sub-color)]">{totalWords} total indexed</span>
       </div>
 
-      {/* Constellation Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Shift Families Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {filteredShifts.map((family) => {
           const words = family.word_ids.map((id) => data.words[id]).filter(Boolean);
           const mastered = mounted ? words.filter((w) => wordMastery[w.id] === "mastered").length : 0;
@@ -102,16 +101,16 @@ export default function AtlasPage() {
             <Link
               key={family.id}
               href={`/atlas/${family.id}`}
-              className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 hover:border-cyan-500/50 transition group flex flex-col justify-between space-y-4 hover:shadow-xl hover:shadow-cyan-500/5"
+              className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 hover:border-[var(--main-color)] transition group flex flex-col justify-between space-y-3"
             >
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {/* Card Top: Symbol & Mini Donut Chart */}
-                <div className="flex items-start justify-between">
+                <div className="flex items-start justify-between gap-2">
                   <div>
-                    <span className="text-xs font-mono font-bold text-cyan-400 px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-500/20">
+                    <span className="text-xs font-mono font-bold text-[var(--main-color)] px-2 py-0.5 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/25">
                       {family.symbol}
                     </span>
-                    <h3 className="text-lg font-bold text-slate-100 mt-2 group-hover:text-amber-300 transition">
+                    <h3 className="text-sm sm:text-base font-bold text-[var(--text-color)] mt-2 group-hover:text-[var(--main-color)] transition">
                       {family.name}
                     </h3>
                   </div>
@@ -121,26 +120,26 @@ export default function AtlasPage() {
                     encountered={encountered}
                     explored={explored}
                     unexplored={unexplored}
-                    size={46}
+                    size={42}
                   />
                 </div>
 
-                <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-[var(--sub-color)] line-clamp-2 leading-relaxed">
                   {family.phonetic_rule}
                 </p>
 
-                {/* 3-4 Preview Word Chips */}
+                {/* 3 Preview Word Chips */}
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {previewWords.map((w) => (
                     <span
                       key={w.id}
-                      className="px-2 py-0.5 rounded-md bg-white/5 border border-white/5 text-[11px] font-mono text-slate-300"
+                      className="px-2 py-0.5 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/15 text-[11px] font-mono text-[var(--text-color)]"
                     >
-                      {w.english_cognate} → <span className="text-amber-400 font-semibold">{w.target_word}</span>
+                      {w.english_cognate} → <span className="text-[var(--main-color)] font-semibold">{w.target_word}</span>
                     </span>
                   ))}
                   {words.length > 3 && (
-                    <span className="text-[10px] font-mono text-slate-500 self-center">
+                    <span className="text-[10px] font-mono text-[var(--sub-color)] self-center">
                       +{words.length - 3} more
                     </span>
                   )}
@@ -148,10 +147,10 @@ export default function AtlasPage() {
               </div>
 
               {/* Card Footer */}
-              <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-slate-500">
+              <div className="pt-2.5 border-t border-[var(--sub-color)]/15 flex items-center justify-between text-xs font-mono text-[var(--sub-color)]">
                 <span>{mastered + encountered}/{words.length} known</span>
-                <span className="flex items-center gap-1 text-cyan-400 group-hover:translate-x-0.5 transition">
-                  Explore Constellation <ChevronRight className="w-3.5 h-3.5" />
+                <span className="flex items-center gap-1 text-[var(--main-color)] group-hover:translate-x-0.5 transition">
+                  explore <ChevronRight className="w-3.5 h-3.5" />
                 </span>
               </div>
             </Link>

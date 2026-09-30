@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="7" fill="#1c1a17"/>
+  <!-- Umlaut dots -->
+  <circle cx="12" cy="9" r="2" fill="#dfba73"/>
+  <circle cx="20" cy="9" r="2" fill="#dfba73"/>
+  <!-- Bridge arch -->
+  <path d="M 6 25 L 6 22 C 6 15 11 14 16 14 C 21 14 26 15 26 22 L 26 25 L 22 25 L 22 22 C 22 17.5 19 17 16 17 C 13 17 10 17.5 10 22 L 10 25 Z" fill="#dfba73"/>
+</svg>

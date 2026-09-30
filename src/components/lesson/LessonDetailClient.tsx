@@ -11,14 +11,14 @@ export function LessonDetailClient({ lessonId }: { lessonId: number }) {
 
   if (!lesson) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-20 text-center space-y-4">
-        <h2 className="text-2xl font-bold text-slate-100">Lesson {lessonId} Coming Soon</h2>
-        <p className="text-slate-400 text-sm">
+      <div className="max-w-2xl mx-auto px-4 py-20 text-center space-y-4 font-mono">
+        <h2 className="text-2xl font-bold text-[var(--text-color)]">Lesson {lessonId} Coming Soon</h2>
+        <p className="text-[var(--sub-color)] text-sm">
           This lesson outline is in Phase 2/3 of the curriculum. The first 10 foundational lessons are currently fully interactive!
         </p>
         <Link
           href="/trail"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-sm"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-medium text-sm transition"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Trail Index
         </Link>

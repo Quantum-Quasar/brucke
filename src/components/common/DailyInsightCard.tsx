@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles, Share2, Check, ExternalLink } from "lucide-react";
+import { BookOpen, Share2, Check } from "lucide-react";
 import type { DailyInsight } from "@/lib/types";
 
 interface DailyInsightCardProps {
@@ -13,16 +13,15 @@ export const DailyInsightCard: React.FC<DailyInsightCardProps> = ({ insight, cla
   const [copied, setCopied] = useState(false);
 
   const handleShare = async () => {
-    const textToShare = `💡 Daily German Etymology Insight:
+    const textToShare = `German Etymology Note:
 "${insight.german_expression}" (${insight.english_meaning})
 ${insight.cultural_etymology}
-Takeaway: ${insight.takeaway_principle}
-— Learn German with Brücke`;
+Principle: ${insight.takeaway_principle}`;
 
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
         await navigator.share({
-          title: `Brücke Insight: ${insight.german_expression}`,
+          title: `Brücke: ${insight.german_expression}`,
           text: textToShare,
         });
         return;
@@ -37,27 +36,28 @@ Takeaway: ${insight.takeaway_principle}
   };
 
   return (
-    <div className={`p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 space-y-3 ${className}`}>
+    <article className={`p-4 sm:p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-3 font-sans ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-400">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Daily Cultural Insight · Day {insight.day}</span>
+        <div className="flex items-center gap-1.5 text-xs font-mono text-[var(--sub-color)]">
+          <BookOpen className="w-3.5 h-3.5 text-[var(--main-color)]" />
+          <span>etymological note · entry {insight.day}</span>
         </div>
         <button
+          type="button"
           onClick={handleShare}
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-slate-300 transition"
-          title="Share this etymology insight"
+          className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[var(--bg-color)] hover:bg-[var(--sub-color)]/10 text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] transition cursor-pointer"
+          title="Copy/Share this note"
         >
           {copied ? (
             <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-400 font-mono text-[11px]">Copied!</span>
+              <Check className="w-3 h-3 text-[var(--main-color)]" />
+              <span className="text-[var(--main-color)] text-[11px]">copied</span>
             </>
           ) : (
             <>
-              <Share2 className="w-3.5 h-3.5 text-slate-400" />
-              <span className="font-mono text-[11px]">Share [↗]</span>
+              <Share2 className="w-3 h-3" />
+              <span className="text-[11px]">share</span>
             </>
           )}
         </button>
@@ -65,17 +65,21 @@ Takeaway: ${insight.takeaway_principle}
 
       {/* Expression & Meaning */}
       <div>
-        <h4 className="text-xl font-bold text-slate-100 tracking-tight">{insight.german_expression}</h4>
-        <p className="text-sm font-mono text-cyan-300 italic">{insight.english_meaning}</p>
+        <h4 className="text-base sm:text-lg font-bold font-mono text-[var(--text-color)] tracking-tight">
+          {insight.german_expression}
+        </h4>
+        <p className="text-xs font-mono text-[var(--main-color)]">{insight.english_meaning}</p>
       </div>
 
       {/* Cultural Etymology Text */}
-      <p className="text-sm text-slate-300 leading-relaxed">{insight.cultural_etymology}</p>
+      <p className="text-xs text-[var(--text-color)]/80 leading-relaxed font-sans">
+        {insight.cultural_etymology}
+      </p>
 
       {/* Takeaway Principle */}
-      <div className="pt-2 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
-        <span className="italic">{insight.takeaway_principle}</span>
+      <div className="pt-2 border-t border-[var(--sub-color)]/15 text-xs text-[var(--sub-color)] font-mono">
+        <span>heuristic: {insight.takeaway_principle}</span>
       </div>
-    </div>
+    </article>
   );
 };

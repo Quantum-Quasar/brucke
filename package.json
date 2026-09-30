@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "parse-data": "bun run scripts/parse-compendium.ts",
+    "trail": "bun run scripts/export-trail.ts",
     "dev": "next dev",
     "build": "bun run parse-data && next build",
     "start": "next start",

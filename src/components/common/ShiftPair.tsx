@@ -37,13 +37,13 @@ export const ShiftPair: React.FC<ShiftPairProps> = React.memo(({
   const getMasteryIndicator = () => {
     switch (mastery) {
       case "mastered":
-        return { badge: "✓", border: "border-emerald-500/60 bg-emerald-500/10 text-emerald-400" };
+        return { badge: "✓", border: "border-[var(--main-color)] bg-[var(--main-color)]/10 text-[var(--main-color)]" };
       case "encountered":
-        return { badge: "●", border: "border-amber-500/60 bg-amber-500/10 text-amber-400" };
+        return { badge: "●", border: "border-[var(--main-color)]/60 bg-[var(--main-color)]/10 text-[var(--main-color)]" };
       case "explored":
-        return { badge: "○", border: "border-cyan-400/60 bg-cyan-400/10 text-cyan-400" };
+        return { badge: "○", border: "border-[var(--sub-color)]/60 bg-[var(--sub-color)]/10 text-[var(--sub-color)]" };
       default:
-        return { badge: "·", border: "border-white/10 bg-transparent text-slate-500" };
+        return { badge: "·", border: "border-[var(--sub-color)]/20 bg-transparent text-[var(--sub-color)]" };
     }
   };
 
@@ -51,14 +51,14 @@ export const ShiftPair: React.FC<ShiftPairProps> = React.memo(({
 
   return (
     <div
-      className={`inline-flex flex-wrap items-center gap-2.5 px-3 py-1.5 rounded-lg border transition-all duration-200 ${indicator.border} ${className}`}
+      className={`inline-flex flex-wrap items-center gap-2.5 px-3 py-1.5 rounded border transition-all duration-200 ${indicator.border} ${className}`}
     >
       {/* English Cognate */}
-      <span className="text-slate-400 font-normal tracking-wide text-sm">
+      <span className="text-[var(--sub-color)] font-normal tracking-wide text-sm">
         {annotation.englishSegments.map((seg, i) => (
           <span
             key={i}
-            className={seg.isChanged ? "text-slate-500 underline decoration-slate-600/80 decoration-1 underline-offset-4" : "text-slate-300"}
+            className={seg.isChanged ? "text-[var(--sub-color)] underline decoration-[var(--sub-color)]/50 decoration-1 underline-offset-4" : "text-[var(--text-color)]"}
           >
             {seg.text}
           </span>
@@ -66,7 +66,7 @@ export const ShiftPair: React.FC<ShiftPairProps> = React.memo(({
       </span>
 
       {/* Shift Rule Indicator */}
-      <div className="flex items-center gap-1 text-[11px] font-mono font-medium text-cyan-400/90 bg-cyan-950/40 px-1.5 py-0.5 rounded border border-cyan-500/20">
+      <div className="flex items-center gap-1 text-[11px] font-mono font-medium text-[var(--main-color)] bg-[var(--sub-alt-color)] px-1.5 py-0.5 rounded border border-[var(--sub-color)]/20">
         <span>→</span>
         <span>{annotation.shiftRule}</span>
       </div>
@@ -76,16 +76,17 @@ export const ShiftPair: React.FC<ShiftPairProps> = React.memo(({
         type="button"
         onClick={() => showDetailsOnClick && openWordDrawer(targetId)}
         className={`group inline-flex items-center gap-2 font-semibold text-sm transition-transform active:scale-95 ${
-          showDetailsOnClick ? "cursor-pointer hover:underline decoration-amber-400/50 underline-offset-4" : ""
+          showDetailsOnClick ? "cursor-pointer hover:underline decoration-[var(--main-color)]/50 underline-offset-4" : ""
         }`}
+        aria-label={`View etymology and details for ${german}`}
       >
         <GenderBadge gender={gender} size="sm" />
 
-        <span className="text-amber-400 group-hover:text-amber-300">
+        <span className="text-[var(--text-color)] group-hover:text-[var(--main-color)]">
           {annotation.germanSegments.map((seg, i) => (
             <span
               key={i}
-              className={seg.isChanged ? "text-cyan-300 font-bold bg-cyan-400/15 px-0.5 rounded" : "text-amber-400"}
+              className={seg.isChanged ? "text-[var(--main-color)] font-mono font-bold bg-[var(--main-color)]/15 px-0.5 rounded" : "text-[var(--text-color)]"}
             >
               {seg.text}
             </span>
@@ -101,8 +102,9 @@ export const ShiftPair: React.FC<ShiftPairProps> = React.memo(({
           const spoken = gender ? `${gender} ${german}` : german;
           playGermanAudio(spoken);
         }}
-        className="p-1 rounded text-slate-500 hover:text-cyan-300 hover:bg-white/5 transition cursor-pointer"
+        className="p-1 rounded text-[var(--sub-color)] hover:text-[var(--main-color)] hover:bg-[var(--sub-alt-color)] transition cursor-pointer"
         title={`Listen to German pronunciation for "${german}"`}
+        aria-label={`Listen to German pronunciation for ${german}`}
       >
         <Volume2 className="w-3.5 h-3.5" />
       </button>

@@ -9,6 +9,7 @@ import { ErrorFeedbackSheet } from "./ErrorFeedbackSheet";
 import { SuccessFeedbackSheet } from "./SuccessFeedbackSheet";
 import { evaluateAnswerAccuracy } from "@/lib/letter-diff";
 import { useAppStore } from "@/lib/store";
+import { soundEngine } from "@/lib/sound";
 import type { ExerciseItem } from "@/lib/types";
 
 interface ExerciseWidgetProps {
@@ -36,6 +37,8 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
   const [showErrorSheet, setShowErrorSheet] = useState(false);
   const [showSuccessSheet, setShowSuccessSheet] = useState(false);
   const [failedAttemptText, setFailedAttemptText] = useState("");
+  const [isCapsLock, setIsCapsLock] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   // Matching pairs state
   const [selectedEnglish, setSelectedEnglish] = useState<string | null>(null);
@@ -43,6 +46,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
   const tolerance = useAppStore((s) => s.tolerance);
+  const settings = useAppStore((s) => s.settings);
 
   const displayGermanPairs = React.useMemo(() => {
     if (!exercise.matching_pairs) return [];
@@ -61,7 +65,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     return (exercise.tile_options || []).map((t) => t.replace(/[.,!?;:]+$/, ""));
   }, [exercise.tile_options]);
 
-  useEffect(() => {
+  const resetCurrentExercise = () => {
     setUserInput("");
     setSelectedIndices([]);
     setSelectedEnglish(null);
@@ -78,6 +82,10 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     if (exercise.type === "derive" || exercise.type === "reverse_cognate") {
       setTimeout(() => inputRef.current?.focus(), 50);
     }
+  };
+
+  useEffect(() => {
+    resetCurrentExercise();
   }, [exercise]);
 
   // Keyboard shortcut listener for all exercise types:
@@ -88,6 +96,20 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
   // - Matching pairs: 1-N for English, then 1-N for German, Escape to deselect
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.getModifierState) {
+        setIsCapsLock(e.getModifierState("CapsLock"));
+      }
+
+      // Quick restart hotkey (esc / tab / enter)
+      if (
+        (settings.quickRestart === "esc" && e.key === "Escape") ||
+        (settings.quickRestart === "tab" && e.key === "Tab")
+      ) {
+        e.preventDefault();
+        resetCurrentExercise();
+        return;
+      }
+
       // Don't intercept when feedback modal sheets are up (they handle their own Enter/Space)
       if (showErrorSheet || showSuccessSheet) return;
 
@@ -100,8 +122,15 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
         return;
       }
 
-      // If user is actively typing in the derivation text input, allow standard text input
-      if (isInput) return;
+      // If user is actively typing in the derivation text input
+      if (isInput) {
+        // Confidence mode: blocks Backspace key
+        if (settings.confidenceMode === "on" && e.key === "Backspace") {
+          e.preventDefault();
+          return;
+        }
+        return;
+      }
 
       // 2. Multiple choice shift select (1-9)
       if (exercise.type === "shift_select" && exercise.options && status === "idle") {
@@ -185,9 +214,29 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [userInput, selectedIndices, matchedPairs, selectedEnglish, displayGermanPairs, status, showErrorSheet, showSuccessSheet, exercise]);
+  }, [userInput, selectedIndices, matchedPairs, selectedEnglish, displayGermanPairs, status, showErrorSheet, showSuccessSheet, exercise, settings]);
 
   const handleInputChange = (val: string) => {
+    if (val.length > userInput.length) {
+      if (settings.stopOnError === "letter") {
+        const nextCharIndex = userInput.length;
+        const expectedTarget = exercise.target_answer;
+        const valChar = val[nextCharIndex]?.toLowerCase();
+        const targetChar = expectedTarget[nextCharIndex]?.toLowerCase();
+        const normalizeChar = (c: string | undefined) =>
+          (c ?? "").replace(/ä/g, "a").replace(/ö/g, "o").replace(/ü/g, "u").replace(/ß/g, "s");
+        const isMatch =
+          valChar === targetChar ||
+          (settings.lazyMode && valChar !== undefined && normalizeChar(valChar) === normalizeChar(targetChar));
+        if (nextCharIndex < expectedTarget.length && !isMatch) {
+          void soundEngine.playError(settings.playSoundOnError, settings.soundVolume);
+          return;
+        }
+      }
+      void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
+    } else if (val.length < userInput.length) {
+      void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
+    }
     setUserInput(val);
     if (status !== "idle") setStatus("idle");
     setFeedbackNote(null);
@@ -222,7 +271,11 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     }
 
     // Three-tier evaluation: Spot On (Green), Almost Right (Yellow), Obviously Wrong (Red)
-    const evaluation = evaluateAnswerAccuracy(answerToCheck, expected);
+    const evalOptions = {
+      umlautTolerance: Boolean(settings.lazyMode ?? tolerance.umlautTolerance),
+      capitalizationTolerance: Boolean(settings.capitalizationTolerance ?? tolerance.capitalizationTolerance),
+    };
+    const evaluation = evaluateAnswerAccuracy(answerToCheck, expected, evalOptions);
 
     if (evaluation.accuracy === "exact") {
       setStatus("correct");
@@ -242,8 +295,8 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       setAlmostWarningNote(evaluation.warningNote);
       setShowSuccessSheet(true);
 
-      // If the spelling was wrong (typo or missing umlaut), queue for repeat at the end
-      if (evaluation.reason === "typo" || evaluation.reason === "umlaut") {
+      // If the spelling was wrong (typo or missing umlaut without tolerance), queue for repeat at the end
+      if (evaluation.reason === "typo" || (evaluation.reason === "umlaut" && !evalOptions.umlautTolerance)) {
         onQueueRetry?.();
       }
       return;
@@ -251,6 +304,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
 
     // Otherwise standard error (obviously wrong)
     setStatus("incorrect");
+    void soundEngine.playError(settings.playSoundOnError, settings.soundVolume);
     onError(
       evaluation.reason === "umlaut"
         ? "umlaut"
@@ -264,7 +318,12 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
   };
 
   const handleShiftOptionSelect = (option: string) => {
-    const evaluation = evaluateAnswerAccuracy(option, exercise.target_answer);
+    void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
+    const evalOptions = {
+      umlautTolerance: Boolean(settings.lazyMode ?? tolerance.umlautTolerance),
+      capitalizationTolerance: Boolean(settings.capitalizationTolerance ?? tolerance.capitalizationTolerance),
+    };
+    const evaluation = evaluateAnswerAccuracy(option, exercise.target_answer, evalOptions);
     if (evaluation.accuracy === "exact") {
       setStatus("correct");
       setFeedbackNote("Spot On! Perfect.");
@@ -279,11 +338,12 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       setVerifiedAttemptText(option);
       setAlmostWarningNote(evaluation.warningNote);
       setShowSuccessSheet(true);
-      if (evaluation.reason === "typo" || evaluation.reason === "umlaut") {
+      if (evaluation.reason === "typo" || (evaluation.reason === "umlaut" && !evalOptions.umlautTolerance)) {
         onQueueRetry?.();
       }
     } else {
       setStatus("incorrect");
+      void soundEngine.playError(settings.playSoundOnError, settings.soundVolume);
       onError("spelling");
       onQueueRetry?.();
       setFailedAttemptText(option);
@@ -295,6 +355,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     if (status !== "idle" && status !== "incorrect") return;
     if (status === "incorrect") setStatus("idle");
     if (selectedIndices.includes(idx)) return;
+    void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
     setFeedbackNote(null);
     setSelectedIndices((prev) => [...prev, idx]);
   };
@@ -302,6 +363,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
   const unpickTilePosition = (rackPosition: number) => {
     if (status !== "idle" && status !== "incorrect") return;
     if (status === "incorrect") setStatus("idle");
+    void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
     setFeedbackNote(null);
     setSelectedIndices((prev) => prev.filter((_, i) => i !== rackPosition));
   };
@@ -310,6 +372,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
   const handleSelectEnglish = (en: string) => {
     if (status !== "idle" && status !== "incorrect") return;
     if (status === "incorrect") setStatus("idle");
+    void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
     setSelectedEnglish(en);
   };
 
@@ -322,6 +385,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     }
 
     if (selectedEnglish === pairEn) {
+      void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
       const updated = [...matchedPairs, pairId];
       setMatchedPairs(updated);
       setSelectedEnglish(null);
@@ -333,6 +397,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
         setShowSuccessSheet(true);
       }
     } else {
+      void soundEngine.playError(settings.playSoundOnError, settings.soundVolume);
       setFeedbackNote(`"${selectedEnglish}" does not match "${de}". Try again!`);
       setSelectedEnglish(null);
       onError("spelling");
@@ -341,50 +406,50 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
   };
 
   return (
-    <div className="p-6 rounded-2xl bg-[#1C1D2B] border border-white/10 space-y-5 shadow-xl">
+    <div className="p-6 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-5 shadow-lg font-mono">
       {/* Exercise Header */}
-      <div className="flex items-center justify-between border-b border-white/5 pb-3">
+      <div className="flex items-center justify-between border-b border-[var(--sub-color)]/15 pb-3">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-cyan-400" />
-          <span className="text-xs font-mono uppercase tracking-wider text-cyan-400 font-semibold">
+          <span className="w-2 h-2 rounded-full bg-[var(--main-color)]" />
+          <span className="text-xs uppercase tracking-wider text-[var(--main-color)] font-semibold">
             {isRetry
-              ? "🔄 End-of-Lesson Retry"
+              ? "retry exercise"
               : exercise.type === "morpheme_tiles"
-              ? "Tile Morpheme Assembly"
+              ? "morpheme assembly"
               : exercise.type === "matching_pairs"
-              ? "Cognate Matching Cards"
+              ? "cognate matching"
               : exercise.type === "shift_select"
-              ? "Shift Pattern Recognition"
+              ? "shift recognition"
               : exercise.type === "syntax_builder"
-              ? "Sentence Construction"
-              : "Rule Application"}
+              ? "sentence builder"
+              : "rule application"}
           </span>
         </div>
 
         {exercise.shift_hint && (
-          <span className="text-xs font-mono px-2.5 py-0.5 rounded bg-cyan-950/60 text-cyan-300 border border-cyan-500/20 font-bold">
+          <span className="text-xs px-2.5 py-0.5 rounded bg-[var(--bg-color)] text-[var(--main-color)] border border-[var(--sub-color)]/20 font-bold">
             {exercise.shift_hint}
           </span>
         )}
       </div>
 
-      <p className="text-lg text-slate-100 font-medium leading-snug">{exercise.prompt}</p>
+      <p className="text-base text-[var(--text-color)] font-bold leading-snug">{exercise.prompt}</p>
 
-      {/* Pre-exercise Vocabulary Hints for newly introduced words (e.g. mit = with) */}
+      {/* Pre-exercise Vocabulary Hints */}
       {exercise.vocab_hints && exercise.vocab_hints.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs animate-in fade-in">
-          <span className="font-mono text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" /> Word Clue:
+        <div className="flex flex-wrap items-center gap-2 p-3 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 text-xs">
+          <span className="text-[var(--main-color)] font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5" /> clue:
           </span>
           {exercise.vocab_hints.map((hint) => (
             <span
               key={hint.word}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/40 border border-white/10 text-slate-200"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-[var(--text-color)]"
             >
-              <strong className="text-amber-300 font-mono font-bold">{hint.word}</strong>
-              <span className="text-slate-400">=</span>
-              <span className="font-medium text-slate-100">{hint.translation}</span>
-              {hint.note && <span className="text-slate-400 text-[11px] italic">({hint.note})</span>}
+              <strong className="text-[var(--main-color)] font-bold">{hint.word}</strong>
+              <span className="text-[var(--sub-color)]">=</span>
+              <span className="text-[var(--text-color)]">{hint.translation}</span>
+              {hint.note && <span className="text-[var(--sub-color)] text-[11px] italic">({hint.note})</span>}
             </span>
           ))}
         </div>
@@ -394,28 +459,28 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       {exercise.type === "morpheme_tiles" && sanitizedTileOptions.length > 0 && (
         <div className="space-y-4">
           {/* Target Assembly Slot */}
-          <div className="min-h-[58px] p-3 rounded-xl bg-[#161722] border-2 border-dashed border-white/20 flex flex-wrap gap-2 items-center justify-center">
+          <div className="min-h-[58px] p-3 rounded-lg bg-[var(--bg-color)] border border-dashed border-[var(--sub-color)]/30 flex flex-wrap gap-2 items-center justify-center">
             {selectedIndices.length === 0 ? (
-              <span className="text-xs font-mono text-slate-500 italic">
-                Tap tiles or press 1–{sanitizedTileOptions.length} to assemble word...
+              <span className="text-xs text-[var(--sub-color)]/60 italic">
+                tap tiles or press 1–{sanitizedTileOptions.length} to assemble word...
               </span>
             ) : (
               selectedIndices.map((tileIdx, pos) => (
                 <button
                   key={`${sanitizedTileOptions[tileIdx]}-${tileIdx}-${pos}`}
                   onClick={() => unpickTilePosition(pos)}
-                  className="px-4 py-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/50 text-base font-bold hover:bg-amber-500/30 transition active:scale-95 flex items-center gap-1.5"
+                  className="px-3 py-1.5 rounded bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/40 text-sm font-bold hover:bg-[var(--error-color)]/20 hover:text-[var(--error-color)] hover:border-[var(--error-color)]/40 transition flex items-center gap-1.5 cursor-pointer"
                   title="Click or press Backspace to unpick"
                 >
                   <span>{sanitizedTileOptions[tileIdx]}</span>
-                  <span className="text-[10px] text-amber-400/60 font-mono font-normal">×</span>
+                  <span className="text-[10px] opacity-60 font-normal">×</span>
                 </button>
               ))
             )}
           </div>
 
           {/* Tile Options Bank */}
-          <div className="flex flex-wrap justify-center gap-2.5 pt-1">
+          <div className="flex flex-wrap justify-center gap-2 pt-1">
             {sanitizedTileOptions.map((tile, i) => {
               const isUsed = selectedIndices.includes(i);
               return (
@@ -424,15 +489,17 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
                   type="button"
                   onClick={() => pickTileIndex(i)}
                   disabled={isUsed || status === "correct" || status === "almost"}
-                  className={`px-4 py-2.5 rounded-xl border text-sm font-semibold transition active:scale-95 flex items-center gap-2 ${
+                  className={`px-3.5 py-2 rounded-lg border text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
                     isUsed
-                      ? "opacity-25 border-white/5 bg-white/5 text-slate-600 cursor-not-allowed"
-                      : "border-white/15 bg-white/10 hover:bg-white/15 text-slate-200 shadow-sm hover:border-amber-400/40"
+                      ? "opacity-25 border-[var(--sub-color)]/10 bg-[var(--bg-color)] text-[var(--sub-color)] cursor-not-allowed"
+                      : "border-[var(--sub-color)]/20 bg-[var(--bg-color)] hover:border-[var(--main-color)] text-[var(--text-color)] shadow-sm"
                   }`}
                 >
-                  <kbd className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-black/40 text-slate-400 border border-white/10">
-                    {i + 1}
-                  </kbd>
+                  {settings.showKeyTips && (
+                    <span className="keycap text-[10px]">
+                      {i + 1}
+                    </span>
+                  )}
                   <span>{tile}</span>
                 </button>
               );
@@ -447,12 +514,12 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
           {/* Left Column: English Cognates */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider block">
-                English Cognates
+              <span className="text-[11px] text-[var(--sub-color)] uppercase tracking-wider block">
+                english cognates
               </span>
               {!selectedEnglish && (
-                <span className="text-[10px] font-mono text-amber-400/80">
-                  Press 1–{exercise.matching_pairs.filter((p) => !matchedPairs.includes(p.id)).length}
+                <span className="text-[10px] text-[var(--sub-color)]">
+                  1–{exercise.matching_pairs.filter((p) => !matchedPairs.includes(p.id)).length}
                 </span>
               )}
             </div>
@@ -468,23 +535,23 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
                   type="button"
                   onClick={() => handleSelectEnglish(pair.english)}
                   disabled={isMatched}
-                  className={`w-full p-3 rounded-xl border text-sm font-medium transition text-left flex items-center justify-between ${
+                  className={`w-full p-3 rounded-lg border text-xs font-mono transition text-left flex items-center justify-between cursor-pointer ${
                     isMatched
-                      ? "bg-emerald-950/30 border-emerald-500/30 text-emerald-400 opacity-60"
+                      ? "bg-[var(--main-color)]/10 border-[var(--main-color)]/30 text-[var(--main-color)] opacity-60"
                       : isSelected
-                      ? "bg-amber-500/20 border-amber-400 text-amber-300 ring-2 ring-amber-400/30 font-bold"
-                      : "bg-white/5 border-white/10 hover:bg-white/10 text-slate-200"
+                      ? "bg-[var(--main-color)]/20 border-[var(--main-color)] text-[var(--main-color)] ring-1 ring-[var(--main-color)]/40 font-bold"
+                      : "bg-[var(--bg-color)] border-[var(--sub-color)]/20 hover:border-[var(--sub-color)]/50 text-[var(--text-color)]"
                   }`}
                 >
                   <span className="flex items-center gap-2">
-                    {unmatchedIndex !== -1 && (
-                      <kbd className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-black/40 text-slate-400 border border-white/10">
+                    {settings.showKeyTips && unmatchedIndex !== -1 && (
+                      <span className="keycap text-[10px]">
                         {unmatchedIndex + 1}
-                      </kbd>
+                      </span>
                     )}
                     <span>{pair.english}</span>
                   </span>
-                  {isMatched && <Check className="w-4 h-4 text-emerald-400" />}
+                  {isMatched && <Check className="w-4 h-4 text-[var(--main-color)]" />}
                 </button>
               );
             })}
@@ -493,12 +560,12 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
           {/* Right Column: Shifted German Targets */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider block">
-                German Shifted
+              <span className="text-[11px] text-[var(--sub-color)] uppercase tracking-wider block">
+                german shifted
               </span>
               {selectedEnglish && (
-                <span className="text-[10px] font-mono text-cyan-400/80">
-                  Press 1–{displayGermanPairs.filter((p) => !matchedPairs.includes(p.id)).length} · Esc
+                <span className="text-[10px] text-[var(--main-color)]">
+                  1–{displayGermanPairs.filter((p) => !matchedPairs.includes(p.id)).length} · esc
                 </span>
               )}
             </div>
@@ -513,21 +580,21 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
                   type="button"
                   onClick={() => handleSelectGerman(pair.german, pair.id, pair.english)}
                   disabled={isMatched}
-                  className={`w-full p-3 rounded-xl border text-sm font-semibold transition text-left flex items-center justify-between ${
+                  className={`w-full p-3 rounded-lg border text-xs font-mono transition text-left flex items-center justify-between cursor-pointer ${
                     isMatched
-                      ? "bg-emerald-950/30 border-emerald-500/30 text-emerald-400 opacity-60"
-                      : "bg-white/5 border-white/10 hover:bg-white/10 text-amber-400"
+                      ? "bg-[var(--main-color)]/10 border-[var(--main-color)]/30 text-[var(--main-color)] opacity-60"
+                      : "bg-[var(--bg-color)] border-[var(--sub-color)]/20 hover:border-[var(--main-color)] text-[var(--main-color)] font-bold"
                   }`}
                 >
                   <span className="flex items-center gap-2">
-                    {selectedEnglish && unmatchedIndex !== -1 && (
-                      <kbd className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-black/40 text-cyan-300 border border-cyan-500/30">
+                    {settings.showKeyTips && selectedEnglish && unmatchedIndex !== -1 && (
+                      <span className="keycap text-[10px]">
                         {unmatchedIndex + 1}
-                      </kbd>
+                      </span>
                     )}
                     <span>{pair.german}</span>
                   </span>
-                  {isMatched && <Check className="w-4 h-4 text-emerald-400" />}
+                  {isMatched && <Check className="w-4 h-4 text-[var(--main-color)]" />}
                 </button>
               );
             })}
@@ -538,43 +605,73 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       {/* 3. Typing Derivation Input */}
       {(exercise.type === "derive" || exercise.type === "reverse_cognate") && (
         <div className="space-y-3">
+          {/* Caps Lock warning indicator */}
+          {settings.capsLockWarning && isCapsLock && (
+            <div className="flex items-center gap-1.5 text-xs text-[var(--error-color)] font-mono animate-pulse">
+              <AlertCircle className="w-3.5 h-3.5" />
+              <span>caps lock is on</span>
+            </div>
+          )}
+
           <div className="relative">
             <input
               ref={inputRef}
               type="text"
               value={userInput}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setIsInputFocused(false)}
               onChange={(e) => handleInputChange(e.target.value)}
               onKeyDown={(e) => {
+                if (e.getModifierState) {
+                  setIsCapsLock(e.getModifierState("CapsLock"));
+                }
+                if (settings.confidenceMode === "on" && e.key === "Backspace") {
+                  e.preventDefault();
+                  return;
+                }
+                if (
+                  (settings.quickRestart === "esc" && e.key === "Escape") ||
+                  (settings.quickRestart === "tab" && e.key === "Tab")
+                ) {
+                  e.preventDefault();
+                  resetCurrentExercise();
+                  return;
+                }
                 if (e.key === "Enter") {
                   e.preventDefault();
+                  e.stopPropagation();
                   handleVerify();
                 }
               }}
               readOnly={status === "correct" || status === "almost"}
-              placeholder={exercise.english_hint ? `Type German (e.g. ${exercise.english_hint})` : "Type answer..."}
-              className="w-full px-4 py-3.5 rounded-xl bg-[#161722] border border-white/15 text-amber-300 text-xl font-bold placeholder-slate-500 outline-none focus:border-amber-400/60 transition shadow-inner"
+              placeholder={exercise.english_hint ? `type german (e.g. ${exercise.english_hint})` : "type answer..."}
+              className="w-full px-4 py-3 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/30 text-[var(--main-color)] text-lg font-bold font-mono outline-none focus:border-[var(--main-color)] transition placeholder:text-[var(--sub-color)]/40"
             />
           </div>
 
-          <GermanCharBar onInsert={(char) => handleInputChange(userInput + char)} />
+          {(settings.showCharBar === "always" || (settings.showCharBar === "on_focus" && isInputFocused)) && (
+            <GermanCharBar onInsert={(char) => handleInputChange(userInput + char)} />
+          )}
         </div>
       )}
 
       {/* 4. Multiple Choice Shift Select */}
       {exercise.type === "shift_select" && exercise.options && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
           {exercise.options.map((opt, i) => (
             <button
               key={opt}
               type="button"
               onClick={() => handleShiftOptionSelect(opt)}
               disabled={status !== "idle"}
-              className="flex items-center justify-between p-3.5 rounded-xl bg-white/5 hover:bg-white/10 active:scale-98 border border-white/10 text-sm font-mono text-slate-200 transition text-left group"
+              className="flex items-center justify-between p-3 rounded-lg bg-[var(--bg-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--text-color)] transition text-left group cursor-pointer"
             >
-              <span className="group-hover:text-amber-300 font-bold">{opt}</span>
-              <kbd className="text-xs text-slate-500 bg-black/40 px-2 py-0.5 rounded border border-white/10">
-                {i + 1}
-              </kbd>
+              <span className="group-hover:text-[var(--main-color)] font-bold">{opt}</span>
+              {settings.showKeyTips && (
+                <span className="keycap text-[10px]">
+                  {i + 1}
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -583,21 +680,21 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       {/* 5. Satzklammer Syntax Builder Tiles */}
       {exercise.type === "syntax_builder" && sanitizedWordBank.length > 0 && (
         <div className="space-y-3">
-          <div className="min-h-[58px] p-3 rounded-xl bg-[#161722] border border-dashed border-white/20 flex flex-wrap gap-2 items-center">
+          <div className="min-h-[58px] p-3 rounded-lg bg-[var(--bg-color)] border border-dashed border-[var(--sub-color)]/30 flex flex-wrap gap-2 items-center">
             {selectedIndices.length === 0 ? (
-              <span className="text-xs font-mono text-slate-500 italic pl-2">
-                Tap tiles or press 1–{sanitizedWordBank.length} in sentence sequence...
+              <span className="text-xs text-[var(--sub-color)]/60 italic pl-2">
+                tap tiles or press 1–{sanitizedWordBank.length} in sentence sequence...
               </span>
             ) : (
               selectedIndices.map((tileIdx, pos) => (
                 <button
                   key={`${sanitizedWordBank[tileIdx]}-${tileIdx}-${pos}`}
                   onClick={() => unpickTilePosition(pos)}
-                  className="px-3.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 text-sm font-medium hover:bg-amber-500/30 transition flex items-center gap-1.5"
+                  className="px-3 py-1.5 rounded bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/40 text-xs font-bold hover:bg-[var(--error-color)]/20 hover:text-[var(--error-color)] hover:border-[var(--error-color)]/40 transition flex items-center gap-1.5 cursor-pointer"
                   title="Click or press Backspace to unpick"
                 >
                   <span>{sanitizedWordBank[tileIdx]}</span>
-                  <span className="text-[10px] text-amber-400/60 font-mono font-normal">×</span>
+                  <span className="text-[10px] opacity-60 font-normal">×</span>
                 </button>
               ))
             )}
@@ -611,15 +708,17 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
                   key={`${tile}-${i}`}
                   onClick={() => pickTileIndex(i)}
                   disabled={isUsed || status === "correct" || status === "almost"}
-                  className={`px-3.5 py-2 rounded-xl border text-sm font-medium transition active:scale-95 flex items-center gap-2 ${
+                  className={`px-3 py-1.5 rounded-lg border text-xs font-mono transition flex items-center gap-2 cursor-pointer ${
                     isUsed
-                      ? "opacity-25 border-white/5 bg-white/5 text-slate-600 cursor-not-allowed"
-                      : "border-white/15 bg-white/10 hover:bg-white/15 text-slate-200 hover:border-amber-400/40"
+                      ? "opacity-25 border-[var(--sub-color)]/10 bg-[var(--bg-color)] text-[var(--sub-color)] cursor-not-allowed"
+                      : "border-[var(--sub-color)]/20 bg-[var(--bg-color)] hover:border-[var(--main-color)] text-[var(--text-color)]"
                   }`}
                 >
-                  <kbd className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-black/40 text-slate-400 border border-white/10">
-                    {i + 1}
-                  </kbd>
+                  {settings.showKeyTips && (
+                    <span className="keycap text-[10px]">
+                      {i + 1}
+                    </span>
+                  )}
                   <span>{tile}</span>
                 </button>
               );
@@ -629,26 +728,26 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       )}
 
       {/* Footer Actions & Notifications */}
-      <div className="pt-3 border-t border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="pt-3 border-t border-[var(--sub-color)]/15 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
           {feedbackNote && (
             <p
-              className={`text-xs font-medium flex items-center gap-1.5 ${
+              className={`text-xs font-mono flex items-center gap-1.5 ${
                 status === "correct"
-                  ? "text-emerald-400"
+                  ? "text-[var(--main-color)]"
                   : status === "almost"
-                  ? "text-amber-400 font-semibold"
+                  ? "text-[var(--sub-color)]"
                   : status === "incorrect"
-                  ? "text-rose-400"
-                  : "text-amber-400"
+                  ? "text-[var(--error-color)]"
+                  : "text-[var(--sub-color)]"
               }`}
             >
               {status === "correct" ? (
-                <Check className="w-4 h-4 text-emerald-400" />
+                <Check className="w-4 h-4 text-[var(--main-color)]" />
               ) : status === "almost" ? (
-                <Sparkles className="w-4 h-4 text-amber-400" />
+                <Sparkles className="w-4 h-4 text-[var(--sub-color)]" />
               ) : (
-                <AlertCircle className="w-4 h-4" />
+                <AlertCircle className="w-4 h-4 text-[var(--error-color)]" />
               )}
               <span>{feedbackNote}</span>
             </p>
@@ -659,9 +758,12 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
           <button
             type="button"
             onClick={handleVerify}
-            className="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition active:scale-95 cursor-pointer ml-auto shadow-md shadow-amber-500/20"
+            className="px-5 py-2 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-mono font-bold text-xs transition cursor-pointer ml-auto flex items-center gap-1.5"
           >
-            Verify [Enter]
+            <span>verify</span>
+            {settings.showKeyTips && (
+              <span className="keycap text-[10px]">enter</span>
+            )}
           </button>
         )}
       </div>

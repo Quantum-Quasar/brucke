@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
+import type { LessonSegment } from "@/lib/types";
 
-export type LessonSegment = "hook" | "pattern" | "table" | "practice" | "summary";
+export type { LessonSegment } from "@/lib/types";
 
 interface ProgressBar5Props {
   currentSegment: LessonSegment;
@@ -35,24 +36,27 @@ export const ProgressBar5: React.FC<ProgressBar5Props> = ({
             <button
               key={seg.id}
               type="button"
+              disabled={!isDone}
               onClick={() => onSelectSegment?.(seg.id)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
+              className={`h-1 rounded transition-all duration-200 ${
                 isCurrent
-                  ? "bg-amber-400 ring-2 ring-amber-400/30"
+                  ? "bg-[var(--main-color)]"
                   : isDone
-                  ? "bg-emerald-500/80"
-                  : "bg-white/10 hover:bg-white/20"
-              }`}
-              title={seg.label}
+                  ? "bg-[var(--main-color)]/60 hover:bg-[var(--main-color)]"
+                  : "bg-[var(--sub-color)]/20"
+              } ${!isDone ? "cursor-not-allowed" : "cursor-pointer"}`}
+              title={isDone ? `${seg.label} (completed)` : `${seg.label} (locked until reached)`}
+              aria-label={`${seg.label}${isCurrent ? ", current step" : isDone ? ", completed" : ", locked"}`}
+              aria-current={isCurrent ? "step" : undefined}
             />
           );
         })}
       </div>
 
       {/* Labels */}
-      <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
+      <div className="flex items-center justify-between text-[11px] font-mono text-[var(--sub-color)]">
         <span>Part {SEGMENTS.findIndex((s) => s.id === currentSegment) + 1} of 5</span>
-        <span className="text-amber-400/90 capitalize font-medium">
+        <span className="text-[var(--main-color)] capitalize font-medium">
           {SEGMENTS.find((s) => s.id === currentSegment)?.label}
         </span>
       </div>

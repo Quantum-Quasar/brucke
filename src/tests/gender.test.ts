@@ -1,9 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { getGenderInfo } from "@/lib/gender";
-import compendium from "@/data/compendium.json";
-import type { CompendiumData } from "@/lib/types";
-
-const data = compendium as unknown as CompendiumData;
+import { compendium as data } from "@/data/compendium";
 
 describe("Grammatical Gender Engine & Color Coding", () => {
   it("maps der to masculine azure blue metadata", () => {
@@ -11,7 +8,7 @@ describe("Grammatical Gender Engine & Color Coding", () => {
     expect(info).toBeDefined();
     expect(info?.gender).toBe("der");
     expect(info?.label).toBe("Masculine");
-    expect(info?.textClass).toContain("blue");
+    expect(info?.colorName).toBe("Azure Blue");
     expect(info?.badgeClass).toContain("blue");
   });
 
@@ -20,7 +17,7 @@ describe("Grammatical Gender Engine & Color Coding", () => {
     expect(info).toBeDefined();
     expect(info?.gender).toBe("die");
     expect(info?.label).toBe("Feminine");
-    expect(info?.textClass).toContain("rose");
+    expect(info?.colorName).toBe("Vivid Rose");
     expect(info?.badgeClass).toContain("rose");
   });
 
@@ -29,7 +26,7 @@ describe("Grammatical Gender Engine & Color Coding", () => {
     expect(info).toBeDefined();
     expect(info?.gender).toBe("das");
     expect(info?.label).toBe("Neuter");
-    expect(info?.textClass).toContain("emerald");
+    expect(info?.colorName).toBe("Emerald Green");
     expect(info?.badgeClass).toContain("emerald");
   });
 

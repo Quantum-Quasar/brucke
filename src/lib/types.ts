@@ -1,8 +1,20 @@
+export const TOTAL_COMPENDIUM_WORDS = 310;
+
 export type Gender = "der" | "die" | "das";
 
 export type MasteryState = "unexplored" | "explored" | "encountered" | "mastered";
 
 export type ReviewMode = "flashcard" | "mcq" | "tiles" | "typing";
+
+export type LessonSegment = "hook" | "pattern" | "table" | "practice" | "summary";
+
+export interface LessonProgress {
+  segment: LessonSegment;
+  practiceIndex: number;
+  completedSegments: LessonSegment[];
+  /** true once any exercise was queued for retry this lesson — a purple star requires it to stay false */
+  everQueued?: boolean;
+}
 
 export interface WordEntity {
   id: string;
@@ -16,7 +28,6 @@ export interface WordEntity {
   context_phrase: string;
   context_translation: string;
   etymology_derivation: string;
-  lesson_index?: number;
 }
 
 export interface ShiftFamily {
@@ -123,9 +134,70 @@ export interface Lesson {
   table_word_ids: string[];
   exercises: ExerciseItem[];
   summary: {
+    outcome: string;
+    use_example: { german: string; english: string };
     takeaway: string;
     curiosity_teaser: string;
   };
+}
+
+// ---------------------------------------------------------------------------
+// Baba-style Trail Map — curriculum shells & node graph
+// ---------------------------------------------------------------------------
+
+/** One shell lesson on the map. Hollow shells carry only a title + authoring plan. */
+export interface LessonShell {
+  /** Globally unique node id. Cores reuse the topic id (1–30); sprigs & branches use offset series. */
+  id: number;
+  title: string;
+  /** One-line plan of what the future content should cover (for the content author). */
+  plan: string;
+  /** true when a fully authored Lesson exists for this shell in data/lessons.ts */
+  authored?: boolean;
+}
+
+/** A topic = one cluster ("bunch") on the trail. The spine passes through every core. */
+export interface TopicCluster {
+  /** 1–30. Equals the core lesson id. */
+  id: number;
+  title: string;
+  /** One-line description shown on the map signpost and in the node drawer. */
+  blurb: string;
+  /** The main-line lesson of the topic (id === topic id). */
+  core: LessonShell;
+  /** Optional side lessons of the same topic; all attach to the core (individually skippable). */
+  sprigs: LessonShell[];
+}
+
+/** A support-material branch: a mini path of 1–3 optional lessons hanging off an attach node. */
+export interface TrailBranch {
+  /** 5000-series unique id of the branch (lessons get branchId+1, +2, …). */
+  id: number;
+  /** Node id the branch hangs from (usually a core). */
+  attach: number;
+  title: string;
+  blurb: string;
+  /** Ordered mini path; lesson i unlocks the next. */
+  lessons: LessonShell[];
+}
+
+/** Golden star for a completed lesson; purple for a flawless first-try run (retry queue untouched). */
+export type LessonStar = "gold" | "purple";
+
+/**
+ * A star gate between topic families. It sits after `afterTopic`'s core and blocks
+ * every later topic until `requiredStars` have been earned within the stretch the
+ * gate closes (topics after the previous gate up to and including `afterTopic`).
+ * Thresholds sit deliberately between the minimum (all cores) and the maximum
+ * (every lesson in the stretch) so learners must also clear side lessons.
+ */
+export interface TrailGate {
+  id: number;
+  afterTopic: number;
+  requiredStars: number;
+  title: string;
+  /** why the gate sits exactly here — shown in the gate drawer */
+  why: string;
 }
 
 export interface CompendiumData {

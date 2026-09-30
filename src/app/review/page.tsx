@@ -15,6 +15,7 @@ import {
   RefreshCw,
   HelpCircle,
   Volume2,
+  AlertCircle,
 } from "lucide-react";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
@@ -24,11 +25,12 @@ import { useAppStore } from "@/lib/store";
 import { getDueCards, getWeakestCards, type ReviewGrade } from "@/lib/srs";
 import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
 import { playGermanAudio } from "@/lib/audio";
-import { computeLetterDiff } from "@/lib/letter-diff";
-import compendium from "@/data/compendium.json";
-import type { CompendiumData, ReviewMode, SRSCard, WordEntity } from "@/lib/types";
-
-const data = compendium as unknown as CompendiumData;
+import { computeLetterDiff, evaluateAnswerAccuracy } from "@/lib/letter-diff";
+import { soundEngine } from "@/lib/sound";
+import { compendium as data } from "@/data/compendium";
+import { WORD_ENTITY_MAP } from "@/lib/word-entities";
+import type { ReviewMode, SRSCard, WordEntity } from "@/lib/types";
+import { useDialogFocus } from "@/lib/use-dialog-focus";
 
 type DeckType = "due" | "shift" | "weakest" | "recent" | "compounds";
 
@@ -37,6 +39,22 @@ interface PendingDeckStart {
   customCards?: SRSCard[];
 }
 
+interface ReviewSessionStats {
+  reviewed: number;
+  correct: number;
+  again: number;
+  hard: number;
+  easy: number;
+}
+
+const EMPTY_SESSION_STATS: ReviewSessionStats = {
+  reviewed: 0,
+  correct: 0,
+  again: 0,
+  hard: 0,
+  easy: 0,
+};
+
 export default function ReviewPage() {
   const [mounted, setMounted] = useState(false);
   const [activeDeck, setActiveDeck] = useState<DeckType | null>(null);
@@ -44,14 +62,31 @@ export default function ReviewPage() {
   const [sessionCards, setSessionCards] = useState<SRSCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
+  const [isCapsLock, setIsCapsLock] = useState(false);
+  const [sessionStats, setSessionStats] = useState<ReviewSessionStats>(EMPTY_SESSION_STATS);
+  const [sessionComplete, setSessionComplete] = useState(false);
+  const [completedDeck, setCompletedDeck] = useState<DeckType | null>(null);
 
   // Review Style Mode State
   const preferredReviewMode = useAppStore((s) => s.preferredReviewMode);
   const setPreferredReviewMode = useAppStore((s) => s.setPreferredReviewMode);
+  const settings = useAppStore((s) => s.settings);
   const [reviewMode, setReviewMode] = useState<ReviewMode>(preferredReviewMode || "flashcard");
   const [isModeSelectorOpen, setIsModeSelectorOpen] = useState(false);
   const [pendingDeck, setPendingDeck] = useState<PendingDeckStart | null>(null);
   const [rememberPreference, setRememberPreference] = useState(true);
+  const modeDialogRef = useRef<HTMLDivElement>(null);
+
+  const closeModeSelector = () => {
+    setIsModeSelectorOpen(false);
+    setPendingDeck(null);
+  };
+
+  useDialogFocus({
+    open: isModeSelectorOpen,
+    containerRef: modeDialogRef,
+    onEscape: closeModeSelector,
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -63,6 +98,7 @@ export default function ReviewPage() {
   const [selectedTiles, setSelectedTiles] = useState<string[]>([]);
   const [availableTiles, setAvailableTiles] = useState<string[]>([]);
   const [currentAutoGrade, setCurrentAutoGrade] = useState<ReviewGrade | null>(null);
+  const [currentFeedbackNote, setCurrentFeedbackNote] = useState<string | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -80,42 +116,8 @@ export default function ReviewPage() {
     }
   }, [preferredReviewMode]);
 
-  // Comprehensive words map combining standard vocabulary, compound calques, and false friend traps
-  const allWordsMap: Record<string, WordEntity> = useMemo(() => {
-    const map: Record<string, WordEntity> = { ...data.words };
-    data.compounds.forEach((c) => {
-      const cleanWord = c.compound.replace(/^(der|die|das)\s+/i, "");
-      map[`compound_${c.id}`] = {
-        id: `compound_${c.id}`,
-        target_word: cleanWord,
-        english_cognate: c.literal_morphemes,
-        english_meaning: `${c.real_meaning} (lit. "${c.literal_morphemes}")`,
-        gender: c.gender,
-        ipa: "/kɔmˈpoːzɪtʊm/",
-        sound_shift_ids: [],
-        shift_rule: "Compound Calque",
-        context_phrase: c.compound,
-        context_translation: `${c.english_counterpart} (${c.literal_morphemes})`,
-        etymology_derivation: c.lore,
-      };
-    });
-    data.falseFriends.forEach((f) => {
-      map[`trap_${f.id}`] = {
-        id: `trap_${f.id}`,
-        target_word: f.german_word,
-        english_cognate: `≠ ${f.looks_like}`,
-        english_meaning: f.actual_meaning,
-        gender: null,
-        ipa: "/faɫʃɐ fʁɔʏ̯nt/",
-        sound_shift_ids: [],
-        shift_rule: "False Friend Trap",
-        context_phrase: `${f.german_word} means "${f.actual_meaning}"`,
-        context_translation: `NOT English "${f.looks_like}"!`,
-        etymology_derivation: f.trap_note,
-      };
-    });
-    return map;
-  }, []);
+  // Shared map keeps core words, compound calques, and false friends on the same detail path.
+  const allWordsMap: Record<string, WordEntity> = WORD_ENTITY_MAP;
 
   const compoundCards: SRSCard[] = useMemo(() => {
     const items: SRSCard[] = [];
@@ -159,6 +161,10 @@ export default function ReviewPage() {
     setSelectedOption(null);
     setSelectedTiles([]);
     setCurrentAutoGrade(null);
+    setCurrentFeedbackNote(null);
+    setSessionStats(EMPTY_SESSION_STATS);
+    setSessionComplete(false);
+    setCompletedDeck(null);
 
     if (customCards) {
       setSessionCards(customCards);
@@ -247,6 +253,7 @@ export default function ReviewPage() {
     setSelectedOption(null);
     setSelectedTiles([]);
     setCurrentAutoGrade(null);
+    setCurrentFeedbackNote(null);
     if (tileData) {
       setAvailableTiles(tileData.tiles);
     }
@@ -254,22 +261,49 @@ export default function ReviewPage() {
 
   // SM-2 Review Grade Handler
   const handleGrade = (grade: ReviewGrade) => {
-    const card = sessionCards[currentIndex];
-    if (card) {
-      recordReview(card.word_id, grade);
+    if (!currentCard || !isRevealed) return;
+
+    if (grade === 1) {
+      void soundEngine.playError(settings.playSoundOnError, settings.soundVolume);
+    } else {
+      void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
     }
+
+    recordReview(currentCard.word_id, grade);
+
+    const nextStats: ReviewSessionStats = {
+      reviewed: sessionStats.reviewed + 1,
+      correct: sessionStats.correct + (grade >= 3 ? 1 : 0),
+      again: sessionStats.again + (grade === 1 ? 1 : 0),
+      hard: sessionStats.hard + (grade === 3 ? 1 : 0),
+      easy: sessionStats.easy + (grade === 5 ? 1 : 0),
+    };
+    setSessionStats(nextStats);
 
     setIsRevealed(false);
     setInputGuess("");
     setSelectedOption(null);
     setSelectedTiles([]);
     setCurrentAutoGrade(null);
+    setCurrentFeedbackNote(null);
 
     if (currentIndex + 1 < sessionCards.length) {
       setCurrentIndex((i) => i + 1);
     } else {
+      setCompletedDeck(activeDeck);
+      setSessionComplete(true);
       setActiveDeck(null); // Finish session
     }
+  };
+
+  const exitDeck = () => {
+    setActiveDeck(null);
+    setSessionComplete(false);
+    setCompletedDeck(null);
+    setSessionStats(EMPTY_SESSION_STATS);
+    setIsRevealed(false);
+    setCurrentAutoGrade(null);
+    setCurrentFeedbackNote(null);
   };
 
   // MCQ Selection Handler
@@ -277,13 +311,20 @@ export default function ReviewPage() {
     if (isRevealed || !currentWord) return;
     setSelectedOption(option);
     const isCorrect = option.toLowerCase() === currentWord.target_word.toLowerCase();
+    if (isCorrect) {
+      void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
+    } else {
+      void soundEngine.playError(settings.playSoundOnError, settings.soundVolume);
+    }
     setCurrentAutoGrade(isCorrect ? 4 : 1);
+    setCurrentFeedbackNote(null);
     setIsRevealed(true);
   };
 
   // Tile Selection Handlers
   const handlePickTile = (tile: string, index: number) => {
     if (isRevealed) return;
+    void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
     const nextAvailable = [...availableTiles];
     nextAvailable.splice(index, 1);
     setAvailableTiles(nextAvailable);
@@ -292,6 +333,7 @@ export default function ReviewPage() {
 
   const handleUnpickTile = (tile: string, index: number) => {
     if (isRevealed) return;
+    void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
     const nextSelected = [...selectedTiles];
     nextSelected.splice(index, 1);
     setSelectedTiles(nextSelected);
@@ -300,6 +342,7 @@ export default function ReviewPage() {
 
   const handleResetTiles = () => {
     if (isRevealed || !tileData) return;
+    void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
     setSelectedTiles([]);
     setAvailableTiles(tileData.tiles);
   };
@@ -308,18 +351,71 @@ export default function ReviewPage() {
     if (isRevealed || !currentWord) return;
     const assembled = selectedTiles.join("");
     const isCorrect = assembled.toLowerCase() === currentWord.target_word.toLowerCase();
+    if (isCorrect) {
+      void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
+    } else {
+      void soundEngine.playError(settings.playSoundOnError, settings.soundVolume);
+    }
     setCurrentAutoGrade(isCorrect ? 4 : 1);
+    setCurrentFeedbackNote(null);
     setIsRevealed(true);
   };
 
   const handleCheckTyping = () => {
     if (isRevealed || !currentWord) return;
     const guess = inputGuess.trim();
-    if (guess.length > 0) {
-      const isCorrect = guess.toLowerCase() === currentWord.target_word.toLowerCase();
-      setCurrentAutoGrade(isCorrect ? 4 : 1);
+    if (!guess) {
+      setCurrentFeedbackNote("Type an answer before checking.");
+      return;
+    }
+
+    const evalOptions = {
+      umlautTolerance: Boolean(settings.lazyMode),
+      capitalizationTolerance: Boolean(settings.capitalizationTolerance),
+    };
+    const evaluation = evaluateAnswerAccuracy(guess, currentWord.target_word, evalOptions);
+    if (evaluation.accuracy === "exact") {
+      void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
+      setCurrentAutoGrade(4);
+      setCurrentFeedbackNote(null);
+    } else if (evaluation.accuracy === "almost") {
+      // A near miss should be corrected, not punished like a completely wrong answer.
+      void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
+      setCurrentAutoGrade(3);
+      setCurrentFeedbackNote(evaluation.warningNote || "Almost right — review the standard spelling.");
+    } else {
+      void soundEngine.playError(settings.playSoundOnError, settings.soundVolume);
+      setCurrentAutoGrade(1);
+      setCurrentFeedbackNote(null);
     }
     setIsRevealed(true);
+  };
+
+  const handleTypingInputChange = (val: string) => {
+    if (val.length > inputGuess.length) {
+      if (settings.stopOnError === "letter" && currentWord) {
+        const nextCharIndex = inputGuess.length;
+        const expectedTarget = currentWord.target_word;
+        if (nextCharIndex < expectedTarget.length) {
+          const valChar = val[nextCharIndex].toLowerCase();
+          const targetChar = expectedTarget[nextCharIndex].toLowerCase();
+          const normalizeChar = (c: string) =>
+            c.replace(/ä/g, "a").replace(/ö/g, "o").replace(/ü/g, "u").replace(/ß/g, "s");
+          const isMatch =
+            valChar === targetChar ||
+            (settings.lazyMode && normalizeChar(valChar) === normalizeChar(targetChar));
+          if (!isMatch) {
+            void soundEngine.playError(settings.playSoundOnError, settings.soundVolume);
+            return;
+          }
+        }
+      }
+      void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
+    } else if (val.length < inputGuess.length) {
+      void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
+    }
+    setInputGuess(val);
+    setCurrentFeedbackNote(null);
   };
 
   // Auto-focus input when in typing mode unrevealed
@@ -340,10 +436,31 @@ export default function ReviewPage() {
   //     - Flashcard: Space/Enter reveals
   //     - MCQ: 1-4 selects options
   //     - Tiles: Enter checks, Space reveals
-  //     - Typing: Enter reveals, Space reveals if empty
+  //     - Typing: Enter checks the typed answer
   //   - Revealed: 1-4 grades, Space/Enter quick-advances with auto-grade or Good (4)
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (e.getModifierState) {
+        setIsCapsLock(e.getModifierState("CapsLock"));
+      }
+
+      // Quick restart hotkey
+      if (
+        activeDeck &&
+        ((settings.quickRestart === "tab" && e.key === "Tab") ||
+          (settings.quickRestart === "esc" && e.key === "Escape" && isRevealed))
+      ) {
+        e.preventDefault();
+        setIsRevealed(false);
+        setInputGuess("");
+        setSelectedOption(null);
+        setSelectedTiles([]);
+        setCurrentAutoGrade(null);
+    setCurrentFeedbackNote(null);
+        if (tileData) setAvailableTiles(tileData.tiles);
+        return;
+      }
+
       // 1. Mode selector modal hotkeys
       if (isModeSelectorOpen) {
         if (e.key === "1") {
@@ -372,12 +489,18 @@ export default function ReviewPage() {
       // Escape exits session
       if (e.key === "Escape") {
         e.preventDefault();
-        setActiveDeck(null);
+        exitDeck();
         return;
       }
 
       // If user is inside an input other than our review input, ignore
       if (e.target instanceof HTMLInputElement && e.target !== inputRef.current) {
+        return;
+      }
+
+      // Confidence mode: blocks backspacing in typing review
+      if (e.target === inputRef.current && settings.confidenceMode === "on" && e.key === "Backspace") {
+        e.preventDefault();
         return;
       }
 
@@ -436,10 +559,7 @@ export default function ReviewPage() {
           if (e.key === "Enter") {
             e.preventDefault();
             handleCheckTyping();
-          } else if (e.key === " " || e.code === "Space") {
-            if (e.target === inputRef.current && inputGuess.trim().length > 0) {
-              return;
-            }
+          } else if ((e.key === " " || e.code === "Space") && e.target !== inputRef.current) {
             e.preventDefault();
             handleCheckTyping();
           }
@@ -487,9 +607,10 @@ export default function ReviewPage() {
     selectedTiles,
     availableTiles,
     currentWord,
-    inputGuess,
     currentAutoGrade,
     currentIndex,
+    sessionStats,
+    settings,
   ]);
 
   const masteredCount = Object.values(wordMastery).filter((m) => m === "mastered").length;
@@ -498,28 +619,28 @@ export default function ReviewPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
       {/* Header */}
-      <div className="space-y-1.5">
-        <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold">
+      <div className="space-y-1">
+        <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[var(--main-color)] font-semibold">
           <RotateCcw className="w-3.5 h-3.5" />
-          <span>Etymological Spaced Repetition</span>
+          <span>spaced repetition</span>
         </div>
-        <h1 className="text-3xl font-extrabold text-slate-100 tracking-tight">Review Hub</h1>
-        <p className="text-slate-400 text-sm">
-          Review words by historical shift family or algorithmic urgency using the SM-2 interval engine.
+        <h1 className="text-2xl font-bold font-mono text-[var(--text-color)] tracking-tight">review</h1>
+        <p className="text-[var(--sub-color)] text-xs font-mono">
+          recall practice powered by historical sound shifts and the sm-2 interval algorithm.
         </p>
       </div>
 
       {/* Stats Bar */}
-      <div className="p-4 rounded-xl bg-[#161722] border border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+      <div className="p-3 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
         <div className="flex items-center gap-6">
-          <span className="text-emerald-400 font-bold">{mounted ? masteredCount : 0} Mastered ✓</span>
-          <span className="text-amber-400 font-bold">{mounted ? activeCount : 0} In Active SRS 🔄</span>
-          <span className="text-cyan-400 font-bold">{mounted ? dueCards.length : 0} Due Today ⚡</span>
+          <span className="text-[var(--main-color)] font-bold">{mounted ? masteredCount : 0} mastered</span>
+          <span className="text-[var(--sub-color)] font-bold">{mounted ? activeCount : 0} in queue</span>
+          <span className="text-[var(--text-color)] font-bold">{mounted ? dueCards.length : 0} due today</span>
         </div>
         <div className="flex items-center gap-4">
           <GenderGuideBanner compact />
-          <div className="flex items-center gap-2 text-slate-400">
-            <span>Style:</span>
+          <div className="flex items-center gap-2 text-[var(--sub-color)]">
+            <span>style:</span>
             <select
               value={reviewMode}
               onChange={(e) => {
@@ -527,13 +648,13 @@ export default function ReviewPage() {
                 setReviewMode(mode);
                 setPreferredReviewMode(mode);
               }}
-              className="bg-[#1C1D2B] border border-white/15 hover:border-cyan-400 rounded px-2 py-0.5 text-xs font-mono text-cyan-300 outline-none cursor-pointer transition"
+              className="bg-[var(--bg-color)] border border-[var(--sub-color)]/25 hover:border-[var(--main-color)] rounded px-2 py-0.5 text-xs font-mono text-[var(--main-color)] outline-none cursor-pointer transition"
               title="Set default review style"
             >
-              <option value="flashcard" className="bg-[#1C1D2B] text-slate-200">📇 Quick Flip</option>
-              <option value="mcq" className="bg-[#1C1D2B] text-slate-200">🔘 MCQ</option>
-              <option value="tiles" className="bg-[#1C1D2B] text-slate-200">🧩 Tiles</option>
-              <option value="typing" className="bg-[#1C1D2B] text-slate-200">✍️ Typing</option>
+              <option value="flashcard" className="bg-[var(--bg-color)] text-[var(--text-color)]">recall</option>
+              <option value="mcq" className="bg-[var(--bg-color)] text-[var(--text-color)]">mcq</option>
+              <option value="tiles" className="bg-[var(--bg-color)] text-[var(--text-color)]">tiles</option>
+              <option value="typing" className="bg-[var(--bg-color)] text-[var(--text-color)]">typing</option>
             </select>
             <button
               type="button"
@@ -541,10 +662,10 @@ export default function ReviewPage() {
                 setPendingDeck(null);
                 setIsModeSelectorOpen(true);
               }}
-              className="text-[11px] font-mono text-slate-400 hover:text-cyan-300 underline underline-offset-2 ml-1 cursor-pointer"
+              className="text-[11px] font-mono text-[var(--sub-color)] hover:text-[var(--main-color)] underline underline-offset-2 ml-1 cursor-pointer"
               title="Select review style"
             >
-              Change Style
+              change style
             </button>
           </div>
         </div>
@@ -555,17 +676,17 @@ export default function ReviewPage() {
 
       {/* ACTIVE REVIEW SESSION MODAL / CARD */}
       {activeDeck && currentCard && currentWord ? (
-        <div className="p-6 sm:p-8 rounded-2xl bg-[#1C1D2B] border-2 border-cyan-500/40 shadow-2xl space-y-6 animate-in fade-in duration-150">
+        <div className="p-6 sm:p-8 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 shadow-md space-y-6 animate-in fade-in duration-150">
           {/* Card Header: Counter, Style Switcher, Exit */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--sub-color)]/15 pb-4">
             <div className="flex items-center gap-3">
-              <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-                Card {currentIndex + 1} of {sessionCards.length}
+              <span className="text-xs font-mono text-[var(--sub-color)] uppercase tracking-wider">
+                card {currentIndex + 1} / {sessionCards.length}
               </span>
 
               {/* Mid-Session Style Switcher */}
-              <div className="flex items-center gap-1.5 bg-black/40 border border-white/10 px-2 py-0.5 rounded-lg">
-                <span className="text-[11px] font-mono text-slate-400">Style:</span>
+              <div className="flex items-center gap-1.5 bg-[var(--bg-color)] border border-[var(--sub-color)]/25 px-2 py-0.5 rounded">
+                <span className="text-[11px] font-mono text-[var(--sub-color)]">style:</span>
                 <select
                   value={reviewMode}
                   onChange={(e) => {
@@ -573,20 +694,20 @@ export default function ReviewPage() {
                     setReviewMode(mode);
                     setPreferredReviewMode(mode);
                   }}
-                  className="bg-transparent text-xs font-mono text-cyan-300 outline-none cursor-pointer"
+                  className="bg-transparent text-xs font-mono text-[var(--main-color)] outline-none cursor-pointer"
                   title="Switch Review Style mid-session"
                 >
-                  <option value="flashcard" className="bg-[#1C1D2B] text-slate-200">
-                    📇 Quick Flip
+                  <option value="flashcard" className="bg-[var(--bg-color)] text-[var(--text-color)]">
+                    recall
                   </option>
-                  <option value="mcq" className="bg-[#1C1D2B] text-slate-200">
-                    🔘 Multiple Choice
+                  <option value="mcq" className="bg-[var(--bg-color)] text-[var(--text-color)]">
+                    mcq
                   </option>
-                  <option value="tiles" className="bg-[#1C1D2B] text-slate-200">
-                    🧩 Tile Builder
+                  <option value="tiles" className="bg-[var(--bg-color)] text-[var(--text-color)]">
+                    tiles
                   </option>
-                  <option value="typing" className="bg-[#1C1D2B] text-slate-200">
-                    ✍️ Typing (Last)
+                  <option value="typing" className="bg-[var(--bg-color)] text-[var(--text-color)]">
+                    typing
                   </option>
                 </select>
               </div>
@@ -595,50 +716,51 @@ export default function ReviewPage() {
             <button
               type="button"
               tabIndex={-1}
-              onClick={() => setActiveDeck(null)}
+              onClick={exitDeck}
               onKeyDown={(e) => {
                 if (e.key === " " || e.key === "Enter") e.preventDefault();
               }}
-              className="text-xs font-mono text-slate-400 hover:text-white px-2.5 py-1 rounded bg-white/5 border border-white/5 hover:bg-white/10 transition cursor-pointer"
+              className="text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-2.5 py-1 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 transition cursor-pointer flex items-center gap-1.5"
               title="Exit Session (Esc)"
             >
-              Exit Session [Esc]
+              <span>exit</span>
+              <span className="keycap text-[10px]">esc</span>
             </button>
           </div>
 
           {/* Front Prompt */}
           <div className="text-center space-y-2 py-2">
             <div className="flex flex-wrap items-center justify-center gap-2">
-              <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest">
-                Shift Rule: {currentWord.shift_rule}
+              <span className="text-xs font-mono text-[var(--sub-color)] uppercase tracking-widest">
+                shift: {currentWord.shift_rule}
               </span>
               {currentWord.gender && (
-                <span className="text-[11px] font-mono px-2 py-0.5 rounded border border-white/10 bg-white/5 text-slate-400">
-                  Gender: [ der / die / das ? ]
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded border border-[var(--sub-color)]/20 bg-[var(--bg-color)] text-[var(--sub-color)]">
+                  gender: [ der / die / das ? ]
                 </span>
               )}
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-100">
+            <h2 className="text-3xl sm:text-4xl font-mono font-bold text-[var(--text-color)]">
               {currentWord.english_cognate}
             </h2>
-            <p className="text-sm text-slate-400 italic">&quot;{currentWord.english_meaning}&quot;</p>
+            <p className="text-sm font-mono text-[var(--sub-color)]">&quot;{currentWord.english_meaning}&quot;</p>
           </div>
 
           {/* MODE 1: QUICK FLIP (FLASHCARD) */}
           {reviewMode === "flashcard" && !isRevealed && (
             <div className="space-y-4 max-w-md mx-auto text-center py-4">
-              <p className="text-xs text-slate-400">
-                Recall the German twin in your mind, then flip to verify.
+              <p className="text-xs font-mono text-[var(--sub-color)]">
+                recall the german twin in your mind, then reveal.
               </p>
               <button
                 type="button"
                 onClick={() => setIsRevealed(true)}
-                className="w-full py-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition cursor-pointer active:scale-95 shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2"
+                className="w-full py-3.5 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-mono font-bold text-sm transition cursor-pointer flex items-center justify-center gap-2"
               >
-                <span>Show Answer / Flip Card</span>
-                <span className="text-xs font-mono px-2 py-0.5 rounded bg-black/20 text-slate-950 font-bold">
-                  Space / Enter
-                </span>
+                <span>show answer</span>
+                {settings.showKeyTips && (
+                  <span className="keycap text-[11px]">space</span>
+                )}
               </button>
             </div>
           )}
@@ -651,14 +773,14 @@ export default function ReviewPage() {
                   const isTarget = opt.toLowerCase() === currentWord.target_word.toLowerCase();
                   const isSelected = selectedOption === opt;
 
-                  let buttonStyle = "bg-[#161722] hover:bg-white/10 border-white/10 text-slate-200";
+                  let buttonStyle = "bg-[var(--bg-color)] hover:border-[var(--main-color)]/50 border-[var(--sub-color)]/20 text-[var(--text-color)]";
                   if (isRevealed) {
                     if (isTarget) {
-                      buttonStyle = "bg-emerald-500/20 border-emerald-500 text-emerald-300 font-bold shadow-lg shadow-emerald-500/10";
+                      buttonStyle = "bg-[var(--main-color)]/15 border-[var(--main-color)] text-[var(--main-color)] font-bold";
                     } else if (isSelected && !isTarget) {
-                      buttonStyle = "bg-rose-500/20 border-rose-500 text-rose-300 line-through";
+                      buttonStyle = "bg-[var(--error-color)]/15 border-[var(--error-color)] text-[var(--error-color)] line-through";
                     } else {
-                      buttonStyle = "bg-[#161722]/60 border-white/5 text-slate-500 opacity-60";
+                      buttonStyle = "bg-[var(--bg-color)]/50 border-[var(--sub-color)]/10 text-[var(--sub-color)] opacity-40";
                     }
                   }
 
@@ -668,27 +790,31 @@ export default function ReviewPage() {
                       type="button"
                       disabled={isRevealed}
                       onClick={() => handleSelectMCQ(opt)}
-                      className={`p-3.5 rounded-xl border text-left flex items-center justify-between transition active:scale-95 cursor-pointer ${buttonStyle}`}
+                      className={`p-3 rounded-lg border text-left flex items-center justify-between transition cursor-pointer font-mono ${buttonStyle}`}
                     >
                       <span className="font-semibold text-sm">{opt}</span>
                       <div className="flex items-center gap-1.5">
-                        {isRevealed && isTarget && <Check className="w-4 h-4 text-emerald-400" />}
-                        {isRevealed && isSelected && !isTarget && <X className="w-4 h-4 text-rose-400" />}
-                        <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-white/5 text-slate-400 border border-white/10">
-                          [{idx + 1}]
-                        </span>
+                        {isRevealed && isTarget && <Check className="w-4 h-4 text-[var(--main-color)]" />}
+                        {isRevealed && isSelected && !isTarget && <X className="w-4 h-4 text-[var(--error-color)]" />}
+                        {settings.showKeyTips && (
+                          <span className="keycap text-[10px]">
+                            {idx + 1}
+                          </span>
+                        )}
                       </div>
                     </button>
                   );
                 })}
               </div>
 
-              {!isRevealed && (
-                <div className="text-center text-[11px] font-mono text-slate-400 pt-1">
-                  Press keys <span className="text-cyan-300 font-bold">[1]</span>,{" "}
-                  <span className="text-cyan-300 font-bold">[2]</span>,{" "}
-                  <span className="text-cyan-300 font-bold">[3]</span>, or{" "}
-                  <span className="text-cyan-300 font-bold">[4]</span> to select
+              {!isRevealed && settings.showKeyTips && (
+                <div className="text-center text-[11px] font-mono text-[var(--sub-color)] pt-1 flex items-center justify-center gap-1">
+                  <span>press</span>
+                  <span className="keycap text-[10px]">1</span>
+                  <span className="keycap text-[10px]">2</span>
+                  <span className="keycap text-[10px]">3</span>
+                  <span className="keycap text-[10px]">4</span>
+                  <span>to select</span>
                 </div>
               )}
             </div>
@@ -698,9 +824,9 @@ export default function ReviewPage() {
           {reviewMode === "tiles" && (
             <div className="space-y-4 max-w-lg mx-auto py-2">
               {/* Selected Tiles Assembly Rack */}
-              <div className="p-3.5 rounded-xl bg-[#161722] border border-white/15 min-h-[60px] flex flex-wrap items-center justify-center gap-2">
+              <div className="p-3.5 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/25 min-h-[60px] flex flex-wrap items-center justify-center gap-2">
                 {selectedTiles.length === 0 ? (
-                  <span className="text-xs text-slate-500 italic">Tap tiles below to assemble word...</span>
+                  <span className="text-xs font-mono text-[var(--sub-color)]/60 italic">tap tiles below to assemble word...</span>
                 ) : (
                   selectedTiles.map((tile, idx) => (
                     <button
@@ -708,7 +834,7 @@ export default function ReviewPage() {
                       type="button"
                       disabled={isRevealed}
                       onClick={() => handleUnpickTile(tile, idx)}
-                      className="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-rose-500/20 border border-cyan-500/40 hover:border-rose-500/40 text-cyan-200 font-bold font-mono text-sm transition cursor-pointer"
+                      className="px-3 py-1.5 rounded bg-[var(--main-color)]/15 hover:bg-[var(--error-color)]/20 border border-[var(--main-color)]/40 hover:border-[var(--error-color)]/40 text-[var(--main-color)] hover:text-[var(--error-color)] font-bold font-mono text-sm transition cursor-pointer"
                       title="Tap to remove"
                     >
                       {tile}
@@ -726,7 +852,7 @@ export default function ReviewPage() {
                         key={`${tile}-${idx}`}
                         type="button"
                         onClick={() => handlePickTile(tile, idx)}
-                        className="px-3.5 py-2 rounded-xl bg-[#222436] hover:bg-cyan-500/15 border border-white/10 hover:border-cyan-400 text-slate-200 font-bold font-mono text-sm transition cursor-pointer active:scale-95 shadow"
+                        className="px-3.5 py-2 rounded-lg bg-[var(--bg-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/25 text-[var(--text-color)] font-bold font-mono text-sm transition cursor-pointer active:scale-95"
                       >
                         {tile}
                       </button>
@@ -738,26 +864,32 @@ export default function ReviewPage() {
                       type="button"
                       onClick={handleResetTiles}
                       disabled={selectedTiles.length === 0}
-                      className="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-slate-400 transition cursor-pointer disabled:opacity-40"
+                      className="px-3 py-1.5 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--sub-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--sub-color)] transition cursor-pointer disabled:opacity-40"
                     >
-                      Reset Rack
+                      reset
                     </button>
 
                     <button
                       type="button"
                       onClick={handleCheckTiles}
                       disabled={selectedTiles.length === 0}
-                      className="px-6 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs font-mono transition cursor-pointer disabled:opacity-40 shadow-md shadow-cyan-500/20"
+                      className="px-5 py-1.5 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs font-mono transition cursor-pointer disabled:opacity-40 flex items-center gap-1.5"
                     >
-                      Check Answer [Enter]
+                      <span>check</span>
+                      {settings.showKeyTips && (
+                        <span className="keycap text-[10px]">enter</span>
+                      )}
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setIsRevealed(true)}
-                      className="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-slate-400 transition cursor-pointer"
+                      className="px-3 py-1.5 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--sub-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--sub-color)] transition cursor-pointer flex items-center gap-1.5"
                     >
-                      Show [Space]
+                      <span>show</span>
+                      {settings.showKeyTips && (
+                        <span className="keycap text-[10px]">space</span>
+                      )}
                     </button>
                   </div>
                 </div>
@@ -768,30 +900,59 @@ export default function ReviewPage() {
           {/* MODE 4: DERIVATION TYPING (LAST) */}
           {reviewMode === "typing" && !isRevealed && (
             <div className="space-y-4 max-w-md mx-auto">
+              {settings.capsLockWarning && isCapsLock && (
+                <div className="flex items-center justify-center gap-1.5 text-xs text-[var(--error-color)] font-mono animate-pulse">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  <span>caps lock is on</span>
+                </div>
+              )}
               <input
                 ref={inputRef}
                 type="text"
                 value={inputGuess}
-                onChange={(e) => setInputGuess(e.target.value)}
+                onChange={(e) => handleTypingInputChange(e.target.value)}
                 onKeyDown={(e) => {
+                  if (e.getModifierState) {
+                    setIsCapsLock(e.getModifierState("CapsLock"));
+                  }
+                  if (settings.confidenceMode === "on" && e.key === "Backspace") {
+                    e.preventDefault();
+                    return;
+                  }
+                  if (
+                    (settings.quickRestart === "esc" && e.key === "Escape") ||
+                    (settings.quickRestart === "tab" && e.key === "Tab")
+                  ) {
+                    e.preventDefault();
+                    setInputGuess("");
+                    return;
+                  }
                   if (e.key === "Enter") {
                     e.preventDefault();
-                    handleCheckTyping();
-                  } else if ((e.key === " " || e.code === "Space") && inputGuess.trim() === "") {
-                    e.preventDefault();
+                    e.stopPropagation();
                     handleCheckTyping();
                   }
                 }}
-                placeholder="Type German derivation (or press Space / Enter)..."
-                className="w-full px-4 py-3 rounded-xl bg-[#161722] border border-white/15 text-amber-300 text-center font-bold text-lg outline-none focus:border-cyan-400"
+                placeholder="type german derivation..."
+                className="w-full px-4 py-3 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/30 text-[var(--main-color)] text-center font-mono font-bold text-lg outline-none focus:border-[var(--main-color)] placeholder:text-[var(--sub-color)]/40 transition"
               />
-              <GermanCharBar onInsert={(c) => setInputGuess((prev) => prev + c)} />
+              {(settings.showCharBar === "always" || settings.showCharBar === "on_focus") && (
+                <GermanCharBar onInsert={(c) => handleTypingInputChange(inputGuess + c)} />
+              )}
+              {currentFeedbackNote && (
+                <p role="alert" className="text-center text-xs font-mono text-[var(--main-color)]">
+                  {currentFeedbackNote}
+                </p>
+              )}
               <button
                 type="button"
                 onClick={handleCheckTyping}
-                className="w-full py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition cursor-pointer active:scale-95 shadow-lg shadow-cyan-500/20"
+                className="w-full py-3 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-mono font-bold text-sm transition cursor-pointer flex items-center justify-center gap-2"
               >
-                Show Answer [Enter / Space]
+                <span>check answer</span>
+                {settings.showKeyTips && (
+                  <span className="keycap text-[10px]">enter</span>
+                )}
               </button>
             </div>
           )}
@@ -799,7 +960,15 @@ export default function ReviewPage() {
           {/* REVEALED CARD CONTENT & SM-2 GRADING (COMMON TO ALL MODES) */}
           {isRevealed && (
             <div className="space-y-6 animate-in fade-in duration-150">
-              <div className="p-4 rounded-xl bg-[#161722] border border-white/10 text-center space-y-3">
+              {currentFeedbackNote && (
+                <p
+                  role="status"
+                  className="text-center text-xs font-mono text-[var(--main-color)] border border-[var(--main-color)]/30 bg-[var(--main-color)]/10 rounded px-3 py-2"
+                >
+                  {currentFeedbackNote}
+                </p>
+              )}
+              <div className="p-5 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 text-center space-y-3">
                 <ShiftPair
                   english={currentWord.english_cognate}
                   german={currentWord.target_word}
@@ -811,9 +980,9 @@ export default function ReviewPage() {
 
                 {/* Character-level Diff for Typing Mode */}
                 {reviewMode === "typing" && inputGuess.trim().length > 0 && (
-                  <div className="p-3 rounded-xl bg-black/40 border border-white/10 text-center space-y-1 max-w-md mx-auto">
-                    <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">
-                      Your Attempt:
+                  <div className="p-3 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-center space-y-1 max-w-md mx-auto">
+                    <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block">
+                      your attempt:
                     </span>
                     <div className="text-base font-mono tracking-wide flex items-center justify-center gap-0.5">
                       {computeLetterDiff(inputGuess.trim(), currentWord.target_word).userChars.map((c, i) => (
@@ -821,8 +990,8 @@ export default function ReviewPage() {
                           key={i}
                           className={
                             c.status === "correct"
-                              ? "text-emerald-400 font-bold"
-                              : "text-rose-400 font-bold underline decoration-rose-500 decoration-2 bg-rose-500/15 px-0.5 rounded"
+                              ? "text-[var(--main-color)] font-bold"
+                              : "text-[var(--error-color)] font-bold underline decoration-[var(--error-color)] decoration-2 bg-[var(--error-color)]/10 px-0.5 rounded"
                           }
                         >
                           {c.char}
@@ -839,16 +1008,19 @@ export default function ReviewPage() {
                       const spoken = currentWord.gender ? `${currentWord.gender} ${currentWord.target_word}` : currentWord.target_word;
                       playGermanAudio(spoken);
                     }}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-400/10 hover:bg-amber-400/20 text-amber-400 border border-amber-400/20 text-xs font-mono transition cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[var(--sub-alt-color)] hover:bg-[var(--main-color)]/10 text-[var(--main-color)] border border-[var(--sub-color)]/20 text-xs font-mono transition cursor-pointer"
                     title="Listen to German pronunciation [R]"
                   >
                     <Volume2 className="w-3.5 h-3.5" />
-                    <span>Listen [R]</span>
+                    <span>listen</span>
+                    {settings.showKeyTips && (
+                      <span className="keycap text-[10px]">r</span>
+                    )}
                   </button>
-                  <span className="text-xs font-mono text-slate-400">{currentWord.ipa}</span>
+                  <span className="text-xs font-mono text-[var(--sub-color)]">{currentWord.ipa}</span>
                 </div>
-                <p className="text-xs text-slate-300 max-w-md mx-auto">{currentWord.etymology_derivation}</p>
-                <div className="p-2.5 rounded-lg bg-black/30 text-xs text-amber-200 italic max-w-md mx-auto">
+                <p className="text-xs font-mono text-[var(--sub-color)] max-w-md mx-auto">{currentWord.etymology_derivation}</p>
+                <div className="p-2.5 rounded bg-[var(--sub-alt-color)] text-xs font-mono text-[var(--text-color)] italic max-w-md mx-auto border border-[var(--sub-color)]/15">
                   &quot;{currentWord.context_phrase}&quot;
                 </div>
               </div>
@@ -859,102 +1031,153 @@ export default function ReviewPage() {
                   <button
                     type="button"
                     onClick={() => handleGrade(1)}
-                    className="p-3.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-semibold text-xs flex flex-col items-center gap-1.5 transition active:scale-95 cursor-pointer"
+                    className="p-3.5 rounded-lg bg-[var(--error-color)]/10 hover:bg-[var(--error-color)]/20 border border-[var(--error-color)]/30 text-[var(--error-color)] font-semibold text-xs flex flex-col items-center gap-1.5 transition cursor-pointer"
                   >
-                    <span className="text-sm font-bold">Again</span>
-                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold border border-rose-500/30">
-                      Press [1]
-                    </span>
+                    <span className="text-sm font-bold font-mono">again</span>
+                    {settings.showKeyTips && (
+                      <span className="keycap text-[10px]">1</span>
+                    )}
                   </button>
 
                   <button
                     type="button"
                     onClick={() => handleGrade(3)}
-                    className="p-3.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-semibold text-xs flex flex-col items-center gap-1.5 transition active:scale-95 cursor-pointer"
+                    className="p-3.5 rounded-lg bg-[var(--sub-color)]/10 hover:bg-[var(--sub-color)]/20 border border-[var(--sub-color)]/30 text-[var(--sub-color)] font-semibold text-xs flex flex-col items-center gap-1.5 transition cursor-pointer"
                   >
-                    <span className="text-sm font-bold">Hard</span>
-                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
-                      Press [2]
-                    </span>
+                    <span className="text-sm font-bold font-mono">hard</span>
+                    {settings.showKeyTips && (
+                      <span className="keycap text-[10px]">2</span>
+                    )}
                   </button>
 
                   <button
                     type="button"
                     onClick={() => handleGrade(4)}
-                    className="p-3.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border-2 border-emerald-500/50 text-emerald-300 font-semibold text-xs flex flex-col items-center gap-1.5 transition active:scale-95 cursor-pointer shadow-lg shadow-emerald-500/10"
+                    className="p-3.5 rounded-lg bg-[var(--main-color)]/15 hover:bg-[var(--main-color)]/25 border-2 border-[var(--main-color)] text-[var(--main-color)] font-semibold text-xs flex flex-col items-center gap-1.5 transition cursor-pointer"
                   >
-                    <span className="text-sm font-bold">Good</span>
-                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
-                      Press [3] / Space
-                    </span>
+                    <span className="text-sm font-bold font-mono">good</span>
+                    {settings.showKeyTips && (
+                      <span className="keycap text-[10px]">3 / space</span>
+                    )}
                   </button>
 
                   <button
                     type="button"
                     onClick={() => handleGrade(5)}
-                    className="p-3.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 font-semibold text-xs flex flex-col items-center gap-1.5 transition active:scale-95 cursor-pointer"
+                    className="p-3.5 rounded-lg bg-[var(--text-color)]/10 hover:bg-[var(--text-color)]/20 border border-[var(--text-color)]/30 text-[var(--text-color)] font-semibold text-xs flex flex-col items-center gap-1.5 transition cursor-pointer"
                   >
-                    <span className="text-sm font-bold">Easy</span>
-                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
-                      Press [4]
-                    </span>
+                    <span className="text-sm font-bold font-mono">easy</span>
+                    {settings.showKeyTips && (
+                      <span className="keycap text-[10px]">4</span>
+                    )}
                   </button>
                 </div>
-                <div className="text-center text-[11px] font-mono text-slate-400">
-                  Keyboard shortcuts: press <span className="text-amber-300 font-bold">1</span>, <span className="text-amber-300 font-bold">2</span>, <span className="text-emerald-300 font-bold">3</span>, or <span className="text-cyan-300 font-bold">4</span> (or <span className="text-white font-bold">Space/Enter</span> for Good)
-                </div>
+                {settings.showKeyTips && (
+                  <div className="text-center text-[11px] font-mono text-[var(--sub-color)] flex items-center justify-center gap-1">
+                    <span>shortcuts:</span>
+                    <span className="keycap text-[10px]">1</span>
+                    <span className="keycap text-[10px]">2</span>
+                    <span className="keycap text-[10px]">3</span>
+                    <span className="keycap text-[10px]">4</span>
+                    <span>(or</span>
+                    <span className="keycap text-[10px]">space</span>
+                    <span>for good)</span>
+                  </div>
+                )}
               </div>
             </div>
           )}
         </div>
       ) : (
-        /* DECK SELECTOR */
-        <div className="space-y-6">
+        <>
+          {sessionComplete && (
+            <section className="p-6 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--main-color)]/40 space-y-4" role="status">
+              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[var(--main-color)] font-semibold">
+                <CheckCircle2 className="w-4 h-4" /> review complete
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-[var(--text-color)]">Nice work — session logged</h2>
+                <p className="text-xs text-[var(--sub-color)] mt-1">
+                  You completed {sessionStats.reviewed} {sessionStats.reviewed === 1 ? "card" : "cards"} in this session.
+                </p>
+              </div>
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div className="p-3 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20">
+                  <div className="text-lg font-bold text-[var(--main-color)] font-mono">{sessionStats.correct}</div>
+                  <div className="text-[10px] font-mono text-[var(--sub-color)]">successful</div>
+                </div>
+                <div className="p-3 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20">
+                  <div className="text-lg font-bold text-[var(--text-color)] font-mono">{sessionStats.again}</div>
+                  <div className="text-[10px] font-mono text-[var(--sub-color)]">again</div>
+                </div>
+                <div className="p-3 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20">
+                  <div className="text-lg font-bold text-[var(--text-color)] font-mono">{sessionStats.hard + sessionStats.easy}</div>
+                  <div className="text-[10px] font-mono text-[var(--sub-color)]">easy/hard</div>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  disabled={!completedDeck}
+                  onClick={() => {
+                    if (completedDeck) startDeck(completedDeck);
+                  }}
+                  className="px-4 py-2 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-bold text-xs font-mono hover:opacity-90 transition disabled:opacity-40"
+                >
+                  review again
+                </button>
+                <span className="text-[11px] font-mono text-[var(--sub-color)]">Your next intervals are saved automatically.</span>
+              </div>
+            </section>
+          )}
+
+          {/* DECK SELECTOR */}
+          <div className="space-y-6">
           {/* Deck 1: Due Today */}
-          <div className="p-6 rounded-2xl bg-[#1C1D2B] border border-white/10 hover:border-cyan-500/40 transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="p-6 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 hover:border-[var(--main-color)]/40 transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-cyan-400" />
-                <h3 className="text-xl font-bold text-slate-100">Due Today Deck</h3>
-                <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
-                  {mounted ? dueCards.length : 0} Cards ⚡
+                <Clock className="w-5 h-5 text-[var(--main-color)]" />
+                <h3 className="text-lg font-bold font-mono text-[var(--text-color)]">due today</h3>
+                <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/30">
+                  {mounted ? dueCards.length : 0} cards
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
-                Scheduled by SM-2 spacing interval for optimal memory consolidation.
+              <p className="text-xs font-mono text-[var(--sub-color)]">
+                scheduled by sm-2 spacing interval for optimal memory consolidation.
               </p>
             </div>
 
             <button
               onClick={() => requestDeckStart("due")}
               disabled={dueCards.length === 0}
-              className={`px-5 py-2.5 rounded-xl font-bold text-sm transition ${
+              className={`px-5 py-2.5 rounded-lg font-mono font-bold text-xs transition ${
                 dueCards.length > 0
-                  ? "bg-cyan-500 hover:bg-cyan-400 text-slate-950 cursor-pointer shadow-lg shadow-cyan-500/20"
-                  : "bg-white/5 text-slate-600 cursor-not-allowed border border-white/5"
+                  ? "bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] cursor-pointer"
+                  : "bg-[var(--bg-color)] text-[var(--sub-color)] opacity-40 cursor-not-allowed border border-[var(--sub-color)]/20"
               }`}
             >
-              {dueCards.length > 0 ? "Start Due Review →" : "No Due Reviews"}
+              {dueCards.length > 0 ? "start due review" : "no due reviews"}
             </button>
           </div>
 
           {/* 4 Secondary Decks */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* By Shift Deck */}
-            <div className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 space-y-3 flex flex-col justify-between hover:border-cyan-500/30 transition">
+            <div className="p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-3 flex flex-col justify-between hover:border-[var(--main-color)]/30 transition">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-cyan-400">
+                <div className="flex items-center gap-2 text-[var(--main-color)]">
                   <Layers className="w-4 h-4" />
-                  <h4 className="text-sm font-bold text-slate-100">By Shift Family</h4>
+                  <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">by shift family</h4>
                 </div>
-                <p className="text-xs text-slate-400">
-                  Review all words belonging to a single structural consonant shift.
+                <p className="text-xs font-mono text-[var(--sub-color)]">
+                  review all words belonging to a single structural consonant shift.
                 </p>
 
                 <select
                   value={selectedShiftId}
                   onChange={(e) => setSelectedShiftId(e.target.value)}
-                  className="w-full mt-2 px-3 py-1.5 rounded-lg bg-[#161722] border border-white/10 text-xs font-mono text-slate-200 outline-none"
+                  className="w-full mt-2 px-3 py-1.5 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--text-color)] outline-none"
                 >
                   {Object.values(data.shifts).map((s) => (
                     <option key={s.id} value={s.id}>
@@ -966,146 +1189,152 @@ export default function ReviewPage() {
 
               <button
                 onClick={() => requestDeckStart("shift")}
-                className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition cursor-pointer"
+                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer"
               >
-                Review Shift Family
+                review shift family
               </button>
             </div>
 
             {/* Weakest Words Deck */}
-            <div className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 space-y-3 flex flex-col justify-between hover:border-amber-500/30 transition">
+            <div className="p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-3 flex flex-col justify-between hover:border-[var(--main-color)]/30 transition">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-amber-400">
+                <div className="flex items-center gap-2 text-[var(--error-color)]">
                   <Flame className="w-4 h-4" />
-                  <h4 className="text-sm font-bold text-slate-100">Weakest Words</h4>
+                  <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">weakest words</h4>
                 </div>
-                <p className="text-xs text-slate-400">
-                  Focus on words that caused repeated lapses or hesitation.
+                <p className="text-xs font-mono text-[var(--sub-color)]">
+                  focus on words that caused repeated lapses or hesitation.
                 </p>
-                <div className="text-xs font-mono text-amber-400 pt-1">
-                  {mounted ? weakestCards.length : 0} Words with Lapses
+                <div className="text-xs font-mono text-[var(--error-color)] pt-1">
+                  {mounted ? weakestCards.length : 0} words with lapses
                 </div>
               </div>
 
               <button
                 onClick={() => requestDeckStart("weakest")}
                 disabled={weakestCards.length === 0}
-                className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition disabled:opacity-40 cursor-pointer"
+                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition disabled:opacity-40 cursor-pointer"
               >
-                Review Weakest
+                review weakest
               </button>
             </div>
 
             {/* Recent Lessons Deck */}
-            <div className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 space-y-3 flex flex-col justify-between hover:border-emerald-500/30 transition">
+            <div className="p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-3 flex flex-col justify-between hover:border-[var(--main-color)]/30 transition">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-emerald-400">
+                <div className="flex items-center gap-2 text-[var(--main-color)]">
                   <CheckCircle2 className="w-4 h-4" />
-                  <h4 className="text-sm font-bold text-slate-100">Recent Lessons</h4>
+                  <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">recent lessons</h4>
                 </div>
-                <p className="text-xs text-slate-400">
-                  Reinforce vocabulary encountered across your most recent Trail lessons.
+                <p className="text-xs font-mono text-[var(--sub-color)]">
+                  reinforce vocabulary encountered across your most recent trail lessons.
                 </p>
-                <div className="text-xs font-mono text-emerald-400 pt-1">
-                  20 Core Words
+                <div className="text-xs font-mono text-[var(--main-color)] pt-1">
+                  20 core words
                 </div>
               </div>
 
               <button
                 onClick={() => requestDeckStart("recent")}
-                className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition cursor-pointer"
+                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer"
               >
-                Review Recent
+                review recent
               </button>
             </div>
 
             {/* Compound Calques & Traps Deck */}
-            <div className="p-5 rounded-2xl bg-[#1C1D2B] border border-white/10 space-y-3 flex flex-col justify-between hover:border-purple-500/40 transition">
+            <div className="p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-3 flex flex-col justify-between hover:border-[var(--main-color)]/30 transition">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-purple-400">
+                <div className="flex items-center gap-2 text-[var(--sub-color)]">
                   <Sparkles className="w-4 h-4" />
-                  <h4 className="text-sm font-bold text-slate-100">Compounds & Traps</h4>
+                  <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">compounds & traps</h4>
                 </div>
-                <p className="text-xs text-slate-400">
-                  Review literal calques (Handschuh, Flugzeug) and false friends (Gift, bald).
+                <p className="text-xs font-mono text-[var(--sub-color)]">
+                  review literal calques (handschuh, flugzeug) and false friends (gift, bald).
                 </p>
-                <div className="text-xs font-mono text-purple-400 pt-1">
-                  {data.compounds.length + data.falseFriends.length} Compounds & Traps
+                <div className="text-xs font-mono text-[var(--sub-color)] pt-1">
+                  {data.compounds.length + data.falseFriends.length} items
                 </div>
               </div>
 
               <button
                 onClick={() => requestDeckStart("compounds")}
-                className="w-full py-2 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-xs font-semibold text-purple-200 transition cursor-pointer"
+                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer"
               >
-                Review Compounds
+                review compounds
               </button>
             </div>
           </div>
         </div>
+        </>
       )}
 
       {/* REVIEW STYLE SELECTION MODAL */}
       {isModeSelectorOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-xl rounded-2xl bg-[#1C1D2B] border border-cyan-500/40 shadow-2xl p-6 sm:p-8 space-y-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-in fade-in duration-150">
+          <div
+            ref={modeDialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="review-style-title"
+            className="w-full max-w-xl rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/30 shadow-2xl p-6 sm:p-8 space-y-6"
+          >
             <div className="space-y-1">
-              <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold">
-                Select Review Style
+              <span className="text-xs font-mono text-[var(--main-color)] uppercase tracking-widest font-semibold">
+                review style
               </span>
-              <h2 className="text-2xl font-extrabold text-slate-100">
+              <h2 id="review-style-title" className="text-xl font-bold font-mono text-[var(--text-color)]">
                 {pendingDeck
-                  ? `How do you want to review ${
+                  ? `how do you want to review ${
                       pendingDeck.deck === "due"
-                        ? "Due Cards"
+                        ? "due cards"
                         : pendingDeck.deck === "shift"
-                        ? "Shift Family"
+                        ? "shift family"
                         : pendingDeck.deck === "weakest"
-                        ? "Weakest Words"
+                        ? "weakest words"
                         : pendingDeck.deck === "recent"
-                        ? "Recent Lessons"
-                        : "Compounds & Traps"
+                        ? "recent lessons"
+                        : "compounds & traps"
                     }?`
-                  : "How do you want to review?"}
+                  : "how do you want to review?"}
               </h2>
-              <p className="text-xs text-slate-400">
-                Pick your preferred exercise style below. All 4 styles advance the same SM-2 interval queue.
+              <p className="text-xs font-mono text-[var(--sub-color)]">
+                pick your preferred exercise style below. all styles advance the same sm-2 interval queue.
               </p>
             </div>
 
-            <div className="space-y-3">
-              {/* Option 1: Quick Flip (Flashcards) */}
+            <div className="space-y-2.5">
+              {/* Option 1: Free recall (flashcards) */}
               <button
                 type="button"
                 onClick={() => selectModeAndStart("flashcard")}
-                className={`w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border transition cursor-pointer flex items-center justify-between group ${
+                className={`w-full text-left p-4 rounded-lg bg-[var(--sub-alt-color)] hover:border-[var(--main-color)] border transition cursor-pointer flex items-center justify-between group ${
                   reviewMode === "flashcard"
-                    ? "border-cyan-400 bg-cyan-950/20 shadow-md shadow-cyan-500/10 ring-1 ring-cyan-400/40"
-                    : "border-white/10 hover:border-cyan-400"
+                    ? "border-[var(--main-color)] ring-1 ring-[var(--main-color)]/40"
+                    : "border-[var(--sub-color)]/20"
                 }`}
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">📇</span>
-                    <span className="font-bold text-slate-100 group-hover:text-cyan-300 transition">
-                      Quick Flip (Flashcard)
+                    <span className="font-bold font-mono text-sm text-[var(--text-color)] group-hover:text-[var(--main-color)] transition">
+                      recall (flashcard)
                     </span>
                     {reviewMode === "flashcard" ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-                        Default Style
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/30">
+                        active
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-white/5 text-slate-400 border border-white/10">
-                        Recommended
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono text-[var(--sub-color)] bg-[var(--bg-color)] border border-[var(--sub-color)]/20">
+                        recommended
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-400">
-                    Zero typing. Recall in your mind, press Space to reveal, rate 1–4.
+                  <p className="text-xs font-mono text-[var(--sub-color)]">
+                    zero typing. recall in your mind, press space to reveal, rate 1–4.
                   </p>
                 </div>
-                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-cyan-400/50">
-                  Press [1]
+                <span className="keycap text-xs">
+                  1
                 </span>
               </button>
 
@@ -1113,34 +1342,29 @@ export default function ReviewPage() {
               <button
                 type="button"
                 onClick={() => selectModeAndStart("mcq")}
-                className={`w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border transition cursor-pointer flex items-center justify-between group ${
+                className={`w-full text-left p-4 rounded-lg bg-[var(--sub-alt-color)] hover:border-[var(--main-color)] border transition cursor-pointer flex items-center justify-between group ${
                   reviewMode === "mcq"
-                    ? "border-amber-400 bg-amber-950/20 shadow-md shadow-amber-500/10 ring-1 ring-amber-400/40"
-                    : "border-white/10 hover:border-amber-400"
+                    ? "border-[var(--main-color)] ring-1 ring-[var(--main-color)]/40"
+                    : "border-[var(--sub-color)]/20"
                 }`}
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">🔘</span>
-                    <span className="font-bold text-slate-100 group-hover:text-amber-300 transition">
-                      Multiple Choice (MCQ)
+                    <span className="font-bold font-mono text-sm text-[var(--text-color)] group-hover:text-[var(--main-color)] transition">
+                      multiple choice (mcq)
                     </span>
-                    {reviewMode === "mcq" ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                        Default Style
-                      </span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300/80 border border-amber-500/20">
-                        Active Recognition
+                    {reviewMode === "mcq" && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/30">
+                        active
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-400">
-                    Pick the German word from 4 options. Press 1–4 keys or click.
+                  <p className="text-xs font-mono text-[var(--sub-color)]">
+                    pick the german word from 4 options. press 1–4 keys or click.
                   </p>
                 </div>
-                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-amber-400/50">
-                  Press [2]
+                <span className="keycap text-xs">
+                  2
                 </span>
               </button>
 
@@ -1148,34 +1372,29 @@ export default function ReviewPage() {
               <button
                 type="button"
                 onClick={() => selectModeAndStart("tiles")}
-                className={`w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border transition cursor-pointer flex items-center justify-between group ${
+                className={`w-full text-left p-4 rounded-lg bg-[var(--sub-alt-color)] hover:border-[var(--main-color)] border transition cursor-pointer flex items-center justify-between group ${
                   reviewMode === "tiles"
-                    ? "border-emerald-400 bg-emerald-950/20 shadow-md shadow-emerald-500/10 ring-1 ring-emerald-400/40"
-                    : "border-white/10 hover:border-emerald-400"
+                    ? "border-[var(--main-color)] ring-1 ring-[var(--main-color)]/40"
+                    : "border-[var(--sub-color)]/20"
                 }`}
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">🧩</span>
-                    <span className="font-bold text-slate-100 group-hover:text-emerald-300 transition">
-                      Tile Builder
+                    <span className="font-bold font-mono text-sm text-[var(--text-color)] group-hover:text-[var(--main-color)] transition">
+                      tile builder
                     </span>
-                    {reviewMode === "tiles" ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                        Default Style
-                      </span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300/80 border border-emerald-500/20">
-                        Morpheme Assembly
+                    {reviewMode === "tiles" && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/30">
+                        active
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-400">
-                    Tap letter & syllable tiles into place to assemble the German cognate.
+                  <p className="text-xs font-mono text-[var(--sub-color)]">
+                    tap letter and morpheme tiles into place to assemble the cognate.
                   </p>
                 </div>
-                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-emerald-400/50">
-                  Press [3]
+                <span className="keycap text-xs">
+                  3
                 </span>
               </button>
 
@@ -1183,47 +1402,42 @@ export default function ReviewPage() {
               <button
                 type="button"
                 onClick={() => selectModeAndStart("typing")}
-                className={`w-full text-left p-4 rounded-xl bg-[#161722] hover:bg-[#1f2130] border transition cursor-pointer flex items-center justify-between group ${
+                className={`w-full text-left p-4 rounded-lg bg-[var(--sub-alt-color)] hover:border-[var(--main-color)] border transition cursor-pointer flex items-center justify-between group ${
                   reviewMode === "typing"
-                    ? "border-purple-400 bg-purple-950/20 shadow-md shadow-purple-500/10 ring-1 ring-purple-400/40"
-                    : "border-white/10 hover:border-purple-400"
+                    ? "border-[var(--main-color)] ring-1 ring-[var(--main-color)]/40"
+                    : "border-[var(--sub-color)]/20"
                 }`}
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">✍️</span>
-                    <span className="font-bold text-slate-100 group-hover:text-purple-300 transition">
-                      Derivation Typing
+                    <span className="font-bold font-mono text-sm text-[var(--text-color)] group-hover:text-[var(--main-color)] transition">
+                      derivation typing
                     </span>
-                    {reviewMode === "typing" ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                        Default Style
-                      </span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/15 text-purple-300/80 border border-purple-500/20">
-                        Deep Active Recall
+                    {reviewMode === "typing" && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/30">
+                        active
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-400">
-                    Type the German word letter-by-letter with umlaut shortcuts.
+                  <p className="text-xs font-mono text-[var(--sub-color)]">
+                    type the german word letter-by-letter with umlaut shortcuts.
                   </p>
                 </div>
-                <span className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-slate-300 border border-white/10 group-hover:border-purple-400/50">
-                  Press [4]
+                <span className="keycap text-xs">
+                  4
                 </span>
               </button>
             </div>
 
-            <div className="flex items-center justify-between pt-2 border-t border-white/10">
-              <label className="flex items-center gap-2 text-xs text-slate-400 cursor-pointer select-none">
+            <div className="flex items-center justify-between pt-2 border-t border-[var(--sub-color)]/20">
+              <label className="flex items-center gap-2 text-xs font-mono text-[var(--sub-color)] cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={rememberPreference}
                   onChange={(e) => setRememberPreference(e.target.checked)}
-                  className="rounded border-white/20 bg-white/5 text-cyan-500 focus:ring-0"
+                  className="rounded border-[var(--sub-color)]/30 bg-[var(--bg-color)] text-[var(--main-color)] focus:ring-0"
                 />
-                Remember as default style
+                remember as default style
               </label>
 
               <button
@@ -1232,9 +1446,10 @@ export default function ReviewPage() {
                   setIsModeSelectorOpen(false);
                   setPendingDeck(null);
                 }}
-                className="text-xs font-mono text-slate-400 hover:text-white px-3 py-1.5 rounded hover:bg-white/5 transition cursor-pointer"
+                className="text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-3 py-1.5 rounded hover:bg-[var(--sub-alt-color)] transition cursor-pointer flex items-center gap-1.5"
               >
-                Cancel [Esc]
+                <span>cancel</span>
+                <span className="keycap text-[10px]">esc</span>
               </button>
             </div>
           </div>

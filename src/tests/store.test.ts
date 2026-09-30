@@ -41,6 +41,7 @@ describe("App Store & User Progress State", () => {
     const state = useAppStore.getState();
     expect(state.completedLessons).toEqual([]);
     expect(state.currentLessonId).toBe(1);
+    expect(state.lessonProgress).toEqual({});
     expect(state.wordMastery).toEqual({});
     expect(state.tolerance.umlautTolerance).toBe(false);
     expect(state.tolerance.capitalizationTolerance).toBe(false);
@@ -72,6 +73,22 @@ describe("App Store & User Progress State", () => {
     store.completeLesson(1);
     expect(useAppStore.getState().completedLessons).toContain(1);
     expect(useAppStore.getState().currentLessonId).toBe(2);
+  });
+
+  it("persists the active lesson segment for resume", () => {
+    const store = useAppStore.getState();
+    store.setLessonProgress(3, {
+      segment: "practice",
+      practiceIndex: 2,
+      completedSegments: ["hook", "pattern", "table"],
+    });
+
+    expect(useAppStore.getState().lessonProgress[3]).toEqual({
+      segment: "practice",
+      practiceIndex: 2,
+      completedSegments: ["hook", "pattern", "table"],
+    });
+    expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!).lessonProgress[3].segment).toBe("practice");
   });
 
   it("manages independent tolerance settings and dismissal thresholds", () => {
@@ -201,5 +218,20 @@ describe("App Store & User Progress State", () => {
     const postResetLocal = localStorage.getItem(STORAGE_KEY);
     expect(postResetLocal).toBeTruthy();
     expect(JSON.parse(postResetLocal!).completedLessons).toContain(1);
+  });
+
+  it("manages and persists Monkeytype color scheme themes", () => {
+    const store = useAppStore.getState();
+    expect(store.theme).toBe("alduin");
+
+    store.setTheme("carbon");
+    expect(useAppStore.getState().theme).toBe("carbon");
+
+    const localRaw = localStorage.getItem(STORAGE_KEY);
+    expect(localRaw).toBeTruthy();
+    expect(JSON.parse(localRaw!).theme).toBe("carbon");
+
+    store.setTheme("nord");
+    expect(useAppStore.getState().theme).toBe("nord");
   });
 });

@@ -5,6 +5,7 @@
 import React, { useEffect } from "react";
 import { AlertCircle, ArrowRight } from "lucide-react";
 import { computeLetterDiff } from "@/lib/letter-diff";
+import { useDialogFocus } from "@/lib/use-dialog-focus";
 
 interface ErrorFeedbackSheetProps {
   userInput: string;
@@ -25,14 +26,14 @@ export const ErrorFeedbackSheet: React.FC<ErrorFeedbackSheetProps> = ({
 }) => {
   const diff = computeLetterDiff(userInput, expectedAnswer);
   const continueBtnRef = React.useRef<HTMLButtonElement>(null);
+  const dialogRef = React.useRef<HTMLDivElement>(null);
 
-  // Auto-focus continue button on mount so keyboard Enter / Space immediately advances
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      continueBtnRef.current?.focus();
-    }, 40);
-    return () => clearTimeout(timer);
-  }, []);
+  useDialogFocus({
+    open: true,
+    containerRef: dialogRef,
+    initialFocusRef: continueBtnRef,
+    onEscape: onContinue,
+  });
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -46,20 +47,26 @@ export const ErrorFeedbackSheet: React.FC<ErrorFeedbackSheetProps> = ({
   }, [onContinue]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full sm:max-w-md bg-[#1C1D2B] border-t sm:border border-rose-500/30 sm:rounded-2xl rounded-t-2xl shadow-2xl p-6 space-y-5 animate-in slide-in-from-bottom duration-200">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 animate-in fade-in duration-200">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="error-feedback-title"
+        className="w-full sm:max-w-md bg-[var(--bg-color)] border-t sm:border border-[var(--error-color)]/30 sm:rounded-lg rounded-t-lg shadow-2xl p-6 space-y-5 animate-in slide-in-from-bottom duration-200"
+      >
         {/* Header */}
-        <div className="flex items-center gap-2 text-rose-400">
+        <div className="flex items-center gap-2 text-[var(--error-color)]">
           <AlertCircle className="w-5 h-5 shrink-0" />
-          <h4 className="text-base font-bold text-slate-100 font-mono">Consonant Shift Breakdown</h4>
+          <h4 id="error-feedback-title" className="text-sm font-bold text-[var(--text-color)] font-mono">sound shift breakdown</h4>
         </div>
 
         {/* Letter Comparison */}
-        <div className="space-y-3 p-4 rounded-xl bg-[#141522] border border-white/5">
+        <div className="space-y-3 p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20">
           {/* User Input with character-level diff */}
           <div>
-            <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider block mb-1">
-              Your Input:
+            <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block mb-1">
+              your attempt:
             </span>
             <div className="text-lg font-mono tracking-wide flex flex-wrap gap-0.5">
               {diff.userChars.length > 0 ? (
@@ -68,41 +75,41 @@ export const ErrorFeedbackSheet: React.FC<ErrorFeedbackSheetProps> = ({
                     key={i}
                     className={
                       c.status === "correct"
-                        ? "text-slate-200 font-medium"
-                        : "text-rose-400 font-bold underline decoration-rose-500 decoration-2 bg-rose-500/15 px-0.5 rounded"
+                        ? "text-[var(--text-color)] font-medium"
+                        : "text-[var(--error-color)] font-bold underline decoration-[var(--error-color)] decoration-2 bg-[var(--error-color)]/15 px-0.5 rounded"
                     }
                   >
                     {c.char}
                   </span>
                 ))
               ) : (
-                <span className="text-slate-500 italic text-sm">(no input)</span>
+                <span className="text-[var(--sub-color)]/50 italic text-sm">(no input)</span>
               )}
             </div>
           </div>
 
           {/* Correct Target Form */}
-          <div className="pt-2 border-t border-white/5">
-            <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider block mb-1">
-              Correct Form:
+          <div className="pt-2 border-t border-[var(--sub-color)]/15">
+            <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block mb-1">
+              target word:
             </span>
-            <div className="text-lg font-mono font-bold text-amber-400">
+            <div className="text-lg font-mono font-bold text-[var(--main-color)]">
               {expectedAnswer}
             </div>
           </div>
 
           {englishPrompt && (
-            <div className="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
-              <span className="text-slate-400 font-mono">Shift Rule:</span>
-              <span className="text-cyan-400 font-mono font-bold">{shiftRule || "Consonant Shift"}</span>
+            <div className="pt-2 border-t border-[var(--sub-color)]/15 flex items-center justify-between text-xs font-mono">
+              <span className="text-[var(--sub-color)]">rule:</span>
+              <span className="text-[var(--main-color)] font-bold">{shiftRule || "Consonant Shift"}</span>
             </div>
           )}
         </div>
 
         {/* Instructive Explanation */}
         {explanation && (
-          <div className="text-xs text-slate-300 leading-relaxed bg-white/5 p-3 rounded-xl border border-white/5">
-            <span className="text-cyan-300 font-semibold block mb-0.5">Why this shift occurs:</span>
+          <div className="text-xs font-mono text-[var(--sub-color)] leading-relaxed bg-[var(--sub-alt-color)] p-3 rounded-lg border border-[var(--sub-color)]/20">
+            <span className="text-[var(--main-color)] font-semibold block mb-0.5">shift note:</span>
             {explanation}
           </div>
         )}
@@ -112,9 +119,10 @@ export const ErrorFeedbackSheet: React.FC<ErrorFeedbackSheetProps> = ({
           ref={continueBtnRef}
           type="button"
           onClick={onContinue}
-          className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-98 text-slate-950 font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20 focus:outline-none focus:ring-2 focus:ring-amber-300"
+          className="w-full py-3 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-mono font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer"
         >
-          <span>Got It — Continue [Enter]</span>
+          <span>continue</span>
+          <span className="keycap text-[10px]">enter</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

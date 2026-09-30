@@ -8,9 +8,6 @@ export interface GenderInfo {
   article: string;
   colorName: string;
   badgeClass: string;
-  borderClass: string;
-  textClass: string;
-  bgClass: string;
   dotColor: string;
 }
 
@@ -24,10 +21,7 @@ export function getGenderInfo(gender: Gender | string | null | undefined): Gende
       label: "Masculine",
       article: "der",
       colorName: "Azure Blue",
-      badgeClass: "text-blue-200 bg-blue-500/25 border-blue-400/60 shadow-sm shadow-blue-500/20",
-      borderClass: "border-blue-400/60",
-      textClass: "text-blue-300",
-      bgClass: "bg-blue-500/20",
+      badgeClass: "text-blue-700 dark:text-blue-300 bg-blue-500/10 dark:bg-blue-500/15 border-blue-500/30",
       dotColor: "#60A5FA",
     };
   }
@@ -38,10 +32,7 @@ export function getGenderInfo(gender: Gender | string | null | undefined): Gende
       label: "Feminine",
       article: "die",
       colorName: "Vivid Rose",
-      badgeClass: "text-rose-200 bg-rose-500/25 border-rose-400/60 shadow-sm shadow-rose-500/20",
-      borderClass: "border-rose-400/60",
-      textClass: "text-rose-300",
-      bgClass: "bg-rose-500/20",
+      badgeClass: "text-rose-700 dark:text-rose-300 bg-rose-500/10 dark:bg-rose-500/15 border-rose-500/30",
       dotColor: "#FB7185",
     };
   }
@@ -52,10 +43,7 @@ export function getGenderInfo(gender: Gender | string | null | undefined): Gende
       label: "Neuter",
       article: "das",
       colorName: "Emerald Green",
-      badgeClass: "text-emerald-200 bg-emerald-500/25 border-emerald-400/60 shadow-sm shadow-emerald-500/20",
-      borderClass: "border-emerald-400/60",
-      textClass: "text-emerald-300",
-      bgClass: "bg-emerald-500/20",
+      badgeClass: "text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 dark:bg-emerald-500/15 border-emerald-500/30",
       dotColor: "#34D399",
     };
   }

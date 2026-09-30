@@ -1,8 +1,5 @@
 import { ConstellationDetailClient } from "@/components/atlas/ConstellationDetailClient";
-import compendium from "@/data/compendium.json";
-import type { CompendiumData } from "@/lib/types";
-
-const data = compendium as unknown as CompendiumData;
+import { compendium as data } from "@/data/compendium";
 
 export function generateStaticParams() {
   return Object.keys(data.shifts).map((family) => ({ family }));

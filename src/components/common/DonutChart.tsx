@@ -26,7 +26,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({
     return (
       <div
         style={{ width: size, height: size }}
-        className="rounded-full border border-white/10 flex items-center justify-center text-[10px] text-slate-500 font-mono"
+        className="rounded-full border border-[var(--sub-color)]/30 flex items-center justify-center text-[10px] text-[var(--sub-color)] font-mono"
       >
         0
       </div>
@@ -37,10 +37,10 @@ export const DonutChart: React.FC<DonutChartProps> = ({
   const circumference = 2 * Math.PI * radius;
 
   const segments = [
-    { count: mastered, color: "#10b981" }, // Emerald / Sage (Mastered)
-    { count: encountered, color: "#f59e0b" }, // Amber (Encountered)
-    { count: explored, color: "#06b6d4" }, // Cyan (Explored)
-    { count: unexplored, color: "#334155" }, // Slate (Unexplored)
+    { count: mastered, color: "var(--main-color)" }, // Mastered (primary accent)
+    { count: encountered, color: "var(--text-color)" }, // Encountered (primary text)
+    { count: explored, color: "var(--sub-color)" }, // Explored (muted sub)
+    { count: unexplored, color: "color-mix(in srgb, var(--sub-color) 35%, transparent)" }, // Unexplored (subtle)
   ];
 
   let accumulatedOffset = 0;
@@ -54,7 +54,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#1e293b"
+          stroke="var(--sub-alt-color)"
           strokeWidth={strokeWidth}
         />
         {segments.map((seg, i) => {
@@ -80,7 +80,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({
           );
         })}
       </svg>
-      <span className="absolute text-[10px] font-mono font-bold text-slate-300">
+      <span className="absolute text-[10px] font-mono font-bold text-[var(--text-color)]">
         {mastered + encountered}
       </span>
     </div>

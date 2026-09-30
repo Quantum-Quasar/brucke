@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeLetterDiff } from "../lib/letter-diff";
+import { computeLetterDiff, getLevenshteinDistance, evaluateAnswerAccuracy } from "../lib/letter-diff";
 
 describe("Letter-by-Letter Diff", () => {
   it("marks exact matches as all correct", () => {
@@ -26,7 +26,6 @@ describe("Letter-by-Letter Diff", () => {
   });
 
   it("calculates Levenshtein distance accurately", () => {
-    const { getLevenshteinDistance } = require("../lib/letter-diff");
     expect(getLevenshteinDistance("kitten", "sitting")).toBe(3);
     expect(getLevenshteinDistance("Wasser", "Wasser")).toBe(0);
     expect(getLevenshteinDistance("Wasser", "wassser")).toBe(2);
@@ -34,7 +33,6 @@ describe("Letter-by-Letter Diff", () => {
   });
 
   it("evaluates accuracy with three-tier feedback (exact, almost, incorrect)", () => {
-    const { evaluateAnswerAccuracy } = require("../lib/letter-diff");
     expect(evaluateAnswerAccuracy("Wasser", "Wasser")).toEqual({ accuracy: "exact" });
     expect(evaluateAnswerAccuracy("wasser", "Wasser").accuracy).toBe("almost");
     expect(evaluateAnswerAccuracy("wasser", "Wasser").reason).toBe("case");
@@ -69,5 +67,34 @@ describe("Letter-by-Letter Diff", () => {
     expect(evaluateAnswerAccuracy("Ich kann kommen", "Ich kann kommen.")).toEqual({ accuracy: "exact" });
     expect(evaluateAnswerAccuracy("Ich kann kommen.", "Ich kann kommen")).toEqual({ accuracy: "exact" });
     expect(evaluateAnswerAccuracy("Ein Glas Wasser bitte!", "Ein Glas Wasser bitte")).toEqual({ accuracy: "exact" });
+  });
+
+  it("applies capitalization tolerance as exact match", () => {
+    expect(evaluateAnswerAccuracy("wasser", "Wasser", { capitalizationTolerance: true })).toEqual({
+      accuracy: "exact",
+    });
+    // without the option the same input stays almost/case
+    expect(evaluateAnswerAccuracy("wasser", "Wasser", {}).accuracy).toBe("almost");
+  });
+
+  it("applies umlaut tolerance to case-matching inputs as exact match", () => {
+    // all-caps input of the correct word: case matches, umlaut substituted
+    expect(evaluateAnswerAccuracy("STRASSE", "Straße", { umlautTolerance: true })).toEqual({ accuracy: "exact" });
+    // lowercase input of a capitalized noun: umlaut tolerated but capitalization error remains
+    const lowerResult = evaluateAnswerAccuracy("strasse", "Straße", { umlautTolerance: true });
+    expect(lowerResult.accuracy).toBe("almost");
+    expect(lowerResult.reason).toBe("case");
+    // digraph expansions (ae/oe/ue/ss) count as umlaut substitutions
+    expect(evaluateAnswerAccuracy("Kaese", "Käse", { umlautTolerance: true, capitalizationTolerance: true })).toEqual({
+      accuracy: "exact",
+    });
+    // without tolerance, the digraph input stays almost/umlaut
+    expect(evaluateAnswerAccuracy("Kaese", "Käse").accuracy).toBe("almost");
+  });
+
+  it("guards against huge pasted input", () => {
+    const long = "a".repeat(250);
+    expect(evaluateAnswerAccuracy(long, "Wasser").accuracy).toBe("incorrect");
+    expect(getLevenshteinDistance("a".repeat(40), "b".repeat(10))).toBe(30);
   });
 });

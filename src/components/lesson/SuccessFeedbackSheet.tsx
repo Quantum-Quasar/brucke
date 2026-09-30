@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import { CheckCircle2, ArrowRight, Sparkles, BookOpen, AlertCircle } from "lucide-react";
 import type { VocabHint } from "@/lib/types";
+import { useDialogFocus } from "@/lib/use-dialog-focus";
 
 interface SuccessFeedbackSheetProps {
   targetAnswer: string;
@@ -28,15 +29,15 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
   onContinue,
 }) => {
   const continueBtnRef = React.useRef<HTMLButtonElement>(null);
+  const dialogRef = React.useRef<HTMLDivElement>(null);
   const isAlmost = variant === "almost";
 
-  // Auto-focus continue button so Enter / Space works immediately without requiring mouse
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      continueBtnRef.current?.focus();
-    }, 40);
-    return () => clearTimeout(timer);
-  }, []);
+  useDialogFocus({
+    open: true,
+    containerRef: dialogRef,
+    initialFocusRef: continueBtnRef,
+    onEscape: onContinue,
+  });
 
   // Listen for Enter or Space key to advance immediately
   useEffect(() => {
@@ -51,85 +52,79 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
   }, [onContinue]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 animate-in fade-in duration-150">
       <div
-        className={`w-full sm:max-w-md bg-[#181C26] border-t sm:border sm:rounded-2xl rounded-t-2xl shadow-2xl p-6 space-y-5 animate-in slide-in-from-bottom duration-200 ${
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="success-feedback-title"
+        className={`w-full sm:max-w-md bg-[var(--bg-color)] border-t sm:border sm:rounded-lg rounded-t-lg shadow-2xl p-6 space-y-5 animate-in slide-in-from-bottom duration-200 font-mono ${
           isAlmost
-            ? "border-amber-500/50 shadow-amber-500/10"
-            : "border-emerald-500/40 shadow-emerald-500/10"
+            ? "border-[var(--sub-color)]/40"
+            : "border-[var(--main-color)]/40"
         }`}
       >
         {/* Header */}
         <div className="flex items-center justify-between">
           <div
             className={`flex items-center gap-2 ${
-              isAlmost ? "text-amber-400" : "text-emerald-400"
+              isAlmost ? "text-[var(--sub-color)]" : "text-[var(--main-color)]"
             }`}
           >
             {isAlmost ? (
-              <Sparkles className="w-5 h-5 shrink-0 text-amber-400" />
+              <Sparkles className="w-5 h-5 shrink-0 text-[var(--sub-color)]" />
             ) : (
-              <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />
+              <CheckCircle2 className="w-5 h-5 shrink-0 text-[var(--main-color)]" />
             )}
-            <h4
-              className={`text-base font-bold font-mono ${
-                isAlmost ? "text-amber-300" : "text-slate-100"
-              }`}
-            >
-              {isAlmost ? "Almost Right — Accepted!" : "Spot On!"}
+            <h4 id="success-feedback-title" className="text-sm font-bold font-mono text-[var(--text-color)]">
+              {isAlmost ? "almost right — accepted" : "correct"}
             </h4>
           </div>
           {shiftRule && (
-            <span
-              className={`text-[11px] font-mono px-2 py-0.5 rounded font-bold border ${
-                isAlmost
-                  ? "bg-amber-500/15 text-amber-300 border-amber-500/30"
-                  : "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
-              }`}
-            >
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded font-bold border border-[var(--sub-color)]/20 bg-[var(--sub-alt-color)] text-[var(--main-color)]">
               {shiftRule}
             </span>
           )}
         </div>
 
-        {/* Almost Right Comparison Callout (Yellow) */}
+        {/* Almost Right Comparison Callout */}
         {isAlmost && userAttempt && (
-          <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/25 space-y-2">
-            <div className="flex items-center gap-1.5 text-amber-400 font-mono font-bold uppercase tracking-wider text-[11px]">
-              <AlertCircle className="w-3.5 h-3.5" /> Note the difference
+          <div className="p-3.5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/25 space-y-2">
+            <div className="flex items-center gap-1.5 text-[var(--sub-color)] font-mono uppercase tracking-wider text-[11px]">
+              <AlertCircle className="w-3.5 h-3.5" /> note difference
             </div>
-            <div className="flex items-center justify-between text-xs font-mono bg-black/30 p-2.5 rounded-lg border border-amber-500/20">
+            <div className="flex items-center justify-between text-xs font-mono bg-[var(--bg-color)] p-2.5 rounded border border-[var(--sub-color)]/20">
               <div>
-                <span className="text-slate-500 block text-[10px] uppercase">Your Input</span>
-                <span className="text-slate-300 line-through decoration-amber-400/80">{userAttempt}</span>
+                <span className="text-[var(--sub-color)] block text-[10px] uppercase">your input</span>
+                <span className="text-[var(--text-color)] line-through decoration-[var(--sub-color)]">{userAttempt}</span>
               </div>
-              <ArrowRight className="w-4 h-4 text-amber-400" />
+              <ArrowRight className="w-4 h-4 text-[var(--sub-color)]" />
               <div className="text-right">
-                <span className="text-slate-500 block text-[10px] uppercase">Standard Form</span>
-                <span className="text-amber-300 font-bold">{targetAnswer}</span>
+                <span className="text-[var(--sub-color)] block text-[10px] uppercase">standard</span>
+                <span className="text-[var(--main-color)] font-bold">{targetAnswer}</span>
               </div>
             </div>
-            {warningNote && <p className="text-xs text-amber-200/90 leading-relaxed">{warningNote}</p>}
+            {warningNote && <p className="text-xs text-[var(--sub-color)] leading-relaxed">{warningNote}</p>}
           </div>
         )}
 
         {/* Answer and Meaning Card */}
-        <div className="p-4 rounded-xl bg-[#12141F] border border-white/5 space-y-2.5">
+        <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-2.5">
           <div>
-            <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider block">
-              German:
+            <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block">
+              german:
             </span>
-            <div className="text-xl font-bold text-amber-300 font-mono">
+            <div className="text-xl font-bold text-[var(--main-color)] font-mono">
               {targetAnswer}
             </div>
           </div>
 
           {meaning && (
-            <div className="pt-2 border-t border-white/5">
-              <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider block">
-                Meaning:
+            <div className="pt-2 border-t border-[var(--sub-color)]/15">
+              <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block">
+                meaning:
               </span>
-              <div className="text-base text-slate-200 font-medium">
+              <div className="text-sm text-[var(--text-color)] font-medium">
                 &ldquo;{meaning}&rdquo;
               </div>
             </div>
@@ -138,15 +133,15 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
 
         {/* Vocabulary Clue / Reinforcement if present */}
         {vocabHints && vocabHints.length > 0 && (
-          <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-1.5 text-xs">
-            <div className="flex items-center gap-1.5 text-amber-400 font-mono font-bold uppercase tracking-wider text-[11px]">
-              <Sparkles className="w-3.5 h-3.5" /> Vocabulary Reinforcement
+          <div className="p-3 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-1.5 text-xs font-mono">
+            <div className="flex items-center gap-1.5 text-[var(--sub-color)] uppercase tracking-wider text-[11px]">
+              <Sparkles className="w-3.5 h-3.5" /> vocabulary reinforcement
             </div>
-            <div className="space-y-1 text-slate-300">
+            <div className="space-y-1 text-[var(--text-color)]">
               {vocabHints.map((hint) => (
                 <div key={hint.word}>
-                  <strong className="text-amber-300 font-mono">{hint.word}</strong> = {hint.translation}
-                  {hint.note && <span className="text-slate-400 ml-1">({hint.note})</span>}
+                  <strong className="text-[var(--main-color)] font-mono">{hint.word}</strong> = {hint.translation}
+                  {hint.note && <span className="text-[var(--sub-color)] ml-1">({hint.note})</span>}
                 </div>
               ))}
             </div>
@@ -155,8 +150,8 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
 
         {/* Instructive Explanation */}
         {explanation && (
-          <div className="text-xs text-slate-400 leading-relaxed bg-white/5 p-3 rounded-xl border border-white/5 flex items-start gap-2">
-            <BookOpen className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+          <div className="text-xs text-[var(--sub-color)] leading-relaxed bg-[var(--sub-alt-color)] p-3 rounded-lg border border-[var(--sub-color)]/20 flex items-start gap-2 font-mono">
+            <BookOpen className="w-4 h-4 text-[var(--main-color)] shrink-0 mt-0.5" />
             <div>{explanation}</div>
           </div>
         )}
@@ -166,13 +161,10 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
           ref={continueBtnRef}
           type="button"
           onClick={onContinue}
-          className={`w-full py-3.5 rounded-xl font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-98 focus:outline-none focus:ring-2 ${
-            isAlmost
-              ? "bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-amber-500/20 focus:ring-amber-300"
-              : "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20 focus:ring-emerald-300"
-          }`}
+          className="w-full py-3 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-mono font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer"
         >
-          <span>Continue [Enter]</span>
+          <span>continue</span>
+          <span className="keycap text-[10px]">enter</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

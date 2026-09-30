@@ -1,13 +1,14 @@
 import { describe, it, expect } from "vitest";
-import compendium from "../data/compendium.json";
-import type { CompendiumData } from "../lib/types";
-
-const data = compendium as unknown as CompendiumData;
+import { compendium as data } from "../data/compendium";
+import { getWordEntity } from "../lib/word-entities";
+import { TOTAL_COMPENDIUM_WORDS } from "../lib/types";
 
 describe("Brücke Compendium Data Integrity", () => {
-  it("contains all 218 core words", () => {
-    expect(data.wordList.length).toBe(218);
-    expect(Object.keys(data.words).length).toBe(218);
+  it("keeps word count at or above the UI total and internally consistent", () => {
+    // TOTAL_COMPENDIUM_WORDS (the UI's "x / N mastered") is synced to the final
+    // compendium size at the end of a content run; the map and list must always agree.
+    expect(data.wordList.length).toBeGreaterThanOrEqual(TOTAL_COMPENDIUM_WORDS);
+    expect(Object.keys(data.words).length).toBe(data.wordList.length);
   });
 
   it("contains all 9 sound shift families", () => {
@@ -55,6 +56,14 @@ describe("Brücke Compendium Data Integrity", () => {
       expect(word.context_phrase).toBeTruthy();
       expect(word.etymology_derivation).toBeTruthy();
     }
+  });
+
+  it("keeps compound and false-friend entities on the shared word detail path", () => {
+    const compound = data.compounds[0];
+    const falseFriend = data.falseFriends[0];
+
+    expect(getWordEntity(`compound_${compound.id}`)?.target_word).toBeTruthy();
+    expect(getWordEntity(`trap_${falseFriend.id}`)?.target_word).toBe(falseFriend.german_word);
   });
 
   it("validates that every sound shift family references existing words", () => {
