@@ -280,6 +280,18 @@ corrective editing, so the copy always starts from the pristine original.
 - **Project conventions.** Follow the worked-on project's AGENTS.md/CLAUDE.md
   except where this node's seed (NODE.md/steps/modes) overrides (e.g. always use
   `$PLANS_DIR` for plans).
+- **Docs-only guard -- there is NO commit scope on this node.** Scope roots are
+  literal path prefixes (`path.startswith(f'{scope}/')`), so a directory name
+  containing a space can never be expressed as one; `fractal node config set
+  scope=[]` was applied and the scope restriction is OFF. The Instructions'
+  docs-only rule is therefore the ONLY guard: never stage or edit a source
+  file, and run `git status` before every commit to prove it.
+- **Quote paths with spaces.** Both deliverable directories contain spaces --
+  `old documentation/` and `documented docs/`. Always quote them in shell
+  commands (`git mv docs "old documentation"`, `cp -r "old documentation"
+  "documented docs"`); an unquoted path silently creates a file named
+  `old` with an argument, or fails mid-copy and leaves a half-made tree.
+
 - **Always make changes.** Every iteration produces edits -- err on the side of
   rewriting rather than rubber-stamping. If you think there is nothing to do,
   you are not looking hard enough.

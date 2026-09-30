@@ -2,13 +2,7 @@
   "title": "Docs Audit",
   "project": ".",
   "root": "main",
-  "scope": [
-    "docs",
-    "old",
-    "documentation",
-    "documented",
-    "docs"
-  ],
+  "scope": [],
   "base": null,
   "meta": null,
   "agent": "omp",
