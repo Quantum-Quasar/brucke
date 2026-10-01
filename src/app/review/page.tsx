@@ -32,11 +32,13 @@ import { WORD_ENTITY_MAP } from "@/lib/word-entities";
 import type { ReviewMode, SRSCard, WordEntity } from "@/lib/types";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
 
-type DeckType = "due" | "shift" | "weakest" | "recent" | "compounds";
+type DeckType = "due" | "shift" | "weakest" | "recent" | "compounds" | "domain";
 
 interface PendingDeckStart {
   deck: DeckType;
   customCards?: SRSCard[];
+  /** Human label for the mode-selector title (e.g. a domain's display name). */
+  deckLabel?: string;
 }
 
 interface ReviewSessionStats {
@@ -59,6 +61,7 @@ export default function ReviewPage() {
   const [mounted, setMounted] = useState(false);
   const [activeDeck, setActiveDeck] = useState<DeckType | null>(null);
   const [selectedShiftId, setSelectedShiftId] = useState<string>("p_to_pf_f");
+  const [selectedDomainId, setSelectedDomainId] = useState<string>("");
   const [sessionCards, setSessionCards] = useState<SRSCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
@@ -152,6 +155,55 @@ export default function ReviewPage() {
     return items;
   }, [srsCards]);
 
+  // Thematic domain decks: the full compendium sliced by each word's domain.
+  // Deliberately NOT gated by encounter history — every word in the compendium
+  // is reviewable immediately, even if it never appeared in a lesson.
+  const domainGroups: Array<{ id: string; label: string; words: WordEntity[] }> = useMemo(() => {
+    const map = new Map<string, WordEntity[]>();
+    for (const word of data.wordList) {
+      const d = word.domain || "general";
+      const bucket = map.get(d);
+      if (bucket) bucket.push(word);
+      else map.set(d, [word]);
+    }
+    const label = (id: string) =>
+      ({
+        body: "Body & Health",
+        colors: "Colors",
+        core: "Core Shift Words",
+        countries: "Countries",
+        directions: "Directions",
+        emotions: "Emotions",
+        family: "Family",
+        food: "Food & Drink",
+        general: "General",
+        hobbies: "Hobbies",
+        home: "Home",
+        months: "Months",
+        nature: "Nature & Animals",
+        numbers: "Numbers",
+        people: "People & Places",
+        professions: "Professions",
+        seasons: "Seasons",
+        shopping: "Shopping & Money",
+        survival: "Survival Phrases",
+        time: "Time",
+        travel: "Travel & Town",
+        weather: "Weather",
+        clothing: "Clothing",
+        adjectives: "Adjectives",
+      }[id] || id.charAt(0).toUpperCase() + id.slice(1));
+    return Array.from(map.entries())
+      .map(([id, words]) => ({ id, label: label(id), words }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, []);
+
+  useEffect(() => {
+    if (!selectedDomainId && domainGroups.length > 0) {
+      setSelectedDomainId(domainGroups[0].id);
+    }
+  }, [domainGroups, selectedDomainId]);
+
   // 1-Click direct deck start
   const startDeck = (deck: DeckType, customCards?: SRSCard[]) => {
     setActiveDeck(deck);
@@ -208,12 +260,27 @@ export default function ReviewPage() {
       setSessionCards(recentCards);
     } else if (deck === "compounds") {
       setSessionCards(compoundCards);
+    } else if (deck === "domain") {
+      const group = domainGroups.find((g) => g.id === selectedDomainId);
+      const domainCards = (group ? group.words : []).map(
+        (w) =>
+          srsCards[w.id] || {
+            word_id: w.id,
+            interval: 1,
+            repetitions: 0,
+            ease_factor: 2.5,
+            due_date: new Date().toISOString().split("T")[0],
+            lapses: 0,
+            last_reviewed: null,
+          }
+      );
+      setSessionCards(domainCards);
     }
   };
 
   // Request deck start: prompts the 4 review style options
-  const requestDeckStart = (deck: DeckType, customCards?: SRSCard[]) => {
-    setPendingDeck({ deck, customCards });
+  const requestDeckStart = (deck: DeckType, customCards?: SRSCard[], deckLabel?: string) => {
+    setPendingDeck({ deck, customCards, deckLabel });
     setIsModeSelectorOpen(true);
   };
 
@@ -739,6 +806,11 @@ export default function ReviewPage() {
                   gender: [ der / die / das ? ]
                 </span>
               )}
+              {!wordMastery[currentCard.word_id] && (
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded border border-[var(--main-color)]/30 bg-[var(--main-color)]/10 text-[var(--main-color)]">
+                  new word
+                </span>
+              )}
             </div>
             <h2 className="text-3xl sm:text-4xl font-mono font-bold text-[var(--text-color)]">
               {currentWord.english_cognate}
@@ -1161,8 +1233,8 @@ export default function ReviewPage() {
             </button>
           </div>
 
-          {/* 4 Secondary Decks */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* 5 Secondary Decks */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* By Shift Deck */}
             <div className="p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-3 flex flex-col justify-between hover:border-[var(--main-color)]/30 transition">
               <div className="space-y-2">
@@ -1192,6 +1264,38 @@ export default function ReviewPage() {
                 className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer"
               >
                 review shift family
+              </button>
+            </div>
+
+            {/* Thematic Domain Deck */}
+            <div className="p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-3 flex flex-col justify-between hover:border-[var(--main-color)]/30 transition">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-[var(--main-color)]">
+                  <Sparkles className="w-4 h-4" />
+                  <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">by domain</h4>
+                </div>
+                <p className="text-xs font-mono text-[var(--sub-color)]">
+                  themed decks from the full compendium — new words appear here even before you meet them in a lesson.
+                </p>
+
+                <select
+                  value={selectedDomainId}
+                  onChange={(e) => setSelectedDomainId(e.target.value)}
+                  className="w-full mt-2 px-3 py-1.5 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--text-color)] outline-none"
+                >
+                  {domainGroups.map((g) => (
+                    <option key={g.id} value={g.id}>
+                      {g.label} ({g.words.length} words)
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <button
+                onClick={() => requestDeckStart("domain", undefined, domainGroups.find((g) => g.id === selectedDomainId)?.label)}
+                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer"
+              >
+                review domain
               </button>
             </div>
 
@@ -1286,7 +1390,9 @@ export default function ReviewPage() {
               <h2 id="review-style-title" className="text-xl font-bold font-mono text-[var(--text-color)]">
                 {pendingDeck
                   ? `how do you want to review ${
-                      pendingDeck.deck === "due"
+                      pendingDeck.deckLabel
+                        ? pendingDeck.deckLabel
+                        : pendingDeck.deck === "due"
                         ? "due cards"
                         : pendingDeck.deck === "shift"
                         ? "shift family"
