@@ -5692,7 +5692,7 @@ export const LESSONS: Lesson[] = [
       outcome: "Use dachte, brachte, ging — and hear thought and dachte as one double-shift word.",
       use_example: { german: "Ich brachte Brot und dachte an dich.", english: "I brought bread and thought of you." },
       takeaway: "The mixed verbs change vowel AND add -t: denken/dachte ↔ think/thought — irregulars, but still twins.",
-      curiosity_teaser: "Next: methinks & Dative Survivors — the English dative fossils mirrored in German.",
+      curiosity_teaser: "Next: hatte & war — the fortress pasts of haben and sein, the storyteller's tense.",
     },
   },
   {
@@ -9131,7 +9131,7 @@ export const LESSONS: Lesson[] = [
       outcome: "Switch cases by motion vs location in full sentences at speed.",
       use_example: { german: "Ich stelle das Glas unter den Tisch.", english: "I put the glass under the table." },
       takeaway: "The verb is the tell: motion verbs drag accusative, rest verbs sit in dative — twenty reps make it reflex.",
-      curiosity_teaser: "The drill isle ends here — but every hollow shell on the trail still waits with a plan. Onto the remaining sprigs!",
+      curiosity_teaser: "The drill isle ends here — next branch: first introductions, the first words Germans actually speak.",
     },
   },
 
@@ -9782,7 +9782,7 @@ export const LESSONS: Lesson[] = [
       outcome: "Use be-/er- verbs with ge--free participles and apply the stress test to new verbs.",
       use_example: { german: "Er erklärt das Wort und ich erinnere mich.", english: "He explains the word and I remember it." },
       takeaway: "be- converts, er- achieves — both factories are unstressed, ge--free, and detectable by stress alone.",
-      curiosity_teaser: "Next: numbers, time & gestern — counting is a shift spiral: drei↔three, zwanzig↔twenty, gestern↔yesterday.",
+      curiosity_teaser: "Next: sich & the lost reflexives — hie thee hence: the pronouns English dropped, the daily verbs that kept them.",
     },
   },
   {
@@ -10151,7 +10151,7 @@ export const LESSONS: Lesson[] = [
       outcome: "Build als/wie comparisons and am -sten superlatives with declining adjectives.",
       use_example: { german: "Heute ist der beste Tag.", english: "Today is the best day." },
       takeaway: "als = than, so...wie = as...as, am -sten = superlative — and before nouns the adjective declines like ein.",
-      curiosity_teaser: "Next: Hidden Shifts I: V → B — the quiet family: geben↔give, über↔over, sieben↔seven.",
+      curiosity_teaser: "Next: adjective endings — the article's echo: der kalte Tag vs ein kalter Tag.",
     },
   },
   {
@@ -10607,6 +10607,1788 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Ich sehe ihn, und ich helfe ihm.", english: "I see him (acc), and I help him (dat)." },
       takeaway: "helfen, danken, gefallen, folgen, gehören — the dative club acts TOWARD; sehen, finden, nehmen act ON.",
       curiosity_teaser: "Next: compound noun engineering — Handschuh is hand-shoe: German builds words like Lego, and so did English.",
+    },
+  },
+
+  {
+    id: 5061,
+    slug: "speak-hands-for-me",
+    title: "Speak, Hands, for Me!",
+    subtitle: "The du-command is the bare stem: Komm! Lern! Iss! — the imperative you already own",
+    phase: 2,
+    shift_categories: [],
+    word_ids: ["kommen", "gehen", "essen", "sprechen", "helfen", "lernen", "trinken", "machen"],
+    table_word_ids: ["kommen", "gehen", "essen", "sprechen", "helfen"],
+    hook: {
+      title: "The Command You Already Give",
+      content:
+        "Here is a secret: you have been commanding in German your whole life. When you say Speak! or Come here! or Help! — no do-support, no subject, just the bare verb — you are using the ancient Germanic imperative, word for word. German never changed the deal: Komm! Geh! Lern! The du-command is simply the stem with nothing attached — the same weapon Shakespeare's Casca grabs when he shouts 'Speak, hands, for me!' seconds before Caesar falls. English trimmed its endings away; German kept the kit, including a fossil you will recognize: Komm! can wear an optional -e (Komme!), the same final -e that once ended every English command.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Speak, Hands, for Me!",
+          content:
+            "Julius Caesar, Act 3, Scene 1: as the conspirators close in, Casca cries 'Speak, hands, for me!' — a bare-stem imperative with no auxiliary. The line is a working demonstration that English's command form is the same construction as Komm! and Sprich!.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Bare Stem — and the Vowel That Stays",
+      content:
+        "The rule is one step: strip -en, and what is left IS the command — lernen → Lern! kommen → Komm! gehen → Geh! trinken → Trink! machen → Mach! No ending, no pronoun. Now the twist you already know from the Thou -st Circuit: verbs whose du-form changes its vowel keep the changed vowel in the command — essen: du isst → Iss! sprechen: du sprichst → Sprich! helfen: du hilfst → Hilf! The command simply borrows whatever stem the du-form uses. (geben will join this club with gib in topic 19.) One warning, honestly: verbs that only UMLAUT in the du-form (du fährst) drop the dots for the command — the command is plain Fahr! The umlaut rides with the -st, not with the stem.",
+      footnotes: [
+        {
+          marker: "2",
+          title: "The Optional -e",
+          content:
+            "Komm! and Komme! are both correct — the -e is an older, more formal flavor that survives in songs, poetry and Luther's Bible. English once had the same choice: 'Hear me!' and 'Hear ye!' — and Old English commands ended in the very same -e.",
+        },
+      ],
+    },
+    exercises: [
+      {
+        id: "l5061_e1",
+        type: "matching_pairs",
+        prompt: "Match each English command with its German twin:",
+        matching_pairs: [
+          { id: "im1", english: "come!", german: "Komm!" },
+          { id: "im2", english: "go!", german: "Geh!" },
+          { id: "im3", english: "eat!", german: "Iss!" },
+          { id: "im4", english: "speak!", german: "Sprich!" },
+        ],
+        target_answer: "Komm, Geh, Iss, Sprich",
+        meaning: "come, go, eat, speak — as commands",
+        explanation: "The command is the bare stem: komm-, geh- — and the e→i stem-changers (Iss!, Sprich!) keep their changed vowel, exactly like their du-forms.",
+      },
+      {
+        id: "l5061_e2",
+        type: "shift_select",
+        prompt: "Command one friend to eat. Du isst — so you say:",
+        options: ["Iss!", "Isst!", "Esst!", "Essen Sie!"],
+        target_answer: "Iss!",
+        meaning: "Iss! = eat! (to one friend)",
+        explanation: "essen's du-form is du isst (e→i) — the command keeps that vowel: Iss! The other forms belong to ihr (Esst!) and Sie (Essen Sie!).",
+      },
+      {
+        id: "l5061_e3",
+        type: "morpheme_tiles",
+        prompt: "Assemble the command with its object: 'Sprich Deutsch'",
+        tile_options: ["Sprich", "Deutsch", "st", "en", "t"],
+        target_answer: "Sprich Deutsch",
+        meaning: "speak! (German) — speak German!",
+        explanation: "sprechen keeps its e→i vowel in the command: Sprich! — the same stem you drilled in du sprichst.",
+      },
+      {
+        id: "l5061_e4",
+        type: "derive",
+        prompt: "helfen takes dative even in a command. Command form of helfen (help!):",
+        english_hint: "du hilfst, minus the -st",
+        target_answer: "Hilf",
+        meaning: "Hilf mir! = help me!",
+        explanation: "du hilfst → Hilf! — the e→i vowel stays. helfen still demands its dative: Hilf mir!",
+      },
+      {
+        id: "l5061_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the command chain: 'Come and drink tea'",
+        target_answer: "Komm und trink Tee",
+        meaning: "Komm und trink Tee = come and drink tea",
+        vocab_hints: [
+          { word: "trink", translation: "drink! (command form)", note: "bare stem of trinken — no ending, no pronoun" },
+        ],
+        word_bank: ["Komm", "und", "trink", "Tee"],
+        explanation: "Two bare-stem commands chained with und — the way real German dialogue strings orders: Komm! Trink!",
+      },
+    ],
+    summary: {
+      outcome: "Form du-commands as bare stems, keeping the e→i vowel of stem-changers.",
+      use_example: { german: "Komm und trink Tee!", english: "Come and drink tea!" },
+      takeaway: "The du-command is the stem: Lern! Komm! — and stem-changers keep their vowel: Iss! Sprich! Hilf!",
+      curiosity_teaser: "Next: Kommen Sie! Kommt! — the formal and the plural imperatives, plus the one irregular command, Sei!.",
+    },
+  },
+
+  {
+    id: 5062,
+    slug: "kommen-sie-kommt",
+    title: "Kommen Sie! Kommt!",
+    subtitle: "The formal Sie-command (verb first, Sie after) and the plural ihr-command",
+    phase: 2,
+    shift_categories: [],
+    word_ids: ["kommen", "machen", "trinken", "sprechen", "sein", "essen"],
+    table_word_ids: ["kommen", "machen", "trinken", "sein", "essen"],
+    hook: {
+      title: "Three Ways to Order Somebody",
+      content:
+        "English commands everybody with one word: come! German refuses. One friend gets Komm!; two friends get Kommt!; a stranger gets Kommen Sie! — and that last one is the strangest, because it is really a statement about 'they': the polite Sie is the old third-person plural, so the command says, in effect, 'let the honored they come.' Verb first, Sie second — it looks like a question with the question mark politely removed, and that is almost exactly its history. English once ran the same split: 'go thou' to one, 'go ye' to many — the King James Bible is full of the plural form. German still lives in that world.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Question With the Mark Removed",
+          content:
+            "Wollen Sie kommen? ('do you want to come?') drops wollen and its question mark: Kommen Sie! The polite command is built on the scaffolding of the polite question — which is why it sounds so courtly.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Full Command Table",
+      content:
+        "ihr-commands: take the ihr ending -t and nothing else — Kommt! Macht! Trinkt! Esst! (essen keeps its vowel: du isst, ihr esst, command Esst!). The Sie-command: the 3rd-person-plural form, verb FIRST, Sie after — Kommen Sie! Machen Sie! Trinken Sie! Sprechen Sie! The irregular one: sein. Its commands are pure history: Sei! (du), Seid! (ihr), Seien Sie! (formal) — the old *bʰu- root wearing command clothes. And the stem-changers hold their line in all three columns: Iss! Esst! Essen Sie! — Hilf! Helft! Helfen Sie!",
+      footnotes: [],
+      linguist_note:
+        "Sei ↔ be: the German command of sein comes from the same Proto-Germanic *bʰu- root as English be (OE bēo!). 'Be good!' and 'Sei gut!' are one command, split by two thousand years of drift.",
+    },
+    exercises: [
+      {
+        id: "l5062_e1",
+        type: "matching_pairs",
+        prompt: "Match each command to the audience it addresses:",
+        matching_pairs: [
+          { id: "fc1", english: "come! (one friend)", german: "Komm!" },
+          { id: "fc2", english: "come! (two friends)", german: "Kommt!" },
+          { id: "fc3", english: "come! (formal)", german: "Kommen Sie!" },
+          { id: "fc4", english: "be! (one friend)", german: "Sei!" },
+        ],
+        target_answer: "Komm, Kommt, Kommen Sie, Sei",
+        meaning: "du, ihr, Sie, and the irregular sein command",
+        explanation: "Bare stem for du, -t for ihr, verb-first + Sie for formal — and sein refuses all three patterns: Sei! Seid! Seien Sie!",
+      },
+      {
+        id: "l5062_e2",
+        type: "shift_select",
+        prompt: "A waiter invites a customer to drink: '_____ Sie ein Glas Wein!'",
+        options: ["Trinken", "Trink", "Trinkt", "Getrunken"],
+        target_answer: "Trinken",
+        meaning: "Trinken Sie! = drink! (formal)",
+        explanation: "The Sie-command uses the 3rd-person-plural form, verb first: Trinken Sie! — never Trink Sie.",
+      },
+      {
+        id: "l5062_e3",
+        type: "shift_select",
+        prompt: "Command two friends to eat:",
+        options: ["Esst!", "Iss!", "Essen Sie!", "Ess!"],
+        target_answer: "Esst!",
+        meaning: "Esst! = eat! (ihr)",
+        explanation: "essen's vowel keeps its e→i shift through the table: du isst, ihr esst — command Esst! The -t ending rides on the shifted stem.",
+      },
+      {
+        id: "l5062_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the ihr-command with its object: 'Macht das'",
+        tile_options: ["Macht", "das", "st", "en", "t"],
+        target_answer: "Macht das",
+        meaning: "do! (ihr) — do that!",
+        explanation: "machen → ihr-command Macht! — the same -t you drilled as the ihr ending, now giving orders.",
+      },
+      {
+        id: "l5062_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the formal command: 'Sprechen Sie Deutsch'",
+        target_answer: "Sprechen Sie Deutsch",
+        meaning: "Sprechen Sie Deutsch = speak German (formal)",
+        vocab_hints: [
+          { word: "Sie", translation: "you (formal)", note: "the polite 'they' — verb first, Sie second" },
+        ],
+        word_bank: ["Sprechen", "Sie", "Deutsch"],
+        explanation: "Verb first, Sie second: Kommen Sie, Machen Sie, Sprechen Sie — the courtly scaffolding of the polite question, minus the question.",
+      },
+    ],
+    summary: {
+      outcome: "Command all three audiences: bare stem (du), -t (ihr), verb-first + Sie (formal) — plus Sei!.",
+      use_example: { german: "Kommen Sie herein und trinken Sie Tee!", english: "Come in and drink tea! (formal)" },
+      takeaway: "Komm! / Kommt! / Kommen Sie! — three audiences, three forms; sein answers only Sei! Seid! Seien Sie!.",
+      curiosity_teaser: "Next: commands in the wild — recipes, dialogues and the register switch, where German drops even the verb's subject.",
+    },
+  },
+
+  {
+    id: 5063,
+    slug: "commands-in-the-wild",
+    title: "Commands in the Wild",
+    subtitle: "Recipes, dialogues and the register switch — where German commands go native",
+    phase: 2,
+    shift_categories: [],
+    word_ids: ["kochen", "essen", "trinken", "machen", "kommen", "suchen", "brot", "tee"],
+    table_word_ids: ["kochen", "essen", "trinken", "machen", "tee"],
+    hook: {
+      title: "The Recipe's Dirty Secret",
+      content:
+        "Open a German cookbook and the commands get lazier — and more ancient. Real recipes skip the pronoun and often the finiteness too: Wasser kochen, Tee machen, Brot essen — 'water to-boil, tea to-make, bread to-eat.' That bare infinitive parade is a command with the stem exposed, the same stripped form you drilled as Komm! — just wearing its infinitive coat. English recipes do the mirror move: 'boil water, add salt, stir.' The command is the oldest sentence shape humans own, and in the wild — recipes, signs, dialogues — German simply lets it run.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "bitte — the Softener",
+          content:
+            "Bitte (please — literally 'ask/bid', the twin hiding in English bid) converts any command from order to request: Komm! vs Komm, bitte! English once did the same with pray: 'pray come in' → 'prithee' → modern please. Both languages ask politely by mentioning the asking.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Two Registers, One Stem",
+      content:
+        "Friend register: Komm! Trink Tee! Iss Brot! — bare-stem commands, chained with und: Komm und iss! Recipe register: Wasser kochen, Tee machen, Kaffee trinken — infinitive-style commands with no pronoun at all, the register of cookbooks and instruction manuals. Formal register: Essen Sie! Trinken Sie! — the verb-first Sie-command. The same stems serve all three: kochen, essen, trinken, machen, kommen, suchen — switch audience, keep the stem. One honest gap: negative commands need nicht, which arrives with topic 12 — komm nicht! waits one topic down the trail.",
+      footnotes: [],
+      linguist_note:
+        "The recipe infinitive is a survival of the old Gerundium: medieval German recipes were written as noun-verb pairs ('zu machene' — to make). English once did it too — 'to make a pie: take flour' — before the imperative took over the kitchen.",
+    },
+    exercises: [
+      {
+        id: "l5063_e1",
+        type: "matching_pairs",
+        prompt: "The recipe list — match each step with its reading:",
+        matching_pairs: [
+          { id: "rc1", english: "boil water (recipe style)", german: "Wasser kochen" },
+          { id: "rc2", english: "make tea (recipe style)", german: "Tee machen" },
+          { id: "rc3", english: "drink coffee (recipe style)", german: "Kaffee trinken" },
+          { id: "rc4", english: "eat bread (recipe style)", german: "Brot essen" },
+        ],
+        target_answer: "Wasser kochen, Tee machen, Kaffee trinken, Brot essen",
+        meaning: "boil water, make tea, drink coffee, eat bread",
+        explanation: "Recipe style: noun then bare infinitive, no pronoun — a command with the stem exposed.",
+      },
+      {
+        id: "l5063_e2",
+        type: "shift_select",
+        prompt: "Which line sounds like it came from a German cookbook?",
+        options: ["Wasser kochen und Tee machen", "Du kochst Wasser", "Ich koche Wasser", "Kochst du Wasser?"],
+        target_answer: "Wasser kochen und Tee machen",
+        meaning: "Recipe register: noun + bare infinitive",
+        explanation: "Recipes drop the subject entirely: Wasser kochen, Tee machen — the stem parade.",
+      },
+      {
+        id: "l5063_e3",
+        type: "morpheme_tiles",
+        prompt: "Assemble the friend-command: 'Trink Tee'",
+        tile_options: ["Trink", "Tee", "st", "en", "t"],
+        target_answer: "Trink Tee",
+        meaning: "drink! tea — drink tea! (to a friend)",
+        explanation: "Bare stem + object: Trink Tee! — the du-command with nothing attached.",
+      },
+      {
+        id: "l5063_e4",
+        type: "derive",
+        prompt: "Formal register: essen → _____ Sie (serve a guest):",
+        english_hint: "the 3rd-person-plural form, verb first",
+        target_answer: "Essen",
+        meaning: "Essen Sie! = eat! (formal)",
+        explanation: "The Sie-command borrows the they-form: Essen Sie! — essen keeps its e→i vowel only in du (isst) and ihr (esst).",
+      },
+      {
+        id: "l5063_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the dialogue line: 'Come and eat bread'",
+        target_answer: "Komm und iss Brot",
+        meaning: "Komm und iss Brot = come and eat bread",
+        vocab_hints: [
+          { word: "iss", translation: "eat! (command form)", note: "essen's du-form isst — the command keeps the i" },
+        ],
+        word_bank: ["Komm", "und", "iss", "Brot"],
+        explanation: "Two commands chained with und — and iss keeps its shifted vowel, the stem-changer in action.",
+      },
+    ],
+    summary: {
+      outcome: "Deploy commands in three registers: friend (Komm!), recipe (Wasser kochen), formal (Essen Sie!).",
+      use_example: { german: "Komm, bitte, und iss Brot!", english: "Come, please, and eat bread!" },
+      takeaway: "One stem, three registers: Komm! / Wasser kochen / Kommen Sie! — the command is German's oldest sentence shape.",
+      curiosity_teaser: "Next: the accusative Him-Case — why only der changes to den, and how English him and whom prove it.",
+    },
+  },
+
+  {
+    id: 1904,
+    slug: "hatte-war-fortress-pasts",
+    title: "hatte & war: The Fortress Pasts",
+    subtitle: "haben and sein keep their simple pasts: hatte ↔ had, war ↔ was — the -te is your -ed",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["haben", "sein", "gestern", "kind", "haus", "kaffee"],
+    table_word_ids: ["haben", "sein", "gestern", "kind"],
+    hook: {
+      title: "The Two Verbs That Never Surrendered",
+      content:
+        "Topic 18 handed you the Perfekt — ge- participles closing brackets everywhere. But two verbs refused the surrender. Nobody says 'ich habe gehabt' for 'I had', and nobody says 'ich bin gewesen' for 'I was'. Speech keeps the old simple pasts: ich hatte, ich war. These are the fortress verbs — the last place the ancient past tense lives in daily German. And the ending on the fortress wall spells its own history: hatte ↔ had. That -te is the same dental suffix as your -ed (Old English hæfde — 'I had' — ends in -de). German never stopped conjugating with the ending English still wears.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Dental Suffix",
+          content:
+            "The weak-past ending -te (machte, sagte, hatte) and the English -ed are one and the same Proto-Germanic dental suffix *-dē. English wore it as -ed/-d, German as -te — machte ↔ made is not a coincidence but a shared inheritance doing paperwork.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Fortress Wall, Person by Person",
+      content:
+        "haben: ich hatte ↔ I had, du hattest ↔ thou hadst, er hatte ↔ he had, wir hatten ↔ we had. sein: ich war ↔ I was, du warst ↔ thou wast, er war ↔ he was, wir waren ↔ we were. The storytelling frames: Gestern hatte ich keine Zeit (yesterday I had no time). Das Haus war alt (the house was old). Wir waren in Berlin (we were in Berlin). One honest note: the Perfekt forms exist — gehabt, gewesen — and appear in formal writing; but in speech the fortress holds. habe gehabt is a construction you will hear only in drills and apologies.",
+      footnotes: [],
+      linguist_note:
+        "war ↔ was is the *wes- root from the sein lesson's three-verb trench coat — and hattest ↔ hadst is the same -st you have drilled since the Shakespeare lesson, riding on the dental suffix. Two histories, one ending.",
+    },
+    exercises: [
+      {
+        id: "l1904_e1",
+        type: "matching_pairs",
+        prompt: "The fortress wall — match each English past with its German twin:",
+        matching_pairs: [
+          { id: "fp1", english: "I had", german: "ich hatte" },
+          { id: "fp2", english: "I was", german: "ich war" },
+          { id: "fp3", english: "thou hadst", german: "du hattest" },
+          { id: "fp4", english: "we were", german: "wir waren" },
+        ],
+        target_answer: "ich hatte, ich war, du hattest, wir waren",
+        meaning: "had, was, hadst, were",
+        explanation: "hatte ↔ had (one dental suffix, -te ↔ -ed) and war ↔ was — the fortress pasts of haben and sein.",
+      },
+      {
+        id: "l1904_e2",
+        type: "shift_select",
+        prompt: "Storytelling check: 'Gestern _____ ich keine Zeit.' (yesterday I HAD no time):",
+        options: ["hatte", "habe", "war", "hat"],
+        target_answer: "hatte",
+        meaning: "Gestern hatte ich keine Zeit",
+        explanation: "Speech keeps the simple past: hatte, never habe gehabt. The fortress verb does its own storytelling.",
+      },
+      {
+        id: "l1904_e3",
+        type: "derive",
+        prompt: "Say where you were yesterday: 'Du _____ gestern in Berlin.' (you were):",
+        english_hint: "war + the Shakespearean -st",
+        target_answer: "warst",
+        meaning: "Du warst gestern in Berlin = you were in Berlin yesterday",
+        explanation: "du warst ↔ thou wast — the *wes- root with the -st ending, both words ancient in both languages.",
+      },
+      {
+        id: "l1904_e4",
+        type: "reverse_cognate",
+        prompt: "Which English word is the true twin of 'hatte'?",
+        target_answer: "had",
+        meaning: "hatte ↔ had (the shared dental suffix -te ↔ -ed)",
+        explanation: "Old English hæfde — 'had' — wears the same dental past suffix as hatte. The fortress pasts are one fortress.",
+      },
+      {
+        id: "l1904_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the storyteller's line: 'Yesterday I had no time'",
+        target_answer: "Gestern hatte ich keine Zeit",
+        meaning: "Gestern hatte ich keine Zeit = yesterday I had no time",
+        vocab_hints: [
+          { word: "hatte", translation: "had", note: "haben's simple past — the fortress form" },
+          { word: "keine", translation: "no / not any", note: "kein before a noun — the none-word" },
+        ],
+        word_bank: ["Gestern", "hatte", "ich", "keine", "Zeit"],
+        explanation: "Gestern fronts the adverb, hatte holds position 2 — the fortress past running a verb-second main clause.",
+      },
+    ],
+    summary: {
+      outcome: "Tell yesterday's story with hatte and war, and explain why habe gehabt never shows up in speech.",
+      use_example: { german: "Gestern hatte ich keine Zeit, aber der Kaffee war gut.", english: "Yesterday I had no time, but the coffee was good." },
+      takeaway: "hatte ↔ had and war ↔ was: the -te/-ed dental suffix shared, the fortress pasts of haben und sein.",
+      curiosity_teaser: "Next: konnte & musste — the frozen pasts of the modals, English's own could/should/would.",
+    },
+  },
+
+  {
+    id: 1905,
+    slug: "konnte-musste-frozen-pasts",
+    title: "konnte, musste & the Frozen Pasts",
+    subtitle: "The preterite-present modals: konnte↔could, musste↔must — English froze their pasts into presents",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["können", "müssen", "dürfen", "sollen", "wollen", "wissen"],
+    table_word_ids: ["können", "müssen", "dürfen", "sollen"],
+    hook: {
+      title: "Pasts Wearing Present Clothes",
+      content:
+        "The six modal verbs are linguistic fossils with a scientific name: preterite-presents. Thousands of years ago their -te forms WERE past tenses — 'I could' meant 'I have been able'. Speakers re-read those pasts as presents, and the modals have lived in the present ever since. English did the exact same freeze and never thawed it: can and could are the same ancient word in two tenses, so are shall/should and will/would. And must? Must IS the old past tense of 'to matter' — grammatically a past that never left. German kept the whole system running: the modals' past tense is rebuilt with the ordinary dental -te — konnte, musste, durfte, sollte, wollte, wusste — one stem for every person, no vowel games at all.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "wist: the KJV Fossil",
+          content:
+            "English kept one frozen past as late as 1611: the King James Bible's 'they knew not nor wist' — wist is the old past of wit 'to know', the exact twin of German wusste. German wisst (you all know) and wissen still wear the same s that English buried.",
+        },
+      ],
+    },
+    pattern: {
+      title: "One Weak Past, Six Ways",
+      content:
+        "können → konnte ↔ could; müssen → musste ↔ must/had to; dürfen → durfte ↔ was allowed (archaic English durst!); sollen → sollte ↔ should; wollen → wollte ↔ wanted to; wissen → wusste ↔ knew (wist). Conjugation is boring on purpose: ich/er konnte, du konntest, wir konnten — one past stem for everybody, the dental -te doing all the work. And the bracket rule rides along: the bare infinitive stays at the end — Ich konnte nicht kommen, Ich musste gestern arbeiten, Wir wollten nach Berlin. Watch the trap: wollte (wanted) has one L in the past but wollen has two in the present — du wolltest, never du wolltest with double-t.",
+      footnotes: [],
+      linguist_note:
+        "Preterite-presents go back to Proto-Indo-European perfect forms — old stative 'has-been-able' constructions re-anchored to the present. That is why the modals have no -en infinitive stress and no ge- participle in older speech: they were never ordinary verbs.",
+    },
+    exercises: [
+      {
+        id: "l1905_e1",
+        type: "matching_pairs",
+        prompt: "The frozen pasts — match each German modal past with its English twin:",
+        matching_pairs: [
+          { id: "fp1", english: "I could / was able", german: "ich konnte" },
+          { id: "fp2", english: "I had to", german: "ich musste" },
+          { id: "fp3", english: "I wanted to", german: "ich wollte" },
+          { id: "fp4", english: "I knew", german: "ich wusste" },
+        ],
+        target_answer: "ich konnte, ich musste, ich wollte, ich wusste",
+        meaning: "could, had to, wanted to, knew",
+        explanation: "can/could, shall/should, will/would — English froze the same preterite-presents; musste is must's own frozen past.",
+      },
+      {
+        id: "l1905_e2",
+        type: "shift_select",
+        prompt: "Bracket check: 'Ich _____ nicht kommen.' (I couldn't come):",
+        options: ["konnte", "kann", "können", "konnten"],
+        target_answer: "konnte",
+        meaning: "Ich konnte nicht kommen = I couldn't come",
+        explanation: "ich/er konnte — one past stem for every person, with the bare infinitive stehen at the bracket's end.",
+      },
+      {
+        id: "l1905_e3",
+        type: "shift_select",
+        prompt: "'Ich _____ gestern arbeiten.' (I had to work yesterday):",
+        options: ["musste", "muss", "müssen", "musst"],
+        target_answer: "musste",
+        meaning: "Ich musste gestern arbeiten = I had to work yesterday",
+        explanation: "must has no living past of its own — but German musste is that past, still working. English and German froze the same verb.",
+      },
+      {
+        id: "l1905_e4",
+        type: "reverse_cognate",
+        prompt: "Which archaic English past of 'wit' (to know) is the twin of 'wusste'? (KJV: 'they knew not nor ___')",
+        target_answer: "wist",
+        meaning: "wusste ↔ wist (the frozen know-past)",
+        explanation: "wissen/wusste ↔ wit/wist: the same s-bearing know-verb, and English kept wist alive into the King James Bible.",
+      },
+      {
+        id: "l1905_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the bracket: 'I couldn't come yesterday'",
+        target_answer: "Ich konnte gestern nicht kommen",
+        meaning: "Ich konnte gestern nicht kommen = I couldn't come yesterday",
+        vocab_hints: [
+          { word: "konnte", translation: "could / was able", note: "können's simple past — one stem, all persons" },
+        ],
+        word_bank: ["Ich", "konnte", "gestern", "nicht", "kommen"],
+        explanation: "Modal past in position 2, bare infinitive at the end — the bracket survives the trip into the past intact.",
+      },
+    ],
+    summary: {
+      outcome: "Use konnte, musste, durfte, sollte, wollte and wusste, and explain the preterite-present freeze behind English could/should/would.",
+      use_example: { german: "Ich wollte kommen, aber ich musste arbeiten.", english: "I wanted to come, but I had to work." },
+      takeaway: "The modals are frozen pasts: konnte↔could, musste↔must, sollte↔should, wollte↔would, wusste↔wist — one weak -te past, one stem.",
+      curiosity_teaser: "Next: the dative case — methinks, mir and the giving case.",
+    },
+  },
+
+  {
+    id: 2403,
+    slug: "adjective-endings-articles-echo",
+    title: "Adjective Endings: the Article's Echo",
+    subtitle: "der kalte Tag vs ein kalter Tag — the adjective only speaks when the article is silent",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["kalt", "gut", "alt", "schön", "klein", "groß", "lang"],
+    table_word_ids: ["kalt", "gut", "alt", "schön"],
+    hook: {
+      title: "One Flag Per Phrase",
+      content:
+        "German grammar allows exactly ONE flag-carrier per noun phrase — one ending that shouts the case and gender. When der/die/das stands in front, the article carries the flag and the adjective falls silent-ish: der kalt**e** Tag. But ein is a quiet article — it has no ending in the masculine nominative — so the adjective must pick the flag up: ein kalt**er** Tag. That is the whole system: the adjective is the article's echo, speaking only when the article cannot. English ran this same show once — 'the olden days', 'mine host' — and then let the endings go. German never did.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Predicative = No Flag At All",
+          content:
+            "Der Tag ist kalt — no ending, because the adjective is not INSIDE a noun phrase, it stands alone after ist. The echo only sounds before a noun: der kalte Tag, but der Tag ist kalt. English does exactly the same: 'the cold day' vs 'the day is cold'.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The 80/20 Echo Rule",
+      content:
+        "After der/die/das (the loud articles): adjective takes -e in the nominative singular and -en almost everywhere else — der kalte Tag, den kalten Tag, die kalte Nacht, das kalte Wasser. After ein/kein/mein (the quiet articles): the adjective copies the article's missing ending — ein kalt**er** Tag (masc. nom.), ein kalt**es** Wasser (neut. nom./acc.), but ein kalt**en** Tee (masc. acc.), eine kalt**e** Nacht (fem.). The 80/20: when in doubt before ANY noun in real sentences, -en is the safe echo — den kalten Tee, mit einem kalten Getränk, die kalten Hände. Pattern: der gute Wein, ein guter Wein, der alte Kaffee, ein alter Kaffee, die kleine Nacht, eine kleine Nacht.",
+      footnotes: [],
+      linguist_note:
+        "The two declensions are the living remains of the older demonstrative system: der/die/das and dieser/jener carry their own case endings (they ARE the old demonstratives), so the adjective never needs to double up. Ein is historically 'one' — a bare numeral with no flag — so the adjective is drafted to carry it.",
+    },
+    exercises: [
+      {
+        id: "l2403_e1",
+        type: "matching_pairs",
+        prompt: "Match each noun phrase with who carries the case flag:",
+        matching_pairs: [
+          { id: "ae1", english: "the cold day (article's flag)", german: "der kalte Tag" },
+          { id: "ae2", english: "a cold day (adjective's flag)", german: "ein kalter Tag" },
+          { id: "ae3", english: "the cold water (article's flag)", german: "das kalte Wasser" },
+          { id: "ae4", english: "a cold water (adjective's flag)", german: "ein kaltes Wasser" },
+        ],
+        target_answer: "der kalte Tag, ein kalter Tag, das kalte Wasser, ein kaltes Wasser",
+        meaning: "the cold day, a cold day, the cold water, a cold water",
+        explanation: "After der/die/das the adjective rests (-e); after ein it echoes the article's missing -er/-es.",
+      },
+      {
+        id: "l2403_e2",
+        type: "shift_select",
+        prompt: "'Ich nehme ein _____ Bier.' (a cold beer — ein is quiet, so who speaks?):",
+        options: ["kaltes", "kalte", "kalter", "kalten"],
+        target_answer: "kaltes",
+        meaning: "ein kaltes Bier = a cold beer (neuter: the adjective echoes -es)",
+        explanation: "das Bier is neuter; ein shows no ending, so the adjective carries the neuter flag: kaltes.",
+      },
+      {
+        id: "l2403_e3",
+        type: "shift_select",
+        prompt: "'Ich trinke den kalt___ Tee.' (the cold tea — masculine accusative):",
+        options: ["en", "er", "es", "e"],
+        target_answer: "en",
+        meaning: "den kalten Tee = the cold tea",
+        explanation: "den already flags the accusative loudly, and the adjective echoes it with -en — the 80/20 ending that covers most real sentences.",
+      },
+      {
+        id: "l2403_e4",
+        type: "shift_select",
+        prompt: "Which noun phrase correctly echoes after the quiet article?",
+        options: ["ein alter Kaffee", "ein alte Kaffee", "ein altes Kaffee", "ein alten Kaffee"],
+        target_answer: "ein alter Kaffee",
+        meaning: "ein alter Kaffee = an old coffee (masculine nominative)",
+        explanation: "der Kaffee is masculine; ein is endingless in the nominative, so alt picks up the masculine -er exactly as der would wear it.",
+      },
+      {
+        id: "l2403_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the phrase pair: 'The old wine is good'",
+        target_answer: "Der alte Wein ist gut",
+        meaning: "Der alte Wein ist gut = the old wine is good",
+        vocab_hints: [
+          { word: "alte", translation: "old (before a noun)", note: "alt + -e: the echo after the loud article der" },
+        ],
+        word_bank: ["Der", "alte", "Wein", "ist", "gut"],
+        explanation: "der carries the flag, alte echoes with -e — and predicative gut stays bare, because outside the noun phrase nobody echoes.",
+      },
+    ],
+    summary: {
+      outcome: "Choose adjective endings after der/die/das vs ein/kein/mein, using the one-flag principle and the 80/20 -en rule.",
+      use_example: { german: "Der kalte Kaffee ist gut, aber ein kalter Tee ist besser.", english: "The cold coffee is good, but a cold tea is better." },
+      takeaway: "One flag per phrase: loud articles speak, quiet ein/kein/mein force the adjective to echo (-er/-es), and -en is the 80% default.",
+      curiosity_teaser: "Next: no article? the adjective goes strong — kaltes Wasser, heißer Tee: the ending does the article's job alone.",
+    },
+  },
+
+  {
+    id: 5071,
+    slug: "first-introductions",
+    title: "First Introductions",
+    subtitle: "ich heiße ↔ hight, ich komme aus, ich wohne — the first sentences Germans actually speak",
+    phase: 1,
+    shift_categories: [],
+    word_ids: ["heißen", "kommen", "wohnen", "alt", "jahr"],
+    table_word_ids: ["heißen", "kommen", "wohnen", "jahr"],
+    hook: {
+      title: "Hight: the Verb You Already Owned",
+      content:
+        "Every German course opens with ich heiße — and the verb is an heirloom. Heißen descends from Proto-Germanic *haitaną, 'to call, to be called', and English wore the same verb until Shakespeare's day: archaic hight meant 'is called' — 'a city hight Rome'. Sir Gawain is hight so; your name is heißt so. The rest of the introduction kit is equally old: ich komme aus England (come, already yours), ich wohne in Berlin (the live/reside verb — no English twin, an honest memorize), ich bin zwanzig Jahre alt (and Jahr is the exact twin of year). Four formulas, all cognate-tested, and you can introduce yourself for a full minute.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "behest: the Command Sibling",
+          content:
+            "Heißen's family survives in English 'behest' — a bidding or command, literally a 'be-called'. The king's behest is what he calls you to do. Same *haitaną root as heißen, hight, and German Heißt du...?",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Four Formulas",
+      content:
+        "1. Ich heiße Anna. — 'I am called Anna'; question form: Wie heißt du? (informal) / Wie heißen Sie? (formal). 2. Ich komme aus England. — come from; the country takes aus with no article: aus Deutschland, aus der Schweiz (feminine keeps hers). 3. Ich wohne in Berlin. — reside; city = bare in, country = in + dative: in Deutschland, in der Schweiz. 4. Ich bin zwanzig Jahre alt. — literally 'I am twenty years old', word for word English. Stack them and the self-introduction builds itself: Ich heiße Anna. Ich komme aus England, und ich wohne jetzt in Berlin.",
+      footnotes: [],
+      linguist_note:
+        "Heißen and hight share the s of *haitaną's present stem — heißt keeps it, hight wore it down. The question 'Wie heißen Sie?' literally asks 'How are you called?', the same logic as archaic 'How are you hight?' — both languages asking for a name by way of a calling.",
+    },
+    exercises: [
+      {
+        id: "l5071_e1",
+        type: "matching_pairs",
+        prompt: "Match each introduction formula with its literal reading:",
+        matching_pairs: [
+          { id: "fi1", english: "I am called (= my name is)", german: "Ich heiße" },
+          { id: "fi2", english: "I come from", german: "Ich komme aus" },
+          { id: "fi3", english: "I live / reside in", german: "Ich wohne in" },
+          { id: "fi4", english: "I am twenty years old", german: "Ich bin zwanzig Jahre alt" },
+        ],
+        target_answer: "Ich heiße, Ich komme aus, Ich wohne in, Ich bin zwanzig Jahre alt",
+        meaning: "my name is, I come from, I live in, I am twenty years old",
+        explanation: "heißen = to be called (hight's twin); the age formula is word-for-word English — years old = Jahre alt.",
+      },
+      {
+        id: "l5071_e2",
+        type: "shift_select",
+        prompt: "'Ich komme _____ Deutschland.' (I come from Germany):",
+        options: ["aus", "von", "in", "bei"],
+        target_answer: "aus",
+        meaning: "Ich komme aus Deutschland = I come from Germany",
+        explanation: "aus = out of — origins run through the out-of preposition, and countries stand bare: aus Deutschland.",
+      },
+      {
+        id: "l5071_e3",
+        type: "shift_select",
+        prompt: "Which archaic English word is the twin of 'heiße'?",
+        options: ["hight", "hot", "hallowed", "hest"],
+        target_answer: "hight",
+        meaning: "heißen ↔ hight = to be called",
+        explanation: "'A city hight Rome' = 'a city is called Rome' — same *haitaną, same meaning, one s worn away.",
+      },
+      {
+        id: "l5071_e4",
+        type: "reverse_cognate",
+        prompt: "'Jahr' is the exact twin of which English word?",
+        target_answer: "year",
+        meaning: "Jahr ↔ year (Proto-West Germanic *jār)",
+        explanation: "Ich bin zwanzig Jahre alt — 'I am twenty years old' — with Jahr/year the twin it has been for two thousand years.",
+      },
+      {
+        id: "l5071_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the full introduction: 'My name is Anna and I come from Berlin'",
+        target_answer: "Ich heiße Anna und ich komme aus Berlin",
+        meaning: "Ich heiße Anna und ich komme aus Berlin",
+        vocab_hints: [
+          { word: "heiße", translation: "am called", note: "ich heiße = my name is — the hight twin" },
+          { word: "aus", translation: "from / out of", note: "kommen aus = come from (origin)" },
+        ],
+        word_bank: ["Ich", "heiße", "Anna", "und", "ich", "komme", "aus", "Berlin"],
+        explanation: "Two verb-second clauses joined by und — each clause holds its own verb in position 2, the rule from topic 14 already at work.",
+      },
+    ],
+    summary: {
+      outcome: "Introduce yourself with heiße, komme aus, wohne in and the age formula — and explain the heißen/hight twin.",
+      use_example: { german: "Ich heiße Anna. Ich komme aus England, und ich wohne in Berlin.", english: "My name is Anna. I come from England, and I live in Berlin." },
+      takeaway: "heißen ↔ hight ('to be called'), kommen aus (origins), wohnen in (residence), Jahre alt (age, word for word) — the whole first minute is cognate-built.",
+      curiosity_teaser: "Next: the alphabet — W is 'veh', V is 'fow', Z is 'tsett', and buchstabieren spells your name out loud.",
+    },
+  },
+
+  {
+    id: 5072,
+    slug: "the-alphabet-and-buchstabieren",
+    title: "The Alphabet & buchstabieren",
+    subtitle: "W = 'veh', V = 'fow', J = 'yot', Z = 'tsett', ß = 'Eszett' — spell it like a native",
+    phase: 1,
+    shift_categories: ["latin_ieren"],
+    word_ids: ["buchstabieren", "buch", "sprechen", "schreiben", "wort"],
+    table_word_ids: ["buchstabieren", "buch", "wort"],
+    hook: {
+      title: "The Letter Names the Shifts Explain",
+      content:
+        "German letter names are tiny history lessons. W is 'veh' and V is 'fow' — because German V is pronounced [f], the very fact the V→B family is built on. J is 'yot' — the y-sound English split away in the y→g family. Z is 'tsett' — the /ts/ affricate of the T→Z shift, said aloud as a letter name. And ß is 'Eszett' — literally 's-z', the sharp s of Straße. Now the verb for using them: buchstabieren, 'to spell', built on Buchstabe 'letter' — literally a book-staff, the beech-wood stick once used to mark reading passages — plus the -ieren suffix you already own from the Latin Bridge. A native root wearing a Latin suit.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Buchstabe's Wooden Secret",
+          content:
+            "Buchstabe comes from Old High German buohstabe: buoh (book) + stab (staff, stick — the same word as English stave). Before printing, runes and reading pointers were carved beechwood sticks — Buche is beech — so a 'letter' was literally a book-stave. English kept the wooden cousin in 'stave' and 'staff'.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Spelling Aloud, the German Way",
+      content:
+        "The trap letters: W = veh (English V's sound), V = fow (English F's sound), J = yot (English Y's sound), Z = tsett (English TS), ß = Eszett (sharp S). The s you reach for at the start of English words is often German's Sch- or St- in speech: sprechen, schreiben. On the phone, Germans spell with the formula: 'Wie schreibt man das? — Buchstabieren Sie bitte: B wie Berta, E wie Emil...' The verb is regular except for the stress: buchstabieren, ich buchstabiere, past participle buchstabiert — and remember the Latin Bridge rule: no ge- on -ieren verbs.",
+      footnotes: [],
+      linguist_note:
+        "Letter names fossilize pronunciation history: German kept the continental Romance values (V = [f] before it shifted, J = [j]) while English drifted to its own. When you say 'fow' for V, you are pronouncing the medieval consonant system out loud — the same one that makes Vater a [f]-word.",
+    },
+    exercises: [
+      {
+        id: "l5072_e1",
+        type: "matching_pairs",
+        prompt: "Match each German letter with its name:",
+        matching_pairs: [
+          { id: "ab1", english: "veh", german: "W" },
+          { id: "ab2", english: "fow", german: "V" },
+          { id: "ab3", english: "yot", german: "J" },
+          { id: "ab4", english: "tsett", german: "Z" },
+          { id: "ab5", english: "Eszett", german: "ß" },
+        ],
+        target_answer: "W, V, J, Z, ß",
+        meaning: "veh, fow, yot, tsett, Eszett",
+        explanation: "V = fow because German V sounds like [f] — the letter name is the V→B family's origin story said out loud.",
+      },
+      {
+        id: "l5072_e2",
+        type: "shift_select",
+        prompt: "How is the letter V pronounced in German words like 'Vater'?",
+        options: ["like English F", "like English V", "like English W", "like English P"],
+        target_answer: "like English F",
+        meaning: "German V = [f] — hence Vater's [f] and the letter name 'fow'",
+        explanation: "German V is the [f] of Vater/Vogel/Vier — which is exactly why Vater is a Verner's-law twin of father, not a V→B word.",
+      },
+      {
+        id: "l5072_e3",
+        type: "shift_select",
+        prompt: "buchstabieren is built from:",
+        options: ["Buchstabe (letter) + -ieren", "Buchstab + einen", "Buch (book) + stabieren", "Buch + Stab + rennen"],
+        target_answer: "Buchstabe (letter) + -ieren",
+        meaning: "to spell = letter + the Latin-style -ieren suffix",
+        explanation: "A Germanic root in a Latin suit: Buchstabe is native (book-staff), -ieren is the productive loan-suffix from the Latin Bridge.",
+      },
+      {
+        id: "l5072_e4",
+        type: "reverse_cognate",
+        prompt: "Which English verb translates 'buchstabieren'?",
+        target_answer: "spell",
+        meaning: "buchstabieren = to spell (name the letters)",
+        explanation: "No English cognate here — 'spell' is a different word. Buchstabieren must be memorized, but its Buchstabe core makes it transparent.",
+      },
+      {
+        id: "l5072_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the polite request: 'Can you spell that please?'",
+        target_answer: "Kannst du das bitte buchstabieren",
+        meaning: "Kannst du das bitte buchstabieren = can you spell that please",
+        vocab_hints: [
+          { word: "buchstabieren", translation: "to spell", note: "Buchstabe (letter) + -ieren" },
+        ],
+        word_bank: ["Kannst", "du", "das", "bitte", "buchstabieren"],
+        explanation: "Modal kann in position 2, the -ieren infinitive at the bracket's end — and no ge- ever touches its participle.",
+      },
+    ],
+    summary: {
+      outcome: "Recite the trap letter names (veh, fow, yot, tsett, Eszett) and spell your name with buchstabieren.",
+      use_example: { german: "Wie schreibt man das? Kannst du das bitte buchstabieren?", english: "How do you write that? Can you spell it please?" },
+      takeaway: "The letter names are the shifts made audible: W=veh, V=fow, J=yot, Z=tsett, ß=Eszett — and buchstabieren is Buchstabe + -ieren.",
+      curiosity_teaser: "Next: your family tree speaks German — Blood & Kin, where Vater, Mutter and Sohn line up as cognates.",
+    },
+  },
+
+  {
+    id: 5091,
+    slug: "blood-and-kin",
+    title: "Blood & Kin",
+    subtitle: "Vater ↔ father (Verner's law, not V→B), Mutter, Sohn, Tochter — the family as cognate wall",
+    phase: 2,
+    shift_categories: ["th_to_d", "d_to_t", "y_gh_to_g_ch"],
+    word_ids: ["vater", "mutter", "sohn", "schwester", "tochter", "bruder", "eltern"],
+    table_word_ids: ["vater", "mutter", "sohn", "tochter", "schwester"],
+    hook: {
+      title: "The Family Reunion Is a Cognate Wall",
+      content:
+        "The core kin words are almost all exact twins: Mutter/mother (essentially unchanged), Sohn/son (the h was once heard), Bruder/brother (th→d), Schwester/sister (sw→schw), Tochter/daughter (a double-shift showpiece: d→t AND gh→ch). One word wears a warning label: Vater/father is NOT the V→B family — the v in Vater is pronounced [f], and English f ↔ German v=[f] here is Verner's law, the ancient voicing rule that made 'father' and 'Vater' both keep their old f-sound while brothers like geben/give drifted to b. And the parents themselves are a grammar riddle: Eltern is literally 'the elder ones' — a frozen comparative of alt that became the whole word for parents.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Verner's Law in One Breath",
+          content:
+            "Before the Germanic sound shifts, the f/th/h family voiced between vowels under Verner's law — which is why father/Vater both have their ancient fricative while brother/Bruder hardened to b. If V→B applied to Vater, German would say *Bater. It does not: the v IS the [f]. Trust the IPA, not the spelling.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Possession Runs on mein/meine",
+      content:
+        "Mein Vater, meine Mutter, mein Sohn, meine Tochter — the possessor echoes the noun's gender (possessive ladders, sprig 1103, at work). Sentences: Mein Bruder lernt Deutsch. Meine Schwester ist Lehrerin. Meine Eltern wohnen in Hamburg (Eltern is plural-only — 'the elders', so meine, not mein). And the diminutive you will hear all day: die Mädchen (girl, neuter because -chen is always neuter) — das Mädchen, not die. Kin vocabulary is where German grammar and cognate memory meet: every family sentence rehearses both.",
+      footnotes: [],
+      linguist_note:
+        "Tochter and daughter are the trail's double-shift trophy: Proto-Germanic *duhtēr → German hardened d→t and gh→ch; English kept both ancient sounds and spelled them daughter. Say both words aloud — you are hearing the same word twice, 1,500 years apart in drift.",
+    },
+    exercises: [
+      {
+        id: "l5091_e1",
+        type: "matching_pairs",
+        prompt: "Match the kin cognates:",
+        matching_pairs: [
+          { id: "bk1", english: "father (Verner's law, NOT V→B)", german: "der Vater" },
+          { id: "bk2", english: "mother (essentially unchanged)", german: "die Mutter" },
+          { id: "bk3", english: "son (the h was once heard)", german: "der Sohn" },
+          { id: "bk4", english: "daughter (double shift: d→t + gh→ch)", german: "die Tochter" },
+          { id: "bk5", english: "sister (sw→schw)", german: "die Schwester" },
+        ],
+        target_answer: "der Vater, die Mutter, der Sohn, die Tochter, die Schwester",
+        meaning: "father, mother, son, daughter, sister",
+        explanation: "Five twins and one warning label: Vater's v is [f] — Verner's law, not the V→B shift that turned give into geben.",
+      },
+      {
+        id: "l5091_e2",
+        type: "shift_select",
+        prompt: "Tochter ↔ daughter carries TWO shifts: d→t and:",
+        options: ["gh→ch", "p→f", "k→ch as in make", "v→b"],
+        target_answer: "gh→ch",
+        meaning: "daughter ↔ Tochter = d→t + gh→ch",
+        explanation: "The silent gh in daughter was once sounded — German Nacht-style ch keeps it: Tochter. Same double shift as Nacht/night.",
+      },
+      {
+        id: "l5091_e3",
+        type: "shift_select",
+        prompt: "Eltern literally means:",
+        options: ["the elder ones", "the parents", "the old ones' house", "the family tree"],
+        target_answer: "the elder ones",
+        meaning: "Eltern = parents, literally 'the elder ones'",
+        explanation: "A frozen comparative of alt (old): elter- is elder. German says 'the elders' where English coined 'parents'.",
+      },
+      {
+        id: "l5091_e4",
+        type: "reverse_cognate",
+        prompt: "Which English word is the twin of 'Sohn'?",
+        target_answer: "son",
+        meaning: "Sohn ↔ son (Proto-Germanic *sunuz)",
+        explanation: "The h in Sohn was once pronounced — *sunuh- — but the twinship is total: son and Sohn are one word.",
+      },
+      {
+        id: "l5091_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the sentence: 'My parents live in Hamburg'",
+        target_answer: "Meine Eltern wohnen in Hamburg",
+        meaning: "Meine Eltern wohnen in Hamburg = my parents live in Hamburg",
+        vocab_hints: [
+          { word: "Eltern", translation: "parents", note: "plural-only: 'the elder ones'" },
+          { word: "wohnen", translation: "to live / reside", note: "ich wohne in... — the residence verb" },
+        ],
+        word_bank: ["Meine", "Eltern", "wohnen", "in", "Hamburg"],
+        explanation: "Eltern is plural, so it takes meine and the -en verb form — the elders, treated as the plural they are.",
+      },
+    ],
+    summary: {
+      outcome: "Name the core family with correct possessives, and explain the Verner's-law trap in Vater.",
+      use_example: { german: "Mein Vater ist alt, aber meine Mutter ist Lehrerin.", english: "My father is old, but my mother is a teacher." },
+      takeaway: "Mutter, Sohn, Bruder, Schwester, Tochter — all twins; Vater wears Verner's law; Eltern is 'the elder ones' frozen into a noun.",
+      curiosity_teaser: "Next: the extended clan — grandparents, in-laws and the compound principle that builds Großvater from parts you own.",
+    },
+  },
+
+  {
+    id: 5092,
+    slug: "the-extended-clan",
+    title: "The Extended Clan",
+    subtitle: "Großvater, Oma, Onkel, Enkel — compounds, nursery words and the ankle surprise",
+    phase: 2,
+    shift_categories: [],
+    word_ids: ["großvater", "großmutter", "oma", "opa", "onkel", "tante", "geschwister", "enkel", "familie"],
+    table_word_ids: ["großvater", "großmutter", "onkel", "tante", "enkel"],
+    hook: {
+      title: "Compounds, Loans and One Ankle",
+      content:
+        "The extended family shows all three ways German builds kin vocabulary. Compounds from parts you own: Großvater (big-father), Großmutter (big-mother), Großeltern (the big-elders). Shared Romance loans: Onkel and Tante came from French oncle/tante — the same loans English took, and Cousin/Cousine likewise. Nursery words: Oma and Opa are German inventions with no English relatives — honest memorize words. And one fossil: Enkel, grandchild, is the same ancient word as ANKLE — both mean 'bender', the ankle's joint becoming the family's 'little bender', the one a generation below. Even Geschwister, siblings, is built: ge- + Schwester, 'sister-hood' for brothers and sisters alike.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Schwieger-: the Quiet In-Law Prefix",
+          content:
+            "Schwiegermutter (mother-in-law) hides Schwieger, an old word for 'affinity by marriage' with no English cousin — but its second half is Mutter, the unchanged twin. German in-law words are compounds wearing one unknown bead on a familiar string.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Clan in Sentences",
+      content:
+        "Mein Großvater liest die Zeitung. Meine Großmutter backt einen Kuchen (the baker verb at work). Meine Tante schenkt mir ein Buch. Ich habe zwei Geschwister — plural counting like English siblings. Der Enkel besucht seinen Großvater. Note the pattern: kin nouns for men take der/mein, for women die/meine, and the compounds follow their HEAD noun — Großmutter is die because Mutter is. Family gatherings are grammar drills: Meine Familie ist groß. — with Geschwister, Eltern, Cousin und Cousine all pulling their genders behind them.",
+      footnotes: [],
+      linguist_note:
+        "Enkel and ankle both descend from Proto-Germanic *ankulaz, 'that which bends'. English kept the body-part sense; German's word bent socially — the grandchild as the family's small joint, linking the generations like an ankle links foot and leg.",
+    },
+    exercises: [
+      {
+        id: "l5092_e1",
+        type: "matching_pairs",
+        prompt: "Match the extended clan:",
+        matching_pairs: [
+          { id: "ec1", english: "grandfather (big-father)", german: "der Großvater" },
+          { id: "ec2", english: "grandmother (big-mother)", german: "die Großmutter" },
+          { id: "ec3", english: "uncle (French loan like English uncle)", german: "der Onkel" },
+          { id: "ec4", english: "aunt (French loan like English aunt)", german: "die Tante" },
+          { id: "ec5", english: "grandchild (twin: ankle)", german: "der Enkel" },
+        ],
+        target_answer: "der Großvater, die Großmutter, der Onkel, die Tante, der Enkel",
+        meaning: "grandfather, grandmother, uncle, aunt, grandchild",
+        explanation: "Compounds (Groß+vater), shared French loans (Onkel, Tante) and one fossil (Enkel ↔ ankle) — the clan in five words.",
+      },
+      {
+        id: "l5092_e2",
+        type: "shift_select",
+        prompt: "Geschwister (siblings) is built on:",
+        options: ["Schwester (sister)", "schwer (heavy)", "Schwager (brother-in-law)", "schön (beautiful)"],
+        target_answer: "Schwester (sister)",
+        meaning: "Geschwister = ge- + Schwester — 'sister-hood' meaning siblings",
+        explanation: "ge- collects a group around one noun: one Schwester, but Geschwister for the whole set of brothers and sisters.",
+      },
+      {
+        id: "l5092_e3",
+        type: "shift_select",
+        prompt: "Enkel shares its ancient root with which English body word?",
+        options: ["ankle", "uncle", "angle", "aunt"],
+        target_answer: "ankle",
+        meaning: "Enkel ↔ ankle — both from *ankulaz 'bender'",
+        explanation: "Both words mean 'the bender': English kept the joint, German bent the word toward the youngest generation.",
+      },
+      {
+        id: "l5092_e4",
+        type: "reverse_cognate",
+        prompt: "Which nursery word is German for grandma (no English twin — honest memorize)?",
+        target_answer: "Oma",
+        meaning: "Oma = grandma (a nursery coinage, cognate only with Dutch)",
+        explanation: "Oma and Opa are German nursery inventions — the honest no-cognate words of the family tree.",
+      },
+      {
+        id: "l5092_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the sentence: 'My grandma is very old'",
+        target_answer: "Meine Oma ist sehr alt",
+        meaning: "Meine Oma ist sehr alt = my grandma is very old",
+        vocab_hints: [
+          { word: "sehr", translation: "very", note: "the intensifier from earlier trail lessons" },
+        ],
+        word_bank: ["Meine", "Oma", "ist", "sehr", "alt"],
+        explanation: "die Oma → meine Oma: the feminine possessor — and alt closes the loop with Eltern, 'the elder ones', from lesson 5091.",
+      },
+    ],
+    summary: {
+      outcome: "Talk about the extended family using compounds, loans and nursery words with correct genders.",
+      use_example: { german: "Meine Großeltern wohnen bei uns, und meine Cousine kommt oft.", english: "My grandparents live with us, and my (female) cousin visits often." },
+      takeaway: "Großvater = compound, Onkel/Tante = shared French loans, Oma/Opa = honest memorize, Enkel ↔ ankle, Geschwister = ge- + Schwester.",
+      curiosity_teaser: "The clan branch ends here — the map's remaining sprigs and the capstone reading still wait.",
+    },
+  },
+
+  {
+    id: 2404,
+    slug: "no-article-adjective-goes-strong",
+    title: "No Article? The Adjective Goes Strong",
+    subtitle: "kaltes Wasser, heißer Tee, guter Wein — the adjective does the article's job alone",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["wasser", "wein", "kaffee", "besser", "gut", "heiß", "kalt", "brot", "warm"],
+    table_word_ids: ["wasser", "wein", "kaffee", "heiß", "kalt"],
+    hook: {
+      title: "The Adjective Promoted to Flag-Carrier",
+      content:
+        "Last lesson's law: one flag-carrier per noun phrase. der shows the case, the adjective whispers -e — der kalte Tag. But German nouns often roam FREE — no article at all: Kaltes Wasser ist gut. Heißer Tee, bitte. The moment the article steps out, the adjective is promoted: it must do the article's job alone, wearing the full strong ending — -er for masculine, -es for neuter, -e for feminine. This is the oldest layer of the system, and English once wore it too: Old English said gōd mann (strong, no article) but se gōda mann (weak, after the). English dropped both sets of endings; German kept them both, working.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Strong and Weak, the Old English Way",
+          content:
+            "Linguists call the no-article endings the STRONG declension and the der/die/das endings the WEAK declension — the same terms used for Old English grammar (strong gōd mann vs weak se gōda mann). The names describe which word carries the case-flag: alone (strong) or propped up by a flagged article (weak).",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Strong Endings Are the Demonstrative Endings",
+      content:
+        "Watch the pattern: the strong adjective borrows the endings of der/die/das itself — guter Wein (masculine -er, like der), kaltes Wasser (neuter -es, like das), gute Butter (feminine -e, like die). The article-less noun phrase is its own little demonstrative. Mixed recap: ein hides its flag in the masculine nominative (ein guter Wein) and neuter (ein kaltes Wasser) — the adjective covers for it — but einen, eine, einer carry their own flags, so the adjective falls back to weak: einen besseren Kaffee (the very form the capstone whispered). And in the no-article plural the adjective takes -e: alte Bücher, gute Freunde? — Freunde arrives with its own lesson; for now: alte Wörter.",
+      footnotes: [],
+      linguist_note:
+        "The strong endings are the old demonstrative pronoun endings (*sa, *sō, *þat) — German spread them onto the adjective so that even a bare noun phrase still announces case and gender. English kept the pronouns (he, she, that) but let the adjective go naked.",
+    },
+    exercises: [
+      {
+        id: "l2404_e1",
+        type: "matching_pairs",
+        prompt: "Bare-noun phrases (no article!) — match each with its reading:",
+        matching_pairs: [
+          { id: "sg1", english: "cold water (no article)", german: "kaltes Wasser" },
+          { id: "sg2", english: "hot tea (no article)", german: "heißer Tee" },
+          { id: "sg3", english: "good wine (no article)", german: "guter Wein" },
+          { id: "sg4", english: "old bread (no article)", german: "altes Brot" },
+        ],
+        target_answer: "kaltes Wasser, heißer Tee, guter Wein, altes Brot",
+        meaning: "cold water, hot tea, good wine, old bread",
+        explanation: "No article → the adjective goes strong: -es after neuter nouns, -er after masculine, mirroring der/das themselves.",
+      },
+      {
+        id: "l2404_e2",
+        type: "shift_select",
+        prompt: "No article, neuter noun: '_____ Wasser ist kalt.' (cold):",
+        options: ["Kaltes", "Kalt", "Kalter", "Kalte"],
+        target_answer: "Kaltes",
+        meaning: "Kaltes Wasser ist kalt = cold water is cold",
+        explanation: "Neuter strong ending -es — the adjective copies das: kaltes Wasser. It is doing the article's job alone.",
+      },
+      {
+        id: "l2404_e3",
+        type: "morpheme_tiles",
+        prompt: "Assemble the bare-noun phrase: 'heißer Tee'",
+        tile_options: ["heißer", "Tee", "es", "en", "e"],
+        target_answer: "heißer Tee",
+        meaning: "hot tea (no article — masculine strong)",
+        explanation: "heißer — the strong masculine -er, borrowed straight from der. Heißer Tee, bitte.",
+      },
+      {
+        id: "l2404_e4",
+        type: "shift_select",
+        prompt: "The capstone's whisper, decoded: 'Ich trinke einen _____ Kaffee.' (better):",
+        options: ["besseren", "besserer", "besseres", "besser"],
+        target_answer: "besseren",
+        meaning: "einen besseren Kaffee = a better coffee",
+        explanation: "einen already carries the accusative flag, so the adjective goes weak: besseren. The flag passes from article to adjective only when the article goes quiet.",
+      },
+      {
+        id: "l2404_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the strong-declension showcase: 'Cold water is better than warm coffee'",
+        target_answer: "Kaltes Wasser ist besser als warmer Kaffee",
+        meaning: "Kaltes Wasser ist besser als warmer Kaffee = cold water is better than warm coffee",
+        vocab_hints: [
+          { word: "warmer", translation: "warm (no article, masculine)", note: "strong ending -er after a bare masculine noun" },
+        ],
+        word_bank: ["Kaltes", "Wasser", "ist", "besser", "als", "warmer", "Kaffee"],
+        explanation: "Two strong adjectives in one sentence — kaltes (neuter) and warmer (masculine) — plus the als-comparison from the Sentence Gym.",
+      },
+    ],
+    summary: {
+      outcome: "Decline adjectives before bare nouns (strong) and after ein-family flags (mixed), including einen besseren Kaffee.",
+      use_example: { german: "Kaltes Wasser ist besser als warmer Kaffee.", english: "Cold water is better than warm coffee." },
+      takeaway: "No article → the adjective goes strong (-er/-es/-e, the demonstrative endings); a flagged article → the adjective falls back to weak.",
+      curiosity_teaser: "Next: hidden shifts I — the quiet V→B family: geben↔give, über↔over, sieben↔seven.",
+    },
+  },
+
+  {
+    id: 1603,
+    slug: "sich-and-the-lost-reflexives",
+    title: "sich & the Lost Reflexives",
+    subtitle: "hie thee hence, help yourself — the pronouns English dropped, German kept working",
+    phase: 2,
+    shift_categories: [],
+    word_ids: ["waschen", "erinnern", "freuen", "fühlen", "treffen", "uns"],
+    table_word_ids: ["waschen", "erinnern", "freuen", "fühlen"],
+    hook: {
+      title: "Hie Thee Hence",
+      content:
+        "Shakespeare's English bounces actions back at the doer constantly: Get thee to a nunnery. Hie thee hence. Sit thee down. That thee is the reflexive pronoun doing its ancient job — and modern English keeps the fossils if you know where to look: help yourself, behave yourself, enjoy yourself. German never retired the system; it just standardized the pronoun: sich. ich wasche MICH, du wäschst DICH, er wäscht SICH, wir waschen UNS. The secret that makes it easy: the reflexive pronoun is just the ordinary pronoun from the Him-Case — except in the third person, where German deploys one all-purpose shape, sich, for he, she, it, they, and the formal Sie.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Feeling Verbs Are Reflexive by Birth",
+          content:
+            "sich freuen (rejoice — froh, the frolic family) and sich fühlen (feel) have no object: the feeling lands on the feeler. German makes that visible with sich; English hides it inside the verb. Ich freue mich = I glad myself = I am glad.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Mirror Table",
+      content:
+        "ich → mich (I wash myself: ich wasche mich). du → dich (thou thee! du wäschst dich). er/sie/es → sich. wir → uns. ihr → euch. sie (plural) → sich. Sie (formal) → sich. So only two new shapes exist: sich (third person + formal) and euch (ihr). Everything else you already drilled in the accusative gym. The stem-changer warning: waschen shifts a→ä in du and er — du wäschst dich, er wäscht sich. And reciprocal sich: Wir treffen uns — we meet (each other); Sie treffen sich — you (plural/formal) meet. Same pronoun, mutual action.",
+      footnotes: [],
+      linguist_note:
+        "sich is the old dative/accusative reflexive *sik, shared with Old English (selfne / sīc in the Northumbrian glosses). English replaced it with self-phrases; Dutch and German kept the bare form. 'Himself' is literally the fossil: him + self, pronoun plus self glued together.",
+    },
+    exercises: [
+      {
+        id: "l1603_e1",
+        type: "matching_pairs",
+        prompt: "The mirror table — match each reflexive sentence with its reading:",
+        matching_pairs: [
+          { id: "rf1", english: "I wash myself", german: "ich wasche mich" },
+          { id: "rf2", english: "you wash yourself", german: "du wäschst dich" },
+          { id: "rf3", english: "he washes himself", german: "er wäscht sich" },
+          { id: "rf4", english: "we feel good", german: "wir fühlen uns gut" },
+        ],
+        target_answer: "ich wasche mich, du wäschst dich, er wäscht sich, wir fühlen uns gut",
+        meaning: "the reflexive pronouns in action: mich, dich, sich, uns",
+        explanation: "The reflexive is the ordinary accusative pronoun — except third person, where everyone shares sich.",
+      },
+      {
+        id: "l1603_e2",
+        type: "shift_select",
+        prompt: "Third person shares one shape: 'Er freut _____.' (He is glad):",
+        options: ["sich", "mich", "dich", "uns"],
+        target_answer: "sich",
+        meaning: "Er freut sich = he is glad (he rejoices himself)",
+        explanation: "er, sie, es, sie (plural) and Sie all take sich — the one reflexive pronoun German never splits.",
+      },
+      {
+        id: "l1603_e3",
+        type: "morpheme_tiles",
+        prompt: "Assemble the reflexive wash: 'Ich wasche mich'",
+        tile_options: ["Ich", "wasche", "mich", "dich", "sich"],
+        target_answer: "Ich wasche mich",
+        meaning: "I wash myself",
+        explanation: "ich acts on ich — the accusative mich bounces the action back, exactly like 'help yourself'.",
+      },
+      {
+        id: "l1603_e4",
+        type: "derive",
+        prompt: "Stem-change alert: waschen in the er-form (he washes):",
+        english_hint: "a goes ä, plus the 3rd-person -t",
+        target_answer: "wäscht",
+        meaning: "er wäscht sich = he washes himself",
+        explanation: "du wäschst, er wäscht — the a→ä umlaut you know from the plural lesson (Mann → Männer), riding into the reflexive routine.",
+      },
+      {
+        id: "l1603_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'I feel good'",
+        target_answer: "Ich fühle mich gut",
+        meaning: "Ich fühle mich gut = I feel good",
+        vocab_hints: [
+          { word: "fühle", translation: "feel", note: "fühlen — the twin of English feel; reflexive: sich fühlen" },
+          { word: "mich", translation: "myself", note: "the accusative of ich, bounced back" },
+        ],
+        word_bank: ["Ich", "fühle", "mich", "gut"],
+        explanation: "sich fühlen needs its target: the feeling lands on the feeler — mich. English hides the same logic inside 'I feel good'.",
+      },
+    ],
+    summary: {
+      outcome: "Use the reflexive pronouns mich/dich/sich/uns/euch with waschen, freuen, fühlen and treffen.",
+      use_example: { german: "Ich fühle mich gut und freue mich.", english: "I feel good and I am glad." },
+      takeaway: "The reflexive is your accusative pronoun bounced back — mich, dich, uns — with sich covering he/she/it/they/Sie.",
+      curiosity_teaser: "Next: reflexive daily routines — anziehen, aufwachen, einschlafen: the morning round, all about yourself.",
+    },
+  },
+
+  {
+    id: 1604,
+    slug: "reflexive-daily-routines",
+    title: "Reflexive Daily Routines",
+    subtitle: "sich anziehen, aufwachen, einschlafen — the morning round where prefixes and reflexives meet",
+    phase: 2,
+    shift_categories: [],
+    word_ids: ["anziehen", "aufstehen", "aufwachen", "einschlafen", "aussehen", "freuen"],
+    table_word_ids: ["anziehen", "aufstehen", "aufwachen", "einschlafen"],
+    hook: {
+      title: "The Morning Is Reflexive",
+      content:
+        "Run the tape of your morning in German and watch two systems you already own click together. Ich wache auf (prefix flies). Ich stehe auf (prefix flies). Then the mirror moment: Ich ziehe mich an — I pull myself on. Get dressed takes a REFLEXIVE object in German: you are the thing being dressed. English hides this (I get dressed — dressed by whom?), but the old English would not have: 'I dress me', said without blinking. Add Ich wasche mich and Ich fühle mich gut and the whole morning runs on actions that turn back on their doer.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "zieht ... an: the Prefix Waits, the Pronoun Doesn't",
+          content:
+            "anziehen is separable (topic 15): the prefix an flies to the end and the reflexive pronoun sits right after the verb — Ich ziehe MICH an. Not mich anziehe, not anziehe mich. Verb, object, prefix: the bracket closes around the pronoun.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Routine Chain",
+      content:
+        "The full chain, verbs you can already conjugate: Ich wache auf (I wake up). Ich stehe auf (I get up). Ich wasche mich (I wash myself). Ich ziehe mich an (I get dressed). Ich fühle mich gut (I feel good). Ich sehe gut aus (I look good — aussehen, no reflexive needed: the looking goes outward!). Ich freue mich (I am glad). Und abends: Ich schlafe ein (I fall asleep — ein- into sleep). Two honest exceptions inside the routine: aussehen and aufwachen are NOT reflexive in German — the prefix does the work, no pronoun. Wir treffen uns um acht (we meet at eight) — reciprocal sich: each meets the other.",
+      footnotes: [],
+      linguist_note:
+        "anziehen: an (on) + ziehen (pull — the tow/tug family). 'To pull on' clothes is the same image English uses, and German makes the puller and the pulled one person: sich anziehen. English 'dress' once meant the same — 'arise and dress yourself' — before the reflexive faded.",
+    },
+    exercises: [
+      {
+        id: "l1604_e1",
+        type: "matching_pairs",
+        prompt: "The routine chain — match each verb phrase with its reading:",
+        matching_pairs: [
+          { id: "dr1", english: "get dressed", german: "Ich ziehe mich an" },
+          { id: "dr2", english: "wake up", german: "Ich wache auf" },
+          { id: "dr3", english: "get up", german: "Ich stehe auf" },
+          { id: "dr4", english: "fall asleep", german: "Ich schlafe ein" },
+        ],
+        target_answer: "Ich ziehe mich an, Ich wache auf, Ich stehe auf, Ich schlafe ein",
+        meaning: "get dressed, wake up, get up, fall asleep",
+        explanation: "Three separable prefixes and one reflexive — the morning round mixes both systems you own.",
+      },
+      {
+        id: "l1604_e2",
+        type: "shift_select",
+        prompt: "Word order with the bracket: which sentence is correct for 'I am getting dressed'?",
+        options: ["Ich ziehe mich an", "Ich mich ziehe an", "Ich anziehe mich", "Mich ziehe ich an"],
+        target_answer: "Ich ziehe mich an",
+        meaning: "Ich ziehe mich an = I get dressed",
+        explanation: "Verb in position 2, reflexive pronoun right after it, prefix an closes the bracket: ziehe ... mich ... an.",
+      },
+      {
+        id: "l1604_e3",
+        type: "shift_select",
+        prompt: "Reciprocal sich: 'Wir treffen _____ um acht.' (We meet at eight):",
+        options: ["uns", "mich", "sich", "dich"],
+        target_answer: "uns",
+        meaning: "Wir treffen uns = we meet (each other)",
+        explanation: "wir → uns: the same reflexive pronoun does reciprocal duty — I meet you, you meet me, one pronoun reports it.",
+      },
+      {
+        id: "l1604_e4",
+        type: "reverse_cognate",
+        prompt: "Which fossil English phrase still uses the reflexive 'yourself' the way German's sich system does?",
+        target_answer: "help yourself",
+        meaning: "help yourself — the reflexive imperative English kept",
+        explanation: "Hilf dir! / Help yourself — both languages once reflexive everywhere; English kept the fossil only in set phrases.",
+      },
+      {
+        id: "l1604_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the morning, in order: 'I wake up and get dressed'",
+        target_answer: "Ich wache auf und ziehe mich an",
+        meaning: "Ich wache auf und ziehe mich an = I wake up and get dressed",
+        vocab_hints: [
+          { word: "ziehe", translation: "pull / put on", note: "anziehen — separable: ziehe ... an" },
+          { word: "auf", translation: "up", note: "the prefix of aufwachen and aufstehen, flying to the end" },
+        ],
+        word_bank: ["Ich", "wache", "auf", "und", "ziehe", "mich", "an"],
+        explanation: "Two clauses, two flying prefixes — and the second clause tucks its reflexive mich inside the bracket: ziehe mich an.",
+      },
+    ],
+    summary: {
+      outcome: "Narrate a daily routine mixing separable prefixes and reflexive pronouns, and spot the two non-reflexive exceptions.",
+      use_example: { german: "Ich wache auf, wasche mich, ziehe mich an und fühle mich gut.", english: "I wake up, wash myself, get dressed and feel good." },
+      takeaway: "Routine verbs lean reflexive (sich anziehen, sich fühlen) — but aussehen and aufwachen let the prefix work alone.",
+      curiosity_teaser: "Next: numbers, time & gestern — counting is a shift spiral: drei↔three, zwanzig↔twenty, gestern↔yesterday.",
+    },
+  },
+
+  {
+    id: 5081,
+    slug: "haette-waere-subjunctive-twins",
+    title: "hätte & wäre: The Subjunctive Twins",
+    subtitle: "hätte is had's subjunctive, wäre is were — the would-world of wishes and kind speech",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["haben", "sein", "zeit", "geld", "reich", "froh", "müde"],
+    table_word_ids: ["haben", "sein", "zeit", "geld", "reich"],
+    hook: {
+      title: "The Room English Locked",
+      content:
+        "English keeps exactly one fossil of its old subjunctive room: If I WERE you. That were — not was — is the sound of a world that isn't real: wishes, hypotheses, polite dreaming. German kept the whole room furnished. wäre is were's twin, same root (the *wes- of war/was), same would-world job. And hätte is had doing a second shift: the past form of haben, re-lit as 'would have' — Wenn ich Zeit hätte (if I had time), Ich hätte Lust (I would like). German builds its gentlest, most polite sentences out of past-tense shapes: the past is where hypotheticals live.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The -e Is the Signal",
+          content:
+            "Compare the pairs: hatte (I had — real past) vs hätte (I would have — the would-world). war (I was) vs wäre (I would be). One letter, one whole reality: the umlauted -e marks the sentence as a hypothesis, a wish, or a politeness. Old English had the same pair — hæfde did duty for both — and German kept the distinction crisp.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Would-World Conjugations",
+      content:
+        "hätte: ich hätte, du hättest, er hätte, wir hätten ↔ I had, thou hadst (in its 'would' shift). wäre: ich wäre, du wärst, er wäre, wir wären ↔ I were, thou wert (the true English subjunctive!). The two great frames: WISHES — Wenn ich Geld hätte! (if only I had money), Wenn ich reich wäre! (if I were rich). SOFT STATEMENTS — Das wäre gut (that would be good), Ich wäre froh (I would be glad), Das wäre alles (that would be all — the politest way to finish an order). Notice wäre ↔ wert: English's thou wert WAS a subjunctive — the fossil in your own mouth.",
+      footnotes: [],
+      linguist_note:
+        "Konjunktiv II from the preterite: Germanic built its hypothetical mood out of past forms (past = far from reality, mentally as well as temporally). That is why hätte looks exactly like hatte with dots — it IS the past form, repurposed by distance.",
+    },
+    exercises: [
+      {
+        id: "l5081_e1",
+        type: "matching_pairs",
+        prompt: "The would-world — match each soft form with its reading:",
+        matching_pairs: [
+          { id: "kw1", english: "if I had time", german: "Wenn ich Zeit hätte" },
+          { id: "kw2", english: "if I were rich", german: "Wenn ich reich wäre" },
+          { id: "kw3", english: "that would be good", german: "Das wäre gut" },
+          { id: "kw4", english: "that would be all", german: "Das wäre alles" },
+        ],
+        target_answer: "Wenn ich Zeit hätte, Wenn ich reich wäre, Das wäre gut, Das wäre alles",
+        meaning: "the two great hätte/wäre frames",
+        explanation: "Wishes take Wenn + hätte/wäre; soft statements use wäre alone. The -e marks the world as hypothetical.",
+      },
+      {
+        id: "l5081_e2",
+        type: "shift_select",
+        prompt: "Wish or memory? 'Wenn ich Zeit _____!' (if only I HAD time — a wish):",
+        options: ["hätte", "hatte", "habe", "hätten"],
+        target_answer: "hätte",
+        meaning: "Wenn ich Zeit hätte = if I had time (would-world)",
+        explanation: "hatte is the plain past (I had — real); hätte is the would-world (I would have — hypothetical). One letter, one reality.",
+      },
+      {
+        id: "l5081_e3",
+        type: "shift_select",
+        prompt: "'Wenn ich reich _____!' (if I were rich):",
+        options: ["wäre", "war", "wären", "ist"],
+        target_answer: "wäre",
+        meaning: "Wenn ich reich wäre = if I were rich",
+        explanation: "wäre ↔ were — the exact twin of English's one surviving subjunctive: if I WERE you.",
+      },
+      {
+        id: "l5081_e4",
+        type: "reverse_cognate",
+        prompt: "Which English fossil verb-form is the true twin of 'wäre'?",
+        target_answer: "were",
+        meaning: "wäre ↔ were (if I were you)",
+        explanation: "Both are the *wes- root in its subjunctive shift. English kept one phrase; German kept the whole conjugation.",
+      },
+      {
+        id: "l5081_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the wish, both verbs: 'If I had time, I would be glad'",
+        target_answer: "Wenn ich Zeit hätte wäre ich froh",
+        meaning: "Wenn ich Zeit hätte, wäre ich froh = if I had time, I would be glad",
+        vocab_hints: [
+          { word: "hätte", translation: "would have / had (wish)", note: "the would-world form of hatte" },
+          { word: "wäre", translation: "would be", note: "the would-world form of war" },
+          { word: "froh", translation: "glad", note: "the frolic family" },
+        ],
+        word_bank: ["Wenn", "ich", "Zeit", "hätte", "wäre", "ich", "froh"],
+        explanation: "Two would-world verbs in one breath: hätte closes the Wenn-clause (verb-final!), wäre carries the main clause.",
+      },
+    ],
+    summary: {
+      outcome: "Use hätte and wäre for wishes and soft statements, and distinguish them from hatte and war.",
+      use_example: { german: "Wenn ich Zeit hätte, wäre ich froh.", english: "If I had time, I would be glad." },
+      takeaway: "hätte ↔ had, wäre ↔ were: the would-world wears past-tense clothes — and the -e is the signal.",
+      curiosity_teaser: "Next: könnte, würde & the politeness escalator — could's old job, would's machine, and four ways to order a coffee.",
+    },
+  },
+
+  {
+    id: 5082,
+    slug: "koennte-wuerde-politeness-escalator",
+    title: "könnte, würde & the Politeness Escalator",
+    subtitle: "could's old job (polite asking), would's machine, and the wurde/würde umlaut trap",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["können", "werden", "mögen", "helfen", "mir", "kaffee", "trinken"],
+    table_word_ids: ["können", "werden", "mögen", "mir", "kaffee"],
+    hook: {
+      title: "Distance Is Politeness",
+      content:
+        "Here is the politeness escalator, four steps, one coffee. Step one: Ein Kaffee, bitte! — bare and friendly. Step two: Ich möchte einen Kaffee — möchte, the softened want you met back in topic 2. Step three: Könnten Sie mir helfen? — could, doing the job English's could still remembers: could was once just the past of can, and polite asking was its first career. Step four: Ich würde einen Kaffee nehmen — I would take a coffee, the conditional machine. Every step adds would-world distance, and distance is politeness. English climbed the identical staircase — give me → I'd like → could you → I would take — because both languages discovered the same trick: the unreal is the respectful.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "wurde vs würde — One Umlaut, Different Worlds",
+          content:
+            "werden's plain past is wurde (it became / it got: Es wurde kalt). Its subjunctive is würde (it would: Es würde kalt). The umlaut is the would-world signal, same as hatte/hätte. Hear the dots or mishear the reality.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Toolkit and the Machine",
+      content:
+        "The polite toolkit: Könnten Sie...? (could you — the formal ask), Würden Sie...? (would you), Ich möchte... (I would like), Ich hätte gern... (I would like — with hätte!). The conditional machine: würde + bare infinitive, bracket closed — Ich würde kommen (I would come), Ich würde Tee trinken (I would drink tea). It is the modal bracket with a would-world verb driving: ich würde in position 2, the bare infinitive parked at the end, exactly like kann and muss from topic 2. Politeness rule of thumb: questions beat statements, könnte/würde beat möchte, and everything beats the bare imperative — unless friends are doing the asking.",
+      footnotes: [],
+      linguist_note:
+        "können's subjunctive könnte and English could are the same verb in the same shift: Old English cūðe, the past of cunnan (to know how). 'Could you help me?' literally asks 'would you know-how to help me?' — knowledge offered politely. Könnten Sie mir helfen? is the same question, unchanged.",
+    },
+    exercises: [
+      {
+        id: "l5082_e1",
+        type: "matching_pairs",
+        prompt: "The polite toolkit — match each form with its job:",
+        matching_pairs: [
+          { id: "pk1", english: "could you...? (polite ask)", german: "Könnten Sie" },
+          { id: "pk2", english: "I would come", german: "Ich würde kommen" },
+          { id: "pk3", english: "I would like", german: "Ich möchte" },
+          { id: "pk4", english: "it got cold (plain past!)", german: "Es wurde kalt" },
+        ],
+        target_answer: "Könnten Sie, Ich würde kommen, Ich möchte, Es wurde kalt",
+        meaning: "the polite toolkit plus the umlaut trap",
+        explanation: "könnte asks politely, würde runs the conditional, möchte softens wanting — and wurde (no umlaut) is just the real past.",
+      },
+      {
+        id: "l5082_e2",
+        type: "shift_select",
+        prompt: "Reality or hypothesis? 'Es _____ kalt.' (it GOT cold — plain fact):",
+        options: ["wurde", "würde", "wird", "wäre"],
+        target_answer: "wurde",
+        meaning: "Es wurde kalt = it got cold (real past)",
+        explanation: "wurde is werden's plain past; würde with the umlaut would be the would-world. The dots decide the reality.",
+      },
+      {
+        id: "l5082_e3",
+        type: "shift_select",
+        prompt: "Politeness escalator: which request climbs highest?",
+        options: [
+          "Ein Bier!",
+          "Ich möchte ein Bier",
+          "Könnten Sie mir ein Bier geben?",
+          "Gib mir ein Bier!",
+        ],
+        target_answer: "Könnten Sie mir ein Bier geben?",
+        meaning: "The könnte-question is the most polite step",
+        explanation: "Distance is politeness: a könnte-question offers the most would-world distance — the asker pretends not to presume.",
+      },
+      {
+        id: "l5082_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the conditional machine: 'Ich würde kommen'",
+        tile_options: ["Ich", "würde", "kommen", "wurde", "wäre"],
+        target_answer: "Ich würde kommen",
+        meaning: "I would come",
+        explanation: "würde drives, the bare infinitive closes the bracket — the modal bracket from topic 2, now in the would-world.",
+      },
+      {
+        id: "l5082_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the formal ask: 'Could you help me?'",
+        target_answer: "Könnten Sie mir helfen",
+        meaning: "Könnten Sie mir helfen = could you help me (formal)",
+        vocab_hints: [
+          { word: "Könnten", translation: "could (polite)", note: "können's would-world form — the polite ask" },
+          { word: "mir", translation: "to me", note: "helfen demands the dative — help goes TO someone" },
+        ],
+        word_bank: ["Könnten", "Sie", "mir", "helfen"],
+        explanation: "Question scaffolding (verb first, Sie second), könnte's politeness, and helfen's dative mir — three systems, one sentence.",
+      },
+    ],
+    summary: {
+      outcome: "Deploy könnte/würde/möchte across the politeness escalator and build würde + infinitive conditionals.",
+      use_example: { german: "Könnten Sie mir helfen? Ich würde Tee trinken.", english: "Could you help me? I would drink tea." },
+      takeaway: "Distance is politeness: könnte asks, würde conditions, möchte softens — and wurde without dots is just the past.",
+      curiosity_teaser: "This would-branch ends here — more side paths wait on the map, and the whole compendium waits in review.",
+    },
+  },
+
+  {
+    id: 5101,
+    slug: "the-man-that-knows-double-duty",
+    title: "The Man That Knows: der/die/das Double Duty",
+    subtitle: "the relative pronoun is the demonstrative re-employed — and the verb drops to the basement",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["der", "die", "das", "mann", "frau", "kind", "lesen", "buch", "trinken", "kaffee"],
+    table_word_ids: ["der", "die", "das", "mann", "frau", "lesen"],
+    hook: {
+      title: "One Set of Pronouns, Three Jobs",
+      content:
+        "der, die, das already work two jobs: the article (der Mann) and the demonstrative (das ist mein Haus? — that is my house, with das = that). Here comes the third: the relative pronoun. Der Mann, der Kaffee trinkt — the man WHO drinks coffee. English splits the job three ways — who for people, which for things, that for both — and Old English used þe and that. German refuses the split: the relative pronoun is just der/die/das, agreeing with whatever it points back to. And you already know the twist: inside the relative clause the verb drops to the basement — der Deutsch lernt — the same rule weil and dass enforce. Nothing new. Two systems you own, one new job description.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "þe, That, and the Missing who",
+          content:
+            "Old English's relative pronoun was þe (and that) — the same þ- that hardened into German d-. who/which/that as relative pronouns is a later English development; the KJV still says 'the man that taught me'. German's der/die/das relatives are the old demonstratives doing day work, exactly as that once did.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Relative Clause Blueprint",
+      content:
+        "Point back, take the gender, send the verb to the basement: Der Mann, der Kaffee trinkt (the man who drinks coffee — masculine, subject). Die Frau, die Deutsch lernt (the woman who learns German — feminine). Das Kind, das spielt (the child that plays — neuter). Die Bücher, die alt sind? — plurals borrow die too. With a direct object inside: Das Buch, das ich lese (the book that I read — the relative pronoun is the OBJECT of lese, but it still shows the gender of Buch: das). The basement rule fires every time: ..., der Kaffee trinkt, ..., die Deutsch lernt, ..., das ich lese. Comma before the relative clause — German demands it, and here the comma is grammar, not style.",
+      footnotes: [],
+      linguist_note:
+        "English 'that' as a relative pronoun is the same word as German das — the demonstrative recruited into clause-linking. 'The book that I read' and 'das Buch, das ich lese' are one construction with one history.",
+    },
+    exercises: [
+      {
+        id: "l5101_e1",
+        type: "matching_pairs",
+        prompt: "The third job — match each relative clause with its reading:",
+        matching_pairs: [
+          { id: "rr1", english: "the man who drinks coffee", german: "der Mann, der Kaffee trinkt" },
+          { id: "rr2", english: "the woman who learns German", german: "die Frau, die Deutsch lernt" },
+          { id: "rr3", english: "the book that I read", german: "das Buch, das ich lese" },
+          { id: "rr4", english: "the child that plays", german: "das Kind, das spielt" },
+        ],
+        target_answer: "der Mann, der Kaffee trinkt, die Frau, die Deutsch lernt, das Buch, das ich lese, das Kind, das spielt",
+        meaning: "subject and object relatives across all three genders",
+        explanation: "The relative pronoun copies the noun's gender (der/die/das) — and the clause verb waits in the basement.",
+      },
+      {
+        id: "l5101_e2",
+        type: "shift_select",
+        prompt: "Copy the gender: 'Die Frau, _____ Deutsch lernt.' (who):",
+        options: ["die", "der", "das", "den"],
+        target_answer: "die",
+        meaning: "Die Frau, die Deutsch lernt",
+        explanation: "The relative pronoun agrees with Frau (feminine): die. It does not care about the main clause — only about its own noun.",
+      },
+      {
+        id: "l5101_e3",
+        type: "shift_select",
+        prompt: "Subject check: 'Der Mann, _____ Kaffee trinkt.' (who drinks):",
+        options: ["der", "den", "dem", "die"],
+        target_answer: "der",
+        meaning: "Der Mann, der Kaffee trinkt",
+        explanation: "The relative pronoun is the SUBJECT of trinkt — subject job, nominative: der. (The object job gets its own lesson.)",
+      },
+      {
+        id: "l5101_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the object relative: 'Das Buch, das ich lese'",
+        tile_options: ["Das", "Buch", "das", "ich", "lese", "der", "den"],
+        target_answer: "Das Buch, das ich lese",
+        meaning: "the book that I read",
+        explanation: "das points back to das Buch AND serves as the object of lese — one word, two jobs — while lese waits in the basement.",
+      },
+      {
+        id: "l5101_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The man who learns German drinks coffee'",
+        target_answer: "Der Mann der Deutsch lernt trinkt Kaffee",
+        meaning: "Der Mann, der Deutsch lernt, trinkt Kaffee",
+        vocab_hints: [
+          { word: "lernt", translation: "learns", note: "the relative clause's verb — parked at the clause end" },
+        ],
+        word_bank: ["Der", "Mann", "der", "Deutsch", "lernt", "trinkt", "Kaffee"],
+        explanation: "Two verbs, two floors: lernt closes the relative basement; trinkt holds position 2 of the main clause.",
+      },
+    ],
+    summary: {
+      outcome: "Build subject and object relative clauses with der/die/das and verb-final order.",
+      use_example: { german: "Das Buch, das ich lese, ist alt.", english: "The book that I am reading is old." },
+      takeaway: "The relative pronoun is der/die/das re-employed: copy the noun's gender, do the clause's job, park the verb at the end.",
+      curiosity_teaser: "Next: relatives in all cases — den and dem, the object and giving jobs, and English's own fossil whom.",
+    },
+  },
+
+  {
+    id: 5102,
+    slug: "relatives-in-all-cases",
+    title: "Relatives in All Cases",
+    subtitle: "den and dem: the case comes from the relative clause's own verb — whom proves it",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["film", "mann", "frau", "kind", "sehen", "helfen", "geben", "buch"],
+    table_word_ids: ["film", "mann", "frau", "sehen", "helfen"],
+    hook: {
+      title: "Whom Still Works Here",
+      content:
+        "The man whom I see. The friend whom I gave it to. English's whom is dying at the street level — but it is exactly the case machine German's relative pronouns still run. The case of the relative pronoun comes from ITS OWN clause: the film that I see — the film is the thing SEEN, so German says den (accusative): der Film, den ich sehe. The man I help — helping goes TO someone (the dative club from topic 20), so dem: der Mann, dem ich helfe. The relative pronoun doesn't take orders from the noun it points at; it takes orders from the verb of its own clause.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Case Interview",
+          content:
+            "To find the relative pronoun's case, ask: what job does it do INSIDE the relative clause? Subject of sehe? nominative (der/die/das). Direct object? accusative (den/die/das). Receiver? dative (dem/der/dem). The noun outside decides gender and number; the clause inside decides case. Two interviews, one pronoun.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Case Roster",
+      content:
+        "Nominative (subject): Der Film, der gefällt? — keep it simple: der Mann, der kommt. Accusative (direct object): der Film, den ich sehe; die Frau, die ich sehe (die serves both nominative and accusative — feminine didn't split); das Kind, das ich sehe. Dative (receiver): der Mann, dem ich helfe; die Frau, der ich helfe (feminine dative is der!); dem Kind, dem ich das Buch gebe — the double-object verb from topic 20, giving the thing (das Buch, accusative) to the receiver (dem, dative). The basement rule holds through every case: the clause verb waits at the end.",
+      footnotes: [],
+      linguist_note:
+        "whom ↔ wen/wem: English's wh-family (who/whom/whose) is the same interrogative-relative system as German wer/wen/wem. whom kept the accusative -m; German's dem/ihm wear the same ancient dative -m ending. The case is older than both languages' differences.",
+    },
+    exercises: [
+      {
+        id: "l5102_e1",
+        type: "matching_pairs",
+        prompt: "The case roster — match each relative clause with its reading:",
+        matching_pairs: [
+          { id: "cr1", english: "the film (that) I see", german: "der Film, den ich sehe" },
+          { id: "cr2", english: "the man I help", german: "der Mann, dem ich helfe" },
+          { id: "cr3", english: "the woman (that) I see", german: "die Frau, die ich sehe" },
+          { id: "cr4", english: "the child I give the book to", german: "das Kind, dem ich das Buch gebe" },
+        ],
+        target_answer: "der Film, den ich sehe, der Mann, dem ich helfe, die Frau, die ich sehe, das Kind, dem ich das Buch gebe",
+        meaning: "accusative and dative relatives in action",
+        explanation: "sehen acts ON (den, accusative); helfen and geben give TO (dem, dative). The clause's verb sets the case.",
+      },
+      {
+        id: "l5102_e2",
+        type: "shift_select",
+        prompt: "Why is it 'der Film, DEN ich sehe'?",
+        options: [
+          "The film is the OBJECT of see — accusative job",
+          "The film is the subject of the clause",
+          "Film is feminine",
+          "sehen demands the dative",
+        ],
+        target_answer: "The film is the OBJECT of see — accusative job",
+        meaning: "den = accusative relative pronoun",
+        explanation: "The relative pronoun plays the object role inside its clause: der Film, den ich sehe — 'which I see', with whom's case logic.",
+      },
+      {
+        id: "l5102_e3",
+        type: "shift_select",
+        prompt: "The dative club strikes again: 'Der Mann, _____ ich helfe.' (I help):",
+        options: ["dem", "den", "der", "das"],
+        target_answer: "dem",
+        meaning: "Der Mann, dem ich helfe = the man I help",
+        explanation: "helfen is a dative verb — helping goes TO someone — so the relative pronoun takes dative: dem.",
+      },
+      {
+        id: "l5102_e4",
+        type: "reverse_cognate",
+        prompt: "Which English pronoun still wears the accusative case-marking that 'den' carries?",
+        target_answer: "whom",
+        meaning: "whom ↔ den/wen — the fossil accusative",
+        explanation: "whom, wen, wem, ihm, dem all share the ancient -m case ending. English retired whom; German still clocks in daily.",
+      },
+      {
+        id: "l5102_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The film that I see is good'",
+        target_answer: "Der Film den ich sehe ist gut",
+        meaning: "Der Film, den ich sehe, ist gut",
+        vocab_hints: [
+          { word: "den", translation: "whom/which (accusative)", note: "the film is being seen — object job inside the clause" },
+        ],
+        word_bank: ["Der", "Film", "den", "ich", "sehe", "ist", "gut"],
+        explanation: "sehe closes the relative basement; ist holds position 2 of the main clause — two verbs, two floors, one case interview passed.",
+      },
+    ],
+    summary: {
+      outcome: "Build accusative and dative relative clauses, deriving the case from the clause's own verb.",
+      use_example: { german: "Der Mann, dem ich helfe, liest das Buch, das ich sehe.", english: "The man I help is reading the book that I see." },
+      takeaway: "Gender from the noun outside, case from the verb inside: den for objects, dem for receivers — whom's living twin.",
+      curiosity_teaser: "This relative branch ends here — more side paths wait on the map, and the whole compendium waits in review.",
+    },
+  },
+
+  {
+    id: 5111,
+    slug: "the-three-whens-wann-als-wenn",
+    title: "The Three Whens: wann, als, wenn",
+    subtitle: "English 'when' does three jobs — German hires three words, all verb-final",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["wann", "als", "wenn", "kommen", "kind", "gestern", "regnen", "lesen", "zeit"],
+    table_word_ids: ["wann", "als", "wenn", "regnen", "lesen"],
+    hook: {
+      title: "The When-Split",
+      content:
+        "English when is one word doing shift work: the question (When do you come?), the once-only past (when I was a child), the repeater (when it rains). German refuses the overtime and hires three. wann asks the question — the twin of when, same ancient root. wenn takes the repeater AND the condition (if) — wann's etymological doublet, the same word split into two jobs. And als marks the once-only past — but here is the twist: als is NOT in the when-family at all. It is the twin of English also (all-so → 'as' → 'than'), the same als you drilled as 'than' in the comparison gym. English collapsed three words into one and one into three; German keeps the divisions sharp.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Doublet Test",
+          content:
+            "wann and wenn were one word in Old High German (hwanne) — exactly like English when, which comes from the same *hwan. wann kept the question job, wenn took the clause job. So when you hesitate between them, you are really choosing between 'asking' and 'linking' — the same choice English hides inside one spelling.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Three Jobs, Three Words, One Basement",
+      content:
+        "wann — the question: Wann kommst du? And the indirect question: Ich weiß nicht, wann er kommt (verb-final — the basement rule fires). als — the once-only past: Als Kind war ich... (as/when I was a child — the war from the fortress pasts), Als ich gestern kam... — plus its old job, 'than': älter als du. wenn — the repeater and the condition: Wenn es regnet, lese ich (when(ever) it rains, I read — and if it rains, the same sentence). Every one of the three drops the verb to the clause end: wann er kommt, als ich kam, wenn ich Zeit habe. If you can already build weil-clauses, you can build all three.",
+      footnotes: [],
+      linguist_note:
+        "als ← OHG alsō, al ('all') + sō ('so') — the exact formation of English also. 'Than' and 'as' both grew out of 'entirely so' by the same worn-road semantic route German still shows transparently.",
+    },
+    exercises: [
+      {
+        id: "l5111_e1",
+        type: "matching_pairs",
+        prompt: "The when-split — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "tw1", english: "When do you come? (question)", german: "Wann kommst du?" },
+          { id: "tw2", english: "when I was a child (once-only)", german: "als ich ein Kind war" },
+          { id: "tw3", english: "when(ever) it rains, I read", german: "wenn es regnet, lese ich" },
+          { id: "tw4", english: "older than you (the old job)", german: "älter als du" },
+        ],
+        target_answer: "Wann kommst du, als ich ein Kind war, wenn es regnet lese ich, älter als du",
+        meaning: "question, once-only past, repeater/condition, comparison",
+        explanation: "wann asks, als marks the unique past moment (and 'than'), wenn repeats and conditions.",
+      },
+      {
+        id: "l5111_e2",
+        type: "shift_select",
+        prompt: "'_____ kommst du?' (question — at what time?):",
+        options: ["Wann", "Wenn", "Als", "Wo"],
+        target_answer: "Wann",
+        meaning: "Wann kommst du? = when are you coming?",
+        explanation: "Questions take wann — the exact twin of English when, keeping the question job.",
+      },
+      {
+        id: "l5111_e3",
+        type: "shift_select",
+        prompt: "'_____ ich gestern kam, war es spät.' (a one-time past moment):",
+        options: ["Als", "Wenn", "Wann", "Dann"],
+        target_answer: "Als",
+        meaning: "Als ich gestern kam, war es spät = when I arrived yesterday, it was late",
+        explanation: "One specific past event → als. Repeating or future conditions → wenn. English 'when' covers both; German splits them.",
+      },
+      {
+        id: "l5111_e4",
+        type: "reverse_cognate",
+        prompt: "wann and wenn are doublets of one ancient word. Which English word is their twin?",
+        target_answer: "when",
+        meaning: "wann/wenn ↔ when (Proto-Germanic *hwan)",
+        explanation: "All three descend from *hwan: English kept one spelling, German split asking (wann) from linking (wenn).",
+      },
+      {
+        id: "l5111_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the repeater: 'When it rains, I read'",
+        target_answer: "Wenn es regnet lese ich",
+        meaning: "Wenn es regnet, lese ich = when(ever) it rains, I read",
+        vocab_hints: [
+          { word: "regnet", translation: "rains", note: "regnen — the rain-verb; es regnet = it rains" },
+        ],
+        word_bank: ["Wenn", "es", "regnet", "lese", "ich"],
+        explanation: "wenn builds the clause and the verb goes to the basement: regnet waits, lese waits — weil's rule, one more employee.",
+      },
+    ],
+    summary: {
+      outcome: "Choose between wann, als and wenn correctly and build all three with verb-final order.",
+      use_example: { german: "Wann kommst du? — Wenn es regnet, lese ich.", english: "When are you coming? — When it rains, I read." },
+      takeaway: "wann asks, als marks the once-only past (and 'than'), wenn repeats and conditions — and all three park the verb.",
+      curiosity_teaser: "Next: ob — whether or not — the indirect yes/no word and English if's true twin.",
+    },
+  },
+
+  {
+    id: 5112,
+    slug: "ob-whether-or-not",
+    title: "ob: Whether or Not",
+    subtitle: "the indirect yes/no word — and the true twin of English if",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["ob", "wenn", "wissen", "kommen", "haben", "mögen", "zeit"],
+    table_word_ids: ["ob", "wenn", "wissen", "haben"],
+    hook: {
+      title: "Two Ifs, One Ancient Word",
+      content:
+        "German has two ifs and refuses to share. wenn runs the conditions (if it rains...). ob handles the open question folded inside a statement: Ich weiß nicht, ob er kommt — I don't know IF he is coming. And here is the family secret: ob is the true twin of English if. Both descend from Proto-Germanic *jabai — English wore it down to if, German to ob, same ancient word, same job of opening a yes/no question inside a bigger sentence. English meanwhile drafted whether for the job German gives ob — and whether literally means 'which of the two', which is exactly what ob asks: yes, or no?",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The 'Or Not' Test",
+          content:
+            "Not sure whether to use ob or wenn? Try adding 'or not'. I don't know if he's coming... or not → works → German wants ob. IF it rains... or not → breaks the sentence → German wants wenn. Ob reports an unanswered yes/no; wenn builds a condition on it.",
+        },
+      ],
+    },
+    pattern: {
+      title: "ob in the Basement",
+      content:
+        "The frames: Ich weiß nicht, ob er kommt (I don't know whether he is coming). Ich weiß nicht, ob er Zeit hat (whether he has time — hat, haben's fortress form). Wir sehen, ob es regnet (we'll see whether it's raining). Ich möchte wissen, ob du kommst (I would like to know whether you are coming — möchte back from the escalator). Contrast pair: Ich weiß nicht, ob er kommt (whether — open question) versus Wenn er kommt, lese ich (if — condition). Both are basement clauses — the verb waits at the end for ob exactly as for wenn, weil and dass.",
+      footnotes: [],
+      linguist_note:
+        "Proto-Germanic *jabai ('when, if') forked into English if and German ob — one of the rare pairs where the English twin looks NOTHING like its German sibling until the pedigree is on the table. The b and the f are the same ancient labial consonant, voiced differently down the centuries.",
+    },
+    exercises: [
+      {
+        id: "l5112_e1",
+        type: "matching_pairs",
+        prompt: "The two ifs — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "ob1", english: "I don't know whether he is coming", german: "Ich weiß nicht, ob er kommt" },
+          { id: "ob2", english: "if it rains, I read", german: "Wenn es regnet, lese ich" },
+          { id: "ob3", english: "whether she has time", german: "ob sie Zeit hat" },
+          { id: "ob4", english: "if I had time (would-world)", german: "Wenn ich Zeit hätte" },
+        ],
+        target_answer: "Ich weiß nicht, ob er kommt, Wenn es regnet lese ich, ob sie Zeit hat, Wenn ich Zeit hätte",
+        meaning: "ob for open questions, wenn for conditions",
+        explanation: "ob reports an open yes/no; wenn builds a condition. English splits the same jobs between whether/if and if.",
+      },
+      {
+        id: "l5112_e2",
+        type: "shift_select",
+        prompt: "'Ich weiß nicht, _____ er kommt.' (I don't know IF/WHETHER...):",
+        options: ["ob", "wenn", "als", "wann"],
+        target_answer: "ob",
+        meaning: "Ich weiß nicht, ob er kommt",
+        explanation: "The 'or not' test: 'whether he is coming or not' works → ob. An indirect yes/no question folds ob into the sentence.",
+      },
+      {
+        id: "l5112_e3",
+        type: "shift_select",
+        prompt: "The condition gets wenn: '_____ du kommst, lese ich.' (if you come, I read):",
+        options: ["Wenn", "Ob", "Wann", "Als"],
+        target_answer: "Wenn",
+        meaning: "Wenn du kommst, lese ich = if you come, I read",
+        explanation: "A condition built on the other clause's action → wenn. ob cannot build conditions — it only reports open questions.",
+      },
+      {
+        id: "l5112_e4",
+        type: "reverse_cognate",
+        prompt: "ob looks nothing like it — but which everyday English word is its true twin (Proto-Germanic *jabai)?",
+        target_answer: "if",
+        meaning: "ob ↔ if (the same ancient word)",
+        explanation: "English if and German ob both descend from *jabai. The family resemblance hid for a thousand years; the pedigree exposes it.",
+      },
+      {
+        id: "l5112_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the open question: 'I don't know whether he has time'",
+        target_answer: "Ich weiß nicht ob er Zeit hat",
+        meaning: "Ich weiß nicht, ob er Zeit hat",
+        vocab_hints: [
+          { word: "ob", translation: "whether / if", note: "the indirect yes/no word — verb goes to the basement" },
+        ],
+        word_bank: ["Ich", "weiß", "nicht", "ob", "er", "Zeit", "hat"],
+        explanation: "weiß holds position 2 of the main clause; hat waits at the basement end — ob's clause runs on weil's rules.",
+      },
+    ],
+    summary: {
+      outcome: "Use ob for indirect yes/no questions, contrast it with wenn, and name English if as its twin.",
+      use_example: { german: "Ich weiß nicht, ob er kommt — wenn er kommt, lese ich.", english: "I don't know whether he's coming — if he comes, I'll read." },
+      takeaway: "ob asks the open yes/no ('or not' test), wenn builds the condition — and ob is English if, disguised.",
+      curiosity_teaser: "This whether-branch ends here — more side paths wait on the map, and the whole compendium waits in review.",
     },
   },
 ];

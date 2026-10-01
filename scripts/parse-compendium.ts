@@ -123,6 +123,7 @@ if (sec2Match) {
     const shiftPatternRaw = cols[5].replace(/`/g, "").trim();
     const contextRaw = cols[6].trim();
     const etymology = cols[7].trim();
+    const domain = (cols[8] || "").trim() || "general";
 
     let gender: Gender | null = null;
     if (rawGender.startsWith("der")) gender = "der";
@@ -171,6 +172,7 @@ if (sec2Match) {
       context_phrase,
       context_translation,
       etymology_derivation: etymology,
+      domain,
     };
 
     words[id] = wordEntity;

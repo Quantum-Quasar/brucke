@@ -194,6 +194,8 @@ export const TOPICS: TopicCluster[] = [
     sprigs: [
       { ...shell(sprigId(16, 1), "ver ↔ for- Cognate Set", "12 ver- words mapped to English for- words; payoff arc completing the vergessen preview from earlier topics."), authored: true },
       { ...shell(sprigId(16, 2), "be- & er- Verb Factory", "be-/er- as meaning-shapers: bekommen, erinnern, erklären; spot inseparable vs separable by stress."), authored: true },
+      { ...shell(sprigId(16, 3), "sich & the Lost Reflexives", "The sich-system and English's lost reflexives (hie thee hence, help yourself): mich/dich/sich/uns, sich waschen with its stem change, sich freuen and sich fühlen."), authored: true },
+      { ...shell(sprigId(16, 4), "Reflexive Daily Routines", "The morning round: sich anziehen, aufstehen, aufwachen, einschlafen — separable prefixes plus reflexive pronouns in routine chains."), authored: true },
     ],
   },
   {
@@ -227,6 +229,8 @@ export const TOPICS: TopicCluster[] = [
       { ...shell(sprigId(19, 1), "sing/sang/sung Mirrors", "Map 14 English irregulars onto German ablauf pairs; hear the vowel melody."), authored: true },
       { ...shell(sprigId(19, 2), "Ablaut Families I: e→i, a→o", "Class drills: geben/gab, sprechen/sprach, fahren/fuhr with participle forms."), authored: true },
       { ...shell(sprigId(19, 3), "dachte & the Suppletive Irregulars", "think/thought↔denken/dachte, bring/brought↔bringen/brachte, go/went↔gehen/ging."), authored: true },
+      { ...shell(sprigId(19, 4), "hatte & war: The Fortress Pasts", "haben and sein keep their simple pasts: hatte ↔ had, war ↔ was — the -te ending is English's own -ed, the storyteller's tense."), authored: true },
+      { ...shell(sprigId(19, 5), "konnte, musste & the Frozen Pasts", "The preterite-present modals: konnte↔could, musste↔must, sollte↔should, wollte↔would, durfte↔durst, wusste↔wist — English froze their pasts into presents."), authored: true },
     ],
   },
   {
@@ -282,6 +286,8 @@ export const TOPICS: TopicCluster[] = [
     sprigs: [
       { ...shell(sprigId(24, 1), "Twin Suppletions", "gut/besser/hoch/höher vs good/better/high/higher — the shared irregular story."), authored: true },
       { ...shell(sprigId(24, 2), "-er/-ste Sentence Gym", "20 comparison sentences with als/wie using taught adjectives."), authored: true },
+      { ...shell(sprigId(24, 3), "Adjective Endings: the Article's Echo", "Before-noun declension: der kalte Tag vs ein kalter Tag — the adjective carries the flag only when the article doesn't; the 80/20 -en rule; mixed declension after kein/mein."), authored: true },
+      { ...shell(sprigId(24, 4), "No Article? The Adjective Goes Strong", "Strong declension before bare nouns: kaltes Wasser, heißer Tee, guter Wein — the adjective does the article's job alone; the capstone's besseren callback."), authored: true },
     ],
   },
   {
@@ -390,6 +396,17 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     ],
   },
   {
+    id: 5060,
+    attach: 9,
+    title: "The Imperative Line",
+    blurb: "Commands are the bare stem: Komm! Mach! Iss! — Shakespeare's English gave orders the same way.",
+    lessons: [
+      { ...shell(5061, "Speak, Hands, for Me!", "The du-command is the bare stem: Komm! Lern! Iss! Sprich! Hilf! — Casca's line from Julius Caesar; the e→i stem-changers that keep their vowel in the command."), authored: true },
+      { ...shell(5062, "Kommen Sie! Kommt!", "The other two imperatives: formal Sie-commands (verb first, Sie after — the polite 'they' plural) and ihr-commands (-t); the one irregular, Sei!."), authored: true },
+      { ...shell(5063, "Commands in the Wild", "Command chains out in the world: recipes and their infinitive-style commands, dialogues with bitte, and the du/Sie register switch under pressure."), authored: true },
+    ],
+  },
+  {
     id: 5050,
     attach: 27,
     title: "Two-Way Preposition Drill Isle",
@@ -397,6 +414,56 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     lessons: [
       { ...shell(5051, "Motion → Accusative, Location → Dative", "wohin?/wo? pair drills across an/auf/in/hinter/neben/über/unter/vor/zwischen."), authored: true },
       { ...shell(5052, "Wechselpräpositionen Sentence Gym", "20 picture-prompt sentences switching cases by motion vs location."), authored: true },
+    ],
+  },
+  {
+    id: 5070,
+    attach: 1,
+    title: "First Words, First Spoken",
+    blurb: "Your first spoken German: saying who you are, where you're from — and the alphabet.",
+    lessons: [
+      { ...shell(5071, "First Introductions", "ich heiße ↔ archaic hight 'to be called'; ich komme aus; ich wohne; ich bin N Jahre alt — introduction sentences from taught cognates."), authored: true },
+      { ...shell(5072, "The Alphabet & buchstabieren", "Das deutsche Alphabet: W = 'veh', V = 'fow', J = 'yot', Z = 'tsett', ß = 'Eszett' — and buchstabieren, the -ieren verb for spelling your name."), authored: true },
+    ],
+  },
+  {
+    id: 5090,
+    attach: 11,
+    title: "Your Family Tree Speaks German",
+    blurb: "One cognate-dense branch on the family: Vater, Mutter, Sohn — and Eltern, 'the elder ones'.",
+    lessons: [
+      { ...shell(5091, "Blood & Kin", "The core kin set as cognates: Vater/father (Verner's law, NOT V→B), Mutter, Sohn, Tochter, Schwester, Bruder, Eltern = 'the elder ones' (frozen comparative)."), authored: true },
+      { ...shell(5092, "The Extended Clan", "Grandparents, in-laws and the compound principle: Großvater, Oma/Opa, Onkel, Tante, Geschwister, Enkel, Familie."), authored: true },
+    ],
+  },
+  {
+    id: 5080,
+    attach: 30,
+    title: "The Would-World: Konjunktiv II",
+    blurb: "hätte, wäre, könnte, würde — the subjunctive twins of had, were, could, would, and the politeness escalator.",
+    lessons: [
+      { ...shell(5081, "hätte & wäre: The Subjunctive Twins", "hätte ↔ had's subjunctive, wäre ↔ were: the would-world of wishes and hypotheses — Wenn ich Zeit hätte, Das wäre gut — with English's one fossil, 'if I were'."), authored: true },
+      { ...shell(5082, "könnte, würde & the Politeness Escalator", "könnte (could's old job: polite asking), würde (would, the conditional machine) and the four-step politeness escalator from Ein Kaffee! to Könnten Sie...? — plus the wurde/würde umlaut trap."), authored: true },
+    ],
+  },
+  {
+    id: 5100,
+    attach: 30,
+    title: "The Relative Twist",
+    blurb: "der/die/das take a third job — relative pronouns — and the verb drops to the basement again.",
+    lessons: [
+      { ...shell(5101, "The Man That Knows: der/die/das Double Duty", "Subject relatives: Der Mann, der Kaffee trinkt — the relative pronoun is the demonstrative re-employed; OE þe/that; verb-final reuses topic 14's basement rule."), authored: true },
+      { ...shell(5102, "Relatives in All Cases", "den and dem as relative objects: der Film, den ich sehe; der Mann, dem ich helfe — the case comes from the relative clause's own verb; English whom is the same fossil."), authored: true },
+    ],
+  },
+  {
+    id: 5110,
+    attach: 30,
+    title: "The Three Whens & the Whether-Word",
+    blurb: "wann, als, wenn split English 'when' into three jobs — and ob turns out to be English if's true twin.",
+    lessons: [
+      { ...shell(5111, "The Three Whens: wann, als, wenn", "The when-split: wann asks the question, als marks the once-only past (and 'than'), wenn repeats and conditions — all verb-final; wann/wenn are doublets, als is also's twin."), authored: true },
+      { ...shell(5112, "ob: Whether or Not", "ob as the indirect yes/no word — the 'or not' test — and its true twin, English if (Proto-Germanic *jabai); wenn vs ob; basement word order throughout."), authored: true },
     ],
   },
 ];

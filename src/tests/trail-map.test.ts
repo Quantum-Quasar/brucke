@@ -102,8 +102,8 @@ describe("Unlock & recommendation logic", () => {
 
   it("unlocks all adjacent nodes at once (Baba OR-join)", () => {
     const next = available([1]).sort((a, b) => a - b);
-    // topic 1 core done → topic 2 core + all topic 1 sprigs unlock together
-    expect(next).toEqual([2, 101, 102, 103]);
+    // topic 1 core done → topic 2 core + all topic 1 sprigs + branch 5070's first lesson unlock together
+    expect(next).toEqual([2, 101, 102, 103, 5071]);
   });
 
   it("keeps sprigs skippable and the spine strict", () => {

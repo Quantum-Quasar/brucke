@@ -1,4 +1,4 @@
-export const TOTAL_COMPENDIUM_WORDS = 310;
+export const TOTAL_COMPENDIUM_WORDS = 619;
 
 export type Gender = "der" | "die" | "das";
 
@@ -28,6 +28,8 @@ export interface WordEntity {
   context_phrase: string;
   context_translation: string;
   etymology_derivation: string;
+  /** Thematic domain (family, colors, food, …) used by the Review Hub domain decks. */
+  domain?: string;
 }
 
 export interface ShiftFamily {
