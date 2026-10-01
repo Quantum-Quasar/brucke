@@ -120,4 +120,34 @@ describe("Store Persistence Security & Header Quota Bounds", () => {
     expect(state.srsCards["card_ok"].word_id).toBe("w_ok");
     expect((state.srsCards as any).evil).toBeUndefined();
   });
+
+  // --- TM-4: the posture settings keys round-trip through backup import/export ---
+
+  it("round-trips posturePrimerSeen and showPostureCues through importBackupState", () => {
+    const store = useAppStore.getState();
+    expect(store.importBackupState({
+      settings: { posturePrimerSeen: true, showPostureCues: false },
+    })).toBe(true);
+
+    const state = useAppStore.getState();
+    expect(state.settings.posturePrimerSeen).toBe(true);
+    expect(state.settings.showPostureCues).toBe(false);
+
+    // the lean cookie fallback still excludes settings — the 2048 guard is untouched
+    const lean = {
+      theme: state.theme,
+      font: state.font,
+    };
+    expect(encodeURIComponent(JSON.stringify(lean)).length).toBeLessThanOrEqual(2048);
+  });
+
+  it("marks the posture primer seen when onboarding completes or is skipped", () => {
+    const store = useAppStore.getState();
+    store.resetProgress();
+    expect(useAppStore.getState().settings.posturePrimerSeen).toBe(false);
+
+    useAppStore.getState().completeOnboarding();
+    expect(useAppStore.getState().settings.posturePrimerSeen).toBe(true);
+    expect(useAppStore.getState().hasCompletedOnboarding).toBe(true);
+  });
 });

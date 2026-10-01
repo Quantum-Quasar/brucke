@@ -196,24 +196,25 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l2_e4",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I want to learn German'",
-        target_answer: "Ich will Deutsch lernen",
-        meaning: "I want to learn German",
-        vocab_hints: [
-          {
-            word: "will",
-            translation: "want to",
-            note: "asserting desire ('free will'). Sentence bracket puts 'lernen' at the end!",
-          },
-        ],
-        word_bank: ["Ich", "will", "Deutsch", "lernen"],
-        explanation: "Modal 'will' in position 2; infinitive 'lernen' kicked cleanly to the end!",
+        type: "literal_gloss",
+        prompt: "Which English is built the German way?",
+        german: "Wir wollen heute singen.",
+        natural: "We want to sing today.",
+        options: ["We want to sing today.", "We want today to sing.", "We today want to sing."],
+        target_answer: "We want today to sing.",
+        meaning: "We want to sing today.",
+        explanation: "The modal holds position 2 and the bare infinitive closes the bracket, so 'today' lands between them in the middle of the English verb pair. English used to tolerate this order ('I know not where'); German never left it.",
       },
       {
         id: "l2_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I can come tomorrow'",
+        type: "transcribe",
+        prompt: "Tell me:",
+        idea: "you're telling me your plans for visiting: you can come tomorrow",
+        cues: [
+          "Who can? → ich kann (can = know-how, as in 'beyond my ken')",
+          "When? → morgen, riding inside the bracket",
+          "The bare infinitive closes the bracket: kommen goes last",
+        ],
         target_answer: "Ich kann morgen kommen",
         meaning: "I can come tomorrow",
         vocab_hints: [
@@ -228,8 +229,12 @@ export const LESSONS: Lesson[] = [
             note: "related to 'can' and 'ken' (knowledge)",
           },
         ],
-        word_bank: ["Ich", "kann", "morgen", "kommen"],
+        word_bank: ["Ich", "kann", "morgen", "kommen", "kannst"],
         explanation: "The Satzklammer wraps around 'morgen', placing bare infinitive 'kommen' at the caboose.",
+        diagnosis: {
+          slip: "the modal's ending jumped onto the infinitive",
+          cue: "Only the modal conjugates — ich kann stays whole, and kommen stays bare. When two verbs share a sentence, the bracket decides who bends.",
+        },
       },
     ],
     summary: {
@@ -237,6 +242,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Ich kann morgen kommen.", english: "I can come tomorrow." },
       takeaway: "Use modal + bare infinitive at the end to assemble complex thoughts immediately.",
       curiosity_teaser: "Next: the will ≠ will drills — separating ich will (free will) from the future, with sollen ↔ shall.",
+    },
+    twist: {
+      prompt: "Same thought, but tomorrow comes first: I want to learn German tomorrow. (Something still has to hold position 2.)",
+      target_answer: "Morgen will ich Deutsch lernen",
+      word_bank: ["Morgen", "will", "ich", "Deutsch", "lernen", "lerne"],
+      explanation: "Fronting fills position 1, so the verb keeps position 2 and the subject slips in behind it — the bracket never breaks, it just re-grips.",
     },
   },
   {
@@ -283,6 +294,7 @@ export const LESSONS: Lesson[] = [
         target_answer: "hoffen",
         meaning: "to hope",
         shift_hint: "P → FF",
+        affirmation: "You breathed the p into ff and pulled the ending on — the shift is becoming a reflex.",
         explanation: "Post-vocalic P shifted into double FF + infinitive -en = hoffen.",
       },
       {
@@ -298,6 +310,7 @@ export const LESSONS: Lesson[] = [
         target_answer: "Schiff, helfen, schlafen, Affe",
         meaning: "ship, to help, to sleep, ape",
         shift_hint: "P → F/FF",
+        affirmation: "Four p-words read straight through the shift — you're starting to hear it everywhere.",
         explanation: "English post-vocalic P regularly corresponds to German F or FF.",
       },
       {
@@ -308,6 +321,7 @@ export const LESSONS: Lesson[] = [
         meaning: "English ripe ↔ German reif (P → F)",
         options: ["P → F/FF", "TH → D", "T → S/SS", "K → CH"],
         shift_hint: "P → F",
+        affirmation: "You read reif backwards to ripe — every German f whispers its English p origin.",
         explanation: "Voiceless stop P shifted into fricative F after a long vowel: ripe ↔ reif. A ripe fruit in German has 'gereift' (ripened).",
       },
       {
@@ -316,25 +330,32 @@ export const LESSONS: Lesson[] = [
         prompt: "Apply the P → FF shift: English: 'sleep' → German verb:",
         english_hint: "slee·p· → schla·f·en",
         shift_hint: "P → F",
+        affirmation: "You heard schl- where English says sl-, and the p breathed into f — sleep became schlafen.",
         target_answer: "schlafen",
         meaning: "to sleep",
         explanation: "English sl- becomes schl- and p shifts to f.",
       },
       {
         id: "l3_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I hope you come'",
+        type: "transcribe",
+        prompt: "You want to say:",
+        idea: "you want your friend to visit, so you tell her: I hope you come",
+        cues: [
+          "Who hopes? → ich hoffe — hope is a regular verb here: hoff- + -e",
+          "Who comes? → du kommst — the friend is 'you' (du), with the Shakespearean -st",
+          "Run it straight through: no 'that', no comma between the two clauses",
+        ],
         target_answer: "Ich hoffe du kommst",
         meaning: "I hope you come",
         vocab_hints: [
           {
             word: "du",
             translation: "you (informal singular)",
-            note: "identical to archaic English 'thou'—notice how 'du kommst' keeps the Shakespearean ending 'thou comest'!",
+            note: "identical to archaic English 'thou' — notice how 'du kommst' keeps the Shakespearean ending 'thou comest'!",
           },
         ],
-        word_bank: ["Ich", "hoffe", "du", "kommst"],
-        explanation: "1st person 'hoffe' + 2nd person 'kommst'.",
+        word_bank: ["Ich", "hoffe", "du", "kommst", "kommen", "hoffst"],
+        explanation: "German lets 'I hope' run straight into 'you come' — no 'that', no comma. And hoffen is your P → F hope wearing a working ending.",
       },
     ],
     summary: {
@@ -342,6 +363,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Ich hoffe, du kommst.", english: "I hope you come." },
       takeaway: "Every time you see German 'f' or 'ff' in a core word, test whether replacing it with 'p' creates an English word.",
       curiosity_teaser: "Next: the PF- openers — path becomes Pfad, pound becomes Pfund: the word-initial explosion of the shift.",
+    },
+    twist: {
+      prompt: "Same words, but now ask it: 'You come tomorrow.' Put the question into German.",
+      target_answer: "Kommst du morgen",
+      word_bank: ["Kommst", "du", "morgen", "kommen"],
+      explanation: "The question puts the verb first and lets du fall in behind it — German's ancient asking order, the same one in Old English 'Knowest thou?'. And Kommst keeps the thou-ending: comest → kommst.",
     },
   },
   {
@@ -373,6 +400,7 @@ export const LESSONS: Lesson[] = [
         {
           marker: "2",
           title: "Thou/Thee & Donner",
+          interest: true,
           content:
             "English 'thou' (thou goest) and German 'du' (du gehst) both take the ancient -st ending. Santa's reindeer 'Donner and Blitzen' literally means 'Thunder and Lightning' (Donnerstag = Thunder-day / Thursday)!",
         },
@@ -389,6 +417,7 @@ export const LESSONS: Lesson[] = [
         target_answer: "danken",
         meaning: "to thank",
         shift_hint: "TH → D",
+        affirmation: "You hardened the th into d and hung on the -en — thank is danken now, all the way down.",
         explanation: "Dental TH hardened to D + infinitive suffix -en = danken.",
       },
       {
@@ -404,6 +433,7 @@ export const LESSONS: Lesson[] = [
         target_answer: "Bruder, denken, drei, Bad",
         meaning: "brother, to think, three, bath",
         shift_hint: "TH → D",
+        affirmation: "Four th-words hardened to d on sight — a 1,300-year-old rule, live in your hands.",
         explanation: "Every Germanic dental fricative TH hardened into D in German.",
       },
       {
@@ -412,6 +442,7 @@ export const LESSONS: Lesson[] = [
         prompt: "What native English word shares the exact root of 'Bruder'?",
         target_answer: "brother",
         meaning: "brother (twin of German Bruder)",
+        affirmation: "You ran the d → th swap and brother stepped out — that medial d is hardened th.",
         explanation: "Medial D in Bruder directly mirrors English TH in brother.",
       },
       {
@@ -420,14 +451,21 @@ export const LESSONS: Lesson[] = [
         prompt: "Apply the TH → D shift: English: 'think' → German verb:",
         english_hint: "th·ink → d·enk·en",
         shift_hint: "TH → D",
+        affirmation: "You hardened th to d and let the -en settle — think became denken.",
         target_answer: "denken",
         meaning: "to think",
         explanation: "TH shifts to D, plus regular -en infinitive.",
       },
       {
         id: "l4_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I think of you'",
+        type: "transcribe",
+        prompt: "Put into German:",
+        idea: "you're letting someone far away know they're on your mind: I think of you",
+        cues: [
+          "Who thinks? → ich denke (TH → D: think → denk-)",
+          "'of you' → an dich — denken needs its an, and thee → dich",
+          "Line them up: thinker, an, then the thee-word",
+        ],
         target_answer: "Ich denke an dich",
         meaning: "I think of you",
         vocab_hints: [
@@ -442,7 +480,7 @@ export const LESSONS: Lesson[] = [
             note: "direct twin of archaic English 'thee' (thou ↔ du, thee ↔ dich, thine ↔ dein)",
           },
         ],
-        word_bank: ["Ich", "denke", "an", "dich"],
+        word_bank: ["Ich", "denke", "an", "dich", "dank", "dir"],
         explanation: "'denken an' takes the accusative (dich = thee). Notice TH → D: think ↔ denke, thee ↔ dich.",
       },
     ],
@@ -451,6 +489,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Ich denke an dich.", english: "I am thinking of you." },
       takeaway: "Whenever you encounter a German 'd', swap it for 'th' in your head to unlock the English cognate.",
       curiosity_teaser: "Next: Donner, Bad & Du — culture words through the D-lens: thunder-day, spa towns, and the thou you already speak.",
+    },
+    twist: {
+      prompt: "Same thought, but the whole family says it: I think of you becomes we think of you.",
+      target_answer: "Wir denken an dich",
+      word_bank: ["Wir", "denken", "denke", "an", "dich"],
+      explanation: "ich denke → wir denken: the ending carries the person (-e → -en), and 'an dich' doesn't budge. The shift words stay; the endings do the work.",
     },
   },
   {
@@ -505,6 +549,7 @@ export const LESSONS: Lesson[] = [
           },
         ],
         shift_hint: "T → SS",
+        affirmation: "You hissed the t into ss and kept the das — the receipt reads water → Wasser.",
         explanation: "Water: T shifts to SS after short vowel = das Wasser.",
       },
       {
@@ -520,6 +565,7 @@ export const LESSONS: Lesson[] = [
         target_answer: "besser, essen, zwei, hassen",
         meaning: "better, to eat, two, to hate",
         shift_hint: "T → S/SS/Z",
+        affirmation: "Four t-words hissed into German — ss after vowels, z at the front door. You're starting to hear it everywhere.",
         explanation: "T becomes ss after vowels, and z at the start of words.",
       },
       {
@@ -529,6 +575,7 @@ export const LESSONS: Lesson[] = [
         target_answer: "T → S/SS",
         meaning: "English better ↔ German besser (T → SS)",
         options: ["T → S/SS", "P → F/FF", "TH → D", "K → CH"],
+        affirmation: "You read besser backwards to better — the doubled ss whispers its tt origin.",
         explanation: "Medial tt shifted into geminate sibilant ss.",
       },
       {
@@ -537,12 +584,19 @@ export const LESSONS: Lesson[] = [
         prompt: "What native English word shares the root of 'essen'?",
         target_answer: "eat",
         meaning: "to eat (twin of German essen)",
+        affirmation: "You swapped the ss for a t and eat stepped out — one sibilant, one ancient stem.",
         explanation: "German 'essen' and English 'eat' are identical Germanic stems with T → SS shift.",
       },
       {
         id: "l5_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'A glass of water please'",
+        type: "transcribe",
+        prompt: "Tell me:",
+        idea: "you're at a café counter asking for a drink: a glass of water, please",
+        cues: [
+          "English t hisses into ss after a vowel: water → Wasser",
+          "Measure phrase, no 'of': ein Glas Wasser",
+          "Seal it with bitte — the cognate of English 'bid'",
+        ],
         target_answer: "Ein Glas Wasser bitte",
         meaning: "A glass of water please",
         vocab_hints: [
@@ -557,8 +611,8 @@ export const LESSONS: Lesson[] = [
             note: "neuter noun: ein Glas",
           },
         ],
-        word_bank: ["Ein", "Glas", "Wasser", "bitte"],
-        explanation: "In German, 'a glass of water' drops the preposition: 'Ein Glas Wasser'. 'bitte' comes from bitten (to bid / request).",
+        word_bank: ["Ein", "Glas", "Wasser", "bitte", "Besser", "und"],
+        explanation: "Measure phrase without 'of', the T → SS receipt on Wasser, and bitte to close — your first café order, built from a thought.",
       },
     ],
     summary: {
@@ -566,6 +620,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Ein Glas Wasser, bitte.", english: "A glass of water, please." },
       takeaway: "English 't' regularly maps to German 'ss', 's', or 'z'.",
       curiosity_teaser: "Next: the tw → zw openers — zwei, Zwilling, Zwerg: the /ts/ costume party of the z-letter.",
+    },
+    twist: {
+      prompt: "Same order, but you're thirsty times two: a glass of water becomes two glasses of water. (German measure words don't take a plural ending.)",
+      target_answer: "Zwei Glas Wasser bitte",
+      word_bank: ["Zwei", "Glas", "Gläser", "Wasser", "bitte"],
+      explanation: "After a number the measure word stays bare: zwei Glas Wasser — Gläser, the true plural, waits for other jobs. Friction on purpose: this exact slip is common and harmless.",
     },
   },
   {
@@ -610,6 +670,7 @@ export const LESSONS: Lesson[] = [
         target_answer: "kochen",
         meaning: "to cook",
         shift_hint: "K → CH",
+        affirmation: "You melted the k into ch and hung the -en — cook is kochen, audible in your throat now.",
         explanation: "Stem 'koch-' (medial K shifted to CH after back vowel 'o') + infinitive suffix '-en' = kochen.",
       },
       {
@@ -625,6 +686,7 @@ export const LESSONS: Lesson[] = [
         target_answer: "suchen, sprechen, Buch, Milch",
         meaning: "to seek, to speak, book, milk",
         shift_hint: "K → CH",
+        affirmation: "Four k-words melted on sight — the throat-sound is becoming a reflex.",
         explanation: "Medial and final English K regularly shifts to German CH ([x] after back vowels, [ç] after front vowels and consonants).",
       },
       {
@@ -639,6 +701,7 @@ export const LESSONS: Lesson[] = [
         ],
         target_answer: "Ach-Laut follows back vowels (u); Ich-Laut follows front vowels (ü)",
         meaning: "Phonetic distribution of Ach-Laut [x] vs Ich-Laut [ç]",
+        affirmation: "You split the two ch-sounds by vowel depth — that is native-level hearing.",
         explanation: "German CH is conditioned by tongue position: back vowels (a, o, u) trigger the velar Ach-Laut [x], while front vowels (e, i, ä, ö, ü) trigger the palatal Ich-Laut [ç].",
       },
       {
@@ -647,14 +710,21 @@ export const LESSONS: Lesson[] = [
         prompt: "Apply the K → CH shift: English 'to make' → German verb:",
         english_hint: "ma·k·e → ma·ch·en",
         shift_hint: "K → CH",
+        affirmation: "You heard make soften to machen — the ghost in the throat, found again.",
         target_answer: "machen",
         meaning: "to make / to do",
         explanation: "Voiceless stop K shifted to velar fricative CH + infinitive suffix -en.",
       },
       {
         id: "l6_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'What are you doing in the kitchen?'",
+        type: "transcribe",
+        prompt: "How would you say:",
+        idea: "you walk in on a friend cooking and ask what they're doing in the kitchen",
+        cues: [
+          "Ask with was: W-word first, verb in position 2 — was machst du",
+          "make → mach- (K → CH) + the thou-ending: machst",
+          "The kitchen carries the same shift: in der Küche",
+        ],
         target_answer: "Was machst du in der Küche",
         meaning: "What are you doing in the kitchen?",
         vocab_hints: [
@@ -662,8 +732,8 @@ export const LESSONS: Lesson[] = [
           { word: "machst", translation: "do / make (2nd person)", note: "K → CH shift: make ↔ mach + Shakespearean -st" },
           { word: "Küche", translation: "kitchen", note: "K → CH shift: kitchen ↔ Küche" },
         ],
-        word_bank: ["Was", "machst", "du", "in", "der", "Küche"],
-        explanation: "Question order: Question word (Was) + conjugated verb in position 2 (machst) + subject (du) + prepositional phrase.",
+        word_bank: ["Was", "machst", "du", "in", "der", "Küche", "kochst"],
+        explanation: "Question order: W-word, verb in position 2, subject, then the place — the frame you just built, from a thought.",
       },
     ],
     summary: {
@@ -671,6 +741,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Was machst du in der Küche?", english: "What are you doing in the kitchen?" },
       takeaway: "English 'k' after vowels systematically softens to German 'ch' ([x] after a/o/u, [ç] after e/i/ä/ö/ü).",
       curiosity_teaser: "Next: the kitchen & book set — Küche, Buch, Milch, suchen: and the seek/beseech proof that English ran this shift too.",
+    },
+    twist: {
+      prompt: "Same question, sharper nose: what are you COOKING in the kitchen? (Same shift, different root.)",
+      target_answer: "Was kochst du in der Küche",
+      word_bank: ["Was", "kochst", "machst", "du", "in", "der", "Küche"],
+      explanation: "machen → kochen, the same K → CH receipt: machst → kochst. The question frame doesn't move — only the root changes.",
     },
   },
   {
@@ -715,6 +791,7 @@ export const LESSONS: Lesson[] = [
         target_answer: "trinken",
         meaning: "to drink",
         shift_hint: "D → T",
+        affirmation: "You hardened the d into t and hung the -en — drink is trinken now.",
         explanation: "Initial D hardens to T: stem 'trink-' + infinitive ending '-en' = trinken.",
       },
       {
@@ -730,6 +807,7 @@ export const LESSONS: Lesson[] = [
         target_answer: "Tag, Tür, Tochter, Traum",
         meaning: "day, door, daughter, dream",
         shift_hint: "D → T",
+        affirmation: "Four d-words hardened on sight — Tag, Tür, Tochter, Traum: the domino, live.",
         explanation: "Where English preserved Germanic D, High German hardened it into T.",
       },
       {
@@ -744,6 +822,7 @@ export const LESSONS: Lesson[] = [
         ],
         target_answer: "D → T and P → F",
         meaning: "Double shift: deep ↔ tief",
+        affirmation: "You ran two shifts in one word — d to t, then p to f: deep became tief.",
         explanation: "Initial D hardened to T (deep → teep), and post-vocalic P shifted to F (teep → tief).",
       },
       {
@@ -752,14 +831,21 @@ export const LESSONS: Lesson[] = [
         prompt: "Apply the D → T shift: English 'cold' → German adjective:",
         english_hint: "col·d → kal·t",
         shift_hint: "D → T",
+        affirmation: "You hardened the final d to t — cold ends crisp, the way German likes it.",
         target_answer: "kalt",
         meaning: "cold",
         explanation: "Final D hardens to T, with vowel alignment: cold ↔ kalt.",
       },
       {
         id: "l7_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'Good day! I drink cold water'",
+        type: "transcribe",
+        prompt: "You want to say:",
+        idea: "you walk into a café at noon: you greet with good day, then say what you'll drink — cold water",
+        cues: [
+          "Greet first: Guten Tag — both words run D → T",
+          "Who drinks? → ich trinke (drink → trink-)",
+          "What? → kaltes Wasser: cold → kalt with the das-Wasser ending",
+        ],
         target_answer: "Guten Tag ich trinke kaltes Wasser",
         meaning: "Good day! I drink cold water",
         vocab_hints: [
@@ -767,8 +853,8 @@ export const LESSONS: Lesson[] = [
           { word: "trinke", translation: "drink (1st person)", note: "D → T shift: drink ↔ trink" },
           { word: "Wasser", translation: "water", note: "T → SS shift: water ↔ Wasser" },
         ],
-        word_bank: ["Guten", "Tag", "ich", "trinke", "kaltes", "Wasser"],
-        explanation: "Greeting formula 'Guten Tag' followed by subject + verb in position 2 + direct object.",
+        word_bank: ["Guten", "Tag", "ich", "trinke", "trinkst", "kaltes", "Wasser"],
+        explanation: "Greeting formula, then subject + verb in position 2 + object — a whole little scene, built from a thought.",
       },
     ],
     summary: {
@@ -776,6 +862,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Guten Tag! Ich trinke kaltes Wasser.", english: "Good day! I drink cold water." },
       takeaway: "English 'd' systematically corresponds to German 't' at the beginning, middle, and end of words.",
       curiosity_teaser: "Next: the double-shift detectives — deep becomes tief and daughter becomes Tochter: two rules at once.",
+    },
+    twist: {
+      prompt: "Same water, shared: I drink cold water becomes we drink cold water. (The verb ending goes back to the stem.)",
+      target_answer: "Wir trinken kaltes Wasser",
+      word_bank: ["Wir", "Trinken", "trinken", "trinke", "kaltes", "Wasser"],
+      explanation: "ich trinke → wir trinken: the ending returns to the bare stem's -en, the one the dictionary form wears. And kaltes Wasser doesn't budge.",
     },
   },
   {
@@ -863,8 +955,13 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l8_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'The computer does not work'",
+        type: "transcribe",
+        prompt: "Put into German:",
+        idea: "you're annoyed at the café: the computer doesn't work",
+        cues: [
+          "Der Computer is the subject; the -ieren verb takes position 2, conjugated: funktioniert (-ier stem + the er/sie/es -t)",
+          "Negation lands at the end: nicht — the no-thing word (not ↔ nicht: gh became ch)",
+        ],
         target_answer: "Der Computer funktioniert nicht",
         meaning: "The computer does not work",
         vocab_hints: [
@@ -872,8 +969,12 @@ export const LESSONS: Lesson[] = [
           { word: "funktioniert", translation: "functions / works", note: "Latinate verb stem funktion- + 3rd person -t" },
           { word: "nicht", translation: "not", note: "gh → ch shift: nought/not ↔ nicht" },
         ],
-        word_bank: ["Der", "Computer", "funktioniert", "nicht"],
-        explanation: "Subject (Der Computer) + verb in position 2 (funktioniert) + negation (nicht).",
+        word_bank: ["Der", "Computer", "funktioniert", "nicht", "funktionieren"],
+        explanation: "Subject, conjugated -ieren verb in position 2, nicht at the end — the Romance stamp never changes, only the personal ending does.",
+        diagnosis: {
+          slip: "the -ieren verb stayed in dictionary clothes",
+          cue: "Position 2 needs the conjugated form: funktioniert (-ier + the er/sie/es -t). The stamp -ieren is for the dictionary, not the sentence.",
+        },
       },
     ],
     summary: {
@@ -881,6 +982,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Der Computer funktioniert nicht.", english: "The computer does not work." },
       takeaway: "Romance loan verbs systematically end in '-ieren', carry suffix stress, and drop 'ge-' in the past participle.",
       curiosity_teaser: "Next: the -ieren verb builder — copy becomes kopieren, produce becomes produzieren: one stamp, five hundred verbs.",
+    },
+    twist: {
+      prompt: "Turn the -ieren verb on yourself: he studies → I study. What happens to the ending? (Careful — ich keeps an -e.)",
+      target_answer: "Ich studiere Deutsch",
+      word_bank: ["Ich", "studiere", "studiert", "Deutsch"],
+      explanation: "funktioniert was the er-form (-t); for ich it's studiere (-e). The Romance stamp -ieren never moves — only the personal ending does. And studieren takes its object bare: Ich studiere Deutsch.",
     },
   },
   {
@@ -967,16 +1074,25 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l9_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'You make coffee and we drink tea'",
+        type: "transcribe",
+        prompt: "Tell me:",
+        idea: "you're describing your household's morning split: you make the coffee and we drink the tea",
+        cues: [
+          "Endings do the work: du machst (thou makest), wir trinken (we drinken)",
+          "und joins two full clauses — each verb holds its own position 2",
+        ],
         target_answer: "Du machst Kaffee und wir trinken Tee",
         meaning: "You make coffee and we drink tea",
         vocab_hints: [
           { word: "machst", translation: "make (du form)", note: "mach + st (thou makest)" },
           { word: "trinken", translation: "drink (wir form)", note: "trink + en (we drinken)" },
         ],
-        word_bank: ["Du", "machst", "Kaffee", "und", "wir", "trinken", "Tee"],
-        explanation: "Subject + conjugated verb: 'Du machst...' + coordinating conjunction 'und' + 'wir trinken...' (both verbs in position 2 of their clauses).",
+        word_bank: ["Du", "machst", "Kaffee", "und", "wir", "trinken", "Tee", "trinkst"],
+        explanation: "Subject + conjugated verb, twice over: the endings carry the persons across both clauses.",
+        diagnosis: {
+          slip: "the thou-ending dropped off",
+          cue: "du keeps the Shakespearean -st: du machst (thou makest), du trinkst (thou drinkest). English only dropped it in the 1600s — German never did.",
+        },
       },
     ],
     summary: {
@@ -984,6 +1100,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Du machst Kaffee und wir trinken Tee.", english: "You make coffee and we drink tea." },
       takeaway: "German present tense endings directly preserve the ancestral English system: ich -e, du -st, er -t, wir -en.",
       curiosity_teaser: "Next: the stem hunters — strip -en at speed and rebuild every person of a verb from its stem.",
+    },
+    twist: {
+      prompt: "Same morning, but she joined the household: we drink tea becomes she drinks tea. (One ending decides it.)",
+      target_answer: "sie trinkt Tee",
+      word_bank: ["sie", "trinkt", "trinken", "Tee"],
+      explanation: "wir trinken → sie trinkt: the -en plural collapses to the 3rd-person -t you met in this lesson (er/sie/es takes -t). Small ending, whole different person.",
     },
   },
   {
@@ -1071,16 +1193,21 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l10_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I am drinking a coffee and looking for him'",
+        type: "transcribe",
+        prompt: "How would you say:",
+        idea: "you're at a café table, people-watching: you're drinking a coffee and looking for him",
+        cues: [
+          "Coffee is masculine and acted-on: ein → einen — the Him-Case on the article",
+          "The pronoun follows the same law: er → ihn (suchen needs no preposition — the 'for' is baked in)",
+        ],
         target_answer: "Ich trinke einen Kaffee und suche ihn",
         meaning: "I am drinking a coffee and looking for him",
         vocab_hints: [
           { word: "einen", translation: "a (masculine direct object)", note: "Kaffee is masculine: ein → einen" },
           { word: "ihn", translation: "him (direct object)", note: "direct cognate of English 'him' (er → ihn)" },
         ],
-        word_bank: ["Ich", "trinke", "einen", "Kaffee", "und", "suche", "ihn"],
-        explanation: "Two clauses sharing subject 'Ich': 'trinke einen Kaffee' (accusative article) + 'suche ihn' (accusative pronoun).",
+        word_bank: ["Ich", "trinke", "einen", "Kaffee", "und", "suche", "ihn", "er"],
+        explanation: "Two clauses, one subject — and the masculine accusative shows twice: einen Kaffee, ihn. Him-case everywhere.",
       },
     ],
     summary: {
@@ -1088,6 +1215,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Ich trinke einen Kaffee und suche ihn.", english: "I drink a coffee and look for it." },
       takeaway: "Only masculine singular changes in the accusative: der → den, ein → einen, and er → ihn (the 'Him-Case').",
       curiosity_teaser: "Next: the den / einen / ihn case gym — the him-case drilled with real objects: trinke einen Kaffee, suche ihn.",
+    },
+    twist: {
+      prompt: "Same mouth, different order: I drink a coffee becomes I drink THE tea. (Careful — still masculine, still acted-on.)",
+      target_answer: "Ich trinke den Tee",
+      word_bank: ["Ich", "trinke", "den", "Tee", "einen", "das"],
+      explanation: "Tee is masculine too, so the Him-Case holds: der → den. Only the masculine article bends — feminine and neuter objects would have refused to change.",
     },
   },
   {
@@ -1120,6 +1253,7 @@ export const LESSONS: Lesson[] = [
         {
           marker: "2",
           title: "Brot Is 'the Brewed Thing'",
+          interest: true,
           content:
             "Brot traces to Proto-Germanic *braudą — originally 'the fermented, risen thing', kin to the verb brew (German brauen). Bread and brew are branches of the same ancient root; bread was named after its foam.",
         },
@@ -1421,6 +1555,7 @@ export const LESSONS: Lesson[] = [
         {
           marker: "1",
           title: "The World as Will",
+          interest: true,
           content:
             "Schopenhauer titled his masterwork Die Welt als Wille und Vorstellung (1818) — 'The World as Will and Representation'. German philosophers could pick 'Wille' precisely because the word still meant raw wanting, the meaning English buried under its future tense.",
         },
@@ -1489,12 +1624,18 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l201_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'We want to learn German'",
+        type: "transcribe",
+        prompt: "How would you say:",
+        idea: "you and your friend are declaring a shared goal: you both want to learn German",
+        cues: [
+          "Who wants? → wir, so the modal takes -en: wir wollen",
+          "What? → Deutsch",
+          "The bare infinitive closes the bracket: lernen goes last",
+        ],
         target_answer: "Wir wollen Deutsch lernen",
         meaning: "We want to learn German",
-        word_bank: ["Wir", "wollen", "Deutsch", "lernen"],
-        explanation: "Modal 'wollen' opens in position 2; the bare infinitive 'lernen' closes the bracket — no zu needed.",
+        word_bank: ["Wir", "wollen", "willst", "Deutsch", "lernen", "lernt"],
+        explanation: "wollen agrees with wir (-en) and the bare infinitive closes the bracket — desire travels bare, no zu.",
       },
     ],
     summary: {
@@ -1529,7 +1670,7 @@ export const LESSONS: Lesson[] = [
     pattern: {
       title: "Build the Bracket",
       content:
-        "Slot 1 is the subject, slot 2 the conjugated modal, then the contents, then the bare infinitive slams shut at the end: Ich kann morgen wandern. Wir wollen heute singen. Ich muss lernen. Du kannst folgen. Nothing else in the sentence may leave the bracket — time words like morgen (twin of 'morrow', the word inside to-morrow) and heute (today) ride inside it, usually right after the verb. The frame never breaks: no matter how full the middle gets, the infinitive waits at the caboose.",
+        "Slot 1 is the subject, slot 2 the conjugated modal, then the contents, then the bare infinitive slams shut at the end: Ich kann morgen wandern. Wir wollen heute singen. Ich muss lernen. Du kannst folgen. Nothing else in the sentence may leave the bracket — time words like morgen (twin of 'morrow', the word inside to-morrow) and heute (today) ride inside it, usually right after the verb. The frame never breaks: no matter how full the middle gets, the infinitive waits at the caboose.\n\nOne Denglisch ladder, read it the German way first: Ich kann morgen kommen → I can tomorrow come → I can come tomorrow. The odd middle line is exact German — modal in position 2, contents inside, bare infinitive at the caboose — and Old English allowed every word of it.",
       footnotes: [],
       linguist_note:
         "English did this too — archaic 'I can go' survives, but Middle English also allowed 'I can the road go' patterns; modern English lost the bracket by fusing modals with a to-infinitive. German kept the original Germanic frame intact.",
@@ -1582,8 +1723,14 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l202_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I want to learn German tomorrow'",
+        type: "transcribe",
+        prompt: "Tell me:",
+        idea: "you're telling me what you want to do tomorrow: learn German",
+        cues: [
+          "Who wants? → ich will (will = want, never the future)",
+          "What? → Deutsch",
+          "The bare infinitive closes the bracket: lernen goes last",
+        ],
         target_answer: "Ich will morgen Deutsch lernen",
         meaning: "I want to learn German tomorrow",
         vocab_hints: [
@@ -1593,8 +1740,8 @@ export const LESSONS: Lesson[] = [
             note: "twin of 'morrow' — the word hiding inside to-morrow",
           },
         ],
-        word_bank: ["Ich", "will", "morgen", "Deutsch", "lernen"],
-        explanation: "Modal 'will' opens, the contents ride inside, and the bare infinitive 'lernen' closes the bracket.",
+        word_bank: ["Ich", "will", "morgen", "Deutsch", "lernen", "lernst", "lerne"],
+        explanation: "Modal opens position 2, the bare infinitive closes the bracket — the Satzklammer you met in this topic.",
       },
     ],
     summary: {
@@ -1700,8 +1847,14 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l301_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'A pound of pepper please'",
+        type: "transcribe",
+        prompt: "Tell me:",
+        idea: "you're at the market stall asking for a quantity: a pound of pepper, please",
+        cues: [
+          "English p explodes to Pf- at the front door: pound → Pfund, pepper → Pfeffer",
+          "German drops the 'of' in measure phrases: ein Pfund Pfeffer",
+          "Seal it with 'please': bitte — the cognate of English 'bid'",
+        ],
         target_answer: "Ein Pfund Pfeffer bitte",
         meaning: "A pound of pepper please",
         vocab_hints: [
@@ -1711,8 +1864,8 @@ export const LESSONS: Lesson[] = [
             note: "cognate with English 'bid' — literally '[I] bid/request it'",
           },
         ],
-        word_bank: ["Ein", "Pfund", "Pfeffer", "bitte"],
-        explanation: "German drops the preposition in measure phrases: 'a pound of pepper' = 'ein Pfund Pfeffer'.",
+        word_bank: ["Ein", "Pfund", "Pfeffer", "bitte", "Pfanne", "und"],
+        explanation: "Measure phrase without 'of', PF- receipts on both nouns, and bitte to close — you just ordered at a German market.",
       },
     ],
     summary: {
@@ -1803,8 +1956,14 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l302_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I hope you sleep'",
+        type: "transcribe",
+        prompt: "How would you say:",
+        idea: "it's late and your friend is still up, so you tell her: I hope you sleep",
+        cues: [
+          "Who hopes? → ich hoffe (your P → FF verb, working ending and all)",
+          "Who sleeps? → du schläfst — schlaf- + the thou-ending -st",
+          "Sleep is the p-shift word: English sleep → schlafen, here in its du form",
+        ],
         target_answer: "Ich hoffe du schläfst",
         meaning: "I hope you sleep",
         vocab_hints: [
@@ -1814,8 +1973,8 @@ export const LESSONS: Lesson[] = [
             note: "stem schlaf- + the Shakespearean -st (thou sleepest); the ä is the du-vowel change",
           },
         ],
-        word_bank: ["Ich", "hoffe", "du", "schläfst"],
-        explanation: "'Ich hoffe' + 'du schläfst' — the p-shift verb gets the ancient thou-ending.",
+        word_bank: ["Ich", "hoffe", "du", "schläfst", "schlafen", "hoffst"],
+        explanation: "'Ich hoffe' + 'du schläfst' — the p-shift verb takes the ancient thou-ending: thou sleepest → du schläfst.",
       },
     ],
     summary: {
@@ -1842,6 +2001,7 @@ export const LESSONS: Lesson[] = [
         {
           marker: "1",
           title: "The Reindeer Spell It Out",
+          interest: true,
           content:
             "Santa's reindeer 'Donner and Blitzen' are simply Thunder and Lightning — the German words, kept alive in English pop culture since the 1823 poem. Donnerstag means Thunder-day; Blitzen means lightning.",
         },
@@ -1904,8 +2064,14 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l401_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I thank thee'",
+        type: "transcribe",
+        prompt: "You want to say:",
+        idea: "someone just helped you, and you want to thank them personally: I thank thee",
+        cues: [
+          "Who thanks? → ich danke (thank with TH → D)",
+          "German thanks TO a person: danke + dir",
+          "dir is the 'to thee' form of du — the thanks travel TO someone",
+        ],
         target_answer: "Ich danke dir",
         meaning: "I thank thee / I thank you",
         vocab_hints: [
@@ -1915,8 +2081,8 @@ export const LESSONS: Lesson[] = [
             note: "danke gives the gift TO someone — dir is the 'to thee' form of du (as in 'I give it thee')",
           },
         ],
-        word_bank: ["Ich", "danke", "dir"],
-        explanation: "German thanks TO a person: ich danke dir — the same dative logic as archaic English 'I give it thee'.",
+        word_bank: ["Ich", "danke", "dir", "dich", "dank"],
+        explanation: "ich danke dir — German thanks TO a person, the same dative logic as archaic English 'I give it thee'.",
       },
     ],
     summary: {
@@ -2000,8 +2166,14 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l402_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'The thing is thin'",
+        type: "transcribe",
+        prompt: "Put into German:",
+        idea: "you're describing a skinny thing to a friend: the thing is thin",
+        cues: [
+          "Both words carry the shift: thing → Ding, thin → dünn (TH → D, twice in one sentence)",
+          "The thing is neuter: das Ding",
+          "After ist the adjective stays bare and goes last: das Ding ist dünn",
+        ],
         target_answer: "Das Ding ist dünn",
         meaning: "The thing is thin",
         vocab_hints: [
@@ -2011,8 +2183,8 @@ export const LESSONS: Lesson[] = [
             note: "das Ding — neuter, like English 'the thing'",
           },
         ],
-        word_bank: ["Das", "Ding", "ist", "dünn"],
-        explanation: "Two TH→D words in one sentence: das Ding and dünn — both hardened from English th.",
+        word_bank: ["Das", "Ding", "ist", "dünn", "dick", "Dorn"],
+        explanation: "Two TH→D words in one sentence, built from your own thought: das Ding and dünn.",
       },
     ],
     summary: {
@@ -3299,12 +3471,17 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l11_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'That is my house'",
+        type: "transcribe",
+        prompt: "Put into German:",
+        idea: "you're showing someone around your street: point at it and say that is my house",
+        cues: [
+          "Every word is a twin: das ↔ that, ist ↔ is, mein ↔ mine",
+          "Pointing word first, verb second, then what's yours: Das ist mein Haus",
+        ],
         target_answer: "Das ist mein Haus",
         meaning: "That is my house",
-        word_bank: ["Das", "ist", "mein", "Haus"],
-        explanation: "Every word is a twin: das ↔ that, ist ↔ is, mein ↔ mine, Haus ↔ house. One sentence, four cognates.",
+        word_bank: ["Das", "ist", "mein", "Haus", "meine"],
+        explanation: "One sentence, four cognates — the demonstrative system you already spoke in King James English.",
       },
     ],
     summary: {
@@ -3312,6 +3489,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Das ist mein Haus.", english: "That is my house." },
       takeaway: "der/die/das and the/that/this are one demonstrative system; ein, kein, mein, dein decline as one family.",
       curiosity_teaser: "Next: the article gym — twenty nouns, three colors: rapid der/die/das reps with every table noun.",
+    },
+    twist: {
+      prompt: "Same grid, new job — negate the noun: I have no time. (kein declines exactly like ein.)",
+      target_answer: "Ich habe keine Zeit",
+      word_bank: ["Ich", "habe", "keine", "kein", "Zeit", "nicht"],
+      explanation: "Zeit is feminine, so kein wears its feminine dress: keine. nicht is for verbs — nouns get the 'not one' word. You just negated without a not.",
     },
   },
   {
@@ -3339,7 +3522,7 @@ export const LESSONS: Lesson[] = [
     pattern: {
       title: "kein for Nouns, nicht for Verbs",
       content:
-        "Negating a noun? Use kein, declined exactly like ein: Ich habe kein Haus (I have no house), keine Zeit (no time), keinen Kaffee (not a coffee — the Him-Case again!). Negating a verb or adjective? Use nicht: Ich kann nicht kommen (I cannot come), Das ist nicht gut (that is not good). Placement: nicht usually lands at the end of simple clauses, right where the action dies. Ich weiß es nicht — I know it not: three words, one of them the twin of wise (weiß), one the twin of it (es).",
+        "Negating a noun? Use kein, declined exactly like ein: Ich habe kein Haus (I have no house), keine Zeit (no time), keinen Kaffee (not a coffee — the Him-Case again!). Negating a verb or adjective? Use nicht: Ich kann nicht kommen (I cannot come), Das ist nicht gut (that is not good). Placement: nicht usually lands at the end of simple clauses, right where the action dies. Ich weiß es nicht — I know it not: three words, one of them the twin of wise (weiß), one the twin of it (es).\n\nOne Denglisch ladder, read it the German way first: Ich will nicht gehen → I want not to go → I don't want to go. The odd middle line is the lesson: nicht sits right before the bare infinitive, exactly where English 'not' sat before want and will merged and English shipped its 'not' forward.",
       footnotes: [],
       linguist_note:
         "kein ← nekein ← ni + ein ('not one') is the exact parallel of English none ← 'not one'. The languages negated possession with the same arithmetic — and German never let the word shrink.",
@@ -3370,11 +3553,14 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l12_e3",
-        type: "reverse_cognate",
-        prompt: "First person 'ich weiß' — what English word is the twin of 'wissen'?",
-        target_answer: "wise",
-        meaning: "wise (twin of German wissen)",
-        explanation: "wissen carries the same root as wise and wit — 'to know' was 'to be wise'. ich weiß = I know.",
+        type: "literal_gloss",
+        prompt: "Which English is built the German way?",
+        german: "Ich will nicht gehen.",
+        natural: "I don't want to go.",
+        options: ["I don't want to go.", "I want not to go.", "Not I want to go."],
+        target_answer: "I want not to go.",
+        meaning: "I don't want to go.",
+        explanation: "nicht negates what follows it and sits right before the bare infinitive — English merged want/will and moved its 'not'; German kept the ancient seat.",
       },
       {
         id: "l12_e4",
@@ -3387,8 +3573,13 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l12_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I do not know it'",
+        type: "transcribe",
+        prompt: "You want to say:",
+        idea: "the question was about it — the thing, the plan, whatever it was — and your honest answer: you do not know it",
+        cues: [
+          "Know is wissen → ich weiß (the wise twin, sharp ß and all)",
+          "nicht kills the verb and lands where the action dies: at the very end",
+        ],
         target_answer: "Ich weiß es nicht",
         meaning: "I do not know it",
         vocab_hints: [
@@ -3403,8 +3594,12 @@ export const LESSONS: Lesson[] = [
             note: "from wissen — the same root as wise; the ß is the sharp S of the T→SS shift",
           },
         ],
-        word_bank: ["Ich", "weiß", "es", "nicht"],
+        word_bank: ["Ich", "weiß", "es", "nicht", "kein", "weise"],
         explanation: "nicht lands at the end where the action dies: 'Ich weiß es nicht' — I know it not.",
+        diagnosis: {
+          slip: "nicht drifted to the English seat",
+          cue: "English merged want/will and shipped its 'not' forward; German kept the ancient seat — nicht goes where the action dies, at the end: Ich weiß es nicht.",
+        },
       },
     ],
     summary: {
@@ -3412,6 +3607,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Ich weiß es nicht.", english: "I do not know it." },
       takeaway: "Nouns take kein ('not one'), verbs and adjectives take nicht ('no-thing') — the two negations English merged into one not.",
       curiosity_teaser: "Next: the kein vs nicht choice gym — twenty prompts naming which no-thing kills the noun and which kills the verb.",
+    },
+    twist: {
+      prompt: "Now kill the verb: I can come tomorrow becomes I cannot come tomorrow. (nicht's seat: right before the bare infinitive.)",
+      target_answer: "Ich kann morgen nicht kommen",
+      word_bank: ["Ich", "kann", "morgen", "nicht", "kommen", "kein"],
+      explanation: "nicht negates what follows it, so it sits right before the bare infinitive — inside the bracket, after morgen. Word for word: 'I can tomorrow not come.'",
     },
   },
   {
@@ -3431,6 +3632,7 @@ export const LESSONS: Lesson[] = [
         {
           marker: "1",
           title: "Romeo Spoke German",
+          interest: true,
           content:
             "warum is the structural twin of wherefore — wo (where) + um (for), 'for-what', exactly as wherefore is 'for-what'. Juliet's 'Wherefore art thou Romeo?' asks WHY, not where — and warum asks the same question the same way.",
         },
@@ -3439,7 +3641,7 @@ export const LESSONS: Lesson[] = [
     pattern: {
       title: "The W-Grid and the Verb-First Flip",
       content:
-        "The grid: was ↔ what, wo ↔ where, wer ↔ who, wann ↔ when, wie ↔ how (its root is why's — English split one ancient word into how and why; German's wie covers the how-job, warum the why-job), wohin ↔ whither (wo + hin, 'to where'). Questions build two ways: W-questions start with the W-word and keep the verb second — Wo ist der Kaffee? Wann kommst du? Yes/no questions flip the verb in front of the subject — Kommst du? Weißt du das? ist er da? No do, no auxiliary, just the ancient flip.",
+        "The grid: was ↔ what, wo ↔ where, wer ↔ who, wann ↔ when, wie ↔ how (its root is why's — English split one ancient word into how and why; German's wie covers the how-job, warum the why-job), wohin ↔ whither (wo + hin, 'to where'). Questions build two ways: W-questions start with the W-word and keep the verb second — Wo ist der Kaffee? Wann kommst du? Yes/no questions flip the verb in front of the subject — Kommst du? Weißt du das? ist er da? No do, no auxiliary, just the ancient flip.\n\nOne Denglisch ladder, read it the German way first: Weißt du das? → Know you that? → Do you know that? The middle line is word-for-word German — verb flipped, no helper — and it was ordinary English not so long ago.",
       footnotes: [],
       linguist_note:
         "English used to flip verbs too: 'Knowest thou?', 'Sawest thou him?' The do-support ('Do you know?') only spread in Early Modern English. German questions are the older machinery, still running.",
@@ -3470,12 +3672,24 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l13_e3",
-        type: "derive",
-        prompt: "Flip the verb: 'du kommst' as a yes/no question →",
-        english_hint: "verb first, like 'Knowest thou?'",
-        target_answer: "Kommst du",
-        meaning: "Kommst du? = Do you come? / Are you coming?",
-        explanation: "Swap subject and verb — no do-support needed: Kommst du? is 'Comest thou?' in modern dress.",
+        type: "transcribe",
+        prompt: "How would you say:",
+        idea: "your friend said they might visit — ask it straight out: are you coming tomorrow?",
+        cues: [
+          "Yes/no questions flip the verb in front: kommst, then du",
+          "Add the time word at the end: morgen",
+        ],
+        target_answer: "Kommst du morgen",
+        meaning: "Are you coming tomorrow?",
+        vocab_hints: [
+          {
+            word: "morgen",
+            translation: "tomorrow",
+            note: "twin of 'morrow' — the word hiding inside to-morrow",
+          },
+        ],
+        word_bank: ["Kommst", "du", "morgen", "kommen", "Du"],
+        explanation: "The verb takes position 1 and the subject falls in behind — no do, no helper: 'Comest thou tomorrow?' in modern dress.",
       },
       {
         id: "l13_e4",
@@ -3487,12 +3701,14 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l13_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'Where is the coffee?'",
-        target_answer: "Wo ist der Kaffee",
-        meaning: "Where is the coffee?",
-        word_bank: ["Wo", "ist", "der", "Kaffee"],
-        explanation: "W-word first, verb second, subject third: 'Wo ist der Kaffee?' — the W-question frame.",
+        type: "literal_gloss",
+        prompt: "Which English is built the German way?",
+        german: "Wann kommst du?",
+        natural: "When are you coming?",
+        options: ["When are you coming?", "When come you?", "When you come?"],
+        target_answer: "When come you?",
+        meaning: "When are you coming?",
+        explanation: "'When come you?' is the German way: the verb flips in front of du, no helper needed. Modern English inserted do instead; German kept the ancient flip — 'Knowest thou?' was still good English in Shakespeare's day.",
       },
     ],
     summary: {
@@ -3500,6 +3716,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Wo ist der Kaffee?", english: "Where is the coffee?" },
       takeaway: "The W-words are your W-words with the h shaved off — and German questions flip the verb like 'Knowest thou?'",
       curiosity_teaser: "Next: the w-word cognate set — all eight w-words matched to their English twins, wer≠where trap included.",
+    },
+    twist: {
+      prompt: "Same words, but now ask it: 'You know it.' Put the question into German — no do, just the flip.",
+      target_answer: "Weißt du es",
+      word_bank: ["Weißt", "du", "es", "wissen"],
+      explanation: "The verb takes position 1 and du falls in behind it — the ancient flip ('Knowest thou?'). The -st ending holds: weißt, like thou knowest.",
     },
   },
   {
@@ -3527,7 +3749,7 @@ export const LESSONS: Lesson[] = [
     pattern: {
       title: "Position 2, Then the Basement",
       content:
-        "Main clause law: verb in position 2, no matter what fronts it — Morgen komme ich (Tomorrow, I come). Subordinate law: after weil, dass, wenn, the verb goes to the basement, the very last slot — Ich weiß, dass du Deutsch lernst. Ich lerne, weil ich will. Combine with your modal bracket and nothing new appears: Ich kann nicht kommen, weil ich arbeiten muss — a bracket inside a basement; the trapped verb muss waits at the very end.",
+        "Main clause law: verb in position 2, no matter what fronts it — Morgen komme ich (Tomorrow, I come). Subordinate law: after weil, dass, wenn, the verb goes to the basement, the very last slot — Ich weiß, dass du Deutsch lernst. Ich lerne, weil ich will. Combine with your modal bracket and nothing new appears: Ich kann nicht kommen, weil ich arbeiten muss — a bracket inside a basement; the trapped verb muss waits at the very end.\n\nOne Denglisch ladder, read it the German way first: Ich kann nicht kommen, weil ich arbeiten muss → I can not come, because I must work → I can't come because I have to. Odd in English, exact in German — and Old English agreed with German about where the trapped verb waits.",
       footnotes: [],
       linguist_note:
         "dass ↔ that is a doublet of das: Proto-Germanic *þat. The spelling difference (das/dass) is a purely German orthographic convention — the two were one word in Old High German (daȥ) as in Old English (þæt).",
@@ -3549,17 +3771,14 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l14_e2",
-        type: "shift_select",
-        prompt: "In 'Ich weiß, dass du kommst', why does 'kommst' sit at the very end?",
-        options: [
-          "Subordinate clauses park the verb in final position",
-          "kommst is a question word",
-          "German sentences always end with verbs",
-          "dass forces the verb into position 2",
-        ],
-        target_answer: "Subordinate clauses park the verb in final position",
-        meaning: "The verb-final law of weil/dass clauses",
-        explanation: "After dass, weil, wenn — the conjugated verb waits in the basement. Old English did the same.",
+        type: "literal_gloss",
+        prompt: "Which English is built the German way?",
+        german: "Ich weiß, dass du Deutsch lernst.",
+        natural: "I know that you are learning German.",
+        options: ["I know that you are learning German.", "I know that you German learn.", "I know that learn you German."],
+        target_answer: "I know that you German learn.",
+        meaning: "I know that you are learning German.",
+        explanation: "Read it the German way first: 'I know that you German learn.' dass slams the conjugated verb to the end of its clause — Old English's own habit, which German never gave up. The third option over-flips: only the subclause verb waits, never the main one.",
       },
       {
         id: "l14_e3",
@@ -3580,8 +3799,13 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l14_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I know that you are learning German'",
+        type: "transcribe",
+        prompt: "Put into German:",
+        idea: "your friend asks what you know about their progress — you know one thing for sure: they are learning German. Say it with that.",
+        cues: [
+          "Main clause first: Ich weiß — verb in position 2",
+          "dass opens the basement: du, Deutsch, and lernst waits at the very end",
+        ],
         target_answer: "Ich weiß dass du Deutsch lernst",
         meaning: "I know that you are learning German",
         vocab_hints: [
@@ -3591,8 +3815,12 @@ export const LESSONS: Lesson[] = [
             note: "the exact twin of English that — and it sends the verb to the end",
           },
         ],
-        word_bank: ["Ich", "weiß", "dass", "du", "Deutsch", "lernst"],
-        explanation: "Main clause verb (weiß) in position 2; after dass, the subclause verb (lernst) waits at the very end.",
+        word_bank: ["Ich", "weiß", "dass", "du", "Deutsch", "lernst", "lernen", "lerne"],
+        explanation: "Main clause verb (weiß) in position 2; after dass, the subclause verb (lernst) waits in the basement — Old English's own habit.",
+        diagnosis: {
+          slip: "the subclause verb stayed upstairs",
+          cue: "dass slams the conjugated verb to the end of its clause — du Deutsch lernst, not 'dass du lernst Deutsch'. The basement is the law.",
+        },
       },
     ],
     summary: {
@@ -3600,6 +3828,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Ich weiß, dass du Deutsch lernst.", english: "I know that you are learning German." },
       takeaway: "Verb in position 2 in main clauses; after weil and dass it waits in the basement — Old English's own habit.",
       curiosity_teaser: "Next: the verb-second bootcamp — front adverbs and objects while the verb stays glued to position 2.",
+    },
+    twist: {
+      prompt: "Basement check: fold 'I come tomorrow' into the basement — she knows it: she knows that I come tomorrow.",
+      target_answer: "Sie weiß dass ich morgen komme",
+      word_bank: ["Sie", "weiß", "dass", "ich", "morgen", "komme", "kommst"],
+      explanation: "Two clauses, two laws: weiß holds position 2 in the main clause; after dass, komme sinks to the basement's last slot. The person changed — the architecture didn't.",
     },
   },
   {
@@ -3627,7 +3861,7 @@ export const LESSONS: Lesson[] = [
     pattern: {
       title: "The Prefix Flight Path",
       content:
-        "Dictionary form: aufwachen, zurückkommen, mitnehmen, aufstehen. In a sentence the conjugated root takes position 2 and the prefix flies to the very end: Ich wache früh auf (I wake up early). Wir kommen um acht zurück (We come back at eight). Ich nehme das Essen mit (I take the food along). In a modal bracket the verb stays whole: Ich will früh aufstehen — the trapped infinitive keeps its prefix, and the bracket swallows both parts. Du siehst gut aus — you look good (literally 'out': you look well-out!).",
+        "Dictionary form: aufwachen, zurückkommen, mitnehmen, aufstehen. In a sentence the conjugated root takes position 2 and the prefix flies to the very end: Ich wache früh auf (I wake up early). Wir kommen um acht zurück (We come back at eight). Ich nehme das Essen mit (I take the food along). In a modal bracket the verb stays whole: Ich will früh aufstehen — the trapped infinitive keeps its prefix, and the bracket swallows both parts. Du siehst gut aus — you look good (literally 'out': you look well-out!).\n\nOne Denglisch ladder, read it the German way first: Ich mache das Fenster auf → I open the window on → I'm opening the window. The middle line is word-for-word German — the particle lands last, exactly where English phrasal verbs say it out loud.",
       footnotes: [],
       linguist_note:
         "English used to allow this too: 'up' could follow or lead (he rose up / up he rose). The German pattern is the same spatial logic — direction first in the dictionary, direction last in the sentence.",
@@ -3649,17 +3883,14 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l15_e2",
-        type: "shift_select",
-        prompt: "In 'Ich mache das Fenster auf' (I open the window), where does 'auf' land?",
-        options: [
-          "At the very end — the prefix flies to the sentence end",
-          "Right after mache",
-          "In position 1",
-          "It disappears — only machen remains",
-        ],
-        target_answer: "At the very end — the prefix flies to the sentence end",
-        meaning: "The prefix flight path: verb in position 2, prefix at the end",
-        explanation: "aufmachen splits: the root machen sits in position 2, the prefix auf closes the sentence like a bracket.",
+        type: "literal_gloss",
+        prompt: "Which English is built the German way?",
+        german: "Ich mache das Fenster auf.",
+        natural: "I'm opening the window.",
+        options: ["I'm opening the window.", "I open the window on.", "On I open the window."],
+        target_answer: "I open the window on.",
+        meaning: "I'm opening the window.",
+        explanation: "Read it the German way: 'I open the window on.' The prefix auf flies to the sentence end — the exact seat where English phrasal verbs park their particles ('wake up', 'give up'), except German does it in writing, every time.",
       },
       {
         id: "l15_e3",
@@ -3680,8 +3911,13 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l15_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I want to get up early'",
+        type: "transcribe",
+        prompt: "Tell me:",
+        idea: "you're telling your household your plan for tomorrow: you want to get up early",
+        cues: [
+          "Modal opens position 2: ich will",
+          "Inside the bracket the separable verb stays whole: früh aufstehen — prefix included",
+        ],
         target_answer: "Ich will früh aufstehen",
         meaning: "I want to get up early",
         vocab_hints: [
@@ -3691,8 +3927,12 @@ export const LESSONS: Lesson[] = [
             note: "no English twin — just learn it with the phrase 'früh aufstehen'",
           },
         ],
-        word_bank: ["Ich", "will", "früh", "aufstehen"],
+        word_bank: ["Ich", "will", "früh", "aufstehen", "stehe", "auf"],
         explanation: "Inside the modal bracket the separable verb stays whole: will opens, aufstehen closes — prefix included.",
+        diagnosis: {
+          slip: "the prefix got left behind",
+          cue: "Inside the modal bracket the separable verb stays whole: aufstehen closes it, prefix included. The prefix only flies when the verb runs the sentence alone.",
+        },
       },
     ],
     summary: {
@@ -3700,6 +3940,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Ich will früh aufstehen.", english: "I want to get up early." },
       takeaway: "Separable prefixes are your phrasal particles: auf = up, zurück = back, mit = along — stressed up front, flown to the end.",
       curiosity_teaser: "Next: the phrasal verb mirrors — fifteen separable verbs matched to the phrasal verbs you already own.",
+    },
+    twist: {
+      prompt: "Same plan, but it's happening now: I want to get up early → I get up early. (Watch the prefix fly.)",
+      target_answer: "Ich stehe früh auf",
+      word_bank: ["Ich", "stehe", "steht", "früh", "auf", "aufstehen"],
+      explanation: "Without the modal the bracket splits: stehe holds position 2 and the prefix auf flies to the caboose — the flight path this topic named. Inside a modal bracket it would have stayed whole.",
     },
   },
   {
@@ -3775,12 +4021,21 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l16_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I have forgotten it'",
+        type: "transcribe",
+        prompt: "How would you say:",
+        idea: "someone asked you to bring the thing, and you have to confess: you have forgotten it",
+        cues: [
+          "haben opens the Perfekt bracket: ich habe",
+          "Inseparable verbs never take ge-: vergessen closes the bracket, prefix welded on",
+        ],
         target_answer: "Ich habe es vergessen",
         meaning: "I have forgotten it",
-        word_bank: ["Ich", "habe", "es", "vergessen"],
+        word_bank: ["Ich", "habe", "es", "vergessen", "gegessen"],
         explanation: "Perfekt bracket with an inseparable verb: 'habe' opens, 'vergessen' closes — no ge- anywhere.",
+        diagnosis: {
+          slip: "ge- crashed the inseparable party",
+          cue: "ver- is welded on — vergessen, never 'gevergessen'. The no-ge- law: inseparables and -ieren verbs skip the prefix.",
+        },
       },
     ],
     summary: {
@@ -3788,6 +4043,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Ich habe es vergessen.", english: "I have forgotten it." },
       takeaway: "ver- = for- (vergessen/forget, verlieren/forlorn), be- and er- reshape meaning — and inseparables never take ge-.",
       curiosity_teaser: "Next: the ver ↔ for- cognate set — vergessen is forget, verboten is forbidden: twelve words, one prefix.",
+    },
+    twist: {
+      prompt: "Wait — you remember after all: negate it. I have forgotten it becomes I have NOT forgotten it.",
+      target_answer: "Ich habe es nicht vergessen",
+      word_bank: ["Ich", "habe", "es", "nicht", "vergessen", "kein"],
+      explanation: "nicht lands before the participle — inside the Perfekt bracket, where the action dies. And vergessen keeps its ge-free, inseparable dignity.",
     },
   },
   {
@@ -4436,24 +4697,14 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l1402_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I know that you are coming tomorrow'",
-        target_answer: "Ich weiß dass du morgen kommst",
-        meaning: "I know that you are coming tomorrow",
-        vocab_hints: [
-          {
-            word: "dass",
-            translation: "that (conjunction)",
-            note: "the exact twin of English that",
-          },
-          {
-            word: "morgen",
-            translation: "tomorrow",
-            note: "the morrow of to-morrow",
-          },
-        ],
-        word_bank: ["Ich", "weiß", "dass", "du", "morgen", "kommst"],
-        explanation: "Main clause: ich weiß. Door: dass. Subclause: du, morgen, then kommst waiting in the basement.",
+        type: "literal_gloss",
+        prompt: "Which English is built the German way?",
+        german: "Ich weiß, dass es kalt ist.",
+        natural: "I know that it is cold.",
+        options: ["I know that it is cold.", "I know that it cold is.", "I know that is it cold."],
+        target_answer: "I know that it cold is.",
+        meaning: "I know that it is cold.",
+        explanation: "Read it the German way: 'I know that it cold is.' The verb ist waits in the basement of the dass-clause. Word-for-word English sounds strange; Old English genuinely said it this way.",
       },
     ],
     summary: {
@@ -4541,10 +4792,15 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l17_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'It is three o'clock'",
+        type: "transcribe",
+        prompt: "You want to say:",
+        idea: "someone stops you on the street and asks the time: it is three o'clock",
+        cues: [
+          "The clock formula is a twin sandwich: es ↔ it, ist ↔ is, drei ↔ three, Uhr ↔ hour — Es ist drei Uhr",
+        ],
         target_answer: "Es ist drei Uhr",
         meaning: "It is three o'clock",
+        affirmation: "You built the clock sentence from four twins — es, ist, drei, Uhr: English with a German accent.",
         vocab_hints: [
           {
             word: "Uhr",
@@ -4552,8 +4808,8 @@ export const LESSONS: Lesson[] = [
             note: "loan-twin of hour; o'clock is literally 'of the clock'",
           },
         ],
-        word_bank: ["Es", "ist", "drei", "Uhr"],
-        explanation: "Es ist drei Uhr — the es ↔ it twin opening the clock formula.",
+        word_bank: ["Es", "ist", "drei", "Uhr", "zwölf"],
+        explanation: "Es ist drei Uhr — the es ↔ it twin opening the clock formula, built from a thought.",
       },
     ],
     summary: {
@@ -4561,6 +4817,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Es ist drei Uhr.", english: "It is three o'clock." },
       takeaway: "Numbers carry the whole shift ledger — drei, zwölf, zwanzig, dreißig — and the time words are pure cognates.",
       curiosity_teaser: "Next: the counting cognates gym — phone numbers, prices, ages, and the elf≠elf trap.",
+    },
+    twist: {
+      prompt: "Same clock, lunchtime: it is three o'clock becomes it is TWELVE o'clock. (The number carries the shift ledger.)",
+      target_answer: "Es ist zwölf Uhr",
+      word_bank: ["Es", "ist", "zwölf", "drei", "Uhr"],
+      explanation: "Only the number changes: zwölf is your twelve in shift clothes (the tw → zw opener from the early trail). The clock formula never moves.",
     },
   },
   {
@@ -4637,12 +4899,20 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l18_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I learned German yesterday'",
+        type: "transcribe",
+        prompt: "Put into German:",
+        idea: "you're telling a friend about last night's study session: you learned German yesterday",
+        cues: [
+          "haben opens, the participle closes: ich habe ... gelernt — ge- + lern + t",
+        ],
         target_answer: "Ich habe gestern Deutsch gelernt",
         meaning: "I learned German yesterday",
-        word_bank: ["Ich", "habe", "gestern", "Deutsch", "gelernt"],
+        word_bank: ["Ich", "habe", "gestern", "Deutsch", "gelernt", "bin"],
         explanation: "haben opens the bracket, the participle gelernt closes it — the spoken past is your modal frame wearing ge-.",
+        diagnosis: {
+          slip: "the helper was chosen by translation, not by motion",
+          cue: "haben for things you do (gelernt), sein for movement and change (gekommen). Ask: did the body move?",
+        },
       },
     ],
     summary: {
@@ -4650,6 +4920,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Ich habe gestern Deutsch gelernt.", english: "I learned German yesterday." },
       takeaway: "ge- is the y- of yclept (genug = enough!), haben/sein opens the bracket, the participle closes it.",
       curiosity_teaser: "Next: Strong Verbs & Ancient Ablaut — sing/sang/sung ↔ singen/sang/gesungen: the vowel melody both languages kept.",
+    },
+    twist: {
+      prompt: "Different verb, different helper: I learned German yesterday becomes I CAME yesterday. (Movement picks sein.)",
+      target_answer: "Ich bin gestern gekommen",
+      word_bank: ["Ich", "bin", "habe", "gestern", "gekommen", "gelernt"],
+      explanation: "kommen moves the body, so sein opens the bracket and gekommen closes it — the same y-/ge- prefix, a different helper. You just told yesterday's story twice.",
     },
   },
   {
@@ -4827,11 +5103,16 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l19_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I have found the book'",
+        type: "transcribe",
+        prompt: "Tell me:",
+        idea: "you've been looking everywhere for the book — and you can finally announce: you have found the book",
+        cues: [
+          "Strong verb, three notes: finden, fand, gefunden — the melody's third note closes the bracket",
+        ],
         target_answer: "Ich habe das Buch gefunden",
         meaning: "I have found the book",
-        word_bank: ["Ich", "habe", "das", "Buch", "gefunden"],
+        affirmation: "You kept the melody's third note — gefunden closes the bracket the way sung closes 'have sung'.",
+        word_bank: ["Ich", "habe", "das", "Buch", "gefunden", "fand"],
         explanation: "Strong participle gefunden closes the Perfekt bracket: 'habe' opens, the melody's third note lands last.",
       },
     ],
@@ -4840,6 +5121,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Ich habe das Buch gefunden.", english: "I have found the book." },
       takeaway: "Strong verbs change the root vowel — sing/sang ↔ singen/sang — and wear ge- + -en as participles.",
       curiosity_teaser: "Next: sing/sang/sung Mirrors — map fourteen English irregulars onto their German ablauf pairs.",
+    },
+    twist: {
+      prompt: "Now ask it: you have found the book → HAVE you found the book? (The helper flips to position 1.)",
+      target_answer: "Hast du das Buch gefunden",
+      word_bank: ["Hast", "habe", "du", "das", "Buch", "gefunden"],
+      explanation: "In a question the helper haben takes position 1 and the subject follows — the participle still closes the bracket. Hast is the thou-form: 'Hast thou...?' was English once.",
     },
   },
   {
@@ -4867,7 +5154,7 @@ export const LESSONS: Lesson[] = [
     pattern: {
       title: "The Receiver's Toolbox",
       content:
-        "The pronouns first: mir ↔ me (to me), dir ↔ thee (to thee), ihm ↔ him (to him) — the same words with the same ancient jobs. The prepositions that always drag the dative along: aus (out of), bei (by — the exact twin of by), mit (with — the twin of mid, as in midwife), nach (after), seit (since), von (from), zu (to). The dative verbs: helfen (Ich helfe dir), danken (Ich danke dir — you already said it!), gefallen (Es gefällt mir — it falls well to me), geben (Gib mir das Buch). When both objects appear, English word order does the dative's job ('give HIM the book'); German marks it on the words: gib ihm das Buch — ihm = to-him (dative), das Buch = accusative.",
+        "The pronouns first: mir ↔ me (to me), dir ↔ thee (to thee), ihm ↔ him (to him) — the same words with the same ancient jobs. The prepositions that always drag the dative along: aus (out of), bei (by — the exact twin of by), mit (with — the twin of mid, as in midwife), nach (after), seit (since), von (from), zu (to). The dative verbs: helfen (Ich helfe dir), danken (Ich danke dir — you already said it!), gefallen (Es gefällt mir — it falls well to me), geben (Gib mir das Buch). When both objects appear, English word order does the dative's job ('give HIM the book'); German marks it on the words: gib ihm das Buch — ihm = to-him (dative), das Buch = accusative.\n\nOne Denglisch ladder, read it the German way first: Gib ihm das Buch → Give to-him the book → Give him the book. The middle line shows the case on the page: the 'to' lives inside ihm.",
       footnotes: [],
       linguist_note:
         "The dative articles: dem (masculine/neuter), der (feminine), den (+ -n) in the plural. Notice dem keeps the ancient m, while the accusative softened it to n (ihn, wen) — one nasal, two case stories.",
@@ -4898,17 +5185,14 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l20_e3",
-        type: "shift_select",
-        prompt: "Which verb club demands a dative object?",
-        options: [
-          "helfen, danken, gefallen — the helper/thanker/pleaser club",
-          "trinken, essen, lesen",
-          "All German verbs are dative verbs",
-          "No German verbs take dative objects",
-        ],
-        target_answer: "helfen, danken, gefallen — the helper/thanker/pleaser club",
-        meaning: "Dative verbs: helfen, danken, gefallen",
-        explanation: "Ich helfe dir, Ich danke dir, Es gefällt mir — you help TO someone, thank TO someone; the pleasure falls TO someone.",
+        type: "literal_gloss",
+        prompt: "Which English is built the German way?",
+        german: "Gib ihm das Buch.",
+        natural: "Give him the book.",
+        options: ["Give him the book.", "Give to him the book.", "Give the book to he."],
+        target_answer: "Give to him the book.",
+        meaning: "Give him the book.",
+        explanation: "German keeps the 'to' audible inside the dative pronoun — ihm IS 'to him'. English used to say 'give it me'; German never stopped.",
       },
       {
         id: "l20_e4",
@@ -4921,12 +5205,20 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l20_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'I help you (thee)'",
+        type: "transcribe",
+        prompt: "How would you say:",
+        idea: "a friend is carrying something heavy: you offer the ancient verb — I help thee",
+        cues: [
+          "helfen is a dative verb: the help goes TO someone — ich helfe dir",
+        ],
         target_answer: "Ich helfe dir",
         meaning: "I help you (to-thee)",
-        word_bank: ["Ich", "helfe", "dir"],
+        word_bank: ["Ich", "helfe", "dir", "dich", "hilft"],
         explanation: "helfen + dative: 'Ich helfe dir' — help goes TO the person, as English once said 'I help thee' with a to.",
+        diagnosis: {
+          slip: "the dative verb was fed an accusative",
+          cue: "helfen refuses the Him-Case: ich helfe dir (to-thee), never 'ich helfe dich'. Helping goes TO someone.",
+        },
       },
     ],
     summary: {
@@ -4934,6 +5226,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Ich helfe dir.", english: "I help you (help to-thee)." },
       takeaway: "The dative marks the receiver: mir/dir/ihm ↔ 'give it me/thee/him' — and helfen, danken, gefallen demand it.",
       curiosity_teaser: "Next: methinks & Dative Survivors — the English dative fossils mirrored in German, dem/den/dem grid row.",
+    },
+    twist: {
+      prompt: "Same verb, different receiver: I help thee becomes I help HIM. (The dative pronoun has three faces.)",
+      target_answer: "Ich helfe ihm",
+      word_bank: ["Ich", "helfe", "ihm", "ihn", "dir"],
+      explanation: "dir → ihm: both dative, both English fossils ('give it thee' → 'give it him'). ihn would be the accusative — helfen refuses it.",
     },
   },
   {
@@ -5952,11 +6250,15 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l21_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'The man and the woman have a child'",
+        type: "transcribe",
+        prompt: "Put into German:",
+        idea: "you're introducing your neighbors to a friend: the man and the woman have a child",
+        cues: [
+          "Flags first: der Mann, die Frau — then the plural verb joins them: haben ein Kind",
+        ],
         target_answer: "Der Mann und die Frau haben ein Kind",
         meaning: "The man and the woman have a child",
-        word_bank: ["Der", "Mann", "und", "die", "Frau", "haben", "ein", "Kind"],
+        word_bank: ["Der", "Mann", "und", "die", "Frau", "haben", "ein", "Kind", "hat"],
         explanation: "Two subjects, plural verb, ein Kind — the family trio with their flags: der, die, das.",
       },
     ],
@@ -5965,6 +6267,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Der Mann und die Frau haben ein Kind.", english: "The man and the woman have a child." },
       takeaway: "Compounds are Lego: split at the last noun, read literally, and let the head word donate the gender.",
       curiosity_teaser: "Next: the 32 Calques Deep-Dive — the curated compound gallery from Kühlschrank to Backpfeife.",
+    },
+    twist: {
+      prompt: "Hearing check — negate the noun: they have a child becomes they have NO child. (kein, declined like ein.)",
+      target_answer: "Sie haben kein Kind",
+      word_bank: ["Sie", "haben", "kein", "Kind", "nicht"],
+      explanation: "Kind is neuter, so kein stays bare: kein Kind. nicht is for verbs — the noun loses its 'one' instead. And the plural verb tells you Sie is 'they', not the formal 'you'.",
     },
   },
   {
@@ -6046,8 +6354,12 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l22_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'The woman reads the newspaper' (die Zeitung — -ung law!)",
+        type: "transcribe",
+        prompt: "Tell me:",
+        idea: "you're describing your morning scene: the woman reads the newspaper",
+        cues: [
+          "Two feminine flags on show: die Frau (plain -e law) and die Zeitung (-ung factory) — and lesen mutates: sie liest",
+        ],
         target_answer: "Die Frau liest die Zeitung",
         meaning: "The woman reads the newspaper",
         vocab_hints: [
@@ -6062,7 +6374,7 @@ export const LESSONS: Lesson[] = [
             note: "Zeit + ung — 'a timing' — built by the feminine -ung factory",
           },
         ],
-        word_bank: ["Die", "Frau", "liest", "die", "Zeitung"],
+        word_bank: ["Die", "die", "Frau", "liest", "Zeitung", "lesen"],
         explanation: "Two feminine flags in one sentence: die Frau (plain -e law) and die Zeitung (-ung law).",
       },
     ],
@@ -6071,6 +6383,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Die Frau liest die Zeitung.", english: "The woman reads the newspaper." },
       takeaway: "Gender is written on the tail: learn the suffix court and new nouns arrive pre-gendered.",
       curiosity_teaser: "Next: the feminine squad — -ung, -heit, -keit drills: derive abstract nouns and their genders.",
+    },
+    twist: {
+      prompt: "She quit the news: negate the noun — the woman reads the newspaper becomes the woman reads NO newspaper. (The -ung law still holds.)",
+      target_answer: "Die Frau liest keine Zeitung",
+      word_bank: ["Die", "Frau", "liest", "keine", "kein", "Zeitung"],
+      explanation: "Zeitung is feminine (-ung law), so kein takes its feminine dress: keine. The suffix decided the gender — and the negation followed it.",
     },
   },
   {
@@ -6360,8 +6678,12 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l23_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'The men drink beer and the women drink tea'",
+        type: "transcribe",
+        prompt: "How would you say:",
+        idea: "you're sketching the beer garden for a friend: the men drink beer and the women drink tea",
+        cues: [
+          "Two umlaut plurals carry it: Mann → die Männer (man → men), Frau → die Frauen — then the plural verb trinken for both",
+        ],
         target_answer: "Die Männer trinken Bier und die Frauen trinken Tee",
         meaning: "The men drink beer and the women drink tea",
         vocab_hints: [
@@ -6371,8 +6693,8 @@ export const LESSONS: Lesson[] = [
             note: "das Bier — a mass noun here, no plural marker",
           },
         ],
-        word_bank: ["Die", "Männer", "trinken", "Bier", "und", "die", "Frauen", "trinken", "Tee"],
-        explanation: "Two umlaut plurals (Männer, Frauen) in one sentence — the fossil pair in the wild.",
+        word_bank: ["Die", "die", "Männer", "trinken", "Bier", "und", "Frauen", "Tee", "das", "Mann"],
+        explanation: "Two umlaut plurals (Männer, Frauen) in one sentence — the fossil pair in the wild, built from a thought.",
       },
     ],
     summary: {
@@ -6380,6 +6702,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Die Männer trinken Bier und die Frauen trinken Tee.", english: "The men drink beer and the women drink tea." },
       takeaway: "Umlaut is English's own fossil — Mann/Männer ↔ man/men — and five patterns cover the plural system.",
       curiosity_teaser: "Next: the fossil umlauts — man/men and foot/feet prove i-mutation is your own buried treasure.",
+    },
+    twist: {
+      prompt: "Shrink the party: the men drink beer becomes THE MAN drinks beer. (Umlaut off, ending changes.)",
+      target_answer: "Der Mann trinkt Bier",
+      word_bank: ["Der", "Die", "Mann", "Männer", "trinkt", "trinken", "Bier"],
+      explanation: "die Männer → der Mann: the umlaut plural dissolves back to singular, and the verb returns to the er/sie -t form. The umlaut is the plural's signature — remove it and the ending steps in.",
     },
   },
   {
@@ -6456,11 +6784,15 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l24_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'The coffee is better than the tea'",
+        type: "transcribe",
+        prompt: "Put into German:",
+        idea: "you're at the café counter making your preference known: the coffee is better than the tea",
+        cues: [
+          "The twin suppletion does the work: gut → besser (good → better) — then als introduces the loser",
+        ],
         target_answer: "Der Kaffee ist besser als der Tee",
         meaning: "The coffee is better than the tea",
-        word_bank: ["Der", "Kaffee", "ist", "besser", "als", "der", "Tee"],
+        word_bank: ["Der", "Kaffee", "ist", "besser", "als", "der", "Tee", "gut"],
         explanation: "Suppletive comparative + als — the twin irregular in a real argument at the café.",
       },
     ],
@@ -6469,6 +6801,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Der Kaffee ist besser als der Tee.", english: "The coffee is better than the tea." },
       takeaway: "gut→besser ↔ good→better: one inherited suppletion — and the umlaut squad (älter, kälter, höher) mirrors English elder.",
       curiosity_teaser: "Next: the twin suppletions — gut→besser is good→better: the shared irregular story.",
+    },
+    twist: {
+      prompt: "Diplomacy check: soften the verdict — the coffee is better than the tea becomes the coffee is NOT better than the tea.",
+      target_answer: "Der Kaffee ist nicht besser als der Tee",
+      word_bank: ["Der", "Kaffee", "ist", "nicht", "besser", "als", "der", "Tee"],
+      explanation: "nicht slides in before the adjective it negates — after ist, before besser. The comparison stands; only the verdict flips.",
     },
   },
   {
@@ -6722,10 +7060,15 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l25_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'We live in Germany and we love it'",
+        type: "transcribe",
+        prompt: "How would you say:",
+        idea: "you're explaining why you stay: you live in Germany and you love it",
+        cues: [
+          "Two quiet-family verbs: leben (live) and lieben (love) — English v between vowels became b, and wir takes -en on both",
+        ],
         target_answer: "Wir leben in Deutschland und wir lieben es",
         meaning: "We live in Germany and we love it",
+        affirmation: "You heard the English v hiding inside both b's — leben and lieben in one breath, the quiet family.",
         vocab_hints: [
           {
             word: "es",
@@ -6733,7 +7076,7 @@ export const LESSONS: Lesson[] = [
             note: "es ↔ it — the twin pronoun from the negation lesson",
           },
         ],
-        word_bank: ["Wir", "leben", "in", "Deutschland", "und", "wir", "lieben", "es"],
+        word_bank: ["Wir", "leben", "in", "Deutschland", "und", "wir", "lieben", "es", "liebe"],
         explanation: "Two quiet-family verbs in one sentence: leben and lieben — living and loving, both shifted v's.",
       },
     ],
@@ -6742,6 +7085,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Wir leben in Deutschland und wir lieben es.", english: "We live in Germany and we love it." },
       takeaway: "English v/f between vowels is German b: give/geben, love/lieben, over/über, seven/sieben — the quiet family.",
       curiosity_teaser: "Next: geben's full dynasty — Gabe, vergeben, and the Perfekt forms gab and gegeben.",
+    },
+    twist: {
+      prompt: "Rainy week — walk it back: we live in Germany and we love it becomes ...and we do NOT love it.",
+      target_answer: "Wir leben in Deutschland und wir lieben es nicht",
+      word_bank: ["Wir", "leben", "in", "Deutschland", "und", "wir", "lieben", "es", "nicht"],
+      explanation: "nicht closes the clause where the action dies — after the object it negates. Word for word: '...and we love it not.'",
     },
   },
   {
@@ -6822,10 +7171,15 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l26_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'Good night! The light is out'",
+        type: "transcribe",
+        prompt: "Tell me:",
+        idea: "you're saying goodnight at a friend's place: good night — the light is out",
+        cues: [
+          "Both ghost-map words sound again in German: Nacht (night) and Licht (light) — gh → ch — then ist aus closes it",
+        ],
         target_answer: "Gute Nacht das Licht ist aus",
         meaning: "Good night! The light is out",
+        affirmation: "You made the silent letters sound — Nacht and Licht built straight from night and light.",
         vocab_hints: [
           {
             word: "aus",
@@ -6833,7 +7187,7 @@ export const LESSONS: Lesson[] = [
             note: "aus ↔ out — the T→S twin, here doing 'off' duty",
           },
         ],
-        word_bank: ["Gute", "Nacht", "das", "Licht", "ist", "aus"],
+        word_bank: ["Gute", "Nacht", "das", "Licht", "ist", "aus", "gut"],
         explanation: "Two ghost-map words in one goodnight: Nacht and Licht — gh → ch, both still sounding.",
       },
     ],
@@ -6842,6 +7196,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Gute Nacht — das Licht ist aus.", english: "Good night — the light is out." },
       takeaway: "gh→ch (Nacht, Licht, acht) and y→g (sagen, gestern): the ghost letters are German sounds English stopped pronouncing.",
       curiosity_teaser: "Next: Nacht & Licht — the gh→ch inversion: the silent letters of night and light, still sounding in German.",
+    },
+    twist: {
+      prompt: "Check before bed: the light is out → IS the light out? (The verb flips to the front.)",
+      target_answer: "Ist das Licht aus",
+      word_bank: ["Ist", "das", "Licht", "aus", "ist"],
+      explanation: "The verb takes position 1 — the ancient flip from topic 13, still free of do. Word for word: 'Is the light out?'",
     },
   },
   {
@@ -7161,7 +7521,7 @@ export const LESSONS: Lesson[] = [
     pattern: {
       title: "The Spatial Set and Its Two Cases",
       content:
-        "The static set (always dative): aus (out of — Ich komme aus Berlin), bei (by/at — bei Berlin), mit (with), nach (after/to), seit (since), von (from), zu (to). The dynamic pair-set (dative location, accusative motion): in dem Haus → im Haus (in the house) vs in das Haus → ins Haus (into the house); über dem Haus (above it) vs über das Haus (over it); unter dem Tisch (under it, lying there) vs unter den Tisch (under it, going there). vor and durch complete the picture: vor dem Haus (in front of it — dative), durch den Park (through it — accusative always, motion by definition).",
+        "The static set (always dative): aus (out of — Ich komme aus Berlin), bei (by/at — bei Berlin), mit (with), nach (after/to), seit (since), von (from), zu (to). The dynamic pair-set (dative location, accusative motion): in dem Haus → im Haus (in the house) vs in das Haus → ins Haus (into the house); über dem Haus (above it) vs über das Haus (over it); unter dem Tisch (under it, lying there) vs unter den Tisch (under it, going there). vor and durch complete the picture: vor dem Haus (in front of it — dative), durch den Park (through it — accusative always, motion by definition).\n\nOne Denglisch ladder, read it the German way first: Das Auto steht vor dem Haus → The car stands before to-the house → The car stands in front of the house. The middle line puts both lessons on the page: vor is before/fore, and dem is the dative 'the' the parked scene demands.",
       footnotes: [],
       linguist_note:
         "The contractions are the case system showing its seams: im = in + dem (dative), ins = in + das (accusative), am = an + dem, zum = zu + dem, zur = zu + der. Each contraction tells you the case before the sentence finishes.",
@@ -7192,12 +7552,19 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l27_e3",
-        type: "shift_select",
-        prompt: "'Die Katze geht _____ den Tisch.' (The cat goes UNDER the table — motion!):",
-        options: ["unter — accusative for motion", "unter — dative again", "über", "aus"],
-        target_answer: "unter — accusative for motion",
-        meaning: "Die Katze geht unter den Tisch",
-        explanation: "wohin? (where-to?) → accusative: den. Crossing into the space flips the case.",
+        type: "transcribe",
+        prompt: "You want to say:",
+        idea: "you're giving directions to a friend: you walk to the house",
+        cues: [
+          "zu + dem shrinks to zum — the contraction shows its case: Ich gehe zum Haus",
+        ],
+        target_answer: "Ich gehe zum Haus",
+        meaning: "I walk to the house",
+        vocab_hints: [
+          { word: "zum", translation: "to the (zu + dem)", note: "zu always takes the dative — the contraction wears it openly" },
+        ],
+        word_bank: ["Ich", "gehe", "zum", "zu", "dem", "Haus", "zur"],
+        explanation: "The contraction is the case system showing its seams: zum = zu + dem (dative). zu never accuses — it always dates.",
       },
       {
         id: "l27_e4",
@@ -7209,12 +7576,14 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l27_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'The car stands in front of the house'",
-        target_answer: "Das Auto steht vor dem Haus",
-        meaning: "The car stands in front of the house",
-        word_bank: ["Das", "Auto", "steht", "vor", "dem", "Haus"],
-        explanation: "Position, not motion: vor + dative (dem). The car is parked — the case knows it.",
+        type: "literal_gloss",
+        prompt: "Which English is built the German way?",
+        german: "Das Auto steht vor dem Haus.",
+        natural: "The car stands in front of the house.",
+        options: ["The car stands in front of the house.", "The car stands before to-the house.", "The car stands in front to-the house."],
+        target_answer: "The car stands before to-the house.",
+        meaning: "The car stands in front of the house.",
+        explanation: "Read it the German way: 'before to-the house.' vor is before/fore, and dem is the dative 'the' that a motion-less scene demands — the case is on the page, where English hides it in word order.",
       },
     ],
     summary: {
@@ -7222,6 +7591,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Das Auto steht vor dem Haus.", english: "The car stands in front of the house." },
       takeaway: "The prepositions are your own spatial words — and the case answers the question: wohin? accusative, wo? dative.",
       curiosity_teaser: "Next: the über, unter, durch metaphor set — spatial drills with the cognate prepositions.",
+    },
+    twist: {
+      prompt: "Same walk, but today comes first: I walk to the house becomes TODAY I walk to the house. (Something still holds position 2.)",
+      target_answer: "Heute gehe ich zum Haus",
+      word_bank: ["Heute", "gehe", "ich", "zum", "Haus", "geht"],
+      explanation: "Fronting fills position 1, so gehe keeps position 2 and ich slips in behind — the verb-second law that survived thirty topics.",
     },
   },
   {
@@ -7298,8 +7673,12 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l28_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'The journey takes an hour' (die Fahrt, dauern hinted: to last)",
+        type: "transcribe",
+        prompt: "Put into German:",
+        idea: "you're planning a day trip: the journey takes an hour",
+        cues: [
+          "fahren's noun leads the sentence: die Fahrt — then dauert (the er/sie -t), and eine Stunde closes it",
+        ],
         target_answer: "Die Fahrt dauert eine Stunde",
         meaning: "The journey takes an hour",
         vocab_hints: [
@@ -7314,7 +7693,7 @@ export const LESSONS: Lesson[] = [
             note: "die Stunde — a distant cousin of 'stand' (the standing-time!)",
           },
         ],
-        word_bank: ["Die", "Fahrt", "dauert", "eine", "Stunde"],
+        word_bank: ["Die", "Fahrt", "dauert", "eine", "Stunde", "der"],
         explanation: "die Fahrt — fahren's noun — as the subject, with a time expression in the accusative.",
       },
     ],
@@ -7323,6 +7702,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Die Fahrt dauert eine Stunde.", english: "The journey takes an hour." },
       takeaway: "Roots radiate: fahren → Fahrt/Fahrzeug/Fahrer; ziehen → Zug/Aufzug/Umzug — learn roots, not lists.",
       curiosity_teaser: "Next: the fahren dynasty — one root radiating into Fahrt, Zug, and a whole transit system.",
+    },
+    twist: {
+      prompt: "Longer trip: the journey takes an hour becomes the journey takes A DAY. (Tag is masculine — mind the case.)",
+      target_answer: "Die Fahrt dauert einen Tag",
+      word_bank: ["Die", "Fahrt", "dauert", "einen", "eine", "Tag", "Stunde"],
+      explanation: "eine Stunde → einen Tag: the time expression is accusative, and Tag is masculine — the Him-Case stamps the article. dauert and die Fahrt don't move.",
     },
   },
   {
@@ -7403,11 +7788,15 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l29_e5",
-        type: "syntax_builder",
-        prompt: "Assemble: 'Yesterday was good and today is cold (for me)'",
+        type: "transcribe",
+        prompt: "How would you say:",
+        idea: "you're summing up the weekend: yesterday was good and today you're cold — the German way, it is cold to me",
+        cues: [
+          "war ↔ was opens the first clause; the second is the dative experiencer: heute ist mir kalt — 'it is cold TO ME'",
+        ],
         target_answer: "Gestern war gut und heute ist mir kalt",
         meaning: "Yesterday was good and today I am cold (it is cold to me)",
-        word_bank: ["Gestern", "war", "gut", "und", "heute", "ist", "mir", "kalt"],
+        word_bank: ["Gestern", "war", "gut", "und", "heute", "ist", "mir", "kalt", "mich"],
         explanation: "war ↔ was in the first clause, the dative experiencer (mir ist kalt) in the second — the being verbs and the idiom fridge in one sentence.",
       },
     ],
@@ -7416,6 +7805,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Gestern war gut, aber heute ist mir kalt.", english: "Yesterday was good, but today I am cold." },
       takeaway: "ist↔is, war↔was, bin↔be — and the idioms are unfrozen English: How goes it? It does me sorrow. It is cold to me.",
       curiosity_teaser: "Next: ist, war & bin — the being cognates: the sein paradigm through its English twins.",
+    },
+    twist: {
+      prompt: "Your friend caught the chill: today I am cold (it is cold to ME) becomes it is cold to HIM.",
+      target_answer: "Heute ist ihm kalt",
+      word_bank: ["Heute", "ist", "ihm", "ihn", "mir", "kalt"],
+      explanation: "mir → ihm: the dative experiencer has three faces, all English fossils — 'give it me', 'give it thee', 'give it him'. The idiom needs the TO-case: ihm, never ihn.",
     },
   },
 
@@ -7492,23 +7887,15 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l30_e5",
-        type: "syntax_builder",
-        prompt: "Assemble the story's last line: 'There is no better morning'",
+        type: "transcribe",
+        prompt: "Put into German:",
+        idea: "you're closing your Berlin story at dawn: there is no better morning",
+        cues: [
+          "es gibt (existence by giving) + keinen (no, Him-Case) + besseren (better with its ending) — four lessons in five words",
+        ],
         target_answer: "Es gibt keinen besseren Morgen",
         meaning: "There is no better morning",
-        vocab_hints: [
-          {
-            word: "keinen",
-            translation: "no (masculine accusative)",
-            note: "kein + the Him-Case: der Morgen is masculine and direct object",
-          },
-          {
-            word: "besseren",
-            translation: "better (adjective ending)",
-            note: "besser + the adjective ending that follows a declined article",
-          },
-        ],
-        word_bank: ["Es", "gibt", "keinen", "besseren", "Morgen"],
+        word_bank: ["Es", "gibt", "keinen", "besseren", "Morgen", "kein", "gute"],
         explanation: "es gibt (existence by giving) + keinen (negated accusative) + besseren (the comparative with its ending) — four lessons in five words.",
       },
     ],
@@ -7517,6 +7904,12 @@ export const LESSONS: Lesson[] = [
       use_example: { german: "Es gibt keinen besseren Morgen.", english: "There is no better morning." },
       takeaway: "You crossed the bridge: sixty words, every one decoded by a law you own — the trail ends, the language begins.",
       curiosity_teaser: "Next: A Day in Berlin, the full reading — with tap-to-inspect words and shift annotations.",
+    },
+    twist: {
+      prompt: "Doubt the ending: there is no better morning → IS there no better morning? (The verb flips, es follows.)",
+      target_answer: "Gibt es keinen besseren Morgen",
+      word_bank: ["Gibt", "es", "keinen", "besseren", "Morgen"],
+      explanation: "In the question, gibt takes position 1 and es falls in behind — the ancient flip, one last time. The capstone closes where the trail began: the verb knows its seat.",
     },
   },
   {
@@ -10594,12 +10987,14 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: "l2003_e5",
-        type: "syntax_builder",
-        prompt: "Assemble the contrast in one breath: 'I see him and I help him' (both pronouns!)",
-        target_answer: "Ich sehe ihn und ich helfe ihm",
-        meaning: "Ich sehe ihn und ich helfe ihm = I see him (acc) and I help him (dat)",
-        word_bank: ["Ich", "sehe", "ihn", "und", "ich", "helfe", "ihm"],
-        explanation: "ihn then ihm — one letter apart, two different clubs. The contrast pair, drilled into one sentence.",
+        type: "literal_gloss",
+        prompt: "Which English is built the German way?",
+        german: "Ich sehe ihn, und ich helfe ihm.",
+        natural: "I see him, and I help him.",
+        options: ["I see him, and I help him.", "I see to-him, and I help to-him.", "I see him, and I help to-him."],
+        target_answer: "I see him, and I help to-him.",
+        meaning: "I see him, and I help him.",
+        explanation: "One letter apart, two clubs: sehen acts ON him (ihn, accusative), helfen acts TO him (ihm, dative). Read it the German way — 'help to-him' — and the case stops being invisible.",
       },
     ],
     summary: {

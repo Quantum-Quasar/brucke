@@ -4,8 +4,9 @@ import React from "react";
 import { Volume2 } from "lucide-react";
 import { alignShiftPair } from "@/lib/shift-annotator";
 import { useAppStore } from "@/lib/store";
+import { getLanguageDefinition } from "@/data/languages";
 import { GenderBadge } from "@/components/common/GenderBadge";
-import { playGermanAudio } from "@/lib/audio";
+import { playTargetAudio } from "@/lib/audio";
 import type { Gender } from "@/lib/types";
 
 interface ShiftPairProps {
@@ -29,6 +30,8 @@ export const ShiftPair: React.FC<ShiftPairProps> = React.memo(({
 }) => {
   const openWordDrawer = useAppStore((s) => s.openWordDrawer);
   const mastery = useAppStore((s) => (wordId ? s.wordMastery[wordId] || "unexplored" : "unexplored"));
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const ttsLocale = getLanguageDefinition(activeLanguageId).ttsLocale;
 
   const targetId = wordId || german.toLowerCase();
   const annotation = alignShiftPair(english, german, rule);
@@ -100,11 +103,11 @@ export const ShiftPair: React.FC<ShiftPairProps> = React.memo(({
         onClick={(e) => {
           e.stopPropagation();
           const spoken = gender ? `${gender} ${german}` : german;
-          playGermanAudio(spoken);
+          playTargetAudio(spoken, ttsLocale);
         }}
         className="p-1 rounded text-[var(--sub-color)] hover:text-[var(--main-color)] hover:bg-[var(--sub-alt-color)] transition cursor-pointer"
-        title={`Listen to German pronunciation for "${german}"`}
-        aria-label={`Listen to German pronunciation for ${german}`}
+        title={`Listen to the pronunciation of "${german}"`}
+        aria-label={`Listen to the pronunciation of ${german}`}
       >
         <Volume2 className="w-3.5 h-3.5" />
       </button>

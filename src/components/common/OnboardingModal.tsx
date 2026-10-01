@@ -1,6 +1,8 @@
 "use client";
 
-// ponytail: polished, multi-step onboarding wizard introducing Brücke philosophy, notation, and menu tour
+// ponytail: polished, multi-step onboarding wizard — step 1 picks the learning
+// language, the remaining steps play that language's own introduction (copy,
+// demos, gender section) from the language registry.
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -14,8 +16,11 @@ import {
   Layers,
   CheckCircle2,
   X,
+  Check,
+  Clock,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
+import { LANGUAGES, getLanguageDefinition, isValidLanguageId } from "@/data/languages";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { GenderBadge } from "@/components/common/GenderBadge";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
@@ -24,11 +29,24 @@ export const OnboardingModal: React.FC = () => {
   const isOpen = useAppStore((s) => s.isOnboardingOpen);
   const hasCompletedOnboarding = useAppStore((s) => s.hasCompletedOnboarding);
   const completeOnboarding = useAppStore((s) => s.completeOnboarding);
+  const setActiveLanguage = useAppStore((s) => s.setActiveLanguage);
+  const onboardingIntroLanguage = useAppStore((s) => s.onboardingIntroLanguage);
   const router = useRouter();
 
+  // TM-4a: the posture primer is appended as the final step — a one-time, 4-card flow
+  const TOTAL_STEPS = 6;
+  const PRIMER_STEP = 5;
   const [step, setStep] = useState(0);
+  // the language being introduced in this run of the wizard
+  const [introLanguageId, setIntroLanguageId] = useState<string | null>(null);
   const [activeShiftDemo, setActiveShiftDemo] = useState(0);
   const dialogRef = useRef<HTMLDivElement>(null);
+
+  // fall back to the user's current language so the guide button always works
+  const storeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const effectiveLanguageId = introLanguageId || storeLanguageId;
+  const language = getLanguageDefinition(effectiveLanguageId);
+  const intro = language.onboarding;
 
   useDialogFocus({
     open: isOpen,
@@ -36,43 +54,32 @@ export const OnboardingModal: React.FC = () => {
     onEscape: completeOnboarding,
   });
 
-  const shiftDemos = [
-    {
-      english: "hand",
-      german: "Hand",
-      gender: "die" as const,
-      rule: "direct twin",
-      wordId: "hand",
-      insight: "English 'hand' is identical to German 'Hand', prominently paired with the vivid rose/feminine article 'die'.",
-    },
-    {
-      english: "water",
-      german: "Wasser",
-      gender: "das" as const,
-      rule: "t → ss / s",
-      wordId: "wasser",
-      insight: "English 't' between vowels consistently shifted to German 'ss'. Neuter nouns are marked with emerald green 'das'.",
-    },
-    {
-      english: "brother",
-      german: "Bruder",
-      gender: "der" as const,
-      rule: "th → d",
-      wordId: "bruder",
-      insight: "German never developed 'th'; every English 'th' shifted to 'd'. Masculine nouns take azure blue 'der'.",
-    },
-    {
-      english: "hope",
-      german: "hoffen",
-      gender: null,
-      rule: "p → ff / f",
-      wordId: "hoffen",
-      insight: "English 'p' shifted to German 'ff' or 'pf'. Verbs do not have grammatical gender and take the universal -en ending.",
-    },
-  ];
+  // every fresh opening starts a clean run — either the intro queued by a
+  // language switch (settings) or the language picker
+  const wasOpen = useRef(false);
+  useEffect(() => {
+    if (isOpen && !wasOpen.current) {
+      if (onboardingIntroLanguage && isValidLanguageId(onboardingIntroLanguage)) {
+        setIntroLanguageId(onboardingIntroLanguage);
+        setStep(1);
+      } else {
+        setIntroLanguageId(null);
+        setStep(0);
+      }
+      setActiveShiftDemo(0);
+    }
+    wasOpen.current = isOpen;
+  }, [isOpen, onboardingIntroLanguage]);
+
+  const selectLanguage = (id: string) => {
+    setIntroLanguageId(id);
+    setActiveShiftDemo(0);
+    setActiveLanguage(id);
+    setStep(1);
+  };
 
   const finishOnboarding = () => {
-    const shouldStartLesson = !hasCompletedOnboarding;
+    const shouldStartLesson = !hasCompletedOnboarding && language.status === "available";
     completeOnboarding();
     if (shouldStartLesson) {
       router.push("/trail/1");
@@ -95,7 +102,7 @@ export const OnboardingModal: React.FC = () => {
         const target = e.target as HTMLElement | null;
         if (e.key === "Enter" && target?.closest("button, a, input, select, textarea")) return;
         e.preventDefault();
-        if (step < 3) {
+        if (step < TOTAL_STEPS - 1) {
           setStep((s) => s + 1);
         } else {
           finishOnboarding();
@@ -110,9 +117,12 @@ export const OnboardingModal: React.FC = () => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, step, completeOnboarding, finishOnboarding, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, step, completeOnboarding, language.id, hasCompletedOnboarding, router]);
 
   if (!isOpen) return null;
+
+  const isAvailable = language.status === "available";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-in fade-in duration-200">
@@ -127,7 +137,8 @@ export const OnboardingModal: React.FC = () => {
         <div className="px-6 py-4 flex items-center justify-between border-b border-[var(--sub-color)]/20 bg-[var(--sub-alt-color)]">
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono uppercase tracking-widest text-[var(--main-color)] font-semibold">
-              brücke • step {step + 1} / 4
+              brücke • step {step + 1} / {TOTAL_STEPS}
+              {step > 0 && <span className="text-[var(--sub-color)]"> • {language.flag} {language.nativeName}</span>}
             </span>
           </div>
 
@@ -144,32 +155,98 @@ export const OnboardingModal: React.FC = () => {
 
         {/* Scrollable Content Body */}
         <div className="px-6 sm:px-8 py-6 overflow-y-auto space-y-6 flex-1">
-          {/* STEP 1: PHILOSOPHY */}
+          {/* STEP 1: CHOOSE YOUR LANGUAGE */}
           {step === 0 && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <div className="space-y-2">
                 <span className="text-xs font-mono text-[var(--main-color)] uppercase tracking-wider font-semibold">
-                  core principle
+                  welcome to brücke
                 </span>
                 <h2 className="text-2xl font-bold font-mono text-[var(--text-color)] tracking-tight">
-                  you don&apos;t start from zero
+                  which language do you want to learn?
                 </h2>
                 <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
-                  english and german are sibling languages born from the same ancestral branch.
-                  over <strong className="text-[var(--text-color)] font-semibold">60% of core spoken english vocabulary</strong> has
-                  an unbroken germanic twin. you aren&apos;t memorizing random sounds — you are unlocking sound shifts you already know.
+                  every language gets its own trail, its own cognate engine, and its own
+                  introduction. you can switch anytime — each language keeps its own progress.
                 </p>
               </div>
 
-              {/* Interactive Sound Shift Demo */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {LANGUAGES.map((lang) => (
+                  <button
+                    key={lang.id}
+                    type="button"
+                    onClick={() => selectLanguage(lang.id)}
+                    className={`p-4 rounded-lg border text-left space-y-2 transition cursor-pointer group ${
+                      effectiveLanguageId === lang.id
+                        ? "bg-[var(--main-color)]/10 border-[var(--main-color)]/60"
+                        : "bg-[var(--sub-alt-color)] border-[var(--sub-color)]/20 hover:border-[var(--main-color)]/40"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl" aria-hidden>{lang.flag}</span>
+                      {lang.status === "available" ? (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-mono px-1.5 py-0.5 rounded bg-[var(--main-color)]/15 text-[var(--main-color)] font-bold uppercase tracking-wider">
+                          <Check className="w-3 h-3" /> available
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-mono px-1.5 py-0.5 rounded bg-[var(--sub-color)]/15 text-[var(--sub-color)] font-bold uppercase tracking-wider">
+                          <Clock className="w-3 h-3" /> soon
+                        </span>
+                      )}
+                    </div>
+                    <div className="space-y-0.5">
+                      <div className="text-sm font-bold font-mono text-[var(--text-color)] group-hover:text-[var(--main-color)] transition">
+                        {lang.name}
+                      </div>
+                      <div className="text-[10px] font-mono text-[var(--sub-color)] uppercase tracking-wider">
+                        {lang.nativeName}
+                      </div>
+                    </div>
+                    <p className="text-[11px] font-mono text-[var(--sub-color)] leading-relaxed">
+                      {lang.blurb}
+                    </p>
+                  </button>
+                ))}
+              </div>
+
+              {effectiveLanguageId && (
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs font-mono transition cursor-pointer"
+                >
+                  <span>continue with {language.flag} {language.name}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* STEP 2: PHILOSOPHY (per language) */}
+          {step === 1 && (
+            <div className="space-y-6 animate-in fade-in duration-200">
+              <div className="space-y-2">
+                <span className="text-xs font-mono text-[var(--main-color)] uppercase tracking-wider font-semibold">
+                  {language.flag} {language.name} • core principle
+                </span>
+                <h2 className="text-2xl font-bold font-mono text-[var(--text-color)] tracking-tight">
+                  {intro.philosophy.heading}
+                </h2>
+                <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                  {intro.philosophy.body}
+                </p>
+              </div>
+
+              {/* Interactive demo pairs */}
               <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-3">
                 <div className="text-xs font-mono text-[var(--sub-color)] uppercase tracking-wider">
-                  high german consonant shift demo:
+                  {intro.philosophy.demoTitle}
                 </div>
 
-                {/* Shift Selector Pills */}
+                {/* Demo Selector Pills */}
                 <div className="flex flex-wrap gap-2">
-                  {shiftDemos.map((demo, idx) => (
+                  {intro.philosophy.demos.map((demo, idx) => (
                     <button
                       key={demo.english}
                       type="button"
@@ -180,7 +257,7 @@ export const OnboardingModal: React.FC = () => {
                           : "bg-[var(--bg-color)] text-[var(--sub-color)] hover:text-[var(--text-color)] border border-[var(--sub-color)]/20"
                       }`}
                     >
-                      {demo.english} → {demo.german}
+                      {demo.english} → {demo.target}
                     </button>
                   ))}
                 </div>
@@ -188,23 +265,24 @@ export const OnboardingModal: React.FC = () => {
                 {/* Active Demo Card */}
                 <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 text-center space-y-2">
                   <ShiftPair
-                    english={shiftDemos[activeShiftDemo].english}
-                    german={shiftDemos[activeShiftDemo].german}
-                    gender={shiftDemos[activeShiftDemo].gender}
-                    rule={shiftDemos[activeShiftDemo].rule}
-                    wordId={shiftDemos[activeShiftDemo].wordId}
+                    english={intro.philosophy.demos[activeShiftDemo].english}
+                    german={intro.philosophy.demos[activeShiftDemo].target}
+                    gender={intro.philosophy.demos[activeShiftDemo].gender}
+                    rule={intro.philosophy.demos[activeShiftDemo].rule}
+                    wordId={intro.philosophy.demos[activeShiftDemo].wordId}
+                    showDetailsOnClick={Boolean(intro.philosophy.demos[activeShiftDemo].wordId)}
                     className="text-lg px-3 py-1.5"
                   />
                   <p className="text-xs font-mono text-[var(--sub-color)] max-w-md mx-auto italic">
-                    &quot;{shiftDemos[activeShiftDemo].insight}&quot;
+                    &quot;{intro.philosophy.demos[activeShiftDemo].note}&quot;
                   </p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* STEP 2: NOTATION & SCAFFOLDING */}
-          {step === 1 && (
+          {/* STEP 3: NOTATION & SCAFFOLDING */}
+          {step === 2 && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <div className="space-y-2">
                 <span className="text-xs font-mono text-[var(--main-color)] uppercase tracking-wider font-semibold">
@@ -214,7 +292,7 @@ export const OnboardingModal: React.FC = () => {
                   linguistic notation & anchors
                 </h2>
                 <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
-                  brücke makes language learning transparent, intuitive, and grounded in living english cognates.
+                  {intro.notation.body}
                 </p>
               </div>
 
@@ -237,7 +315,7 @@ export const OnboardingModal: React.FC = () => {
                   </div>
                   <h3 className="text-xs font-bold font-mono text-[var(--text-color)]">everyday english</h3>
                   <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
-                    we connect german words to everyday english: <strong className="text-[var(--text-color)]">mit</strong> to <em className="text-[var(--main-color)]">midwife</em> and <strong className="text-[var(--text-color)]">will</strong> to <em className="text-[var(--main-color)]">voluntary</em>.
+                    {intro.notation.anchorsBody}
                   </p>
                 </div>
 
@@ -253,56 +331,67 @@ export const OnboardingModal: React.FC = () => {
                 </div>
               </div>
 
-              {/* Principle 4: Grammatical Gender Colors */}
-              <div className="p-4 sm:p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-3">
-                <div className="flex items-center justify-between">
+              {/* Principle 4: Grammatical Gender (only for gendered languages) */}
+              {intro.notation.showGenders && language.genderSystem ? (
+                <div className="p-4 sm:p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="text-[var(--main-color)] font-mono text-xs font-bold uppercase tracking-wider">
+                      04 • the 3 genders
+                    </div>
+                    <span className="text-xs font-mono text-[var(--sub-color)]">der · die · das</span>
+                  </div>
+                  <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                    in german, <strong className="text-[var(--text-color)]">every noun has an inherent grammatical gender</strong>.
+                    brücke pairs high-contrast badges with nouns so visual memory encodes gender:
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                    <div className="p-3 rounded-lg bg-[var(--bg-color)] border border-blue-500/30 flex flex-col justify-between gap-1.5">
+                      <div className="flex items-center justify-between">
+                        <GenderBadge gender="der" size="sm" showLabel />
+                        <span className="text-[11px] font-mono font-bold text-blue-400">masculine</span>
+                      </div>
+                      <p className="text-xs font-mono text-[var(--text-color)]">
+                        der Bruder <span className="text-[var(--sub-color)] font-sans text-[11px]">(brother)</span>
+                      </p>
+                    </div>
+
+                    <div className="p-3 rounded-lg bg-[var(--bg-color)] border border-rose-500/30 flex flex-col justify-between gap-1.5">
+                      <div className="flex items-center justify-between">
+                        <GenderBadge gender="die" size="sm" showLabel />
+                        <span className="text-[11px] font-mono font-bold text-rose-400">feminine</span>
+                      </div>
+                      <p className="text-xs font-mono text-[var(--text-color)]">
+                        die Hand <span className="text-[var(--sub-color)] font-sans text-[11px]">(hand)</span>
+                      </p>
+                    </div>
+
+                    <div className="p-3 rounded-lg bg-[var(--bg-color)] border border-emerald-500/30 flex flex-col justify-between gap-1.5">
+                      <div className="flex items-center justify-between">
+                        <GenderBadge gender="das" size="sm" showLabel />
+                        <span className="text-[11px] font-mono font-bold text-emerald-400">neuter</span>
+                      </div>
+                      <p className="text-xs font-mono text-[var(--text-color)]">
+                        das Wasser <span className="text-[var(--sub-color)] font-sans text-[11px]">(water)</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-4 sm:p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-2">
                   <div className="text-[var(--main-color)] font-mono text-xs font-bold uppercase tracking-wider">
-                    04 • the 3 genders
+                    04 • grammatical gender
                   </div>
-                  <span className="text-xs font-mono text-[var(--sub-color)]">der · die · das</span>
+                  <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                    {intro.notation.noGenderNote}
+                  </p>
                 </div>
-                <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
-                  in german, <strong className="text-[var(--text-color)]">every noun has an inherent grammatical gender</strong>.
-                  brücke pairs high-contrast badges with nouns so visual memory encodes gender:
-                </p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
-                  <div className="p-3 rounded-lg bg-[var(--bg-color)] border border-blue-500/30 flex flex-col justify-between gap-1.5">
-                    <div className="flex items-center justify-between">
-                      <GenderBadge gender="der" size="sm" showLabel />
-                      <span className="text-[11px] font-mono font-bold text-blue-400">masculine</span>
-                    </div>
-                    <p className="text-xs font-mono text-[var(--text-color)]">
-                      der Bruder <span className="text-[var(--sub-color)] font-sans text-[11px]">(brother)</span>
-                    </p>
-                  </div>
-
-                  <div className="p-3 rounded-lg bg-[var(--bg-color)] border border-rose-500/30 flex flex-col justify-between gap-1.5">
-                    <div className="flex items-center justify-between">
-                      <GenderBadge gender="die" size="sm" showLabel />
-                      <span className="text-[11px] font-mono font-bold text-rose-400">feminine</span>
-                    </div>
-                    <p className="text-xs font-mono text-[var(--text-color)]">
-                      die Hand <span className="text-[var(--sub-color)] font-sans text-[11px]">(hand)</span>
-                    </p>
-                  </div>
-
-                  <div className="p-3 rounded-lg bg-[var(--bg-color)] border border-emerald-500/30 flex flex-col justify-between gap-1.5">
-                    <div className="flex items-center justify-between">
-                      <GenderBadge gender="das" size="sm" showLabel />
-                      <span className="text-[11px] font-mono font-bold text-emerald-400">neuter</span>
-                    </div>
-                    <p className="text-xs font-mono text-[var(--text-color)]">
-                      das Wasser <span className="text-[var(--sub-color)] font-sans text-[11px]">(water)</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           )}
 
-          {/* STEP 3: THE THREE PILLARS */}
-          {step === 2 && (
+          {/* STEP 4: THE THREE PILLARS */}
+          {step === 3 && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <div className="space-y-2">
                 <span className="text-xs font-mono text-[var(--main-color)] uppercase tracking-wider font-semibold">
@@ -326,7 +415,7 @@ export const OnboardingModal: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <h4 className="text-sm font-bold text-[var(--text-color)]">trail</h4>
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-color)] text-[var(--sub-color)] border border-[var(--sub-color)]/20">
-                        30 lessons
+                        {isAvailable ? "30 lessons" : "coming soon"}
                       </span>
                     </div>
                     <p className="text-xs text-[var(--sub-color)] leading-relaxed">
@@ -344,11 +433,13 @@ export const OnboardingModal: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <h4 className="text-sm font-bold text-[var(--text-color)]">atlas</h4>
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-color)] text-[var(--sub-color)] border border-[var(--sub-color)]/20">
-                        constellations
+                        {isAvailable ? "constellations" : "coming soon"}
                       </span>
                     </div>
                     <p className="text-xs text-[var(--sub-color)] leading-relaxed">
-                      explore 9 consonant shift families and 32 compound calques with 4-tier mastery donut charts.
+                      {isAvailable
+                        ? "explore 9 consonant shift families and 32 compound calques with 4-tier mastery donut charts."
+                        : "explore sound-shift families and compound calques with 4-tier mastery donut charts."}
                     </p>
                   </div>
                 </div>
@@ -374,16 +465,16 @@ export const OnboardingModal: React.FC = () => {
             </div>
           )}
 
-          {/* STEP 4: READY TO BEGIN */}
-          {step === 3 && (
+          {/* STEP 5: READY TO BEGIN */}
+          {step === 4 && (
             <div className="space-y-6 text-center py-4 animate-in fade-in duration-200">
               <div className="space-y-2 max-w-md mx-auto font-mono">
+                <div className="text-3xl" aria-hidden>{language.flag}</div>
                 <h2 className="text-2xl font-bold text-[var(--text-color)] tracking-tight">
-                  ready to begin
+                  ready to begin {language.flag} {language.name}
                 </h2>
                 <p className="text-xs text-[var(--sub-color)] leading-relaxed">
-                  start with lesson 1 on the trail to encounter your first ten german cognates.
-                  all progress is stored locally in your browser.
+                  {intro.ready.body}
                 </p>
               </div>
 
@@ -395,16 +486,77 @@ export const OnboardingModal: React.FC = () => {
                 <div className="pl-6 text-[var(--text-color)]">• <strong>trail</strong>: structured lesson sequence</div>
                 <div className="pl-6 text-[var(--text-color)]">• <strong>palette</strong>: switch between 187 monkeytype themes</div>
                 <div className="pl-6 text-[var(--text-color)]">• <strong>esc / space / 1-4</strong>: full keyboard navigation</div>
+                <div className="pl-6 text-[var(--text-color)]">• <strong>settings</strong>: switch language anytime, progress is kept per language</div>
               </div>
             </div>
           )}
-        </div>
+          {/* STEP 6: THE POSTURE PRIMER (TM-4a — how to take the course; taught once, properly) */}
+          {step === PRIMER_STEP && (
+            <div className="space-y-4 animate-in fade-in duration-200">
+              <div className="space-y-2">
+                <span className="text-xs font-mono text-[var(--main-color)] uppercase tracking-wider font-semibold">
+                  how to take this course
+                </span>
+                <h2 className="text-2xl font-bold font-mono text-[var(--text-color)] tracking-tight">
+                  the posture
+                </h2>
+                <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                  four things to know before your first lesson — they matter more than any single answer.
+                </p>
+              </div>
 
-        {/* Modal Footer Controls */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-1.5">
+                  <div className="text-[var(--main-color)] font-mono text-xs font-bold uppercase tracking-wider">
+                    01 • pause and say it
+                  </div>
+                  <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                    Every exercise has a pause built in. Use it: think the answer through, say it out
+                    loud, then type. Thinking slowly here is what makes German fast later.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-1.5">
+                  <div className="text-[var(--main-color)] font-mono text-xs font-bold uppercase tracking-wider">
+                    02 • this is a gym, not a test
+                  </div>
+                  <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                    Wrong answers are reps. The queue at the end of a lesson isn&apos;t punishment;
+                    it&apos;s the second half of the workout. Nothing here is graded against you.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-1.5">
+                  <div className="text-[var(--main-color)] font-mono text-xs font-bold uppercase tracking-wider">
+                    03 • words are receipts, thoughts are the goods
+                  </div>
+                  <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                    Don&apos;t memorize German words — learn the laws that turn English thoughts into
+                    German. When you forget a word, the law will usually rebuild it.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-1.5">
+                  <div className="text-[var(--main-color)] font-mono text-xs font-bold uppercase tracking-wider">
+                    04 • let it go
+                  </div>
+                  <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed">
+                    You will forget things. That&apos;s the design: Review brings them back at the right
+                    moment. Never rewind a lesson to chase a word — keep walking.
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed text-center pt-1">
+                Purple means you built every answer by thinking it through, first try.
+              </p>
+            </div>
+          )}
+        </div>
         <div className="px-6 py-4 bg-[var(--sub-alt-color)] border-t border-[var(--sub-color)]/20 flex items-center justify-between gap-4 font-mono">
           {/* Step indicators */}
           <div className="flex items-center gap-1.5">
-            {[0, 1, 2, 3].map((i) => (
+            {Array.from({ length: TOTAL_STEPS }, (_, i) => i).map((i) => (
               <button
                 key={i}
                 type="button"
@@ -430,11 +582,12 @@ export const OnboardingModal: React.FC = () => {
               </button>
             )}
 
-            {step < 3 ? (
+            {step < TOTAL_STEPS - 1 ? (
               <button
                 type="button"
                 onClick={() => setStep((s) => s + 1)}
-                className="px-4 py-1.5 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs font-mono transition flex items-center gap-1.5 cursor-pointer"
+                disabled={step === 0 && !effectiveLanguageId}
+                className="px-4 py-1.5 rounded bg-[var(--main-color)] hover:opacity-90 disabled:opacity-40 text-[var(--bg-color)] font-bold text-xs font-mono transition flex items-center gap-1.5 cursor-pointer"
               >
                 <span>next</span>
                 <ArrowRight className="w-3 h-3" />
@@ -445,7 +598,13 @@ export const OnboardingModal: React.FC = () => {
                 onClick={finishOnboarding}
                 className="px-5 py-1.5 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs font-mono transition flex items-center gap-1.5 cursor-pointer"
               >
-                <span>{hasCompletedOnboarding ? "close guide" : "start lesson 1"}</span>
+                <span>
+                  {hasCompletedOnboarding
+                    ? "close guide"
+                    : isAvailable
+                    ? "start lesson 1"
+                    : "explore the app"}
+                </span>
                 <ArrowRight className="w-3 h-3" />
               </button>
             )}

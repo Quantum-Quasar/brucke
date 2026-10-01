@@ -43,12 +43,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <title>Brücke — German Cognate Engine</title>
+        <title>Brücke — Cognate Engine</title>
         <meta name="darkreader-lock" />
         <meta name="color-scheme" content="dark light" />
         <meta
           name="description"
-          content="Learn German vocabulary through historical sound shifts and etymological cognates. Fast, distraction-free, and keyboard-driven."
+          content="Learn vocabulary across languages through historical sound shifts and etymological cognates. Fast, distraction-free, and keyboard-driven."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script

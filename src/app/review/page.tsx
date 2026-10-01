@@ -27,8 +27,9 @@ import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
 import { playGermanAudio } from "@/lib/audio";
 import { computeLetterDiff, evaluateAnswerAccuracy } from "@/lib/letter-diff";
 import { soundEngine } from "@/lib/sound";
-import { compendium as data } from "@/data/compendium";
-import { WORD_ENTITY_MAP } from "@/lib/word-entities";
+import { getLanguageDefinition } from "@/data/languages";
+import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
+import { getWordEntityMap } from "@/lib/word-entities";
 import type { ReviewMode, SRSCard, WordEntity } from "@/lib/types";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
 
@@ -58,6 +59,12 @@ const EMPTY_SESSION_STATS: ReviewSessionStats = {
 };
 
 export default function ReviewPage() {
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
+  const content = getLanguageContent(activeLanguageId);
+  // coming-soon languages get an empty compendium; the page shows a
+  // construction notice instead of German content below
+  const data = content.compendium ?? EMPTY_COMPENDIUM;
   const [mounted, setMounted] = useState(false);
   const [activeDeck, setActiveDeck] = useState<DeckType | null>(null);
   const [selectedShiftId, setSelectedShiftId] = useState<string>("p_to_pf_f");
@@ -120,7 +127,7 @@ export default function ReviewPage() {
   }, [preferredReviewMode]);
 
   // Shared map keeps core words, compound calques, and false friends on the same detail path.
-  const allWordsMap: Record<string, WordEntity> = WORD_ENTITY_MAP;
+  const allWordsMap: Record<string, WordEntity> = getWordEntityMap(activeLanguageId);
 
   const compoundCards: SRSCard[] = useMemo(() => {
     const items: SRSCard[] = [];
@@ -697,6 +704,21 @@ export default function ReviewPage() {
         </p>
       </div>
 
+      {language.status !== "available" && (
+        <div className="p-8 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-center space-y-3">
+          <Clock className="w-8 h-8 text-[var(--main-color)] mx-auto" />
+          <h2 className="text-base font-bold font-mono text-[var(--text-color)]">
+            review comes with the {language.name.toLowerCase()} trail
+          </h2>
+          <p className="text-xs font-mono text-[var(--sub-color)] max-w-md mx-auto leading-relaxed">
+            spaced repetition unlocks as soon as {language.name} content is authored. switch languages
+            from settings — each language keeps its own review queue.
+          </p>
+        </div>
+      )}
+
+      {language.status === "available" && (
+      <>
       {/* Stats Bar */}
       <div className="p-3 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
         <div className="flex items-center gap-6">
@@ -1371,6 +1393,8 @@ export default function ReviewPage() {
           </div>
         </div>
         </>
+      )}
+      </>
       )}
 
       {/* REVIEW STYLE SELECTION MODAL */}

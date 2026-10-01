@@ -8,6 +8,7 @@ import { createInitialCard, gradeCard, isMastered, type ReviewGrade } from "./sr
 import { applyTheme, DEFAULT_THEME } from "@/data/themes";
 import { applyFont, DEFAULT_FONT } from "@/data/fonts";
 import { type CustomizationSettings, DEFAULT_SETTINGS } from "@/data/settings";
+import { DEFAULT_LANGUAGE_ID, isValidLanguageId } from "@/data/languages";
 import { applyAppearanceSettings } from "./appearance";
 import { soundEngine } from "./sound";
 
@@ -18,7 +19,30 @@ export interface ToleranceSettings {
   capitalizationDismissals: number;
 }
 
+/**
+ * Everything that is language-scoped in a learner's progress. The store keeps
+ * the ACTIVE language's slice mirrored onto the top-level fields
+ * (completedLessons, wordMastery, …) so the rest of the app reads them
+ * unchanged; switching languages swaps the mirrored slice.
+ */
+export interface LanguageProgress {
+  completedLessons: number[];
+  currentLessonId: number;
+  lessonProgress: Record<number, LessonProgress>;
+  lessonStars: Record<number, LessonStar>;
+  wordMastery: Record<string, MasteryState>;
+  srsCards: Record<string, SRSCard>;
+  weeklyActivity: boolean[]; // 7 days Mon-Sun
+  lastActivityWeek?: string;
+}
+
 export interface AppState {
+  /** which language the user is currently learning (global preference) */
+  activeLanguageId: string;
+  /** per-language progress; the active slice is mirrored to the fields above */
+  progressByLanguage: Record<string, LanguageProgress>;
+  /** languages whose onboarding introduction has been seen */
+  seenIntroLanguages: string[];
   completedLessons: number[];
   currentLessonId: number;
   lessonProgress: Record<number, LessonProgress>;
@@ -33,6 +57,8 @@ export interface AppState {
   preferredReviewMode: ReviewMode;
   hasCompletedOnboarding: boolean;
   isOnboardingOpen: boolean;
+  /** when onboarding auto-opens from a language switch: which language's intro to play (transient) */
+  onboardingIntroLanguage: string | null;
   hasSeenGenderIntro: boolean;
   theme: string;
   isThemeSelectorOpen: boolean;
@@ -41,6 +67,7 @@ export interface AppState {
   settings: CustomizationSettings;
 
   // Actions
+  setActiveLanguage: (languageId: string) => void;
   updateSetting: <K extends keyof CustomizationSettings>(key: K, value: CustomizationSettings[K]) => void;
   resetSettings: () => void;
   setTheme: (theme: string) => void;
@@ -140,6 +167,47 @@ export function loadSavedState(): Partial<AppState> {
         parsed.settings.quickRestart = DEFAULT_SETTINGS.quickRestart;
       }
     }
+
+    // Language slices: pre-multi-language saves kept progress only on the top
+    // level — migrate it into the default language's slice so nobody loses a
+    // day of German progress.
+    if (!parsed.activeLanguageId || !isValidLanguageId(parsed.activeLanguageId)) {
+      parsed.activeLanguageId = DEFAULT_LANGUAGE_ID;
+    }
+    if (!parsed.progressByLanguage || typeof parsed.progressByLanguage !== "object" || Array.isArray(parsed.progressByLanguage)) {
+      parsed.progressByLanguage = {};
+    }
+    if (!Array.isArray(parsed.seenIntroLanguages)) parsed.seenIntroLanguages = [];
+    if (!parsed.progressByLanguage[parsed.activeLanguageId]) {
+      parsed.progressByLanguage[parsed.activeLanguageId] = {
+        completedLessons: parsed.completedLessons,
+        currentLessonId: parsed.currentLessonId || 1,
+        lessonProgress: parsed.lessonProgress,
+        lessonStars: parsed.lessonStars,
+        wordMastery: parsed.wordMastery,
+        srsCards: parsed.srsCards,
+        weeklyActivity: parsed.weeklyActivity,
+        lastActivityWeek: parsed.lastActivityWeek,
+      };
+    }
+    // The top-level fields always mirror the active language's slice.
+    const activeSlice = parsed.progressByLanguage[parsed.activeLanguageId];
+    if (activeSlice && typeof activeSlice === "object") {
+      if (!Array.isArray(activeSlice.completedLessons)) activeSlice.completedLessons = [];
+      if (!activeSlice.lessonProgress || typeof activeSlice.lessonProgress !== "object" || Array.isArray(activeSlice.lessonProgress)) activeSlice.lessonProgress = {};
+      if (!activeSlice.lessonStars || typeof activeSlice.lessonStars !== "object" || Array.isArray(activeSlice.lessonStars)) activeSlice.lessonStars = {};
+      if (!activeSlice.wordMastery || typeof activeSlice.wordMastery !== "object") activeSlice.wordMastery = {};
+      if (!activeSlice.srsCards || typeof activeSlice.srsCards !== "object") activeSlice.srsCards = {};
+      if (!Array.isArray(activeSlice.weeklyActivity)) activeSlice.weeklyActivity = [false, false, false, false, false, false, false];
+      parsed.completedLessons = activeSlice.completedLessons;
+      parsed.currentLessonId = activeSlice.currentLessonId || 1;
+      parsed.lessonProgress = activeSlice.lessonProgress;
+      parsed.lessonStars = activeSlice.lessonStars;
+      parsed.wordMastery = activeSlice.wordMastery;
+      parsed.srsCards = activeSlice.srsCards;
+      parsed.weeklyActivity = activeSlice.weeklyActivity;
+      parsed.lastActivityWeek = activeSlice.lastActivityWeek;
+    }
     return parsed;
   }
 
@@ -150,7 +218,24 @@ let lastSerialized = "";
 
 export function saveState(state: AppState) {
   if (typeof window === "undefined") return;
+  // the active language's slice is derived from the mirrored top-level fields
+  const progressByLanguage: Record<string, LanguageProgress> = {
+    ...state.progressByLanguage,
+    [state.activeLanguageId]: {
+      completedLessons: state.completedLessons,
+      currentLessonId: state.currentLessonId,
+      lessonProgress: state.lessonProgress,
+      lessonStars: state.lessonStars,
+      wordMastery: state.wordMastery,
+      srsCards: state.srsCards,
+      weeklyActivity: state.weeklyActivity,
+      lastActivityWeek: state.lastActivityWeek,
+    },
+  };
   const toPersist = {
+    activeLanguageId: state.activeLanguageId,
+    progressByLanguage,
+    seenIntroLanguages: state.seenIntroLanguages,
     completedLessons: state.completedLessons,
     currentLessonId: state.currentLessonId,
     lessonProgress: state.lessonProgress,
@@ -179,6 +264,7 @@ export function saveState(state: AppState) {
   // 2. Also save to cookie with strict encoded size guard <= 2048 bytes (prevents HTTP 431)
   try {
     const lean = {
+      activeLanguageId: state.activeLanguageId,
       completedLessons: state.completedLessons,
       currentLessonId: state.currentLessonId,
       wordMastery: state.wordMastery,
@@ -200,6 +286,9 @@ export function saveState(state: AppState) {
 const initialSaved = loadSavedState();
 
 export const useAppStore = create<AppState>((set, get) => ({
+  activeLanguageId: initialSaved.activeLanguageId || DEFAULT_LANGUAGE_ID,
+  progressByLanguage: initialSaved.progressByLanguage || {},
+  seenIntroLanguages: initialSaved.seenIntroLanguages || [],
   completedLessons: initialSaved.completedLessons || [],
   currentLessonId: initialSaved.currentLessonId || 1,
   lessonProgress: initialSaved.lessonProgress || {},
@@ -212,6 +301,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   preferredReviewMode: (initialSaved.preferredReviewMode as ReviewMode) || "flashcard",
   hasCompletedOnboarding: initialSaved.hasCompletedOnboarding || false,
   isOnboardingOpen: false,
+  onboardingIntroLanguage: null,
   hasSeenGenderIntro: initialSaved.hasSeenGenderIntro || false,
   theme: (initialSaved as any)?.theme || DEFAULT_THEME,
   isThemeSelectorOpen: false,
@@ -223,6 +313,52 @@ export const useAppStore = create<AppState>((set, get) => ({
     capitalizationTolerance: initialSaved.settings?.capitalizationTolerance || false,
     umlautDismissals: 0,
     capitalizationDismissals: 0,
+  },
+
+  setActiveLanguage: (languageId) => {
+    if (!isValidLanguageId(languageId)) return;
+    set((s) => {
+      if (s.activeLanguageId === languageId) return s;
+      // park the outgoing language's mirrored progress, then restore the
+      // incoming language's slice (or a fresh one for a first-time language)
+      const progressByLanguage = {
+        ...s.progressByLanguage,
+        [s.activeLanguageId]: {
+          completedLessons: s.completedLessons,
+          currentLessonId: s.currentLessonId,
+          lessonProgress: s.lessonProgress,
+          lessonStars: s.lessonStars,
+          wordMastery: s.wordMastery,
+          srsCards: s.srsCards,
+          weeklyActivity: s.weeklyActivity,
+          lastActivityWeek: s.lastActivityWeek,
+        },
+      };
+      const incoming = progressByLanguage[languageId];
+      const seenIntroLanguages = s.seenIntroLanguages.includes(languageId)
+        ? s.seenIntroLanguages
+        : [...s.seenIntroLanguages, languageId];
+      const next: AppState = {
+        ...s,
+        activeLanguageId: languageId,
+        progressByLanguage,
+        seenIntroLanguages,
+        completedLessons: incoming?.completedLessons || [],
+        currentLessonId: incoming?.currentLessonId || 1,
+        lessonProgress: incoming?.lessonProgress || {},
+        lessonStars: incoming?.lessonStars || {},
+        wordMastery: incoming?.wordMastery || {},
+        srsCards: incoming?.srsCards || {},
+        weeklyActivity: incoming?.weeklyActivity || [false, false, false, false, false, false, false],
+        lastActivityWeek: incoming?.lastActivityWeek,
+        activeWordDrawerId: null,
+        // a language's introduction plays the first time it is chosen
+        isOnboardingOpen: !s.seenIntroLanguages.includes(languageId),
+        onboardingIntroLanguage: s.seenIntroLanguages.includes(languageId) ? null : languageId,
+      };
+      saveState(next);
+      return next;
+    });
   },
 
   updateSetting: (key, value) => {
@@ -296,14 +432,20 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   completeOnboarding: () => {
     set((s) => {
-      const next = { ...s, hasCompletedOnboarding: true, isOnboardingOpen: false };
+      const seenIntroLanguages = s.seenIntroLanguages.includes(s.activeLanguageId)
+        ? s.seenIntroLanguages
+        : [...s.seenIntroLanguages, s.activeLanguageId];
+      // TM-4a: the primer sits inside onboarding, so completing or skipping the
+      // wizard marks it seen (additive settings key; everything else untouched)
+      const settings = { ...s.settings, posturePrimerSeen: true };
+      const next = { ...s, hasCompletedOnboarding: true, isOnboardingOpen: false, onboardingIntroLanguage: null, seenIntroLanguages, settings };
       saveState(next);
       return next;
     });
   },
 
   openOnboarding: () => {
-    set({ isOnboardingOpen: true });
+    set({ isOnboardingOpen: true, onboardingIntroLanguage: null });
   },
 
   closeOnboarding: () => {
@@ -527,6 +669,9 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   resetProgress: () => {
     const emptyState = {
+      activeLanguageId: DEFAULT_LANGUAGE_ID,
+      progressByLanguage: {},
+      seenIntroLanguages: [],
       completedLessons: [],
       currentLessonId: 1,
       lessonProgress: {},
@@ -538,6 +683,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       preferredReviewMode: "flashcard" as ReviewMode,
       hasCompletedOnboarding: false,
       isOnboardingOpen: false,
+      onboardingIntroLanguage: null,
       hasSeenGenderIntro: false,
       theme: DEFAULT_THEME,
       isThemeSelectorOpen: false,
@@ -572,6 +718,9 @@ export const useAppStore = create<AppState>((set, get) => ({
     // reporting success while restoring nothing
     const RECOGNIZED_FIELDS = [
       "settings",
+      "activeLanguageId",
+      "progressByLanguage",
+      "seenIntroLanguages",
       "completedLessons",
       "currentLessonId",
       "lessonProgress",
@@ -662,6 +811,37 @@ export const useAppStore = create<AppState>((set, get) => ({
         ? payload.lastActivityWeek
         : s.lastActivityWeek;
 
+      // Language identity & slices. A pre-multi-language backup (no
+      // progressByLanguage) carries one language's progress on the top level —
+      // attribute it to the backup's own active language, not the current one.
+      const backupLanguageId = isValidLanguageId(payload.activeLanguageId) ? payload.activeLanguageId : s.activeLanguageId;
+      let progressByLanguage = { ...s.progressByLanguage };
+      if (payload.progressByLanguage && typeof payload.progressByLanguage === "object" && !Array.isArray(payload.progressByLanguage)) {
+        for (const [langId, slice] of Object.entries(payload.progressByLanguage)) {
+          if (isValidLanguageId(langId) && slice && typeof slice === "object") {
+            progressByLanguage[langId] = { ...(progressByLanguage[langId] || {}), ...(slice as LanguageProgress) };
+          }
+        }
+      } else if (
+        backupLanguageId !== s.activeLanguageId &&
+        (Array.isArray(payload.completedLessons) ||
+          (payload.wordMastery && typeof payload.wordMastery === "object"))
+      ) {
+        progressByLanguage[backupLanguageId] = {
+          completedLessons: Array.isArray(payload.completedLessons) ? completedLessons : progressByLanguage[backupLanguageId]?.completedLessons || [],
+          currentLessonId: typeof currentLessonId === "number" ? currentLessonId : 1,
+          lessonProgress: (payload.lessonProgress && typeof payload.lessonProgress === "object" ? payload.lessonProgress : {}) as Record<number, LessonProgress>,
+          lessonStars: (payload.lessonStars && typeof payload.lessonStars === "object" ? payload.lessonStars : {}) as Record<number, LessonStar>,
+          wordMastery: (payload.wordMastery && typeof payload.wordMastery === "object" ? payload.wordMastery : {}) as Record<string, MasteryState>,
+          srsCards: srsCards as Record<string, SRSCard>,
+          weeklyActivity: Array.isArray(payload.weeklyActivity) ? weeklyActivity : [false, false, false, false, false, false, false],
+          lastActivityWeek: typeof payload.lastActivityWeek === "string" ? payload.lastActivityWeek : undefined,
+        };
+      }
+      const nextSeenIntroLanguages = Array.isArray(payload.seenIntroLanguages)
+        ? Array.from(new Set([...s.seenIntroLanguages, ...payload.seenIntroLanguages.filter((x: any) => typeof x === "string")]))
+        : s.seenIntroLanguages;
+
       const nextTolerance = {
         ...s.tolerance,
         umlautTolerance: typeof nextSettings.lazyMode === "boolean" ? nextSettings.lazyMode : s.tolerance.umlautTolerance,
@@ -670,6 +850,9 @@ export const useAppStore = create<AppState>((set, get) => ({
 
       const next: AppState = {
         ...s,
+        activeLanguageId: backupLanguageId,
+        progressByLanguage,
+        seenIntroLanguages: nextSeenIntroLanguages,
         completedLessons,
         currentLessonId,
         lessonProgress,
@@ -710,6 +893,11 @@ export const useAppStore = create<AppState>((set, get) => ({
 
         return {
           ...s,
+          activeLanguageId: saved.activeLanguageId || s.activeLanguageId,
+          progressByLanguage: { ...s.progressByLanguage, ...((saved as any).progressByLanguage || {}) },
+          seenIntroLanguages: Array.isArray((saved as any).seenIntroLanguages)
+            ? Array.from(new Set([...s.seenIntroLanguages, ...((saved as any).seenIntroLanguages as string[])]))
+            : s.seenIntroLanguages,
           completedLessons: Array.isArray(saved.completedLessons) && saved.completedLessons.length > 0
             ? saved.completedLessons
             : s.completedLessons,

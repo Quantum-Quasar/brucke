@@ -24,6 +24,10 @@ export interface CustomizationSettings {
   capsLockWarning: boolean;
   showMasteryCounter: boolean;
   increasedContrast: boolean;
+
+  // Posture (TM-4): how the course asks to be taken
+  showPostureCues: boolean;
+  posturePrimerSeen: boolean;
 }
 
 export const DEFAULT_SETTINGS: CustomizationSettings = {
@@ -43,4 +47,7 @@ export const DEFAULT_SETTINGS: CustomizationSettings = {
   capsLockWarning: true,
   showMasteryCounter: true,
   increasedContrast: false,
+
+  showPostureCues: true,
+  posturePrimerSeen: false,
 };

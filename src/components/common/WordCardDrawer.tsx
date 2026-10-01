@@ -7,9 +7,10 @@ import Link from "next/link";
 import { X, ExternalLink, Compass, BookOpen, CheckCircle2, Circle, Disc, Minus, Volume2 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { GenderBadge } from "@/components/common/GenderBadge";
-import { playGermanAudio } from "@/lib/audio";
-import { compendium as data } from "@/data/compendium";
-import { getWordEntity, WORD_LESSON_MAP } from "@/lib/word-entities";
+import { playTargetAudio } from "@/lib/audio";
+import { getLanguageDefinition } from "@/data/languages";
+import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
+import { getWordEntity, getWordLessonMap } from "@/lib/word-entities";
 import type { WordEntity } from "@/lib/types";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
 
@@ -17,6 +18,9 @@ export const WordCardDrawer: React.FC = () => {
   const activeWordId = useAppStore((s) => s.activeWordDrawerId);
   const closeDrawer = useAppStore((s) => s.closeWordDrawer);
   const mastery = useAppStore((s) => (activeWordId ? s.wordMastery[activeWordId] || "unexplored" : "unexplored"));
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
+  const data = getLanguageContent(activeLanguageId).compendium ?? EMPTY_COMPENDIUM;
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useDialogFocus({
@@ -27,7 +31,7 @@ export const WordCardDrawer: React.FC = () => {
 
   if (!activeWordId) return null;
 
-  const word: WordEntity | undefined = getWordEntity(activeWordId);
+  const word: WordEntity | undefined = getWordEntity(activeWordId, activeLanguageId);
 
   if (!word) {
     return (
@@ -52,7 +56,7 @@ export const WordCardDrawer: React.FC = () => {
   }
 
   const shiftFamily = word.sound_shift_ids[0] ? data.shifts[word.sound_shift_ids[0]] : null;
-  const lessonId = word ? WORD_LESSON_MAP[word.id] : undefined;
+  const lessonId = word ? getWordLessonMap(activeLanguageId)[word.id] : undefined;
   const relatedCompounds = data.compounds.filter(
     (c) => c.compound.toLowerCase().includes(word.target_word.toLowerCase()) || c.literal_morphemes.toLowerCase().includes(word.target_word.toLowerCase())
   );
@@ -124,7 +128,7 @@ export const WordCardDrawer: React.FC = () => {
               <h2 id="word-drawer-title" className="text-3xl font-mono font-bold text-[var(--main-color)] tracking-tight">{word.target_word}</h2>
               <button
                 type="button"
-                onClick={() => playGermanAudio(word.gender ? `${word.gender} ${word.target_word}` : word.target_word)}
+                onClick={() => playTargetAudio(word.gender ? `${word.gender} ${word.target_word}` : word.target_word, language.ttsLocale)}
                 className="p-1.5 rounded bg-[var(--sub-alt-color)] hover:bg-[var(--main-color)]/10 text-[var(--main-color)] border border-[var(--sub-color)]/20 transition cursor-pointer"
                 title={`Listen to "${word.gender ? `${word.gender} ` : ""}${word.target_word}"`}
                 aria-label={`Listen to German pronunciation of ${word.gender ? `${word.gender} ` : ""}${word.target_word}`}

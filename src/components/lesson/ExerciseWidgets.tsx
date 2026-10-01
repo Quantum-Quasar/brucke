@@ -7,10 +7,13 @@ import { Check, AlertCircle, Sparkles } from "lucide-react";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
 import { ErrorFeedbackSheet } from "./ErrorFeedbackSheet";
 import { SuccessFeedbackSheet } from "./SuccessFeedbackSheet";
+import { TranscribeExercise } from "./TranscribeExercise";
+import { LiteralGloss } from "./LiteralGloss";
 import { evaluateAnswerAccuracy } from "@/lib/letter-diff";
+import { diagnoseAttempt, affirmationFor } from "@/lib/shift-diagnosis";
 import { useAppStore } from "@/lib/store";
 import { soundEngine } from "@/lib/sound";
-import type { ExerciseItem } from "@/lib/types";
+import type { ExerciseDiagnosis, ExerciseItem } from "@/lib/types";
 
 interface ExerciseWidgetProps {
   exercise: ExerciseItem;
@@ -18,9 +21,54 @@ interface ExerciseWidgetProps {
   onError: (errorType: "spelling" | "umlaut" | "capitalization") => void;
   isRetry?: boolean;
   onQueueRetry?: () => void;
+  /** TM-1: using a transcribe cue ladder forfeits the purple star (help is honest) */
+  onPurpleForfeit?: () => void;
 }
 
 export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
+  exercise,
+  onSuccess,
+  onError,
+  isRetry = false,
+  onQueueRetry,
+  onPurpleForfeit,
+}) => {
+  // TM-1/TM-2: the two production-drill types are self-contained widgets with their
+  // own cue ladders / option flow; they reuse the same feedback sheets.
+  if (exercise.type === "transcribe") {
+    return (
+      <TranscribeExercise
+        exercise={exercise}
+        isRetry={isRetry}
+        onSuccess={onSuccess}
+        onError={onError}
+        onQueueRetry={onQueueRetry}
+        onPurpleForfeit={onPurpleForfeit}
+      />
+    );
+  }
+  if (exercise.type === "literal_gloss") {
+    return (
+      <LiteralGloss
+        exercise={exercise}
+        isRetry={isRetry}
+        onSuccess={onSuccess}
+        onError={onError}
+        onQueueRetry={onQueueRetry}
+      />
+    );
+  }
+
+  return <LegacyExerciseWidget
+    exercise={exercise}
+    onSuccess={onSuccess}
+    onError={onError}
+    isRetry={isRetry}
+    onQueueRetry={onQueueRetry}
+  />;
+};
+
+const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit">> = ({
   exercise,
   onSuccess,
   onError,
@@ -37,6 +85,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
   const [showErrorSheet, setShowErrorSheet] = useState(false);
   const [showSuccessSheet, setShowSuccessSheet] = useState(false);
   const [failedAttemptText, setFailedAttemptText] = useState("");
+  const [failedDiagnosis, setFailedDiagnosis] = useState<ExerciseDiagnosis | undefined>(undefined);
   const [isCapsLock, setIsCapsLock] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
@@ -78,6 +127,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     setShowErrorSheet(false);
     setShowSuccessSheet(false);
     setFailedAttemptText("");
+    setFailedDiagnosis(undefined);
 
     if (exercise.type === "derive" || exercise.type === "reverse_cognate") {
       setTimeout(() => inputRef.current?.focus(), 50);
@@ -314,6 +364,13 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     );
     onQueueRetry?.();
     setFailedAttemptText(answerToCheck);
+    // TM-3: authored diagnosis wins; computed diagnosis names the violated shift law
+    setFailedDiagnosis(
+      exercise.diagnosis ??
+        (exercise.type === "derive" || exercise.type === "reverse_cognate"
+          ? diagnoseAttempt(expected, answerToCheck, exercise.shift_hint) ?? undefined
+          : undefined)
+    );
     setShowErrorSheet(true);
   };
 
@@ -347,6 +404,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       onError("spelling");
       onQueueRetry?.();
       setFailedAttemptText(option);
+      setFailedDiagnosis(exercise.diagnosis);
       setShowErrorSheet(true);
     }
   };
@@ -776,6 +834,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
           englishPrompt={exercise.prompt}
           shiftRule={exercise.shift_hint}
           explanation={exercise.explanation}
+          diagnosis={failedDiagnosis}
           onContinue={() => {
             setShowErrorSheet(false);
             setStatus("idle");
@@ -804,6 +863,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
           variant={sheetVariant}
           userAttempt={verifiedAttemptText}
           warningNote={almostWarningNote}
+          affirmation={affirmationFor(exercise.affirmation, exercise.shift_hint)}
           onContinue={() => {
             setShowSuccessSheet(false);
             setStatus("idle");

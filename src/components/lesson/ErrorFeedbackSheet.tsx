@@ -3,9 +3,10 @@
 // ponytail: focused bottom modal sheet presenting letter-by-letter diff and mechanical shift explanation
 
 import React, { useEffect } from "react";
-import { AlertCircle, ArrowRight } from "lucide-react";
+import { AlertCircle, ArrowRight, Stethoscope } from "lucide-react";
 import { computeLetterDiff } from "@/lib/letter-diff";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
+import type { ExerciseDiagnosis } from "@/lib/types";
 
 interface ErrorFeedbackSheetProps {
   userInput: string;
@@ -13,6 +14,7 @@ interface ErrorFeedbackSheetProps {
   englishPrompt?: string;
   shiftRule?: string;
   explanation?: string;
+  diagnosis?: ExerciseDiagnosis;
   onContinue: () => void;
 }
 
@@ -22,6 +24,7 @@ export const ErrorFeedbackSheet: React.FC<ErrorFeedbackSheetProps> = ({
   englishPrompt,
   shiftRule,
   explanation,
+  diagnosis,
   onContinue,
 }) => {
   const diff = computeLetterDiff(userInput, expectedAnswer);
@@ -105,6 +108,18 @@ export const ErrorFeedbackSheet: React.FC<ErrorFeedbackSheetProps> = ({
             </div>
           )}
         </div>
+
+        {/* TM-3: name the slip before the letter diff — feedback is teaching time */}
+        {diagnosis && (
+          <div className="text-xs font-mono text-[var(--text-color)] leading-relaxed bg-[var(--sub-alt-color)] p-3 rounded-lg border border-[var(--main-color)]/30">
+            <span className="text-[var(--main-color)] font-semibold flex items-center gap-1.5 mb-0.5 uppercase tracking-wider text-[11px]">
+              <Stethoscope className="w-3.5 h-3.5" /> what went wrong
+            </span>
+            <em>
+              {diagnosis.slip} — {diagnosis.cue}
+            </em>
+          </div>
+        )}
 
         {/* Instructive Explanation */}
         {explanation && (

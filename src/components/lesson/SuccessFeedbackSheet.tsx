@@ -1,9 +1,16 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { CheckCircle2, ArrowRight, Sparkles, BookOpen, AlertCircle } from "lucide-react";
+import { CheckCircle2, ArrowRight, Sparkles, BookOpen, AlertCircle, Repeat } from "lucide-react";
 import type { VocabHint } from "@/lib/types";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
+
+interface LiteralGlossPair {
+  literal: string;
+  natural: string;
+  /** load-bearing words (present in one rendering, absent in the other) */
+  highlights: string[];
+}
 
 interface SuccessFeedbackSheetProps {
   targetAnswer: string;
@@ -14,6 +21,10 @@ interface SuccessFeedbackSheetProps {
   variant?: "exact" | "almost";
   userAttempt?: string;
   warningNote?: string;
+  /** TM-3 process affirmation — the correct answer restates the process (guidebook §1.7). */
+  affirmation?: string;
+  /** TM-2 literal-gloss reveal: the word-for-word English beside its natural form. */
+  literalPair?: LiteralGlossPair;
   onContinue: () => void;
 }
 
@@ -26,6 +37,8 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
   variant = "exact",
   userAttempt,
   warningNote,
+  affirmation,
+  literalPair,
   onContinue,
 }) => {
   const continueBtnRef = React.useRef<HTMLButtonElement>(null);
@@ -87,6 +100,14 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
           )}
         </div>
 
+        {/* TM-3: masked repetition — a correct answer restates the process, specifically (§1.7) */}
+        {affirmation && (
+          <p className="text-xs font-mono text-[var(--main-color)] flex items-center gap-2 leading-relaxed">
+            <Repeat className="w-4 h-4 shrink-0" />
+            <span>{affirmation}</span>
+          </p>
+        )}
+
         {/* Almost Right Comparison Callout */}
         {isAlmost && userAttempt && (
           <div className="p-3.5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/25 space-y-2">
@@ -108,28 +129,55 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
           </div>
         )}
 
-        {/* Answer and Meaning Card */}
-        <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-2.5">
-          <div>
-            <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block">
-              german:
-            </span>
-            <div className="text-xl font-bold text-[var(--main-color)] font-mono">
-              {targetAnswer}
-            </div>
-          </div>
-
-          {meaning && (
-            <div className="pt-2 border-t border-[var(--sub-color)]/15">
+        {/* TM-2: the literal rendering beside its natural form, load-bearing words highlighted */}
+        {literalPair ? (
+          <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-2.5">
+            <div>
               <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block">
-                meaning:
+                built the german way:
               </span>
-              <div className="text-sm text-[var(--text-color)] font-medium">
-                &ldquo;{meaning}&rdquo;
+              <div className="text-lg font-bold text-[var(--main-color)] font-mono">
+                {literalPair.literal.split(/(\s+)/).map((token, i) =>
+                  literalPair.highlights.includes(token.toLowerCase().replace(/[.,!?;:]+$/, "")) && token.trim() ? (
+                    <span key={i} className="px-1 rounded bg-[var(--main-color)]/15 underline decoration-2">
+                      {token}
+                    </span>
+                  ) : (
+                    <span key={i}>{token}</span>
+                  )
+                )}
               </div>
             </div>
-          )}
-        </div>
+            <div className="pt-2 border-t border-[var(--sub-color)]/15">
+              <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block">
+                natural english:
+              </span>
+              <div className="text-sm text-[var(--text-color)] font-medium">&ldquo;{literalPair.natural}&rdquo;</div>
+            </div>
+          </div>
+        ) : (
+          <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-2.5">
+            <div>
+              <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block">
+                german:
+              </span>
+              <div className="text-xl font-bold text-[var(--main-color)] font-mono">
+                {targetAnswer}
+              </div>
+            </div>
+
+            {meaning && (
+              <div className="pt-2 border-t border-[var(--sub-color)]/15">
+                <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block">
+                  meaning:
+                </span>
+                <div className="text-sm text-[var(--text-color)] font-medium">
+                  &ldquo;{meaning}&rdquo;
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Vocabulary Clue / Reinforcement if present */}
         {vocabHints && vocabHints.length > 0 && (

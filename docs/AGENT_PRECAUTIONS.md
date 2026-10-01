@@ -152,4 +152,60 @@
 
 ---
 
+## 7. Thinking Method surfaces (`transcribe`, `literal_gloss`, `twist`) — applies when you author or edit the TM content
+
+> Added 2026-10-01 by the Thinking Method upgrade (`docs/THINKING_METHOD_UPGRADE.md`), which
+> also amends §4.5: surgical edits to existing lessons are permitted under that document's
+> §0.3 rules (never `id`/`slug`/`title`/`phase`/`shift_categories`/position; at most one
+> exercise swap per lesson per batch; lessons 1–10 are add-only). `src/lib/store.ts` remains
+> frozen except for its documented additive TM-4 settings keys.
+
+### 7.1 `transcribe` invariants (tests enforce most of this)
+- **Applies when:** authoring a production drill.
+- **Action:** `word_bank` must contain every word of `target_answer` **and** be strictly
+  longer than the target's word count (≥ 1 distractor — a transcribe without distractors is
+  a syntax_builder in disguise). `cues` is 1–3 scaled prompts (topic band 2–7 → 3, 8–16 → 2,
+  17–30 → 1). `idea` must pin every German form (person, tense, object) in natural English.
+  No trailing punctuation on `target_answer` or bank chips. Never in the first exercise slot.
+
+### 7.2 `literal_gloss` invariants
+- **Applies when:** authoring a direct-translation exercise.
+- **Action:** `options` unique, 3–4, contains `target_answer` (the word-for-word rendering);
+  the other options must be natural or *differently* wrong — author them natural first.
+  `explanation` names the cluster's taught law in the trail's voice. Only in the seven
+  word-order clusters (topics 2, 12, 13, 14, 15, 20, 27) and their drilled sprigs — outside
+  word order it becomes a gimmick (TM-2 limit 2). Never in the first exercise slot.
+
+### 7.3 The `twist` is ungraded and outside the 5-exercise contract
+- **Applies when:** authoring or touching `lesson.twist`.
+- **Action:** exactly one optional twist per lesson; it never counts toward the 5 exercises,
+  never touches `everQueued`, the retry queue, star logic, or completion gating. Its
+  `target_answer` obeys the no-trailing-punctuation rule; its `word_bank` (if present) must
+  contain every target word. Grading a twist would violate the guidebook twice — do not.
+
+### 7.4 Word-reference audit is wider now
+- **Applies when:** any content batch.
+- **Action:** run `bun scripts/audit-word-refs.ts` alongside the baseline — it checks
+  `word_ids`/`table_word_ids` **and** every German token in `transcribe` (answer + bank),
+  `twist`, and `literal_gloss.german` against the compendium, vocab hints, and a documented
+  function-word/inflection table. A new unresolved token is either a bug or a new allowlist
+  entry you must justify in the batch report.
+
+### 7.5 Feedback fields ride on exercises, not on sweeps
+- **Applies when:** authoring affirmations or diagnoses.
+- **Action:** `affirmation` (≤ 140 chars, restates the process, only true claims) and
+  `diagnosis: { slip, cue }` (authored override for the common wrong answer) are authored
+  per batch alongside exercises, never as a separate sweep. Authored diagnosis wins over
+  the computed one (`src/lib/shift-diagnosis.ts` + `src/data/shift-diagnosis-table.ts`);
+  the table is data — new rows are allowed but every cue must state a real law (P7).
+
+### 7.6 Duplicate exercise ids were a live bug — keep checking
+- **Applies when:** editing exercises in `lessons.ts`.
+- **Action:** the id convention is `l<lessonId>_e<n>`; sprig 202's e5 shipped as `l2_e5`
+  (duplicate of core 2's) and was only found when a regex edit landed on the wrong block.
+  After any exercise edit: `grep -o 'id: "l[0-9]*_e[0-9]*"' src/data/lessons.ts | sort | uniq -d`
+  must print nothing.
+
+---
+
 *If you find a new trap, add it here with its condition — this file is the institutional memory that keeps agents from re-learning the same lessons.*

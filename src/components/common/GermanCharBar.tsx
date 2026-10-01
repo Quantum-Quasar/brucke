@@ -1,35 +1,35 @@
 "use client";
 
 import React from "react";
+import { useAppStore } from "@/lib/store";
+import { getLanguageDefinition } from "@/data/languages";
 
 interface GermanCharBarProps {
   onInsert: (char: string) => void;
   className?: string;
 }
 
-const CHARACTERS: [char: string, digraph: string][] = [
-  ["ä", "ae"],
-  ["ö", "oe"],
-  ["ü", "ue"],
-  ["ß", "ss"],
-  ["Ä", "Ae"],
-  ["Ö", "Oe"],
-  ["Ü", "Ue"],
-];
-
+/**
+ * Quick-insert bar for the active language's special characters.
+ * (Keeps its historical GermanCharBar name; characters come from the
+ * language registry, so other languages get their own accents for free.)
+ */
 export const GermanCharBar: React.FC<GermanCharBarProps> = ({ onInsert, className = "" }) => {
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
+
   return (
     <div className={`flex flex-wrap items-center gap-1.5 p-1.5 rounded bg-[var(--sub-alt-color)]/50 border border-[var(--sub-color)]/20 ${className}`}>
       <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--sub-color)] px-1.5 hidden sm:inline">
-        Umlauts:
+        {language.charBarLabel}:
       </span>
-      {CHARACTERS.map(([char, digraph]) => (
+      {language.specialChars.map(([char, digraph]) => (
         <button
           key={char}
           type="button"
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => onInsert(char)}
-          title={`Insert ${char} (or type "${digraph}" with lazy mode on)`}
+          title={`Insert ${char}${digraph ? ` (or type "${digraph}" with lazy mode on)` : ""}`}
           className="group relative flex flex-col items-center justify-center min-w-[32px] sm:min-w-[36px] h-9 px-2 rounded bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 active:scale-95 border border-[var(--sub-color)]/30 hover:border-[var(--main-color)]/40 transition-colors cursor-pointer"
         >
           <span className="text-sm font-mono font-medium text-[var(--main-color)]">{char}</span>

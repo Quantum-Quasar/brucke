@@ -262,3 +262,34 @@ describe("Trail layout", () => {
     expect(new Set(layout.nodes.map((n) => n.id)).size).toBe(order.length);
   });
 });
+
+// --- Thinking Method upgrade (TM-1/TM-2): trail-wide content invariants ---
+
+describe("Thinking Method trail invariants", () => {
+  it("gives every core lesson from topic 2 on at least one transcribe production drill", () => {
+    for (let topic = 2; topic <= TOTAL_TOPICS; topic++) {
+      const core = LESSONS.find((l) => l.id === topic);
+      expect(core, `core lesson ${topic} exists`).toBeDefined();
+      const transcribes = core!.exercises.filter((e) => e.type === "transcribe");
+      expect(transcribes.length, `core ${topic} has a transcribe`).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it("gives all seven word-order clusters at least one literal_gloss", () => {
+    const WORD_ORDER_CLUSTERS = [2, 12, 13, 14, 15, 20, 27];
+    for (const topic of WORD_ORDER_CLUSTERS) {
+      const core = LESSONS.find((l) => l.id === topic);
+      expect(core, `core lesson ${topic} exists`).toBeDefined();
+      const glosses = core!.exercises.filter((e) => e.type === "literal_gloss");
+      expect(glosses.length, `core ${topic} has a literal_gloss`).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it("gives every core lesson from topic 2 on exactly one ungraded twist", () => {
+    for (let topic = 2; topic <= TOTAL_TOPICS; topic++) {
+      const core = LESSONS.find((l) => l.id === topic);
+      expect(core, `core lesson ${topic} exists`).toBeDefined();
+      expect(core!.twist, `core ${topic} has a twist`).toBeDefined();
+    }
+  });
+});

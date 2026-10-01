@@ -162,4 +162,120 @@ describe("Progressive Bite-Sized Exercise Architecture", () => {
     }
     expect(completedRetries).toEqual([lesson.exercises[1].id, lesson.exercises[2].id]);
   });
+
+  // --- TM-1: transcribe — production from a thought, with a cue ladder ---
+
+  it("validates transcribe exercises: bank covers the answer, carries distractors, and cues stay within the ladder cap", () => {
+    for (const lesson of LESSONS) {
+      const transcribeExercises = lesson.exercises.filter((e) => e.type === "transcribe");
+      for (const ex of transcribeExercises) {
+        // the thought and the solicitation both exist
+        expect(ex.idea).toBeDefined();
+        expect(ex.idea!.length).toBeGreaterThan(0);
+        expect(ex.prompt.length).toBeGreaterThan(0);
+
+        // word_bank ⊇ every word of the target answer (kept from syntax_builder)…
+        expect(ex.word_bank).toBeDefined();
+        const targetWords = ex.target_answer.split(" ");
+        for (const word of targetWords) {
+          expect(ex.word_bank).toContain(word);
+        }
+        // …and ≥ 1 plausible distractor — a transcribe without distractors is a syntax_builder in disguise
+        expect(ex.word_bank!.length).toBeGreaterThan(targetWords.length);
+
+        // cue ladder: 1–3 scaled prompts
+        expect(ex.cues).toBeDefined();
+        expect(ex.cues!.length).toBeGreaterThanOrEqual(1);
+        expect(ex.cues!.length).toBeLessThanOrEqual(3);
+        for (const cue of ex.cues!) {
+          expect(cue.length).toBeGreaterThan(0);
+        }
+
+        // no trailing punctuation in the answer, none on the bank chips
+        expect(ex.target_answer).not.toMatch(/[.,!?;:]$/);
+        for (const chip of ex.word_bank!) {
+          expect(chip).not.toMatch(/[.,!?;:]$/);
+        }
+      }
+
+      // production drills never open a lesson (recognition first — don't open at peak load)
+      if (lesson.exercises[0].type === "transcribe") {
+        throw new Error(`lesson ${lesson.id} opens with a transcribe exercise`);
+      }
+    }
+  });
+
+  // --- TM-2: literal_gloss — the word-for-word English is the lesson ---
+
+  it("validates literal_gloss exercises: unique options, exactly one literal rendering, german and natural present", () => {
+    for (const lesson of LESSONS) {
+      const glossExercises = lesson.exercises.filter((e) => e.type === "literal_gloss");
+      for (const ex of glossExercises) {
+        expect(ex.options).toBeDefined();
+        expect(ex.options!.length).toBeGreaterThanOrEqual(3);
+        expect(ex.options!.length).toBeLessThanOrEqual(4);
+        expect(new Set(ex.options).size).toBe(ex.options!.length);
+        expect(ex.options).toContain(ex.target_answer);
+        expect(ex.german).toBeDefined();
+        expect(ex.german!.length).toBeGreaterThan(0);
+        expect(ex.natural).toBeDefined();
+        expect(ex.natural!.length).toBeGreaterThan(0);
+        expect(ex.explanation).toBeDefined();
+        expect(ex.explanation!.length).toBeGreaterThan(0);
+      }
+
+      if (lesson.exercises[0].type === "literal_gloss") {
+        throw new Error(`lesson ${lesson.id} opens with a literal_gloss exercise`);
+      }
+    }
+  });
+
+  // --- TM-5a: the twist — one per lesson, outside the 5-exercise contract ---
+
+  it("keeps the twist outside the 5-exercise contract and well-formed when authored", () => {
+    for (const lesson of LESSONS) {
+      // exactly 5 exercises, twist not counted
+      expect(lesson.exercises.length).toBe(5);
+      if (!lesson.twist) continue;
+
+      expect(lesson.twist.prompt.length).toBeGreaterThan(0);
+      expect(lesson.twist.target_answer.length).toBeGreaterThan(0);
+      expect(lesson.twist.target_answer).not.toMatch(/[.,!?;:]$/);
+      expect(lesson.twist.explanation.length).toBeGreaterThan(0);
+
+      if (lesson.twist.word_bank) {
+        const targetWords = lesson.twist.target_answer.split(" ");
+        for (const word of targetWords) {
+          expect(lesson.twist.word_bank).toContain(word);
+        }
+        for (const chip of lesson.twist.word_bank) {
+          expect(chip).not.toMatch(/[.,!?;:]$/);
+        }
+      }
+    }
+  });
+
+  // --- TM-3: affirmations and authored diagnoses ride on the exercises ---
+
+  it("keeps authored affirmations short and diagnoses paired", () => {
+    for (const lesson of LESSONS) {
+      for (const ex of lesson.exercises) {
+        if (ex.affirmation !== undefined) {
+          expect(ex.affirmation.length).toBeGreaterThan(0);
+          expect(ex.affirmation.length).toBeLessThanOrEqual(140);
+        }
+        if (ex.diagnosis !== undefined) {
+          expect(ex.diagnosis.slip.length).toBeGreaterThan(0);
+          expect(ex.diagnosis.cue.length).toBeGreaterThan(0);
+        }
+      }
+    }
+  });
+
+  // --- TM-1/TM-2: word-order errors must never sneak through the tiered grader ---
+
+  it("grades transcribed word-order swaps as incorrect, not exact", () => {
+    expect(evaluateAnswerAccuracy("Ich will lernen Deutsch", "Ich will Deutsch lernen").accuracy).toBe("incorrect");
+    expect(evaluateAnswerAccuracy("Ich will Deutsch lernen", "Ich will Deutsch lernen").accuracy).toBe("exact");
+  });
 });

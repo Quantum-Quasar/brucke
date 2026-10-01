@@ -5,12 +5,16 @@ import Link from "next/link";
 import { Compass, Search, ChevronRight } from "lucide-react";
 import { DonutChart } from "@/components/common/DonutChart";
 import { useAppStore } from "@/lib/store";
-import { compendium as data } from "@/data/compendium";
+import { getLanguageDefinition } from "@/data/languages";
+import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
 
 export default function AtlasPage() {
   const [mounted, setMounted] = useState(false);
   const [filterQuery, setFilterQuery] = useState("");
   const wordMastery = useAppStore((s) => s.wordMastery);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
+  const data = getLanguageContent(activeLanguageId).compendium ?? EMPTY_COMPENDIUM;
 
   useEffect(() => {
     setMounted(true);
@@ -63,6 +67,7 @@ export default function AtlasPage() {
         </div>
 
         {/* Search / Filter input */}
+        {language.status === "available" && (
         <div className="relative w-full sm:w-64">
           <Search className="w-3.5 h-3.5 text-[var(--sub-color)] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
@@ -73,9 +78,25 @@ export default function AtlasPage() {
             className="w-full pl-8 pr-3 py-1.5 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/25 text-xs text-[var(--text-color)] placeholder-[var(--sub-color)] outline-none focus:border-[var(--main-color)] transition font-mono"
           />
         </div>
+        )}
       </div>
 
+      {language.status !== "available" && (
+        <div className="p-8 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-center space-y-3">
+          <Compass className="w-8 h-8 text-[var(--main-color)] mx-auto" />
+          <h2 className="text-base font-bold font-mono text-[var(--text-color)]">
+            the {language.name.toLowerCase()} atlas is under construction
+          </h2>
+          <p className="text-xs font-mono text-[var(--sub-color)] max-w-md mx-auto leading-relaxed">
+            sound-shift constellations arrive with the {language.name} trail. switch languages from
+            settings — each language keeps its own atlas exploration.
+          </p>
+        </div>
+      )}
+
       {/* Global Mastery Banner */}
+      {language.status === "available" && (
+      <>
       <div className="p-3.5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
         <div className="flex flex-wrap items-center gap-4 sm:gap-6">
           <span className="text-[var(--main-color)] font-semibold">{totalMastered} mastered</span>
@@ -157,6 +178,8 @@ export default function AtlasPage() {
           );
         })}
       </div>
+      </>
+      )}
     </div>
   );
 }

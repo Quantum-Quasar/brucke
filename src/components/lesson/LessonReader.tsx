@@ -3,13 +3,15 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, BookOpen, Sparkles, Info, Compass } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Sparkles, Info, Compass, HeartHandshake, Zap } from "lucide-react";
 import { ProgressBar5, type LessonSegment } from "./ProgressBar5";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { ExerciseWidget } from "./ExerciseWidgets";
 import { RetryQueue } from "./RetryQueue";
+import { TwistCard } from "./TwistCard";
 import { useAppStore } from "@/lib/store";
 import { getNextPlayableLessonId } from "@/data/curriculum";
+import { whisperCuesForLesson } from "@/data/posture-cues";
 import { compendium as data } from "@/data/compendium";
 import type { Lesson, ExerciseItem } from "@/lib/types";
 
@@ -29,6 +31,21 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   const [isLessonFinished, setIsLessonFinished] = useState(false);
   // purple star ledger: stays false only when the retry queue was never touched all lesson
   const [everQueued, setEverQueued] = useState(savedProgress?.everQueued ?? false);
+  // TM-5a: the twist card runs after the last exercise, before the reinforcement queue
+  const [twistPhase, setTwistPhase] = useState(false);
+  const [twistCompleted, setTwistCompleted] = useState(false);
+  // TM-5a: "not yet" re-surfaces the twist at the end of the session (in-memory only)
+  const [twistMeetAgain, setTwistMeetAgain] = useState(false);
+  const [twistResurfaced, setTwistResurfaced] = useState(false);
+  // TM-4c queue mercy: failed attempts per exercise id in the reinforcement phase
+  const [failCounts, setFailCounts] = useState<Record<string, number>>({});
+  const [mercyRevealFor, setMercyRevealFor] = useState<string | null>(null);
+
+  const showPostureCues = useAppStore((s) => s.settings.showPostureCues);
+  const whisperCues = React.useMemo(
+    () => whisperCuesForLesson(lesson.id, lesson.exercises.map((e) => e.type), showPostureCues),
+    [lesson.id, lesson.exercises, showPostureCues]
+  );
 
   const primaryShiftId = lesson.shift_categories && lesson.shift_categories[0];
   const primaryShift = primaryShiftId ? data.shifts[primaryShiftId] : null;
@@ -78,6 +95,12 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
           setInRetryPhase(false);
           setRetryQueue([]);
           setEverQueued(false);
+          setTwistPhase(false);
+          setTwistCompleted(false);
+          setTwistMeetAgain(false);
+          setTwistResurfaced(false);
+          setFailCounts({});
+          setMercyRevealFor(null);
           markSegmentDone("table", "practice");
         } else if (e.key === "Backspace" || e.key === "ArrowLeft") {
           e.preventDefault();
@@ -112,18 +135,59 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
     });
   };
 
+  // TM-4c: count misses per item during reinforcement so "Walk me through it" can appear
+  const handleRetryError = (exercise: ExerciseItem) => {
+    setFailCounts((prev) => ({ ...prev, [exercise.id]: (prev[exercise.id] ?? 0) + 1 }));
+    handleExerciseError(exercise);
+  };
+
+  /** TM-5a / retry hand-off after the initial run (and after the twist) completes. */
+  const advanceAfterInitialRun = () => {
+    if (retryQueue.length > 0) {
+      setInRetryPhase(true);
+      setRetryIndex(0);
+    } else {
+      markSegmentDone("practice", "summary");
+    }
+  };
+
+  const handleTwistDone = (meetAgain: boolean) => {
+    setTwistPhase(false);
+    setTwistCompleted(true);
+    if (meetAgain) setTwistMeetAgain(true);
+    advanceAfterInitialRun();
+  };
+
+  const handleResurfaceTwist = () => {
+    setTwistMeetAgain(false);
+    setTwistResurfaced(true);
+  };
+
+  /** TM-4c: drain the current item after a guided re-learn; it returns in Review. */
+  const drainCurrentRetry = () => {
+    setMercyRevealFor(null);
+    const nextQueue = retryQueue.filter((e) => e.id !== currentExercise?.id);
+    if (nextQueue.length === 0) {
+      setRetryQueue([]);
+      setInRetryPhase(false);
+      markSegmentDone("practice", "summary");
+    } else {
+      setRetryQueue(nextQueue);
+      setRetryIndex((prev) => Math.min(prev, nextQueue.length - 1));
+    }
+  };
+
   const handlePracticeSuccess = () => {
     if (!inRetryPhase) {
       if (practiceIndex + 1 < lesson.exercises.length) {
         setPracticeIndex((prev) => prev + 1);
       } else {
-        // Initial run complete. If any items in retry queue, enter reinforcement phase!
-        if (retryQueue.length > 0) {
-          setInRetryPhase(true);
-          setRetryIndex(0);
-        } else {
-          markSegmentDone("practice", "summary");
+        // Initial run complete. The twist (if authored) comes first, then reinforcement.
+        if (lesson.twist && !twistCompleted && !twistPhase) {
+          setTwistPhase(true);
+          return;
         }
+        advanceAfterInitialRun();
       }
     } else {
       // In retry phase
@@ -212,6 +276,11 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                   {lesson.hook.footnotes.map((fn) => (
                     <div key={fn.marker} className="text-xs text-[var(--sub-color)]">
                       <span className="text-[var(--main-color)] font-bold">[{fn.marker}] {fn.title}:</span> {fn.content}
+                      {fn.interest && (
+                        <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-[var(--sub-color)] uppercase tracking-wider">
+                          for interest — not on the test
+                        </span>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -349,6 +418,12 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                     setInRetryPhase(false);
                     setRetryQueue([]);
                     setEverQueued(false);
+                    setTwistPhase(false);
+                    setTwistCompleted(false);
+                    setTwistMeetAgain(false);
+                    setTwistResurfaced(false);
+                    setFailCounts({});
+                    setMercyRevealFor(null);
                     markSegmentDone("table", "practice");
                   }}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-mono font-medium text-sm transition cursor-pointer active:scale-95"
@@ -361,13 +436,30 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
             </div>
           )}
 
-          {/* STEP 4: Interactive Practice Card (ONE AT A TIME + SEAMLESS RETRY QUEUE) */}
-          {currentSegment === "practice" && currentExercise && (
+          {/* STEP 4: Interactive Practice Card (ONE AT A TIME + TWIST + SEAMLESS RETRY QUEUE) */}
+          {currentSegment === "practice" && (twistPhase ? lesson.twist : currentExercise) && (
             <div className="space-y-4 animate-in fade-in duration-200">
+              {/* TM-4b whisper-cue: pacing/framing micro-line, at most twice per lesson */}
+              {!inRetryPhase &&
+                !twistPhase &&
+                whisperCues[practiceIndex] &&
+                (practiceIndex === 0 || practiceIndex === 3) && (
+                  <p className="text-xs italic text-[var(--sub-color)] font-mono pl-1 border-l-2 border-[var(--main-color)]/40">
+                    {whisperCues[practiceIndex]}
+                  </p>
+                )}
+
               {/* Exercise Step Tracker */}
               <div className="flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
-                  {inRetryPhase ? (
+                  {twistPhase ? (
+                    <>
+                      <Zap className="w-3.5 h-3.5 text-[var(--main-color)]" />
+                      <span className="text-xs font-mono uppercase tracking-wider text-[var(--main-color)] font-medium">
+                        twist · ungraded
+                      </span>
+                    </>
+                  ) : inRetryPhase ? (
                     <>
                       <span className="w-2 h-2 rounded-full bg-[var(--main-color)] animate-pulse" />
                       <span className="text-xs font-mono uppercase tracking-wider text-[var(--main-color)] font-medium">
@@ -396,33 +488,60 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                           }`}
                         />
                       ))
-                    : lesson.exercises.map((ex, idx) => (
-                        <span
-                          key={ex.id}
-                          className={`h-1 rounded transition-all duration-200 ${
-                            idx === practiceIndex
-                              ? "w-6 bg-[var(--main-color)]"
-                              : idx < practiceIndex
-                              ? "w-3 bg-[var(--main-color)]/50"
-                              : "w-3 bg-[var(--sub-color)]/20"
-                          }`}
-                        />
-                      ))}
+                    : (
+                      <>
+                        {lesson.exercises.map((ex, idx) => (
+                          <span
+                            key={ex.id}
+                            className={`h-1 rounded transition-all duration-200 ${
+                              idx === practiceIndex && !twistPhase
+                                ? "w-6 bg-[var(--main-color)]"
+                                : idx < practiceIndex || twistPhase
+                                ? "w-3 bg-[var(--main-color)]/50"
+                                : "w-3 bg-[var(--sub-color)]/20"
+                            }`}
+                          />
+                        ))}
+                        {lesson.twist && (
+                          <span
+                            className={`h-1 rounded transition-all duration-200 ${
+                              twistPhase
+                                ? "w-6 bg-[var(--main-color)]"
+                                : twistCompleted
+                                ? "w-3 bg-[var(--main-color)]/50"
+                                : "w-3 bg-[var(--sub-color)]/20"
+                            }`}
+                          />
+                        )}
+                      </>
+                    )}
                 </div>
               </div>
 
+              {/* TM-5a: the Twist card — its own step, outside the queue entirely */}
+              {twistPhase && lesson.twist && (
+                <TwistCard twist={lesson.twist} onDone={handleTwistDone} />
+              )}
+
+              {!twistPhase && (
+                <>
               {/* Informative Reinforcement Banner when in Retry Phase */}
               {inRetryPhase && (
-                <div className="p-3 rounded bg-[var(--sub-alt-color)] border border-[var(--main-color)]/30 flex items-center justify-between text-xs text-[var(--main-color)] font-mono">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 shrink-0" />
-                    <span>
-                      reinforcing {retryQueue.length} exercise{retryQueue.length > 1 ? "s" : ""}
+                <div className="p-3 rounded bg-[var(--sub-alt-color)] border border-[var(--main-color)]/30 space-y-1 text-xs text-[var(--main-color)] font-mono">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 shrink-0" />
+                      <span>
+                        reinforcing {retryQueue.length} exercise{retryQueue.length > 1 ? "s" : ""}
+                      </span>
+                    </div>
+                    <span className="hidden sm:inline">
+                      step {retryIndex + 1}/{retryQueue.length}
                     </span>
                   </div>
-                  <span className="hidden sm:inline">
-                    step {retryIndex + 1}/{retryQueue.length}
-                  </span>
+                  <p className="text-[var(--sub-color)]">
+                    These come back in Review either way — you can&apos;t lose them.
+                  </p>
                 </div>
               )}
 
@@ -432,9 +551,48 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                 exercise={currentExercise}
                 isRetry={inRetryPhase}
                 onSuccess={handlePracticeSuccess}
-                onError={() => handleExerciseError(currentExercise)}
+                onError={() =>
+                  inRetryPhase ? handleRetryError(currentExercise) : handleExerciseError(currentExercise)
+                }
                 onQueueRetry={() => handleExerciseError(currentExercise)}
+                onPurpleForfeit={() => setEverQueued(true)}
               />
+
+              {/* TM-4c queue mercy: after a second miss on the same item, offer a guided re-learn */}
+              {inRetryPhase && !mercyRevealFor && (failCounts[currentExercise.id] ?? 0) >= 2 && (
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setMercyRevealFor(currentExercise.id)}
+                    className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/30 text-xs font-mono text-[var(--sub-color)] hover:text-[var(--main-color)] hover:border-[var(--main-color)]/40 transition cursor-pointer"
+                  >
+                    <HeartHandshake className="w-3.5 h-3.5" />
+                    <span>Walk me through it</span>
+                  </button>
+                </div>
+              )}
+
+              {inRetryPhase && mercyRevealFor === currentExercise.id && currentExercise && (
+                <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--main-color)]/30 space-y-2 font-mono">
+                  <div className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-[var(--main-color)] font-semibold">
+                    <HeartHandshake className="w-3.5 h-3.5" />
+                    <span>re-learned — this one comes back in review</span>
+                  </div>
+                  <div className="text-sm font-bold text-[var(--main-color)]">{currentExercise.target_answer}</div>
+                  {currentExercise.explanation && (
+                    <p className="text-xs text-[var(--sub-color)] leading-relaxed">{currentExercise.explanation}</p>
+                  )}
+                  <button
+                    type="button"
+                    onClick={drainCurrentRetry}
+                    className="w-full py-2 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs transition cursor-pointer"
+                  >
+                    continue
+                  </button>
+                </div>
+              )}
+                </>
+              )}
 
               <div className="flex items-center justify-between px-1 pt-1">
                 <button
@@ -448,7 +606,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                 >
                   ← Review Transformation Table
                 </button>
-                {!inRetryPhase && practiceIndex > 0 && (
+                {!inRetryPhase && practiceIndex > 0 && !twistPhase && (
                   <button
                     type="button"
                     onClick={() => setPracticeIndex((prev) => Math.max(0, prev - 1))}
@@ -477,6 +635,12 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                       setRetryQueue([]);
                       handleCompleteAll();
                     }}
+                    onDrainCurrent={(id) =>
+                      setRetryQueue((prev) => {
+                        const next = prev.filter((e) => e.id !== id);
+                        return next;
+                      })
+                    }
                   />
                 </div>
               ) : (
@@ -484,6 +648,15 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                   <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[var(--main-color)] font-semibold">
                     <span>lesson complete</span>
                   </div>
+
+                  {/* TM-4e: the star is a posture reward, not a perfection badge */}
+                  {isLessonFinished && (
+                    <p className="text-xs font-mono italic text-[var(--main-color)]">
+                      {everQueued
+                        ? "Not a test — a rep."
+                        : "Purple means you built every answer by thinking it through, first try."}
+                    </p>
+                  )}
 
                   <div className="space-y-2">
                     <div className="text-xs uppercase tracking-wider text-[var(--main-color)]">after this lesson, you can</div>
@@ -503,6 +676,21 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                     <div className="text-xs uppercase tracking-wider text-[var(--main-color)]">curiosity teaser</div>
                     <p className="text-xs text-[var(--sub-color)] italic">{lesson.summary.curiosity_teaser}</p>
                   </div>
+
+                  {/* TM-5a: "not yet" promises the twist returns at the end of the session */}
+                  {twistMeetAgain && lesson.twist && !twistResurfaced && (
+                    <button
+                      type="button"
+                      onClick={handleResurfaceTwist}
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[var(--bg-color)] border border-[var(--main-color)]/30 text-xs font-mono text-[var(--main-color)] hover:border-[var(--main-color)] transition cursor-pointer"
+                    >
+                      <Zap className="w-3.5 h-3.5" />
+                      <span>meet the twist again — think it through once more</span>
+                    </button>
+                  )}
+                  {twistResurfaced && lesson.twist && (
+                    <TwistCard twist={lesson.twist} onDone={() => setTwistResurfaced(false)} />
+                  )}
 
                   {/* Atlas Deep-Dive Trail Bridge */}
                   <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
@@ -573,12 +761,22 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                 <div key={fn.marker} className="p-3 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 space-y-1">
                   <span className="text-[var(--main-color)] font-bold">[{fn.marker}] {fn.title}</span>
                   <p>{fn.content}</p>
+                  {fn.interest && (
+                    <span className="inline-block text-[10px] px-1.5 py-0.5 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-[var(--sub-color)] uppercase tracking-wider">
+                      for interest — not on the test
+                    </span>
+                  )}
                 </div>
               ))}
               {lesson.pattern.footnotes?.map((fn) => (
                 <div key={fn.marker} className="p-3 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 space-y-1">
                   <span className="text-[var(--main-color)] font-bold">[{fn.marker}] {fn.title}</span>
                   <p>{fn.content}</p>
+                  {fn.interest && (
+                    <span className="inline-block text-[10px] px-1.5 py-0.5 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-[var(--sub-color)] uppercase tracking-wider">
+                      for interest — not on the test
+                    </span>
+                  )}
                 </div>
               ))}
               <div className="p-3 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 space-y-1">

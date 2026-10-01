@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { CheckCircle, AlertTriangle, ShieldCheck } from "lucide-react";
+import { CheckCircle, AlertTriangle, ShieldCheck, HeartHandshake } from "lucide-react";
 import { ExerciseWidget } from "./ExerciseWidgets";
 import { useAppStore } from "@/lib/store";
 import type { ExerciseItem } from "@/lib/types";
@@ -9,12 +9,17 @@ import type { ExerciseItem } from "@/lib/types";
 interface RetryQueueProps {
   queue: ExerciseItem[];
   onCompleteQueue: () => void;
+  /** TM-4c: drains the current item after a guided re-learn — it returns in Review */
+  onDrainCurrent?: (exerciseId: string) => void;
 }
 
-export const RetryQueue: React.FC<RetryQueueProps> = ({ queue, onCompleteQueue }) => {
+export const RetryQueue: React.FC<RetryQueueProps> = ({ queue, onCompleteQueue, onDrainCurrent }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [errorTypesOnCurrent, setErrorTypesOnCurrent] = useState<string[]>([]);
   const [showToleranceModal, setShowToleranceModal] = useState<"umlaut" | "capitalization" | null>(null);
+  // TM-4c queue mercy: misses per item id; after the 2nd, "Walk me through it" appears
+  const [failCounts, setFailCounts] = useState<Record<string, number>>({});
+  const [mercyRevealFor, setMercyRevealFor] = useState<string | null>(null);
 
   const tolerance = useAppStore((s) => s.tolerance);
   const setUmlautTolerance = useAppStore((s) => s.setUmlautTolerance);
@@ -69,12 +74,27 @@ export const RetryQueue: React.FC<RetryQueueProps> = ({ queue, onCompleteQueue }
   const handleError = (type: "spelling" | "umlaut" | "capitalization") => {
     const updated = [...errorTypesOnCurrent, type];
     setErrorTypesOnCurrent(updated);
+    if (currentExercise) {
+      setFailCounts((prev) => ({ ...prev, [currentExercise.id]: (prev[currentExercise.id] ?? 0) + 1 }));
+    }
 
     // If repeat error on umlauts and dismissals < 2
     if (type === "umlaut" && tolerance.umlautDismissals < 2 && !tolerance.umlautTolerance) {
       setShowToleranceModal("umlaut");
     } else if (type === "capitalization" && tolerance.capitalizationDismissals < 2 && !tolerance.capitalizationTolerance) {
       setShowToleranceModal("capitalization");
+    }
+  };
+
+  /** TM-4c: guided re-learn of the current item; it comes back in Review either way. */
+  const drainCurrent = () => {
+    if (!currentExercise) return;
+    setMercyRevealFor(null);
+    if (onDrainCurrent) {
+      onDrainCurrent(currentExercise.id);
+      // the parent drops the item; this index now shows the next one (or the queue empties)
+    } else {
+      handleSuccess();
     }
   };
 
@@ -88,6 +108,11 @@ export const RetryQueue: React.FC<RetryQueueProps> = ({ queue, onCompleteQueue }
           </span>
         </div>
       </div>
+
+      {/* TM-4c: the queue is the second half of the workout, not a wall */}
+      <p className="text-xs italic text-[var(--sub-color)] font-mono px-1">
+        These come back in Review either way — you can&apos;t lose them.
+      </p>
 
       {/* Tolerance Prompt Modal / Banner */}
       {showToleranceModal === "umlaut" && (
@@ -159,6 +184,40 @@ export const RetryQueue: React.FC<RetryQueueProps> = ({ queue, onCompleteQueue }
         onSuccess={handleSuccess}
         onError={handleError}
       />
+
+      {/* TM-4c queue mercy: after a second miss on the same item */}
+      {!mercyRevealFor && (failCounts[currentExercise.id] ?? 0) >= 2 && (
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={() => setMercyRevealFor(currentExercise.id)}
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/30 text-xs font-mono text-[var(--sub-color)] hover:text-[var(--main-color)] hover:border-[var(--main-color)]/40 transition cursor-pointer"
+          >
+            <HeartHandshake className="w-3.5 h-3.5" />
+            <span>Walk me through it</span>
+          </button>
+        </div>
+      )}
+
+      {mercyRevealFor === currentExercise.id && (
+        <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--main-color)]/30 space-y-2 font-mono">
+          <div className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-[var(--main-color)] font-semibold">
+            <HeartHandshake className="w-3.5 h-3.5" />
+            <span>re-learned — this one comes back in review</span>
+          </div>
+          <div className="text-sm font-bold text-[var(--main-color)]">{currentExercise.target_answer}</div>
+          {currentExercise.explanation && (
+            <p className="text-xs text-[var(--sub-color)] leading-relaxed">{currentExercise.explanation}</p>
+          )}
+          <button
+            type="button"
+            onClick={drainCurrent}
+            className="w-full py-2 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs transition cursor-pointer"
+          >
+            continue
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -85,7 +85,9 @@ export type ExerciseType =
   | "shift_select"
   | "syntax_builder"
   | "derive"
-  | "reverse_cognate";
+  | "reverse_cognate"
+  | "transcribe"
+  | "literal_gloss";
 
 export interface MatchingPairItem {
   id: string;
@@ -99,6 +101,12 @@ export interface VocabHint {
   note?: string;
 }
 
+/** TM-3: process affirmation shown on success; authored override for the common wrong answer. */
+export interface ExerciseDiagnosis {
+  slip: string;
+  cue: string;
+}
+
 export interface ExerciseItem {
   id: string;
   type: ExerciseType;
@@ -108,18 +116,68 @@ export interface ExerciseItem {
   target_answer: string;
   meaning?: string;
   vocab_hints?: VocabHint[];
-  options?: string[]; // For shift_select or multiple choice
+  options?: string[]; // For shift_select, literal_gloss, or multiple choice
   tile_options?: string[]; // For morpheme_tiles
   target_tiles?: string[]; // For morpheme_tiles assembly
   matching_pairs?: MatchingPairItem[]; // For matching_pairs cards
-  word_bank?: string[]; // For syntax_builder tiles
+  word_bank?: string[]; // For syntax_builder / transcribe chips
   explanation?: string;
+  /** TM-3: restates the process on a correct answer (≤ 140 chars), instead of "Spot on!". */
+  affirmation?: string;
+  /** TM-3: authored override for the common wrong answer on this exercise. */
+  diagnosis?: ExerciseDiagnosis;
+  // --- transcribe (TM-1): the thought the learner must render into German ---
+  idea?: string;
+  cues?: string[]; // 1–3 scaled prompts, ordered easy→late, revealed on demand or on failure
+  // --- literal_gloss (TM-2): the German sentence and its natural English ---
+  german?: string;
+  natural?: string;
+}
+
+/**
+ * TM-1 production drill: idea in, elements chosen, order decided, German out.
+ * `word_bank` must contain every word of `target_answer` plus 1–3 plausible distractors —
+ * a transcribe without distractors is a syntax_builder in disguise.
+ */
+export interface TranscribeExercise extends ExerciseItem {
+  type: "transcribe";
+  idea: string;
+  cues: string[];
+  word_bank: string[];
+}
+
+/**
+ * TM-2 direct translation: pick the English rendering that is built the German way.
+ * Exactly one option is the word-for-word one (`target_answer`); the rest are natural
+ * or differently-wrong. The odd English is the lesson — never a model to produce.
+ */
+export interface LiteralGlossExercise extends ExerciseItem {
+  type: "literal_gloss";
+  german: string;
+  natural: string;
+  options: string[];
+}
+
+/** TM-5a: one deliberate, ungraded friction point at the end of a lesson's practice. */
+export interface LessonTwist {
+  prompt: string;
+  target_answer: string;
+  word_bank?: string[];
+  explanation: string;
+}
+
+export interface Footnote {
+  marker: string;
+  title: string;
+  content: string;
+  /** TM-5b: a genuine tangent — cued as such so the learner knows it is not key material. */
+  interest?: boolean;
 }
 
 export interface LessonSection {
   title: string;
   content: string;
-  footnotes?: Array<{ marker: string; title: string; content: string }>;
+  footnotes?: Footnote[];
   linguist_note?: string;
 }
 
@@ -135,6 +193,8 @@ export interface Lesson {
   pattern: LessonSection;
   table_word_ids: string[];
   exercises: ExerciseItem[];
+  /** TM-5a: rendered after the last exercise, before the reinforcement queue. Ungraded, skippable. */
+  twist?: LessonTwist;
   summary: {
     outcome: string;
     use_example: { german: string; english: string };

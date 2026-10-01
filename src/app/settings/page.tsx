@@ -22,11 +22,13 @@ import {
   Upload,
   RefreshCw,
   HelpCircle,
+  Languages,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { SettingItem } from "@/components/settings/SettingItem";
 import { THEME_LIST } from "@/data/themes";
 import { FONT_LIST } from "@/data/fonts";
+import { LANGUAGES, getLanguageDefinition } from "@/data/languages";
 import {
   SOUND_CLICK_OPTIONS,
   SOUND_ERROR_OPTIONS,
@@ -40,6 +42,7 @@ import {
 } from "@/data/settings";
 
 const SECTIONS = [
+  { id: "language", label: "language", icon: Languages },
   { id: "behavior", label: "behavior", icon: Zap },
   { id: "input", label: "input", icon: Keyboard },
   { id: "sound", label: "sound", icon: Volume2 },
@@ -62,6 +65,9 @@ export default function SettingsPage() {
   const font = useAppStore((s) => s.font);
   const openThemeSelector = useAppStore((s) => s.openThemeSelector);
   const openFontSelector = useAppStore((s) => s.openFontSelector);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const setActiveLanguage = useAppStore((s) => s.setActiveLanguage);
+  const activeLanguage = getLanguageDefinition(activeLanguageId);
 
   useEffect(() => {
     setMounted(true);
@@ -112,7 +118,22 @@ export default function SettingsPage() {
     const state = useAppStore.getState();
     const backupData = {
       timestamp: new Date().toISOString(),
-      version: 1,
+      version: 2,
+      activeLanguageId: state.activeLanguageId,
+      progressByLanguage: {
+        ...state.progressByLanguage,
+        [state.activeLanguageId]: {
+          completedLessons: state.completedLessons,
+          currentLessonId: state.currentLessonId,
+          lessonProgress: state.lessonProgress,
+          lessonStars: state.lessonStars,
+          wordMastery: state.wordMastery,
+          srsCards: state.srsCards,
+          weeklyActivity: state.weeklyActivity,
+          lastActivityWeek: state.lastActivityWeek,
+        },
+      },
+      seenIntroLanguages: state.seenIntroLanguages,
       settings: state.settings,
       completedLessons: state.completedLessons,
       currentLessonId: state.currentLessonId,
@@ -231,6 +252,44 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {/* 0. LANGUAGE SECTION */}
+        <section id="language" className="space-y-3 pt-2">
+          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--sub-color)] border-b border-[var(--sub-color)]/20 pb-2">
+            <Languages className="w-4 h-4 text-[var(--main-color)]" />
+            <span>language</span>
+          </div>
+
+          <SettingItem
+            id="active-language"
+            icon={Languages}
+            title={`language you are learning (${activeLanguage.flag} ${activeLanguage.name})`}
+            description="Switch the language you are learning. Each language keeps its own progress, SRS schedule, and introduction — switching never mixes them."
+            matchesSearch={matches(["language", "german", "spanish", "french", "switch language", "learning language"])}
+          >
+            <div className="flex items-center gap-2 flex-wrap">
+              {LANGUAGES.map((lang) => (
+                <button
+                  key={lang.id}
+                  type="button"
+                  onClick={() => setActiveLanguage(lang.id)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono transition cursor-pointer border ${
+                    lang.id === activeLanguageId
+                      ? "bg-[var(--main-color)] text-[var(--bg-color)] font-bold border-[var(--main-color)] shadow-xs"
+                      : "bg-[var(--sub-alt-color)] text-[var(--sub-color)] hover:text-[var(--text-color)] border-[var(--sub-color)]/20"
+                  }`}
+                  title={lang.status === "available" ? lang.blurb : `${lang.name} — content coming soon`}
+                >
+                  <span aria-hidden>{lang.flag}</span>
+                  <span>{lang.nativeName}</span>
+                  {lang.status === "coming-soon" && (
+                    <span className="text-[9px] uppercase tracking-wider opacity-70">soon</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </SettingItem>
+        </section>
+
         {/* 1. BEHAVIOR SECTION */}
         <section id="behavior" className="space-y-3 pt-2">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--sub-color)] border-b border-[var(--sub-color)]/20 pb-2">
@@ -309,6 +368,30 @@ export default function SettingsPage() {
               </button>
             ))}
           </SettingItem>
+
+          {/* posture cues (TM-4b) */}
+          <SettingItem
+            id="posture-cues"
+            icon={Zap}
+            title="posture cues"
+            description="Occasional one-line reminders of how to take the course — pause, think aloud, let Review do its job. At most two per lesson, never graded."
+            matchesSearch={matches(["posture", "cues", "pause", "whisper", "behavior", "reminders"])}
+          >
+            {[false, true].map((val) => (
+              <button
+                key={String(val)}
+                type="button"
+                onClick={() => updateSetting("showPostureCues", val)}
+                className={`px-3 py-1.5 rounded text-xs font-mono transition cursor-pointer ${
+                  settings.showPostureCues === val
+                    ? "bg-[var(--main-color)] text-[var(--bg-color)] font-bold shadow-xs"
+                    : "bg-[var(--sub-alt-color)] text-[var(--sub-color)] hover:text-[var(--text-color)]"
+                }`}
+              >
+                {val ? "on" : "off"}
+              </button>
+            ))}
+          </SettingItem>
         </section>
 
         {/* 2. INPUT SECTION */}
@@ -370,9 +453,9 @@ export default function SettingsPage() {
           <SettingItem
             id="show-char-bar"
             icon={Keyboard}
-            title="german character bar"
-            description="Controls when the quick umlaut bar (ä, ö, ü, ß) is shown beneath typing inputs."
-            matchesSearch={matches(["german character bar", "char bar", "umlaut buttons", "input"])}
+            title="special character bar"
+            description="Controls when the quick accent bar for the language you are learning (German: ä, ö, ü, ß) is shown beneath typing inputs."
+            matchesSearch={matches(["german character bar", "special character bar", "char bar", "umlaut buttons", "input"])}
           >
             {(["always", "on_focus", "off"] as ShowCharBar[]).map((mode) => (
               <button

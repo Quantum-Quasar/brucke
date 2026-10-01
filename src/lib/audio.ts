@@ -13,10 +13,10 @@ if (typeof window !== "undefined" && "speechSynthesis" in window) {
 }
 
 /**
- * Plays German pronunciation using the native Web Speech API.
- * Uses 'de-DE' locale at a comfortable 0.92x rate for clear phoneme perception.
+ * Plays target-language pronunciation using the native Web Speech API.
+ * Comfortable 0.92x rate for clear phoneme perception.
  */
-export function playGermanAudio(text: string): boolean {
+export function playTargetAudio(text: string, locale = "de-DE"): boolean {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) {
     return false;
   }
@@ -27,14 +27,14 @@ export function playGermanAudio(text: string): boolean {
     if (!cleanText) return false;
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = "de-DE";
+    utterance.lang = locale;
     utterance.rate = 0.92;
     utterance.pitch = 1.0;
 
     const voices = cachedVoices.length > 0 ? cachedVoices : window.speechSynthesis.getVoices();
-    const deVoice = voices.find((v) => v.lang.startsWith("de"));
-    if (deVoice) {
-      utterance.voice = deVoice;
+    const voice = voices.find((v) => v.lang.startsWith(locale.slice(0, 2)));
+    if (voice) {
+      utterance.voice = voice;
     }
 
     window.speechSynthesis.speak(utterance);
@@ -42,4 +42,12 @@ export function playGermanAudio(text: string): boolean {
   } catch {
     return false;
   }
+}
+
+/**
+ * Plays German pronunciation using the native Web Speech API.
+ * Uses 'de-DE' locale at a comfortable 0.92x rate for clear phoneme perception.
+ */
+export function playGermanAudio(text: string): boolean {
+  return playTargetAudio(text, "de-DE");
 }

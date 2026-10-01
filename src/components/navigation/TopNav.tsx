@@ -5,7 +5,8 @@ import Link from "next/link";
 import { HelpCircle } from "lucide-react";
 import { ThemeDropdown } from "@/components/common/ThemeDropdown";
 import { useAppStore } from "@/lib/store";
-import { TOTAL_COMPENDIUM_WORDS } from "@/lib/types";
+import { getLanguageDefinition } from "@/data/languages";
+import { getTotalWordCount } from "@/data/language-content";
 
 // Slim identity + customization bar. All destinations live in the bottom dock (BottomNav).
 export const TopNav: React.FC = () => {
@@ -13,12 +14,14 @@ export const TopNav: React.FC = () => {
   const masteredCount = useAppStore((s) => Object.values(s.wordMastery).filter((m) => m === "mastered").length);
   const openOnboarding = useAppStore((s) => s.openOnboarding);
   const showMasteryCounter = useAppStore((s) => s.settings.showMasteryCounter);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
 
   React.useEffect(() => {
     setMounted(true);
   }, []);
 
-  const totalWords = TOTAL_COMPENDIUM_WORDS;
+  const totalWords = mounted ? getTotalWordCount(activeLanguageId) : 0;
   const displayMastered = mounted ? masteredCount : 0;
 
   return (
@@ -31,7 +34,9 @@ export const TopNav: React.FC = () => {
             <span className="font-bold text-[var(--text-color)] text-base tracking-tight group-hover:text-[var(--main-color)] transition">
               brücke
             </span>
-            <span className="text-[10px] font-mono text-[var(--sub-color)] hidden sm:inline">german cognates</span>
+            <span className="text-[10px] font-mono text-[var(--sub-color)] hidden sm:inline">
+              {language.name.toLowerCase()} cognates
+            </span>
           </div>
         </Link>
 
