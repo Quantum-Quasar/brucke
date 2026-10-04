@@ -1,0 +1,322 @@
+// Vocabulary-balance audit (vocab-rebalance-650 campaign).
+//
+// Complements scripts/audit-word-refs.ts (existence) with the ORDERING and
+// BALANCE dimensions from docs/vocab-rebalance-movelist.md:
+//   a. new-words-per-lesson within bands (classification printed for eyeballing)
+//   b. no word required before its introduction lesson in trail order
+//      (word_ids ordering is exact; German exercise-surface tokens are resolved
+//      to candidate words and checked against first introduction, with a
+//      documented PRE_EXISTING allowlist for drifts that predate this campaign)
+//   c. per-word floor: ≥1 exercise mention; weaving target ≥3 later lessons
+//      (minimum acceptable 2 — shortfalls below 3 are reported, below 2 fail)
+//   d. zero-new lessons ≤ 25% (enforced in --strict, reported otherwise)
+//   e. explicit deferral list (documented temporary exceptions)
+//
+// Modes:
+//   bun scripts/audit-vocab-balance.ts           per-batch: fails on real
+//       violations (legality, exposure/band on executed rows); reports
+//       move-list rows still pending as progress.
+//   bun scripts/audit-vocab-balance.ts --strict  checkpoint: additionally
+//       requires every move-list row executed, zero-new ≤ 25%, and exits 1
+//       on any pending row.
+
+import { LESSONS } from "../src/data/lessons";
+import { compendium } from "../src/data/compendium";
+import { flattenTrailNodes } from "../src/data/curriculum";
+
+const STRICT = process.argv.includes("--strict");
+
+// ---------------------------------------------------------------- classification
+// pattern: single-rule exemplar sets (sound-shift cores & sprigs, prefix families)
+const PATTERN = new Set([1, 3, 4, 5, 6, 7, 8, 15, 16, 25, 26, 3002, 101, 301, 302, 401, 402, 501, 502, 601, 602, 701, 801, 2601]);
+const GRAMMAR_CORE = new Set([2, 9, 10, 11, 12, 13, 14, 17, 18, 19, 20, 21, 22, 23, 24, 27, 28, 29]);
+// Deliberate zero-new revision lessons (drill/gym/reading/review; never accidental).
+const REVISION = new Set([30, 702, 902, 1002, 1101, 1201, 1302, 1401, 1501, 1803, 1901, 2002, 2202, 2501, 3001, 3003, 5012, 5041, 5052, 5061, 5062, 5063]);
+const BANDS: Record<string, [number, number]> = {
+  pattern: [4, 11], grammarCore: [3, 6], consolidation: [2, 4], revision: [0, 2], branch: [0, 8],
+};
+const roleOf = (id: number, kind: string) =>
+  PATTERN.has(id) ? "pattern" : GRAMMAR_CORE.has(id) ? "grammarCore" : REVISION.has(id) ? "revision" : kind === "branch" ? "branch" : "consolidation";
+
+// ---------------------------------------------------------------- deferrals
+// Lesson-level: (reason, Campaign 2 plan) — see docs/vocab-rebalance-movelist.md.
+const LESSON_DEFERRALS: Record<number, string> = {
+  2401: "Twin Suppletions: closed-class suppletion; no fitting untouched compendium words. Campaign 2: add gern/lieber entries and host here.",
+};
+// Tail words: fewer than 3 later lessons exist; floor met at the minimum (2).
+const TAIL_DEFERRALS = new Set(["lehrer", "person", "freund"]);
+
+// German exercise-surface tokens that referenced their word before its
+// introduction in the PRE-CAMPAIGN tree. Documented drifts; shrink as batches
+// reword them. Format: `${lessonId}:${token.toLowerCase()}`.
+const PRE_EXISTING = new Set([
+  "2:soll", "9:kaffee", "9:tee", "12:weiß", "13:weißt", "14:weiß", "22:lesen", "23:auto",
+  "23:autos", "28:gift", "30:gabe", "30:rat", "30:gift", "1401:weiß", "1402:müde",
+  "1604:ziehe", "1702:mittwoch", "1802:auto", "2401:film", "2403:wein", "2501:gabe",
+  "2501:gift", "2901:gelesen", "3001:abend", "3001:gelesen", "1002:sehe",
+  "21:zahnarzt", "21:zahn", "902:art", "1201:bekomme", "1403:vergesse", "602:kaffee",
+  "602:kind", "302:schreiben", "1801:werden", "1802:werde",
+]);
+
+// Move-list planned adds (word -> host lesson), for progress reporting only.
+const PLANNED: Record<string, number> = {
+  stehen: 9, zeigen: 9, küssen: 9, bett: 11, teller: 11, kurz: 12, laut: 12, leise: 12, billig: 12,
+  dunkel: 14, sorge: 14, gleich: 14, meinung: 14, ankommen: 18, buchen: 18, blasen: 19, frieren: 19,
+  zahnarzt: 21, hauptstadt: 21, zeitung: 22, berg: 22, blatt: 23, auge: 23, ei: 23, knie: 23,
+  ecke: 27, mitte: 27, strand: 27, gewinnen: 28, schauen: 28, hunger: 29, krank: 29, satt: 29,
+  glücklich: 29, spät: 24, pfirsich: 301, pflanze: 302, mund: 401, kleid: 401, monat: 401, darm: 401,
+  zunge: 501, süß: 502, knochen: 601, riechen: 601, koch: 601, weich: 601, kauen: 602,
+  fotografieren: 801, anprobieren: 802, spazieren: 802, hell: 2601, mond: 2601, stern: 2601,
+  deutsch: 102, bier: 102, kuchen: 102, wurst: 102, lust: 201, teuer: 201, fernsehen: 202,
+  einsteigen: 202, aussteigen: 202, setzen: 901, sitzen: 901, halten: 901, stuhl: 1001,
+  fenster: 1001, löffel: 1001, insel: 1102, nebel: 1102, baum: 1102, getränk: 1103, tasse: 1103,
+  nie: 1202, nichts: 1202, niemand: 1202, katze: 1301, hund: 1301, kennen: 1301, tier: 1301,
+  weiß: 1402, traurig: 1402, angst: 1402, hoffnung: 1402, einkaufen: 1502, abfahren: 1502,
+  verdienen: 1601, beginnen: 1602, bezahlen: 1602, ausziehen: 1604, hundert: 1701, minute: 1701,
+  zählen: 1701, wochenende: 1703, sommer: 1703, winter: 1703, tragen: 1801, fliegen: 1802,
+  fallen: 1902, springen: 1902, treten: 1902, schlagen: 1903, stehlen: 1903, jung: 1904,
+  stark: 1904, schwach: 1904, gesund: 1904, wünschen: 1905, glück: 2001, mut: 2001, wunsch: 2001,
+  schmecken: 2003, fußball: 2101, regenbogen: 2101, heimweh: 2101, geburtstag: 2102, feiern: 2102,
+  flugzeug: 2103, briefmarke: 2103, rechnung: 2201, blume: 2201, lampe: 2201, bluse: 2201,
+  maus: 2301, vogel: 2301, kuh: 2301, spiel: 2302, stunde: 2302, schnell: 2402, schwer: 2402,
+  lecker: 2403, neu: 2403, voll: 2404, nass: 2404, selbst: 2502, mitternacht: 2602, nichte: 2602,
+  legen: 2603, hafen: 2701, wald: 2701, brücke: 2701, platz: 2702, fluss: 2703, markt: 2703,
+  wand: 2703, urlaub: 2801, meer: 2801, holen: 2802, wieder: 2802, leute: 2901, himmel: 2901,
+  mensch: 2901, schlecht: 2902, fertig: 2902, lustig: 2902, übel: 2903,
+  fabrik: 5021, gymnasium: 5021, rente: 5021, dom: 5021, art: 5021, kaution: 5021, eventuell: 5021,
+  öl: 5031, tüte: 5031, freundlich: 5082, familie: 5091, lehrer: 5101, person: 5101,
+  freund: 5102, herr: 5011, buchstabe: 5072,
+};
+const REMOVALS: Record<string, string[]> = { 3002: ["fabrik", "gymnasium", "rente", "dom", "art", "kaution", "eventuell"] };
+// Re-home donors: lesson keeps the word, but its introduction moved earlier.
+const REHOME_DONOR: Record<string, string[]> = { 5092: ["familie"] };
+// Standalone exposure fixes (zero-mention words whose host gets only an
+// exercise touch). Inline fixes ride on PLANNED rows (stumpf@302, salz@502,
+// begriff@22, klein@2402, lang@2403, argumentieren@801, dürfen@1905,
+// handy/aktuell@3002, zahn@21 via zahnarzt, familie@5091).
+const EXPOSURE_PLAN: Record<string, number> = {
+  arm: 1, finger: 1, ring: 101, apfel: 3, akzeptieren: 8, informieren: 8, existieren: 8,
+  teufel: 701, tausend: 701, heute: 17, gabe: 30, freuen: 1603, wohnen: 5071, jahr: 5071,
+  heißen: 5071, geld: 5081, müde: 5081, froh: 5081, lesen: 5101,
+};
+
+// ---------------------------------------------------------------- resolver
+const compIds = new Set(Object.keys(compendium.words));
+const compTargets = new Map<string, string[]>();
+for (const [id, w] of Object.entries(compendium.words)) {
+  const t = w.target_word.toLowerCase();
+  (compTargets.get(t) ?? compTargets.set(t, []).get(t)!).push(id);
+}
+// Function words beyond src/lib/word-refs-audit.ts's closed list (documented:
+// uns/man/wen are pronouns, werden/werde is the future auxiliary — function
+// class, no compendium claim). The ordering check consults these; existence
+// is still word-refs-audit's business.
+const FUNCTION_WORDS = new Set(
+  [
+    "ich", "du", "er", "sie", "es", "wir", "ihr",
+    "mich", "dir", "mir", "ihm", "ihnen", "uns",
+    "der", "die", "das", "den", "dem", "ein", "eine", "einen", "einem", "einer",
+    "kein", "keine", "keinen", "mein", "meine", "meinen", "dein", "deine",
+    "ist", "bin", "bist", "sind", "war", "waren", "hat", "habe", "haben", "hatte",
+    "gibt", "und", "oder", "aber", "weil", "dass", "wenn", "als", "wie",
+    "nicht", "ja", "nein", "bitte", "danke", "sehr", "gut", "hier",
+    "in", "an", "auf", "aus", "bei", "mit", "nach", "von", "zu", "zum", "zur", "vor",
+    "durch", "über", "unter", "ohne", "für",
+    "morgen", "heute", "gestern", "früh", "drei", "zwei", "zwölf", "eins",
+    "was", "wo", "wer", "wann", "warum", "wohin",
+    "guten", "gute", "danke", "man", "wen",
+  ]
+);
+const EXTRA_FUNCTION = new Set(["werden", "werde"]);
+const RESOLVED: Record<string, string> = {
+  kannst: "können", kann: "können", willst: "wollen", hast: "haben", hilft: "helfen",
+  hilf: "helfen", gefunden: "finden", fand: "finden", gegessen: "essen", stehe: "aufstehen",
+  steht: "aufstehen", genommen: "nehmen", gibst: "geben",
+};
+const stemOf = (id: string) => (id.length > 4 && id.endsWith("en") ? id.slice(0, -2) : id);
+const stems = new Map<string, string[]>();
+for (const id of compIds) (stems.get(stemOf(id)) ?? stems.set(stemOf(id), []).get(stemOf(id))!).push(id);
+const fold = (s: string) => s.replace(/ä/g, "a").replace(/ö/g, "o").replace(/ü/g, "u").replace(/ß/g, "ss");
+
+function candidates(rawToken: string): string[] {
+  const raw = rawToken.toLowerCase().replace(/[.,!?;:)]+$/, "");
+  if (!raw || FUNCTION_WORDS.has(raw) || EXTRA_FUNCTION.has(raw)) return [];
+  const out = new Set<string>();
+  if (RESOLVED[raw]) out.add(RESOLVED[raw]);
+  for (const id of compTargets.get(raw) ?? []) out.add(id);
+  const geStripped = raw.startsWith("ge") && raw.length > 4 ? raw.slice(2) : raw;
+  for (const id of compTargets.get(fold(geStripped)) ?? []) out.add(id);
+  const t = fold(geStripped);
+  if (t.length >= 4) for (const [stem, ids] of stems) {
+    if (stem.length >= 4 && t.startsWith(stem)) for (const id of ids) out.add(id);
+  }
+  return [...out];
+}
+
+// ---------------------------------------------------------------- walk
+type Node = { id: number; kind: "core" | "sprig" | "branch"; topicId: number };
+const nodes = flattenTrailNodes() as unknown as Node[];
+const byId = new Map(LESSONS.map((l) => [l.id, l]));
+const plannedWordIds = new Map<number, Set<string>>(LESSONS.map((l) => [l.id, new Set(l.word_ids)]));
+
+const firstIntro = new Map<string, number>();
+const trail = nodes.map((n, i) => {
+  const lesson = byId.get(n.id)!;
+  const wids = [...plannedWordIds.get(n.id)!];
+  const newW: string[] = [];
+  for (const w of wids) if (!firstIntro.has(w)) { firstIntro.set(w, i); newW.push(w); }
+  return { idx: i, id: n.id, kind: n.kind, title: lesson.title, wids, newW, role: roleOf(n.id, n.kind) };
+});
+
+// ---------------------------------------------------------------- checks
+const fails: string[] = [], notes: string[] = [];
+
+// b. legality — word_ids ordering (exact)
+for (const l of trail) {
+  for (const w of l.wids) {
+    const intro = firstIntro.get(w) ?? Infinity;
+    if (intro > l.idx) fails.push(`legality: l${l.id} word_ids entry "${w}" first introduced at trail ${intro}`);
+  }
+}
+// b. legality — German exercise-surface tokens (allowlist for pre-campaign drifts)
+function surfaces(lesson: (typeof LESSONS)[number]): Array<{ where: string; text: string }> {
+  const out: Array<{ where: string; text: string }> = [];
+  for (const ex of lesson.exercises) {
+    const w = `l${lesson.id}/${ex.id}`;
+    if (ex.type === "morpheme_tiles") out.push({ where: w, text: [...(ex.tile_options ?? []), ex.target_answer].join(" ") });
+    else if (ex.type === "matching_pairs") out.push({ where: w, text: (ex.matching_pairs ?? []).map((p) => p.german).join(" ") });
+    else if (ex.type === "shift_select") out.push({ where: w, text: [...(ex.options ?? []), ex.target_answer].join(" ") });
+    else if (ex.type === "derive" || ex.type === "reverse_cognate") out.push({ where: w, text: ex.target_answer });
+    else if (ex.type === "syntax_builder") out.push({ where: w, text: [...(ex.word_bank ?? []), ex.target_answer].join(" ") });
+    else if (ex.type === "transcribe") out.push({ where: w, text: [ex.target_answer, ...(ex.word_bank ?? [])].join(" ") });
+    else if (ex.type === "literal_gloss") out.push({ where: w, text: [ex.german ?? "", ex.target_answer].join(" ") });
+  }
+  if (lesson.twist) out.push({ where: `l${lesson.id}/twist`, text: [lesson.twist.target_answer, ...(lesson.twist.word_bank ?? [])].join(" ") });
+  return out;
+}
+let preExistingHits = 0;
+for (const l of trail) {
+  const lesson = byId.get(l.id)!;
+  for (const surf of surfaces(lesson)) {
+    for (const tok of surf.text.split(/[\s—]+/)) {
+      const cands = candidates(tok);
+      if (!cands.length) continue;
+      const firsts = cands.map((c) => firstIntro.get(c)).filter((x): x is number => x !== undefined);
+      if (!firsts.length) continue;
+      if (Math.min(...firsts) > l.idx) {
+        const key = `${l.id}:${tok.toLowerCase().replace(/[.,!?;:)]+$/, "")}`;
+        if (PRE_EXISTING.has(key)) { preExistingHits++; continue; }
+        fails.push(`legality: l${l.id} ${surf.where} token "${tok}" resolves to word(s) introduced later (trail ${Math.min(...firsts)})`);
+      }
+    }
+  }
+}
+
+// execution progress: a host lesson's row is executed when every planned add
+// landed at it, every planned removal was shed, and every re-home moved past it.
+const rowExecuted = (lessonId: number): boolean => {
+  const l = trail.find((x) => x.id === lessonId)!;
+  for (const [w, host] of Object.entries(PLANNED)) if (host === lessonId && firstIntro.get(w) !== l.idx) return false;
+  for (const w of REMOVALS[lessonId] ?? []) if (l.wids.includes(w)) return false;
+  for (const w of REHOME_DONOR[lessonId] ?? []) if ((firstIntro.get(w) ?? Infinity) >= l.idx) return false;
+  return true;
+};
+// exercise-mention counts per word (exact target-word form across all
+// exercises + twist), used by both the progress tracker and the exposure check
+const targetOf = new Map(Object.entries(compendium.words).map(([id, w]) => [id, w.target_word.toLowerCase()]));
+const wordMentions = new Map<string, number>();
+for (const lesson of LESSONS) {
+  const hay = JSON.stringify(lesson.exercises) + (lesson.twist ? JSON.stringify(lesson.twist) : "");
+  for (const wid of new Set(lesson.word_ids)) {
+    const t = targetOf.get(wid) ?? wid;
+    const re = new RegExp(`(?<![\\p{L}])${t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\p{L}])`, "giu");
+    const m = hay.match(re);
+    if (m) wordMentions.set(wid, (wordMentions.get(wid) ?? 0) + m.length);
+  }
+}
+
+const pending: string[] = [], executed: string[] = [];
+const hosts = new Set<number>([...Object.values(PLANNED), ...Object.keys(REMOVALS).map(Number), ...Object.keys(REHOME_DONOR).map(Number)]);
+for (const host of hosts) {
+  if (rowExecuted(host)) executed.push(`${host}`); else pending.push(`${host}`);
+}
+for (const [w, host] of Object.entries(EXPOSURE_PLAN)) {
+  if (wordMentions.get(w)) executed.push(`mention:${w}@l${host}`); else pending.push(`mention:${w}@l${host}`);
+}
+
+// c. exposure — every taught word has ≥1 explicit exercise mention (per word,
+// across the whole trail). Pending while its plan row is unexecuted; a real
+// failure only when the row executed but the mention never landed.
+const exposureFails: string[] = [], exposurePending: string[] = [];
+for (const [wid, host] of [...Object.entries(PLANNED), ...Object.entries(EXPOSURE_PLAN)]) {
+  if ((wordMentions.get(wid) ?? 0) === 0) {
+    if (rowExecuted(host) && PLANNED[wid] === host) exposureFails.push(`${wid}@l${host}`);
+    else exposurePending.push(`${wid}@l${host}`);
+  }
+}
+for (const f of exposureFails) fails.push(`exposure: taught word "${f}" has zero exercise mentions`);
+if (STRICT && exposurePending.length) fails.push(`strict: ${exposurePending.length} words still lack an exercise mention: ${exposurePending.join(", ")}`);
+else if (exposurePending.length) notes.push(`${exposurePending.length} words pending their exposure fix (${exposurePending.slice(0, 8).join(", ")}${exposurePending.length > 8 ? " …" : ""})`);
+
+// c. weaving — later-lesson appearances per introduced word. The floor binds
+// words this campaign introduces (PLANNED); pre-existing shortfalls are notes.
+const wordUse = new Map<string, number[]>();
+for (const l of trail) for (const w of l.wids) (wordUse.get(w) ?? wordUse.set(w, []).get(w)!).push(l.idx);
+const weaveFails: string[] = [], weaveThin: string[] = [], weavePreExisting: string[] = [];
+let pendingWeave = 0;
+for (const [w, hostIdx] of [...firstIntro]) {
+  const later = (wordUse.get(w) ?? []).filter((t) => t > hostIdx).length;
+  const laterExist = trail.length - 1 - hostIdx;
+  const campaignWord = w in PLANNED;
+  const rowDone = campaignWord && firstIntro.get(w) === trail.find((l) => l.id === PLANNED[w])!.idx;
+  if (later >= 3) continue;
+  const label = `${w}@l${trail[hostIdx].id}:${later}`;
+  if (campaignWord) {
+    if (!rowDone) pendingWeave++;
+    else if (later < 2 && laterExist >= 2 && !TAIL_DEFERRALS.has(w)) weaveFails.push(label);
+    else weaveThin.push(label);
+  } else {
+    if (later < 2 && laterExist >= 2) weavePreExisting.push(label); // documented pre-existing shortfall
+    else weaveThin.push(label);
+  }
+}
+for (const f of weaveFails) fails.push(`weaving: "${f.split(":")[0]}" (intro ${f.split("@")[1].split(":")[0]}) used in only ${f.split(":")[1]} later lesson(s), floor is 2`);
+if (weavePreExisting.length) notes.push(`pre-existing words below the 2-later-lesson floor (not introduced by this campaign): ${weavePreExisting.length} — e.g. ${weavePreExisting.slice(0, 12).join(", ")}`);
+
+// a. bands
+const bandFails: string[] = [];
+for (const l of trail) {
+  if (LESSON_DEFERRALS[l.id]) continue;
+  const [lo, hi] = BANDS[l.role];
+  const n = l.newW.length;
+  if (n >= lo && n <= hi) continue;
+  const msg = `band: l${l.id} (${l.role}, "${l.title}") has ${n} new words, band ${lo}-${hi}`;
+  if (STRICT || rowExecuted(l.id)) bandFails.push(msg);
+  else notes.push(`pending — ${msg}`);
+}
+for (const f of bandFails) fails.push(f);
+
+// d. zero-new share
+const zeroNew = trail.filter((l) => l.newW.length === 0);
+const zeroPct = (zeroNew.length / trail.length) * 100;
+if (STRICT && zeroPct > 25) fails.push(`zero-new lessons ${zeroNew.length}/${trail.length} (${zeroPct.toFixed(1)}%) exceed 25%`);
+const zeroNewUnplanned = zeroNew.filter((l) => !REVISION.has(l.id) && !LESSON_DEFERRALS[l.id]).map((l) => l.id);
+
+// ---------------------------------------------------------------- report
+console.log(`=== vocab-balance audit ${STRICT ? "(strict)" : ""} ===`);
+console.log(`unique taught words: ${firstIntro.size} (campaign target 450-500)`);
+console.log(`histogram: ${JSON.stringify(trail.reduce((h: Record<number, number>, l) => { h[l.newW.length] = (h[l.newW.length] ?? 0) + 1; return h; }, {}))}`);
+console.log(`zero-new: ${zeroNew.length}/${trail.length} (${zeroPct.toFixed(1)}%)${STRICT || zeroPct <= 25 ? "" : " — over the 25% end-state bound (expected mid-campaign)"}`);
+if (zeroNewUnplanned.length && (STRICT || zeroPct <= 25)) fails.push(`zero-new outside the deliberate revision set / deferrals: ${zeroNewUnplanned.join(", ")}`);
+console.log(`move-list rows: ${executed.length} executed, ${pending.length} pending`);
+if (pending.length && STRICT) fails.push(`strict: ${pending.length} move-list rows pending`);
+console.log(`pre-existing drift tokens honored from allowlist: ${preExistingHits}`);
+if (pendingWeave) console.log(`weaving pending for ${pendingWeave} campaign words (host rows not yet executed)`);
+if (weaveThin.length) console.log(`below 3-lesson weaving target, floor 2 holds (${weaveThin.length}): ${weaveThin.slice(0, 12).join(", ")}${weaveThin.length > 12 ? " …" : ""}`);
+for (const n of notes) console.log(`  · ${n}`);
+if (fails.length) {
+  console.log(`\n✗ ${fails.length} violation(s):`);
+  for (const f of fails) console.log("  ✗ " + f);
+  process.exit(1);
+}
+console.log(`\n✓ vocab balance checks pass${pending.length ? ` (${pending.length} rows pending — mid-campaign)` : " (move-list fully executed)"}`);
