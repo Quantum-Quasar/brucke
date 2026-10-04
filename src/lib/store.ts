@@ -8,7 +8,7 @@ import { createInitialCard, gradeCard, isMastered, type ReviewGrade } from "./sr
 import { applyTheme, DEFAULT_THEME } from "@/data/themes";
 import { applyFont, DEFAULT_FONT } from "@/data/fonts";
 import { type CustomizationSettings, DEFAULT_SETTINGS } from "@/data/settings";
-import { DEFAULT_LANGUAGE_ID, isValidLanguageId } from "@/data/languages";
+import { DEFAULT_LANGUAGE_ID, getLanguageDefinition, isValidLanguageId } from "@/data/languages";
 import { applyAppearanceSettings } from "./appearance";
 import { soundEngine } from "./sound";
 
@@ -98,19 +98,22 @@ export interface AppState {
   logDailyActivity: () => void;
   resetProgress: () => void;
   hydrateFromStorage: () => void;
-  importBackupState: (payload: any) => boolean;
+  importBackupState: (payload: unknown) => boolean;
 }
 
 export const STORAGE_KEY = "brucke_app_state_v1";
 export const STORAGE_COOKIE_KEY = "brucke_progress";
 
 export function getWeekString(date = new Date()): string {
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  const dayNum = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  const weekNo = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
-  return `${d.getUTCFullYear()}-W${weekNo}`;
+  // purely local time: keyed by the local Monday of that week — never mixes
+  // local getters with UTC setters
+  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const dayNum = (d.getDay() + 6) % 7; // Monday = 0
+  d.setDate(d.getDate() - dayNum);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-W${mm}-${dd}`;
 }
 
 export function getCookie(name: string): string | null {
@@ -131,90 +134,123 @@ export function deleteCookie(name: string) {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
 }
 
+/** Structural guard for persisted-state and backup payloads: any non-null,
+ * non-array object qualifies. Field-level validation and defaults are applied
+ * afterwards (normalizeParsedState), so a partial payload is repaired —
+ * never a crash and never a reason to discard the other store. */
+export function isPlausibleStateObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function parseStoredJson(raw: string | null): unknown {
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
 export function loadSavedState(): Partial<AppState> {
   if (typeof window === "undefined") return {};
 
-  let parsed: any = null;
-  // 1. Try localStorage
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      parsed = JSON.parse(raw);
-    }
-  } catch {}
+  // Parse BOTH stores before choosing a base: a valid-but-truncated
+  // localStorage payload must not bury recoverable cookie data. The cookie
+  // write runs in the same saveState pass as localStorage, so it is never
+  // staler than the localStorage snapshot it accompanies.
+  const local = parseStoredJson(localStorage.getItem(STORAGE_KEY));
+  const cookie = parseStoredJson(getCookie(STORAGE_COOKIE_KEY));
 
-  // 2. Fallback to cookie storage
-  if (!parsed) {
-    try {
-      const rawCookie = getCookie(STORAGE_COOKIE_KEY);
-      if (rawCookie) {
-        parsed = JSON.parse(rawCookie);
-      }
-    } catch {}
+  let parsed: Record<string, unknown> | null = null;
+  if (isPlausibleStateObject(local) && isPlausibleStateObject(cookie)) {
+    // Field-level merge: localStorage wins for every field it actually has;
+    // the cookie fills whatever the localStorage payload is missing.
+    parsed = { ...cookie, ...local };
+  } else if (isPlausibleStateObject(local)) {
+    parsed = local;
+  } else if (isPlausibleStateObject(cookie)) {
+    parsed = cookie;
   }
 
-  if (parsed && typeof parsed === "object") {
-    // ponytail: defensive schema defaults preventing corrupted storage crashes
-    if (!Array.isArray(parsed.completedLessons)) parsed.completedLessons = [];
-    if (!parsed.lessonProgress || typeof parsed.lessonProgress !== "object" || Array.isArray(parsed.lessonProgress)) parsed.lessonProgress = {};
-    if (!parsed.lessonStars || typeof parsed.lessonStars !== "object" || Array.isArray(parsed.lessonStars)) parsed.lessonStars = {};
-    if (!parsed.wordMastery || typeof parsed.wordMastery !== "object") parsed.wordMastery = {};
-    if (!parsed.srsCards || typeof parsed.srsCards !== "object") parsed.srsCards = {};
-    if (!Array.isArray(parsed.weeklyActivity)) parsed.weeklyActivity = [false, false, false, false, false, false, false];
-    if (parsed.settings) {
-      parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
-      if (parsed.settings.quickRestart === "enter") {
-        parsed.settings.quickRestart = DEFAULT_SETTINGS.quickRestart;
-      }
-    }
-
-    // Language slices: pre-multi-language saves kept progress only on the top
-    // level — migrate it into the default language's slice so nobody loses a
-    // day of German progress.
-    if (!parsed.activeLanguageId || !isValidLanguageId(parsed.activeLanguageId)) {
-      parsed.activeLanguageId = DEFAULT_LANGUAGE_ID;
-    }
-    if (!parsed.progressByLanguage || typeof parsed.progressByLanguage !== "object" || Array.isArray(parsed.progressByLanguage)) {
-      parsed.progressByLanguage = {};
-    }
-    if (!Array.isArray(parsed.seenIntroLanguages)) parsed.seenIntroLanguages = [];
-    if (!parsed.progressByLanguage[parsed.activeLanguageId]) {
-      parsed.progressByLanguage[parsed.activeLanguageId] = {
-        completedLessons: parsed.completedLessons,
-        currentLessonId: parsed.currentLessonId || 1,
-        lessonProgress: parsed.lessonProgress,
-        lessonStars: parsed.lessonStars,
-        wordMastery: parsed.wordMastery,
-        srsCards: parsed.srsCards,
-        weeklyActivity: parsed.weeklyActivity,
-        lastActivityWeek: parsed.lastActivityWeek,
-      };
-    }
-    // The top-level fields always mirror the active language's slice.
-    const activeSlice = parsed.progressByLanguage[parsed.activeLanguageId];
-    if (activeSlice && typeof activeSlice === "object") {
-      if (!Array.isArray(activeSlice.completedLessons)) activeSlice.completedLessons = [];
-      if (!activeSlice.lessonProgress || typeof activeSlice.lessonProgress !== "object" || Array.isArray(activeSlice.lessonProgress)) activeSlice.lessonProgress = {};
-      if (!activeSlice.lessonStars || typeof activeSlice.lessonStars !== "object" || Array.isArray(activeSlice.lessonStars)) activeSlice.lessonStars = {};
-      if (!activeSlice.wordMastery || typeof activeSlice.wordMastery !== "object") activeSlice.wordMastery = {};
-      if (!activeSlice.srsCards || typeof activeSlice.srsCards !== "object") activeSlice.srsCards = {};
-      if (!Array.isArray(activeSlice.weeklyActivity)) activeSlice.weeklyActivity = [false, false, false, false, false, false, false];
-      parsed.completedLessons = activeSlice.completedLessons;
-      parsed.currentLessonId = activeSlice.currentLessonId || 1;
-      parsed.lessonProgress = activeSlice.lessonProgress;
-      parsed.lessonStars = activeSlice.lessonStars;
-      parsed.wordMastery = activeSlice.wordMastery;
-      parsed.srsCards = activeSlice.srsCards;
-      parsed.weeklyActivity = activeSlice.weeklyActivity;
-      parsed.lastActivityWeek = activeSlice.lastActivityWeek;
-    }
-    return parsed;
+  if (parsed) {
+    return normalizeParsedState(parsed);
   }
-
   return {};
 }
 
+/** Applies schema defaults & legacy migrations to a parsed persisted-state
+ * object (mutates and returns it). */
+function normalizeParsedState(parsed: Record<string, any>): Partial<AppState> {
+  // ponytail: defensive schema defaults preventing corrupted storage crashes
+  if (!Array.isArray(parsed.completedLessons)) parsed.completedLessons = [];
+  if (!parsed.lessonProgress || typeof parsed.lessonProgress !== "object" || Array.isArray(parsed.lessonProgress)) parsed.lessonProgress = {};
+  if (!parsed.lessonStars || typeof parsed.lessonStars !== "object" || Array.isArray(parsed.lessonStars)) parsed.lessonStars = {};
+  if (!parsed.wordMastery || typeof parsed.wordMastery !== "object") parsed.wordMastery = {};
+  if (!parsed.srsCards || typeof parsed.srsCards !== "object") parsed.srsCards = {};
+  if (!Array.isArray(parsed.weeklyActivity)) parsed.weeklyActivity = [false, false, false, false, false, false, false];
+  if (parsed.settings) {
+    parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
+    // "enter" was removed; "tab" hijacks keyboard focus navigation, so the
+    // old "tab" default is treated as accidental and falls back to "off"
+    if (parsed.settings.quickRestart === "enter" || parsed.settings.quickRestart === "tab") {
+      parsed.settings.quickRestart = DEFAULT_SETTINGS.quickRestart;
+    }
+  }
+
+  // Language slices: pre-multi-language saves kept progress only on the top
+  // level — migrate it into the default language's slice so nobody loses a
+  // day of German progress.
+  if (!parsed.activeLanguageId || !isValidLanguageId(parsed.activeLanguageId)) {
+    parsed.activeLanguageId = DEFAULT_LANGUAGE_ID;
+  }
+  // languages without content are hidden from the UI — anyone parked on one
+  // (e.g. from before it was pulled) gets moved back to the default language
+  if (getLanguageDefinition(parsed.activeLanguageId).status !== "available") {
+    parsed.activeLanguageId = DEFAULT_LANGUAGE_ID;
+  }
+  if (!parsed.progressByLanguage || typeof parsed.progressByLanguage !== "object" || Array.isArray(parsed.progressByLanguage)) {
+    parsed.progressByLanguage = {};
+  }
+  if (!Array.isArray(parsed.seenIntroLanguages)) parsed.seenIntroLanguages = [];
+  if (!parsed.progressByLanguage[parsed.activeLanguageId]) {
+    parsed.progressByLanguage[parsed.activeLanguageId] = {
+      completedLessons: parsed.completedLessons,
+      currentLessonId: parsed.currentLessonId || 1,
+      lessonProgress: parsed.lessonProgress,
+      lessonStars: parsed.lessonStars,
+      wordMastery: parsed.wordMastery,
+      srsCards: parsed.srsCards,
+      weeklyActivity: parsed.weeklyActivity,
+      lastActivityWeek: parsed.lastActivityWeek,
+    };
+  }
+  // The top-level fields always mirror the active language's slice.
+  const activeSlice = parsed.progressByLanguage[parsed.activeLanguageId];
+  if (activeSlice && typeof activeSlice === "object") {
+    if (!Array.isArray(activeSlice.completedLessons)) activeSlice.completedLessons = [];
+    if (!activeSlice.lessonProgress || typeof activeSlice.lessonProgress !== "object" || Array.isArray(activeSlice.lessonProgress)) activeSlice.lessonProgress = {};
+    if (!activeSlice.lessonStars || typeof activeSlice.lessonStars !== "object" || Array.isArray(activeSlice.lessonStars)) activeSlice.lessonStars = {};
+    if (!activeSlice.wordMastery || typeof activeSlice.wordMastery !== "object") activeSlice.wordMastery = {};
+    if (!activeSlice.srsCards || typeof activeSlice.srsCards !== "object") activeSlice.srsCards = {};
+    if (!Array.isArray(activeSlice.weeklyActivity)) activeSlice.weeklyActivity = [false, false, false, false, false, false, false];
+    parsed.completedLessons = activeSlice.completedLessons;
+    parsed.currentLessonId = activeSlice.currentLessonId || 1;
+    parsed.lessonProgress = activeSlice.lessonProgress;
+    parsed.lessonStars = activeSlice.lessonStars;
+    parsed.wordMastery = activeSlice.wordMastery;
+    parsed.srsCards = activeSlice.srsCards;
+    parsed.weeklyActivity = activeSlice.weeklyActivity;
+    parsed.lastActivityWeek = activeSlice.lastActivityWeek;
+  }
+  return parsed;
+}
+
 let lastSerialized = "";
+
+// the auto-open of onboarding on first visit must only ever happen once per
+// page load — cross-tab `storage` events re-run hydrateFromStorage and must
+// not yank the intro open over whatever the user is doing now
+let hasAutoOpenedOnboarding = false;
 
 export function saveState(state: AppState) {
   if (typeof window === "undefined") return;
@@ -265,6 +301,8 @@ export function saveState(state: AppState) {
   try {
     const lean = {
       activeLanguageId: state.activeLanguageId,
+      progressByLanguage,
+      seenIntroLanguages: state.seenIntroLanguages,
       completedLessons: state.completedLessons,
       currentLessonId: state.currentLessonId,
       wordMastery: state.wordMastery,
@@ -277,7 +315,12 @@ export function saveState(state: AppState) {
     if (encodeURIComponent(leanJson).length <= 2048) {
       setCookie(STORAGE_COOKIE_KEY, leanJson, 365);
     } else {
-      const minimal = JSON.stringify({ theme: state.theme, font: state.font });
+      const minimal = JSON.stringify({
+        theme: state.theme,
+        font: state.font,
+        activeLanguageId: state.activeLanguageId,
+        seenIntroLanguages: state.seenIntroLanguages,
+      });
       setCookie(STORAGE_COOKIE_KEY, minimal, 365);
     }
   } catch {}
@@ -296,16 +339,16 @@ export const useAppStore = create<AppState>((set, get) => ({
   wordMastery: initialSaved.wordMastery || {},
   srsCards: initialSaved.srsCards || {},
   weeklyActivity: initialSaved.weeklyActivity || [false, false, false, false, false, false, false],
-  lastActivityWeek: (initialSaved as any)?.lastActivityWeek || getWeekString(),
+  lastActivityWeek: initialSaved.lastActivityWeek || getWeekString(),
   activeWordDrawerId: null,
   preferredReviewMode: (initialSaved.preferredReviewMode as ReviewMode) || "flashcard",
   hasCompletedOnboarding: initialSaved.hasCompletedOnboarding || false,
   isOnboardingOpen: false,
   onboardingIntroLanguage: null,
   hasSeenGenderIntro: initialSaved.hasSeenGenderIntro || false,
-  theme: (initialSaved as any)?.theme || DEFAULT_THEME,
+  theme: initialSaved.theme || DEFAULT_THEME,
   isThemeSelectorOpen: false,
-  font: (initialSaved as any)?.font || DEFAULT_FONT,
+  font: initialSaved.font || DEFAULT_FONT,
   isFontSelectorOpen: false,
   settings: initialSaved.settings ? { ...DEFAULT_SETTINGS, ...initialSaved.settings } : DEFAULT_SETTINGS,
   tolerance: initialSaved.tolerance || {
@@ -335,14 +378,12 @@ export const useAppStore = create<AppState>((set, get) => ({
         },
       };
       const incoming = progressByLanguage[languageId];
-      const seenIntroLanguages = s.seenIntroLanguages.includes(languageId)
-        ? s.seenIntroLanguages
-        : [...s.seenIntroLanguages, languageId];
+      // the intro is not marked seen at selection time — only completing the
+      // wizard (completeOnboarding) marks it, so an early dismissal replays it
       const next: AppState = {
         ...s,
         activeLanguageId: languageId,
         progressByLanguage,
-        seenIntroLanguages,
         completedLessons: incoming?.completedLessons || [],
         currentLessonId: incoming?.currentLessonId || 1,
         lessonProgress: incoming?.lessonProgress || {},
@@ -449,7 +490,13 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   closeOnboarding: () => {
-    set({ isOnboardingOpen: false });
+    // dismissing (skip/escape) closes the intro but leaves the language out of
+    // seenIntroLanguages so its intro can replay; still counts as onboarding
+    // having been dealt with, to avoid nagging on every fresh load
+    const settings = { ...get().settings, posturePrimerSeen: true };
+    const next = { isOnboardingOpen: false, onboardingIntroLanguage: null, hasCompletedOnboarding: true, settings };
+    set(next);
+    saveState({ ...get(), ...next });
   },
 
   dismissGenderIntro: () => {
@@ -712,7 +759,10 @@ export const useAppStore = create<AppState>((set, get) => ({
     set(emptyState);
   },
 
-  importBackupState: (payload: any) => {
+  importBackupState: (rawPayload: unknown) => {
+    // the boundary type is `unknown` — everything below narrows defensively
+    // before use, so a hostile or malformed backup can only be ignored
+    const payload = rawPayload as Record<string, any>;
     if (!payload || typeof payload !== "object" || Array.isArray(payload)) return false;
     // an object with none of our fields is not a backup — say so instead of
     // reporting success while restoring nothing
@@ -800,8 +850,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         : s.weeklyActivity;
 
       const VALID_REVIEW_MODES: ReviewMode[] = ["flashcard", "mcq", "tiles", "typing"];
-      const nextPreferredReviewMode = VALID_REVIEW_MODES.includes(payload.preferredReviewMode)
-        ? payload.preferredReviewMode
+      const rawReviewMode = payload.preferredReviewMode as ReviewMode;
+      const nextPreferredReviewMode = VALID_REVIEW_MODES.includes(rawReviewMode)
+        ? rawReviewMode
         : s.preferredReviewMode;
       const nextHasCompletedOnboarding =
         typeof payload.hasCompletedOnboarding === "boolean" ? payload.hasCompletedOnboarding : s.hasCompletedOnboarding;
@@ -814,7 +865,10 @@ export const useAppStore = create<AppState>((set, get) => ({
       // Language identity & slices. A pre-multi-language backup (no
       // progressByLanguage) carries one language's progress on the top level —
       // attribute it to the backup's own active language, not the current one.
-      const backupLanguageId = isValidLanguageId(payload.activeLanguageId) ? payload.activeLanguageId : s.activeLanguageId;
+      const backupLanguageId =
+        typeof payload.activeLanguageId === "string" && isValidLanguageId(payload.activeLanguageId)
+          ? payload.activeLanguageId
+          : s.activeLanguageId;
       let progressByLanguage = { ...s.progressByLanguage };
       if (payload.progressByLanguage && typeof payload.progressByLanguage === "object" && !Array.isArray(payload.progressByLanguage)) {
         for (const [langId, slice] of Object.entries(payload.progressByLanguage)) {
@@ -885,34 +939,36 @@ export const useAppStore = create<AppState>((set, get) => ({
         const completed = typeof saved.hasCompletedOnboarding === "boolean"
           ? saved.hasCompletedOnboarding
           : s.hasCompletedOnboarding;
-        const currentTheme = (saved as any).theme || s.theme || DEFAULT_THEME;
+        const currentTheme = saved.theme || s.theme || DEFAULT_THEME;
         applyTheme(currentTheme);
 
-        const currentFont = (saved as any).font || s.font || DEFAULT_FONT;
+        const currentFont = saved.font || s.font || DEFAULT_FONT;
         applyFont(currentFont);
 
         return {
           ...s,
           activeLanguageId: saved.activeLanguageId || s.activeLanguageId,
-          progressByLanguage: { ...s.progressByLanguage, ...((saved as any).progressByLanguage || {}) },
-          seenIntroLanguages: Array.isArray((saved as any).seenIntroLanguages)
-            ? Array.from(new Set([...s.seenIntroLanguages, ...((saved as any).seenIntroLanguages as string[])]))
+          progressByLanguage: { ...s.progressByLanguage, ...(saved.progressByLanguage || {}) },
+          seenIntroLanguages: Array.isArray(saved.seenIntroLanguages)
+            ? Array.from(new Set([...s.seenIntroLanguages, ...saved.seenIntroLanguages]))
             : s.seenIntroLanguages,
-          completedLessons: Array.isArray(saved.completedLessons) && saved.completedLessons.length > 0
-            ? saved.completedLessons
+          completedLessons: Array.isArray(saved.completedLessons)
+            ? Array.from(new Set([...s.completedLessons, ...saved.completedLessons]))
             : s.completedLessons,
           currentLessonId: saved.currentLessonId ? Math.max(s.currentLessonId, saved.currentLessonId) : s.currentLessonId,
-          lessonProgress: { ...s.lessonProgress, ...((saved as any).lessonProgress || {}) },
-          lessonStars: { ...s.lessonStars, ...(((saved as any).lessonStars as Record<number, LessonStar>) || {}) },
+          lessonProgress: { ...s.lessonProgress, ...(saved.lessonProgress || {}) },
+          lessonStars: { ...s.lessonStars, ...(saved.lessonStars || {}) },
           wordMastery: { ...s.wordMastery, ...(saved.wordMastery || {}) },
           srsCards: { ...s.srsCards, ...(saved.srsCards || {}) },
           weeklyActivity: Array.isArray(saved.weeklyActivity) ? saved.weeklyActivity : s.weeklyActivity,
-          lastActivityWeek: (saved as any).lastActivityWeek || s.lastActivityWeek,
+          lastActivityWeek: saved.lastActivityWeek || s.lastActivityWeek,
           preferredReviewMode: saved.preferredReviewMode || s.preferredReviewMode,
           theme: currentTheme,
           font: currentFont,
           hasCompletedOnboarding: completed,
-          isOnboardingOpen: !completed, // Automatically trigger onboarding on first visit
+          // first visit auto-opens onboarding; later (cross-tab) hydrations
+          // must never reopen or close an in-progress intro
+          ...(hasAutoOpenedOnboarding ? {} : { isOnboardingOpen: !completed }),
           hasSeenGenderIntro: typeof saved.hasSeenGenderIntro === "boolean" ? saved.hasSeenGenderIntro : s.hasSeenGenderIntro,
           tolerance: saved.tolerance ? { ...s.tolerance, ...saved.tolerance } : s.tolerance,
           settings: saved.settings ? { ...DEFAULT_SETTINGS, ...saved.settings } : s.settings,
@@ -923,21 +979,22 @@ export const useAppStore = create<AppState>((set, get) => ({
       if (latestSettings.playSoundOnClick !== "off") {
         void soundEngine.preloadClickSound(latestSettings.playSoundOnClick);
       }
-    } else {
-      // Clean slate first-time user: trigger onboarding!
+    } else if (!hasAutoOpenedOnboarding) {
+      // Clean slate first-time user: trigger onboarding (once per page load)!
       applyTheme(DEFAULT_THEME);
       applyFont(DEFAULT_FONT);
       applyAppearanceSettings(DEFAULT_SETTINGS);
       set((s) => ({ ...s, isOnboardingOpen: !s.hasCompletedOnboarding }));
     }
+    hasAutoOpenedOnboarding = true;
   },
 }));
 
 // Auto-hydrate on client load if running in browser
 if (typeof window !== "undefined") {
   const initial = loadSavedState();
-  applyTheme((initial as any)?.theme || DEFAULT_THEME);
-  applyFont((initial as any)?.font || DEFAULT_FONT);
+  applyTheme(initial.theme || DEFAULT_THEME);
+  applyFont(initial.font || DEFAULT_FONT);
   if (initial.settings) {
     applyAppearanceSettings({ ...DEFAULT_SETTINGS, ...initial.settings });
   } else {

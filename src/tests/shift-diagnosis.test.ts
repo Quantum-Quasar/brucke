@@ -63,6 +63,12 @@ describe("TM-3 shift diagnosis: name the slip, not just the diff", () => {
     expect(diagnoseAttempt("Wasser", "Wasser")).toBeNull();
     expect(diagnoseAttempt("", "x")).toBeNull();
   });
+
+  it("does not fire a family whose law does not bring the attempt closer to the target", () => {
+    // "tad" vs "das": applying d→t yields "tat" (distance 1), the same as the raw
+    // attempt — the real slip is t-vs-s, so the stop-shift message must NOT fire
+    expect(diagnoseAttempt("das", "tad")).toBeNull();
+  });
 });
 
 describe("TM-3 process affirmations", () => {

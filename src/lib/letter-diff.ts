@@ -151,7 +151,16 @@ export function evaluateAnswerAccuracy(
   if (matchesUmlauts) {
     if (options?.umlautTolerance) {
       // If umlauts are tolerated, check if capitalization tolerance is also respected or if case matches
-      const caseMatches = user === userLower ? target === targetLower : true;
+      // capitalization style must match (all-lower vs capitalized-first vs
+      // other): "WASSER" must not count as case-correct just for containing caps
+      const lettersOf = (s: string) => s.replace(/[^A-Za-zÄÖÜäöüß]/g, "");
+      const caseStyle = (s: string) => {
+        const l = lettersOf(s);
+        if (l === l.toLowerCase()) return "lower";
+        if (l[0] === l[0].toUpperCase() && l.slice(1) === l.slice(1).toLowerCase()) return "capitalized";
+        return "other";
+      };
+      const caseMatches = caseStyle(user) === caseStyle(target);
       if (options.capitalizationTolerance || caseMatches) {
         return { accuracy: "exact" };
       }

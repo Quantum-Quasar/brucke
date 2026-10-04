@@ -101,7 +101,7 @@ const shifts: Record<string, ShiftFamily> = {
   },
 };
 
-// 2. Parse 218 Core Words
+// 2. Parse Core Words (the header count is kept in sync by hand; the regex accepts any count)
 const words: Record<string, WordEntity> = {};
 const wordList: WordEntity[] = [];
 

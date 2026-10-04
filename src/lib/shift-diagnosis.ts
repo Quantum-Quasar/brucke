@@ -77,11 +77,16 @@ export function diagnoseAttempt(
   if (!t || !a || t === a) return null;
   if (Math.abs(t.length - a.length) > LENGTH_DIFF_GUARD) return null;
 
+  // the law must move the attempt TOWARD the target — otherwise a coincidental
+  // letter (e.g. "tad" vs "das") would fire a wrong family's message
+  const rawDistance = getLevenshteinDistance(a, t);
+
   for (const law of LETTER_LAWS) {
     if (!a.includes(law.from)) continue;
     for (const to of law.to) {
       const transformed = a.split(law.from).join(to);
-      if (getLevenshteinDistance(transformed, t) <= law.tolerance) {
+      const transformedDistance = getLevenshteinDistance(transformed, t);
+      if (transformedDistance <= law.tolerance && transformedDistance < rawDistance) {
         return table[law.family] ?? null;
       }
     }

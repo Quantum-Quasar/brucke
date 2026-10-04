@@ -1,18 +1,18 @@
 import { describe, it, expect } from "vitest";
-import { playGermanAudio } from "@/lib/audio";
+import { playTargetAudio } from "@/lib/audio";
 
 describe("Native Speech Synthesis Audio Engine", () => {
   it("safely handles server-side or non-browser environments without crashing", () => {
     // In node/test environment, window or speechSynthesis might not be fully featured
-    const result = playGermanAudio("Wasser");
+    const result = playTargetAudio("Wasser");
     expect(typeof result).toBe("boolean");
   });
 
   it("handles empty or whitespace strings gracefully", () => {
-    const result = playGermanAudio("");
+    const result = playTargetAudio("");
     expect(result).toBe(false);
 
-    const whitespaceResult = playGermanAudio("   ");
+    const whitespaceResult = playTargetAudio("   ");
     expect(whitespaceResult).toBe(false);
   });
 
@@ -47,7 +47,7 @@ describe("Native Speech Synthesis Audio Engine", () => {
       this.voice = null;
     };
 
-    const res = playGermanAudio("[der] Wasser");
+    const res = playTargetAudio("[der] Wasser");
     expect(res).toBe(true);
     expect(cancelCalled).toBe(true);
     expect(spoken).toBe(true);

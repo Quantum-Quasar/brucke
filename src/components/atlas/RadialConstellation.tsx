@@ -3,7 +3,7 @@
 import React from "react";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { useAppStore } from "@/lib/store";
-import { compendium as data } from "@/data/compendium";
+import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
 import type { ShiftFamily } from "@/lib/types";
 
 interface RadialConstellationProps {
@@ -19,6 +19,8 @@ export const RadialConstellation: React.FC<RadialConstellationProps> = ({
   React.useEffect(() => {
     setMounted(true);
   }, []);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const data = getLanguageContent(activeLanguageId).compendium ?? EMPTY_COMPENDIUM;
   const persistedMastery = useAppStore((s) => s.wordMastery);
   const openWordDrawer = useAppStore((s) => s.openWordDrawer);
   // keep mastery-derived classes/counts at defaults on the hydrating render so SSG

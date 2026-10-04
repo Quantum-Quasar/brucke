@@ -383,7 +383,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "Why German Has No 'TH' Sound",
       content:
-        "Notice how native German speakers learning English often struggle with the 'th' sound? That is because German completely abolished dental fricatives over 1,300 years ago. Every single original Germanic 'th' sound hardened directly into 'd'.",
+        "Notice how native German speakers learning English often struggle with the 'th' sound? That is because German completely abolished dental fricatives over 1,300 years ago. Every single original Germanic 'th' sound hardened directly into 'd'. You already own proof from the wild: danke — the one German word everyone picks up — is thank with its th hardened to d.",
       footnotes: [
         {
           marker: "1",
@@ -658,6 +658,12 @@ export const LESSONS: Lesson[] = [
           marker: "2",
           title: "Palatal vs. Velar",
           content: "Ach-Laut [x] follows back vowels; Ich-Laut [ç] follows front vowels and liquid consonants.",
+        },
+        {
+          marker: "3",
+          title: "Say What You Read",
+          content:
+            "German spells the way it sounds: each vowel letter holds one sound — the I of finden is always the /ee/ of seen — and the letter laws own the consonants, so every word you read tells you how to say it. When a cluster like the schl- of schlafen tangles on your tongue, slow down; the sounds sit together fine at half speed. And don't let regional accents shake you: you might hear a harder /ick/ in Berlin or an /ish/-tinged ich in the south — variants to recognize, never to learn.",
         },
       ],
     },
@@ -3586,7 +3592,7 @@ export const LESSONS: Lesson[] = [
           {
             word: "es",
             translation: "it",
-            note: "es ↔ it — the same ancient pronoun",
+            note: "es ↔ it — the same ancient pronoun. In speech you might hear it cling to the verb: hat's (hat es), ist's (ist es) — recognize them, no pressure to use them.",
           },
           {
             word: "weiß",

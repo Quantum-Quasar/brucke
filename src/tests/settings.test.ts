@@ -9,7 +9,7 @@ describe("Settings & Store Architecture", () => {
   });
 
   it("contains valid default customization settings", () => {
-    expect(DEFAULT_SETTINGS.quickRestart).toBe("tab");
+    expect(DEFAULT_SETTINGS.quickRestart).toBe("off");
     expect(DEFAULT_SETTINGS.lazyMode).toBe(false);
     expect(DEFAULT_SETTINGS.capitalizationTolerance).toBe(false);
     expect(DEFAULT_SETTINGS.stopOnError).toBe("off");
@@ -64,7 +64,7 @@ describe("Settings & Store Architecture", () => {
 
     store.resetSettings();
     const reset = useAppStore.getState().settings;
-    expect(reset.quickRestart).toBe("tab");
+    expect(reset.quickRestart).toBe("off");
     expect(reset.soundVolume).toBe(0.5);
     expect(reset.showKeyTips).toBe(true);
   });

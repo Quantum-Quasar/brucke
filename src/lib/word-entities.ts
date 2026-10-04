@@ -7,6 +7,8 @@ import type { WordEntity } from "@/lib/types";
 interface WordEntityMaps {
   wordLesson: Record<string, number>;
   entities: Record<string, WordEntity>;
+  /** lowercase target_word/id index — avoids the O(n) scan on lookup misses */
+  byLowerKey: Record<string, WordEntity>;
 }
 
 function buildWordEntityMaps(
@@ -58,7 +60,15 @@ function buildWordEntityMaps(
     };
   });
 
-  return { wordLesson, entities };
+  const byLowerKey: Record<string, WordEntity> = {};
+  for (const word of Object.values(entities)) {
+    const t = word.target_word.toLowerCase();
+    if (!(t in byLowerKey)) byLowerKey[t] = word;
+    const i = word.id.toLowerCase();
+    if (!(i in byLowerKey)) byLowerKey[i] = word;
+  }
+
+  return { wordLesson, entities, byLowerKey };
 }
 
 const GERMAN_IPA = { compound: COMPOUND_IPA, falseFriend: FALSE_FRIEND_IPA };
@@ -95,22 +105,13 @@ function getMaps(languageId: string): WordEntityMaps {
   const content = getLanguageContent(languageId);
   const maps = content.compendium
     ? buildWordEntityMaps(content.compendium, content.lessons, { compound: {}, falseFriend: {} })
-    : { wordLesson: {}, entities: {} };
+    : { wordLesson: {}, entities: {}, byLowerKey: {} };
   mapsByLanguage[languageId] = maps;
   return maps;
 }
 
-/** Legacy German-only lookup — prefer getWordEntity(id, activeLanguageId). */
-export const WORD_ENTITY_MAP: Record<string, WordEntity> = germanMaps.entities;
-
 export function getWordEntity(id: string, languageId = "de"): WordEntity | undefined {
-  const map = getMaps(languageId).entities;
+  const maps = getMaps(languageId);
   const normalized = id.trim().toLowerCase();
-  return (
-    map[id] ||
-    map[normalized] ||
-    Object.values(map).find(
-      (word) => word.target_word.toLowerCase() === normalized || word.id.toLowerCase() === normalized
-    )
-  );
+  return maps.entities[id] || maps.entities[normalized] || maps.byLowerKey[normalized];
 }

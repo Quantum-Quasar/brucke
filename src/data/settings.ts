@@ -31,7 +31,7 @@ export interface CustomizationSettings {
 }
 
 export const DEFAULT_SETTINGS: CustomizationSettings = {
-  quickRestart: "tab",
+  quickRestart: "off",
   lazyMode: false,
   capitalizationTolerance: false,
 

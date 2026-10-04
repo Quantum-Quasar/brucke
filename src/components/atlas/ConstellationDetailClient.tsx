@@ -6,18 +6,32 @@ import { ArrowLeft, BookOpen, Info } from "lucide-react";
 import { RadialConstellation } from "@/components/atlas/RadialConstellation";
 import { BranchDrillModal } from "@/components/atlas/BranchDrillModal";
 import { ShiftPair } from "@/components/common/ShiftPair";
-import { compendium as data } from "@/data/compendium";
+import { useAppStore } from "@/lib/store";
+import { getLanguageDefinition } from "@/data/languages";
+import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
 import type { ShiftFamily } from "@/lib/types";
 
 export function ConstellationDetailClient({ familyId }: { familyId: string }) {
   const [isDrillOpen, setIsDrillOpen] = useState(false);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
+  const data = getLanguageContent(activeLanguageId).compendium ?? EMPTY_COMPENDIUM;
 
   const family: ShiftFamily | undefined = data.shifts[familyId || ""];
 
   if (!family) {
+    // German-only shift families are German-only routes: another language's
+    // atlas is empty until its content is authored, so say that instead of
+    // silently rendering German words
+    const comingSoon = language.status !== "available";
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center space-y-4 font-sans">
-        <h2 className="text-xl font-bold text-[var(--text-color)]">Family Not Found</h2>
+        <h2 className="text-xl font-bold text-[var(--text-color)]">
+          {comingSoon ? `Atlas comes with the ${language.name.toLowerCase()} trail` : "Family Not Found"}
+        </h2>
+        {!comingSoon && (
+          <p className="text-xs font-mono text-[var(--sub-color)]">No shift family exists at this route.</p>
+        )}
         <Link
           href="/atlas"
           className="inline-flex items-center gap-2 px-4 py-2 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-bold text-xs font-mono"

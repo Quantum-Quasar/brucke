@@ -4,13 +4,24 @@ import type { SRSCard, WordEntity } from "./types";
 
 export type ReviewGrade = 1 | 3 | 4 | 5; // 1 = Again, 3 = Hard, 4 = Good, 5 = Easy
 
+/** Calendar-day key (YYYY-MM-DD) in the machine's local timezone.
+ * The SM-2 queue is keyed by local days — never mix this with UTC getters
+ * like toISOString, which rolls over to the next day a few hours before
+ * local midnight (west of UTC) and lags a day behind (east of UTC). */
+export function localDateKey(date = new Date()): string {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 export function createInitialCard(word_id: string): SRSCard {
   return {
     word_id,
     interval: 0,
     repetitions: 0,
     ease_factor: 2.5,
-    due_date: new Date().toISOString().split("T")[0],
+    due_date: localDateKey(),
     lapses: 0,
     last_reviewed: null,
   };
@@ -40,10 +51,11 @@ export function gradeCard(card: SRSCard, grade: ReviewGrade, now = new Date()): 
     if (ease_factor < 1.3) ease_factor = 1.3;
   }
 
-  // Calculate next due date
+  // Calculate next due date — local arithmetic + local key, so a review at
+  // 23:40 local with interval 1 is due tomorrow local (not the day after)
   const nextDue = new Date(now.getTime());
   nextDue.setDate(nextDue.getDate() + interval);
-  const due_date = nextDue.toISOString().split("T")[0];
+  const due_date = localDateKey(nextDue);
 
   return {
     ...card,
@@ -61,7 +73,7 @@ export function isMastered(card: SRSCard): boolean {
   return card.repetitions >= 3 && card.interval >= 7;
 }
 
-export function getDueCards(cards: Record<string, SRSCard>, today = new Date().toISOString().split("T")[0]): SRSCard[] {
+export function getDueCards(cards: Record<string, SRSCard>, today = localDateKey()): SRSCard[] {
   return Object.values(cards).filter((c) => c.due_date <= today);
 }
 

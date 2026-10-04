@@ -43,11 +43,3 @@ export function playTargetAudio(text: string, locale = "de-DE"): boolean {
     return false;
   }
 }
-
-/**
- * Plays German pronunciation using the native Web Speech API.
- * Uses 'de-DE' locale at a comfortable 0.92x rate for clear phoneme perception.
- */
-export function playGermanAudio(text: string): boolean {
-  return playTargetAudio(text, "de-DE");
-}

@@ -86,26 +86,25 @@ describe("Filesystem Assets & Dynamic Routes Integrity", () => {
   });
 
   describe("Curriculum Trail Dynamic Routes (/trail/[id])", () => {
-    it("verifies that all 10 lesson route IDs resolve valid lesson objects with intact word associations", () => {
-      expect(LESSONS.length).toBeGreaterThanOrEqual(10);
+    it("verifies that every authored lesson resolves with intact word associations", () => {
+      expect(LESSONS.length).toBeGreaterThanOrEqual(100);
 
-      for (let id = 1; id <= 10; id++) {
-        const lesson = LESSONS.find((l) => l.id === id);
-        expect(lesson, `Lesson ${id} must exist`).toBeDefined();
-        expect(lesson!.title).toBeTruthy();
-        expect(lesson!.phase).toBeGreaterThanOrEqual(1);
-        expect(lesson!.exercises.length).toBeGreaterThanOrEqual(3);
+      for (const lesson of LESSONS) {
+        const ctx = `lesson ${lesson.id}`;
+        expect(lesson.title, `${ctx} must have a title`).toBeTruthy();
+        expect(lesson.phase, `${ctx} must have a phase`).toBeGreaterThanOrEqual(1);
+        expect(lesson.exercises.length, `${ctx} must have exercises`).toBeGreaterThanOrEqual(3);
 
         // Verify table words map to valid words in Compendium
-        for (const wordId of lesson!.table_word_ids) {
+        for (const wordId of lesson.table_word_ids) {
           const word = compendium.words[wordId.toLowerCase()];
-          expect(word, `Table word "${wordId}" in lesson ${id} must exist in compendium`).toBeDefined();
+          expect(word, `Table word "${wordId}" in ${ctx} must exist in compendium`).toBeDefined();
         }
 
         // Verify lesson word_ids map to valid words in Compendium
-        for (const wordId of lesson!.word_ids) {
+        for (const wordId of lesson.word_ids) {
           const word = compendium.words[wordId.toLowerCase()];
-          expect(word, `Word "${wordId}" in lesson ${id} must exist in compendium`).toBeDefined();
+          expect(word, `Word "${wordId}" in ${ctx} must exist in compendium`).toBeDefined();
         }
       }
     });

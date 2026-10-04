@@ -148,10 +148,13 @@ describe("store multi-language progress", () => {
     expect(spanish.activeLanguageId).toBe("es");
     expect(spanish.completedLessons).toEqual([]);
     expect(spanish.currentLessonId).toBe(1);
-    // choosing a new language queues its introduction
+    // choosing a new language queues its introduction, but does not mark it
+    // seen — only finishing the intro marks it, so an early dismissal replays
     expect(spanish.isOnboardingOpen).toBe(true);
     expect(spanish.seenIntroLanguages).toContain("de");
-    expect(spanish.seenIntroLanguages).toContain("es");
+    expect(spanish.seenIntroLanguages).not.toContain("es");
+    useAppStore.getState().completeOnboarding();
+    expect(useAppStore.getState().seenIntroLanguages).toContain("es");
 
     // german progress survives the round trip
     useAppStore.getState().setActiveLanguage("de");

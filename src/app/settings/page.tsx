@@ -252,7 +252,8 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* 0. LANGUAGE SECTION */}
+        {/* 0. LANGUAGE SECTION — hidden until more than one language ships */}
+        {LANGUAGES.filter((l) => l.status === "available").length > 1 && (
         <section id="language" className="space-y-3 pt-2">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--sub-color)] border-b border-[var(--sub-color)]/20 pb-2">
             <Languages className="w-4 h-4 text-[var(--main-color)]" />
@@ -267,7 +268,7 @@ export default function SettingsPage() {
             matchesSearch={matches(["language", "german", "spanish", "french", "switch language", "learning language"])}
           >
             <div className="flex items-center gap-2 flex-wrap">
-              {LANGUAGES.map((lang) => (
+              {LANGUAGES.filter((l) => l.status === "available").map((lang) => (
                 <button
                   key={lang.id}
                   type="button"
@@ -289,6 +290,7 @@ export default function SettingsPage() {
             </div>
           </SettingItem>
         </section>
+        )}
 
         {/* 1. BEHAVIOR SECTION */}
         <section id="behavior" className="space-y-3 pt-2">

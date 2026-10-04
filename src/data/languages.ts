@@ -235,7 +235,7 @@ export const LANGUAGES: LanguageDefinition[] = [
       colors: ["blue", "rose", "emerald"],
     },
     status: "available",
-    blurb: "The full cognate engine: 30 topics, 9 shift families, 619 words.",
+    blurb: "The full cognate engine: 30 topics, 9 shift families, 1226 words.",
     onboarding: GERMAN_ONBOARDING,
   },
   {

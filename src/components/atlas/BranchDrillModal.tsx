@@ -3,7 +3,8 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { X, Check } from "lucide-react";
 import { ExerciseWidget } from "@/components/lesson/ExerciseWidgets";
-import { compendium as data } from "@/data/compendium";
+import { useAppStore } from "@/lib/store";
+import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
 import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
 import type { ShiftFamily, ExerciseItem } from "@/lib/types";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
@@ -20,6 +21,8 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
   const [isFinished, setIsFinished] = useState(false);
   const [currentQuestionFailed, setCurrentQuestionFailed] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const data = getLanguageContent(activeLanguageId).compendium ?? EMPTY_COMPENDIUM;
 
   useDialogFocus({
     open: isOpen,

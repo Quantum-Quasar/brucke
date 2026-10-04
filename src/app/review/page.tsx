@@ -22,9 +22,9 @@ import { GermanCharBar } from "@/components/common/GermanCharBar";
 import { GenderBadge } from "@/components/common/GenderBadge";
 import { GenderGuideBanner } from "@/components/common/GenderGuideBanner";
 import { useAppStore } from "@/lib/store";
-import { getDueCards, getWeakestCards, type ReviewGrade } from "@/lib/srs";
+import { getDueCards, getWeakestCards, localDateKey, type ReviewGrade } from "@/lib/srs";
 import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
-import { playGermanAudio } from "@/lib/audio";
+import { playTargetAudio } from "@/lib/audio";
 import { computeLetterDiff, evaluateAnswerAccuracy } from "@/lib/letter-diff";
 import { soundEngine } from "@/lib/sound";
 import { getLanguageDefinition } from "@/data/languages";
@@ -130,37 +130,26 @@ export default function ReviewPage() {
   const allWordsMap: Record<string, WordEntity> = getWordEntityMap(activeLanguageId);
 
   const compoundCards: SRSCard[] = useMemo(() => {
+    const fallback = (): SRSCard => ({
+      word_id: "",
+      interval: 1,
+      repetitions: 0,
+      ease_factor: 2.5,
+      due_date: localDateKey(),
+      lapses: 0,
+      last_reviewed: null,
+    });
     const items: SRSCard[] = [];
     data.compounds.forEach((c) => {
       const id = `compound_${c.id}`;
-      items.push(
-        srsCards[id] || {
-          word_id: id,
-          interval: 1,
-          repetitions: 0,
-          ease_factor: 2.5,
-          due_date: new Date().toISOString().split("T")[0],
-          lapses: 0,
-          last_reviewed: null,
-        }
-      );
+      items.push(srsCards[id] || { ...fallback(), word_id: id });
     });
     data.falseFriends.forEach((f) => {
       const id = `trap_${f.id}`;
-      items.push(
-        srsCards[id] || {
-          word_id: id,
-          interval: 1,
-          repetitions: 0,
-          ease_factor: 2.5,
-          due_date: new Date().toISOString().split("T")[0],
-          lapses: 0,
-          last_reviewed: null,
-        }
-      );
+      items.push(srsCards[id] || { ...fallback(), word_id: id });
     });
     return items;
-  }, [srsCards]);
+  }, [srsCards, data]);
 
   // Thematic domain decks: the full compendium sliced by each word's domain.
   // Deliberately NOT gated by encounter history — every word in the compendium
@@ -203,7 +192,7 @@ export default function ReviewPage() {
     return Array.from(map.entries())
       .map(([id, words]) => ({ id, label: label(id), words }))
       .sort((a, b) => a.label.localeCompare(b.label));
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     if (!selectedDomainId && domainGroups.length > 0) {
@@ -244,7 +233,7 @@ export default function ReviewPage() {
             interval: 1,
             repetitions: 0,
             ease_factor: 2.5,
-            due_date: new Date().toISOString().split("T")[0],
+            due_date: localDateKey(),
             lapses: 0,
             last_reviewed: null,
           }
@@ -259,7 +248,7 @@ export default function ReviewPage() {
             interval: 1,
             repetitions: 0,
             ease_factor: 2.5,
-            due_date: new Date().toISOString().split("T")[0],
+            due_date: localDateKey(),
             lapses: 0,
             last_reviewed: null,
           }
@@ -276,7 +265,7 @@ export default function ReviewPage() {
             interval: 1,
             repetitions: 0,
             ease_factor: 2.5,
-            due_date: new Date().toISOString().split("T")[0],
+            due_date: localDateKey(),
             lapses: 0,
             last_reviewed: null,
           }
@@ -312,13 +301,13 @@ export default function ReviewPage() {
   const mcqOptions = useMemo(() => {
     if (!currentWord) return [];
     return generateMCQOptions(currentWord, data.wordList, 4);
-  }, [currentWord?.id]);
+  }, [currentWord, data]);
 
   // Tiles for current card
   const tileData = useMemo(() => {
     if (!currentWord) return { tiles: [], targetChunks: [], targetAnswer: "" };
     return generateWordTiles(currentWord, data.wordList);
-  }, [currentWord?.id]);
+  }, [currentWord, data]);
 
   // Reset interactive state per card
   useEffect(() => {
@@ -644,7 +633,7 @@ export default function ReviewPage() {
           e.preventDefault();
           if (currentWord) {
             const spoken = currentWord.gender ? `${currentWord.gender} ${currentWord.target_word}` : currentWord.target_word;
-            playGermanAudio(spoken);
+            playTargetAudio(spoken, language.ttsLocale);
           }
           return;
         }
@@ -1100,10 +1089,10 @@ export default function ReviewPage() {
                     type="button"
                     onClick={() => {
                       const spoken = currentWord.gender ? `${currentWord.gender} ${currentWord.target_word}` : currentWord.target_word;
-                      playGermanAudio(spoken);
+                      playTargetAudio(spoken, language.ttsLocale);
                     }}
                     className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[var(--sub-alt-color)] hover:bg-[var(--main-color)]/10 text-[var(--main-color)] border border-[var(--sub-color)]/20 text-xs font-mono transition cursor-pointer"
-                    title="Listen to German pronunciation [R]"
+                    title="Listen to pronunciation [R]"
                   >
                     <Volume2 className="w-3.5 h-3.5" />
                     <span>listen</span>

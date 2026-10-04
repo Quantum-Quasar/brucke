@@ -29,6 +29,7 @@ export const OnboardingModal: React.FC = () => {
   const isOpen = useAppStore((s) => s.isOnboardingOpen);
   const hasCompletedOnboarding = useAppStore((s) => s.hasCompletedOnboarding);
   const completeOnboarding = useAppStore((s) => s.completeOnboarding);
+  const closeOnboarding = useAppStore((s) => s.closeOnboarding);
   const setActiveLanguage = useAppStore((s) => s.setActiveLanguage);
   const onboardingIntroLanguage = useAppStore((s) => s.onboardingIntroLanguage);
   const router = useRouter();
@@ -48,10 +49,16 @@ export const OnboardingModal: React.FC = () => {
   const language = getLanguageDefinition(effectiveLanguageId);
   const intro = language.onboarding;
 
+  // only languages with real content are offered — stubs stay in the registry
+  // (and get reintroduced in the picker as their content lands)
+  const availableLanguages = LANGUAGES.filter((l) => l.status === "available");
+  const singleLanguage = availableLanguages.length === 1;
+  const firstStep = singleLanguage ? 1 : 0;
+
   useDialogFocus({
     open: isOpen,
     containerRef: dialogRef,
-    onEscape: completeOnboarding,
+    onEscape: closeOnboarding,
   });
 
   // every fresh opening starts a clean run — either the intro queued by a
@@ -61,6 +68,9 @@ export const OnboardingModal: React.FC = () => {
     if (isOpen && !wasOpen.current) {
       if (onboardingIntroLanguage && isValidLanguageId(onboardingIntroLanguage)) {
         setIntroLanguageId(onboardingIntroLanguage);
+        setStep(1);
+      } else if (singleLanguage) {
+        setIntroLanguageId(availableLanguages[0].id);
         setStep(1);
       } else {
         setIntroLanguageId(null);
@@ -96,7 +106,7 @@ export const OnboardingModal: React.FC = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
-        completeOnboarding();
+        closeOnboarding();
       } else if (e.key === "ArrowRight" || (e.key === "Enter" && !e.shiftKey)) {
         // let focused buttons/links keep their native Enter activation
         const target = e.target as HTMLElement | null;
@@ -109,7 +119,7 @@ export const OnboardingModal: React.FC = () => {
         }
       } else if (e.key === "ArrowLeft") {
         e.preventDefault();
-        if (step > 0) {
+        if (step > firstStep) {
           setStep((s) => s - 1);
         }
       }
@@ -118,7 +128,7 @@ export const OnboardingModal: React.FC = () => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, step, completeOnboarding, language.id, hasCompletedOnboarding, router]);
+  }, [isOpen, step, closeOnboarding, language.id, hasCompletedOnboarding, router]);
 
   if (!isOpen) return null;
 
@@ -144,7 +154,7 @@ export const OnboardingModal: React.FC = () => {
 
           <button
             type="button"
-            onClick={completeOnboarding}
+            onClick={closeOnboarding}
             className="text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] transition flex items-center gap-1.5 cursor-pointer"
             title="Skip onboarding tour (Esc)"
           >
@@ -172,7 +182,7 @@ export const OnboardingModal: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {LANGUAGES.map((lang) => (
+                {availableLanguages.map((lang) => (
                   <button
                     key={lang.id}
                     type="button"
@@ -486,7 +496,7 @@ export const OnboardingModal: React.FC = () => {
                 <div className="pl-6 text-[var(--text-color)]">• <strong>trail</strong>: structured lesson sequence</div>
                 <div className="pl-6 text-[var(--text-color)]">• <strong>palette</strong>: switch between 187 monkeytype themes</div>
                 <div className="pl-6 text-[var(--text-color)]">• <strong>esc / space / 1-4</strong>: full keyboard navigation</div>
-                <div className="pl-6 text-[var(--text-color)]">• <strong>settings</strong>: switch language anytime, progress is kept per language</div>
+                <div className="pl-6 text-[var(--text-color)]">• <strong>settings</strong>: theme, fonts, sound, and behavior — progress is stored locally</div>
               </div>
             </div>
           )}
@@ -561,7 +571,8 @@ export const OnboardingModal: React.FC = () => {
                 key={i}
                 type="button"
                 onClick={() => setStep(i)}
-                className={`h-1.5 rounded transition-all cursor-pointer ${
+                disabled={i < firstStep}
+                className={`h-1.5 rounded transition-all ${i < firstStep ? "opacity-30 cursor-default" : "cursor-pointer"} ${
                   step === i ? "w-5 bg-[var(--main-color)]" : "w-1.5 bg-[var(--sub-color)]/30 hover:bg-[var(--sub-color)]/60"
                 }`}
                 title={`Go to step ${i + 1}`}
@@ -571,7 +582,7 @@ export const OnboardingModal: React.FC = () => {
 
           {/* Navigation Buttons */}
           <div className="flex items-center gap-2.5">
-            {step > 0 && (
+            {step > firstStep && (
               <button
                 type="button"
                 onClick={() => setStep((s) => s - 1)}

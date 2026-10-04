@@ -12,7 +12,7 @@ import { TwistCard } from "./TwistCard";
 import { useAppStore } from "@/lib/store";
 import { getNextPlayableLessonId } from "@/data/curriculum";
 import { whisperCuesForLesson } from "@/data/posture-cues";
-import { compendium as data } from "@/data/compendium";
+import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
 import type { Lesson, ExerciseItem } from "@/lib/types";
 
 interface LessonReaderProps {
@@ -21,6 +21,8 @@ interface LessonReaderProps {
 
 export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   const router = useRouter();
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const data = getLanguageContent(activeLanguageId).compendium ?? EMPTY_COMPENDIUM;
   const savedProgress = useAppStore((s) => s.lessonProgress[lesson.id]);
   const [currentSegment, setCurrentSegment] = useState<LessonSegment>(savedProgress?.segment || "hook");
   const [practiceIndex, setPracticeIndex] = useState(savedProgress?.practiceIndex || 0);

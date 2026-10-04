@@ -78,8 +78,12 @@ describe("Letter-by-Letter Diff", () => {
   });
 
   it("applies umlaut tolerance to case-matching inputs as exact match", () => {
-    // all-caps input of the correct word: case matches, umlaut substituted
-    expect(evaluateAnswerAccuracy("STRASSE", "Straße", { umlautTolerance: true })).toEqual({ accuracy: "exact" });
+    // all-caps input is not case-correct, even though umlauts are tolerated
+    const capsResult = evaluateAnswerAccuracy("STRASSE", "Straße", { umlautTolerance: true });
+    expect(capsResult.accuracy).toBe("almost");
+    expect(capsResult.reason).toBe("case");
+    // standard capitalized substitution is exact
+    expect(evaluateAnswerAccuracy("Strasse", "Straße", { umlautTolerance: true })).toEqual({ accuracy: "exact" });
     // lowercase input of a capitalized noun: umlaut tolerated but capitalization error remains
     const lowerResult = evaluateAnswerAccuracy("strasse", "Straße", { umlautTolerance: true });
     expect(lowerResult.accuracy).toBe("almost");

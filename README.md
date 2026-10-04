@@ -23,7 +23,7 @@ Rather than relying on rote memorization or gamified streaks without substance, 
 - **Styling**: Tailwind CSS v4 (native CSS tokens, dark mode default)
 - **State Management**: [Zustand](https://github.com/pmndrs/zustand) 5 (dual `localStorage` + size-guarded cookie persistence)
 - **Icons**: Lucide React
-- **Testing**: Vitest / `bun test` (21 test suites, 119 automated tests)
+- **Testing**: Vitest / `bun run test` (29 test files, ~215 automated tests) <!-- corrected 2026-10-03: was "21 test suites, 119 automated tests" — package.json only defines "test": "vitest run" -->
 - **Audio Engine**: Zero-dependency browser-native Web Speech API (`window.speechSynthesis`) + Web Audio click synthesizer
 
 ---
@@ -46,16 +46,15 @@ bun run parse-data
 
 ### Run Automated Tests
 
-Executes 119 unit and integration tests across 21 suites:
+Executes the full Vitest suite — 29 test files, ~215 automated tests:
 
 ```bash
 bun run test
-bun test
 ```
 
 ### Production Build
 
-Pre-renders all 28 pages to static HTML (`● SSG`):
+Pre-renders every route to static HTML (`● SSG`): 6 static routes, 9 `/atlas/[family]` pages, and one page per authored lesson (128 `/trail/[id]` pages; unknown ids 404 via `dynamicParams = false`):
 
 ```bash
 bun run build
@@ -77,7 +76,7 @@ Visit `http://localhost:3000` in your browser.
    - Baba Is You-style node map: 30 topic clusters on one linear spine, with skip-able extra-practice nodes ("sprigs") and support-material branches hanging off each cluster.
    - All adjacent nodes unlock at once when a node is completed; the spine itself stays strictly ordered.
    - Climb the map bottom-to-top; the pulsing theme-colored selector marks your recommended node.
-   - 1–3 lessons per topic; topics 1–10 fully authored, 11–30 shipped as titled shells with authoring plans (`src/data/curriculum.ts`).
+   - The entire curriculum is authored: 30 cores + 78 sprigs + 20 branch lessons = **128 lessons** (`src/data/curriculum.ts`, `src/data/lessons.ts`).
    - Custom DOM+SVG renderer (no game libraries) with `content-visibility` windowing per topic cluster, sized for hundreds of future lessons.
    - 5-part card-by-card lesson wizard (Hook, Pattern, Transformation Table, Bite-Sized Practice, Summary & Retries) at `/trail/[id]`.
    - Scaffolded exercises (morpheme tiles, matching pairs, shift select, syntax builder, derivation typing).
@@ -101,6 +100,11 @@ Visit `http://localhost:3000` in your browser.
    - `das` (Neuter): Emerald Green
    - Educational onboarding & dismissible gender guide banners.
 
+5. **Multi-Language Ready**:
+   - Switch the learning language from Settings or onboarding (German fully authored; Spanish & French marked coming-soon).
+   - Each language keeps its own progress slice, SRS queue, and onboarding intro (`src/data/language-content.ts`).
+   - Components render language-scoped content; languages without authored content show coming-soon states instead of stale German words.
+
 ---
 
 ## Project Structure
@@ -121,10 +125,10 @@ src/
 │   ├── navigation/       # Game-style bottom dock (all destinations), slim TopNav, Footer
 │   └── trail/            # TrailMap, MapNode, LessonNodeDrawer (the homepage map)
 ├── data/
-│   ├── compendium.json   # 218 core words, 9 shifts, 32 compounds, 16 traps, 28 insights
-│   ├── curriculum.ts     # 30 topic clusters: cores, sprigs, branches + authoring plans
-│   ├── lessons.ts        # Authored lesson content (ids 1–10 = the first 10 topic cores)
-│   └── ...               # themes, fonts, settings, phonetics, insights
+│   ├── compendium.json   # 1226 core words, 9 shifts, 32 compounds, 16 traps, 28 insights
+│   ├── curriculum.ts     # 30 topic clusters: cores, sprigs, branches + star gates
+│   ├── lessons.ts        # All 128 authored lessons (cores 1–30, sprigs, branches 50xx)
+│   └── ...               # themes, fonts, settings, phonetics, insights, languages
 ├── lib/
 │   ├── audio.ts          # Native speech pronunciation engine
 │   ├── gender.ts         # 3-color gender metadata & styling
@@ -136,7 +140,7 @@ src/
 │   ├── store.ts          # Zustand store with dual persistence (+ lessonStars)
 │   ├── trail-map.ts      # Map graph, responsive layout engine, unlock/recommend logic
 │   └── types.ts          # Core domain TypeScript interfaces
-└── tests/                # 22 test suites (Vitest / Bun)
+└── tests/                # 29 test files (Vitest)
 ```
 
 ---
@@ -145,5 +149,5 @@ src/
 
 - **No Third-Party Component Bloat**: The UI strictly avoids component libraries like Radix, Headless UI, or Framer Motion. Standard DOM and Tailwind CSS are used.
 - **Zero Cloud TTS Dependency**: Pronunciation uses the browser's native `window.speechSynthesis` (`de-DE`), avoiding external API costs, latency, or asset downloads.
-- **Durable Local Storage**: Progress is preserved across sessions using `localStorage` with a size-guarded cookie fallback (< 3800 bytes).
-- **All Routes Static**: Every route in `/app` must pre-render via `generateStaticParams()` to guarantee instant navigation.
+- **Durable Local Storage**: Progress is preserved across sessions using `localStorage` with a size-guarded cookie backup (the lean payload is written only if it URL-encodes to ≤ 2048 bytes) and field-level fallback merging between the two stores.
+- **All Routes Static**: Every route in `/app` must pre-render via `generateStaticParams()` to guarantee instant navigation; dynamic segments set `dynamicParams = false` so unknown params 404 instead of server-rendering.

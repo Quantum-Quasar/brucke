@@ -31,7 +31,7 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 ## 3. Four Core Functional Pillars
 
 ### Pillar 1: The Trail (`/trail` and `/trail/[id]`)
-- **Curriculum Scope**: 30-lesson syllabus structured into 5 evolutionary phases. Lessons 1–10 are currently fully interactive.
+- **Curriculum Scope**: 30 topic clusters with the entire curriculum authored — 30 cores + 78 sprigs + 20 branch lessons = **128 lessons**, all fully interactive. Unknown lesson ids 404 at the router level (`dynamicParams = false`).
 - **5-Segment Card-by-Card Wizard (`LessonReader.tsx`)**:
   1. **Part 01: The Hook**: Historical intuition and living English cognate framing.
   2. **Part 02: The Pattern**: Mechanical shift rules, suffix patterns (`-en`), with margin philological notes.
@@ -95,7 +95,7 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 ## 5. File Structure & Component Map
 
 ```
-/home/shaurya/gemini-tmp/german-app-2/
+/home/shaurya/gemini-tmp/german-app-thinking-method/
 ├── package.json               # Next 16.3.4, React 19.2.8, Tailwind v4, Zustand 5, Vitest 5, Bun
 ├── next.config.mjs            # Next.js configuration with React strict mode
 ├── tsconfig.json              # TypeScript config with '@/*' path aliases
@@ -150,9 +150,9 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 │   │   ├── letter-diff.ts     # Character-by-character typo alignment & diffing
 │   │   └── audio.ts           # Web Speech API German speech synthesis wrapper
 │   ├── data/
-│   │   ├── compendium.json    # 218 words, 9 shifts, 32 compounds, 16 false friends, 28 insights
-│   │   └── lessons.ts         # Lessons 1–10 rich definitions, exercises, and clues
-│   └── tests/                 # 21 test suites, 119 automated tests (Vitest / Bun)
+│   │   ├── compendium.json    # 1226 words, 9 shifts, 32 compounds, 16 false friends, 28 insights
+│   │   └── lessons.ts         # All 128 authored lesson definitions, exercises, and clues
+│   └── tests/                 # 29 test files (Vitest) — whole-curriculum integrity, timezone boundaries, persistence merging, security
 │       ├── store.test.ts
 │       ├── exercises.test.ts
 │       ├── letter-diff.test.ts
@@ -182,13 +182,14 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 ## 7. Performance & Resource Optimization Highlights
 
 1. **100% Pre-rendered Static Site Generation (SSG)**:
-   - Dynamic parameter routes `/atlas/[family]` (9 pages) and `/trail/[id]` (5 pages) export `generateStaticParams()`.
+   - Dynamic parameter routes `/atlas/[family]` (9 pages) and `/trail/[id]` (128 pages — one per authored lesson) export `generateStaticParams()` and set `dynamicParams = false`, so unknown params 404 instead of triggering dynamic server rendering.
    - All app routes build to static HTML. Navigation between lessons and atlas families is instantaneous with zero runtime server latency.
 2. **Shift Alignment Memoization**:
    - `alignShiftPair` in `src/lib/shift-annotator.ts` uses an in-memory `Map` cache. Redundant letter parsing is eliminated; test suite executes in < 200ms.
 3. **Storage I/O Deduplication & Cookie Guard**:
    - `saveState` in `src/lib/store.ts` checks `lastSerialized` to prevent redundant writes to `localStorage` and `document.cookie`.
-   - Cookie storage is size-gated (< 3800 bytes) with a lean fallback to prevent cookie truncation and HTTP request header bloat.
+   - Cookie storage is size-gated (lean payload written only if it URL-encodes to ≤ 2048 bytes) with a minimal fallback to prevent cookie truncation and HTTP request header bloat.
+   - `loadSavedState` parses both stores and merges them field-by-field (localStorage wins; the cookie fills gaps), so a truncated localStorage payload can no longer bury recoverable cookie data.
 4. **Leaf Component Memoization**:
    - `ShiftPair` and `GenderBadge` are wrapped in `React.memo` to eliminate unnecessary DOM recalculations when sibling states update.
 
@@ -202,9 +203,8 @@ All commands should be executed from `/home/shaurya/gemini-tmp/german-app-2`:
 # 1. Run Data Compilation Pipeline
 bun run parse-data
 
-# 2. Run All Automated Test Suites (119 tests / 21 suites)
+# 2. Run All Automated Test Suites (29 test files / ~215 tests)
 bun run test
-bun test
 
 # 3. Compile Production Build (Turbopack + SSG verification)
 bun run build
@@ -220,7 +220,7 @@ bun run dev
 When auditing the codebase, verify:
 - [ ] **Architecture Integrity**: No external UI component frameworks or CSS-in-JS libraries installed.
 - [ ] **Pedagogical Integrity**:
-  - Lessons 1–10 never start with cold typing exercises.
+  - Lessons never start with cold typing exercises.
   - Review Hub front cards never display gender badges before recall.
   - Auxiliary words (like `mit`) contain clear `vocab_hints`.
 - [ ] **Accessibility & Keyboard Flow**:
@@ -228,7 +228,7 @@ When auditing the codebase, verify:
   - Interactive inputs auto-focus without forcing auto-scroll jumps.
 - [ ] **State Durability**:
   - State changes in Zustand persist to `localStorage`.
-  - Cookie backup stays within safe browser limits (< 4096 bytes).
+  - Cookie backup stays within safe browser limits (lean payload ≤ 2048 URL-encoded bytes).
 - [ ] **Build & Tests**:
-  - `bun run test` (Vitest) and `bun test` pass with 0 failures across all 119 tests.
-  - `bun run build` generates 28 static pages without TypeScript or Turbopack errors.
+  - `bun run test` (Vitest) passes with 0 failures across all 29 test files (~215 tests).
+  - `bun run build` generates all static pages (6 static routes + 9 atlas families + 128 lesson pages) without TypeScript or Turbopack errors.
