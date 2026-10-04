@@ -447,7 +447,7 @@
 
 ## 🚪 The Shift Gate
 
-> **14★ required** (earned across topics up to 7). Topics 1–7 build your decode engine: sentence basics plus all five great consonant shifts (P→F, TH→D, T→S, K→CH, D→T). Every grammar topic ahead assumes you can decode shift vocabulary on sight — bank 14 of the 25 lessons in this stretch before moving on.
+> **14★ required** (earned across topics up to 7). Topics 1–7 build your decode engine: sentence basics plus all five great consonant shifts (P→F, TH→D, T→S, K→CH, D→T). Every grammar topic ahead assumes you can decode shift vocabulary on sight — bank 14 of the 22 lessons in this stretch before moving on.
 
 ---
 
@@ -652,7 +652,7 @@
 
 ## 🚪 The Grammar Gate
 
-> **6★ required** (earned across topics up to 10). Topics 8–10 land your first grammar: -ieren verbs, the living conjugation endings and the accusative Him-Case. Articles, negation and questions ahead assume solid verbs and direct objects — earn 6 of the 10 lessons in this stretch.
+> **6★ required** (earned across topics up to 10). Topics 8–10 land your first grammar: -ieren verbs, the living conjugation endings and the accusative Him-Case. Articles, negation and questions ahead assume solid verbs and direct objects — earn 6 of the 9 lessons in this stretch.
 
 ---
 
@@ -1010,7 +1010,7 @@
 
 ## 🚪 The Verb-Complex Gate
 
-> **11★ required** (earned across topics up to 16). Topics 11–16 assemble the sentence machine: determiners, negation, questions, word order and both prefix families. The past-tense stretch ahead assumes you can build complex sentences — bank 11 of the 20 lessons here.
+> **11★ required** (earned across topics up to 16). Topics 11–16 assemble the sentence machine: determiners, negation, questions, word order and both prefix families. The past-tense stretch ahead assumes you can build complex sentences — bank 11 of the 22 lessons here.
 
 ---
 
@@ -1305,7 +1305,7 @@
 
 ## 🚪 The Past Gate
 
-> **9★ required** (earned across topics up to 20). Topics 17–20 hand you time, the conversational past, ancient ablaut and the dative case. The word-formation stretch ahead reuses past-tense and case-heavy sentences in every example — earn 9 of the 17 lessons in this stretch.
+> **9★ required** (earned across topics up to 20). Topics 17–20 hand you time, the conversational past, ancient ablaut and the dative case. The word-formation stretch ahead reuses past-tense and case-heavy sentences in every example — earn 9 of the 18 lessons in this stretch.
 
 ---
 
@@ -1645,7 +1645,7 @@
 
 ## 🚪 The Atlas Gate
 
-> **11★ required** (earned across topics up to 26). Topics 21–26 are word formation plus the hidden shifts (V→B, GH→CH, Y→G) that complete all nine Atlas families. The final stretch is pure synthesis across everything — carry 11 of the 20 stars in this stretch with you.
+> **11★ required** (earned across topics up to 26). Topics 21–26 are word formation plus the hidden shifts (V→B, GH→CH, Y→G) that complete all nine Atlas families. The final stretch is pure synthesis across everything — carry 11 of the 22 stars in this stretch with you.
 
 ---
 
@@ -1846,7 +1846,7 @@
 
 ## 🚪 The Capstone Gate
 
-> **9★ required** (earned across topics up to 29). Topics 27–29 close the system: prepositions and their cases, verb families, and sein with the idiomatic mindset. The capstone reading assumes near-complete coverage of the language — earn 9 of the 13 lessons in this stretch.
+> **9★ required** (earned across topics up to 29). Topics 27–29 close the system: prepositions and their cases, verb families, and sein with the idiomatic mindset. The capstone reading assumes near-complete coverage of the language — earn 9 of the 11 lessons in this stretch.
 
 ---
 

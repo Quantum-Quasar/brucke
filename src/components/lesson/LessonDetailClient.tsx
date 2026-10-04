@@ -18,7 +18,7 @@ export function LessonDetailClient({ lessonId }: { lessonId: number }) {
           interactive lessons.
         </p>
         <Link
-          href="/trail"
+          href="/"
           className="inline-flex items-center gap-2 px-4 py-2 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-medium text-sm transition"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Trail Index

@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config";
+import { defineConfig, configDefaults } from "vitest/config";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -8,6 +8,8 @@ export default defineConfig({
   test: {
     environment: "node",
     globals: true,
+    // tests/e2e is the Playwright browser suite (`bun run test:e2e`)
+    exclude: [...configDefaults.exclude, "tests/e2e/**"],
   },
   resolve: {
     alias: {

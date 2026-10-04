@@ -474,12 +474,12 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
  * the stretch's cores (minimum) and all its lessons (maximum):
  *
  *   1–2   sentence basics            ┐
- *   3–7   the five great shifts      ┘→ Shift Gate      14★ of 25 (7 cores min, 25 max)
- *   8–10  -ieren, conjugation, accusative  → Grammar Gate     6★ of 10 (3 min, 10 max)
- *   11–16 determiners, negation, questions, word order, prefixes → Verb-Complex Gate  11★ of 20 (6 min, 20 max)
- *   17–20 numbers, Perfekt, ablaut, dative → Past Gate        9★ of 17 (4 min, 17 max)
- *   21–26 compounds, gender, plurals, hidden shifts → Atlas Gate       11★ of 20 (6 min, 20 max)
- *   27–29 prepositions, verb families, sein & idioms → Capstone Gate    9★ of 13 (3 min, 13 max)
+ *   3–7   the five great shifts      ┘→ Shift Gate      14★ of 22 (7 cores min, 22 max)
+ *   8–10  -ieren, conjugation, accusative  → Grammar Gate     6★ of 9 (3 min, 9 max)
+ *   11–16 determiners, negation, questions, word order, prefixes → Verb-Complex Gate  11★ of 22 (6 min, 22 max)
+ *   17–20 numbers, Perfekt, ablaut, dative → Past Gate        9★ of 18 (4 min, 18 max)
+ *   21–26 compounds, gender, plurals, hidden shifts → Atlas Gate       11★ of 22 (6 min, 22 max)
+ *   27–29 prepositions, verb families, sein & idioms → Capstone Gate    9★ of 11 (3 min, 11 max)
  *   30    capstone
  */
 export const TRAIL_GATES: TrailGate[] = [
@@ -488,42 +488,42 @@ export const TRAIL_GATES: TrailGate[] = [
     afterTopic: 7,
     requiredStars: 14,
     title: "The Shift Gate",
-    why: "Topics 1–7 build your decode engine: sentence basics plus all five great consonant shifts (P→F, TH→D, T→S, K→CH, D→T). Every grammar topic ahead assumes you can decode shift vocabulary on sight — bank 14 of the 25 lessons in this stretch before moving on.",
+    why: "Topics 1–7 build your decode engine: sentence basics plus all five great consonant shifts (P→F, TH→D, T→S, K→CH, D→T). Every grammar topic ahead assumes you can decode shift vocabulary on sight — bank 14 of the 22 lessons in this stretch before moving on.",
   },
   {
     id: 2,
     afterTopic: 10,
     requiredStars: 6,
     title: "The Grammar Gate",
-    why: "Topics 8–10 land your first grammar: -ieren verbs, the living conjugation endings and the accusative Him-Case. Articles, negation and questions ahead assume solid verbs and direct objects — earn 6 of the 10 lessons in this stretch.",
+    why: "Topics 8–10 land your first grammar: -ieren verbs, the living conjugation endings and the accusative Him-Case. Articles, negation and questions ahead assume solid verbs and direct objects — earn 6 of the 9 lessons in this stretch.",
   },
   {
     id: 3,
     afterTopic: 16,
     requiredStars: 11,
     title: "The Verb-Complex Gate",
-    why: "Topics 11–16 assemble the sentence machine: determiners, negation, questions, word order and both prefix families. The past-tense stretch ahead assumes you can build complex sentences — bank 11 of the 20 lessons here.",
+    why: "Topics 11–16 assemble the sentence machine: determiners, negation, questions, word order and both prefix families. The past-tense stretch ahead assumes you can build complex sentences — bank 11 of the 22 lessons here.",
   },
   {
     id: 4,
     afterTopic: 20,
     requiredStars: 9,
     title: "The Past Gate",
-    why: "Topics 17–20 hand you time, the conversational past, ancient ablaut and the dative case. The word-formation stretch ahead reuses past-tense and case-heavy sentences in every example — earn 9 of the 17 lessons in this stretch.",
+    why: "Topics 17–20 hand you time, the conversational past, ancient ablaut and the dative case. The word-formation stretch ahead reuses past-tense and case-heavy sentences in every example — earn 9 of the 18 lessons in this stretch.",
   },
   {
     id: 5,
     afterTopic: 26,
     requiredStars: 11,
     title: "The Atlas Gate",
-    why: "Topics 21–26 are word formation plus the hidden shifts (V→B, GH→CH, Y→G) that complete all nine Atlas families. The final stretch is pure synthesis across everything — carry 11 of the 20 stars in this stretch with you.",
+    why: "Topics 21–26 are word formation plus the hidden shifts (V→B, GH→CH, Y→G) that complete all nine Atlas families. The final stretch is pure synthesis across everything — carry 11 of the 22 stars in this stretch with you.",
   },
   {
     id: 6,
     afterTopic: 29,
     requiredStars: 9,
     title: "The Capstone Gate",
-    why: "Topics 27–29 close the system: prepositions and their cases, verb families, and sein with the idiomatic mindset. The capstone reading assumes near-complete coverage of the language — earn 9 of the 13 lessons in this stretch.",
+    why: "Topics 27–29 close the system: prepositions and their cases, verb families, and sein with the idiomatic mindset. The capstone reading assumes near-complete coverage of the language — earn 9 of the 11 lessons in this stretch.",
   },
 ];
 

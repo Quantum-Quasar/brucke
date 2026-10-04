@@ -80,7 +80,7 @@ export class SoundEngine {
     if (!opt || opt.count === 0) return;
     for (let i = 1; i <= opt.count; i++) {
       const url = `/sounds/click${clickId}/${i}.wav`;
-      void this.loadBuffer(url);
+      fetch(url).catch(() => {});
     }
   }
 
@@ -150,6 +150,7 @@ export class SoundEngine {
   }
 
   private playOscillatorFallback(freq: number, type: OscillatorType, volume: number, durationMs = 60) {
+    if (volume <= 0) return;
     const ctx = this.getAudioContext();
     if (!ctx) return;
     try {

@@ -3045,7 +3045,7 @@ export const LESSONS: Lesson[] = [
     },
     exercises: [
       {
-        id: "l901_e2",
+        id: "l901_e1",
         type: "morpheme_tiles",
         prompt: "Rebuild 'we come' from the stem (stem + the full ending):",
         tile_options: ["komm", "en", "st", "t", "e"],
@@ -3054,7 +3054,7 @@ export const LESSONS: Lesson[] = [
         explanation: "Stem 'komm-' + wir's full '-en' = kommen — the dictionary form does double duty as the wir-form.",
       },
       {
-        id: "l901_e1",
+        id: "l901_e2",
         type: "derive",
         prompt: "Strip the infinitive: lernen → stem:",
         english_hint: "remove the -en tail",
@@ -6215,7 +6215,7 @@ export const LESSONS: Lesson[] = [
     },
     exercises: [
       {
-        id: "l21_e2",
+        id: "l21_e1",
         type: "shift_select",
         prompt: "Compound gender rule: der Apfel + der Kuchen = ?",
         options: ["der Apfelkuchen — the last noun donates the gender", "das Apfelkuchen — compounds are neuter", "die Apfelkuchen — food is feminine", "no article — compounds reject articles"],
@@ -6224,7 +6224,7 @@ export const LESSONS: Lesson[] = [
         explanation: "The final piece is the grammatical head: its article, its plural, its meaning core. das Haus → das Krankenhaus.",
       },
       {
-        id: "l21_e1",
+        id: "l21_e2",
         type: "reverse_cognate",
         prompt: "Split it: 'Handschuh' is literally 'hand-shoe' — what is the real word in English?",
         target_answer: "glove",

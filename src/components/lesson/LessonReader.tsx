@@ -7,7 +7,6 @@ import { ArrowLeft, ArrowRight, BookOpen, Sparkles, Info, Compass, HeartHandshak
 import { ProgressBar5, type LessonSegment } from "./ProgressBar5";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { ExerciseWidget } from "./ExerciseWidgets";
-import { RetryQueue } from "./RetryQueue";
 import { TwistCard } from "./TwistCard";
 import { useAppStore } from "@/lib/store";
 import { getNextPlayableLessonId } from "@/data/curriculum";
@@ -624,29 +623,8 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
           {/* STEP 5: Summary & Retries */}
           {currentSegment === "summary" && (
             <div className="space-y-6 animate-in fade-in duration-200">
-              {/* End-of-Lesson Retry Queue (if any exercises failed) */}
-              {retryQueue.length > 0 && !isLessonFinished ? (
-                <div className="space-y-4">
-                  <div className="p-3 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-xs text-[var(--main-color)] font-mono flex items-center justify-between">
-                    <span>reinforcement queue</span>
-                    <span className="text-[var(--sub-color)]">{retryQueue.length} items to clear</span>
-                  </div>
-                  <RetryQueue
-                    queue={retryQueue}
-                    onCompleteQueue={() => {
-                      setRetryQueue([]);
-                      handleCompleteAll();
-                    }}
-                    onDrainCurrent={(id) =>
-                      setRetryQueue((prev) => {
-                        const next = prev.filter((e) => e.id !== id);
-                        return next;
-                      })
-                    }
-                  />
-                </div>
-              ) : (
-                <div className="p-6 sm:p-8 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-5 shadow-lg font-mono">
+              {/* End-of-Lesson Summary */}
+              <div className="p-6 sm:p-8 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-5 shadow-lg font-mono">
                   <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[var(--main-color)] font-semibold">
                     <span>lesson complete</span>
                   </div>
@@ -747,9 +725,8 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                     </Link>
                   </div>
                 </div>
-              )}
-            </div>
-          )}
+              </div>
+            )}
         </div>
 
         {/* Right Margin Column: Desktop Side Notes */}

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
+import { useDialogFocus } from "@/lib/use-dialog-focus";
 import { ArrowRight, BookOpen, Check, GitBranch, Info, Lock, Sparkles, Star } from "lucide-react";
 import type { TrailNode, NodeStatus, GateView, NodeGateInfo, GateMarker } from "@/lib/trail-map";
 
@@ -29,25 +30,29 @@ export const LessonNodeDrawer: React.FC<LessonNodeDrawerProps> = ({
   onClose,
   onStart,
 }) => {
+  const dialogRef = useRef<HTMLDivElement | null>(null);
   const closeRef = useRef<HTMLButtonElement | null>(null);
-
-  useEffect(() => {
-    closeRef.current?.focus();
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  useDialogFocus({
+    open: true,
+    containerRef: dialogRef,
+    initialFocusRef: closeRef,
+    onEscape: onClose,
+  });
 
   const { status, star } = view;
   const playable = node.authored && status !== "locked";
 
   return (
-    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={node.title}>
+    <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" onClick={onClose} aria-hidden />
 
-      <div className="absolute inset-x-0 bottom-0 sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[440px] max-h-[82vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-[var(--bg-color)] border border-[var(--sub-color)]/30 shadow-2xl">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={node.title}
+        className="absolute inset-x-0 bottom-0 sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[440px] max-h-[82vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-[var(--bg-color)] border border-[var(--sub-color)]/30 shadow-2xl"
+      >
         <div className="p-5 sm:p-6 space-y-4">
           {/* header */}
           <div className="flex items-start justify-between gap-3">
@@ -165,23 +170,27 @@ interface GateDrawerProps {
 
 /** Checkpoint drawer explaining why a star gate sits where it sits. */
 export const GateDrawer: React.FC<GateDrawerProps> = ({ gate, view, onClose }) => {
+  const dialogRef = useRef<HTMLDivElement | null>(null);
   const closeRef = useRef<HTMLButtonElement | null>(null);
-
-  useEffect(() => {
-    closeRef.current?.focus();
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  useDialogFocus({
+    open: true,
+    containerRef: dialogRef,
+    initialFocusRef: closeRef,
+    onEscape: onClose,
+  });
 
   const pct = Math.min(100, Math.round((view.stars / gate.requiredStars) * 100));
 
   return (
-    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={gate.title}>
+    <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" onClick={onClose} aria-hidden />
-      <div className="absolute inset-x-0 bottom-0 sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[440px] max-h-[82vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-[var(--bg-color)] border border-[var(--sub-color)]/30 shadow-2xl">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={gate.title}
+        className="absolute inset-x-0 bottom-0 sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[440px] max-h-[82vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-[var(--bg-color)] border border-[var(--sub-color)]/30 shadow-2xl"
+      >
         <div className="p-5 sm:p-6 space-y-4">
           <div className="flex items-start justify-between gap-3">
             <div className="space-y-1 min-w-0">
@@ -211,7 +220,14 @@ export const GateDrawer: React.FC<GateDrawerProps> = ({ gate, view, onClose }) =
                 {view.stars} / {gate.requiredStars}
               </span>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-[var(--bg-color)] overflow-hidden">
+            <div
+              role="progressbar"
+              aria-valuenow={view.stars}
+              aria-valuemin={0}
+              aria-valuemax={gate.requiredStars}
+              aria-label={`Star requirement for ${gate.title}`}
+              className="w-full h-1.5 rounded-full bg-[var(--bg-color)] overflow-hidden"
+            >
               <div
                 className="h-full rounded-full transition-all duration-300"
                 style={{ width: `${pct}%`, background: view.open ? "var(--main-color)" : "var(--sub-color)" }}

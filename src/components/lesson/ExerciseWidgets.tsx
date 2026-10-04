@@ -130,7 +130,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
     setFailedDiagnosis(undefined);
 
     if (exercise.type === "derive" || exercise.type === "reverse_cognate") {
-      setTimeout(() => inputRef.current?.focus(), 50);
+      setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 50);
     }
   };
 
@@ -504,7 +504,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
               key={hint.word}
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-[var(--text-color)]"
             >
-              <strong className="text-[var(--main-color)] font-bold">{hint.word}</strong>
+              <strong className="text-[var(--main-color)] font-bold" lang="de">{hint.word}</strong>
               <span className="text-[var(--sub-color)]">=</span>
               <span className="text-[var(--text-color)]">{hint.translation}</span>
               {hint.note && <span className="text-[var(--sub-color)] text-[11px] italic">({hint.note})</span>}
@@ -530,7 +530,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
                   className="px-3 py-1.5 rounded bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/40 text-sm font-bold hover:bg-[var(--error-color)]/20 hover:text-[var(--error-color)] hover:border-[var(--error-color)]/40 transition flex items-center gap-1.5 cursor-pointer"
                   title="Click or press Backspace to unpick"
                 >
-                  <span>{sanitizedTileOptions[tileIdx]}</span>
+                  <span lang="de">{sanitizedTileOptions[tileIdx]}</span>
                   <span className="text-[10px] opacity-60 font-normal">×</span>
                 </button>
               ))
@@ -558,7 +558,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
                       {i + 1}
                     </span>
                   )}
-                  <span>{tile}</span>
+                  <span lang="de">{tile}</span>
                 </button>
               );
             })}
@@ -593,6 +593,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
                   type="button"
                   onClick={() => handleSelectEnglish(pair.english)}
                   disabled={isMatched}
+                  aria-pressed={isSelected}
                   className={`w-full p-3 rounded-lg border text-xs font-mono transition text-left flex items-center justify-between cursor-pointer ${
                     isMatched
                       ? "bg-[var(--main-color)]/10 border-[var(--main-color)]/30 text-[var(--main-color)] opacity-60"
@@ -629,6 +630,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
             </div>
             {displayGermanPairs.map((pair) => {
               const isMatched = matchedPairs.includes(pair.id);
+              const isSelected = false;
               const unmatchedIndex = !isMatched
                 ? displayGermanPairs.filter((p) => !matchedPairs.includes(p.id)).findIndex((p) => p.id === pair.id)
                 : -1;
@@ -638,6 +640,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
                   type="button"
                   onClick={() => handleSelectGerman(pair.german, pair.id, pair.english)}
                   disabled={isMatched}
+                  aria-pressed={isSelected}
                   className={`w-full p-3 rounded-lg border text-xs font-mono transition text-left flex items-center justify-between cursor-pointer ${
                     isMatched
                       ? "bg-[var(--main-color)]/10 border-[var(--main-color)]/30 text-[var(--main-color)] opacity-60"
@@ -650,7 +653,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
                         {unmatchedIndex + 1}
                       </span>
                     )}
-                    <span>{pair.german}</span>
+                    <span lang="de">{pair.german}</span>
                   </span>
                   {isMatched && <Check className="w-4 h-4 text-[var(--main-color)]" />}
                 </button>
@@ -676,6 +679,8 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
               ref={inputRef}
               type="text"
               value={userInput}
+              aria-label={exercise.prompt || "Enter German translation"}
+              lang="de"
               onFocus={() => setIsInputFocused(true)}
               onBlur={() => setIsInputFocused(false)}
               onChange={(e) => handleInputChange(e.target.value)}
@@ -724,7 +729,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
               disabled={status !== "idle"}
               className="flex items-center justify-between p-3 rounded-lg bg-[var(--bg-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--text-color)] transition text-left group cursor-pointer"
             >
-              <span className="group-hover:text-[var(--main-color)] font-bold">{opt}</span>
+              <span className="group-hover:text-[var(--main-color)] font-bold" lang="de">{opt}</span>
               {settings.showKeyTips && (
                 <span className="keycap text-[10px]">
                   {i + 1}
@@ -751,7 +756,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
                   className="px-3 py-1.5 rounded bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/40 text-xs font-bold hover:bg-[var(--error-color)]/20 hover:text-[var(--error-color)] hover:border-[var(--error-color)]/40 transition flex items-center gap-1.5 cursor-pointer"
                   title="Click or press Backspace to unpick"
                 >
-                  <span>{sanitizedWordBank[tileIdx]}</span>
+                  <span lang="de">{sanitizedWordBank[tileIdx]}</span>
                   <span className="text-[10px] opacity-60 font-normal">×</span>
                 </button>
               ))
@@ -777,7 +782,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
                       {i + 1}
                     </span>
                   )}
-                  <span>{tile}</span>
+                  <span lang="de">{tile}</span>
                 </button>
               );
             })}
@@ -843,7 +848,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
               // In retry mode, stay on current exercise and reset input so user can try again
               setUserInput("");
               setSelectedIndices([]);
-              setTimeout(() => inputRef.current?.focus(), 50);
+              setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 50);
             } else {
               // In normal flow, exercise was appended to retry queue, advance
               onSuccess();

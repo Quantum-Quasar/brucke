@@ -131,7 +131,8 @@ const ADJACENCY = adjacency();
  * Full layout for a given canvas width. Deterministic — same width, same map.
  */
 export function buildTrailLayout(width: number): TrailLayout {
-  const w = Math.min(Math.max(Math.round(width), 320), 980);
+  const safeWidth = Number.isFinite(width) ? width : 640;
+  const w = Math.min(Math.max(Math.round(safeWidth), 320), 980);
   const centerX = w / 2;
   const swing = Math.min(150, Math.max(0, (w - 380) / 2));
   const nodes: TrailNode[] = [];
@@ -332,7 +333,7 @@ const gateRegion = (index: number): { fromTopic: number; toTopic: number } => ({
 
 export function getTrailState(
   completed: number[],
-  stars: Record<number, LessonStar>,
+  stars: Record<number, LessonStar> = {},
   nodes?: Array<Pick<TrailNode, "id" | "kind" | "topicId">>
 ): TrailState {
   const completedSet = new Set(completed);
@@ -351,7 +352,7 @@ export function getTrailState(
   const gateViews = new Map<number, GateView>();
   TRAIL_GATES.forEach((gate, i) => {
     const { fromTopic, toTopic } = gateRegion(i);
-    const regionStars = completed.filter((id) => {
+    const regionStars = Array.from(completedSet).filter((id) => {
       const t = topicById.get(id);
       return t !== undefined && t >= fromTopic && t <= toTopic;
     }).length;
@@ -360,7 +361,7 @@ export function getTrailState(
   // the first closed gate at or before a node's topic blocks it (the spine is strict,
   // so a closed gate locks everything beyond it)
   const closedGateBefore = (topicId: number) => {
-    for (let i = TRAIL_GATES.length - 1; i >= 0; i--) {
+    for (let i = 0; i < TRAIL_GATES.length; i++) {
       if (TRAIL_GATES[i].afterTopic < topicId && !gateViews.get(TRAIL_GATES[i].id)!.open) {
         const { fromTopic, toTopic } = gateRegion(i);
         return { gate: TRAIL_GATES[i], stars: gateViews.get(TRAIL_GATES[i].id)!.stars, fromTopic, toTopic };

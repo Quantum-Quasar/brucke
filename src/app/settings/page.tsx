@@ -162,6 +162,12 @@ export default function SettingsPage() {
   const handleImportBackup = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    const MAX_BACKUP_BYTES = 2 * 1024 * 1024; // 2 MB
+    if (file.size > MAX_BACKUP_BYTES) {
+      alert("Backup file is too large (maximum allowed size is 2 MB).");
+      e.target.value = "";
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
@@ -213,7 +219,7 @@ export default function SettingsPage() {
 
           {/* Quick Category Navigation Bar */}
           <div className="sticky top-14 z-30 bg-[var(--bg-color)]/95 backdrop-blur-xs py-2 border-b border-[var(--sub-color)]/20 -mx-4 px-4 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs font-mono">
-            {SECTIONS.map((sec) => {
+            {SECTIONS.filter((sec) => sec.id !== "language" || LANGUAGES.filter((l) => l.status === "available").length > 1).map((sec) => {
               const Icon = sec.icon;
               return (
                 <button

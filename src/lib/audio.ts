@@ -12,6 +12,8 @@ if (typeof window !== "undefined" && "speechSynthesis" in window) {
   } catch {}
 }
 
+const activeUtterances = new Set<SpeechSynthesisUtterance>();
+
 /**
  * Plays target-language pronunciation using the native Web Speech API.
  * Comfortable 0.92x rate for clear phoneme perception.
@@ -23,6 +25,7 @@ export function playTargetAudio(text: string, locale = "de-DE"): boolean {
 
   try {
     window.speechSynthesis.cancel();
+    activeUtterances.clear();
     const cleanText = text.replace(/^[\[\(].*?[\]\)]\s*/, "").trim();
     if (!cleanText) return false;
 
@@ -36,6 +39,14 @@ export function playTargetAudio(text: string, locale = "de-DE"): boolean {
     if (voice) {
       utterance.voice = voice;
     }
+
+    activeUtterances.add(utterance);
+    utterance.onend = () => {
+      activeUtterances.delete(utterance);
+    };
+    utterance.onerror = () => {
+      activeUtterances.delete(utterance);
+    };
 
     window.speechSynthesis.speak(utterance);
     return true;

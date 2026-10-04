@@ -42,13 +42,21 @@ export function gradeCard(card: SRSCard, grade: ReviewGrade, now = new Date()): 
     } else if (repetitions === 1) {
       interval = 6;
     } else {
-      interval = Math.round(interval * ease_factor);
+      const base = interval > 0 ? interval : 6;
+      interval = Math.max(1, Math.round(base * ease_factor));
     }
     repetitions += 1;
 
     // SM-2 Ease Factor formula
     ease_factor = ease_factor + (0.1 - (5 - grade) * (0.08 + (5 - grade) * 0.02));
     if (ease_factor < 1.3) ease_factor = 1.3;
+  }
+  // Sanitize ease_factor and interval against NaN: ensure ease_factor is a finite number >= 1.3, and interval is a finite number >= 1.
+  if (!Number.isFinite(ease_factor) || ease_factor < 1.3) {
+    ease_factor = 1.3;
+  }
+  if (!Number.isFinite(interval) || interval < 1) {
+    interval = 1;
   }
 
   // Calculate next due date — local arithmetic + local key, so a review at
@@ -67,6 +75,7 @@ export function gradeCard(card: SRSCard, grade: ReviewGrade, now = new Date()): 
     last_reviewed: now.toISOString(),
   };
 }
+export const calculateSM2 = gradeCard;
 
 export function isMastered(card: SRSCard): boolean {
   // Mastery criteria: at least 3 successful consecutive reviews without current lapse

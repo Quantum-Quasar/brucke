@@ -60,7 +60,7 @@ if (newRows.length === 0) {
 }
 
 // insert before the section terminator ("---" + "## 3.")
-const insertAnchor = content.indexOf("## 3\.");
+const insertAnchor = content.indexOf("## 3.");
 if (insertAnchor === -1) throw new Error("§3 anchor not found");
 // find the start of the "---" line right before "## 3."
 const before = content.slice(0, insertAnchor);

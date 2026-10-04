@@ -97,17 +97,14 @@ export const OnboardingModal: React.FC = () => {
   };
 
   // Global hotkeys for onboarding modal:
-  // - Escape: skips onboarding cleanly
+  // - Escape: skips onboarding cleanly (handled by useDialogFocus)
   // - ArrowRight / Enter: next step (or finish)
   // - ArrowLeft: previous step
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        closeOnboarding();
-      } else if (e.key === "ArrowRight" || (e.key === "Enter" && !e.shiftKey)) {
+      if (e.key === "ArrowRight" || (e.key === "Enter" && !e.shiftKey)) {
         // let focused buttons/links keep their native Enter activation
         const target = e.target as HTMLElement | null;
         if (e.key === "Enter" && target?.closest("button, a, input, select, textarea")) return;

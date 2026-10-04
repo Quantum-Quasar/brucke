@@ -131,7 +131,7 @@ export default function AboutPage() {
       {/* Quick Navigation Cards */}
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
         <Link
-          href="/trail"
+          href="/"
           className="p-3.5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 hover:border-[var(--main-color)]/50 transition flex flex-col items-center text-center gap-1 group"
         >
           <BookOpen className="w-5 h-5 text-[var(--sub-color)] group-hover:text-[var(--main-color)] transition" />

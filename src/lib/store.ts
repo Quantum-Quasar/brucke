@@ -178,6 +178,9 @@ export function loadSavedState(): Partial<AppState> {
   return {};
 }
 
+export const isDangerousKey = (key: string): boolean =>
+  key === "__proto__" || key === "constructor" || key === "prototype" || key === "toString" || key === "valueOf";
+
 /** Applies schema defaults & legacy migrations to a parsed persisted-state
  * object (mutates and returns it). */
 function normalizeParsedState(parsed: Record<string, any>): Partial<AppState> {
@@ -185,8 +188,10 @@ function normalizeParsedState(parsed: Record<string, any>): Partial<AppState> {
   if (!Array.isArray(parsed.completedLessons)) parsed.completedLessons = [];
   if (!parsed.lessonProgress || typeof parsed.lessonProgress !== "object" || Array.isArray(parsed.lessonProgress)) parsed.lessonProgress = {};
   if (!parsed.lessonStars || typeof parsed.lessonStars !== "object" || Array.isArray(parsed.lessonStars)) parsed.lessonStars = {};
-  if (!parsed.wordMastery || typeof parsed.wordMastery !== "object") parsed.wordMastery = {};
-  if (!parsed.srsCards || typeof parsed.srsCards !== "object") parsed.srsCards = {};
+  if (!parsed.wordMastery || typeof parsed.wordMastery !== "object" || Array.isArray(parsed.wordMastery)) parsed.wordMastery = {};
+  if (!parsed.srsCards || typeof parsed.srsCards !== "object" || Array.isArray(parsed.srsCards)) parsed.srsCards = {};
+  const rawId = Number(parsed.currentLessonId);
+  parsed.currentLessonId = Number.isInteger(rawId) && rawId >= 1 ? rawId : 1;
   if (!Array.isArray(parsed.weeklyActivity)) parsed.weeklyActivity = [false, false, false, false, false, false, false];
   if (parsed.settings) {
     parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
@@ -215,7 +220,7 @@ function normalizeParsedState(parsed: Record<string, any>): Partial<AppState> {
   if (!parsed.progressByLanguage[parsed.activeLanguageId]) {
     parsed.progressByLanguage[parsed.activeLanguageId] = {
       completedLessons: parsed.completedLessons,
-      currentLessonId: parsed.currentLessonId || 1,
+      currentLessonId: parsed.currentLessonId,
       lessonProgress: parsed.lessonProgress,
       lessonStars: parsed.lessonStars,
       wordMastery: parsed.wordMastery,
@@ -230,11 +235,13 @@ function normalizeParsedState(parsed: Record<string, any>): Partial<AppState> {
     if (!Array.isArray(activeSlice.completedLessons)) activeSlice.completedLessons = [];
     if (!activeSlice.lessonProgress || typeof activeSlice.lessonProgress !== "object" || Array.isArray(activeSlice.lessonProgress)) activeSlice.lessonProgress = {};
     if (!activeSlice.lessonStars || typeof activeSlice.lessonStars !== "object" || Array.isArray(activeSlice.lessonStars)) activeSlice.lessonStars = {};
-    if (!activeSlice.wordMastery || typeof activeSlice.wordMastery !== "object") activeSlice.wordMastery = {};
-    if (!activeSlice.srsCards || typeof activeSlice.srsCards !== "object") activeSlice.srsCards = {};
+    if (!activeSlice.wordMastery || typeof activeSlice.wordMastery !== "object" || Array.isArray(activeSlice.wordMastery)) activeSlice.wordMastery = {};
+    if (!activeSlice.srsCards || typeof activeSlice.srsCards !== "object" || Array.isArray(activeSlice.srsCards)) activeSlice.srsCards = {};
     if (!Array.isArray(activeSlice.weeklyActivity)) activeSlice.weeklyActivity = [false, false, false, false, false, false, false];
     parsed.completedLessons = activeSlice.completedLessons;
-    parsed.currentLessonId = activeSlice.currentLessonId || 1;
+    const rawSliceId = Number(activeSlice.currentLessonId);
+    activeSlice.currentLessonId = Number.isInteger(rawSliceId) && rawSliceId >= 1 ? rawSliceId : parsed.currentLessonId;
+    parsed.currentLessonId = activeSlice.currentLessonId;
     parsed.lessonProgress = activeSlice.lessonProgress;
     parsed.lessonStars = activeSlice.lessonStars;
     parsed.wordMastery = activeSlice.wordMastery;
@@ -799,7 +806,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       let completedLessons = s.completedLessons;
       if (Array.isArray(payload.completedLessons)) {
         completedLessons = payload.completedLessons
-          .map((item: any) => {
+          .map((item: unknown) => {
             if (typeof item === "number") return item;
             if (typeof item === "string") {
               const parsed = parseInt(item.replace(/[^\d]/g, ""), 10);
@@ -807,7 +814,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             }
             return null;
           })
-          .filter((n: any): n is number => typeof n === "number");
+          .filter((n: unknown): n is number => typeof n === "number");
       }
 
       let currentLessonId = s.currentLessonId;
@@ -826,23 +833,39 @@ export const useAppStore = create<AppState>((set, get) => ({
         ? { ...s.lessonStars, ...payload.lessonStars }
         : s.lessonStars;
 
-      const wordMastery = payload.wordMastery && typeof payload.wordMastery === "object"
-        ? { ...s.wordMastery, ...payload.wordMastery }
-        : s.wordMastery;
+      let wordMastery = s.wordMastery;
+      if (payload.wordMastery && typeof payload.wordMastery === "object" && !Array.isArray(payload.wordMastery)) {
+        let masteryMap: Record<string, MasteryState> = { ...s.wordMastery };
+        for (const [k, v] of Object.entries(payload.wordMastery)) {
+          if (k && !isDangerousKey(k)) {
+            masteryMap[k] = v as MasteryState;
+          }
+        }
+        wordMastery = masteryMap;
+      }
 
       let srsCards = s.srsCards;
       if (Array.isArray(payload.srsCards)) {
         let cardMap: Record<string, SRSCard> = { ...s.srsCards };
-        payload.srsCards.forEach((c: any) => {
-          // "__proto__" via plain assignment swaps the object's prototype —
-          // skip it so a hostile backup can't inject inherited SRS state
-          if (c && typeof c.id === "string" && c.id && c.id !== "__proto__") {
-            cardMap[c.id] = c;
+        payload.srsCards.forEach((c: unknown) => {
+          // "__proto__" and prototype pollution keys via plain assignment swap the object's prototype —
+          // skip them so a hostile backup can't inject inherited SRS state
+          if (c && typeof c === "object" && "id" in c) {
+            const cardId = c.id;
+            if (typeof cardId === "string" && cardId && !isDangerousKey(cardId)) {
+              cardMap[cardId] = c as unknown as SRSCard;
+            }
           }
         });
         srsCards = cardMap;
       } else if (payload.srsCards && typeof payload.srsCards === "object") {
-        srsCards = { ...s.srsCards, ...payload.srsCards };
+        let cardMap: Record<string, SRSCard> = { ...s.srsCards };
+        for (const [cardId, card] of Object.entries(payload.srsCards)) {
+          if (cardId && !isDangerousKey(cardId) && card && typeof card === "object") {
+            cardMap[cardId] = card as unknown as SRSCard;
+          }
+        }
+        srsCards = cardMap;
       }
 
       const weeklyActivity = Array.isArray(payload.weeklyActivity) && payload.weeklyActivity.length === 7
@@ -872,12 +895,23 @@ export const useAppStore = create<AppState>((set, get) => ({
       let progressByLanguage = { ...s.progressByLanguage };
       if (payload.progressByLanguage && typeof payload.progressByLanguage === "object" && !Array.isArray(payload.progressByLanguage)) {
         for (const [langId, slice] of Object.entries(payload.progressByLanguage)) {
-          if (isValidLanguageId(langId) && slice && typeof slice === "object") {
-            progressByLanguage[langId] = { ...(progressByLanguage[langId] || {}), ...(slice as LanguageProgress) };
+          if (isValidLanguageId(langId) && !isDangerousKey(langId) && slice && typeof slice === "object" && !Array.isArray(slice)) {
+            const cleanSlice: LanguageProgress = { ...(progressByLanguage[langId] || {}), ...(slice as LanguageProgress) };
+            if (cleanSlice.srsCards && typeof cleanSlice.srsCards === "object" && !Array.isArray(cleanSlice.srsCards)) {
+              const safeCards: Record<string, SRSCard> = {};
+              for (const [cId, card] of Object.entries(cleanSlice.srsCards)) {
+                if (cId && !isDangerousKey(cId)) {
+                  safeCards[cId] = card;
+                }
+              }
+              cleanSlice.srsCards = safeCards;
+            }
+            progressByLanguage[langId] = cleanSlice;
           }
         }
       } else if (
         backupLanguageId !== s.activeLanguageId &&
+        !isDangerousKey(backupLanguageId) &&
         (Array.isArray(payload.completedLessons) ||
           (payload.wordMastery && typeof payload.wordMastery === "object"))
       ) {
@@ -893,7 +927,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         };
       }
       const nextSeenIntroLanguages = Array.isArray(payload.seenIntroLanguages)
-        ? Array.from(new Set([...s.seenIntroLanguages, ...payload.seenIntroLanguages.filter((x: any) => typeof x === "string")]))
+        ? Array.from(new Set([...s.seenIntroLanguages, ...payload.seenIntroLanguages.filter((x: unknown) => typeof x === "string")]))
         : s.seenIntroLanguages;
 
       const nextTolerance = {
@@ -945,24 +979,43 @@ export const useAppStore = create<AppState>((set, get) => ({
         const currentFont = saved.font || s.font || DEFAULT_FONT;
         applyFont(currentFont);
 
+        const nextLang = saved.activeLanguageId || s.activeLanguageId;
+        const isLangSwitch = Boolean(saved.activeLanguageId && saved.activeLanguageId !== s.activeLanguageId);
+        const activeSlice = saved.progressByLanguage?.[nextLang];
+
         return {
           ...s,
-          activeLanguageId: saved.activeLanguageId || s.activeLanguageId,
+          activeLanguageId: nextLang,
           progressByLanguage: { ...s.progressByLanguage, ...(saved.progressByLanguage || {}) },
           seenIntroLanguages: Array.isArray(saved.seenIntroLanguages)
             ? Array.from(new Set([...s.seenIntroLanguages, ...saved.seenIntroLanguages]))
             : s.seenIntroLanguages,
-          completedLessons: Array.isArray(saved.completedLessons)
-            ? Array.from(new Set([...s.completedLessons, ...saved.completedLessons]))
-            : s.completedLessons,
-          currentLessonId: saved.currentLessonId ? Math.max(s.currentLessonId, saved.currentLessonId) : s.currentLessonId,
-          lessonProgress: { ...s.lessonProgress, ...(saved.lessonProgress || {}) },
-          lessonStars: { ...s.lessonStars, ...(saved.lessonStars || {}) },
-          wordMastery: { ...s.wordMastery, ...(saved.wordMastery || {}) },
-          srsCards: { ...s.srsCards, ...(saved.srsCards || {}) },
-          weeklyActivity: Array.isArray(saved.weeklyActivity) ? saved.weeklyActivity : s.weeklyActivity,
-          lastActivityWeek: saved.lastActivityWeek || s.lastActivityWeek,
-          preferredReviewMode: saved.preferredReviewMode || s.preferredReviewMode,
+          completedLessons: isLangSwitch
+            ? (Array.isArray(saved.completedLessons) ? saved.completedLessons : (activeSlice?.completedLessons ?? []))
+            : (Array.isArray(saved.completedLessons)
+              ? Array.from(new Set([...s.completedLessons, ...saved.completedLessons]))
+              : s.completedLessons),
+          currentLessonId: isLangSwitch
+            ? (saved.currentLessonId ?? activeSlice?.currentLessonId ?? 1)
+            : (saved.currentLessonId ? Math.max(s.currentLessonId, saved.currentLessonId) : s.currentLessonId),
+          lessonProgress: isLangSwitch
+            ? (saved.lessonProgress ?? activeSlice?.lessonProgress ?? {})
+            : { ...s.lessonProgress, ...(saved.lessonProgress || {}) },
+          lessonStars: isLangSwitch
+            ? (saved.lessonStars ?? activeSlice?.lessonStars ?? {})
+            : { ...s.lessonStars, ...(saved.lessonStars || {}) },
+          wordMastery: isLangSwitch
+            ? (saved.wordMastery ?? activeSlice?.wordMastery ?? {})
+            : { ...s.wordMastery, ...(saved.wordMastery || {}) },
+          srsCards: isLangSwitch
+            ? (saved.srsCards ?? activeSlice?.srsCards ?? {})
+            : { ...s.srsCards, ...(saved.srsCards || {}) },
+          weeklyActivity: isLangSwitch
+            ? (Array.isArray(saved.weeklyActivity) ? saved.weeklyActivity : (activeSlice?.weeklyActivity ?? [false, false, false, false, false, false, false]))
+            : (Array.isArray(saved.weeklyActivity) ? saved.weeklyActivity : s.weeklyActivity),
+          lastActivityWeek: isLangSwitch
+            ? (saved.lastActivityWeek ?? activeSlice?.lastActivityWeek ?? undefined)
+            : (saved.lastActivityWeek || s.lastActivityWeek),
           theme: currentTheme,
           font: currentFont,
           hasCompletedOnboarding: completed,

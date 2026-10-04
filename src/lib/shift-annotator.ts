@@ -54,7 +54,14 @@ export function alignShiftPair(english: string, german: string, fallbackRule?: s
   const enLower = english.toLowerCase();
   const deLower = german.toLowerCase();
 
-  for (const rule of SHIFT_RULES_PATTERNS) {
+  const rules = fallbackRule
+    ? [
+        ...SHIFT_RULES_PATTERNS.filter((r) => r.label.toLowerCase() === fallbackRule.toLowerCase() || fallbackRule.toLowerCase().includes(r.label.toLowerCase())),
+        ...SHIFT_RULES_PATTERNS.filter((r) => r.label.toLowerCase() !== fallbackRule.toLowerCase() && !fallbackRule.toLowerCase().includes(r.label.toLowerCase())),
+      ]
+    : SHIFT_RULES_PATTERNS;
+
+  for (const rule of rules) {
     const enIdx = enLower.indexOf(rule.en);
     const deIdx = deLower.indexOf(rule.de);
 
