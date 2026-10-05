@@ -466,6 +466,215 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
       { ...shell(5112, "ob: Whether or Not", "ob as the indirect yes/no word — the 'or not' test — and its true twin, English if (Proto-Germanic *jabai); wenn vs ob; basement word order throughout."), authored: true },
     ],
   },
+  // -------------------------------------------------------------------------
+  // Campaign 2 — the A1 vocabulary expansion (branches 5120–5310).
+  //
+  // Purely additive: new ids, new branches appended after 5110, every existing
+  // shell, gate, threshold and array position untouched. No branch attaches to
+  // topic 1 (the first-node unlock set is asserted verbatim in trail-map.test.ts).
+  // Each branch is a two-lesson vocabulary pair that hangs off the topic it
+  // extends; lesson 2 chains off lesson 1, so both stay skippable.
+  // -------------------------------------------------------------------------
+  {
+    id: 5120,
+    attach: 17,
+    title: "Zählen & Zahlen: eins bis hundert",
+    blurb: "The counting core you actually use — eins, vier, fünf, sechs, zehn — and the nouns that count for you: die Zahl, die Nummer, die Hälfte.",
+    lessons: [
+      { ...shell(5121, "Zählen I: eins, vier, fünf, sechs, zehn", "The everyday count: eins/vier/fünf/sechs plus zehn — whose T→S shift (ten) is the same law as Tag/day and two/zwei. drei, zwei, sieben, acht, hundert are already yours."), authored: true },
+      { ...shell(5122, "Zählen II: null, die Zahl, die Nummer, die Hälfte, die Million", "Zero and the counting nouns: die Zahl (a count), die Nummer (a number you look up), die Hälfte (half — the doubling prefix), die Million. Every one of them takes a Z, the tsett-letter."), authored: true },
+    ],
+  },
+  {
+    id: 5130,
+    attach: 17,
+    title: "Häufigkeit & Zeitpunkte",
+    blurb: "Adverbs of rate and moment: immer, oft, manchmal, selten, einmal — and jetzt, sofort, später, früh, endlich.",
+    lessons: [
+      { ...shell(5131, "Wie oft? immer, oft, manchmal, selten, einmal", "Frequency adverbs sit where English puts its -ly: Ich komme oft. The -mal doubling behind einmal (einmal, zweimal) is the same machinery as zweimal from topic 5."), authored: true },
+      { ...shell(5132, "Wann genau? jetzt, sofort, später, früh, endlich", "Point-in-time adverbs: jetzt, sofort (at once), später, früh (early — one f, the long vowel), endlich (finally). Position: they slot into the V2 frame without disturbing the verb."), authored: true },
+    ],
+  },
+  {
+    id: 5140,
+    attach: 17,
+    title: "Der Kalender: Monate & Feiertage",
+    blurb: "All twelve months as a phonetic set, plus Feiertag, Ostern and der Wochentag — the calendar is one of the easiest A1 wins in the language.",
+    lessons: [
+      { ...shell(5141, "Kalender I: Januar bis Mai", "Januar, Februar, März, April, Mai — five -ar months that German kept as Latin names; the stress never moves to the second syllable, unlike English."), authored: true },
+      { ...shell(5142, "Kalender II: Juni bis Oktober", "Juni, Juli, August, September, Oktober — the second half of the year, with the -us/-er endings intact and September hiding your old -ber friend.") },
+      { ...shell(5143, "Kalender III: November, Dezember, Feiertag, Ostern, Wochentag", "The year's last two months plus the word for a holiday (Feiertag) and the one German holiday English kept (Ostern/easter). Der Wochentag builds the whole week.") },
+    ],
+  },
+  {
+    id: 5150,
+    attach: 17,
+    title: "Dauer, Termin & Punkt",
+    blurb: "How long things last and when they are due: der Moment, dauern, der Termin, die Sekunde, das Datum.",
+    lessons: [
+      { ...shell(5151, "Dauer & Termin: der Moment, dauern, der Termin, die Sekunde, das Datum", "dauern takes an accusative of length — Die Sitzung dauert zwei Stunden — while der Termin is the appointment and das Datum the date you write at the top.") },
+    ],
+  },
+  {
+    id: 5160,
+    attach: 27,
+    title: "Wo? Ort & Richtung",
+    blurb: "The four here/there words and the compass of the body: hier, dort, drüben, gegenüber, Umweg, links, rechts, geradeaus, oben, unten.",
+    lessons: [
+      { ...shell(5161, "Ort I: hier, dort, drüben, gegenüber, der Umweg", "Deictics as pure Germanic: hier (here), dort (there, from *þar), drüben (over there), gegenüber (opposite — gegen+über). English lost all four as distinct words.") },
+      { ...shell(5162, "Richtung I: links, rechts, geradeaus, oben, unten", "Direction as fixed spatial metaphor: left/right, straight ahead (geradeaus), up, down — the same body-relative frame every language inherits from its hearer.") },
+    ],
+  },
+  {
+    id: 5170,
+    attach: 27,
+    title: "Die Himmelsrichtungen & die Ferne",
+    blurb: "hinten plus the four compass points, and the distance words: Nähe, weit, fern, quer, entlang.",
+    lessons: [
+      { ...shell(5171, "Richtung II: hinten, Norden, Osten, Westen, Süden", "hinten (behind — the T→D shift in German, D→T in English), then the four compass points, all built on the sun's path: north, east, west, south.") },
+      { ...shell(5172, "Entfernung: die Nähe, weit, fern, quer, entlang", "Near/far as a single axis — die Nähe, weit, fern — plus quer (across) and entlang (along), the two prepositions that take a path rather than a place.") },
+    ],
+  },
+  {
+    id: 5180,
+    attach: 15,
+    title: "Die Lehnwörter: was die Engländer ausgeliehen haben",
+    blurb: "The borrowings that run the other way — Sofa, Radio, Klavier, Computer, Kino, Hotel, Taxi, Bus, Theater, Hobby.",
+    lessons: [
+      { ...shell(5181, "Lehnwörter I: Sofa, Radio, Klavier, Computer, Kino", "Five objects English handed over and German pronounced with its own mouth: Klavier (from French clavier), Kino (from cinema), Computer. German writes them, then says them with German rules.") },
+      { ...shell(5182, "Lehnwörter II: Hotel, Taxi, Bus, Theater, das Hobby", "The travel-and-leisure layer: Hotel, Taxi, Bus (Latin), Theater (Greek), Hobby. Note the stress pattern German imposes — Bus is short, Theater is not.") },
+    ],
+  },
+  {
+    id: 5190,
+    attach: 20,
+    title: "Kleidung & Anziehen",
+    blurb: "The everyday wardrobe in two lessons: Schuh, Hose, Hemd, Mantel, Jacke — then Socke, Tasche, Mütze, Schal, Hut.",
+    lessons: [
+      { ...shell(5191, "Kleidung I: der Schuh, die Hose, das Hemd, der Mantel, die Jacke", "Tragen takes clothes like a subject takes a state: Ich trage einen Mantel. The gender follows the -e/-en nouns exactly as topic 22 taught it.") },
+      { ...shell(5192, "Kleidung II: die Socke, die Tasche, die Mütze, der Schal, der Hut", "The small gear, where German's compound logic shines: die Sonnenbrille is a sun-glasses, the Regenmantel a rain-coat. All of them take an.") },
+    ],
+  },
+  {
+    id: 5200,
+    attach: 21,
+    title: "Die Wohnung: Räume & Möbel",
+    blurb: "Where things live: Zimmer, Wohnung, Flur, Keller, Etage — then Teppich, Schrank, Spiegel, Vorhang, Balkon.",
+    lessons: [
+      { ...shell(5201, "Wohnen I: das Zimmer, die Wohnung, der Flur, der Keller, die Etage", "The rooms of a flat, and the compound engine that builds the rest: Wohnzimmer, Schlafzimmer, Badezimmer, Esszimmer — one head noun, four prefixes.") },
+      { ...shell(5202, "Wohnen II: der Teppich, der Schrank, der Spiegel, der Vorhang, der Balkon", "Furniture and fittings, where die/das flips without warning: der Teppich but das Sofa. The Vorhang (curtain) is a literal 'hang-before' — an inseparable prefix wearing a noun.") },
+    ],
+  },
+  {
+    id: 5210,
+    attach: 21,
+    title: "Tisch & Küche",
+    blurb: "Telling: Gabel, Messer, Flasche, Becher, Kanne — then the kitchen's machines: Herd, Ofen, Seife, Kamm, Klingel.",
+    lessons: [
+      { ...shell(5211, "Am Tisch: die Gabel, das Messer, die Flasche, der Becher, die Kanne", "Table words where the T→S shift runs both ways: die Gabel is a four-tine Zinke, das Messer kept its S in English too, and die Kanne is the coffee-pot.") },
+      { ...shell(5212, "In der Küche: der Herd, der Ofen, die Seife, der Kamm, die Klingel", "The kitchen's real estate — Herd (herd, and stove) and Ofen (oven, a true doublet) — plus the bathroom and door objects that share the room.") },
+    ],
+  },
+  {
+    id: 5220,
+    attach: 6,
+    title: "Essen I: Fisch, Fleisch, Käse, Suppe, Gemüse",
+    blurb: "The German table's backbone — and four words English borrowed and wrote down as German.",
+    lessons: [
+      { ...shell(5221, "Essen I: der Fisch, das Fleisch, der Käse, die Suppe, das Gemüse", "The meat-and-bread-and-milk set, with the loanwords flagged honestly: Käse ← cheese, Suppe ← soup, Gemüse ← vegetable. Fleisch is native, and its English cousin is the flesh it no longer is.") },
+      { ...shell(5222, "Essen II: das Obst, die Kartoffel, die Tomate, die Gurke, die Zwiebel", "Fruit and vegetables, where German and English are the same words in different clothes: Kartoffel ← potato, Tomate ← tomato, Gurke ← gourd, Zwiebel (with the T→S Z).") },
+    ],
+  },
+  {
+    id: 5230,
+    attach: 6,
+    title: "Essen III & der Frühstückstisch",
+    blurb: "Sweet things — Zucker, Honig, Schokolade, Keks, Torte — and the breakfast set: Frühstück, Brötchen, Marmelade, Toast.",
+    lessons: [
+      { ...shell(5231, "Essen III: der Zucker, der Honig, die Schokolade, der Keks, die Torte", "The sweet shelf, and three words English is merely spelling: Zucker ← sugar, Keks ← cakes, Torte ← Italian torta. Die Torte is the birthday cake you already know from topic 21.") },
+      { ...shell(5232, "Frühstück: das Frühstück, das Brötchen, die Marmelade, der Toast, die Butter", "The one meal with its own noun: das Frühstück literally 'break-fast'. The Brötchen is the little bread — the diminutive -chen, the same job as English -let.") },
+    ],
+  },
+  {
+    id: 5240,
+    attach: 22,
+    title: "Farben",
+    blurb: "The colour set in two lessons: rot, blau, grün, schwarz, bunt — then braun, grau, rosa, lila, Farbe.",
+    lessons: [
+      { ...shell(5241, "Farben I: rot, blau, grün, schwarz, bunt", "The primaries plus bunt (coloured) and schwarz — where the T→D shift ran the other way: English red's German R is still there, but German rot kept its T.") },
+      { ...shell(5242, "Farben II: braun, grau, rosa, lila, die Farbe", "The second row, all of them noun-shaped adjectives: braun ← brown, grau ← grey, rosa ← rosa, lila ← lilac. die Farbe (colour) is the head noun that compounds them.") },
+    ],
+  },
+  {
+    id: 5250,
+    attach: 27,
+    title: "Reisen I: Fahrrad, Koffer, Karte, Haltestelle, Dorf",
+    blurb: "Getting around on land, and the paperwork that comes with it.",
+    lessons: [
+      { ...shell(5251, "Reisen I: das Fahrrad, der Koffer, die Karte, die Haltestelle, das Dorf", "Bike, suitcase, map, stop, village: die Karte is English's card/chart by way of Latin charta, and die Haltestelle keeps the T→S shift you drilled in halten.") },
+      { ...shell(5252, "Reisen II: die Fahrkarte, der Fahrplan, die Abfahrt, die Ankunft, der Flughafen", "The travel-timetable set, and the pair that answers 'when does it leave / when does it arrive' — Abfahrt and Ankunft share the fahren verb from topic 28.") },
+    ],
+  },
+  {
+    id: 5260,
+    attach: 27,
+    title: "Reisen III & Länder I",
+    blurb: "Tourists and their luggage, then the country names: Deutschland, Frankreich, England, Spanien, Italien.",
+    lessons: [
+      { ...shell(5261, "Reisen III: der Ausflug, der Tourist, das Gepäck, der Pass, die Fähre", "The excursion set — der Ausflug (out-trip), das Gepäck (singular collective, no plural in the everyday), der Pass for the border, die Fähre for the crossing.") },
+      { ...shell(5262, "Länder I: Deutschland, Frankreich, England, Spanien, Italien", "Five country names that English mostly abandoned (Deutschland/Germany, Frankreich/France) alongside the ones it kept (England, Spanien/Spain, Italien/Italy).") },
+    ],
+  },
+  {
+    id: 5270,
+    attach: 12,
+    title: "Länder II & Sprachen",
+    blurb: "Schweiz, Österreich, Türkei, Polen, Irland — plus Sprache and the four language adjectives.",
+    lessons: [
+      { ...shell(5271, "Länder II: die Schweiz, Österreich, die Türkei, Polen, Irland", "The second row of country names, with their -ei and -land endings intact, and the two that hide an umlaut: die Türkei, Irland.") },
+      { ...shell(5272, "Sprachen: die Sprache, französisch, englisch, spanisch, italienisch", "Language names as adjectives — ich spreche Französisch — built on Sprache, whose K→CH shift is the same law as Milch and Bücher.") },
+    ],
+  },
+  {
+    id: 5280,
+    attach: 18,
+    title: "Berufe I & II",
+    blurb: "What people do for work: Arzt, Bäcker, Verkäufer, Polizist, Schüler — then Student, Fahrer, Sänger, Bauer, Arbeiter.",
+    lessons: [
+      { ...shell(5281, "Berufe I: der Arzt, der Bäcker, der Verkäufer, der Polizist, der Schüler", "The five jobs a first conversation needs. Four are agent-nouns off a verb (verkaufen, polizeilich, Schüler from Schule); der Arzt comes to us by coinage, and English borrowed it as surgeon.") },
+      { ...shell(5282, "Berufe II: der Student, der Fahrer, der Sänger, der Bauer, der Arbeiter", "The -er job suffix does the same work English's -er does, but German also feminises and lengthens: die Sängerin, die Arbeiterin. Der Bauer is the farmer, not the builder.") },
+    ],
+  },
+  {
+    id: 5290,
+    attach: 18,
+    title: "Berufe III & Hobbys I",
+    blurb: "Ingenieur, Friseur, Beruf, Pilot, Kellner — then Musik, Sport, Lied, tanzen, malen.",
+    lessons: [
+      { ...shell(5291, "Berufe III: der Ingenieur, der Friseur, der Beruf, der Pilot, der Kellner", "Beruf is the abstract noun the -er jobs hang under, and the list is where English borrowed hardest: Ingenieur, Pilot. Kellner comes from kelnern — to serve.") },
+      { ...shell(5292, "Hobbys I: die Musik, der Sport, das Lied, tanzen, malen", "What you do with the free time — including two words English took FROM German's neighbourhood: Sport and Musik, both with the K→CH shift law hiding inside.") },
+    ],
+  },
+  {
+    id: 5300,
+    attach: 13,
+    title: "Hobbys II & Menschen",
+    blurb: "Party, Gitarre, reiten, Schach, Freizeit — then wir, Schule, Gast, Gruppe, Held.",
+    lessons: [
+      { ...shell(5301, "Hobbys II: die Party, die Gitarre, reiten, das Schach, die Freizeit", "The past-time set, and die Freizeit — free-time — the compound engine turning Freizeit into Freizeitpool, Freizeitstress and, for parents, the weekend's end.") },
+      { ...shell(5302, "Menschen: wir, die Schule, der Gast, die Gruppe, der Held", "The pronouns and the people around you: wir is the only new pronoun A1 adds, and der Held is English hero wearing a German H — Held was 'the one who shines' before it was the champion.") },
+    ],
+  },
+  {
+    id: 5310,
+    attach: 24,
+    title: "Gefühle & Adjektive",
+    blurb: "The emotional set — Liebe, nett, wütend, stolz, Freude — and five high-value adjectives: richtig, falsch, sauber, leer, offen.",
+    lessons: [
+      { ...shell(5311, "Gefühle: die Liebe, nett, wütend, stolz, die Freude", "The feeling nouns, where the -ung suffix does the same job English's -ness does (Freude/joy, Liebe/love), and wütend/stolz show the dative-free adjective turning back into a noun: der Zorn, der Stolz.") },
+      { ...shell(5312, "Adjektive: richtig, falsch, sauber, leer, offen", "Five adjectives English kept almost intact — richtig/right, falsch/false, offen/open — with sauber (clean) and leer (empty, with a silent colleague: leer's near-empty leer) around them.") },
+    ],
+  },
 ];
 
 /**

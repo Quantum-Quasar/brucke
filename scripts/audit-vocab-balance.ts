@@ -64,6 +64,11 @@ const PRE_EXISTING = new Set([
   "1:deutsch", "1:brücke", "103:wander", "302:schlagen", "1101:kurz",
   "1201:weiß", "1501:fall", "1601:brücke", "1801:gewandert", "1803:gewandert",
   "2101:krankenhaus", "2101:spielen", "2201:wanderung", "2302:lehrer",
+  // Activated by Campaign 2's calendar/time lessons (5121–5141), same situation:
+  // original prose, verified at e0e9b1a, that named the word long before any
+  // lesson listed it. "weißt" is the conjugated wissen ("do you know"), which the
+  // stem resolver reads as the adjective weiß — a homograph, not an ordering fault.
+  "1302:weißt", "1401:jetzt", "1703:viertel",
 ]);
 
 // Weaves that are planned but not yet executed: word -> host lessons that will
@@ -74,6 +79,33 @@ const WEAVE_PLAN: Record<string, number[]> = {
   "ausziehen": [5072],
   "öl": [5072],
   "tüte": [5072],
+  // Campaign 2 batch 1 (5121–5141). Each host below is a lesson already wired in
+  // curriculum.ts and slated for authoring; the weave lands when that batch does.
+  eins: [5161, 5172],
+  vier: [5142, 5172],
+  fünf: [5162, 5182],
+  sechs: [5162, 5182],
+  zehn: [5142, 5172],
+  null: [5151, 5241],
+  zahl: [5151, 5211],
+  nummer: [5161, 5192],
+  hälfte: [5172, 5211],
+  million: [5151, 5222],
+  immer: [5161, 5221],
+  oft: [5142, 5143],
+  manchmal: [5162, 5231],
+  selten: [5191, 5292],
+  einmal: [5143, 5232],
+  jetzt: [5151, 5223],
+  sofort: [5161, 5272],
+  später: [5151, 5191],
+  früh: [5151, 5271],
+  endlich: [5162, 5301],
+  januar: [5143, 5271],
+  februar: [5143, 5271],
+  märz: [5143, 5271],
+  april: [5143, 5222],
+  mai: [5143, 5222],
 };
 
 // Zero-new lessons that are deliberately deferred rather than filled (see
@@ -111,6 +143,14 @@ const PLANNED: Record<string, number> = {
   fabrik: 5021, gymnasium: 5021, rente: 5021, dom: 5021, art: 5021, kaution: 5021, eventuell: 5021,
   öl: 5031, tüte: 5031, freundlich: 5082, familie: 5091, lehrer: 5101, person: 5101,
   freund: 5102, herr: 5011, buchstabe: 5072,
+  // Campaign 2 — the A1 expansion. 40 new branch lessons (5121–5312), five new
+  // words each, reaching ≥650 unique. Added to PLANNED as each batch lands so the
+  // band, weaving and exposure checks treat them as this campaign's words.
+  eins: 5121, vier: 5121, fünf: 5121, sechs: 5121, zehn: 5121,
+  null: 5122, zahl: 5122, nummer: 5122, hälfte: 5122, million: 5122,
+  immer: 5131, oft: 5131, manchmal: 5131, selten: 5131, einmal: 5131,
+  jetzt: 5132, sofort: 5132, später: 5132, früh: 5132, endlich: 5132,
+  januar: 5141, februar: 5141, märz: 5141, april: 5141, mai: 5141,
 };
 const REMOVALS: Record<string, string[]> = { 3002: ["fabrik", "gymnasium", "rente", "dom", "art", "kaution", "eventuell"] };
 // Re-home donors: lesson keeps the word, but its introduction moved earlier.
@@ -171,9 +211,12 @@ function candidates(rawToken: string): string[] {
   for (const id of compTargets.get(raw) ?? []) out.add(id);
   const geStripped = raw.startsWith("ge") && raw.length > 4 ? raw.slice(2) : raw;
   for (const id of compTargets.get(fold(geStripped)) ?? []) out.add(id);
-  const t = fold(geStripped);
-  if (t.length >= 4) for (const [stem, ids] of stems) {
-    if (stem.length >= 4 && t.startsWith(stem)) for (const id of ids) out.add(id);
+  // Stem matching is morphological, and only the sharp-s fold may apply: folding
+  // umlauts here made zähle (zählen, taught long ago) resolve to the unrelated
+  // noun zahl. German umlauts are meaning. The ß→ss fold is kept because weist and
+  // weiß really are the same word written two ways.
+  if (geStripped.length >= 4) for (const [stem, ids] of stems) {
+    if (stem.length >= 4 && geStripped.startsWith(stem)) for (const id of ids) out.add(id);
   }
   return [...out];
 }
@@ -185,7 +228,9 @@ const byId = new Map(LESSONS.map((l) => [l.id, l]));
 const plannedWordIds = new Map<number, Set<string>>(LESSONS.map((l) => [l.id, new Set(l.word_ids)]));
 
 const firstIntro = new Map<string, number>();
-const trail = nodes.map((n, i) => {
+// Hollow shells (Campaign 2 branches still queued for authoring) have no Lesson
+// behind them yet; the taught trail is the authored nodes only.
+const trail = nodes.filter((n) => byId.has(n.id)).map((n, i) => {
   const lesson = byId.get(n.id)!;
   const wids = [...plannedWordIds.get(n.id)!];
   const newW: string[] = [];
@@ -240,7 +285,10 @@ for (const l of trail) {
 // execution progress: a host lesson's row is executed when every planned add
 // landed at it, every planned removal was shed, and every re-home moved past it.
 const rowExecuted = (lessonId: number): boolean => {
-  const l = trail.find((x) => x.id === lessonId)!;
+  const l = trail.find((x) => x.id === lessonId);
+  // A Campaign 2 shell whose Lesson has not been authored yet is a pending row,
+  // never an executed one — its planned words cannot have landed.
+  if (!l) return false;
   for (const [w, host] of Object.entries(PLANNED)) if (host === lessonId && firstIntro.get(w) !== l.idx) return false;
   for (const w of REMOVALS[lessonId] ?? []) if (l.wids.includes(w)) return false;
   for (const w of REHOME_DONOR[lessonId] ?? []) if ((firstIntro.get(w) ?? Infinity) >= l.idx) return false;
@@ -332,7 +380,7 @@ const zeroNewUnplanned = zeroNew.filter((l) => !REVISION.has(l.id) && !LESSON_DE
 
 // ---------------------------------------------------------------- report
 console.log(`=== vocab-balance audit ${STRICT ? "(strict)" : ""} ===`);
-console.log(`unique taught words: ${firstIntro.size} (campaign target 450-500)`);
+console.log(`unique taught words: ${firstIntro.size} (Campaign 1 band 450–500; Campaign 2 target ≥650)`);
 console.log(`histogram: ${JSON.stringify(trail.reduce((h: Record<number, number>, l) => { h[l.newW.length] = (h[l.newW.length] ?? 0) + 1; return h; }, {}))}`);
 console.log(`zero-new: ${zeroNew.length}/${trail.length} (${zeroPct.toFixed(1)}%)${STRICT || zeroPct <= 25 ? "" : " — over the 25% end-state bound (expected mid-campaign)"}`);
 if (zeroNewUnplanned.length && (STRICT || zeroPct <= 25)) fails.push(`zero-new outside the deliberate revision set / deferrals: ${zeroNewUnplanned.join(", ")}`);

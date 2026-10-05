@@ -525,6 +525,35 @@ Batch-9 notes:
 - **One duplicate host found and removed:** I had listed `urlaub` and `meer` at **both** l2802 (batch 7) and l29 (batch 8). Trail order puts 2802 at position 99 and 29 at position 100, so the audit resolved their introduction to 2802 and the l29 plan row could never execute — the last pending row. Resolved in favour of the plan: both words now list **only at l29**, l2802's summary sentence was rewritten to drop them ("The journey verbs ride their own rails: aufstehen, mitnehmen, schauen"), and each is woven forward into **both 2902** (`Wie war der Urlaub am Meer?` — small talk's unavoidable follow-up question) and **2903** (`Am Meer ist mir kalt, im Urlaub ist mir gut` — the dative-experiencer frame with a place attached). Two later lessons each, satisfying the floor honestly rather than by re-homing the words backwards.
 - **One new legality allowlist entry:** `2302:lehrer` — `l2302_e1`'s pair `{ id: "fp4", english: "der Lehrer → (zero)", german: "die Lehrer" }` is original exercise prose, verified against the pre-campaign tree at `e0e9b1a`, that used the word before any lesson listed it. Teaching `lehrer` later in the trail is what makes the resolver see it at all.
 
+## Campaign 2 — the A1 expansion (40 new lessons, 5121–5312)
+
+**Wiring.** Twenty new branches (5120–5310) appended to `TRAIL_BRANCHES` in `src/data/curriculum.ts`, lessons 5121–5312. Purely additive: no existing shell, gate, threshold or array position moved, no renumbering, `TOTAL_TOPICS` untouched. No branch attaches to topic 1, whose first-node unlock set is asserted verbatim in `trail-map.test.ts`. The 40 shells carry `authored: true` only as their batch lands, so the app's own "hollow shell" convention marks the queue honestly and `themes.test.ts`'s shell/lesson count stays true at every commit.
+
+**Shape.** Five new words per lesson, two lessons per branch, each branch hanging off the topic it extends (numbers → 17, places → 27, clothes → 20, rooms and compounds → 21, food → 6, colours → 22, travel → 27, countries and nicht/kein → 12, jobs and the Perfekt → 18, hobbies → 13, feelings and adjectives → 24). 455 + 200 = **655 unique**, above the ≥650 target. Every word is drawn from the existing 771-word compendium pool (Goethe A1 frequency × shift/cognate quality × domain spread × thematic fit); the compendium itself is untouched.
+
+**Batches and words**
+
+| Batch | Lessons | New words |
+|---|---|---|
+| 1 | 5121, 5122, 5131, 5132, 5141 | eins, vier, fünf, sechs, zehn · null, zahl, nummer, hälfte, million · immer, oft, manchmal, selten, einmal · jetzt, sofort, später, früh, endlich · januar, februar, märz, april, mai |
+| 2 | 5142, 5143, 5151, 5161, 5162 | juni…oktober · november, dezember, feiertag, ostern, wochentag · moment, dauern, termin, sekunde, datum · hier, dort, drüben, gegenüber, umweg · links, rechts, geradeaus, oben, unten |
+| 3 | 5171, 5172, 5181, 5182, 5191 | hinten + compass · nähe, weit, fern, quer, entlang · sofa, radio, klavier, computer, kino · hotel, taxi, bus, theater, hobby · schuh, hose, hemd, mantel, jacke |
+| 4 | 5192, 5201, 5202, 5211, 5212 | socke, tasche, mütze, schal, hut · zimmer, wohnung, flur, keller, etage · teppich, schrank, spiegel, vorhang, balkon · gabel, messer, flasche, becher, kanne · herd, ofen, seife, kamm, klingel |
+| 5 | 5221, 5222, 5231, 5232, 5241 | fisch, fleisch, käse, suppe, gemüse · obst, kartoffel, tomate, gurke, zwiebel · zucker, honig, schokolade, keks, torte · frühstück, brötchen, marmelade, toast, butterbrot · rot, blau, grün, schwarz, bunt |
+| 6 | 5242, 5251, 5252, 5261, 5262 | braun, grau, rosa, lila, farbe · fahrrad, koffer, karte, haltestelle, dorf · fahrkarte, fahrplan, abfahrt, ankunft, flughafen · ausflug, tourist, gepäck, pass, fähre · deutschland, frankreich, england, spanien, italien |
+| 7 | 5271, 5272, 5281, 5282, 5283 | schweiz, österreich, türkei, polen, irland · sprache, französisch, englisch, spanisch, italienisch · arzt, bäcker, verkäufer, polizist, schüler · student, fahrer, sänger, bauer, arbeiter · ingenieur, friseur, beruf, pilot, kellner |
+| 8 | 5284, 5285, 5286, 5291, 5292 | musik, sport, lied, tanzen, malen · party, gitarre, reiten, schach, freizeit · wir, schule, gast, gruppe, held · liebe, nett, wütend, stolz, freude · richtig, falsch, sauber, leer, offen |
+
+**After batch 1** (5121, 5122, 5131, 5132, 5141): **480 unique words**. 28 test files / 223 tests, `tsc --noEmit` clean, word refs all resolve, `title drift: 0 | teaser flags: 0`, no duplicate exercise ids. The 25 new words are registered in the audit's `PLANNED` map (so band, weaving and exposure treat them as campaign words) and their future weave hosts in `WEAVE_PLAN`, which reports **15 pending weaves** until batches 2–8 land — pending, not failed, and `--strict` still fails while any remain.
+
+Three audit-tooling changes were needed to make Campaign 2 measurable, all in `scripts/audit-vocab-balance.ts`:
+
+- **Hollow shells are skipped.** The trail walk filtered on `byId.has(node.id)` so the 35 not-yet-authored shells don't crash the walk.
+- **Un-authored shells count as pending rows**, never executed — `rowExecuted()` returns false when no `Lesson` exists for that id.
+- **The stem matcher no longer folds umlauts.** Folding made `zähle` (zählen, taught in topic 18) resolve to the unrelated noun `zahl`, and `später` to `spat`. German umlauts are meaning; stem matching is morphological now, and the check got stricter, not looser — it surfaced three genuine pre-existing prose tokens (`1302:weißt`, `1401:jetzt`, `1703:viertel`), each verified against the pre-campaign tree at `e0e9b1a` and allowlisted with that provenance in the code.
+
+**Deviation from the plan, flagged once:** the prompt asks for the documentation count sync ONCE at the very end. `docs-sync.test.ts` fails the moment the lesson count changes, so the three machine-checked counts (README.md, AUDIT_MANIFEST.md, docs/README.md) are updated mechanically after each batch. The prose inventory sync — README's §2 table, AUDIT_MANIFEST's inventory, `TOTAL_COMPENDIUM_WORDS` — still happens once at the end.
+
 ## Word-selection priorities applied
 
 1. Goethe A1 coverage (official 2024 Wortliste fetched and cross-referenced); 2. frequency; 3. connection quality — every table word teaches a shift, cognate, or documented borrowing; 4. domain spread (body, food, home, family, nature, time, verbs, adjectives, travel, shopping); 5. thematic fit with the host lesson. Force-fit guard honored: themes were never bent; words with no fit stay untaught (936→781 untouched after Campaign 1). No compendium additions needed — the existing pool sufficed.

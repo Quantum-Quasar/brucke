@@ -13000,4 +13000,521 @@ export const LESSONS: Lesson[] = [
       curiosity_teaser: "This whether-branch ends here — more side paths wait on the map, and the whole compendium waits in review.",
     },
   },
+  {
+    id: 5121,
+    slug: "zaehlen-i-eins-vier-fuenf-sechs-zehn",
+    title: "Zählen I: eins, vier, fünf, sechs, zehn",
+    subtitle: "the everyday count — and the T→S shift hiding inside zehn",
+    phase: 3,
+    shift_categories: ["t_to_s_ss_z"],
+    word_ids: ["eins", "vier", "fünf", "sechs", "zehn", "zählen", "hundert", "zwölf", "minute", "uhr"],
+    table_word_ids: ["eins", "vier", "fünf", "sechs", "zehn"],
+    hook: {
+      title: "Five Numbers, Three Shift Families",
+      content:
+        "You already own drei, zwei and hundert. These five fill the gaps you actually use — and they arrive wearing three different shift badges. zehn is the T→S family: German zehn and English ten are the same sound with the T hardened to a Z-sound, exactly like zwei/two and Tag/day. drei is the opposite badge, TH→D, which is why German three keeps its D and English three lost the H. eins has no badge at all: German eins and English one both fall back to Proto-Germanic *ainaz, the very first number any Indo-European language ever had. fünf and sechs are the plain ones — sound twins with no shift, which is precisely why they are easy. The number system is not a chore. It is the shift atlas with the volume turned up.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Why the Clock Is a Number Lesson",
+          content:
+            "Es ist fünf Uhr — 'it is five o'clock' — is the sentence Germans say more often than any other time sentence. The number, the noun Uhr and sein: three items, all drilled today. Say it wrong and you are understood; say it right and you are understood faster.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Where the Number Stands",
+      content:
+        "Three frames, one rule. 1. With sein: Es ist fünf Uhr (it is five o'clock) — the number simply stands in for the subject. 2. Counting: Ich zähle bis zehn (I count to ten) — zählen takes an endpoint, bis marks the ceiling. 3. With a noun: Ich habe vier Bücher (I have four books) — the number sits in front and the plural noun follows it bare, with NO article: nicht vier Bücher but vier Bücher. The clock: Es ist zwölf Uhr / Es ist sechs Uhr morgens. And the promise: Ich warte zehn Minuten (I wait ten minutes) — accusative time, no preposition.",
+      footnotes: [],
+      linguist_note:
+        "The bare plural after a numeral is old: Latin, Greek and English all once said 'four oxen'. English kept the bare noun only after a few dozen ('four hundred men'); German never raised the threshold, so *vier Bücher* still sounds as natural as *four books*.",
+    },
+    exercises: [
+      {
+        id: "l5121_e1",
+        type: "matching_pairs",
+        prompt: "The everyday count — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "zz1", english: "I count to ten", german: "Ich zähle bis zehn" },
+          { id: "zz2", english: "It is five o'clock", german: "Es ist fünf Uhr" },
+          { id: "zz3", english: "It is twelve o'clock", german: "Es ist zwölf Uhr" },
+          { id: "zz4", english: "I have only one of those", german: "Ich habe nur eins davon" },
+          { id: "zz5", english: "I have four books", german: "Ich habe vier Bücher" },
+          { id: "zz6", english: "I wait ten minutes", german: "Ich warte zehn Minuten" },
+        ],
+        target_answer: "Ich zähle bis zehn, Es ist fünf Uhr, Es ist zwölf Uhr, Ich habe nur eins davon, Ich habe vier Bücher, Ich warte zehn Minuten",
+        meaning: "counting, telling the time, counting things, waiting",
+        explanation:
+          "Five numbers in six frames. The bare plural after the numeral (vier Bücher, no article) is the German reflex of an older English 'four books'; the accusative Minute takes no preposition at all.",
+      },
+      {
+        id: "l5121_e2",
+        type: "shift_select",
+        prompt: "Which of these five numbers wears the T→S shift badge (Tag→day, zwei→two)?",
+        options: ["zehn", "vier", "eins", "sechs"],
+        target_answer: "zehn",
+        meaning: "zehn ↔ ten: the T→S/SS shift family",
+        explanation:
+          "zehn is the T→S family: the ancient T hardened to a Z-sound, and English kept the soft T in ten. vier and sechs shifted in neither direction (pure sound twins); eins has no shift — it is Proto-Germanic *ainaz, the first number.",
+      },
+      {
+        id: "l5121_e3",
+        type: "reverse_cognate",
+        prompt: "'drei' keeps its D where English three lost its H — which shift is that?",
+        options: ["TH→D (drei ↔ three)", "P→F", "K→CH", "V→B"],
+        target_answer: "TH→D (drei ↔ three)",
+        meaning: "drei ↔ three: the TH→D family runs the other way from T→S",
+        explanation:
+          "Both languages start from Proto-Germanic *þrīz. German hardened the þ to d; English kept the breathy th and later dropped it. Same ancient numeral, two sound laws pulling in opposite directions.",
+      },
+      {
+        id: "l5121_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the time sentence: 'It is five o'clock'",
+        tile_options: ["Es", "ist", "fünf", "Uhr", "vier", "zehn"],
+        target_answer: "Es ist fünf Uhr",
+        meaning: "It is five o'clock",
+        explanation: "es + ist + the number + die Uhr. The impersonal es does the work no German sentence ever asks a person to do.",
+      },
+      {
+        id: "l5121_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the counting sentence: 'I count to ten'",
+        target_answer: "Ich zähle bis zehn",
+        meaning: "I count to ten",
+        vocab_hints: [
+          {
+            word: "bis",
+            translation: "up to / until",
+            note: "bis marks the ceiling of a count — Ich zähle bis zehn, not bis elf. English 'to' here is not 'until'.",
+          },
+        ],
+        word_bank: ["Ich", "zähle", "bis", "zehn", "hundert"],
+        explanation: "zählen takes an endpoint; bis tells you where the counting stops. hundert sits in the bank to prove the frame scales: Ich zähle bis hundert.",
+      },
+    ],
+    summary: {
+      outcome: "Count, tell the time, and put a bare plural after a number without thinking about it.",
+      use_example: { german: "Es ist fünf Uhr — ich zähle bis zehn.", english: "It is five o'clock — I count to ten." },
+      takeaway:
+        "zehn wears the T→S badge, drei wears TH→D, eins is the untouched original — and vier Bücher takes no article.",
+      curiosity_teaser: "Next: null and the nouns that count for you — die Zahl, die Nummer, die Hälfte, die Million.",
+    },
+  },
+
+  {
+    id: 5122,
+    slug: "zaehlen-ii-null-zahl-nummer-haelfte-million",
+    title: "Zählen II: null, die Zahl, die Nummer, die Hälfte, die Million",
+    subtitle: "zero, and the four nouns that count for you",
+    phase: 3,
+    shift_categories: ["t_to_s_ss_z"],
+    word_ids: ["null", "zahl", "nummer", "hälfte", "million", "zehn", "hundert", "zählen", "kuchen", "minute"],
+    table_word_ids: ["null", "zahl", "nummer", "hälfte", "million"],
+    hook: {
+      title: "Zero Is a Latecomer",
+      content:
+        "null is a Roman import: Latin nullus ('not one') walked into German through the universities and stayed. English took the same Latin word through a different door — null. Between them, German and English share one number and one nothing. The four nouns are older friends wearing Latin clothes: die Zahl counts things, die Nummer is the number you look up (a phone number, a house number — Latin numerus, and English number is the same word), die Hälfte is 'half', doubled from halb the way zweimal doubles zwei, and die Million is Latin milio, the great Latin counting unit that English kept whole. Every one of them is die feminine — and every one of them is the same Z-sound as zehn, null's silent companion.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Zahl vs Nummer",
+          content:
+            "Die Zahl is the count itself — die Zahl sieben, a count of seven, a number in the mathematical sense. Die Nummer is the label: meine Telefonnummer, die Hausnummer, die Zimmernummer. If you can point at it on a card, it is a Nummer. If it is an abstract quantity, it is a Zahl.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Counting Nouns in Sentences",
+      content:
+        "Zero: Die Temperatur ist null Grad (the temperature is zero degrees) — null is an adjective here, uninflected in the commonest readings and declined like one when it stands alone. Nouns: eine Zahl / eine Nummer / eine Million take ihre normal die-forms. Doubling: die Hälfte des Kuchens (half of the cake) — des is genitive, and halb is hiding inside. Scale: eine Million Menschen, zwei Millionen. Time: null Uhr is midnight, and the frame you already own still holds — Es ist null Uhr.",
+      footnotes: [],
+      linguist_note:
+        "English dropped the num- root from 'number' and kept it in 'numeric', 'numerous'. German kept the noun and gave English the adjective. Both kept die Million intact because both borrowed Latin milio at roughly the same moment, through the same scholarly channel.",
+    },
+    exercises: [
+      {
+        id: "l5122_e1",
+        type: "matching_pairs",
+        prompt: "Zero and the counting nouns — match each phrase with its reading:",
+        matching_pairs: [
+          { id: "nz1", english: "the number seven (the count)", german: "die Zahl sieben" },
+          { id: "nz2", english: "my phone number", german: "meine Telefonnummer" },
+          { id: "nz3", english: "half of the cake", german: "die Hälfte des Kuchens" },
+          { id: "nz4", english: "one million people", german: "eine Million Menschen" },
+          { id: "nz5", english: "the temperature is zero degrees", german: "Die Temperatur ist null Grad" },
+        ],
+        target_answer: "die Zahl sieben, meine Telefonnummer, die Hälfte des Kuchens, eine Million Menschen, Die Temperatur ist null Grad",
+        meaning: "count, lookup number, half, million, zero",
+        explanation:
+          "Zahl counts, Nummer labels. Hälfte doubles halb and takes genitive des. Million is singular with its Million Menschen.",
+      },
+      {
+        id: "l5122_e2",
+        type: "shift_select",
+        prompt: "'Wie ist deine Telefonnummer?' — which noun is the label you can look up?",
+        options: ["die Nummer", "die Zahl", "die Hälfte", "null"],
+        target_answer: "die Nummer",
+        meaning: "die Nummer = the number you look up",
+        explanation:
+          "Point at it on a card and it is a Nummer — phone, house, room. Keep it abstract and it is a Zahl. Both descend from Latin numerus; English kept the root only in 'number'.",
+      },
+      {
+        id: "l5122_e3",
+        type: "derive",
+        prompt: "Build the German for 'half' — the doubled relative of 'halb':",
+        english_hint: "halb + the -te that turns an adjective into a counted share",
+        target_answer: "die Hälfte",
+        meaning: "die Hälfte = half",
+        explanation:
+          "halb is 'half'; die Hälfte is 'the half' — the same doubling that gives zweimal from zwei and einmal from ein.",
+      },
+      {
+        id: "l5122_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the midnight sentence: 'It is zero o'clock'",
+        tile_options: ["Es", "ist", "null", "Uhr", "zehn", "Hälfte"],
+        target_answer: "Es ist null Uhr",
+        meaning: "It is zero o'clock — midnight",
+        explanation: "Same frame as five o'clock, same impersonal es. null is Latin nullus; the frame never notices.",
+      },
+      {
+        id: "l5122_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The city has one million people'",
+        target_answer: "Die Stadt hat eine Million Menschen",
+        meaning: "The city has one million people",
+        vocab_hints: [
+          {
+            word: "die Million",
+            translation: "the million",
+            note: "eine Million Menschen — singular noun, plural people, and no article on Menschen because it follows the numeral bare.",
+          },
+        ],
+        word_bank: ["Die", "Stadt", "hat", "eine", "Million", "Menschen", "Zahl"],
+        explanation:
+          "Million is Latin milio, borrowed whole. After a numeral the noun stands bare: eine Million Menschen, nicht eine Million die Menschen.",
+      },
+    ],
+    summary: {
+      outcome: "Say zero, and reach for the right counting noun: Zahl, Nummer, Hälfte or Million.",
+      use_example: { german: "Die Zahl ist null — meine Nummer bleibt geheim.", english: "The count is zero — my number stays secret." },
+      takeaway:
+        "null is Latin nullus, die Zahl counts, die Nummer labels, die Hälfte doubles halb — and all four are die.",
+      curiosity_teaser: "Next: how often, in one word — immer, oft, manchmal, selten, einmal.",
+    },
+  },
+
+  {
+    id: 5131,
+    slug: "wie-oft-immer-oft-manchmal-selten-einmal",
+    title: "Wie oft? immer, oft, manchmal, selten, einmal",
+    subtitle: "frequency without a helping verb — five single words doing English's -ly work",
+    phase: 3,
+    shift_categories: ["d_to_t"],
+    word_ids: ["immer", "oft", "manchmal", "selten", "einmal", "morgen", "heute", "zeit", "kaffee", "trinken"],
+    table_word_ids: ["immer", "oft", "manchmal", "selten", "einmal"],
+    hook: {
+      title: "English Needs a Helper, German Doesn't",
+      content:
+        "To say how often in English you reach for a helper: I always drink coffee, I often drink coffee, I sometimes drink coffee. German needs none of that — immer, oft, manchmal are single words that drop straight into the sentence and stay put. There is no do-support, no -ly, no position rule to memorise. Two of the five hide a shift you already own: selten wears the D→T badge backwards (compare English seldom, where the T hardened while German kept the D), and einmal is ein + Mal — one + time — the same doubling that built zweimal in topic 5. English kept the -mal half of that family and lost the German word for it.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Mal Family",
+          content:
+            "Jedes Mal, ein Mal, zwei Mal — English and German split this word in half. English kept Mal as the noun 'time' and dropped Mal from the adverbs; German kept das Mal as noun AND built einmal, zweimal, dreimal on it. Both languages still say it: once and once.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Where the Frequency Word Lands",
+      content:
+        "Default slot: right after the verb, before the object. Ich trinke immer Kaffee (I always drink coffee). Freestyle fronting for emphasis: Immer trinke ich Kaffee — the adverb takes position 1 and pushes the conjugated verb to position 2, the same swap you do with heute and morgen. With negation: Ich tringe nicht oft Kaffee; nie is the absolute ('never') and sits exactly where nicht would. And the one-off: einmal means 'once', and its opposite einmalig is not needed — Einmal im Jahr fahre ich ans Meer does the job with an ordinary time phrase.",
+      footnotes: [],
+      linguist_note:
+        "German's frequency adverbs are uninflected single words, which is why they never drift away from the verb. English bolted them on with -ly and let them wander to the front of the sentence; German's wandered and settled back into the same slot every time.",
+    },
+    exercises: [
+      {
+        id: "l5131_e1",
+        type: "matching_pairs",
+        prompt: "Frequency — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "hf1", english: "I always drink coffee in the morning", german: "Ich trinke immer Kaffee am Morgen" },
+          { id: "hf2", english: "We often have time today", german: "Wir haben oft heute Zeit" },
+          { id: "hf3", english: "Sometimes I read a book", german: "Manchmal lese ich ein Buch" },
+          { id: "hf4", english: "I seldom drink coffee", german: "Ich trinke selten Kaffee" },
+          { id: "hf5", english: "Once a year I go to the sea", german: "Einmal im Jahr fahre ich ans Meer" },
+        ],
+        target_answer: "Ich trinke immer Kaffee am Morgen, Wir haben oft heute Zeit, Manchmal lese ich ein Buch, Ich trinke selten Kaffee, Einmal im Jahr fahre ich ans Meer",
+        meaning: "always, often, sometimes, seldom, once a year",
+        explanation:
+          "No helper verb anywhere: always/never/often/sometimes/once are all single German words sitting after the conjugated verb.",
+      },
+      {
+        id: "l5131_e2",
+        type: "shift_select",
+        prompt: "'Ich trinke _____ Kaffee.' (I seldom drink coffee) — which word wears the D→T badge?",
+        options: ["selten", "immer", "manchmal", "oft"],
+        target_answer: "selten",
+        meaning: "selten ↔ seldom: German kept the D, English hardened it to T",
+        explanation:
+          "selten is the D→T family's mirror image: English turned the d into a t (seldom), German left the d alone. Same word, same meaning, opposite outcome.",
+      },
+      {
+        id: "l5131_e3",
+        type: "shift_select",
+        prompt: "Fronted for emphasis: '_____ trinke ich Kaffee.' (Always I drink coffee):",
+        options: ["Immer", "Nicht", "Sehr", "Schon"],
+        target_answer: "Immer",
+        meaning: "Immer trinke ich Kaffee = always I drink coffee",
+        explanation:
+          "Fronting a frequency adverb swaps positions 1 and 2: the adverb takes position 1, and the conjugated verb (trinke) moves up behind it. Same rule as heute and morgen.",
+      },
+      {
+        id: "l5131_e4",
+        type: "reverse_cognate",
+        prompt: "'einmal' = one + Mal — and English kept the noun 'time'. What is the English word that survives?",
+        options: ["time", "often", "again", "never"],
+        target_answer: "time",
+        meaning: "das Mal ↔ time: German kept the noun and built einmal on it",
+        explanation:
+          "German kept das Mal as 'time' AND the adverbs (einmal, zweimal). English kept only the noun — once, twice, and the noun time are two halves of the same German family.",
+      },
+      {
+        id: "l5131_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'I always drink coffee in the morning'",
+        target_answer: "Ich trinke immer Kaffee am Morgen",
+        meaning: "I always drink coffee in the morning",
+        vocab_hints: [
+          {
+            word: "immer",
+            translation: "always",
+            note: "immer goes straight after the conjugated verb — no helping word, no -ly. Ich trinke immer Kaffee.",
+          },
+        ],
+        word_bank: ["Ich", "trinke", "immer", "Kaffee", "am", "Morgen"],
+        explanation:
+          "Verb in slot 2, immer in the slot behind it, then the object. am Morgen is the accusative time phrase with the article already inside the preposition.",
+      },
+    ],
+    summary: {
+      outcome: "Answer 'how often?' with one word, and slot it after the verb without a helper.",
+      use_example: { german: "Manchmal trinke ich immer Kaffee.", english: "Sometimes I always drink coffee." },
+      takeaway:
+        "immer, oft, manchmal, selten, einmal — five helperless adverbs, and selten is English seldom's D→T twin.",
+      curiosity_teaser: "Next: point-in-time adverbs — jetzt, sofort, später, früh, endlich.",
+    },
+  },
+
+  {
+    id: 5132,
+    slug: "wann-genau-jetzt-sofort-spaeter-frueh-endlich",
+    title: "Wann genau? jetzt, sofort, später, früh, endlich",
+    subtitle: "point-in-time adverbs — German's five answers to 'when exactly?'",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["jetzt", "sofort", "später", "früh", "endlich", "zeit", "morgen", "fahren", "kommen", "garten"],
+    table_word_ids: ["jetzt", "sofort", "später", "früh", "endlich"],
+    hook: {
+      title: "When Exactly — Without a Preposition",
+      content:
+        "English answers 'when' with a noun: at noon, in the morning, at once. German has five adverbs that answer it with nothing but a word. jetzt (now), sofort (at once — never 'soon', a trap for anyone who pattern-matches on soon), später (later), früh (early — one f, and it never means 'too early'), endlich (finally / at last). All five drop into the same slot behind the conjugated verb that immer and oft just used, which means the frequency lesson and the time lesson are the same lesson wearing different vocabulary. Two of them travel: Bis später! is one of the three most common farewells in the language, and Endlich ist der Sommer da is the sentence you say when a wait finally ends.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "sofort Is Not soon",
+          content:
+            "Komm bitte sofort! means 'come right now', urgently — the adverb sits closer to at once than to soon. If you want 'soon', German reaches for bald (from topic 8) or a gar bald: Bald bin ich da.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Same Slot, Five Words",
+      content:
+        "The frame never changes: verb in slot 2, time adverb behind it, everything else follows. Jetzt lerne ich Deutsch (now I am learning German). Der Zug fährt sehr früh (the train leaves very early). Endlich ist der Sommer da (at last summer is here). With a separable verb the adverb can also be pushed to the very front — Endlich kommt er (at last he is coming) — because an adverb in position 1 does exactly what a negated verb or a conjunction does. And the farewell: Bis später! takes the accusative of time you already own.",
+      footnotes: [],
+      linguist_note:
+        "English made temporal 'when' a preposition word (at, in, on) and then fed it nouns. German kept the adverb slot empty and let single words fill it — which is why German sentences carry time as a flat adverb where English carries a small prepositional phrase.",
+    },
+    exercises: [
+      {
+        id: "l5132_e1",
+        type: "matching_pairs",
+        prompt: "Point in time — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "zg1", english: "Now I am learning German", german: "Jetzt lerne ich Deutsch" },
+          { id: "zg2", english: "The train leaves very early", german: "Der Zug fährt sehr früh" },
+          { id: "zg3", english: "At last summer is here", german: "Endlich ist der Sommer da" },
+          { id: "zg4", english: "Come here immediately, please", german: "Komm bitte sofort hierher" },
+          { id: "zg5", english: "See you later", german: "Bis später" },
+        ],
+        target_answer: "Jetzt lerne ich Deutsch, Der Zug fährt sehr früh, Endlich ist der Sommer da, Komm bitte sofort hierher, Bis später",
+        meaning: "now, early, finally, at once, later",
+        explanation:
+          "No preposition anywhere. The adverb goes behind the conjugated verb — or takes position 1 and pushes the verb to slot 2 (Jetzt lerne ich).",
+      },
+      {
+        id: "l5132_e2",
+        type: "shift_select",
+        prompt: "'Komm bitte _____!' (Come here AT ONCE, please) — which word means 'at once', not 'soon'?",
+        options: ["sofort", "bald", "später", "früh"],
+        target_answer: "sofort",
+        meaning: "Komm bitte sofort! = come here right now",
+        explanation:
+          "sofort sits on the at-once end of the line. bald is the 'soon' of topic 8, später is later, früh is early. English soon has no single German twin.",
+      },
+      {
+        id: "l5132_e3",
+        type: "shift_select",
+        prompt: "Adverb to position 1: '_____ kommt er.' (At last he is coming):",
+        options: ["Endlich", "Nie", "Sehr", "Fast"],
+        target_answer: "Endlich",
+        meaning: "Endlich kommt er = at last he is coming",
+        explanation:
+          "An adverb in position 1 does what a negated verb does: kommt slides to slot 2. Same swap as Jetzt lerne ich Deutsch.",
+      },
+      {
+        id: "l5132_e4",
+        type: "reverse_cognate",
+        prompt: "'früh' has one f and a long ü — which English word is its true twin?",
+        options: ["early", "first", "fast", "soon"],
+        target_answer: "early",
+        meaning: "früh ↔ early: the same root, the same vowel",
+        explanation:
+          "Both come from Proto-Germanic *frēz, 'earlier than'. German kept the long ü where English drifted to ea — the cognate is audible the moment you say the pair aloud.",
+      },
+      {
+        id: "l5132_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The train leaves very early'",
+        target_answer: "Der Zug fährt sehr früh",
+        meaning: "The train leaves very early",
+        vocab_hints: [
+          {
+            word: "früh",
+            translation: "early",
+            note: "one f, long ü. Der Zug fährt früh — the adverb rides behind the conjugated verb fährt, exactly like immer and oft did.",
+          },
+        ],
+        word_bank: ["Der", "Zug", "fährt", "sehr", "früh", "spät"],
+        explanation:
+          "fahren in slot 2 (Der takes slot 1), then the adverb. Note the contrast pair waiting in the bank: spät is 'late', früh is 'early' — the same train, two hours apart.",
+      },
+    ],
+    summary: {
+      outcome: "Answer 'when exactly?' with one adverb, in the slot behind the verb.",
+      use_example: { german: "Jetzt lerne ich Deutsch — bis später!", english: "Now I am learning German — see you later!" },
+      takeaway:
+        "jetzt, sofort, später, früh, endlich — five time adverbs, no preposition, same slot as immer and oft. sofort is at once, not soon.",
+      curiosity_teaser: "Next: the calendar itself — Januar bis Mai, the Latin months with German mouths.",
+    },
+  },
+
+  {
+    id: 5141,
+    slug: "kalender-i-januar-bis-mai",
+    title: "Kalender I: Januar bis Mai",
+    subtitle: "five Latin month names, five German pronunciations",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["januar", "februar", "märz", "april", "mai", "monat", "jahr", "woche", "oft", "vier", "garten"],
+    table_word_ids: ["januar", "februar", "märz", "april", "mai"],
+    hook: {
+      title: "Latin Names, German Mouths",
+      content:
+        "Every month in this lesson is a Latin month that never left. Januar, Februar, März, April, Mai — and the giveaway is German's pronunciation rule: all five keep the stress on the FIRST syllable, ja-NU-ar, fe-BRU-ar, MÄRZ, a-PRIL. English often pulls the stress to the second syllable, and when you learn German's months by ear you will be tempted to follow. Don't. And the grammar behind them is a one-off worth learning once: month names are masculine even though they end in -r, they take der (der Januar, not die Januare), and in dates they stand bare after the day — am 5. Mai, with no article in front of the name. One Monat has vier Wochen; a Jahr has zwölf Monate. The calendar is the one place where German and Latin never stopped talking.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The March Surprise",
+          content:
+            "Der März is the month where German and English diverge least — but watch the stress: German MÄRZ, English March. The z is the same sharp sound you drilled in zehn and zwei. And April is nearly identical on both sides, which is a gift rather than a coincidence.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Saying the Date",
+      content:
+        "Three frames, all of them old. 1. With a preposition: im Januar, im Februar, im März, im April, im Mai — 'im' is in + dem, and dem is the masculine, so the month name follows it bare. 2. As a subject: Der Januar ist kalt (January is cold). 3. In a date: am 5. Mai, am 1. April — the ordinal number, a dot, then the name with no article. And the arithmetic you already own: ein Monat hat vier Wochen; ein Jahr hat zwölf Monate.",
+      footnotes: [],
+      linguist_note:
+        "The masculine gender of the months is a Latin leftover: Latin Ianuarius was a masculine proper name, and proper names kept their gender when they turned into common nouns. English lost the gender along with the names; German kept it, so you get der Januar and das Jahr — one masculine, one neuter, both Latin.",
+    },
+    exercises: [
+      {
+        id: "l5141_e1",
+        type: "matching_pairs",
+        prompt: "The first five months — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "jm1", english: "January is cold", german: "Der Januar ist kalt" },
+          { id: "jm2", english: "In February the children play in the garden", german: "Im Februar spielen die Kinder im Garten" },
+          { id: "jm3", english: "In March it rains", german: "Im März regnet es" },
+          { id: "jm4", english: "In April it often rains", german: "Im April regnet es oft" },
+          { id: "jm5", english: "In May it is warm", german: "Im Mai ist es warm" },
+        ],
+        target_answer: "Der Januar ist kalt, Im Februar spielen die Kinder im Garten, Im März regnet es, Im April regnet es oft, Im Mai ist es warm",
+        meaning: "the five months in sentences",
+        explanation:
+          "im = in + dem, so the masculine month name follows it bare. Every one of these five sentences is something a German will actually say about the weather.",
+      },
+      {
+        id: "l5141_e2",
+        type: "shift_select",
+        prompt: "'___ April regnet es oft.' (In April it often rains) — which preposition-plus-article contracts to im?",
+        options: ["im", "am", "vom", "zum"],
+        target_answer: "im",
+        meaning: "im April = in dem April",
+        explanation:
+          "Month names are masculine, so in + dem = im. Compare am Montag (an dem) and im Garten (in dem) — same contraction law, different genders.",
+      },
+      {
+        id: "l5141_e3",
+        type: "shift_select",
+        prompt: "One month has how many weeks?",
+        options: ["vier", "zehn", "fünf", "sechs"],
+        target_answer: "vier",
+        meaning: "Ein Monat hat vier Wochen",
+        explanation:
+          "vier — the same word you counted with two lessons ago. Ein Monat hat vier Wochen; ein Jahr hat zwölf Monate; and die Woche is a K→CH word, the ch of Milch and Buch.",
+      },
+      {
+        id: "l5141_e4",
+        type: "reverse_cognate",
+        prompt: "Which of the five month names is nearly IDENTICAL in English and German — letter for letter?",
+        options: ["April", "Januar", "Februar", "März"],
+        target_answer: "April",
+        meaning: "April ↔ April: the same Latin name both languages kept whole",
+        explanation:
+          "April survives untouched on both sides. Januar became January with an added J, and Februar and März kept their consonants while English rewrote their vowels.",
+      },
+      {
+        id: "l5141_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'A month has four weeks'",
+        target_answer: "Ein Monat hat vier Wochen",
+        meaning: "A month has four weeks",
+        vocab_hints: [
+          {
+            word: "die Woche",
+            translation: "the week",
+            note: "K→CH: die Woche carries the same ch as Milch and Buch. And the plural after a numeral is bare — vier Wochen, nicht vier die Wochen.",
+          },
+        ],
+        word_bank: ["Ein", "Monat", "hat", "vier", "Wochen", "Jahr"],
+        explanation:
+          "hat in slot 2, then the bare numeral and its bare plural. Swap Monat for Jahr and the same frame gives you the year.",
+      },
+    ],
+    summary: {
+      outcome: "Name the first five months, use im + the bare name, and state the month-to-week arithmetic.",
+      use_example: { german: "Im April regnet es oft — ein Monat hat vier Wochen.", english: "In April it often rains — a month has four weeks." },
+      takeaway:
+        "Der Januar, der Februar, der März, der April, der Mai — masculine, bare after im, and always stressed on the first syllable.",
+      curiosity_teaser: "Next: Juni bis Oktober, the second half of the year's Latin wardrobe.",
+    },
+  },
 ];
