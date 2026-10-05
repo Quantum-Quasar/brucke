@@ -63,7 +63,7 @@ const PRE_EXISTING = new Set([
   // trail — as Campaign 1 does — is what lets the resolver see it at all.
   "1:deutsch", "1:brücke", "103:wander", "302:schlagen", "1101:kurz",
   "1201:weiß", "1501:fall", "1601:brücke", "1801:gewandert", "1803:gewandert",
-  "2101:krankenhaus", "2101:spielen", "2201:wanderung",
+  "2101:krankenhaus", "2101:spielen", "2201:wanderung", "2302:lehrer",
 ]);
 
 // Weaves that are planned but not yet executed: word -> host lessons that will

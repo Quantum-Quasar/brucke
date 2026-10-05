@@ -472,14 +472,14 @@ _branch_
 
 ## Before/after
 
-| Metric | Before | After (planned) |
+| Metric | Before | After (actual, Campaign 1 closed) |
 |---|---|---|
 | Unique taught words | 290 (23.7%) | **455** (37.1%) |
 | New words introduced | — | 165 |
 | Re-homed words | — | 8 |
-| Zero-new lessons | 51 (39.8%) | **21 (16.4%)**, all deliberate revision + 1 deferral |
-| Lessons edited | — | 88 (76 word-move rows, 10 exposure-only, 2 weave-only) |
-| New/lesson histogram | 0→51, 1→22, 2→16, 3→7, 4→9, 5→4, 6→4, 7→5, 9→6, 10→2, 11→1, 15→1 | 0→21, 1→4, 2→19, 3→20, 4→31, 5→8, 6→8, 7→7, 8→2, 9→5, 10→2, 11→1 |
+| Zero-new lessons | 51 (39.8%) | **22 (17.2%)**, all deliberate revision + 1 deferral |
+| Move-list rows executed | — | **95 / 95** (0 pending) |
+| New/lesson histogram | 0→51, 1→22, 2→16, 3→7, 4→9, 5→4, 6→4, 7→5, 9→6, 10→2, 11→1, 15→1 | 0→22, 1→4, 2→18, 3→20, 4→30, 5→8, 6→9, 7→7, 8→2, 9→5, 10→2, 11→1 |
 
 ## Execution order (batches of ≤10 edited lessons, trail order)
 
@@ -515,6 +515,15 @@ Batch-8 deviations from the plan, all recorded in `scripts/audit-vocab-balance.t
 - **Weaves still queued for batch 9:** `öl`, `tüte` and `ausziehen` need one further later lesson each beyond the ones landed in batch 8; the audit now tracks them through `WEAVE_PLAN` (host 5072) and reports them as pending rather than failed until 5072 executes. `--strict` fails while any remain.
 - **Pre-existing drift tokens added to the legality allowlist** (13 tokens, verified against the pre-campaign tree at `e0e9b1a`): original exercise prose that used a word before any lesson listed it — Deutsch, Brücke (l1, l1601), wander/gewandert/Wanderung (l103, l1801, l1803, l2201), schlagen (l302), kurz (l1101), weiß (l1201), fall (l1501), Krankenhaus, spielen (l2101). Teaching these words later in the trail is what makes the resolver see them at all; the prose itself is untouched.
 - **Two of my own order violations fixed:** l1502_e3 no longer uses `kaufe` (kaufen is taught at l1801, later in trail order) — it uses the lesson's own `einkaufen`; l1905_e1 pairs `ich durfte` instead of `ich wünschte` (wunsch is taught at l2001, later).
+
+**After batch 9** (lessons 5072, 5091, 5081, 5082, 5101, 5102, 5111, 5112): **455 unique words** — Campaign 1's target band (450–500) met. Zero-new 22/128 (17.2%), **95 of 95 move-list rows executed, 0 pending**, no queued weaves left. Strict mode (`--strict`) passes: all bands, the weaving floor, and the exposure floor hold. 28 test files / 223 tests, `tsc --noEmit` clean, `audit-word-refs` all resolve, `title drift: 0 | teaser flags: 0`, no duplicate exercise ids.
+
+Batch-9 notes:
+
+- **The last weave (`ausziehen`) landed at 5072** (`WEAVE_PLAN` exhausted): lesson 5072 now carries `öl`, `tüte` and `ausziehen` in `word_ids`, each with a vocab hint — the hint for `ausziehen` pointing back at the Z hidden inside it, which is the letter 5072's first exercise drills.
+- **`familie` re-homed to 5091** (the meeting-the-family lesson), then woven forward into 5081 and 5082; `freundlich` woven forward through 5101 → 5102; `person` and `lehrer` through 5101 → 5111.
+- **One duplicate host found and removed:** I had listed `urlaub` and `meer` at **both** l2802 (batch 7) and l29 (batch 8). Trail order puts 2802 at position 99 and 29 at position 100, so the audit resolved their introduction to 2802 and the l29 plan row could never execute — the last pending row. Resolved in favour of the plan: both words now list **only at l29**, l2802's summary sentence was rewritten to drop them ("The journey verbs ride their own rails: aufstehen, mitnehmen, schauen"), and each is woven forward into **both 2902** (`Wie war der Urlaub am Meer?` — small talk's unavoidable follow-up question) and **2903** (`Am Meer ist mir kalt, im Urlaub ist mir gut` — the dative-experiencer frame with a place attached). Two later lessons each, satisfying the floor honestly rather than by re-homing the words backwards.
+- **One new legality allowlist entry:** `2302:lehrer` — `l2302_e1`'s pair `{ id: "fp4", english: "der Lehrer → (zero)", german: "die Lehrer" }` is original exercise prose, verified against the pre-campaign tree at `e0e9b1a`, that used the word before any lesson listed it. Teaching `lehrer` later in the trail is what makes the resolver see it at all.
 
 ## Word-selection priorities applied
 
