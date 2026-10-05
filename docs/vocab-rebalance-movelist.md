@@ -25,6 +25,7 @@ Rationale for debatable calls: 1001 ("Case Gym") is filled with concrete der-nou
 | Lesson | Item | Reason | Campaign 2 plan |
 |---|---|---|---|
 | 2401 Twin Suppletions | 0 new (band 2–4) | closed-class suppletion (good/better/best, gern/lieber); no fitting untouched compendium words | add gern/lieber entries via word_connections.md, host in 2401 |
+| 2801 fahren & its Dynasty | 0 new (band 2–4) | its two planned words (urlaub, meer) were hosted at l29 instead, where the sea/vacation idioms belong; fahren, Fahrt and Zug are taught earlier in full | host Fahrplan/Fahrkarte here in Campaign 2 |
 | 5101/5102 tail words | lehrer, person, freund have exactly 2 later lessons (5102, 5111, 5112) | trail tail — no later lessons exist beyond them | none needed: floor met at the minimum (2 later + ≥4 mentions) |
 
 ## Per-lesson move-list (trail order)
@@ -366,7 +367,7 @@ _grammar core_
 
 ### 2801 — fahren & its Dynasty
 _consolidation sprig_
-- **+** Urlaub (vacation (twin: leave)), Meer (sea)
+- **+** Urlaub (vacation (twin: leave)), Meer (sea) — **moved to l29** in batch 8 (sea/vacation idioms fit there better); l2801 stays a zero-new consolidation, documented in the deferral table
 - **weave→** 2802 (urlaub, meer), 29 (urlaub, meer)
 
 ### 2802 — ziehen & nehmen Dynasties
@@ -396,6 +397,7 @@ _consolidation sprig_
 
 ### 30 — Capstone: The Bridge Reading
 _revision (deliberate)_
+- **weave→** schlecht, fertig, lustig, übel (topic 2's adjectives), fluss, markt, wand, gewinnen, schauen (l28/l2703 families, one later use each), ausziehen (first of two)
 - **exposure** gabe gain explicit exercise mentions
 
 ### 3002 — Trap Watch: False Friends in the Wild
@@ -420,6 +422,7 @@ _branch_
 
 ### 5071 — First Introductions
 _branch_
+- **weave→** fabrik, gymnasium, rente, dom, art, kaution, eventuell (the seven 3002 re-homes), herr, öl, tüte
 - **exposure** wohnen, jahr, heißen gain explicit exercise mentions
 
 ### 5072 — The Alphabet & buchstabieren
@@ -499,6 +502,19 @@ Computed from the validated map; each batch ends with the full sequential valida
 **Batch 8** (10 lessons): 29, 2901, 2902, 2903, 30, 3002, 5011, 5021, 5031, 5071
 
 **Batch 9** (8 lessons): 5072, 5091, 5081, 5082, 5101, 5102, 5111, 5112
+
+## Batch log
+
+**After batch 7** (commit 00e46c8): 436 unique words, zero-new 28/128 (21.9%), 76 move-list rows executed.
+
+**After batch 8** (lessons 29, 2901, 2902, 2903, 30, 3002, 5011, 5021, 5031, 5071): **450 unique words**, zero-new 22/128 (17.2%), 85 move-list rows executed, 10 pending. All three audits green (`title drift: 0 | teaser flags: 0`, all word refs resolve, vocab-balance passes), 28 test files / 223 tests, typecheck clean.
+
+Batch-8 deviations from the plan, all recorded in `scripts/audit-vocab-balance.ts`:
+
+- **urlaub/meer hosted at l29, not l2801** (see the deferral table above).
+- **Weaves still queued for batch 9:** `öl`, `tüte` and `ausziehen` need one further later lesson each beyond the ones landed in batch 8; the audit now tracks them through `WEAVE_PLAN` (host 5072) and reports them as pending rather than failed until 5072 executes. `--strict` fails while any remain.
+- **Pre-existing drift tokens added to the legality allowlist** (13 tokens, verified against the pre-campaign tree at `e0e9b1a`): original exercise prose that used a word before any lesson listed it — Deutsch, Brücke (l1, l1601), wander/gewandert/Wanderung (l103, l1801, l1803, l2201), schlagen (l302), kurz (l1101), weiß (l1201), fall (l1501), Krankenhaus, spielen (l2101). Teaching these words later in the trail is what makes the resolver see them at all; the prose itself is untouched.
+- **Two of my own order violations fixed:** l1502_e3 no longer uses `kaufe` (kaufen is taught at l1801, later in trail order) — it uses the lesson's own `einkaufen`; l1905_e1 pairs `ich durfte` instead of `ich wünschte` (wunsch is taught at l2001, later).
 
 ## Word-selection priorities applied
 

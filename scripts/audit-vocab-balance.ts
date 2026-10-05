@@ -42,6 +42,7 @@ const roleOf = (id: number, kind: string) =>
 // Lesson-level: (reason, Campaign 2 plan) — see docs/vocab-rebalance-movelist.md.
 const LESSON_DEFERRALS: Record<number, string> = {
   2401: "Twin Suppletions: closed-class suppletion; no fitting untouched compendium words. Campaign 2: add gern/lieber entries and host here.",
+  2801: "fahren & its Dynasty: the planned words (urlaub, meer) were hosted at l29, where the sea/vacation idioms belong; fahren, Fahrt and Zug are all taught earlier in full, so the lesson consolidates. Campaign 2: host Fahrplan/Fahrkarte here.",
 };
 // Tail words: fewer than 3 later lessons exist; floor met at the minimum (2).
 const TAIL_DEFERRALS = new Set(["lehrer", "person", "freund"]);
@@ -56,7 +57,31 @@ const PRE_EXISTING = new Set([
   "2501:gift", "2901:gelesen", "3001:abend", "3001:gelesen", "1002:sehe",
   "21:zahnarzt", "21:zahn", "902:art", "1201:bekomme", "1403:vergesse", "602:kaffee",
   "602:kind", "302:schreiben", "1801:werden", "1802:werde",
+  // Activated by this campaign, not authored by it: these tokens are original
+  // exercise prose (verified against the pre-campaign tree at e0e9b1a) that
+  // used the word before any lesson listed it. Teaching the word later in the
+  // trail — as Campaign 1 does — is what lets the resolver see it at all.
+  "1:deutsch", "1:brücke", "103:wander", "302:schlagen", "1101:kurz",
+  "1201:weiß", "1501:fall", "1601:brücke", "1801:gewandert", "1803:gewandert",
+  "2101:krankenhaus", "2101:spielen", "2201:wanderung",
 ]);
+
+// Weaves that are planned but not yet executed: word -> host lessons that will
+// carry the word's remaining later appearances in a later batch. While a host
+// row is pending the weaving floor reports pending, not failed (same rule the
+// band check uses for unexecuted rows); --strict still demands they land.
+const WEAVE_PLAN: Record<string, number[]> = {
+  "ausziehen": [5072],
+  "öl": [5072],
+  "tüte": [5072],
+};
+
+// Zero-new lessons that are deliberately deferred rather than filled (see
+// docs/vocab-rebalance-movelist.md). Superset of LESSON_DEFERRALS' rationale:
+// these are reported, never silently counted into the ≤25% budget.
+const ZERO_NEW_DEFERRALS: Record<number, string> = {
+  2801: "fahren & its Dynasty: the planned words (urlaub, meer) were hosted at l29, where the sea/vacation idioms belong; fahren, Fahrt and Zug are all taught earlier in full, so the lesson consolidates. Campaign 2: host Fahrplan/Fahrkarte here.",
+};
 
 // Move-list planned adds (word -> host lesson), for progress reporting only.
 const PLANNED: Record<string, number> = {
@@ -81,7 +106,7 @@ const PLANNED: Record<string, number> = {
   maus: 2301, vogel: 2301, kuh: 2301, spiel: 2302, stunde: 2302, schnell: 2402, schwer: 2402,
   lecker: 2403, neu: 2403, voll: 2404, nass: 2404, selbst: 2502, mitternacht: 2602, nichte: 2602,
   legen: 2603, hafen: 2701, wald: 2701, brücke: 2701, platz: 2702, fluss: 2703, markt: 2703,
-  wand: 2703, urlaub: 2801, meer: 2801, holen: 2802, wieder: 2802, leute: 2901, himmel: 2901,
+  wand: 2703, urlaub: 29, meer: 29, holen: 2802, wieder: 2802, leute: 2901, himmel: 2901,
   mensch: 2901, schlecht: 2902, fertig: 2902, lustig: 2902, übel: 2903,
   fabrik: 5021, gymnasium: 5021, rente: 5021, dom: 5021, art: 5021, kaution: 5021, eventuell: 5021,
   öl: 5031, tüte: 5031, freundlich: 5082, familie: 5091, lehrer: 5101, person: 5101,
@@ -273,8 +298,11 @@ for (const [w, hostIdx] of [...firstIntro]) {
   const label = `${w}@l${trail[hostIdx].id}:${later}`;
   if (campaignWord) {
     if (!rowDone) pendingWeave++;
-    else if (later < 2 && laterExist >= 2 && !TAIL_DEFERRALS.has(w)) weaveFails.push(label);
-    else weaveThin.push(label);
+    else if (later < 2 && laterExist >= 2 && !TAIL_DEFERRALS.has(w)) {
+      const queued = (WEAVE_PLAN[w] ?? []).some((h) => !rowExecuted(h));
+      if (queued) pendingWeave++;
+      else weaveFails.push(label);
+    } else weaveThin.push(label);
   } else {
     if (later < 2 && laterExist >= 2) weavePreExisting.push(label); // documented pre-existing shortfall
     else weaveThin.push(label);
@@ -300,7 +328,7 @@ for (const f of bandFails) fails.push(f);
 const zeroNew = trail.filter((l) => l.newW.length === 0);
 const zeroPct = (zeroNew.length / trail.length) * 100;
 if (STRICT && zeroPct > 25) fails.push(`zero-new lessons ${zeroNew.length}/${trail.length} (${zeroPct.toFixed(1)}%) exceed 25%`);
-const zeroNewUnplanned = zeroNew.filter((l) => !REVISION.has(l.id) && !LESSON_DEFERRALS[l.id]).map((l) => l.id);
+const zeroNewUnplanned = zeroNew.filter((l) => !REVISION.has(l.id) && !LESSON_DEFERRALS[l.id] && !ZERO_NEW_DEFERRALS[l.id]).map((l) => l.id);
 
 // ---------------------------------------------------------------- report
 console.log(`=== vocab-balance audit ${STRICT ? "(strict)" : ""} ===`);
@@ -311,7 +339,10 @@ if (zeroNewUnplanned.length && (STRICT || zeroPct <= 25)) fails.push(`zero-new o
 console.log(`move-list rows: ${executed.length} executed, ${pending.length} pending`);
 if (pending.length && STRICT) fails.push(`strict: ${pending.length} move-list rows pending`);
 console.log(`pre-existing drift tokens honored from allowlist: ${preExistingHits}`);
-if (pendingWeave) console.log(`weaving pending for ${pendingWeave} campaign words (host rows not yet executed)`);
+if (pendingWeave) {
+  console.log(`weaving pending for ${pendingWeave} campaign words (host rows not yet executed)`);
+  if (STRICT) fails.push(`strict: ${pendingWeave} campaign words still below the weaving floor`);
+}
 if (weaveThin.length) console.log(`below 3-lesson weaving target, floor 2 holds (${weaveThin.length}): ${weaveThin.slice(0, 12).join(", ")}${weaveThin.length > 12 ? " …" : ""}`);
 for (const n of notes) console.log(`  · ${n}`);
 if (fails.length) {
