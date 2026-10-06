@@ -13349,10 +13349,10 @@ export const LESSONS: Lesson[] = [
           { id: "zg1", english: "Now I am learning German", german: "Jetzt lerne ich Deutsch" },
           { id: "zg2", english: "The train leaves very early", german: "Der Zug fährt sehr früh" },
           { id: "zg3", english: "At last summer is here", german: "Endlich ist der Sommer da" },
-          { id: "zg4", english: "Come here immediately, please", german: "Komm bitte sofort hierher" },
+          { id: "zg4", english: "Come along right away, please", german: "Komm bitte sofort mit" },
           { id: "zg5", english: "See you later", german: "Bis später" },
         ],
-        target_answer: "Jetzt lerne ich Deutsch, Der Zug fährt sehr früh, Endlich ist der Sommer da, Komm bitte sofort hierher, Bis später",
+        target_answer: "Jetzt lerne ich Deutsch, Der Zug fährt sehr früh, Endlich ist der Sommer da, Komm bitte sofort mit, Bis später",
         meaning: "now, early, finally, at once, later",
         explanation:
           "No preposition anywhere. The adverb goes behind the conjugated verb — or takes position 1 and pushes the verb to slot 2 (Jetzt lerne ich).",
@@ -13515,6 +13515,529 @@ export const LESSONS: Lesson[] = [
       takeaway:
         "Der Januar, der Februar, der März, der April, der Mai — masculine, bare after im, and always stressed on the first syllable.",
       curiosity_teaser: "Next: Juni bis Oktober, the second half of the year's Latin wardrobe.",
+    },
+  },
+
+  {
+    id: 5142,
+    slug: "kalender-ii-juni-bis-oktober",
+    title: "Kalender II: Juni bis Oktober",
+    subtitle: "the second half of the Latin year — and the Roman numbers hiding inside it",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["juni", "juli", "august", "september", "oktober", "monat", "jahr", "warm", "regnen", "vier", "zehn", "oft"],
+    table_word_ids: ["juni", "juli", "august", "september", "oktober"],
+    hook: {
+      title: "A Calendar Forgetting Its Own Numbers",
+      content:
+        "Last lesson: five Latin names that never left. These five tell a second story — a calendar slowly forgetting how to count. September is Latin septem, 'seven', and Oktober is octo, 'eight': in the old Roman year that began in March, they really were months seven and eight. Juli and August once counted too — Quintilis, 'fifth', and Sextilis, 'sixth' — until the big names moved in: Julius Caesar took the fifth month (Juli), Augustus took the sixth (August, 'the venerable one'), and Juni belongs to Juno, queen of the gods. English kept every one of these names whole — June, July, August — so this is not vocabulary, it is pronunciation: German hammers the stress onto the FIRST syllable (JU-ni, AU-gust, SEP-tem-ber) where English lets it drift (ju-LY, au-GUST, sep-TEM-ber). And the law from Kalender I still holds: months are masculine and stand bare after im — im Juni, im Oktober.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The J That Isn't a J",
+          content:
+            "Latin's I was a Y-sound, and German still says it that way: Juni sounds like 'YOO-nee' and Juli like 'YOO-lee'. English hardened the sound into J (June, July). Same Latin name, two consonants — but the vowel never moved, which is why the months feel so familiar when you say them the German way.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Dates in the Second Half",
+      content:
+        "Same three frames as Kalender I, new names. 1. With a preposition: im Juni, im Juli, im August, im September, im Oktober — 'im' is in + dem, and dem is the masculine, so the bare name follows. 2. As a subject: Der August ist heiß. 3. Weather small talk: Im Oktober regnet es oft. The arithmetic scales up: von Januar bis Oktober sind es zehn Monate. And the date frame from last lesson still works: am 5. Mai, am 1. September — ordinal, dot, bare name.",
+      footnotes: [],
+      linguist_note:
+        "English pulled the stress rightward over the centuries (ju-LY, au-GUST, sep-TEM-ber, oc-TO-ber); German's first-syllable law never moved (JU-li, AU-gust, SEP-tem-ber, OK-to-ber). Two thousand years of Latin company, and German still gives every borrowed name the same German beat.",
+    },
+    exercises: [
+      {
+        id: "l5142_e1",
+        type: "matching_pairs",
+        prompt: "The second half of the year — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "jo1", english: "June is warm", german: "Der Juni ist warm" },
+          { id: "jo2", english: "In July we often swim", german: "Im Juli schwimmen wir oft" },
+          { id: "jo3", english: "August is hot", german: "Der August ist heiß" },
+          { id: "jo4", english: "In September it rains on four days", german: "Im September regnet es an vier Tagen" },
+          { id: "jo5", english: "In October the leaves fall", german: "Im Oktober fallen die Blätter" },
+          { id: "jo6", english: "From January to October there are ten months", german: "Von Januar bis Oktober sind es zehn Monate" },
+        ],
+        target_answer:
+          "Der Juni ist warm, Im Juli schwimmen wir oft, Der August ist heiß, Im September regnet es an vier Tagen, Im Oktober fallen die Blätter, Von Januar bis Oktober sind es zehn Monate",
+        meaning: "the five months in sentences, plus the count",
+        explanation:
+          "im + the bare masculine name, exactly as in Kalender I. And the count still runs underneath: from Januar to Oktober there are zehn Monate — the Roman count you will close out next lesson.",
+      },
+      {
+        id: "l5142_e2",
+        type: "shift_select",
+        prompt: "Which month is Latin septem — 'seven' — even though it is the ninth month of our year?",
+        options: ["September", "Juni", "Juli", "August"],
+        target_answer: "September",
+        meaning: "September hides the Roman number seven",
+        explanation:
+          "The old Roman year began in March, so September really was the seventh month (septem) and Oktober the eighth (octo). When January moved to the front, the names kept their old numbers — a fossil count you now own in two languages.",
+      },
+      {
+        id: "l5142_e3",
+        type: "reverse_cognate",
+        prompt:
+          "'Der August' still carries a Roman emperor's title, augustus — 'the venerable one'. Which English month is the same name?",
+        options: ["August", "October", "June", "July"],
+        target_answer: "August",
+        meaning: "August ↔ August: one emperor, one name, two languages",
+        explanation:
+          "Augustus renamed the sixth month (Sextilis) after himself, and both German and English kept it letter for letter — only the stress moved: German AU-gust, English au-GUST. Juni keeps a goddess (Juno) and Juli an emperor (Julius Caesar) the same way.",
+      },
+      {
+        id: "l5142_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the October sentence: 'In October the leaves fall'",
+        tile_options: ["Im", "Oktober", "fallen", "die", "Blätter", "September", "warm"],
+        target_answer: "Im Oktober fallen die Blätter",
+        meaning: "In October the leaves fall",
+        explanation:
+          "Time phrase first, verb second, subject last — the German order you have been assembling all along. Fallen is the same strong verb as English fall; die Blätter is the umlauted plural of das Blatt.",
+      },
+      {
+        id: "l5142_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'In June I have vacation'",
+        target_answer: "Im Juni habe ich Urlaub",
+        meaning: "In June I have vacation",
+        word_bank: ["Im", "Juni", "habe", "ich", "Urlaub", "Juli", "heiß"],
+        explanation:
+          "habe in slot 2, the time phrase up front. Swap the month and the sentence still works: Im Juli habe ich Urlaub. The frame is yours; the calendar just fills the gap.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Name Juni through Oktober, keep the first-syllable stress, and read the Roman count hiding in September and Oktober.",
+      use_example: { german: "Im August ist es heiß — im Oktober fallen die Blätter.", english: "In August it is hot — in October the leaves fall." },
+      takeaway:
+        "Der Juni, der Juli, der August, der September, der Oktober — masculine, bare after im, stressed on the first syllable, with septem and octo still counting inside.",
+      curiosity_teaser: "Next: November and Dezember — the count finally closes, and the holiday words walk in with it.",
+    },
+  },
+
+  {
+    id: 5143,
+    slug: "kalender-iii-november-dezember-feiertag-ostern-wochentag",
+    title: "Kalender III: November, Dezember, Feiertag, Ostern, Wochentag",
+    subtitle: "the count closes at ten — and the holiday words walk in with it",
+    phase: 3,
+    shift_categories: ["t_to_s_ss_z"],
+    word_ids: ["november", "dezember", "feiertag", "ostern", "wochentag", "feiern", "tag", "januar", "februar", "märz", "april", "mai", "oft", "einmal"],
+    table_word_ids: ["november", "dezember", "feiertag", "ostern", "wochentag"],
+    hook: {
+      title: "The Count Closes, the Parties Begin",
+      content:
+        "The last two months finish the count the Romans started. November is Latin novem, 'nine', and Dezember is decem, 'ten' — and decem is your old friend wearing Latin clothes: it is the same ancient word as German zehn and English ten, the T hardened to a Z-sound exactly as in zwei/two and zu/to. The Roman count still sits inside the name. Then the calendar stops counting and starts celebrating. Der Feiertag is feiern + Tag — a day for celebrating — and Tag is the same ancient word as English day. Der Wochentag is Woche + Tag, the build that runs the whole week: Montag, Dienstag, Freitag — each one is a Wochentag. And then Ostern, the one holiday whose name English also kept: Ostern and Easter are the same Germanic name, built on *aust-, 'dawn, east' — the season when the light comes back. One name, two languages, and neither ever let it go.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Bede's Honest Doubt",
+          content:
+            "Everything we know about the goddess behind the name comes from one English monk, Bede, writing in 725: the English, he says, named the spring month after a goddess called Ēostre. Scholars still argue whether she was a real goddess or Bede's own guess from the month's name. What is certain: German Ostern and English Easter are the same name from the same root — *aust-, 'dawn, east' — and the fact that both languages kept it is the aha.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Holidays, Weekdays, the Last Two Months",
+      content:
+        "1. The months: im November, im Dezember — same masculine frame. 2. The holiday: Heute ist ein Feiertag. 3. The weekday: Der Montag ist ein Wochentag — and am Wochenende ist die Familie zu Hause. 4. The celebrations: Wir feiern Ostern im März oder im April — Ostern ist einmal im Jahr. 5. Your dates keep working: Mein Geburtstag ist im Mai. And the weather runs on: Im November regnet es oft, der Dezember ist dunkel.",
+      footnotes: [],
+      linguist_note:
+        "German builds its calendar out of Tag exactly the way English builds out of day: Feiertag, Wochentag, Geburtstag, Freitag. The factory is shared; only the parts are German. English even kept one finished product — Easter — straight from the same Germanic shelf as Ostern.",
+    },
+    exercises: [
+      {
+        id: "l5143_e1",
+        type: "matching_pairs",
+        prompt: "The year's end and its holidays — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "nd1", english: "In November it often rains", german: "Im November regnet es oft" },
+          { id: "nd2", english: "December is dark", german: "Der Dezember ist dunkel" },
+          { id: "nd3", english: "Today is a public holiday", german: "Heute ist ein Feiertag" },
+          { id: "nd4", english: "The third of October is a holiday", german: "Der 3. Oktober ist ein Feiertag" },
+          { id: "nd5", english: "Easter is in March or in April", german: "Ostern ist im März oder im April" },
+          { id: "nd6", english: "Easter is once a year", german: "Ostern ist einmal im Jahr" },
+          { id: "nd7", english: "My birthday is in May", german: "Mein Geburtstag ist im Mai" },
+        ],
+        target_answer:
+          "Im November regnet es oft, Der Dezember ist dunkel, Heute ist ein Feiertag, Der 3. Oktober ist ein Feiertag, Ostern ist im März oder im April, Ostern ist einmal im Jahr, Mein Geburtstag ist im Mai",
+        meaning: "the last months, the holiday words, and your dates",
+        explanation:
+          "Everything rides on frames you already own: im + the bare month, ist + ein Feiertag, einmal im Jahr from the frequency lesson. And it is all true — Germany's national holiday really is the 3. Oktober, and Easter really does fall only in März or April.",
+      },
+      {
+        id: "l5143_e2",
+        type: "reverse_cognate",
+        prompt:
+          "Ostern is the one holiday name English kept. Which English word is its twin — the festival, not the direction?",
+        options: ["Easter", "East", "Evening", "October"],
+        target_answer: "Easter",
+        meaning: "Ostern ↔ Easter: one Germanic name, two languages",
+        explanation:
+          "Ostern and Easter are the same name built on *aust-, 'dawn, east' — the spring festival of the returning light. East is the root's cousin, not the festival: the holiday word is Easter, and German and English both kept it whole.",
+      },
+      {
+        id: "l5143_e3",
+        type: "shift_select",
+        prompt:
+          "Dezember is Latin decem. Which German number is hiding inside it — the same ancient word as English ten?",
+        options: ["zehn", "zwei", "zwölf", "drei"],
+        target_answer: "zehn",
+        meaning: "decem ↔ zehn: the T→Z hardening inside Dezember",
+        explanation:
+          "Latin decem and German zehn both descend from the same Proto-Indo-European 'ten' — German hardened the T to a Z-sound, exactly zwei/two and zu/to. Dezember was the tenth month of the old Roman count, and the number never left the name.",
+      },
+      {
+        id: "l5143_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the weekday sentence: 'Monday is a weekday'",
+        tile_options: ["Der", "Montag", "ist", "ein", "Wochentag", "Wochenende", "Sonntag"],
+        target_answer: "Der Montag ist ein Wochentag",
+        meaning: "Monday is a weekday",
+        explanation:
+          "See the compound build itself: Woche + Tag = Wochentag, the same Tag as in Feiertag and Geburtstag. Sonntag and Wochenende wait in the bank — the parts of the week you already own, ready to swap in.",
+      },
+      {
+        id: "l5143_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'In January and in February it is cold'",
+        target_answer: "Im Januar und im Februar ist es kalt",
+        meaning: "In January and in February it is cold",
+        word_bank: ["Im", "Januar", "und", "im", "Februar", "ist", "es", "kalt", "heiß", "März"],
+        explanation:
+          "Two time phrases joined by und, then the verb, then es. Swap the pair for any months you own — Im Juli und im August ist es heiß — and the same frame carries the whole year.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Close the calendar: November and Dezember with their Roman numbers, the Feiertag/Wochentag compounds, and Ostern as the holiday English kept.",
+      use_example: {
+        german: "Im Dezember feiern wir — Ostern kommt im März oder im April.",
+        english: "In December we celebrate — Easter comes in March or in April.",
+      },
+      takeaway:
+        "November is novem, Dezember hides zehn (decem), Feiertag and Wochentag are Tag-compounds — and Ostern/Easter is one Germanic name, *aust-, 'dawn, east', kept on both sides of the North Sea.",
+      curiosity_teaser:
+        "Next: Dauer und Termin — how long things last, and the Latin hiding inside the most German verb in the room.",
+    },
+  },
+
+  {
+    id: 5151,
+    slug: "dauer-termin-moment-dauern-termin-sekunde-datum",
+    title: "Dauer & Termin: der Moment, dauern, der Termin, die Sekunde, das Datum",
+    subtitle: "how long things last — and the Latin hiding inside the most German verb in the room",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["moment", "dauern", "termin", "sekunde", "datum", "minute", "stunde", "null", "zahl", "million", "jetzt", "später", "früh"],
+    table_word_ids: ["moment", "dauern", "termin", "sekunde", "datum"],
+    hook: {
+      title: "Even the Waiting Is Roman",
+      content:
+        "You already say when (jetzt, sofort, später) and how often (oft, einmal). Today: how LONG. Der Moment is Latin momentum, 'movement' — a moment is one beat of the moving world, and English momentum in physics class is the same word in a lab coat. Der Termin is Latin terminus, the boundary stone a Roman planted where his land ended — a Termin is an end-point planted in your day, and English terminus and terminal are the same stone. Die Sekunde is Latin secundus, 'the following' — the minute's follower, sixty of them deep; English second is the same follower. Das Datum is Latin datum, 'the given' — the date is what the calendar hands you, and English data is literally the same word in the plural. And the sleeper: dauern looks like the most German verb alive, but it walked in from Latin durare, 'to last, to hold out' — dauern and English during, duration, durable are one verb in two coats.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Politeness Pair",
+          content:
+            "Einen Moment, bitte and Eine Sekunde, bitte are the two standard 'one moment, please's — accusative, because the moment is the thing you are being handed. Moment buys you patience; Sekunde buys you urgency. Same frame, different clock.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Dauern Eats the Accusative",
+      content:
+        "One frame carries the lesson: Der Termin dauert zwanzig Minuten — the duration stands in the accusative with NO preposition, exactly like Ich warte zehn Minuten. The question is just the frame tilted: Wie lange dauert der Termin? The politeness pair rides the same accusative: Einen Moment, bitte! Eine Sekunde, bitte! The scale climbs — die Sekunde, die Minute, die Stunde — and the case never changes. And the date: Wie ist das Datum heute? — Heute ist der 3. Oktober. Zero fits the same clock: Es ist null Uhr — Mitternacht.",
+      footnotes: [],
+      linguist_note:
+        "The accusative of duration is inherited, not invented: Latin measured time the same bare way (multos annos, 'for many years' — accusative, no preposition). German's dauern kept the old measurement; English needs a 'for' and moves on.",
+    },
+    exercises: [
+      {
+        id: "l5151_e1",
+        type: "matching_pairs",
+        prompt: "Moments, seconds, appointments — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "mt1", english: "One moment, please", german: "Einen Moment, bitte" },
+          { id: "mt2", english: "One second, please", german: "Eine Sekunde, bitte" },
+          { id: "mt3", english: "The appointment lasts twenty minutes", german: "Der Termin dauert zwanzig Minuten" },
+          { id: "mt4", english: "Zero is a number", german: "Null ist eine Zahl" },
+          { id: "mt5", english: "A million has six zeros", german: "Eine Million hat sechs Nullen" },
+          { id: "mt6", english: "The appointment is early in the morning", german: "Der Termin ist früh am Morgen" },
+          { id: "mt7", english: "See you later", german: "Bis später" },
+        ],
+        target_answer:
+          "Einen Moment, bitte, Eine Sekunde, bitte, Der Termin dauert zwanzig Minuten, Null ist eine Zahl, Eine Million hat sechs Nullen, Der Termin ist früh am Morgen, Bis später",
+        meaning: "the politeness pair, the duration frame, and the numbers on the clock",
+        explanation:
+          "The accusative is everywhere: einen Moment (der Moment), eine Sekunde (die Sekunde), zwanzig Minuten — duration and objects, no preposition in sight. And the numbers you drilled are already inside: null, eine Million, sechs Nullen.",
+      },
+      {
+        id: "l5151_e2",
+        type: "shift_select",
+        prompt:
+          "'Der Termin dauert zwanzig Minuten.' What case is 'zwanzig Minuten' — and what does that tell you about dauern?",
+        options: ["accusative of duration", "nominative subject", "dative", "genitive"],
+        target_answer: "accusative of duration",
+        meaning: "dauern takes a bare accusative of duration",
+        explanation:
+          "dauern measures its span with a bare accusative — zwanzig Minuten, keine Präposition. It is the same measurement as Ich warte zehn Minuten, and the same construction Latin used: the duration simply stands there, unmarked.",
+      },
+      {
+        id: "l5151_e3",
+        type: "morpheme_tiles",
+        prompt: "Assemble the duration question: 'How long does the appointment last'",
+        tile_options: ["Wie", "lange", "dauert", "der", "Termin", "Moment", "Zahl"],
+        target_answer: "Wie lange dauert der Termin",
+        meaning: "How long does the appointment last?",
+        vocab_hints: [
+          {
+            word: "lange",
+            translation: "long / (for) how long",
+            note: "Wie lange asks about DURATION — how long it lasts, from start to finish.",
+          },
+        ],
+        explanation:
+          "Wie lange dauert ...? is the all-purpose duration question — swap the subject and it still works: Wie lange dauert der Kaffee, die Stunde, der Winter? The verb dauert sits in slot 2, as always.",
+      },
+      {
+        id: "l5151_e4",
+        type: "reverse_cognate",
+        prompt:
+          "'Das Datum' is Latin datum, 'the given'. Which English word is the same Latin word — the one you type every day?",
+        options: ["data", "date", "dozen", "detail"],
+        target_answer: "data",
+        meaning: "Datum ↔ data: one Latin participle, two languages",
+        explanation:
+          "Datum is the neuter past participle of Latin dare, 'to give' — 'the given'. English data is literally that same word in the plural, and English date came through the same medieval Latin channel. The calendar hands you data every time you write a Datum.",
+      },
+      {
+        id: "l5151_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'Now I have an appointment'",
+        target_answer: "Jetzt habe ich einen Termin",
+        meaning: "Now I have an appointment",
+        word_bank: ["Jetzt", "habe", "ich", "einen", "Termin", "Moment", "früh", "der"],
+        explanation:
+          "Jetzt takes position 1, habe slides to slot 2 — the V2 swap from the time-adverb lesson. einen Termin is masculine accusative, the same case as einen Moment, bitte.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Say how long something lasts with dauern + bare accusative, book a Termin, ask the date, and buy patience with Einen Moment, bitte.",
+      use_example: { german: "Wie lange dauert der Termin? — Zwanzig Minuten.", english: "How long does the appointment last? — Twenty minutes." },
+      takeaway:
+        "Moment, Termin, Sekunde, Datum are Latin loans — and so, in disguise, is dauern (durare ↔ during). Duration takes a bare accusative: Der Termin dauert zwanzig Minuten.",
+      curiosity_teaser: "Next: Ort I — hier, dort, drüben, gegenüber, der Umweg — the words that tell you where.",
+    },
+  },
+
+  {
+    id: 5161,
+    slug: "ort-i-hier-dort-drueben-gegenueber-umweg",
+    title: "Ort I: hier, dort, drüben, gegenüber, der Umweg",
+    subtitle: "the words that point — and the sound shift hiding inside dort",
+    phase: 3,
+    shift_categories: ["th_to_d", "v_to_b"],
+    word_ids: ["hier", "dort", "drüben", "gegenüber", "umweg", "wohnen", "haus", "kirche", "brücke", "nummer", "eins", "immer", "sofort", "nehmen"],
+    table_word_ids: ["hier", "dort", "drüben", "gegenüber", "umweg"],
+    hook: {
+      title: "English Points Twice, German Points Four Times",
+      content:
+        "English points with here and there and then gives up. German points four times. hier and here are the purest twins you will ever meet — both come from the same Proto-Germanic *hiar, untouched, with no shift to explain. dort is there's twin with a badge: the same ancient adverb *þar, with German hardening the breathy th to d — the same law that made drei out of three and das out of that. drüben is über wearing its adverb coat — 'on the over side' — and über ↔ over is the V→B twin you know from geben/give. gegenüber stacks gegen ('against') on über ('over') — over-against — a relation English writes as a whole phrase. Der Umweg is um + Weg, a way-around, and Weg ↔ way is a twin as old as the road. So the honest score: English kept here and there, but lost drüben and gegenüber as single words and spells the detour with borrowed letters; German still runs three rungs of distance — hier, dort, drüben.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The TH→D Family Reunion",
+          content:
+            "Once you hear TH→D you hear it everywhere: three/drei, that/das, thou/du, there/dort. One sound law, one family, thousands of years old — and German never stopped inviting the th to harden. Say dort and there back to back and feel the d and the th be the same consonant wearing two dialects.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Four Words, Three Distances",
+      content:
+        "1. Here: Ich wohne hier — where you stand. 2. There: Die Brücke ist drüben — across the gap, visible but far. 3. Plain there: Das Auto ist dort. 4. Opposite: Gegenüber ist die Kirche — or with a noun, postposed: das Haus gegenüber. 5. The detour: Wir nehmen einen Umweg — 'a way around'. 6. Right away: Ich komme sofort. And the numbers still point: das Haus gegenüber hat die Nummer eins.",
+      footnotes: [],
+      linguist_note:
+        "Three degrees of distance is the old Germanic system: hier, dort, drüben. English once had the third rung too — yonder, still alive in dialects — but standard English collapsed to two words and a phrase ('over there'). German never had to collapse; the system is intact.",
+    },
+    exercises: [
+      {
+        id: "l5161_e1",
+        type: "matching_pairs",
+        prompt: "The pointing words in place — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "hd1", english: "I live here", german: "Ich wohne hier" },
+          { id: "hd2", english: "The bridge is over there", german: "Die Brücke ist drüben" },
+          { id: "hd3", english: "Opposite is the church", german: "Gegenüber ist die Kirche" },
+          { id: "hd4", english: "The house opposite has number one", german: "Das Haus gegenüber hat die Nummer eins" },
+          { id: "hd5", english: "We take a detour", german: "Wir nehmen einen Umweg" },
+          { id: "hd6", english: "I am coming right away", german: "Ich komme sofort" },
+        ],
+        target_answer:
+          "Ich wohne hier, Die Brücke ist drüben, Gegenüber ist die Kirche, Das Haus gegenüber hat die Nummer eins, Wir nehmen einen Umweg, Ich komme sofort",
+        meaning: "here, over there, opposite, detour, right away",
+        explanation:
+          "Notice the two faces of gegenüber: alone in position 1 (Gegenüber ist die Kirche) or trailing its noun (das Haus gegenüber). One word, two seats — and der Umweg is literally a 'way-around'.",
+      },
+      {
+        id: "l5161_e2",
+        type: "shift_select",
+        prompt: "dort ↔ there — which shift badge does the pair wear?",
+        options: ["TH→D (dort ↔ there)", "T→S/Z (zehn ↔ ten)", "K→CH (Woche ↔ week)", "V→B (über ↔ over)"],
+        target_answer: "TH→D (dort ↔ there)",
+        meaning: "dort is there's twin: the ancient *þar with th hardened to d",
+        explanation:
+          "Both point back to Proto-Germanic *þar. English kept the breathy th; German hardened it to d — the same law as drei/three and das/that. And you can see the V→B badge on the word drüben: über ↔ over, with b where English has v.",
+      },
+      {
+        id: "l5161_e3",
+        type: "reverse_cognate",
+        prompt:
+          "The purest twin in the lesson: hier. Spell its English twin — the one word that never shifted at all:",
+        options: ["here", "hear", "hair", "hare"],
+        target_answer: "here",
+        meaning: "hier ↔ here: the same *hiar, untouched",
+        explanation:
+          "hier and here are the same Proto-Germanic word *hiar with no shift to explain — h stayed h, the vowel stayed itself. The twins never moved apart; the spelling just drifted one letter.",
+      },
+      {
+        id: "l5161_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the detour sentence: 'We take a detour'",
+        tile_options: ["Wir", "nehmen", "einen", "Umweg", "sofort", "die", "Kirche"],
+        target_answer: "Wir nehmen einen Umweg",
+        meaning: "We take a detour",
+        explanation:
+          "nehmen + einen Umweg — masculine accusative, the same case as einen Moment, bitte. The compound says exactly what it does: um + Weg, a way-around. Distractors wait in the bank, but the detour is the destination.",
+      },
+      {
+        id: "l5161_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'We always live here'",
+        target_answer: "Wir wohnen immer hier",
+        meaning: "We always live here",
+        word_bank: ["Wir", "wohnen", "immer", "hier", "dort", "die", "Kirche"],
+        explanation:
+          "wohnen in slot 2, immer right behind it, hier at the end — the frequency adverb from the Wie-oft lesson doing its job in a new house. Swap hier for dort and the sentence moves across town.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Point four ways — hier, dort, drüben, gegenüber — take an Umweg, and hear the TH→D shift inside dort.",
+      use_example: { german: "Ich wohne hier — die Brücke ist drüben.", english: "I live here — the bridge is over there." },
+      takeaway:
+        "hier/here never shifted, dort/there wears TH→D, drüben hides über/over, gegenüber is gegen+über stacked, and der Umweg is a 'way-around' — Weg and way are the same word.",
+      curiosity_teaser: "Next: Richtung I — links, rechts, geradeaus, oben, unten — the words that tell you which way.",
+    },
+  },
+
+  {
+    id: 5162,
+    slug: "richtung-i-links-rechts-geradeaus-oben-unten",
+    title: "Richtung I: links, rechts, geradeaus, oben, unten",
+    subtitle: "left, right, and the words that point the way — one twin, one loner, three builders",
+    phase: 3,
+    shift_categories: ["y_gh_to_g_ch"],
+    word_ids: ["links", "rechts", "geradeaus", "oben", "unten", "familie", "wohnen", "auto", "kirche", "garten", "fünf", "sechs", "manchmal", "endlich"],
+    table_word_ids: ["links", "rechts", "geradeaus", "oben", "unten"],
+    hook: {
+      title: "Left Is the Loner",
+      content:
+        "Two of today's five are twins; three are builders. rechts is right — the same ancient word *rehtaz, 'straight, correct', which is why direction and correctness are one idea in both languages (du hast recht / you are right — you already own the adjective). English kept the -ight family — right, light, night, eight — and German answers with -echt and -acht: recht, Licht, Nacht, acht. One photo album, two spellings. links is the honest loner: no English twin survives. English's own left grew from a different old word meaning 'weak', and the two never were related — some twins simply die, and pretending otherwise is how etymology gets a bad name. geradeaus is two small words welded: gerade ('straight') + aus ('out') — straight-out, the whole direction in one breath. And oben and unten are the adverbs of prepositions you already trust: oben is built on über's root (über ↔ over), unten on unter's (unter ↔ under). Up is over's adverb; down is under's.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Adverbial -s",
+          content:
+            "rechts, links — and morgens, abends — all wear an old genitive -s: 'of the right', 'of the morning'. English once marked adverbs the same way and keeps the fossil in 'besides' and the old phrase 'needs must'. The -s is not a plural and not a verb ending; it is grammar's dust.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Which Way? One Word Each",
+      content:
+        "1. Sideways: nach links, nach rechts — Die Kirche ist links, das Auto steht rechts. 2. Ahead: Gehen Sie geradeaus — and the street's own answer, Immer geradeaus! 3. Vertical: Der Himmel ist oben, der Garten ist unten. 4. Living there: Oben wohnen sechs Familien. 5. With a walk: Gehen Sie fünf Minuten geradeaus. 6. Home at last: Endlich bin ich zu Hause. The words never inflect — no endings, no agreement; they sit where adverbs sit and point where you face.",
+      footnotes: [],
+      linguist_note:
+        "Unlike the months, the direction words are pure Germanic — no Latin ever planted a flag on the body's own map. Left and right are anchored to your facing hand, up and down to your height, which is why every language inherits the same body-relative frame and fills it with its own sounds.",
+    },
+    exercises: [
+      {
+        id: "l5162_e1",
+        type: "matching_pairs",
+        prompt: "Directions in place — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "lr1", english: "The church is on the left", german: "Die Kirche ist links" },
+          { id: "lr2", english: "The car is on the right", german: "Das Auto steht rechts" },
+          { id: "lr3", english: "Go straight ahead", german: "Gehen Sie geradeaus" },
+          { id: "lr4", english: "The sky is above", german: "Der Himmel ist oben" },
+          { id: "lr5", english: "The garden is below", german: "Der Garten ist unten" },
+          { id: "lr6", english: "Six families live upstairs", german: "Oben wohnen sechs Familien" },
+          { id: "lr7", english: "Finally I am home", german: "Endlich bin ich zu Hause" },
+        ],
+        target_answer:
+          "Die Kirche ist links, Das Auto steht rechts, Gehen Sie geradeaus, Der Himmel ist oben, Der Garten ist unten, Oben wohnen sechs Familien, Endlich bin ich zu Hause",
+        meaning: "left, right, straight ahead, up, down",
+        explanation:
+          "One word per direction, no prepositions, no endings. And the vertical pair stays busy: oben wohnen sechs Familien — upstairs, where the families are — while der Garten waits unten.",
+      },
+      {
+        id: "l5162_e2",
+        type: "reverse_cognate",
+        prompt: "links has no English twin — but its partner does. Give the English twin of rechts:",
+        options: ["right", "left", "straight", "up"],
+        target_answer: "right",
+        meaning: "rechts ↔ right — the true pair; links is the honest loner",
+        explanation:
+          "rechts and right are the same word *rehtaz — the -ight/-echt family with light/Licht and night/Nacht. links never had an English twin: English's left grew from an old word meaning 'weak'. Honest limitation, not a missed connection.",
+      },
+      {
+        id: "l5162_e3",
+        type: "shift_select",
+        prompt: "You already know 'du hast recht' (you are right). Which word is the DIRECTION twin of that recht?",
+        options: ["rechts", "links", "oben", "geradeaus"],
+        target_answer: "rechts",
+        meaning: "rechts is the adverb of recht — direction and correctness are one root",
+        explanation:
+          "English did the same thing with one word: right (correct) and right (not left). German split the jobs — recht keeps the meaning, rechts takes the direction — but both grow from *rehtaz, 'straight'. The straight path and the correct answer are the same idea.",
+      },
+      {
+        id: "l5162_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the walking direction: 'Go five minutes straight ahead'",
+        tile_options: ["Gehen", "Sie", "fünf", "Minuten", "geradeaus", "sechs", "links"],
+        target_answer: "Gehen Sie fünf Minuten geradeaus",
+        meaning: "Go five minutes straight ahead",
+        explanation:
+          "The verb leads, Sie follows, the measure of time sits in the middle, and geradeaus closes the sentence — the same slot the duration accusative took with dauern. Swap fünf for sechs and the walk gets longer.",
+      },
+      {
+        id: "l5162_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'Sometimes I go left and sometimes right'",
+        target_answer: "Manchmal gehe ich nach links und manchmal nach rechts",
+        meaning: "Sometimes I go left and sometimes right",
+        word_bank: ["Manchmal", "gehe", "ich", "nach", "links", "und", "manchmal", "rechts", "oben", "geradeaus"],
+        explanation:
+          "manchmal opens the sentence and pushes gehe to slot 2 — the V2 swap again. nach is the pointing preposition: nach links, nach rechts, nach Hause. The repetition is the rhythm of real street directions.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Point all five ways — links, rechts, geradeaus, oben, unten — and know which twin lives, which died, and which are compounds.",
+      use_example: {
+        german: "Gehen Sie geradeaus — die Kirche ist links, wir wohnen oben.",
+        english: "Go straight ahead — the church is on the left, we live upstairs.",
+      },
+      takeaway:
+        "rechts/right is one word (*rehtaz, with recht, Licht, Nacht, acht), links has no English twin, geradeaus is gerade+aus, and oben/unten are the adverbs of über/over and unter/under.",
+      curiosity_teaser: "Next: hinten and the compass — Norden, Osten, Westen, Süden — the map the sun drew.",
     },
   },
 ];

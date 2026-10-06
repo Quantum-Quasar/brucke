@@ -502,8 +502,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     blurb: "All twelve months as a phonetic set, plus Feiertag, Ostern and der Wochentag — the calendar is one of the easiest A1 wins in the language.",
     lessons: [
       { ...shell(5141, "Kalender I: Januar bis Mai", "Januar, Februar, März, April, Mai — five -ar months that German kept as Latin names; the stress never moves to the second syllable, unlike English."), authored: true },
-      { ...shell(5142, "Kalender II: Juni bis Oktober", "Juni, Juli, August, September, Oktober — the second half of the year, with the -us/-er endings intact and September hiding your old -ber friend.") },
-      { ...shell(5143, "Kalender III: November, Dezember, Feiertag, Ostern, Wochentag", "The year's last two months plus the word for a holiday (Feiertag) and the one German holiday English kept (Ostern/easter). Der Wochentag builds the whole week.") },
+      { ...shell(5142, "Kalender II: Juni bis Oktober", "Juni, Juli, August, September, Oktober — the second half of the year, with the -us/-er endings intact and September hiding your old -ber friend."), authored: true },
+      { ...shell(5143, "Kalender III: November, Dezember, Feiertag, Ostern, Wochentag", "The year's last two months plus the word for a holiday (Feiertag) and the one German holiday English kept (Ostern/easter). Der Wochentag builds the whole week."), authored: true },
     ],
   },
   {
@@ -512,7 +512,7 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Dauer, Termin & Punkt",
     blurb: "How long things last and when they are due: der Moment, dauern, der Termin, die Sekunde, das Datum.",
     lessons: [
-      { ...shell(5151, "Dauer & Termin: der Moment, dauern, der Termin, die Sekunde, das Datum", "dauern takes an accusative of length — Die Sitzung dauert zwei Stunden — while der Termin is the appointment and das Datum the date you write at the top.") },
+      { ...shell(5151, "Dauer & Termin: der Moment, dauern, der Termin, die Sekunde, das Datum", "dauern takes an accusative of length — Die Sitzung dauert zwei Stunden — while der Termin is the appointment and das Datum the date you write at the top."), authored: true },
     ],
   },
   {
@@ -521,8 +521,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Wo? Ort & Richtung",
     blurb: "The four here/there words and the compass of the body: hier, dort, drüben, gegenüber, Umweg, links, rechts, geradeaus, oben, unten.",
     lessons: [
-      { ...shell(5161, "Ort I: hier, dort, drüben, gegenüber, der Umweg", "Deictics as pure Germanic: hier (here), dort (there, from *þar), drüben (over there), gegenüber (opposite — gegen+über). English lost all four as distinct words.") },
-      { ...shell(5162, "Richtung I: links, rechts, geradeaus, oben, unten", "Direction as fixed spatial metaphor: left/right, straight ahead (geradeaus), up, down — the same body-relative frame every language inherits from its hearer.") },
+      { ...shell(5161, "Ort I: hier, dort, drüben, gegenüber, der Umweg", "Deictics as pure Germanic: hier (here), dort (there, from *þar), drüben (over there), gegenüber (opposite — gegen+über). English kept hier/here and dort/there, but lost drüben and gegenüber as single words and spells the detour with borrowed letters."), authored: true },
+      { ...shell(5162, "Richtung I: links, rechts, geradeaus, oben, unten", "Direction as fixed spatial metaphor: left/right, straight ahead (geradeaus), up, down — the same body-relative frame every language inherits from its hearer."), authored: true },
     ],
   },
   {

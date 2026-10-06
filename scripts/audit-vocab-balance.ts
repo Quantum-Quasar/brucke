@@ -96,7 +96,6 @@ const WEAVE_PLAN: Record<string, number[]> = {
   manchmal: [5162, 5231],
   selten: [5191, 5292],
   einmal: [5143, 5232],
-  jetzt: [5151, 5223],
   sofort: [5161, 5272],
   später: [5151, 5191],
   früh: [5151, 5271],
@@ -106,6 +105,35 @@ const WEAVE_PLAN: Record<string, number[]> = {
   märz: [5143, 5271],
   april: [5143, 5222],
   mai: [5143, 5222],
+  // Campaign 2 batch 2 (5142–5162). Hosts queued in later batches; the weave
+  // lands as each host batch is authored. (5223 has no shell — jetzt's second
+  // host re-pointed to 5221, which carries it naturally.)
+  jetzt: [5151, 5221],
+  juni: [5252, 5262],
+  juli: [5262, 5143],
+  august: [5143, 5261],
+  september: [5261, 5222],
+  oktober: [5143, 5222],
+  november: [5252, 5271],
+  dezember: [5271, 5241],
+  feiertag: [5271, 5292],
+  ostern: [5231, 5221],
+  wochentag: [5221, 5292],
+  moment: [5191, 5211],
+  dauern: [5252, 5232],
+  termin: [5281, 5292],
+  sekunde: [5191, 5212],
+  datum: [5252, 5271],
+  hier: [5162, 5251],
+  dort: [5201, 5162],
+  "drüben": [5162, 5251],
+  "gegenüber": [5201, 5251],
+  umweg: [5172, 5251],
+  links: [5171, 5251],
+  rechts: [5171, 5251],
+  geradeaus: [5171, 5172],
+  oben: [5201, 5202],
+  unten: [5201, 5202],
 };
 
 // Zero-new lessons that are deliberately deferred rather than filled (see
@@ -151,6 +179,11 @@ const PLANNED: Record<string, number> = {
   immer: 5131, oft: 5131, manchmal: 5131, selten: 5131, einmal: 5131,
   jetzt: 5132, sofort: 5132, später: 5132, früh: 5132, endlich: 5132,
   januar: 5141, februar: 5141, märz: 5141, april: 5141, mai: 5141,
+  juni: 5142, juli: 5142, august: 5142, september: 5142, oktober: 5142,
+  november: 5143, dezember: 5143, feiertag: 5143, ostern: 5143, wochentag: 5143,
+  moment: 5151, dauern: 5151, termin: 5151, sekunde: 5151, datum: 5151,
+  hier: 5161, dort: 5161, "drüben": 5161, "gegenüber": 5161, umweg: 5161,
+  links: 5162, rechts: 5162, geradeaus: 5162, oben: 5162, unten: 5162,
 };
 const REMOVALS: Record<string, string[]> = { 3002: ["fabrik", "gymnasium", "rente", "dom", "art", "kaution", "eventuell"] };
 // Re-home donors: lesson keeps the word, but its introduction moved earlier.

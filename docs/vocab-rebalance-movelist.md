@@ -546,6 +546,8 @@ Batch-9 notes:
 
 **After batch 1** (5121, 5122, 5131, 5132, 5141): **480 unique words**. 28 test files / 223 tests, `tsc --noEmit` clean, word refs all resolve, `title drift: 0 | teaser flags: 0`, no duplicate exercise ids. The 25 new words are registered in the audit's `PLANNED` map (so band, weaving and exposure treat them as campaign words) and their future weave hosts in `WEAVE_PLAN`, which reports **15 pending weaves** until batches 2–8 land — pending, not failed, and `--strict` still fails while any remain.
 
+**After batch 2** (5142, 5143, 5151, 5161, 5162): **505 unique words**. The 25 new words are registered in `PLANNED`, and each carries two queued weave hosts in `WEAVE_PLAN` — the months ride the travel, food and country lessons (5222, 5252, 5261, 5262, 5271), the pointing words the Wohnen and Reisen lessons (5162, 5171–5172, 5201–5202, 5251), the Dauer/Termin words the clothes, table and jobs lessons (5191–5192, 5211–5212, 5232, 5281, 5292). One pre-campaign prose fix rode along: 5132's pair "Komm bitte sofort hierher" became "Komm bitte sofort mit" — hier is taught this batch, and hierher would have resolved to it a lesson too early. Shell description of 5161 corrected: hier/here and dort/there are alive; only drüben, gegenüber and the Umweg are what English lost.
+
 Three audit-tooling changes were needed to make Campaign 2 measurable, all in `scripts/audit-vocab-balance.ts`:
 
 - **Hollow shells are skipped.** The trail walk filtered on `byId.has(node.id)` so the 35 not-yet-authored shells don't crash the walk.
