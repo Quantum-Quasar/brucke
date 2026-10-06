@@ -14040,4 +14040,536 @@ export const LESSONS: Lesson[] = [
       curiosity_teaser: "Next: hinten and the compass — Norden, Osten, Westen, Süden — the map the sun drew.",
     },
   },
+
+  {
+    id: 5171,
+    slug: "richtung-ii-hinten-norden-osten-westen-sueden",
+    title: "Richtung II: hinten, Norden, Osten, Westen, Süden",
+    subtitle: "behind, and the four compass points — dawn, evening, sun-side and the left hand",
+    phase: 3,
+    shift_categories: ["d_to_t", "th_to_d"],
+    word_ids: [
+      "hinten",
+      "norden",
+      "osten",
+      "westen",
+      "süden",
+      "garten",
+      "auto",
+      "zug",
+      "stadt",
+      "kirche",
+      "brücke",
+      "links",
+      "rechts",
+      "geradeaus",
+      "eins",
+      "vier",
+      "zehn",
+    ],
+    table_word_ids: ["hinten", "norden", "osten", "westen", "süden"],
+    hook: {
+      title: "One Body Word, Four Sky Words",
+      content:
+        "Five direction words — one for your body, four for the sky. hinten is the body word: German built it on the same ancient behind-root that gave English behind (be-hind, 'by the hind part') — German hardened the D to T, the d_to_t family at work, the same law that turned day into Tag. English keeps the hin family only in the archaic-sounding hence and hither; German still says hin every day — hin und her, back and forth. The four compass points are pure twins, because German and English read the same sky. der Norden ↔ north. der Osten ↔ east — from the dawn-word *austrōn, 'toward the sunrise', the same dawn-root Latin turned into aurora. der Süden ↔ south — from *sunþrą, literally 'the sun side', the warm side of the sky. der Westen ↔ west — from the evening-root Latin keeps in vesper. Four sky twins, one body twin, and a lesson you can navigate by.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "North Is a Left-Handed Word",
+          content:
+            "Norden is the odd one out: it is not a sun word. The old root *ner- meant 'left' — face the rising sun and north is your left hand. East is where you look at dawn, west where the evening glow goes (Latin vesper and English west are the same evening-word), and south is the sun side. One compass, four etymologies.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Compass Takes der, hinten Takes Nothing",
+      content:
+        "Compass points are masculine and take im: im Norden, im Osten, im Süden, im Westen — 'in the north'. Motion adds the accusative: in den Süden, or plain nach Süden ('southward'). hinten is an adverb — no article, no case: hinten links (at the back on the left), von hinten (from behind), hinten im Garten (at the back of the garden). The fronting frame from Richtung I still holds: put a place in position 1 and the verb holds slot 2 — Im Süden ist es warm. And the compass scales into real sentences: Der Zug kommt aus dem Osten — the train comes from the east.",
+      footnotes: [],
+      linguist_note:
+        "English behind is literally 'by the hind part' — the same hind that survives in hind legs and hindquarters. German kept the whole family alive: hinten, hinter, hintereinander. English kept the adjective and the preposition; German kept the everyday adverb.",
+    },
+    exercises: [
+      {
+        id: "l5171_e1",
+        type: "matching_pairs",
+        prompt: "The compass and the space behind you — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "rw1", english: "The garden is at the back on the left", german: "Der Garten ist hinten links" },
+          { id: "rw2", english: "The car comes from behind", german: "Das Auto kommt von hinten" },
+          { id: "rw3", english: "The train comes from the east", german: "Der Zug kommt aus dem Osten" },
+          { id: "rw4", english: "The bridge is in the south", german: "Die Brücke ist im Süden" },
+          { id: "rw5", english: "There are four streets in the north", german: "Es gibt vier Straßen im Norden" },
+          { id: "rw6", english: "The church is in the west", german: "Die Kirche ist im Westen" },
+          { id: "rw7", english: "Go straight ahead to the right", german: "Gehen Sie geradeaus nach rechts" },
+        ],
+        target_answer:
+          "Der Garten ist hinten links, Das Auto kommt von hinten, Der Zug kommt aus dem Osten, Die Brücke ist im Süden, Es gibt vier Straßen im Norden, Die Kirche ist im Westen, Gehen Sie geradeaus nach rechts",
+        meaning: "behind, east, south, north, west",
+        explanation:
+          "hinten needs no article; the compass points take im or aus dem. The frame is always the same: place phrase, verb, rest — Der Zug kommt aus dem Osten.",
+      },
+      {
+        id: "l5171_e2",
+        type: "shift_select",
+        prompt: "One of these words describes the space BEHIND you, not a point of the compass — which?",
+        options: ["hinten", "Norden", "Osten", "Westen"],
+        target_answer: "hinten",
+        meaning: "hinten = at the back, behind you — not a sky direction",
+        explanation:
+          "hinten is where YOUR body is: hinten links, von hinten. Norden, Osten and Westen are world-fixed — they point the same way no matter how you turn. Body-relative versus sky-fixed: one word each.",
+      },
+      {
+        id: "l5171_e3",
+        type: "reverse_cognate",
+        prompt: "Osten and east are twins from the dawn-word *austrōn. Which Latin word shares the same dawn-root?",
+        options: ["aurora", "terra", "audire", "augustus"],
+        target_answer: "aurora",
+        meaning: "Osten ↔ east ↔ aurora: one dawn-root across three languages",
+        explanation:
+          "Proto-Germanic *austrōn ('toward the sunrise') and Latin aurora ('dawn') both grow from the same ancient dawn-root. East is the dawn-land; the goddess of dawn is its name in Latin. terra, audire and augustus are unrelated.",
+      },
+      {
+        id: "l5171_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the weather-on-the-compass sentence: 'It is warm in the south'",
+        tile_options: ["Im", "Süden", "ist", "es", "warm", "Norden", "kalt"],
+        target_answer: "Im Süden ist es warm",
+        meaning: "It is warm in the south",
+        explanation:
+          "Place first, verb second: Im Süden ist es warm. The impersonal es does the work, and the two distractor tiles show the frame scales to every compass point — Im Norden ist es kalt.",
+      },
+      {
+        id: "l5171_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The train comes from the south at ten o'clock'",
+        target_answer: "Der Zug kommt um zehn Uhr aus dem Süden",
+        meaning: "The train comes from the south at ten o'clock",
+        word_bank: ["Der", "Zug", "kommt", "um", "zehn", "Uhr", "aus", "dem", "Süden", "eins", "vier", "Osten"],
+        explanation:
+          "Time before place: um zehn Uhr, then aus dem Süden. The bank holds eins and vier to prove the frame takes any clock number — um eins, um vier, um zehn.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Use hinten for the space behind you and the four compass points for the world's directions — im Norden, aus dem Osten, in den Süden.",
+      use_example: { german: "Der Zug kommt um zehn Uhr aus dem Süden.", english: "The train comes from the south at ten o'clock." },
+      takeaway:
+        "hinten is behind's D→T twin; Norden, Osten, Westen and Süden are pure sky twins — dawn, evening, sun-side and the left hand.",
+      curiosity_teaser: "Next: the distance axis — die Nähe, weit, fern, quer, entlang.",
+    },
+  },
+
+  {
+    id: 5172,
+    slug: "entfernung-naehe-weit-fern-quer-entlang",
+    title: "Entfernung: die Nähe, weit, fern, quer, entlang",
+    subtitle: "near and far on one axis — and the two words that walk a path instead of pointing at a place",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["nähe", "weit", "fern", "quer", "entlang", "weg", "straße", "fluss", "strand", "umweg", "geradeaus", "eins", "vier", "zehn", "hälfte"],
+    table_word_ids: ["nähe", "weit", "fern", "quer", "entlang"],
+    hook: {
+      title: "One Axis: Nah to Fern",
+      content:
+        "Distance in German is one line with two ends. die Nähe holds the near end: German nah and English nigh are the same ancient word, *nēhwaz — and English even kept the comparison: near was originally nigh's comparative, 'nigher', frozen into its own word. weit ↔ wide is a pure twin, *wīdaz, the same sound in both languages: when German asks Wie weit ist es? it is literally asking how WIDE the gap is. fern ↔ far share the ancient beyond-root; English drifted to far, German kept fern — and built das Fernsehen, the far-seer, on it. Then the two path words: entlang is ent + lang, and lang ↔ long is a pure twin — German names the path first and hangs entlang behind it: den Fluss entlang. quer is the cross-word; English queer may even be its borrowing [UNVERIFIED — check]. Nah, die Nähe, weit, fern — and two words for the shape of the road between.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "wie weit, never wie fern",
+          content:
+            "German asks distance with wie weit — 'how wide' — and never with fern. fern states a fact from where you stand (der Strand ist nicht fern), while weit measures the stretch between two points. The question is wide; the answer is far.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Asking, Answering, Crossing, Walking",
+      content:
+        "Ask the stretch: Wie weit ist es? Answer with time, not numbers: Zehn Minuten zu Fuß. State remoteness: Der Weg ist nicht fern. Locate with die Nähe: in der Nähe — In der Nähe gibt es einen Markt. Cross the space: quer durch die Stadt — durch does the case work. Walk the path: Wir gehen den Fluss entlang — the path takes accusative (den Fluss) and entlang stands AFTER it, the opposite of English word order.",
+      footnotes: [],
+      linguist_note:
+        "English split the old near-family three ways: nigh retreated into poetry, near took the daily slot, and nearly drifted into 'almost'. German kept one adjective, nah, and one noun, die Nähe — the family never had to split.",
+    },
+    exercises: [
+      {
+        id: "l5172_e1",
+        type: "matching_pairs",
+        prompt: "The near-far axis and the two path words — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "df1", english: "How far is the beach?", german: "Wie weit ist der Strand?" },
+          { id: "df2", english: "The way is not far", german: "Der Weg ist nicht fern" },
+          { id: "df3", english: "There is a market nearby", german: "In der Nähe gibt es einen Markt" },
+          { id: "df4", english: "I drive across the city", german: "Ich fahre quer durch die Stadt" },
+          { id: "df5", english: "Ten minutes on foot", german: "Zehn Minuten zu Fuß" },
+          { id: "df6", english: "Half of the street is new", german: "Die Hälfte der Straße ist neu" },
+          { id: "df7", english: "We take a detour — the way is far", german: "Wir nehmen einen Umweg, der Weg ist weit" },
+          { id: "df8", english: "Go straight ahead to the corner", german: "Gehen Sie geradeaus bis zur Ecke" },
+        ],
+        target_answer:
+          "Wie weit ist der Strand?, Der Weg ist nicht fern, In der Nähe gibt es einen Markt, Ich fahre quer durch die Stadt, Zehn Minuten zu Fuß, Die Hälfte der Straße ist neu, Wir nehmen einen Umweg, der Weg ist weit, Gehen Sie geradeaus bis zur Ecke",
+        meaning: "how far, not far, nearby, across, on foot, half",
+        explanation:
+          "wie weit asks the stretch, fern states the remoteness, die Nähe names the neighborhood, and quer durch crosses the space. Time answers where numbers fail: Zehn Minuten zu Fuß.",
+      },
+      {
+        id: "l5172_e2",
+        type: "shift_select",
+        prompt: "'Wie _____ ist der Weg?' — which word does German use to ask HOW FAR?",
+        options: ["weit", "fern", "eins", "vier"],
+        target_answer: "weit",
+        meaning: "wie weit = how far — the wide-word asks the distance",
+        explanation:
+          "The fixed question is wie weit — literally 'how wide', the twin of wide at work. fern answers, it never asks: der Weg ist nicht fern. And eins and vier count things, not kilometers.",
+      },
+      {
+        id: "l5172_e3",
+        type: "reverse_cognate",
+        prompt: "'weit' is a pure twin — the same ancient *wīdaz. Which English word is it?",
+        options: ["wide", "white", "with", "wit"],
+        target_answer: "wide",
+        meaning: "weit ↔ wide: same sound, same root, same width",
+        explanation:
+          "weit and wide are one word in two mouths: *wīdaz. white is the twin of a different German word (weiß), and with and wit come from other roots entirely — the width belongs to weit.",
+      },
+      {
+        id: "l5172_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the time-answer frame: 'I wait four minutes'",
+        tile_options: ["Ich", "warte", "vier", "Minuten", "zehn", "weit"],
+        target_answer: "Ich warte vier Minuten",
+        meaning: "I wait four minutes",
+        explanation:
+          "German answers distance in time: not four streets but four minutes. warte takes the time phrase with no preposition — the same accusative frame as Ich warte zehn Minuten from the numbers lesson.",
+      },
+      {
+        id: "l5172_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'We walk along the river'",
+        target_answer: "Wir gehen den Fluss entlang",
+        meaning: "We walk along the river",
+        word_bank: ["Wir", "gehen", "den", "Fluss", "entlang", "quer", "weit", "die", "dem"],
+        explanation:
+          "entlang rides BEHIND the path: den Fluss entlang, never entlang den Fluss. The path takes accusative — den, not dem — which is why dem sits in the bank as the trap tile.",
+      },
+    ],
+    summary: {
+      outcome: "Ask wie weit, answer with fern or a time, and shape the path with quer and entlang.",
+      use_example: { german: "Wie weit ist der Strand? — Zehn Minuten zu Fuß.", english: "How far is the beach? — Ten minutes on foot." },
+      takeaway:
+        "die Nähe ↔ nigh, weit ↔ wide, fern ↔ far, entlang = ent + lang — one axis, two path words, and entlang always last.",
+      curiosity_teaser: "Next: the words English handed over — Sofa, Radio, Klavier, Computer, Kino.",
+    },
+  },
+
+  {
+    id: 5181,
+    slug: "lehnwoerter-i-sofa-radio-klavier-computer-kino",
+    title: "Lehnwörter I: Sofa, Radio, Klavier, Computer, Kino",
+    subtitle: "five words English handed over — and the German mouth that received them",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["sofa", "radio", "klavier", "computer", "kino", "auto", "hund", "sitzen", "film", "haus", "neu", "schwer", "stadt"],
+    table_word_ids: ["sofa", "radio", "klavier", "computer", "kino"],
+    hook: {
+      title: "German Borrows Back",
+      content:
+        "For most of its history German lent English words; this lesson is the border crossing in the other direction — and every word that crosses, German says with its own mouth. der Computer is Latin computare, 'to reckon up' — English kept the Latin, and German kept the very same Latin. das Klavier came through French clavier, from Latin clavis, 'key' — the piano is literally a key-board, and English kept the same key-root in clavichord (and in clavicle, the shoulder's 'little key'). das Kino is a German shortening of Kinematograph — Greek kinēma, 'movement' — and cinema is the same Greek word English uses. das Radio hides Latin radius, 'ray' — the ray that carries the signal. das Sofa walked the longest road: Arabic ṣuffa, a cushioned bench, that both languages borrowed whole. German writes them almost as English does — then pronounces them as if it had invented them: KEE-no, kla-VEER.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Why So Much das?",
+          content:
+            "Four of the five arrive as das — das Sofa, das Radio, das Kino, das Klavier; only der Computer is der. Borrowed things tend to start neuter in German and earn their article over time. The gender is German's decision, not the donor's.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Same Letters, German Mouth",
+      content:
+        "The frames are everyday German: Das Auto hat ein Radio. Ich sitze auf dem Sofa. Der Computer ist neu. Im Kino sehen wir einen Film — in + dem, German's where-frame, doing for Kino what at does for cinema. What German did not change: the spellings are nearly the English ones. What it did change: the mouth — final -o stays long (Kino, Radio), the W in Klavier is the V-sound, and the stress lands where German wants it: KEE-no, kla-VEER.",
+      footnotes: [],
+      linguist_note:
+        "A loanword's stress tells you when it arrived. Kino, Sofa and Radio took German's comfortable first-syllable beat; Klavier kept its French final stress — kla-VIER — a little Paris still audible inside German.",
+    },
+    exercises: [
+      {
+        id: "l5181_e1",
+        type: "matching_pairs",
+        prompt: "The borrowed objects in their natural frames — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "lw1", english: "The dog sits on the sofa", german: "Der Hund sitzt auf dem Sofa" },
+          { id: "lw2", english: "The car has a radio", german: "Das Auto hat ein Radio" },
+          { id: "lw3", english: "The computer is new", german: "Der Computer ist neu" },
+          { id: "lw4", english: "The piano is big and heavy", german: "Das Klavier ist groß und schwer" },
+          { id: "lw5", english: "At the cinema we watch a film", german: "Im Kino sehen wir einen Film" },
+        ],
+        target_answer:
+          "Der Hund sitzt auf dem Sofa, Das Auto hat ein Radio, Der Computer ist neu, Das Klavier ist groß und schwer, Im Kino sehen wir einen Film",
+        meaning: "sofa, radio, computer, piano, cinema",
+        explanation:
+          "Five loanwords in five German frames: auf dem Sofa, im Kino, hat ein Radio. The words are international; the grammar around them is pure German.",
+      },
+      {
+        id: "l5181_e2",
+        type: "reverse_cognate",
+        prompt:
+          "Klavier came through French clavier — Latin clavis, 'key'. Which English instrument still hides the same Latin word?",
+        options: ["clavichord", "harpsichord", "piano", "organ"],
+        target_answer: "clavichord",
+        meaning: "Klavier ↔ clavichord: one Latin key-word, clavis",
+        explanation:
+          "Latin clavis, 'key', became French clavier and German Klavier — and English names the clavichord with the same Latin key. The harpsichord is harp-and-chord, the piano is Italian for 'soft', the organ is Greek — none of them carries the key.",
+      },
+      {
+        id: "l5181_e3",
+        type: "shift_select",
+        prompt: "Der, die oder das — which article does German give Sofa, Radio, Kino and Klavier?",
+        options: ["das", "der", "die"],
+        target_answer: "das",
+        meaning: "das Sofa, das Radio, das Kino, das Klavier — the neuter default",
+        explanation:
+          "Borrowed things tend to start neuter: das Sofa, das Radio, das Kino, das Klavier. Only der Computer breaks the pattern. German assigns the gender; the donor language has no vote.",
+      },
+      {
+        id: "l5181_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the where-frame: 'The cinema is in the city'",
+        tile_options: ["Das", "Kino", "ist", "in", "der", "die", "dem", "Stadt"],
+        target_answer: "Das Kino ist in der Stadt",
+        meaning: "The cinema is in the city",
+        explanation:
+          "Where-frames take in + dative: in der Stadt, im Haus, im Auto. das Kino stays das even as the subject — the frame around it is what changes.",
+      },
+      {
+        id: "l5181_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The house has a computer and a radio'",
+        target_answer: "Das Haus hat einen Computer und ein Radio",
+        meaning: "The house has a computer and a radio",
+        word_bank: ["Das", "Haus", "hat", "einen", "Computer", "und", "ein", "Radio", "Kino", "ist", "der"],
+        explanation:
+          "Two accusatives, two endings: der Computer becomes einen Computer in the accusative, das Radio stays ein Radio. The loanwords inflect exactly like the native nouns — borrowing changes the vocabulary, never the grammar.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Recognize the five loans, use them in German frames — im Kino, auf dem Sofa — and say them German-style: KEE-no, kla-VEER.",
+      use_example: {
+        german: "Das Klavier ist groß und schwer — im Kino sehen wir einen Film.",
+        english: "The piano is big and heavy — at the cinema we watch a film.",
+      },
+      takeaway:
+        "Sofa, Radio, Klavier, Computer, Kino — Arabic, Latin and Greek roots that German writes like English and says like German; four of the five are das.",
+      curiosity_teaser: "Next: Hotel, Taxi, Bus, Theater, Hobby — the travel-and-leisure layer.",
+    },
+  },
+
+  {
+    id: 5182,
+    slug: "lehnwoerter-ii-hotel-taxi-bus-theater-hobby",
+    title: "Lehnwörter II: Hotel, Taxi, Bus, Theater, das Hobby",
+    subtitle: "the travel-and-leisure layer — short Bus, long Theater, and the stress German imposes",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["hotel", "taxi", "bus", "theater", "hobby", "nehmen", "fahren", "gehen", "teuer", "schwimmen", "stadt", "fünf", "sechs"],
+    table_word_ids: ["hotel", "taxi", "bus", "theater", "hobby"],
+    hook: {
+      title: "The Travel Layer",
+      content:
+        "The travel-and-leisure words are German's most cosmopolitan shelf — Latin, Greek, French and English itself, all pronounced with German rules. das Hotel is one word wearing three English masks: Latin hospitale became French hôtel, and English borrowed the family three times as hostel, hotel and hospital. das Taxi is a shortening: the meter on the roof that charged you was the Taxameter — Latin taxa, 'charge', the same root as English tax — and the cab took the meter's name. der Bus is Latin omnibus, 'for all' — a French omnibus car shortened until only the Latin ending survived. das Theater is Greek théatron, 'the viewing place' — and English theory is the same Greek viewing-root: a theory is a way of seeing. das Hobby is the newest arrival, borrowed straight from English and pluralized German-style: die Hobbys. And watch the stress German imposes: Bus is short and blunt, but Theater carries the beat in the middle — te-A-ter — where English says THI-ater.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "For All",
+          content:
+            "Omnibus is Latin 'for all' — the dative plural of omnis. The Paris passenger car of the 1820s was the voiture omnibus, the car-for-all, and the nickname outlived the joke: both languages kept the short form, bus, and forgot the Latin.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Taking the Bus, Taking a Taxi",
+      content:
+        "Transport takes mit + dem: Wir fahren mit dem Bus in die Stadt. Destination takes zu or in + das: zum Hotel, ins Theater. The vehicle frame: Wir nehmen ein Taxi zum Hotel — nehmen does the taking. Der Bus kommt um sechs Uhr. Duration: Es dauert fünf Minuten mit dem Taxi. And the leisure frame: Mein Hobby ist Schwimmen — the verb dressed as a noun. The articles: das Hotel, das Taxi, das Theater, das Hobby — only der Bus is der, the one short blunt exception.",
+      footnotes: [],
+      linguist_note:
+        "German stress is the arrival stamp. Bus kept its single blunt syllable; Theater moved the beat to the middle — te-A-ter — a Greek-French rhythm English never adopted; Hobby folded into German plurals (die Hobbys) while staying English in spelling.",
+    },
+    exercises: [
+      {
+        id: "l5182_e1",
+        type: "matching_pairs",
+        prompt: "The travel-and-leisure shelf in its frames — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "tv1", english: "The bus comes at six o'clock", german: "Der Bus kommt um sechs Uhr" },
+          { id: "tv2", english: "We take a taxi to the hotel", german: "Wir nehmen ein Taxi zum Hotel" },
+          { id: "tv3", english: "We are going to the theater today", german: "Wir gehen heute ins Theater" },
+          { id: "tv4", english: "The hotel is very expensive", german: "Das Hotel ist sehr teuer" },
+          { id: "tv5", english: "My hobby is swimming", german: "Mein Hobby ist Schwimmen" },
+        ],
+        target_answer:
+          "Der Bus kommt um sechs Uhr, Wir nehmen ein Taxi zum Hotel, Wir gehen heute ins Theater, Das Hotel ist sehr teuer, Mein Hobby ist Schwimmen",
+        meaning: "bus, taxi, hotel, theater, hobby",
+        explanation:
+          "nehmen takes the taxi, mit + dem takes the bus, ins Theater is the destination frame, and das Hobby dresses a verb as a noun. Five loans, one grammar.",
+      },
+      {
+        id: "l5182_e2",
+        type: "shift_select",
+        prompt: "'Der Bus kommt um sechs Uhr' — which article does the short, blunt Bus take?",
+        options: ["der", "das", "die"],
+        target_answer: "der",
+        meaning: "der Bus — the one masculine on the travel shelf",
+        explanation:
+          "Bus is the exception: das Hotel, das Taxi, das Theater, das Hobby — but der Bus. The shortest, bluntest word on the shelf is also the only one that refused the neuter default.",
+      },
+      {
+        id: "l5182_e3",
+        type: "reverse_cognate",
+        prompt:
+          "Theater is Greek théatron, 'the viewing place'. Which everyday English word is the same Greek viewing-root?",
+        options: ["theory", "theme", "thermal", "throne"],
+        target_answer: "theory",
+        meaning: "Theater ↔ theory: one Greek root — a viewing",
+        explanation:
+          "Greek théatron ('viewing place') and theōria ('a viewing, a speculation') share the root thea, 'a look'. A theory is, etymologically, a way of seeing — theme, thermal and throne are different Greek roots.",
+      },
+      {
+        id: "l5182_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the transport frame: 'We go by bus into the city'",
+        tile_options: ["Wir", "fahren", "mit", "dem", "Bus", "in", "die", "Stadt", "zum", "der"],
+        target_answer: "Wir fahren mit dem Bus in die Stadt",
+        meaning: "We go by bus into the city",
+        explanation:
+          "Vehicle takes mit + dem; motion into a place takes in + accusative (in die Stadt), while standing in a place takes dative (in der Stadt, im Haus). zum in the bank belongs to destinations like zum Hotel, not to vehicles.",
+      },
+      {
+        id: "l5182_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'That's five minutes by taxi'",
+        target_answer: "Das sind fünf Minuten mit dem Taxi",
+        meaning: "That's five minutes by taxi",
+        word_bank: ["Das", "sind", "fünf", "Minuten", "mit", "dem", "Taxi", "zehn", "Bus", "zu"],
+        explanation:
+          "Distance answers in time: das sind fünf Minuten mit dem Taxi. mit + dem names the vehicle, and the bank's zehn proves the frame scales — zehn Minuten mit dem Bus.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Handle the travel words — der Bus, das Taxi, zum Hotel, ins Theater — and read the stress German imposes on its loans.",
+      use_example: {
+        german: "Wir nehmen ein Taxi zum Hotel — der Bus kommt um sechs Uhr.",
+        english: "We take a taxi to the hotel — the bus comes at six o'clock.",
+      },
+      takeaway:
+        "Hotel, Taxi, Bus, Theater, Hobby — hospitale, taxa, omnibus, théatron and English itself; Bus is short and blunt, Theater is te-A-ter, and das rules the shelf except der Bus.",
+      curiosity_teaser: "Next: what you wear — der Schuh, die Hose, das Hemd, der Mantel, die Jacke.",
+    },
+  },
+
+  {
+    id: 5191,
+    slug: "kleidung-i-schuh-hose-hemd-mantel-jacke",
+    title: "Kleidung I: der Schuh, die Hose, das Hemd, der Mantel, die Jacke",
+    subtitle: "what you wear — and the accusative that tragen demands",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["schuh", "hose", "hemd", "mantel", "jacke", "tragen", "kaufen", "klein", "warm", "weiß", "neu", "schön", "später", "selten", "moment", "sekunde"],
+    table_word_ids: ["schuh", "hose", "hemd", "mantel", "jacke"],
+    hook: {
+      title: "The Wardrobe Reunion",
+      content:
+        "The wardrobe is where English kept its Germanic closet. der Schuh ↔ shoe is a pure twin — same word, same sound, same ancient *skōhaz. die Hose ↔ hose is the same word too: English wore hose for centuries before trousers took over, and hosiery still keeps the old name. der Mantel ↔ mantle is Latin mantellum twice over — it walked into German directly (Old High German mantal) and into English through French (mantel): one Latin word, two roads. die Jacke came from French jaque, a short jacket named for the name Jacques — a jacket is, etymologically, a Jack. das Hemd is the honest loss: its Old English cousin hama — a garment, a covering skin — died out a thousand years ago, and English dressed itself in a different Germanic word, shirt (the shirt/skirt doublet). Four twins and one loss — the wardrobe keeps the family tree better than the family does.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "From Jacques to Jacket",
+          content:
+            "French jaque was the name of the short work-jacket, from the popular name Jacques — French for James, from Late Latin Iacobus. English took the diminutive jaquet and made jacket; German took jaque whole and made Jacke. Two languages, one name tag.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Tragen Wears the Accusative",
+      content:
+        "Tragen takes clothes the way sein takes states: Ich trage einen Mantel. The article does the case work: einen Mantel (masculine accusative), eine Hose (feminine), ein Hemd (neuter). Front a time or frequency word and the verb holds slot 2: Selten trage ich einen Mantel. Später kaufe ich eine Jacke. The two -e nouns are die (die Hose, die Jacke); Schuh and Mantel are der; Hemd is das. And the everyday facts hold for all five: Der Schuh ist zu klein, der Mantel ist warm, das Hemd ist weiß.",
+      footnotes: [],
+      linguist_note:
+        "hose is the survivor word. English wore hose when Chaucer wrote; then the word retreated — to hosiery, then to the tube in the garden. German never retreated: die Hose is still the everyday word for trousers.",
+    },
+    exercises: [
+      {
+        id: "l5191_e1",
+        type: "matching_pairs",
+        prompt: "The wardrobe and its frames — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "wd1", english: "The shoe is too small", german: "Der Schuh ist zu klein" },
+          { id: "wd2", english: "The trousers are new", german: "Die Hose ist neu" },
+          { id: "wd3", english: "The shirt is white", german: "Das Hemd ist weiß" },
+          { id: "wd4", english: "The coat is warm", german: "Der Mantel ist warm" },
+          { id: "wd5", english: "The jacket is beautiful", german: "Die Jacke ist schön" },
+          { id: "wd6", english: "Later I buy a coat", german: "Später kaufe ich einen Mantel" },
+          { id: "wd7", english: "One moment, please — the coat is beautiful", german: "Einen Moment, bitte, der Mantel ist schön" },
+          { id: "wd8", english: "One second, please", german: "Eine Sekunde, bitte" },
+        ],
+        target_answer:
+          "Der Schuh ist zu klein, Die Hose ist neu, Das Hemd ist weiß, Der Mantel ist warm, Die Jacke ist schön, Später kaufe ich einen Mantel, Einen Moment, bitte, der Mantel ist schön, Eine Sekunde, bitte",
+        meaning: "shoe, trousers, shirt, coat, jacket — and later I buy",
+        explanation:
+          "Five garments, three genders: der Schuh and der Mantel, die Hose and die Jacke, das Hemd. Note die Hose takes a SINGULAR verb — Die Hose ist neu, never sind.",
+      },
+      {
+        id: "l5191_e2",
+        type: "shift_select",
+        prompt:
+          "'_____ trage ich einen Mantel.' — I seldom wear a coat. Which word takes position 1 and pushes trage to slot 2?",
+        options: ["Selten", "Später", "Heute", "Immer"],
+        target_answer: "Selten",
+        meaning: "Selten trage ich einen Mantel — fronted frequency, verb in slot 2",
+        explanation:
+          "Fronting an adverb swaps positions 1 and 2 — the same move as Heute kaufe ich ein. Selten is English seldom's twin (German kept the D, English hardened it to T); Immer would say the opposite, Später only shifts the hour.",
+      },
+      {
+        id: "l5191_e3",
+        type: "reverse_cognate",
+        prompt: "Which English word was once the everyday name for legwear — the TRUE twin German still uses?",
+        options: ["hose", "stockings", "trousers", "leggings"],
+        target_answer: "hose",
+        meaning: "Hose ↔ hose: same word, one retreated, one stayed",
+        explanation:
+          "English wore hose for centuries; the word survives in hosiery before it went to the garden tube. German kept die Hose in daily use — the twin that never left home.",
+      },
+      {
+        id: "l5191_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble: 'I wear a coat' — watch the accusative",
+        tile_options: ["Ich", "trage", "einen", "Mantel", "eine", "ein", "das"],
+        target_answer: "Ich trage einen Mantel",
+        meaning: "I wear a coat",
+        explanation:
+          "tragen takes the garment as its object, so der Mantel turns accusative: einen Mantel. eine and ein in the bank are the feminine and neuter forms — right for die Hose and das Hemd, wrong for the coat.",
+      },
+      {
+        id: "l5191_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'Later I buy trousers and a jacket'",
+        target_answer: "Später kaufe ich eine Hose und eine Jacke",
+        meaning: "Later I buy trousers and a jacket",
+        word_bank: ["Später", "kaufe", "ich", "eine", "Hose", "und", "eine", "Jacke", "einen", "Mantel", "Schuh"],
+        explanation:
+          "Two -e feminines in a row: eine Hose und eine Jacke — no ending to change. The bank's einen Mantel is the masculine trap: it would be right for the coat, wrong here.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Talk about what you wear with tragen + accusative — einen Mantel, eine Hose, ein Hemd — and front Selten or Später like a native.",
+      use_example: {
+        german: "Selten trage ich einen Mantel — später kaufe ich eine Jacke.",
+        english: "I seldom wear a coat — later I'll buy a jacket.",
+      },
+      takeaway:
+        "Schuh ↔ shoe, Hose ↔ hose, Mantel ↔ mantle, Jacke ↔ jacket — and Hemd, the word English lost; tragen wears einen, eine or ein.",
+      curiosity_teaser: "Next: the small gear — die Socke, die Tasche, die Mütze, der Schal, der Hut.",
+    },
+  },
 ];

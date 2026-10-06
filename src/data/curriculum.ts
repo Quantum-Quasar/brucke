@@ -531,8 +531,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Die Himmelsrichtungen & die Ferne",
     blurb: "hinten plus the four compass points, and the distance words: Nähe, weit, fern, quer, entlang.",
     lessons: [
-      { ...shell(5171, "Richtung II: hinten, Norden, Osten, Westen, Süden", "hinten (behind — the T→D shift in German, D→T in English), then the four compass points, all built on the sun's path: north, east, west, south.") },
-      { ...shell(5172, "Entfernung: die Nähe, weit, fern, quer, entlang", "Near/far as a single axis — die Nähe, weit, fern — plus quer (across) and entlang (along), the two prepositions that take a path rather than a place.") },
+      { ...shell(5171, "Richtung II: hinten, Norden, Osten, Westen, Süden", "hinten (behind — German hardened the D of the behind-root to T), then the four compass points: Osten and Westen are dawn and evening, Süden the sun side, Norden the old left-hand-of-dawn word."), authored: true },
+      { ...shell(5172, "Entfernung: die Nähe, weit, fern, quer, entlang", "Near/far as a single axis — die Nähe, weit, fern — plus quer (across) and entlang (along), the two prepositions that take a path rather than a place."), authored: true },
     ],
   },
   {
@@ -541,8 +541,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Die Lehnwörter: was die Engländer ausgeliehen haben",
     blurb: "The borrowings that run the other way — Sofa, Radio, Klavier, Computer, Kino, Hotel, Taxi, Bus, Theater, Hobby.",
     lessons: [
-      { ...shell(5181, "Lehnwörter I: Sofa, Radio, Klavier, Computer, Kino", "Five objects English handed over and German pronounced with its own mouth: Klavier (from French clavier), Kino (from cinema), Computer. German writes them, then says them with German rules.") },
-      { ...shell(5182, "Lehnwörter II: Hotel, Taxi, Bus, Theater, das Hobby", "The travel-and-leisure layer: Hotel, Taxi, Bus (Latin), Theater (Greek), Hobby. Note the stress pattern German imposes — Bus is short, Theater is not.") },
+      { ...shell(5181, "Lehnwörter I: Sofa, Radio, Klavier, Computer, Kino", "Five objects English handed over and German pronounced with its own mouth: Klavier (from French clavier), Kino (from cinema), Computer. German writes them, then says them with German rules."), authored: true },
+      { ...shell(5182, "Lehnwörter II: Hotel, Taxi, Bus, Theater, das Hobby", "The travel-and-leisure layer: Hotel, Taxi, Bus (Latin), Theater (Greek), Hobby. Note the stress pattern German imposes — Bus is short, Theater is not."), authored: true },
     ],
   },
   {
@@ -551,7 +551,7 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Kleidung & Anziehen",
     blurb: "The everyday wardrobe in two lessons: Schuh, Hose, Hemd, Mantel, Jacke — then Socke, Tasche, Mütze, Schal, Hut.",
     lessons: [
-      { ...shell(5191, "Kleidung I: der Schuh, die Hose, das Hemd, der Mantel, die Jacke", "Tragen takes clothes like a subject takes a state: Ich trage einen Mantel. The gender follows the -e/-en nouns exactly as topic 22 taught it.") },
+      { ...shell(5191, "Kleidung I: der Schuh, die Hose, das Hemd, der Mantel, die Jacke", "Tragen takes clothes like a subject takes a state: Ich trage einen Mantel. Four of the five are English twins — Schuh, Hose, Mantel, Jacke; das Hemd is the honest loss."), authored: true },
       { ...shell(5192, "Kleidung II: die Socke, die Tasche, die Mütze, der Schal, der Hut", "The small gear, where German's compound logic shines: die Sonnenbrille is a sun-glasses, the Regenmantel a rain-coat. All of them take an.") },
     ],
   },

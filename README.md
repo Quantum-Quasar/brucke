@@ -76,7 +76,7 @@ Visit `http://localhost:3000` in your browser.
    - Baba Is You-style node map: 30 topic clusters on one linear spine, with skip-able extra-practice nodes ("sprigs") and support-material branches hanging off each cluster.
    - All adjacent nodes unlock at once when a node is completed; the spine itself stays strictly ordered.
    - Climb the map bottom-to-top; the pulsing theme-colored selector marks your recommended node.
-   - The entire curriculum is authored: 30 cores + 78 sprigs + 30 branch lessons = **138 lessons** (`src/data/curriculum.ts`, `src/data/lessons.ts`).
+   - The entire curriculum is authored: 30 cores + 78 sprigs + 35 branch lessons = **143 lessons** (`src/data/curriculum.ts`, `src/data/lessons.ts`).
    - Custom DOM+SVG renderer (no game libraries) with `content-visibility` windowing per topic cluster, sized for hundreds of future lessons.
    - 5-part card-by-card lesson wizard (Hook, Pattern, Transformation Table, Bite-Sized Practice, Summary & Retries) at `/trail/[id]`.
    - Scaffolded exercises (morpheme tiles, matching pairs, shift select, syntax builder, derivation typing).
@@ -127,7 +127,7 @@ src/
 ├── data/
 │   ├── compendium.json   # 1226 core words, 9 shifts, 32 compounds, 16 traps, 28 insights
 │   ├── curriculum.ts     # 30 topic clusters: cores, sprigs, branches + star gates
-│   ├── lessons.ts        # All 138 authored lessons (cores 1–30, sprigs, branches 50xx–53xx)
+│   ├── lessons.ts        # All 143 authored lessons (cores 1–30, sprigs, branches 50xx–53xx)
 │   └── ...               # themes, fonts, settings, phonetics, insights, languages
 ├── lib/
 │   ├── audio.ts          # Native speech pronunciation engine

@@ -69,6 +69,10 @@ const PRE_EXISTING = new Set([
   // lesson listed it. "weißt" is the conjugated wissen ("do you know"), which the
   // stem resolver reads as the adjective weiß — a homograph, not an ordering fault.
   "1302:weißt", "1401:jetzt", "1703:viertel",
+  // Activated by Campaign 2's batch-3 lessons (5171–5191), verified at e0e9b1a:
+  // l1701's bus fare, l21's compound tile "schuh" (Zahn/arzt/haus/zeug/schuh),
+  // l5052's cat-on-the-sofa reading, l8/l802's -ieren Computer sentences.
+  "1701:bus", "21:schuh", "5052:sofa", "8:computer", "802:computer",
 ]);
 
 // Weaves that are planned but not yet executed: word -> host lessons that will
@@ -134,6 +138,34 @@ const WEAVE_PLAN: Record<string, number[]> = {
   geradeaus: [5171, 5172],
   oben: [5201, 5202],
   unten: [5201, 5202],
+  // Campaign 2 batch 3 (5171–5191). Compass points ride the distance and
+  // country lessons; the loanwords the Wohnen/Reisen/Hobbys lessons; the
+  // wardrobe the Kleidung II and -er-job lessons.
+  hinten: [5202, 5282],
+  norden: [5172, 5262],
+  osten: [5172, 5262],
+  westen: [5172, 5262],
+  "süden": [5172, 5262],
+  "nähe": [5201, 5252],
+  weit: [5201, 5251],
+  fern: [5262, 5271],
+  quer: [5261, 5251],
+  entlang: [5202, 5251],
+  sofa: [5201, 5202],
+  radio: [5292, 5301],
+  klavier: [5292, 5301],
+  computer: [5202, 5281],
+  kino: [5252, 5292],
+  hotel: [5252, 5271],
+  taxi: [5252, 5301],
+  bus: [5282, 5252],
+  theater: [5252, 5301],
+  hobby: [5292, 5301],
+  schuh: [5192, 5292],
+  hose: [5192, 5282],
+  hemd: [5192, 5282],
+  mantel: [5192, 5282],
+  jacke: [5192, 5282],
 };
 
 // Zero-new lessons that are deliberately deferred rather than filled (see
@@ -184,6 +216,11 @@ const PLANNED: Record<string, number> = {
   moment: 5151, dauern: 5151, termin: 5151, sekunde: 5151, datum: 5151,
   hier: 5161, dort: 5161, "drüben": 5161, "gegenüber": 5161, umweg: 5161,
   links: 5162, rechts: 5162, geradeaus: 5162, oben: 5162, unten: 5162,
+  hinten: 5171, norden: 5171, osten: 5171, westen: 5171, "süden": 5171,
+  "nähe": 5172, weit: 5172, fern: 5172, quer: 5172, entlang: 5172,
+  sofa: 5181, radio: 5181, klavier: 5181, computer: 5181, kino: 5181,
+  hotel: 5182, taxi: 5182, bus: 5182, theater: 5182, hobby: 5182,
+  schuh: 5191, hose: 5191, hemd: 5191, mantel: 5191, jacke: 5191,
 };
 const REMOVALS: Record<string, string[]> = { 3002: ["fabrik", "gymnasium", "rente", "dom", "art", "kaution", "eventuell"] };
 // Re-home donors: lesson keeps the word, but its introduction moved earlier.
