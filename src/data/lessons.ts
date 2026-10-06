@@ -13626,7 +13626,7 @@ export const LESSONS: Lesson[] = [
     subtitle: "the count closes at ten — and the holiday words walk in with it",
     phase: 3,
     shift_categories: ["t_to_s_ss_z"],
-    word_ids: ["november", "dezember", "feiertag", "ostern", "wochentag", "feiern", "tag", "januar", "februar", "märz", "april", "mai", "oft", "einmal"],
+    word_ids: ["november", "dezember", "feiertag", "ostern", "wochentag", "feiern", "tag", "januar", "februar", "märz", "april", "mai", "juli", "august", "oktober", "oft", "einmal"],
     table_word_ids: ["november", "dezember", "feiertag", "ostern", "wochentag"],
     hook: {
       title: "The Count Closes, the Parties Begin",
@@ -13707,7 +13707,7 @@ export const LESSONS: Lesson[] = [
         prompt: "Assemble: 'In January and in February it is cold'",
         target_answer: "Im Januar und im Februar ist es kalt",
         meaning: "In January and in February it is cold",
-        word_bank: ["Im", "Januar", "und", "im", "Februar", "ist", "es", "kalt", "heiß", "März"],
+        word_bank: ["Im", "Januar", "und", "im", "Februar", "ist", "es", "kalt", "heiß", "März", "Juli", "August"],
         explanation:
           "Two time phrases joined by und, then the verb, then es. Swap the pair for any months you own — Im Juli und im August ist es heiß — and the same frame carries the whole year.",
       },
@@ -14169,7 +14169,7 @@ export const LESSONS: Lesson[] = [
     subtitle: "near and far on one axis — and the two words that walk a path instead of pointing at a place",
     phase: 3,
     shift_categories: [],
-    word_ids: ["nähe", "weit", "fern", "quer", "entlang", "weg", "straße", "fluss", "strand", "umweg", "geradeaus", "eins", "vier", "zehn", "hälfte"],
+    word_ids: ["nähe", "weit", "fern", "quer", "entlang", "norden", "osten", "westen", "süden", "weg", "straße", "fluss", "strand", "umweg", "geradeaus", "eins", "vier", "zehn", "hälfte"],
     table_word_ids: ["nähe", "weit", "fern", "quer", "entlang"],
     hook: {
       title: "One Axis: Nah to Fern",
@@ -14206,9 +14206,11 @@ export const LESSONS: Lesson[] = [
           { id: "df6", english: "Half of the street is new", german: "Die Hälfte der Straße ist neu" },
           { id: "df7", english: "We take a detour — the way is far", german: "Wir nehmen einen Umweg, der Weg ist weit" },
           { id: "df8", english: "Go straight ahead to the corner", german: "Gehen Sie geradeaus bis zur Ecke" },
+          { id: "df9", english: "From north to south it is far", german: "Von Norden bis Süden ist es weit" },
+          { id: "df10", english: "In the west is the sea, in the east the city", german: "Im Westen ist das Meer, im Osten die Stadt" },
         ],
         target_answer:
-          "Wie weit ist der Strand?, Der Weg ist nicht fern, In der Nähe gibt es einen Markt, Ich fahre quer durch die Stadt, Zehn Minuten zu Fuß, Die Hälfte der Straße ist neu, Wir nehmen einen Umweg, der Weg ist weit, Gehen Sie geradeaus bis zur Ecke",
+          "Wie weit ist der Strand?, Der Weg ist nicht fern, In der Nähe gibt es einen Markt, Ich fahre quer durch die Stadt, Zehn Minuten zu Fuß, Die Hälfte der Straße ist neu, Wir nehmen einen Umweg, der Weg ist weit, Gehen Sie geradeaus bis zur Ecke, Von Norden bis Süden ist es weit, Im Westen ist das Meer, im Osten die Stadt",
         meaning: "how far, not far, nearby, across, on foot, half",
         explanation:
           "wie weit asks the stretch, fern states the remoteness, die Nähe names the neighborhood, and quer durch crosses the space. Time answers where numbers fail: Zehn Minuten zu Fuß.",
@@ -14776,7 +14778,7 @@ export const LESSONS: Lesson[] = [
         prompt: "Assemble: 'The bedroom is up there'",
         target_answer: "Das Schlafzimmer ist dort oben",
         meaning: "The bedroom is up there",
-        word_bank: ["Das", "Schlafzimmer", "ist", "dort", "oben", "Badezimmer", "unten", "im", "Keller"],
+        word_bank: ["Das", "Schlafzimmer", "ist", "dort", "oben", "Badezimmer", "unten", "im", "Keller", "Zimmer", "Wohnung", "Etage"],
         explanation:
           "das Schlafzimmer is schlafen + Zimmer, built by the compound engine — and das Badezimmer in the bank shows the same engine again. Stack the position words: dort oben, dort unten — German lets them pile up in that order.",
       },
@@ -14799,7 +14801,7 @@ export const LESSONS: Lesson[] = [
     subtitle: "a carpet that began in Greek, a wardrobe related to shrink, and a curtain that is a literal hang-before",
     phase: 3,
     shift_categories: [],
-    word_ids: ["teppich", "schrank", "spiegel", "vorhang", "balkon", "oben", "unten", "hinten", "sofa", "computer", "entlang", "flur", "fenster"],
+    word_ids: ["teppich", "schrank", "spiegel", "vorhang", "balkon", "oben", "unten", "hinten", "sofa", "computer", "entlang", "flur", "fenster", "zimmer", "wohnung", "etage"],
     table_word_ids: ["teppich", "schrank", "spiegel", "vorhang", "balkon"],
     hook: {
       title: "Furniture with Passports",
@@ -15128,6 +15130,2798 @@ export const LESSONS: Lesson[] = [
         "Herd and hearth are cousins (þ→d), Seife and soap are twins with Rome holding a loan-copy, Kamm ↔ comb and Klingel ↔ clink ring true — and der Ofen is Latin furnus wearing oven's face.",
       curiosity_teaser:
         "Next: Essen I — der Fisch, das Fleisch, der Käse, die Suppe, das Gemüse — the meal itself, after all this kitchen talk.",
+    },
+  },
+
+  {
+    id: 5221,
+    slug: "essen-i-fisch-fleisch-kaese-suppe-gemuese",
+    title: "Essen I: der Fisch, das Fleisch, der Käse, die Suppe, das Gemüse",
+    subtitle: "the table's backbone — two sound twins, two Latin guests, and one word English never touched",
+    phase: 3,
+    shift_categories: [],
+    word_ids: [
+      "fisch",
+      "fleisch",
+      "käse",
+      "suppe",
+      "gemüse",
+      "immer",
+      "jetzt",
+      "ostern",
+      "wochentag",
+      "gabel",
+      "messer",
+      "becher",
+      "kanne",
+      "flasche",
+      "essen",
+      "freitag",
+      "heiß",
+      "lecker",
+      "brot",
+    ],
+    table_word_ids: ["fisch", "fleisch", "käse", "suppe", "gemüse"],
+    hook: {
+      title: "Two Twins and Three Guests at the Table",
+      content:
+        "The German table's backbone is five nouns, and they arrive by three different roads. der Fisch ↔ the fish is the easy one: the same Proto-Germanic word, *fiskaz, the same sound in both languages — no badge, no story, just a twin. das Fleisch ↔ the flesh is the same word with a narrowing: English pushed flesh toward the body and handed the table to 'meat', while German kept Fleisch doing both jobs. der Käse and die Suppe are Latin guests: Käse is Latin caseus, and English cheese is the same Latin word that walked in through a different door; Suppe is Late Latin suppa, 'bread soaked in broth' — the word behind both soup and the sop you soak in it, and a Latin word that was itself borrowed from Germanic, so soup left home and came back. das Gemüse is the odd one out: no twin, no Latin — it grew inside German from an old word for soft food (Middle High German gemüese, 'mush, food'), and English never borrowed it, which is why German has to lend it to you now.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Friday Is Fish Day",
+          content:
+            "Am Freitag essen wir Fisch is not a textbook sentence — it is a habit. Catholic Germany kept meat off the Friday table for centuries, and the fish custom outlived the rule: der Freitag is still der Fischtag on many German menus. Your new words Essen, Freitag and Fisch ride in one real sentence.",
+        },
+      ],
+    },
+    pattern: {
+      title: "How the Table Words Sit",
+      content:
+        "Four frames, one meal. 1. General food takes no article: Ich esse Fisch, Wir essen Suppe — exactly like English 'we eat soup', the food stands bare. 2. The heat frame: Die Suppe ist sehr heiß — heiß is the heat-word you own from tea, and the food noun keeps its gender (der Fisch, das Fleisch, der Käse, die Suppe, das Gemüse). 3. The festival frame: zu + dative names the occasion — zu Ostern, zu Weihnachten: Zu Ostern essen wir Fisch. 4. The frequency slot: Am Freitag essen wir immer Fisch — immer rides directly behind the conjugated verb, the same slot lesson 5131 drilled, and jetzt parks there too: Ich esse jetzt Suppe.",
+      footnotes: [],
+      linguist_note:
+        "English split the old work between two words and narrowed both: meat (once 'any food' — sweetmeats!) became the table word, flesh retreated to the body. German never moved: Fleisch still serves both the butcher and the anatomist. One Proto-Germanic word, two fates.",
+    },
+    exercises: [
+      {
+        id: "l5221_e1",
+        type: "matching_pairs",
+        prompt: "The table's backbone — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "fb1", english: "We always eat fish on Friday", german: "Am Freitag essen wir immer Fisch" },
+          { id: "fb2", english: "Monday is a weekday", german: "Der Montag ist ein Wochentag" },
+          { id: "fb3", english: "I eat meat with vegetables", german: "Ich esse Fleisch mit Gemüse" },
+          { id: "fb4", english: "The soup is very hot", german: "Die Suppe ist sehr heiß" },
+          { id: "fb5", english: "The cheese on the bread is tasty", german: "Der Käse auf dem Brot ist lecker" },
+          { id: "fb6", english: "I eat fish with fork and knife", german: "Ich esse Fisch mit Gabel und Messer" },
+          { id: "fb7", english: "The coffee is in the mug", german: "Der Kaffee ist im Becher" },
+          { id: "fb8", english: "The pot stands on the table", german: "Die Kanne steht auf dem Tisch" },
+          { id: "fb9", english: "A bottle of water, please", german: "Eine Flasche Wasser, bitte" },
+        ],
+        target_answer:
+          "Am Freitag essen wir immer Fisch, Der Montag ist ein Wochentag, Ich esse Fleisch mit Gemüse, Die Suppe ist sehr heiß, Der Käse auf dem Brot ist lecker, Ich esse Fisch mit Gabel und Messer, Der Kaffee ist im Becher, Die Kanne steht auf dem Tisch, Eine Flasche Wasser, bitte",
+        meaning: "always fish on Friday, weekday, meat with vegetables, hot soup, cheese on bread",
+        explanation:
+          "Five foods in five frames. General food takes no article (Ich esse Fleisch mit Gemüse), and immer sits directly behind the verb — the frequency slot from lesson 5131.",
+      },
+      {
+        id: "l5221_e2",
+        type: "shift_select",
+        prompt:
+          "Which of these five words did English never take — no twin, no loan, the one that grew inside German alone?",
+        options: ["der Käse", "die Suppe", "der Fisch", "das Gemüse"],
+        target_answer: "das Gemüse",
+        meaning: "das Gemüse = the one English never got",
+        explanation:
+          "Käse and Suppe are Latin loans English shares; Fisch is a pure sound twin. Gemüse grew inside German — Middle High German gemüese, 'soft food, mush' — and English never touched it. The honest odd one out.",
+      },
+      {
+        id: "l5221_e3",
+        type: "reverse_cognate",
+        prompt:
+          "'das Fleisch' is the same ancient word as its English twin — but English narrowed it to the body. What is the twin?",
+        options: ["flesh", "fresh", "flush", "fish"],
+        target_answer: "flesh",
+        meaning: "das Fleisch ↔ flesh: same word, narrower English life",
+        explanation:
+          "Both come from Proto-Germanic *flēską. English pushed flesh to the body and handed the table to 'meat'; German kept Fleisch doing both jobs — the butcher's and the anatomist's.",
+      },
+      {
+        id: "l5221_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the festival sentence: 'At Easter we eat fish'",
+        tile_options: ["Zu", "Ostern", "essen", "wir", "Fisch", "Fleisch", "Suppe"],
+        target_answer: "Zu Ostern essen wir Fisch",
+        meaning: "At Easter we eat fish",
+        explanation:
+          "zu + dative names the occasion: zu Ostern, zu Weihnachten. The verb holds slot 2 and the food stays bare — no article on Fisch, because it is food in general.",
+      },
+      {
+        id: "l5221_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'I am eating soup now'",
+        target_answer: "Ich esse jetzt Suppe",
+        meaning: "I am eating soup now",
+        word_bank: ["Ich", "esse", "jetzt", "Suppe", "Käse", "Brot", "heiß"],
+        explanation:
+          "jetzt goes straight behind the conjugated verb — the same slot immer and oft used in lesson 5131. Suppe stands bare because it is food in general, not one specific bowl.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Name the five table nouns with their genders, eat them in bare-object sentences, and slot immer and jetzt behind the verb.",
+      use_example: {
+        german: "Zu Ostern essen wir Fisch — am Freitag essen wir immer Fisch.",
+        english: "At Easter we eat fish — on Friday we always eat fish.",
+      },
+      takeaway:
+        "Fisch and Fleisch are twins (English narrowed Fleisch to flesh), Käse and Suppe are shared Latin loans, Gemüse grew alone in German — and the genders stand: der Fisch, das Fleisch, der Käse, die Suppe, das Gemüse.",
+      curiosity_teaser:
+        "Next: fruit and vegetables — die Kartoffel named after an Italian truffle, die Tomate from Nahuatl, and das Obst, the Latin shelf-label.",
+    },
+  },
+
+  {
+    id: 5222,
+    slug: "essen-ii-obst-kartoffel-tomate-gurke-zwiebel",
+    title: "Essen II: das Obst, die Kartoffel, die Tomate, die Gurke, die Zwiebel",
+    subtitle: "fruit and vegetables — four names that traveled, and one Latin shelf-label",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["obst", "kartoffel", "tomate", "gurke", "zwiebel", "million", "april", "mai", "september", "oktober", "essen", "suppe", "gesund", "mensch"],
+    table_word_ids: ["obst", "kartoffel", "tomate", "gurke", "zwiebel"],
+    hook: {
+      title: "Every Name Here Carries a Passport",
+      content:
+        "das Obst is the shelf, and everything on it came by a different road. die Kartoffel — the potato — wears an Italian mushroom's name: German borrowed Italian tartufo, 'truffle', in the 1500s, because the new tuber looked like a truffle growing underground. (English potato is a Caribbean word, Taíno batata through Spanish — the two languages named the same vegetable from two different continents.) die Tomate walked one road in both languages: Nahuatl tomatl, through Spanish tomate, into German and English almost unchanged. die Gurke came overland — German took it from Polish ogórek. die Zwiebel is the old Latin onion, cepa, in its diminutive dress — cepula, 'little onion' — and English kept the same root in the smallest onion of all: the chive. And das Obst itself is Latin obsonium, a word for bought provisions; English took Latin fructus instead and got 'fruit'. Five foods, five roads, one shared table.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Earth-Apple",
+          content:
+            "Before Kartoffel won, German also called the potato das Erdapfel — the earth-apple — the same instinct French had with pomme de terre. The south never gave it up: in Austria and Bavaria the potatoes are still die Erdäpfel, and the compound reads itself — Erd- + Apfel, both words you own.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Produce Shelf in Sentences",
+      content:
+        "Three frames and a count. 1. The harvest calendar: Im April und im Mai essen wir Tomaten, im September essen wir Gurken, im Oktober essen wir Kartoffeln — the month rides behind im and the plural food noun stands bare. 2. The count frame: Eine Million Menschen essen Tomaten — die Million stays singular with bare Menschen after it, exactly as lesson 5122 built it. 3. The category: Obst ist sehr gesund — das Obst is the category (singular, no plural in the shop sense), while die Tomate and die Gurke are the countable pieces. 4. Essen in slot 2, food bare: Ich esse Kartoffeln mit Gemüse.",
+      footnotes: [],
+      linguist_note:
+        "Neither language borrowed its potato word from the potato's Andean homeland: English carried a Taíno word through Spanish, German an Italian mushroom name. But the tomato both languages took straight from Nahuatl through Spanish — the rare food that crossed the ocean once and kept its name the whole way.",
+    },
+    exercises: [
+      {
+        id: "l5222_e1",
+        type: "matching_pairs",
+        prompt: "Fruit and vegetables, five roads — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "gv1", english: "In April and in May we eat tomatoes", german: "Im April und im Mai essen wir Tomaten" },
+          { id: "gv2", english: "In September we eat cucumbers", german: "Im September essen wir Gurken" },
+          { id: "gv3", english: "In October we eat potatoes", german: "Im Oktober essen wir Kartoffeln" },
+          { id: "gv4", english: "A million people eat tomatoes", german: "Eine Million Menschen essen Tomaten" },
+          { id: "gv5", english: "Fruit is very healthy", german: "Obst ist sehr gesund" },
+          { id: "gv6", english: "I eat no onions", german: "Ich esse keine Zwiebel" },
+        ],
+        target_answer:
+          "Im April und im Mai essen wir Tomaten, Im September essen wir Gurken, Im Oktober essen wir Kartoffeln, Eine Million Menschen essen Tomaten, Obst ist sehr gesund, Ich esse keine Zwiebel",
+        meaning:
+          "tomatoes in spring, cucumbers in September, potatoes in October, a million eaters, healthy fruit, no onions",
+        explanation:
+          "Months ride behind im; die Million stays singular with bare Menschen after it; and das Obst is the category while die Tomate and die Gurke are the countable pieces. Ich esse keine Zwiebel is the picky-eater frame — kein before the bare singular.",
+      },
+      {
+        id: "l5222_e2",
+        type: "shift_select",
+        prompt: "Which of these five wears a Polish name?",
+        options: ["die Gurke", "die Tomate", "die Kartoffel", "das Obst"],
+        target_answer: "die Gurke",
+        meaning: "die Gurke ← Polish ogórek",
+        explanation:
+          "Gurke is German's borrowing of Polish ogórek. Kartoffel took the Italian road (tartufo, 'truffle'), Tomate the Spanish road from Nahuatl, Obst the Latin door — and English gourd is a separate word entirely, from Latin cucurbita, with no family tie to any of them.",
+      },
+      {
+        id: "l5222_e3",
+        type: "reverse_cognate",
+        prompt:
+          "The tomato's Nahuatl name tomatl crossed the ocean once — and both languages kept it. Which English word is the same voyage?",
+        options: ["tomato", "potato", "tomcat", "tornado"],
+        target_answer: "tomato",
+        meaning: "die Tomate ↔ tomato: the same Nahuatl word, tomatl",
+        explanation:
+          "Spanish carried Nahuatl tomatl into both languages nearly unchanged — Tomate and tomato are the same word with the last vowel traded. English potato, by contrast, is Taíno batata: a different continent in the same vegetable patch.",
+      },
+      {
+        id: "l5222_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble: 'I eat potatoes with vegetables'",
+        tile_options: ["Ich", "esse", "Kartoffeln", "mit", "Gemüse", "Tomaten", "Obst"],
+        target_answer: "Ich esse Kartoffeln mit Gemüse",
+        meaning: "I eat potatoes with vegetables",
+        explanation:
+          "Plural Kartoffeln after no article — food stays bare in German. mit introduces what rides along, and the verb keeps slot 2 while the food nouns fill the back of the sentence.",
+      },
+      {
+        id: "l5222_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the harvest sentence: 'In October we eat potatoes and onions'",
+        target_answer: "Im Oktober essen wir Kartoffeln und Zwiebeln",
+        word_bank: ["Im", "Oktober", "essen", "wir", "Kartoffeln", "und", "Zwiebeln", "Tomaten", "Obst"],
+        meaning: "In October we eat potatoes and onions",
+        explanation:
+          "Time phrase first, verb second, subject third — the order you drilled with the months. Swap Oktober for September and the harvest moves with it: Im September essen wir Gurken.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Name fruit and vegetables with their genders, put a bare plural on the table, and hang a month behind im.",
+      use_example: {
+        german: "Im Oktober essen wir Kartoffeln — im April und im Mai essen wir Tomaten.",
+        english: "In October we eat potatoes — in April and in May we eat tomatoes.",
+      },
+      takeaway:
+        "Kartoffel is the truffle's name, Tomate is Nahuatl tomatl, Gurke is Polish ogórek, Zwiebel is Latin cepula (English chive), Obst is Latin obsonium — and Million stays singular before bare Menschen.",
+      curiosity_teaser:
+        "Next: the sweet shelf — der Zucker, der Honig, die Schokolade, der Keks, die Torte, and the plural 'cakes' German borrowed whole.",
+    },
+  },
+
+  {
+    id: 5231,
+    slug: "essen-iii-zucker-honig-schokolade-keks-torte",
+    title: "Essen III: der Zucker, der Honig, die Schokolade, der Keks, die Torte",
+    subtitle: "the sweet shelf — gravel that became sugar, and a plural 'cakes' German kept whole",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["zucker", "honig", "schokolade", "keks", "torte", "ofen", "manchmal", "ostern", "essen", "kaffee", "süß", "schmecken", "geburtstag", "nehmen"],
+    table_word_ids: ["zucker", "honig", "schokolade", "keks", "torte"],
+    hook: {
+      title: "Sugar Was Gravel",
+      content:
+        "The sweet shelf is where the borrowings go deepest. der Zucker made the longest journey of any word you own: Sanskrit śarkarā meant 'gravel, grit', Greek borrowed it as sákkharon for the crystalline sand that sweetens, Latin made it saccharum, and both languages carried it home — Zucker and sugar are the same ancient gravel, ground fine. der Honig is the opposite: no journey at all, the pure twin of honey, one Proto-Germanic word in both mouths. die Schokolade is Nahuatl chocolātl through Spanish chocolate — the same door the tomato used. der Keks is the delicious one: German borrowed the English plural cakes whole, s and all, and respelled it — Keks is 'cakes' with a German accent. die Torte came from Italian torta, and English tart is the same word through French: both go back to Latin torquere, 'to twist' — the twisted pastry dough. One twin, one gravel, one ocean-crosser, one baked-in plural, one twist.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Plural Baked In",
+          content:
+            "When der Keks arrived in the 19th century, German heard the whole English plural cakes and kept the s as part of the word — so der Keks is, literally, more than one cake baked into a singular. German then adds its own plural on top: die Kekse. English did its own re-hearing with pease: the old mass word sounded plural, so pea was carved out of it as the singular.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Sweet Shelf in Sentences",
+      content:
+        "Four frames, one shelf. 1. Taking: Ich nehme Zucker in den Kaffee — nehmen for what you add, in + accusative for what goes into the cup. 2. Tasting: Der Honig schmeckt süß — schmecken takes the taste as a bare adjective: German tastes sweet, it does not have to be sweet. 3. Handing out: Zu Ostern gibt es Schokolade — gibt + es announces what exists: at Easter there is chocolate. 4. Frequency slot: Manchmal esse ich eine Torte — manchmal directly behind the verb, the lesson 5131 slot, with the food counted this time: eine Torte.",
+      footnotes: [],
+      linguist_note:
+        "Keks is a rare baked-in loan: German borrowed an English plural and froze it into a singular noun. English did its own reshaping by ear with pea — the mass word pease re-heard as a plural, the new singular carved out of it — showing both languages re-analyzing forms in real time, centuries apart.",
+    },
+    exercises: [
+      {
+        id: "l5231_e1",
+        type: "matching_pairs",
+        prompt: "The sweet shelf — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "ss1", english: "At Easter there is chocolate", german: "Zu Ostern gibt es Schokolade" },
+          { id: "ss2", english: "I take sugar in my coffee", german: "Ich nehme Zucker in den Kaffee" },
+          { id: "ss3", english: "The honey tastes sweet", german: "Der Honig schmeckt süß" },
+          { id: "ss4", english: "I take a cookie with the coffee", german: "Ich nehme einen Keks zum Kaffee" },
+          { id: "ss5", english: "Sometimes I eat a cake", german: "Manchmal esse ich eine Torte" },
+          { id: "ss6", english: "The cake comes out of the oven", german: "Der Kuchen kommt aus dem Ofen" },
+        ],
+        target_answer:
+          "Zu Ostern gibt es Schokolade, Ich nehme Zucker in den Kaffee, Der Honig schmeckt süß, Ich nehme einen Keks zum Kaffee, Manchmal esse ich eine Torte, Der Kuchen kommt aus dem Ofen",
+        meaning: "Easter chocolate, sugar in coffee, sweet honey, a cookie with coffee, sometimes a cake",
+        explanation:
+          "gibt + es hands out what exists, schmecken takes the taste as a bare adjective, and manchmal sits directly behind the verb. Note the genders on the shelf: der Zucker, der Honig, die Schokolade, der Keks, die Torte.",
+      },
+      {
+        id: "l5231_e2",
+        type: "shift_select",
+        prompt: "Which word did German borrow from English — plural s included?",
+        options: ["der Keks", "die Torte", "der Zucker", "der Honig"],
+        target_answer: "der Keks",
+        meaning: "der Keks ← English cakes",
+        explanation:
+          "Keks is English cakes respelled — a plural frozen into a singular noun. Torte came from Italian torta (English tart is the same twisted word through French), Zucker walked from Sanskrit gravel through Greek and Latin, and Honig never left Germanic at all.",
+      },
+      {
+        id: "l5231_e3",
+        type: "reverse_cognate",
+        prompt:
+          "Zucker's oldest ancestor is Sanskrit śarkarā — 'gravel'. Which English word walked the same Greek-to-Latin road?",
+        options: ["sugar", "gravel", "sweet", "sacred"],
+        target_answer: "sugar",
+        meaning: "der Zucker ↔ sugar: both from Sanskrit śarkarā, 'gravel'",
+        explanation:
+          "Sanskrit śarkarā became Greek sákkharon, Latin saccharum, and finally sugar and Zucker. The sweetest word on the shelf began as the grit under your feet — the crystals looked like sand.",
+      },
+      {
+        id: "l5231_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble: 'The chocolate is too sweet'",
+        tile_options: ["Die", "Schokolade", "ist", "zu", "süß", "Honig", "Zucker"],
+        target_answer: "Die Schokolade ist zu süß",
+        meaning: "The chocolate is too sweet",
+        explanation:
+          "zu + adjective means too much of it — the same zu that scales every quality. The nouns keep their genders (die Schokolade, der Honig, der Zucker) and the adjective never notices.",
+      },
+      {
+        id: "l5231_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'For the birthday we eat cake'",
+        target_answer: "Zum Geburtstag essen wir Torte",
+        word_bank: ["Zum", "Geburtstag", "essen", "wir", "Torte", "Keks", "Schokolade", "Honig"],
+        meaning: "For the birthday we eat cake",
+        explanation:
+          "zu + dem = zum names the occasion, and die Torte stands bare as the food in general — die Torte is the layered birthday cake, the one with the candles.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Name the five sweet words with their genders, add sugar with nehmen, taste with schmecken + adjective, and hand things out with gibt es.",
+      use_example: { german: "Zu Ostern gibt es Schokolade — manchmal eine Torte.", english: "At Easter there is chocolate — sometimes a cake." },
+      takeaway:
+        "Zucker is Sanskrit gravel, Honig is honey's untouched twin, Schokolade is Nahuatl chocolātl, Keks is English cakes with the s baked in, Torte is the twisted one — der, der, die, der, die.",
+      curiosity_teaser:
+        "Next: the meal with its own noun — das Frühstück, das Brötchen, die Marmelade, der Toast, and butter coming back as a compound.",
+    },
+  },
+
+  {
+    id: 5232,
+    slug: "fruehstueck-fruehstueck-broetchen-marmelade-toast-butter",
+    title: "Frühstück: das Frühstück, das Brötchen, die Marmelade, der Toast, die Butter",
+    subtitle: "the one meal with its own noun — and butter coming back as a compound",
+    phase: 3,
+    shift_categories: [],
+    word_ids: [
+      "frühstück",
+      "brötchen",
+      "marmelade",
+      "toast",
+      "butterbrot",
+      "butter",
+      "einmal",
+      "dauern",
+      "fleisch",
+      "käse",
+      "gabel",
+      "messer",
+      "becher",
+      "kanne",
+      "flasche",
+      "ofen",
+      "gemüse",
+      "herd",
+      "seife",
+      "zucker",
+      "suppe",
+      "obst",
+      "tomate",
+      "honig",
+      "keks",
+      "torte",
+      "schokolade",
+      "essen",
+      "brot",
+      "minute",
+      "sieben",
+      "uhr",
+      "woche",
+    ],
+    table_word_ids: ["frühstück", "brötchen", "marmelade", "toast", "butterbrot", "butter"],
+    hook: {
+      title: "Two Languages, Two Recipes for One Meal",
+      content:
+        "English and German built their breakfast word at home, from different parts. English breakfast is break + fast — the meal named for the fast it ends. das Frühstück is früh + Stück — 'early piece' — the first piece of bread taken early in the day, which is exactly what a breakfast roll still is. Same meal, two descriptions: English names what the meal ends, German names when you eat it. das Brötchen is Brot with the diminutive -chen — the little bread — the same job English does with -let (booklet), and German -chen is a true cousin of English -kin (lambkin). die Marmelade came from Portuguese marmelo, 'quince', and the quince's own name is Greek melímēlon — 'honey-apple' — so there is honey hiding in every jar of jam. der Toast is English toast, from Latin tostare, 'to scorch': English kept the Latin roast-word, and German borrowed it back from English. And the payoff is a compound you can already read: das Butterbrot — butter + Brot — the word for what English calls a sandwich, built out of two words you have owned since lesson 101.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "-chen Makes Everything das",
+          content:
+            "The diminutive -chen always makes the noun neuter: der Baum becomes das Bäumchen, die Katze becomes das Kätzchen, and das Brot stays das as das Brötchen. No exceptions, no memorizing — the suffix decides. That is why the little bread is das Brötchen even though bread rolls come in dozens.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Breakfast in Sentences",
+      content:
+        "Four frames, one table. 1. Duration: Das Frühstück dauert zwanzig Minuten — dauern measures the meal in bare accusative time, no preposition, the lesson 5151 frame. 2. Frequency: Einmal in der Woche essen wir Toast — einmal + in + dative is the once-a-week frame, and the toast stands bare. 3. The table: Ich esse Brötchen mit Marmelade, Wir essen Brot mit Butter — mit + dative carries whatever rides along. 4. Taking it with you: Ich nehme ein Butterbrot mit — the separable particle mit drops to the end of the sentence, the same move as Ich stehe früh auf.",
+      footnotes: [],
+      linguist_note:
+        "Breakfast is the rare meal the two languages name differently at the root: German records the early piece of bread a farmer ate before work; English records the monastic act of ending a night's fast. English 'dinner' grew from the same idea — Vulgar Latin disjeiunare, 'to break the fast' — before the main meal slid to midday. German stayed literal: früh + Stück, early + piece.",
+    },
+    exercises: [
+      {
+        id: "l5232_e1",
+        type: "matching_pairs",
+        prompt: "The breakfast table — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "fs1", english: "Breakfast lasts twenty minutes", german: "Das Frühstück dauert zwanzig Minuten" },
+          { id: "fs2", english: "Once a week we eat toast", german: "Einmal in der Woche essen wir Toast" },
+          { id: "fs3", english: "I eat rolls with jam", german: "Ich esse Brötchen mit Marmelade" },
+          { id: "fs4", english: "We eat bread with butter", german: "Wir essen Brot mit Butter" },
+          { id: "fs5", english: "I take a sandwich with me", german: "Ich nehme ein Butterbrot mit" },
+          { id: "fs6", english: "The sandwich with meat and cheese", german: "Das Butterbrot mit Fleisch und Käse" },
+          { id: "fs7", english: "We eat the roll without fork and knife", german: "Wir essen das Brötchen ohne Gabel und Messer" },
+          { id: "fs8", english: "The mug and the pot on the table", german: "Der Becher und die Kanne auf dem Tisch" },
+          { id: "fs9", english: "The stove is warm", german: "Der Herd ist warm" },
+          { id: "fs10", english: "Soap before the meal", german: "Seife vor dem Essen" },
+          { id: "fs11", english: "No sugar in the tea", german: "Kein Zucker im Tee" },
+          { id: "fs12", english: "The soup is ready early", german: "Die Suppe ist früh fertig" },
+          { id: "fs13", english: "Vegetables and fruit for breakfast", german: "Gemüse und Obst zum Frühstück" },
+          { id: "fs14", english: "Tomatoes on the bread", german: "Tomaten auf dem Brot" },
+          { id: "fs15", english: "Honey on the roll", german: "Honig auf dem Brötchen" },
+          { id: "fs16", english: "Cookies and cake with the coffee", german: "Kekse und Torte zum Kaffee" },
+          { id: "fs17", english: "The chocolate is in the cupboard", german: "Die Schokolade ist im Schrank" },
+          { id: "fs18", english: "A bottle of water for breakfast", german: "Eine Flasche Wasser zum Frühstück" },
+          { id: "fs19", english: "The roll comes out of the oven", german: "Das Brötchen kommt aus dem Ofen" },
+        ],
+        target_answer:
+          "Das Frühstück dauert zwanzig Minuten, Einmal in der Woche essen wir Toast, Ich esse Brötchen mit Marmelade, Wir essen Brot mit Butter, Ich nehme ein Butterbrot mit, Das Butterbrot mit Fleisch und Käse, Wir essen das Brötchen ohne Gabel und Messer, Der Becher und die Kanne auf dem Tisch, Der Herd ist warm, Seife vor dem Essen, Kein Zucker im Tee, Die Suppe ist früh fertig, Obst zum Frühstück, Tomaten auf dem Brot, Honig auf dem Brötchen, Kekse und Torte zum Kaffee, Die Schokolade ist im Schrank, Eine Flasche Wasser zum Frühstück, Das Brötchen kommt aus dem Ofen",
+        meaning: "breakfast duration, weekly toast, rolls with jam, bread and butter, a sandwich to go",
+        explanation:
+          "dauern measures how long the meal takes — das Frühstück dauert zwanzig Minuten, bare accusative, no preposition. einmal in der Woche is the once-a-week frame, and mit carries what rides along: jam, butter, or the Butterbrot itself.",
+      },
+      {
+        id: "l5232_e2",
+        type: "shift_select",
+        prompt: "Which word wears the diminutive -chen — the suffix that always makes the noun das?",
+        options: ["das Brötchen", "die Marmelade", "der Toast", "das Butterbrot"],
+        target_answer: "das Brötchen",
+        meaning: "das Brötchen = Brot + -chen, the little bread",
+        explanation:
+          "Brot + -chen = the little bread, neuter by rule — -chen makes every noun das, the same job English does with -let. Butterbrot is a plain compound (butter + Brot), while Marmelade and Toast are travelers from Portuguese and English.",
+      },
+      {
+        id: "l5232_e3",
+        type: "reverse_cognate",
+        prompt:
+          "Marmelade's Greek grandmother is melímēlon — 'honey-apple'. Which English word hides in the first half?",
+        options: ["honey", "marmot", "mellow", "melon"],
+        target_answer: "honey",
+        meaning: "die Marmelade ← marmelo ← Greek melímēlon: méli = honey",
+        explanation:
+          "Portuguese marmelo (quince) is Latin melimēlum from Greek melímēlon, 'honey-apple' — and méli is Greek honey, the root English keeps in mellifluous, 'flowing with honey'. The honey itself German owns as Honig, lesson 5231's pure twin. English melon keeps the apple half.",
+      },
+      {
+        id: "l5232_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble: 'Breakfast is at seven o'clock'",
+        tile_options: ["Das", "Frühstück", "ist", "um", "sieben", "Uhr", "Toast", "Brot"],
+        target_answer: "Das Frühstück ist um sieben Uhr",
+        meaning: "Breakfast is at seven o'clock",
+        explanation:
+          "um + the clock time — the frame from the first lessons, now serving a meal. das Frühstück is neuter twice over: built on das Stück, and it is the early piece itself.",
+      },
+      {
+        id: "l5232_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'I eat toast with butter and jam'",
+        target_answer: "Ich esse Toast mit Butter und Marmelade",
+        word_bank: ["Ich", "esse", "Toast", "mit", "Butter", "und", "Marmelade", "Brötchen", "Frühstück"],
+        meaning: "I eat toast with butter and jam",
+        explanation:
+          "Three breakfast nouns, one mit, verb in slot 2. And the compound is waiting: butter + Brot = das Butterbrot — German can say this whole plate in one word.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Talk about the one meal with its own noun: measure it with dauern, time it with um, and build the -chen and Butter- compounds yourself.",
+      use_example: {
+        german: "Das Frühstück dauert zwanzig Minuten — Brot mit Butter und Marmelade.",
+        english: "Breakfast lasts twenty minutes — bread with butter and jam.",
+      },
+      takeaway:
+        "Frühstück is früh + Stück, 'early piece' (English named the broken fast instead), Brötchen is the -chen little bread, Marmelade hides Greek honey, Toast is English's Latin — and Butterbrot is butter + Brot, both lesson-101 words.",
+      curiosity_teaser: "Next: Farben I — rot, blau, grün, schwarz, bunt, where rot keeps the T that English red let go.",
+    },
+  },
+
+  {
+    id: 5241,
+    slug: "farben-i-rot-blau-gruen-schwarz-bunt",
+    title: "Farben I: rot, blau, grün, schwarz, bunt",
+    subtitle: "the first row of colors — three twins, one half-lost twin, and the honest odd one out",
+    phase: 3,
+    shift_categories: ["d_to_t"],
+    word_ids: [
+      "rot",
+      "blau",
+      "grün",
+      "schwarz",
+      "bunt",
+      "schal",
+      "teppich",
+      "schrank",
+      "vorhang",
+      "balkon",
+      "null",
+      "dezember",
+      "berg",
+      "weiß",
+      "blume",
+      "himmel",
+      "wald",
+      "katze",
+      "vogel",
+    ],
+    table_word_ids: ["rot", "blau", "grün", "schwarz", "bunt"],
+    hook: {
+      title: "Three Twins, a Ghost, and a Mystery",
+      content:
+        "Color words are ancient — most of this row is older than the countries that speak it — and the five show every kind of kinship at once. rot ↔ red is the badge one: the same Proto-Germanic word, *raudaz, with English keeping the D and German hardening it to T — the d_to_t family, the same law that made day into Tag. blau ↔ blue and grün ↔ green are pure twins, no shift at all: German and English read the same sky and the same forest. schwarz ↔ swart is the ghost: the same word on both sides, but everyday English retired it — it survives only in the poetic swarthy — while German still says schwarz for everything dark. And then bunt: no twin, no borrowing anyone can prove, its origin still argued over by German etymologists. Every family has one member like this, and the honest answer is the lesson: bunt means colorful, and its past is a blur. One bonus twin rides along — weiß ↔ white, the mountain's December color.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Flag Reads Itself",
+          content:
+            "Die deutsche Fahne ist schwarz, rot und gold — the German flag is black, red and gold. Two of the flag's three colors are in this lesson, and das Gold has been yours since lesson 101. The sentence needs no new words at all — which is exactly what a first-row color lesson is for.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Colors Stand After sein",
+      content:
+        "Four frames, one rule. 1. With sein, the color never changes: Die Blume ist rot, der Himmel ist blau, der Wald ist grün, die Katze ist schwarz, der Vogel ist bunt — no ending, no gender agreement, the adjective just stands. 2. Two colors stack with und: Die Katze ist schwarz und weiß. 3. The month frame fronts and swaps: Im Dezember ist der Berg weiß — the time phrase takes position 1 and pushes ist to slot 2, the swap you know from Heute lerne ich Deutsch. 4. The count: Null Blumen im Dezember — null is your lesson-5122 zero, counting what the snow replaced.",
+      footnotes: [],
+      linguist_note:
+        "English black and German schwarz are not twins: black is the Germanic 'burned' word — kin to bleach, the burned one and the bright one from one root — while English's real black-twin swart was pushed into poetry. German kept schwarz as the everyday word and never needed a replacement. Color words are the slowest-moving layer of a language, which is why this row is a museum of every kinship type.",
+    },
+    exercises: [
+      {
+        id: "l5241_e1",
+        type: "matching_pairs",
+        prompt: "The first row of colors — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "cl1", english: "The flower is red", german: "Die Blume ist rot" },
+          { id: "cl2", english: "The sky is blue", german: "Der Himmel ist blau" },
+          { id: "cl3", english: "The forest is green", german: "Der Wald ist grün" },
+          { id: "cl4", english: "The cat is black", german: "Die Katze ist schwarz" },
+          { id: "cl5", english: "The bird is colorful", german: "Der Vogel ist bunt" },
+          { id: "cl6", english: "Zero flowers in December — the mountain is white", german: "Null Blumen im Dezember — der Berg ist weiß" },
+          { id: "cl7", english: "The scarf is colorful", german: "Der Schal ist bunt" },
+          { id: "cl8", english: "The rug is green, the wardrobe is black", german: "Der Teppich ist grün, der Schrank ist schwarz" },
+          {
+            id: "cl9",
+            english: "The curtain is blue, the flowers on the balcony are colorful",
+            german: "Der Vorhang ist blau, die Blumen auf dem Balkon sind bunt",
+          },
+        ],
+        target_answer:
+          "Die Blume ist rot, Der Himmel ist blau, Der Wald ist grün, Die Katze ist schwarz, Der Vogel ist bunt, Null Blumen im Dezember — der Berg ist weiß, Der Schal ist bunt, Der Teppich ist grün, der Schrank ist schwarz, Der Vorhang ist blau, die Blumen auf dem Balkon sind bunt",
+        meaning: "red flower, blue sky, green forest, black cat, colorful bird, white mountain in December",
+        explanation:
+          "The color stands after sein and never takes an ending: rot, blau, grün, schwarz, bunt. And the December count is null — zero flowers — because the mountain took over in weiß, the twin of white.",
+      },
+      {
+        id: "l5241_e2",
+        type: "shift_select",
+        prompt: "Which color wears the D→T badge — German T where English keeps D (Tag ↔ day)?",
+        options: ["rot", "blau", "grün", "schwarz"],
+        target_answer: "rot",
+        meaning: "rot ↔ red: the D→T family",
+        explanation:
+          "rot and red are the same Proto-Germanic word: English kept the D, German hardened it to T — the same road Tag took from day. blau, grün and schwarz are twins without a shift, and bunt stays out of the quiz: no twin, no proven loan.",
+      },
+      {
+        id: "l5241_e3",
+        type: "reverse_cognate",
+        prompt:
+          "'schwarz' has an English twin that everyday English retired — it survives only in a poetic word. Which one?",
+        options: ["swarthy", "sword", "swan", "swell"],
+        target_answer: "swarthy",
+        meaning: "schwarz ↔ swart/swarthy: the same word, English kept only the ghost",
+        explanation:
+          "Both come from Proto-Germanic *swartz, Old English sweart. German still says schwarz every day; English kept the word only as the poetic swarthy — a twin living in the attic.",
+      },
+      {
+        id: "l5241_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble: 'In December the mountain is white'",
+        tile_options: ["Im", "Dezember", "ist", "der", "Berg", "weiß", "schwarz", "grün"],
+        target_answer: "Im Dezember ist der Berg weiß",
+        meaning: "In December the mountain is white",
+        explanation:
+          "The month phrase takes position 1 and pushes ist to slot 2 — the same swap as Jetzt lerne ich Deutsch. And weiß wears the T→S badge: English kept the T in white, German turned it to ss, exactly like Wasser from water.",
+      },
+      {
+        id: "l5241_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The sky is blue and the forest is green'",
+        target_answer: "Der Himmel ist blau und der Wald ist grün",
+        word_bank: ["Der", "Himmel", "ist", "blau", "und", "der", "Wald", "ist", "grün", "rot", "bunt"],
+        meaning: "The sky is blue and the forest is green",
+        explanation:
+          "Two sein-frames joined by und, the verb second in each half. Swap the nouns and the colors still fit: der Himmel ist blau, der Wald ist grün, die Blume ist rot, der Vogel ist bunt.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Say five colors after sein without inflecting them, spot the D→T badge on rot, and keep weiß and bunt in the December picture.",
+      use_example: {
+        german: "Im Dezember ist der Berg weiß — null Blumen, aber der Himmel ist blau.",
+        english: "In December the mountain is white — zero flowers, but the sky is blue.",
+      },
+      takeaway:
+        "rot wears D→T (red kept the D), blau and grün are pure twins, schwarz survives in English only as swarthy, bunt's origin is honestly unknown — and weiß is white with the T→S badge.",
+      curiosity_teaser: "Next: braun, grau, rosa, lila — and die Farbe, the head noun that colors them all.",
+    },
+  },
+
+  {
+    id: 5242,
+    slug: "farben-ii-braun-grau-rosa-lila-farbe",
+    title: "Farben II: braun, grau, rosa, lila, die Farbe",
+    subtitle: "the second row of the paintbox — two perfect twins, two imports, and the head noun that names them all",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["braun", "grau", "rosa", "lila", "farbe", "schwarz", "rot", "blau", "grün", "bunt", "auto", "himmel", "katze", "mütze"],
+    table_word_ids: ["braun", "grau", "rosa", "lila", "farbe"],
+    hook: {
+      title: "The Row Without a Badge",
+      content:
+        "Farben I gave you five Germanic natives with shift stories. This row is quieter — and in its own way stranger. braun and grau are so old that neither language touched them: braun is English brown with the same consonants, and that w in the English spelling is simply the old u — German wrote the vowel, English later wrote it as w. grau is grey by the same trick. Neither wears a shift badge, because neither needs one: they are Proto-Germanic *brūnaz and *grēwaz, kept whole on both sides of the North Sea. rosa is the odd one out in a different way: it is Latin rosa itself — the exact word English keeps as rose — borrowed straight into German as a color adjective from Italian and French. lila arrived by an even longer road (see the footnote). And die Farbe is not a color at all but the head noun — the word that names the category and compounds it: die Farbenlehre is Goethe's great book on color theory, and whatever braun and grau are, they are Farben first.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Color That Sailed from India",
+          content:
+            "lila began as Sanskrit nī́laḥ, 'dark blue', became Persian līläǧ, 'indigo', then Arabic līlāk, then French lilas — the lilac shrub and its color — and finally German lila, clipped from the French in the 19th century. English took the identical loan as lilac: same Persian indigo, same Arabic and French doorway, one purple arrival with two names.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Where a Color Stands",
+      content:
+        "Three frames, one of them borrowed. 1. After sein: Der Himmel ist grau (the sky is gray) — the color stands as the predicate and takes no ending. 2. In front of a noun it takes the endings you already know: ein brauner Hund, eine braune Katze — braun behaves like any native adjective. 3. The imports refuse: rosa and lila never decline — ein rosa Auto, die lila Mütze — they were borrowed finished and stay finished. And the head noun lets you ask and answer without pointing: Die Farbe der Mütze ist lila (the color of the cap is purple).",
+      footnotes: [],
+      linguist_note:
+        "Duden's rule for rosa and lila is one line long: they do not decline. English went further and retired adjective endings altogether in the Middle Ages, so 'a purple cap' needs no agreement either. German kept the endings for its native stock and left the newest imports unfinished — loans enter through whatever door is already open.",
+    },
+    exercises: [
+      {
+        id: "l5242_e1",
+        type: "matching_pairs",
+        prompt: "The second row — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "fc1", english: "My car is gray", german: "Mein Auto ist grau" },
+          { id: "fc2", english: "The cat is brown", german: "Die Katze ist braun" },
+          { id: "fc3", english: "The flower is pink", german: "Die Blume ist rosa" },
+          { id: "fc4", english: "The cap is purple", german: "Die Mütze ist lila" },
+          { id: "fc5", english: "The flower is red", german: "Die Blume ist rot" },
+          { id: "fc6", english: "The color of the cap", german: "Die Farbe der Mütze" },
+          { id: "fc7", english: "Black and white are colors too", german: "Schwarz und weiß sind Farben" },
+        ],
+        target_answer:
+          "Mein Auto ist grau, Die Katze ist braun, Die Blume ist rosa, Die Mütze ist lila, Die Blume ist rot, Die Farbe der Mütze, Schwarz und weiß sind Farben",
+        meaning: "gray, brown, pink, purple, red, the color",
+        explanation:
+          "The same Blume wears rot from Farben I and rosa from Farben II — old row and new row in one sentence. And die Farbe is the head noun: the color OF the cap, genitive der.",
+      },
+      {
+        id: "l5242_e2",
+        type: "shift_select",
+        prompt:
+          "Four of these colors are Germanic natives; one crossed from India through Arabic and French — and English took the exact same journey with it. Which?",
+        options: ["braun", "grau", "lila", "blau"],
+        target_answer: "lila",
+        meaning: "lila ↔ lilac: the same Persian loan, the same route",
+        explanation:
+          "lila is French lilas clipped short, and English lilac is the same French word unclipped — Persian indigo to a purple paintbox, in both languages. braun, grau and blau never left the Germanic house.",
+      },
+      {
+        id: "l5242_e3",
+        type: "reverse_cognate",
+        prompt:
+          "'grau' and its English twin differ only in the last two letters — one diphthong kept, one dropped. Give the twin:",
+        target_answer: "grey",
+        meaning: "grau ↔ grey: the pure sound twin, no shift badge",
+        explanation:
+          "Both come from Proto-Germanic *grēwaz. German kept the old w-glide — grēwaz became grau — while English lost it: grǣg, grey. braun/brown is the other twin of the row: same story, no badge needed.",
+      },
+      {
+        id: "l5242_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the import sentence: 'The cap is purple'",
+        tile_options: ["Die", "Mütze", "ist", "lila", "grün", "bunt"],
+        target_answer: "Die Mütze ist lila",
+        meaning: "The cap is purple",
+        explanation:
+          "lila takes no ending even in front of the noun — eine lila Mütze, where eine grüne Mütze would take its -e. The imports stay imports: borrowed finished, uninflected, done.",
+      },
+      {
+        id: "l5242_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The sky is gray today'",
+        target_answer: "Der Himmel ist heute grau",
+        meaning: "The sky is gray today",
+        word_bank: ["Der", "Himmel", "ist", "heute", "grau", "braun", "blau"],
+        explanation:
+          "Time word in the middle slot — Der Himmel ist heute grau, the same order as Der Zug fährt sehr früh. The bank holds two near-misses for contrast — braun from this row, blau from Farben I — but only grau fits: the sky is gray today.",
+      },
+    ],
+    summary: {
+      outcome: "Use the second row of colors after sein and before nouns — and leave rosa and lila endings-free.",
+      use_example: { german: "Die Mütze ist lila und mein Auto ist grau.", english: "The cap is purple and my car is gray." },
+      takeaway:
+        "braun↔brown and grau↔grey are pure twins with no badge; rosa is Latin rosa (English rose); lila is Persian indigo (English lilac); die Farbe is the head noun that compounds them.",
+      curiosity_teaser: "Next: wheels and suitcases — das Fahrrad, der Koffer, die Karte, die Haltestelle, das Dorf.",
+    },
+  },
+
+  {
+    id: 5251,
+    slug: "reisen-i-fahrrad-koffer-karte-haltestelle-dorf",
+    title: "Reisen I: das Fahrrad, der Koffer, die Karte, die Haltestelle, das Dorf",
+    subtitle: "wheels, luggage and the road out of town — a travel kit built from verbs and baskets you already own",
+    phase: 3,
+    shift_categories: ["th_to_d", "d_to_t"],
+    word_ids: [
+      "fahrrad",
+      "koffer",
+      "karte",
+      "haltestelle",
+      "dorf",
+      "hier",
+      "drüben",
+      "umweg",
+      "gegenüber",
+      "links",
+      "rechts",
+      "quer",
+      "entlang",
+      "wohnung",
+      "fahren",
+      "zug",
+      "uhr",
+      "stadt",
+      "fluss",
+      "berg",
+      "klein",
+      "alt",
+    ],
+    table_word_ids: ["fahrrad", "koffer", "karte", "haltestelle", "dorf"],
+    hook: {
+      title: "Out of Town in Five Words",
+      content:
+        "das Fahrrad is fahren + Rad — the driving-wheel, compounded out of the go-verb you have owned since early on. der Koffer is Latin cophinus, a wicker basket, that walked to German through Old French and Dutch — and to English as coffin: the box you travel with and the box nobody comes home from are the same word. die Karte is Latin charta, 'a sheet of papyrus' — German hardened the c to K and kept one word, while English split the sheet into card and chart. die Haltestelle is halten (English hold with the D→T badge, the Tag/day family) + Stelle, 'place': the place where the bus holds still. And das Dorf is Proto-Germanic *þurpą, the village: German hardened þ→d and kept the everyday word, English kept the th and lost the word — it survives only in place names like Scunthorpe and Grimethorpe, which are Dörfer that never left the map.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "English Took the Basket Twice",
+          content:
+            "Latin cophinus reached English through Old French two times over: as coffin, the funeral box (from cofin), and as coffer, the treasure chest (from cofre). German's Koffer came by the cofre route — Dutch koffer — so der Koffer is really English coffer wearing travel clothes. One Latin basket, three boxes.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Travel Kit in Frames",
+      content:
+        "Four frames. 1. Ride: Ich fahre mit dem Fahrrad (I go by bike) — mit + dem does the riding, fahren does the going. 2. Search: Ich suche den Weg auf der Karte (I look for the way on the map) — auf + der says where the search happens. 3. Stand: Die Haltestelle ist gleich hier (the stop is right here) — gleich is the 'right' of right here, the same gleich as in looking alike. 4. Arrive small: Das Dorf ist klein und alt — and if you missed it, Der Zug fährt sehr früh is the sentence that explains why.",
+      footnotes: [],
+      linguist_note:
+        "The Danelaw is why England still speaks of thorpes: Old Norse þorp and Old English þorp are the same *þurpą as German Dorf. The common noun died in English, but the map kept it — Scunthorpe, Grimethorpe and their neighbors are a list of Dörfer across the old Danelaw.",
+    },
+    exercises: [
+      {
+        id: "l5251_e1",
+        type: "matching_pairs",
+        prompt: "Out of town — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "rt1", english: "I go by bike", german: "Ich fahre mit dem Fahrrad" },
+          { id: "rt2", english: "My suitcase is too heavy", german: "Mein Koffer ist zu schwer" },
+          { id: "rt3", english: "I am looking for the way on the map", german: "Ich suche den Weg auf der Karte" },
+          { id: "rt4", english: "The bus stop is right here", german: "Die Haltestelle ist gleich hier" },
+          { id: "rt5", english: "The village is small and old", german: "Das Dorf ist klein und alt" },
+          { id: "rt6", english: "The train leaves very early", german: "Der Zug fährt sehr früh" },
+          { id: "rt7", english: "The village is over there — we take a detour", german: "Das Dorf ist drüben, wir nehmen einen Umweg" },
+          { id: "rt8", english: "The flat opposite is small", german: "Die Wohnung gegenüber ist klein" },
+          { id: "rt9", english: "The church is on the left, the house on the right", german: "Die Kirche ist links, das Haus rechts" },
+          { id: "rt10", english: "The street crosses through the village", german: "Die Straße geht quer durch das Dorf" },
+          { id: "rt11", english: "Along the river is the village", german: "Den Fluss entlang ist das Dorf" },
+        ],
+        target_answer:
+          "Ich fahre mit dem Fahrrad, Mein Koffer ist zu schwer, Ich suche den Weg auf der Karte, Die Haltestelle ist gleich hier, Das Dorf ist klein und alt, Der Zug fährt sehr früh, Das Dorf ist drüben, wir nehmen einen Umweg, Die Wohnung gegenüber ist klein, Die Kirche ist links, das Haus rechts, Die Straße geht quer durch das Dorf, Den Fluss entlang ist das Dorf",
+        meaning: "bike, suitcase, map, bus stop, village, early train",
+        explanation:
+          "Six travel frames, no new verbs: fahre carries das Fahrrad, sucht reads die Karte, and fährt is the same fahren in the Zug. Too heavy is zu schwer — zu doubling as 'too', exactly like English.",
+      },
+      {
+        id: "l5251_e2",
+        type: "shift_select",
+        prompt:
+          "One of today's five wears the TH→D badge — the same hardening that made drei out of three and Bruder out of brother. Which?",
+        options: ["das Dorf", "der Koffer", "die Karte", "das Fahrrad"],
+        target_answer: "das Dorf",
+        meaning: "das Dorf ↔ thorpe: the TH→D family",
+        explanation:
+          "Proto-Germanic *þurpą 'village': German hardened þ to d (Dorf), English kept the th (thorp, thorpe) and then lost the word. English kept it on the map — Scunthorpe is a Dorf that never left.",
+      },
+      {
+        id: "l5251_e3",
+        type: "reverse_cognate",
+        prompt:
+          "Greek kóphinos became Latin cophinus, 'wicker basket'. German took the traveler's box as der Koffer. English took the same basket as a box nobody comes home from. Give the English twin:",
+        target_answer: "coffin",
+        meaning: "der Koffer ↔ coffin: one Latin cophinus, two boxes",
+        explanation:
+          "coffin came through Old French cofin; German's Koffer came through Old French cofre via Dutch — the route English also used for coffer, the money chest. Same Latin basket, and the travel box and the funeral box are etymological twins.",
+      },
+      {
+        id: "l5251_e4",
+        type: "derive",
+        prompt: "Build the German compound for 'bicycle':",
+        english_hint: "fahren (to go, to drive) + das Rad (the wheel)",
+        target_answer: "das Fahrrad",
+        meaning: "das Fahrrad = the bicycle, the driving-wheel",
+        explanation:
+          "das Fahrrad is fahren + Rad: the driving-wheel. German named the machine by what it does; English went Latin-Greek instead — bi-cycle, 'two wheels' (Greek kyklos, wheel).",
+      },
+      {
+        id: "l5251_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'I go to the village by bike'",
+        target_answer: "Ich fahre mit dem Fahrrad ins Dorf",
+        meaning: "I go to the village by bike",
+        vocab_hints: [
+          {
+            word: "ins",
+            translation: "into the (in + das)",
+            note:
+              "ins is in + das contracted — motion into a das-noun: ins Dorf, ins Haus. English does the same with 'into the'.",
+          },
+        ],
+        word_bank: ["Ich", "fahre", "mit", "dem", "Fahrrad", "ins", "Dorf", "Koffer", "Stadt"],
+        explanation:
+          "fahren in slot 2, mit + dem for the bike, ins for motion into the das-noun. The bank offers der Koffer and die Stadt to prove the frame scales: Ich fahre mit dem Fahrrad in die Stadt.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Name the travel kit and ride, search, wait and arrive with compounds that decompose into words you own.",
+      use_example: {
+        german: "Ich fahre mit dem Fahrrad ins Dorf — der Koffer ist zu schwer.",
+        english: "I go to the village by bike — the suitcase is too heavy.",
+      },
+      takeaway:
+        "Fahrrad = fahren + Rad; Koffer is coffin's Latin cousin (cophinus); Karte is card/chart from charta; Haltestelle hides halten (hold, D→T); Dorf is thorpe with the TH→D badge.",
+      curiosity_teaser:
+        "Next: the timetable — Fahrkarte, Fahrplan, Abfahrt, Ankunft, Flughafen, every one built from a verb you already own.",
+    },
+  },
+
+  {
+    id: 5252,
+    slug: "reisen-ii-fahrkarte-fahrplan-abfahrt-ankunft-flughafen",
+    title: "Reisen II: die Fahrkarte, der Fahrplan, die Abfahrt, die Ankunft, der Flughafen",
+    subtitle: "the timetable set — German compounds it from three verbs, English borrowed it from Latin",
+    phase: 3,
+    shift_categories: ["strong_verbs_ablaut"],
+    word_ids: [
+      "fahrkarte",
+      "fahrplan",
+      "abfahrt",
+      "ankunft",
+      "flughafen",
+      "nähe",
+      "koffer",
+      "haltestelle",
+      "hotel",
+      "taxi",
+      "bus",
+      "theater",
+      "kino",
+      "juni",
+      "november",
+      "dauern",
+      "datum",
+      "brötchen",
+      "marmelade",
+      "toast",
+      "butterbrot",
+      "frühstück",
+      "zimmer",
+      "tasche",
+      "fahren",
+      "fahrt",
+      "kommen",
+      "fliegen",
+      "hafen",
+      "zug",
+      "uhr",
+      "flugzeug",
+    ],
+    table_word_ids: ["fahrkarte", "fahrplan", "abfahrt", "ankunft", "flughafen"],
+    hook: {
+      title: "A Timetable Made of Verbs",
+      content:
+        "Look at what English did: departure is Latin dis- + partire, 'to divide apart' — you 'divide' yourself from the journey — and arrival from Vulgar Latin adripare, 'to reach the shore', so English speakers arrive by boat whether or not there is water. German built the same two ideas from strong verbs you already own. fahren gives die Fahrkarte and der Fahrplan as plain compounds, and with the prefix ab- — the same ancient word as English off and Latin ab — it gives die Abfahrt, the off-drive. kommen gives die Ankunft: an + Kunft, and Kunft is kommen frozen into a noun, a living German word until the early 1800s, now surviving only inside compounds like Ankunft and Zukunft. And fliegen's noun compounds with der Hafen — English haven's twin — into der Flughafen. No Latin was borrowed: German made its timetable the Germanic way, by freezing verbs.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "die Fahrt Is fare",
+          content:
+            "die Fahrt is fahren's journey-noun, and English fare — sea fare, taxi fare, the price of going — is the same noun from the same verb: Old English faru, from faran. Every time you pay a fare you are speaking die Fahrt.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Timetable in Frames",
+      content:
+        "Four frames. 1. Ticket: Ich kaufe eine Fahrkarte (I buy a ticket) — a fahren-compound, not a new word. 2. Plan: Der Fahrplan ist an der Wand (the timetable is on the wall). 3. Clock: Die Abfahrt ist um acht Uhr, die Ankunft ist spät — um is the clock preposition, and the Abfahrt/Ankunft pair answers leave and arrive without a verb in sight. 4. Fly: Der Flughafen ist sehr groß — fliegen's noun + the harbor word you own; and when the plane joins the timetable, Das Flugzeug ist spät.",
+      footnotes: [],
+      linguist_note:
+        "The -t noun is a shared Germanic trick: take a strong verb's participle stem and bolt on t. English built flight from fly (flug- + t) and thought from think; German built Kunft from kommen and Zucht from ziehen. German then let standalone Kunft die in the 1800s — it survives inside Ankunft, Zukunft, Auskunft, Herkunft. English kept flight and never had Kunft: same construction, opposite fates.",
+    },
+    exercises: [
+      {
+        id: "l5252_e1",
+        type: "matching_pairs",
+        prompt: "The timetable set — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "tt1", english: "I buy a ticket", german: "Ich kaufe eine Fahrkarte" },
+          { id: "tt2", english: "The timetable is on the wall", german: "Der Fahrplan ist an der Wand" },
+          { id: "tt3", english: "The departure is at eight o'clock", german: "Die Abfahrt ist um acht Uhr" },
+          { id: "tt4", english: "The arrival is late", german: "Die Ankunft ist spät" },
+          { id: "tt5", english: "The airport is very big", german: "Der Flughafen ist sehr groß" },
+          { id: "tt6", english: "The plane is late", german: "Das Flugzeug ist spät" },
+          { id: "tt7", english: "The hotel is near the airport", german: "Das Hotel ist in der Nähe vom Flughafen" },
+          { id: "tt8", english: "My suitcase is heavy", german: "Mein Koffer ist schwer" },
+          { id: "tt9", english: "The bus drives to the stop", german: "Der Bus fährt zur Haltestelle" },
+          {
+            id: "tt10",
+            english: "The departure is in June, the arrival is in November",
+            german: "Die Abfahrt ist im Juni, die Ankunft ist im November",
+          },
+          { id: "tt11", english: "The trip lasts two hours", german: "Die Fahrt dauert zwei Stunden" },
+          { id: "tt12", english: "The date is on the ticket", german: "Das Datum steht auf der Fahrkarte" },
+          { id: "tt13", english: "Rolls with jam for the trip", german: "Brötchen mit Marmelade für die Fahrt" },
+        ],
+        target_answer:
+          "Ich kaufe eine Fahrkarte, Der Fahrplan ist an der Wand, Die Abfahrt ist um acht Uhr, Die Ankunft ist spät, Der Flughafen ist sehr groß, Das Flugzeug ist spät, Das Hotel ist in der Nähe vom Flughafen, Mein Koffer ist schwer, Der Bus fährt zur Haltestelle, Die Abfahrt ist im Juni, die Ankunft ist im November, Die Fahrt dauert zwei Stunden, Das Datum steht auf der Fahrkarte, Brötchen mit Marmelade für die Fahrt",
+        meaning: "ticket, timetable, departure, arrival, airport, plane",
+        explanation:
+          "Five of the six sentences are compounds or frozen verbs: Fahrkarte, Fahrplan, Abfahrt, Ankunft, Flughafen. dauern measures the trip itself — Die Fahrt dauert zwei Stunden — and only kaufe and ist are doing plain work: the timetable is a family tree of fahren, kommen and fliegen.",
+      },
+      {
+        id: "l5252_e2",
+        type: "shift_select",
+        prompt: "'Die Ankunft' is the arrival — an + Kunft. Which strong verb is frozen inside it?",
+        options: ["kommen", "fahren", "fliegen", "haben"],
+        target_answer: "kommen",
+        meaning: "Ankunft = an + Kunft, the old noun of kommen",
+        explanation:
+          "Kunft is kommen frozen into a noun — independent German until the early 1800s, now alive only inside Ankunft and Zukunft. English did the same freezing on fliegen's twin: see the next exercise.",
+      },
+      {
+        id: "l5252_e3",
+        type: "reverse_cognate",
+        prompt:
+          "Ankunft ends in Kunft — kommen frozen into a noun with the -t ending. English built one word exactly the same way from fly. Which?",
+        options: ["flight", "fright", "light", "fight"],
+        target_answer: "flight",
+        meaning: "Kunft ↔ flight: the same -t noun on a strong verb",
+        explanation:
+          "fly's participle stem flug- plus t gives flight — precisely how kommen gives Kunft. The -ight words are look-alikes: fright, light and fight come from different verbs entirely. English kept flight and never had Kunft; German kept Kunft, but only inside compounds.",
+      },
+      {
+        id: "l5252_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the timetable pair: 'The departure is early, the arrival is late'",
+        tile_options: ["Die", "Abfahrt", "ist", "früh", "Ankunft", "spät", "Zug"],
+        target_answer: "Die Abfahrt ist früh, die Ankunft ist spät",
+        meaning: "The departure is early, the arrival is late",
+        explanation:
+          "The leave/arrive pair, no verb in sight: Abfahrt (ab + Fahrt) takes früh, Ankunft (an + Kunft) takes spät. Both nouns are feminine, and both carry a strong verb frozen inside them.",
+      },
+      {
+        id: "l5252_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The ticket for the train is expensive'",
+        target_answer: "Die Fahrkarte für den Zug ist teuer",
+        meaning: "The ticket for the train is expensive",
+        word_bank: [
+          "Die",
+          "Fahrkarte",
+          "für",
+          "den",
+          "Zug",
+          "ist",
+          "teuer",
+          "Fahrplan",
+          "Abfahrt",
+          "Ankunft",
+          "schnell",
+          "Zimmer",
+          "Frühstück",
+          "Toast",
+          "Butterbrot",
+          "Taxi",
+          "Theater",
+          "Kino",
+          "Tasche",
+        ],
+        explanation:
+          "für takes the accusative: für den Zug. teuer is the d→t twin of English dear — the Tag/day family again — and the bank's Fahrplan and schnell are there to prove Fahrkarte stays a compound even in a longer frame.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Read a German timetable: know which verb each of Fahrkarte, Fahrplan, Abfahrt, Ankunft and Flughafen freezes.",
+      use_example: {
+        german: "Die Abfahrt ist um acht Uhr — die Ankunft ist spät.",
+        english: "The departure is at eight o'clock — the arrival is late.",
+      },
+      takeaway:
+        "Abfahrt = ab (English off) + Fahrt (fare); Ankunft = an + Kunft, kommen's frozen noun and flight's twin; Flughafen = Flug + Hafen (haven). English borrowed Latin for all of it.",
+      curiosity_teaser: "Next: the day-trip kit — der Ausflug, der Tourist, das Gepäck, der Pass, die Fähre.",
+    },
+  },
+
+  {
+    id: 5261,
+    slug: "reisen-iii-ausflug-tourist-gepaeck-pass-faehre",
+    title: "Reisen III: der Ausflug, der Tourist, das Gepäck, der Pass, die Fähre",
+    subtitle: "the day-trip kit — an out-flight, a passport named for walking, and the fahren family's boat",
+    phase: 3,
+    shift_categories: [],
+    word_ids: [
+      "ausflug",
+      "tourist",
+      "gepäck",
+      "pass",
+      "fähre",
+      "fahrkarte",
+      "fahrplan",
+      "fahrrad",
+      "quer",
+      "fisch",
+      "obst",
+      "tomate",
+      "gurke",
+      "kartoffel",
+      "zwiebel",
+      "weit",
+      "blau",
+      "grau",
+      "hut",
+      "tasche",
+      "koffer",
+      "dorf",
+      "weg",
+      "markt",
+      "haltestelle",
+      "abfahrt",
+      "ankunft",
+      "august",
+      "september",
+      "fliegen",
+      "fahren",
+      "schiff",
+      "meer",
+      "fluss",
+      "wasser",
+      "schwer",
+      "berg",
+    ],
+    table_word_ids: ["ausflug", "tourist", "gepäck", "pass", "fähre"],
+    hook: {
+      title: "The Excursion Set",
+      content:
+        "der Ausflug is aus + Flug — an out-flight, fliegen's noun sent outside; English asked Latin instead (excursion is excurrere, 'to run out'), German said it with a verb it owns. das Gepäck is a ge- collective on Pack — and English pack is that same Low German cargo word; one prefix gathers every bag you brought into a single, plural-less noun. der Pass goes back to Latin passus, 'a step' — the same word that gives English pass (to take steps) and pace (a measured step); a border document named for walking through. die Fähre is the fahren family's boat: English faran left fare and ferry behind, German kept fahren and floated the craft itself as die Fähre. And der Tourist is French touriste, from tour, from Latin tornare, 'to turn on a lathe' — a tourist is someone who goes in circles; English tour and turn are the same Latin doublet.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The ge- That Collects",
+          content:
+            "German uses ge- to gather many things into one noun: das Gepäck (all the luggage, from Pack), das Gebirge (a whole mountain range, from Berg), das Gemüse (vegetables as one drawer of the fridge). English once owned the same prefix — it survives, fossilized, as the y- of the archaic yclept, 'also called'.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Day Trip in Frames",
+      content:
+        "Four frames. 1. Go: Wir machen einen Ausflug in die Berge (we take a trip to the mountains) — machen + einen carries the trip. 2. Carry: Das Gepäck ist schwer — singular verb, because das Gepäck is one collective; there is no everyday plural. 3. Documents: Mein Pass ist im Koffer — the one thing you check twice. 4. Cross: Die Fähre fährt über den Fluss — and when someone loses the map, Der Tourist sucht den Weg.",
+      footnotes: [],
+      linguist_note:
+        "das Gepäck has no everyday plural because the collective prefix already did the plural's job: one word, all the bags. English made the same discovery twice over — luggage (from lug, 'to drag') and baggage are also singular collectives — but it never built a systematic prefix-family the way German did with ge-.",
+    },
+    exercises: [
+      {
+        id: "l5261_e1",
+        type: "matching_pairs",
+        prompt: "The day-trip kit — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "ax1", english: "We take a trip to the mountains", german: "Wir machen einen Ausflug in die Berge" },
+          { id: "ax2", english: "The luggage is heavy", german: "Das Gepäck ist schwer" },
+          { id: "ax3", english: "My passport is in the suitcase", german: "Mein Pass ist im Koffer" },
+          { id: "ax4", english: "The ferry goes across the river", german: "Die Fähre fährt über den Fluss" },
+          { id: "ax5", english: "The tourist looks for the stop", german: "Der Tourist sucht die Haltestelle" },
+          { id: "ax6", english: "The ship is in the harbor", german: "Das Schiff ist im Hafen" },
+          { id: "ax7", english: "The ticket for the ferry", german: "Die Fahrkarte für die Fähre" },
+          {
+            id: "ax8",
+            english: "The excursion by bike goes across the mountains",
+            german: "Der Ausflug mit dem Fahrrad geht quer durch die Berge",
+          },
+          { id: "ax9", english: "There are fish in the river", german: "Im Fluss sind Fische" },
+          { id: "ax10", english: "Tomatoes and fruit for the excursion", german: "Tomaten und Obst für den Ausflug" },
+          { id: "ax11", english: "Cucumbers, potatoes and onions from the market", german: "Gurken, Kartoffeln und Zwiebeln vom Markt" },
+          { id: "ax12", english: "The way into the village is far", german: "Der Weg ins Dorf ist weit" },
+          { id: "ax13", english: "The sea is blue, the sky is gray", german: "Das Meer ist blau, der Himmel ist grau" },
+          { id: "ax14", english: "The tourist has a hat and a bag", german: "Der Tourist hat einen Hut und eine Tasche" },
+          {
+            id: "ax15",
+            english: "In August or in September we take the excursion",
+            german: "Im August oder im September machen wir den Ausflug",
+          },
+        ],
+        target_answer:
+          "Wir machen einen Ausflug in die Berge, Das Gepäck ist schwer, Mein Pass ist im Koffer, Die Fähre fährt über den Fluss, Der Tourist sucht die Haltestelle, Das Schiff ist im Hafen, Die Fahrkarte für die Fähre, Der Ausflug mit dem Fahrrad geht quer durch die Berge, Im Fluss sind Fische, Tomaten und Obst für den Ausflug, Gurken, Kartoffeln und Zwiebeln vom Markt, Der Weg ins Dorf ist weit, Das Meer ist blau, der Himmel ist grau, Der Tourist hat einen Hut und eine Tasche, Im August oder im September machen wir den Ausflug",
+        meaning: "excursion, luggage, passport, ferry, tourist, harbor",
+        explanation:
+          "Six day-trip frames from five new nouns and the verbs you own: machen carries the Ausflug, fährt drives die Fähre, sucht is suchen looking for den Weg. Das Gepäck stays singular even when it is heavy.",
+      },
+      {
+        id: "l5261_e2",
+        type: "shift_select",
+        prompt: "'Der Ausflug' is an out-trip — aus + the noun of a verb you own. Which verb is hiding inside it?",
+        options: ["fliegen", "fahren", "kommen", "haben"],
+        target_answer: "fliegen",
+        meaning: "Ausflug = aus + Flug, fliegen's noun",
+        explanation:
+          "der Flug is fliegen's noun, and aus sends it outside: an out-flight. English asked Latin for the same idea — excursion is excurrere, 'to run out' — while German compounded the verb it already had.",
+      },
+      {
+        id: "l5261_e3",
+        type: "reverse_cognate",
+        prompt:
+          "die Fähre is the boat of the fahren family. English kept the same root as the verb for what a trip costs (fare) and as the craft that carries you. Which is die Fähre's twin?",
+        options: ["ferry", "fairy", "furrow", "farrow"],
+        target_answer: "ferry",
+        meaning: "die Fähre ↔ ferry: the fahren family's boat",
+        explanation:
+          "ferry is Old English ferian, 'to carry', the causative twin of faran — the verb German keeps as fahren. fairy (Latin fata), furrow (a ploughing word) and farrow (a litter of pigs) are look-alikes from different families.",
+      },
+      {
+        id: "l5261_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the crossing sentence: 'The ferry goes across the river'",
+        tile_options: ["Die", "Fähre", "fährt", "über", "den", "Fluss", "Meer", "Wasser"],
+        target_answer: "Die Fähre fährt über den Fluss",
+        meaning: "The ferry goes across the river",
+        explanation:
+          "fährt is the same fahren you drive a Zug with — here it is the boat doing the driving. über + den (accusative) marks the crossing, and the bank's Meer and Wasser are the bigger crossings waiting: über das Meer.",
+      },
+      {
+        id: "l5261_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'I have my passport and the luggage'",
+        target_answer: "Ich habe meinen Pass und das Gepäck",
+        meaning: "I have my passport and the luggage",
+        word_bank: ["Ich", "habe", "meinen", "Pass", "und", "das", "Gepäck", "schwer", "Fähre", "Fahrplan"],
+        explanation:
+          "meinen Pass — der Pass takes the masculine -en after mein. und joins a masculine document and a neuter collective without changing stride: der Pass, das Gepäck, one sentence.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Pack the day trip: Ausflug, Gepäck, Pass, Fähre, Tourist — and know which verb or Latin step each one carries.",
+      use_example: {
+        german: "Wir machen einen Ausflug — die Fähre fährt über den Fluss.",
+        english: "We take an excursion — the ferry goes across the river.",
+      },
+      takeaway:
+        "Ausflug = aus + Flug (excursion is Latin 'run out'); Gepäck is the ge-collective of English pack; Pass is Latin passus 'step'; Fähre is ferry of the fahren family; Tourist is a turner of circles.",
+      curiosity_teaser:
+        "Next: five countries — Deutschland, Frankreich, England, Spanien, Italien — and why English renamed two of them.",
+    },
+  },
+
+  {
+    id: 5262,
+    slug: "laender-i-deutschland-frankreich-england-spanien-italien",
+    title: "Länder I: Deutschland, Frankreich, England, Spanien, Italien",
+    subtitle: "five country names — the ones English kept, the ones it renamed, and the one that points at you",
+    phase: 3,
+    shift_categories: ["th_to_d", "k_to_ch"],
+    word_ids: [
+      "deutschland",
+      "frankreich",
+      "england",
+      "spanien",
+      "italien",
+      "norden",
+      "süden",
+      "westen",
+      "braun",
+      "fern",
+      "karte",
+      "fähre",
+      "rot",
+      "juni",
+      "juli",
+      "deutsch",
+      "reich",
+      "bruder",
+      "wohnen",
+      "freund",
+      "urlaub",
+      "stadt",
+      "schön",
+    ],
+    table_word_ids: ["deutschland", "frankreich", "england", "spanien", "italien"],
+    hook: {
+      title: "The Map Split in Two",
+      content:
+        "England both languages kept, and for the best reason in this course: the Angles were a Germanic tribe from Angeln, a small peninsula in Schleswig, and when they sailed west their name became England — the Angles' land — and their tongue became English. You are not studying a foreign cousin; English is a Germanic dialect that moved next door and borrowed a Roman wardrobe. Deutschland German built from deutsch: Proto-Germanic *þiudiskaz, 'of the (our) people', with the same þ→d hardening that made drei out of three and Bruder out of brother — while English borrowed the Dutch form of that very word as Dutch, pointed it at the Netherlands, and took Germany's own name from Latin Germani instead. Frankreich is the Franks' realm: reich is English rich wearing the k→ch badge (Buch/book, brechen/break), and the Franks were so famously the free men of Gaul that English borrowed their very name as the adjective frank. Spanien and Italien are simply Rome's names — Hispania and Italia — which both languages kept as Rome left them.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The People-Word English Lost",
+          content:
+            "The root of deutsch, Proto-Germanic *þeudō, 'people', was Old English þēod. English let it die and kept the family only by borrowing: Dutch (from the Dutch form of *þiudiskaz) and Teutonic (from the Latinized form). German kept the native word and made a country of it — the people's land.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Countries in Frames",
+      content:
+        "Three frames, and no article anywhere. 1. Dwell: Ich wohne in Deutschland — the bare country, exactly like German cities. 2. Move: Ich fahre nach Frankreich, Wir urlauben in Spanien — nach for travel toward a country, in for being inside it. 3. Originate: Er kommt aus England — aus for where someone is from. And the adjective that got away: Frankreich ist schön und reich — reich is the ordinary word 'rich', doing double duty inside the country name.",
+      footnotes: [],
+      linguist_note:
+        "Country names are migration sediment. The Angles named England and, through it, the English language; the Franks named Francia — and, because in Frankish Gaul only the Franks were free, their name became the adjective frank 'free'; the Romans wrote Germani, origin uncertain, and English kept Rome's label. German answered all of it with one native compound: the people's land.",
+    },
+    exercises: [
+      {
+        id: "l5262_e1",
+        type: "matching_pairs",
+        prompt: "Five countries, no article — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "ct1", english: "I live in Germany", german: "Ich wohne in Deutschland" },
+          { id: "ct2", english: "I am going to France", german: "Ich fahre nach Frankreich" },
+          { id: "ct3", english: "He comes from England", german: "Er kommt aus England" },
+          { id: "ct4", english: "We vacation in Spain", german: "Wir urlauben in Spanien" },
+          { id: "ct5", english: "Italy is very beautiful", german: "Italien ist sehr schön" },
+          { id: "ct6", english: "Spain is in the south, England in the north", german: "Spanien ist im Süden, England im Norden" },
+          {
+            id: "ct7",
+            english: "In June we vacation in Spain, in July in Italy",
+            german: "Im Juni urlauben wir in Spanien, im Juli in Italien",
+          },
+          { id: "ct8", english: "Italy is not far", german: "Italien ist nicht fern" },
+          { id: "ct9", english: "Spain is on the map", german: "Spanien ist auf der Karte" },
+          { id: "ct10", english: "The tomato is red", german: "Die Tomate ist rot" },
+          { id: "ct11", english: "My dog is brown", german: "Mein Hund ist braun" },
+          { id: "ct12", english: "France is in the west", german: "Frankreich ist im Westen" },
+          { id: "ct13", english: "The ferry to Italy", german: "Die Fähre nach Italien" },
+        ],
+        target_answer:
+          "Ich wohne in Deutschland, Ich fahre nach Frankreich, Er kommt aus England, Wir urlauben in Spanien, Italien ist sehr schön, Spanien ist im Süden, England im Norden, Im Juni urlauben wir in Spanien, im Juli in Italien, Italien ist nicht fern, Spanien ist auf der Karte, Die Tomate ist rot, Mein Hund ist braun, Frankreich ist im Westen, Die Fähre nach Italien",
+        meaning: "live in, travel to, come from, vacation in, is beautiful",
+        explanation:
+          "Dwell in, move nach, come aus: the three prepositions do the whole grammar, and none of the five countries takes an article. urlauben is Urlaub made into a verb — German verbifies, English paraphrases.",
+      },
+      {
+        id: "l5262_e2",
+        type: "shift_select",
+        prompt: "deutsch hardened the old þ to d — *þiudiskaz, 'of the people'. Which pair wears the same TH→D badge?",
+        options: ["Bruder ↔ brother", "Tag ↔ day", "zehn ↔ ten", "Haus ↔ house"],
+        target_answer: "Bruder ↔ brother",
+        meaning: "deutsch is *þiudiskaz with the TH→D badge, like Bruder/brother",
+        explanation:
+          "Bruder/brother is TH→D: same Proto-Germanic word, German hardened þ, English kept th. Tag/day runs the other way (D→T — German hardened d), and zehn/ten is T→S. Three badges, three directions, one family album.",
+      },
+      {
+        id: "l5262_e3",
+        type: "reverse_cognate",
+        prompt:
+          "English borrowed deutsch through Dutch — and pointed the word at the Netherlands. What is the English twin of deutsch?",
+        options: ["Dutch", "German", "Dane", "deuce"],
+        target_answer: "Dutch",
+        meaning: "deutsch ↔ Dutch: one word, two neighbors",
+        explanation:
+          "Deutsch and Dutch are the same word — *þiudiskaz, 'of the people'. English took the Dutch form duutsc, aimed it at the Netherlands, and named Germany with Latin Germani instead. deuce is French deux, 'two', and Dane is a different tribe entirely — false friends on both flanks.",
+      },
+      {
+        id: "l5262_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble: 'My friend lives in Italy'",
+        tile_options: ["Mein", "Freund", "wohnt", "in", "Italien", "Spanien", "Deutschland"],
+        target_answer: "Mein Freund wohnt in Italien",
+        meaning: "My friend lives in Italy",
+        explanation:
+          "wohnt is wohnen in slot 2 after Mein Freund takes slot 1 — the swap you have drilled all course. The bank's two other countries fit the same frame: Mein Freund wohnt in Spanien, in Deutschland.",
+      },
+      {
+        id: "l5262_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'France is beautiful and rich'",
+        target_answer: "Frankreich ist schön und reich",
+        meaning: "France is beautiful and rich",
+        word_bank: ["Frankreich", "ist", "schön", "und", "reich", "Deutschland", "Spanien"],
+        explanation:
+          "reich is the ordinary adjective 'rich' — the k→ch twin of English rich (Buch/book) — doing double duty inside the country name: the realm of the Franks, who gave English the adjective frank.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Say where you live, where you travel and where you are from — five country names, three prepositions, no articles.",
+      use_example: { german: "Ich wohne in Deutschland — mein Bruder wohnt in England.", english: "I live in Germany — my brother lives in England." },
+      takeaway:
+        "England is the Angles' land from Angeln; deutsch and Dutch are one word (*þiudiskaz, TH→D); reich is rich (k→ch); Frankreich is the Franks' realm; Spanien and Italien are Rome's own names.",
+      curiosity_teaser: "Next: the neighbors — and the two countries whose names insist on bringing their own article.",
+    },
+  },
+
+  {
+    id: 5271,
+    slug: "laender-ii-schweiz-oesterreich-tuerkei-polen-irland",
+    title: "Länder II: die Schweiz, Österreich, die Türkei, Polen, Irland",
+    subtitle: "five more countries — two insist on their article, and the endings -ei, -land and -reich still mean what they meant",
+    phase: 3,
+    shift_categories: ["k_to_ch"],
+    word_ids: [
+      "schweiz",
+      "österreich",
+      "türkei",
+      "polen",
+      "irland",
+      "früh",
+      "januar",
+      "februar",
+      "märz",
+      "feiertag",
+      "datum",
+      "november",
+      "grau",
+      "dezember",
+      "hotel",
+      "fern",
+      "karte",
+      "fähre",
+      "mütze",
+      "lila",
+      "rosa",
+      "farbe",
+      "grün",
+      "frankreich",
+      "italien",
+      "spanien",
+      "osten",
+      "fisch",
+      "fahrkarte",
+      "abfahrt",
+      "ankunft",
+      "flughafen",
+      "ausflug",
+      "tourist",
+      "england",
+      "deutschland",
+      "urlaub",
+      "fahren",
+      "familie",
+      "reich",
+    ],
+    table_word_ids: ["schweiz", "österreich", "türkei", "polen", "irland"],
+    hook: {
+      title: "The Row That Brings Its Own Article",
+      content:
+        "Länder I gave you five names that travel bare — nach Deutschland, aus Spanien. The second row splits in two: Österreich, Polen and Irland stay bare, while die Schweiz and die Türkei insist on carrying die. And the names themselves are little history lessons. die Schweiz is a country named after one canton: Schwyz was a member of the 1291 confederation, its people were so loud in the alliance's story that by the fifteenth century the whole union answered to their valley's name. Österreich is a compass reading: Ost + Reich, 'eastern realm' — the same Ost as your compass word der Osten, and the same reich you met inside Frankreich, the k→ch twin of English rich; the old royal names kept it too, as the -ric in Theodoric. die Türkei is built with the place-suffix -ei, the same one that turns backen into die Bäckerei: the place of the Turks. Polen keeps its Slavic story — the Polanie, 'the plain-dwellers', the people of the open field. And Irland is English Ireland with one letter gone: German heard the name and simply kept it, with the purest cognate pair in the language at the end, Land ↔ land.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "One Country, Four Languages",
+          content:
+            "die Schweiz has four national languages: German, French, Italian and Romansh. The next lesson hands you three of those four names — which is one reason Swiss schoolchildren would find your German homework very reasonable.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Countries in Frames, Articles Attached",
+      content:
+        "The three frames from Länder I still do all the work — only the articles change. 1. Dwell: Ich wohne in der Schweiz, Ich wohne in Polen — the feminine names take die, and in + die collapses to der. 2. Move: Ich fahre nach Österreich, Ich fahre in die Türkei — bare names ride after nach, feminine names prefer in die. 3. Originate: Meine Familie kommt aus Polen, Irland ist grün und schön. Time drops into position 1 as always: Im März fahre ich nach Österreich, Im Januar bin ich in der Schweiz — im is in + dem, the month's own little contraction.",
+      footnotes: [],
+      linguist_note:
+        "The place-suffixes are old money. -land is the Germanic land (England, Irland, Deutschland — one recipe, three countries), -ei is Latin -ia in German clothes (Türkei, Bäckerei), and -reich is the old ruler-word. English writes the same Latin suffix as -y: Turkey, Hungary, Italy — the ending is identical, only the costume changed.",
+    },
+    exercises: [
+      {
+        id: "l5271_e1",
+        type: "matching_pairs",
+        prompt: "The second row of countries — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "sc1", english: "I live in Switzerland", german: "Ich wohne in der Schweiz" },
+          { id: "sc2", english: "In January I am in Austria", german: "Im Januar bin ich in Österreich" },
+          { id: "sc3", english: "My family comes from Poland", german: "Meine Familie kommt aus Polen" },
+          { id: "sc4", english: "The vacation was in Turkey", german: "Der Urlaub war in der Türkei" },
+          { id: "sc5", english: "Ireland is green and beautiful", german: "Irland ist grün und schön" },
+          { id: "sc6", english: "I drive to Germany very early", german: "Ich fahre sehr früh nach Deutschland" },
+          {
+            id: "sc7",
+            english: "In November Ireland is gray, in December I am in Switzerland",
+            german: "Im November ist Irland grau, im Dezember bin ich in der Schweiz",
+          },
+          { id: "sc8", english: "The date of the holiday is the first of January", german: "Das Datum vom Feiertag ist der 1. Januar" },
+          {
+            id: "sc9",
+            english: "The hotel is in Switzerland, the ferry to Ireland",
+            german: "Das Hotel ist in der Schweiz, die Fähre nach Irland",
+          },
+          { id: "sc10", english: "Poland and Switzerland on the map", german: "Polen und die Schweiz auf der Karte" },
+          { id: "sc11", english: "Ireland is far", german: "Irland ist fern" },
+          { id: "sc12", english: "The cap is lilac, the flower is pink", german: "Die Mütze ist lila, die Blume ist rosa" },
+          { id: "sc13", english: "The color of Ireland is green", german: "Die Farbe Irlands ist grün" },
+          { id: "sc14", english: "The train to France or Italy", german: "Der Zug nach Frankreich oder Italien" },
+          { id: "sc15", english: "The vacation was in Spain", german: "Der Urlaub war in Spanien" },
+          { id: "sc16", english: "Austria is in the east", german: "Österreich ist im Osten" },
+          { id: "sc17", english: "In Ireland we eat fish", german: "In Irland essen wir Fisch" },
+          { id: "sc18", english: "The tourist from England", german: "Der Tourist aus England" },
+        ],
+        target_answer:
+          "Ich wohne in der Schweiz, Im Januar bin ich in Österreich, Meine Familie kommt aus Polen, Der Urlaub war in der Türkei, Irland ist grün und schön, Ich fahre sehr früh nach Deutschland, Im November ist Irland grau, im Dezember bin ich in der Schweiz, Das Datum vom Feiertag ist der 1. Januar, Das Hotel ist in der Schweiz, die Fähre nach Irland, Polen und die Schweiz auf der Karte, Irland ist fern, Die Mütze ist lila, die Blume ist rosa, Die Farbe Irlands ist grün, Der Zug nach Frankreich oder Italien, Der Urlaub war in Spanien, Österreich ist im Osten, In Irland essen wir Fisch, Der Tourist aus England",
+        meaning: "live in, travel to, come from, vacation in, is beautiful",
+        explanation:
+          "Three countries ride bare (Österreich, Polen, Irland), two bring their own die (Schweiz, Türkei) and turn in der. The frames are the ones from Länder I: in for dwelling, aus for coming, nach for going.",
+      },
+      {
+        id: "l5271_e2",
+        type: "shift_select",
+        prompt: "'Ich wohne in _____.' — which of these country names refuses to travel without its article?",
+        options: ["die Türkei", "Österreich", "Polen", "Irland"],
+        target_answer: "die Türkei",
+        meaning: "die Türkei is one of the two feminines — die Schweiz is the other",
+        explanation:
+          "die Türkei and die Schweiz are feminine and carry die everywhere: in der Türkei, in der Schweiz. Österreich, Polen and Irland are neuter and go bare, like all of Länder I.",
+      },
+      {
+        id: "l5271_e3",
+        type: "reverse_cognate",
+        prompt:
+          "Österreich ends in reich — rich's k→ch twin (Buch/book), the same root that ends Theodoric as -ric. Which English word is reich's twin?",
+        options: ["rich", "realm", "reach", "right"],
+        target_answer: "rich",
+        meaning: "reich ↔ rich: one ruler-word, two outcomes",
+        explanation:
+          "Both descend from the same Germanic ruler-word: German kept the ruler and the realm (das Reich) alongside the money sense, while English narrowed the word to wealth. reach is a different root that happens to rhyme, realm came from Latin through French — and right is unrelated.",
+      },
+      {
+        id: "l5271_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble: 'I am traveling to Austria in March'",
+        tile_options: ["Im", "März", "fahre", "ich", "nach", "Österreich", "Schweiz"],
+        target_answer: "Im März fahre ich nach Österreich",
+        meaning: "I am traveling to Austria in March",
+        explanation:
+          "The month phrase takes position 1 and pushes fahre to slot 2 — the swap from the time lessons. im is in + dem, and the bare Österreich rides after nach with no article to slow it down.",
+      },
+      {
+        id: "l5271_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'I am traveling to Poland in February'",
+        target_answer: "Im Februar fahre ich nach Polen",
+        meaning: "I am traveling to Poland in February",
+        vocab_hints: [
+          {
+            word: "im",
+            translation: "in the",
+            note:
+              "im is in + dem, fused into one word — months take it bare: im Januar, im März, im Februar. For the feminine countries the fusion makes in + die → in der Schweiz.",
+          },
+        ],
+        word_bank: ["Im", "Februar", "fahre", "ich", "nach", "Polen", "Januar", "Familie", "Türkei", "Fahrkarte", "Abfahrt", "Ankunft", "Flughafen", "Ausflug"],
+        explanation:
+          "Same frame, one country over: Im Februar fahre ich nach Polen. The bank's leftovers prove the frame scales — the month swaps (Januar), the country swaps (Türkei), the frame never notices.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Name five more countries, use them with in, nach and aus — articles attached for the two feminines — and read the -ei, -land and -reich endings as the old words they are.",
+      use_example: {
+        german: "Im März fahre ich nach Österreich — im Januar war ich in der Schweiz.",
+        english: "In March I am traveling to Austria — in January I was in Switzerland.",
+      },
+      takeaway:
+        "die Schweiz and die Türkei wear die; Österreich, Polen and Irland go bare. Österreich is 'eastern realm' with rich inside it, die Türkei is Türk + -ei like Bäckerei, and Irland kept Ireland's name.",
+      curiosity_teaser:
+        "Next: die Sprache and the four language names — and the ending -isch that turns out to be English's own -ish.",
+    },
+  },
+
+  {
+    id: 5272,
+    slug: "sprachen-sprache-franzoesisch-englisch-spanisch-italienisch",
+    title: "Sprachen: die Sprache, französisch, englisch, spanisch, italienisch",
+    subtitle: "the language names are the country names wearing -isch — and -isch is English's own -ish",
+    phase: 3,
+    shift_categories: ["k_to_ch"],
+    word_ids: [
+      "sprache",
+      "französisch",
+      "englisch",
+      "spanisch",
+      "italienisch",
+      "schweiz",
+      "österreich",
+      "türkei",
+      "polen",
+      "irland",
+      "sprechen",
+      "sofort",
+      "deutsch",
+      "deutschland",
+      "frankreich",
+      "england",
+      "spanien",
+      "italien",
+    ],
+    table_word_ids: ["sprache", "französisch", "englisch", "spanisch", "italienisch"],
+    hook: {
+      title: "die Sprache Is What sprechen Leaves Behind",
+      content:
+        "die Sprache is the noun made from sprechen — speak's own k→ch twin (Buch/book, Milch/milk). Sprache is literally 'that which is spoken': the talking, and then, by extension, the whole system a people talks with. Now look at the four language names, because they are the country names from the last two lessons wearing a suffix: Frankreich → französisch, Spanien → spanisch, Italien → italienisch, England → englisch. That suffix -isch is the aha of the lesson: it is English's own -ish. Both descend from one Proto-Germanic ending, *-iskaz — so englisch and english are the same word built the same way, and Irish, Scottish and Danish carry the English half of it into the present. Even deutsch wears it: the word from Länder I that became Dutch in English is *þiudiskaz, 'of the people' — the -isk is sitting right there in the oldest member of the family. And when the language stands for itself as a noun, German capitalizes it: Ich spreche Französisch.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Capital or Lowercase?",
+          content:
+            "As a noun — the language itself — German capitalizes: Ich spreche Englisch, Ich lerne Französisch. As an adjective in front of a noun it stays lowercase: ein französisches Buch, die französische Sprache. Same word, two costumes — the capital tells you it is the language.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Speaking About Speaking",
+      content:
+        "Four frames. 1. State it: Ich spreche Englisch und Deutsch — the language after sprechen is a capitalized noun. 2. Ask it: Sprechen Sie Spanisch? — formal Sie, verb first, language capitalized. 3. Count it: Wir sprechen drei Sprachen — die Sprache pluralizes to die Sprachen like any die noun. 4. Pair it: England → englisch, Frankreich → französisch, Spanien → spanisch, Italien → italienisch — and the odd one out is Deutschland, whose language deutsch was the original -isch word of all. One warning from the pairs: adverbial uses stay lowercase — Wir essen oft italienisch means eating Italian-style, no noun in sight.",
+      footnotes: [],
+      linguist_note:
+        "*-iskaz is one suffix wearing three national costumes: German -isch (englisch, irisch, schottisch), English -ish (English, Irish, Scottish), and Scandinavian -sk (Danish dansk). The sound-shape drifted, the job never changed — 'in the style of'. English uses it natively in its own nationality words and borrowed French -esque alongside; German never stopped building with it.",
+    },
+    exercises: [
+      {
+        id: "l5272_e1",
+        type: "matching_pairs",
+        prompt: "Talking about languages — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "sp1", english: "I speak English and German", german: "Ich spreche Englisch und Deutsch" },
+          { id: "sp2", english: "Do you speak Spanish?", german: "Sprechen Sie Spanisch" },
+          { id: "sp3", english: "The French language is beautiful", german: "Die französische Sprache ist schön" },
+          { id: "sp4", english: "We often eat Italian", german: "Wir essen oft italienisch" },
+          { id: "sp5", english: "We speak three languages", german: "Wir sprechen drei Sprachen" },
+          { id: "sp6", english: "Switzerland has four languages", german: "Die Schweiz hat vier Sprachen" },
+          { id: "sp7", english: "In Austria one speaks German", german: "In Österreich spricht man Deutsch" },
+          { id: "sp8", english: "The language of Turkey", german: "Die Sprache der Türkei" },
+          { id: "sp9", english: "The language of Poland", german: "Die Sprache von Polen" },
+          { id: "sp10", english: "In Ireland one speaks English", german: "In Irland spricht man Englisch" },
+        ],
+        target_answer:
+          "Ich spreche Englisch und Deutsch, Sprechen Sie Spanisch, Die französische Sprache ist schön, Wir essen oft italienisch, Wir sprechen drei Sprachen, Die Schweiz hat vier Sprachen, In Österreich spricht man Deutsch, Die Sprache der Türkei, Die Sprache von Polen, In Irland spricht man Englisch",
+        meaning: "speak, ask about languages, the language noun, eat Italian-style, count languages",
+        explanation:
+          "Every country name from the last two lessons reappears wearing -isch. The capitalized forms (Englisch, Spanisch) are nouns — the language itself; the lowercase französische and italienisch are adjectives doing describing work.",
+      },
+      {
+        id: "l5272_e2",
+        type: "shift_select",
+        prompt: "die Sprache is built on one of these verbs — 'that which is spoken'. Which one?",
+        options: ["sprechen", "trinken", "sagen", "leben"],
+        target_answer: "sprechen",
+        meaning: "die Sprache ← sprechen: the k→ch family (speak)",
+        explanation:
+          "sprechen is speak's k→ch twin, and die Sprache is its noun: what is spoken. sagen means 'to say' — a different verb doing a different job — and trinken and leben have no language business at all.",
+      },
+      {
+        id: "l5272_e3",
+        type: "reverse_cognate",
+        prompt: "-isch and English -ish are one suffix, *-iskaz. englisch : english :: spanisch : ___",
+        target_answer: "spanish",
+        meaning: "spanisch ↔ spanish: the same suffix on the same country stem",
+        explanation:
+          "spanisch and spanish are built identically: the country stem + the one Germanic suffix. English kept *-iskaz in its nationality words (English, Irish, Scottish); German never let it go. The pair is audible the moment you say it aloud.",
+      },
+      {
+        id: "l5272_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the question: 'Do you speak English?'",
+        tile_options: ["Sprechen", "Sie", "Englisch", "Französisch", "Sprache"],
+        target_answer: "Sprechen Sie Englisch",
+        meaning: "Do you speak English?",
+        explanation:
+          "Verb first with Sie — the question frame you drilled in the first topic. Englisch is capitalized because it is the noun here; swap in Französisch and the frame holds: Sprechen Sie Französisch?",
+      },
+      {
+        id: "l5272_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'Let us speak German right now'",
+        target_answer: "Sprechen wir sofort Deutsch",
+        meaning: "Let us speak German right now",
+        vocab_hints: [
+          {
+            word: "sofort",
+            translation: "right now, immediately",
+            note:
+              "your time-lesson adverb — Komm bitte sofort! Here it pushes the whole sentence: no waiting, switch to German now. Sprechen wir... is the let-us frame: verb first, no question mark needed.",
+          },
+        ],
+        word_bank: ["Sprechen", "wir", "sofort", "Deutsch", "Englisch", "Französisch", "Spanisch", "Italienisch"],
+        explanation:
+          "Sprechen wir sofort Deutsch — the hortative frame (verb first, wir behind) with sofort doing the urgency and Deutsch capitalized as the noun it is. The bank's other three languages fit the same slot: Sprechen wir sofort Französisch.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Say which languages you speak, ask Sprechen Sie...?, count die Sprachen, and see -isch as English -ish every time.",
+      use_example: { german: "Ich spreche Englisch — und ich lerne Französisch.", english: "I speak English — and I am learning French." },
+      takeaway:
+        "die Sprache is sprechen's k→ch noun; every language name is a country name + -isch; -isch and -ish are one suffix (*-iskaz); language nouns are capitalized: Ich spreche Französisch.",
+      curiosity_teaser:
+        "Next: the five jobs a first conversation needs — der Arzt, der Bäcker, der Verkäufer, der Polizist, der Schüler.",
+    },
+  },
+
+  {
+    id: 5281,
+    slug: "berufe-i-arzt-baecker-verkaeufer-polizist-schueler",
+    title: "Berufe I: der Arzt, der Bäcker, der Verkäufer, der Polizist, der Schüler",
+    subtitle: "five jobs for a first conversation — one Greek double-door, one bake, and the prefix English wrote as for-",
+    phase: 3,
+    shift_categories: [],
+    word_ids: [
+      "arzt",
+      "bäcker",
+      "verkäufer",
+      "polizist",
+      "schüler",
+      "termin",
+      "computer",
+      "österreich",
+      "verkaufen",
+      "kaufen",
+      "brot",
+      "lehrer",
+      "auto",
+      "helfen",
+      "mann",
+      "buch",
+    ],
+    table_word_ids: ["arzt", "bäcker", "verkäufer", "polizist", "schüler"],
+    hook: {
+      title: "Five Jobs, Four Recipes",
+      content:
+        "der Bäcker is the honest one: backen — English bake, the same Proto-Germanic verb — plus the doer-suffix -er, exactly English's baker. der Verkäufer runs on verkaufen, the shopping verb you already own: ver- + kaufen, and ver- is the prefix English wrote as for- (verboten/forbidden, vergeben/forgive — same old *fra-, 'away'). The gem hides inside: Kauf and English cheap are twins — one old trader-word that German kept as the noun and English narrowed to 'low price', which is why London's old market street is called Cheapside. der Polizist borrows Greek through Latin: Polizei is Greek politeia, 'the city's business' — the same Greek word English took as police, and policy is a cousin; the -ist tail is Greek's agent ending, the same one in artist and dentist. der Schüler borrows a different Greek word: Schule is Greek scholē, 'leisure' — Greek thinking time, turned into lecture, then school; scholar is that same Greek word through Latin. And der Arzt came by the medical door: Latin archiater, 'chief healer', from Greek archi- + iatros — a court physician's title that German heard and kept whole.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Two Greek Doors, One Profession",
+          content:
+            "English and German both wanted a word for the person who treats the sick, and both went shopping in Greek — but at different stalls. German took archiater, the 'chief healer', and squeezed it into Arzt. English took cheirourgia, 'hand-work', and after a long detour through French it arrived as surgeon. Different Greek words, different doors, one profession.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Jobs After sein Go Bare",
+      content:
+        "Two rules carry the lesson. 1. After sein, the profession drops the article: Ich bin Verkäufer, Ich bin Lehrer — not ein Verkäufer. English keeps the a; German trusts the noun. 2. The job does its verb: der Bäcker verkauft Brot, der Arzt hilft mir — hilft is helfen's vowel-changed third person, and the doer-suffixes split cleanly: -er for native makes (Bäcker, Verkäufer), -ist for the borrowed Greek ones (Polizist). Plural preview: der Arzt umlauts — die Ärzte — while die Schüler and die Bäcker stay flat.",
+      footnotes: [],
+      linguist_note:
+        "The -er of Verkäufer and the -er of English baker, seller, buyer are the same suffix doing the same job on both sides of the channel — German and English agree on agents. -ist is the Greek -istēs both languages borrowed through Latin. And the pair Kauf/cheap is a reminder that some twins diverge in meaning, not in sound: same trader-word, one kept the trade, one kept the discount.",
+    },
+    exercises: [
+      {
+        id: "l5281_e1",
+        type: "matching_pairs",
+        prompt: "The first-conversation jobs — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "jb1", english: "The baker sells bread", german: "Der Bäcker verkauft Brot" },
+          { id: "jb2", english: "The doctor helps me", german: "Der Arzt hilft mir" },
+          { id: "jb3", english: "The policeman knows the man", german: "Der Polizist kennt den Mann" },
+          { id: "jb4", english: "The pupil reads the book", german: "Der Schüler liest das Buch" },
+          { id: "jb5", english: "I am a teacher", german: "Ich bin Lehrer" },
+          { id: "jb6", english: "The pupil from Austria reads at the computer", german: "Der Schüler aus Österreich liest am Computer" },
+          { id: "jb7", english: "I have an appointment with the doctor", german: "Ich habe einen Termin beim Arzt" },
+        ],
+        target_answer:
+          "Der Bäcker verkauft Brot, Der Arzt hilft mir, Der Polizist kennt den Mann, Der Schüler liest das Buch, Ich bin Lehrer, Der Schüler aus Österreich liest am Computer, Ich habe einen Termin beim Arzt",
+        meaning: "sell, help, know, read, be a profession",
+        explanation:
+          "Note pair five: after bin the article vanishes — Ich bin Lehrer, not ein Lehrer. The job words do their verbs: the baker verkauft, the Arzt hilft, the Schüler liest.",
+      },
+      {
+        id: "l5281_e2",
+        type: "shift_select",
+        prompt: "'Ich bin _____.' (I am a baker) — which form does German actually say?",
+        options: ["Bäcker", "ein Bäcker", "der Bäcker", "einen Bäcker"],
+        target_answer: "Bäcker",
+        meaning: "professions after sein take no article",
+        explanation:
+          "After sein, German states the profession bare: Ich bin Bäcker. The article English needs (a) is exactly the word German leaves at home — one of the first habits worth building.",
+      },
+      {
+        id: "l5281_e3",
+        type: "reverse_cognate",
+        prompt:
+          "German took Greek's 'chief healer' (archiater → Arzt). English took Greek's 'hand-work' (cheirourgia → ___). What is the English word?",
+        options: ["surgeon", "physician", "medic", "doctor"],
+        target_answer: "surgeon",
+        meaning: "surgeon is cheirourgia, 'hand-work' — Greek through French",
+        explanation:
+          "surgeon walked from Greek cheirourgia ('hand-work' — cheir is hand) through Latin and Old French into English, while Arzt walked from Greek archiatros ('chief healer') through medieval Latin into German. Two doors from the same language, no borrowing between them.",
+      },
+      {
+        id: "l5281_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble: 'The salesman sells the car'",
+        tile_options: ["Der", "Verkäufer", "verkauft", "das", "Auto", "Bäcker"],
+        target_answer: "Der Verkäufer verkauft das Auto",
+        meaning: "The salesman sells the car",
+        explanation:
+          "Der Verkäufer verkauft — the profession and its verb are the same word under the suffix, exactly like baker/bakes. The bank's Bäcker reminds you the frame is generic: Der Bäcker verkauft Brot.",
+      },
+      {
+        id: "l5281_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The doctor helps the child'",
+        target_answer: "Der Arzt hilft dem Kind",
+        meaning: "The doctor helps the child",
+        vocab_hints: [
+          {
+            word: "hilft",
+            translation: "helps",
+            note:
+              "helfen in its vowel-changed third person: ich helfe, du hilfst, er hilft. helfen also pulls its helper into the dative — dem Kind, mir.",
+          },
+        ],
+        word_bank: ["Der", "Arzt", "hilft", "dem", "Kind", "Polizist", "Verkäufer", "Mann"],
+        explanation:
+          "Der Arzt hilft dem Kind — helfen gives its object the dative (dem Kind), the same case you saw in Der Arzt hilft mir. The bank holds two more job words: Der Polizist hilft dem Kind works identically.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Name the five first-conversation jobs, say Ich bin + profession with no article, and split the -er and -ist suffix families.",
+      use_example: { german: "Ich bin Verkäufer — ich verkaufe das Auto.", english: "I am a salesman — I am selling the car." },
+      takeaway:
+        "Bäcker is bake + -er; ver- is English for- and Kauf is cheap's twin; Polizist and Schüler are Greek borrowings like police and school; Arzt and surgeon are two different Greek doors to one profession.",
+      curiosity_teaser:
+        "Next: the -er jobs — der Student, der Fahrer, der Sänger, der Bauer, der Arbeiter — and the dweller-family hiding inside Bauer.",
+    },
+  },
+
+  {
+    id: 5282,
+    slug: "berufe-ii-student-fahrer-saenger-bauer-arbeiter",
+    title: "Berufe II: der Student, der Fahrer, der Sänger, der Bauer, der Arbeiter",
+    subtitle: "the -er jobs do what English -er does — and Bauer turns out to be the dweller inside neighbor",
+    phase: 3,
+    shift_categories: ["strong_verbs_ablaut"],
+    word_ids: [
+      "student",
+      "fahrer",
+      "sänger",
+      "bauer",
+      "arbeiter",
+      "hose",
+      "hemd",
+      "mantel",
+      "jacke",
+      "hut",
+      "schal",
+      "socke",
+      "hinten",
+      "fahrplan",
+      "polen",
+      "polizist",
+      "sprache",
+      "fleisch",
+      "käse",
+      "gemüse",
+      "kartoffel",
+      "gurke",
+      "zwiebel",
+      "schüler",
+      "italien",
+      "singen",
+      "fahren",
+      "studieren",
+      "wohnen",
+      "dorf",
+      "bus",
+      "jung",
+      "sieben",
+      "auto",
+    ],
+    table_word_ids: ["student", "fahrer", "sänger", "bauer", "arbeiter"],
+    hook: {
+      title: "The -er Machine, and One Family Reunion",
+      content:
+        "Three of today's jobs are the -er machine running on verbs you already own. der Fahrer is fahren + -er — and fahren is English fare: the same verb that survives in wayfarer and seafarer, so a Fahrer is literally a farer, one who fares. der Sänger is singen + -er, and singen is sing wearing its full ablaut — singen, sang, gesungen against sing, sang, sung: the same seven vowel steps in the same order, the strongest evidence on the course that these two languages are one verb system. der Student is the Latin import: studieren was already yours (Latin studēre, 'to study'), and der Student is that verb's person — Latin made the noun out of the present participle, 'the one studying'. Then the family gem: der Bauer is the -er of bauen, which originally meant not to build but to dwell. A Bauer is a dweller — and English kept the same dweller-word twice: in neighbor, the old near-dweller (nigh + bur), and in boor, the bare dweller that became an insult. Farmer, neighbor and boor are one word at three distances. der Arbeiter is the honest one: die Arbeit has no English cognate — English lost whatever twin it had, and work's true German twin is Werk, a different word entirely.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The -in Keeps the List Honest",
+          content:
+            "German marks the women of these jobs with -in: die Sängerin, die Arbeiterin, die Studentin, die Fahrerin. The -er names the job; the -in names the person who holds it. Bäckerin and Verkäuferin from the last lesson work the same way.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Doer in the Sentence",
+      content:
+        "1. The agent does the verb: Der Fahrer fährt den Bus — fahren in slot 2 with its vowel change, der Student studiert, der Sänger singt. 2. Professions stay bare after sein, as in the last lesson: Der Mann ist Student. 3. Where they stand: Der Bauer wohnt im Dorf — dwelling verbs (wohnen) pair naturally with dwelling people. 4. Plurals: der Sänger → die Sänger, der Fahrer → die Fahrer (-er stays), but der Student → die Studenten — the Latin import takes the Latin-style -en ending.",
+      footnotes: [],
+      linguist_note:
+        "sing/sang/sung and singen/sang/gesungen are not similar — they are the same ablaut row, inherited whole from Proto-Germanic. Vowel change as grammar (here: past tense) predates both languages, which is why a German learner's strongest anchor is not a word list but the vowel map English already ships with. Bauer's row is different evidence: not a shared verb system but one noun that split into dweller, farmer, neighbor and boor as the languages drifted apart.",
+    },
+    exercises: [
+      {
+        id: "l5282_e1",
+        type: "matching_pairs",
+        prompt: "The -er jobs — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "er1", english: "The student is young", german: "Der Student ist jung" },
+          { id: "er2", english: "The farmer lives in the village", german: "Der Bauer wohnt im Dorf" },
+          { id: "er3", english: "The singer sings beautifully", german: "Der Sänger singt schön" },
+          { id: "er4", english: "The worker comes at seven o'clock", german: "Der Arbeiter kommt um sieben Uhr" },
+          { id: "er5", english: "The driver drives the bus", german: "Der Fahrer fährt den Bus" },
+          { id: "er6", english: "The worker wears trousers and a shirt", german: "Der Arbeiter trägt eine Hose und ein Hemd" },
+          {
+            id: "er7",
+            english: "In winter the farmer wears a coat, a scarf, a hat and warm socks",
+            german: "Im Winter trägt der Bauer einen Mantel, einen Schal, einen Hut und warme Socken",
+          },
+          { id: "er8", english: "The student wears a jacket today", german: "Der Student trägt heute eine Jacke" },
+          {
+            id: "er9",
+            english: "The driver reads the timetable and drives to Poland",
+            german: "Der Fahrer liest den Fahrplan und fährt nach Polen",
+          },
+          { id: "er10", english: "The policeman asks the student", german: "Der Polizist fragt den Studenten" },
+          { id: "er11", english: "The language is hard, but beautiful", german: "Die Sprache ist schwer, aber schön" },
+          { id: "er12", english: "The policeman sits at the back of the bus", german: "Der Polizist sitzt hinten im Bus" },
+          { id: "er13", english: "The farmer brings meat, cheese and vegetables", german: "Der Bauer bringt Fleisch, Käse und Gemüse" },
+          {
+            id: "er14",
+            english: "The farmer sells potatoes, cucumbers and onions",
+            german: "Der Bauer verkauft Kartoffeln, Gurken und Zwiebeln",
+          },
+          { id: "er15", english: "The pupil reads on the bus", german: "Der Schüler liest im Bus" },
+        ],
+        target_answer:
+          "Der Student ist jung, Der Bauer wohnt im Dorf, Der Sänger singt schön, Der Arbeiter kommt um sieben Uhr, Der Fahrer fährt den Bus, Der Arbeiter trägt eine Hose und ein Hemd, Im Winter trägt der Bauer einen Mantel, einen Schal, einen Hut und warme Socken, Der Student trägt heute eine Jacke, Der Fahrer liest den Fahrplan und fährt nach Polen, Der Polizist fragt den Studenten, Die Sprache ist schwer, aber schön, Der Polizist sitzt hinten im Bus, Der Bauer bringt Fleisch, Käse und Gemüse, Der Bauer verkauft Kartoffeln, Gurken und Zwiebeln, Der Schüler liest im Bus",
+        meaning: "be young, live in the village, sing, come at seven, drive the bus",
+        explanation:
+          "Every job word does its own verb: the Sänger singt, the Fahrer fährt (vowel change), the Bauer wohnt. Note fährt's vowel — the same ablaut family that turns singen into sang.",
+      },
+      {
+        id: "l5282_e2",
+        type: "shift_select",
+        prompt:
+          "singen – sang – gesungen ↔ sing – sang – sung: the same ablaut, step for step. Which job word is built on that verb?",
+        options: ["der Sänger", "der Fahrer", "der Bauer", "der Arbeiter"],
+        target_answer: "der Sänger",
+        meaning: "der Sänger ← singen: the strong-verb job",
+        explanation:
+          "der Sänger is singen's doer — and the vowel inside Sänger (ä) is the plural/stem echo of the same verb. der Fahrer's verb changes its vowel too (fährt), but it is fahren/fare, a different strong verb.",
+      },
+      {
+        id: "l5282_e3",
+        type: "reverse_cognate",
+        prompt:
+          "der Bauer is the dweller (bauen, originally 'to dwell'). English kept the same dweller-word in neighbor, the near-dweller — and once more, bare. Which English word is Bauer's twin?",
+        options: ["boor", "boar", "bore", "bourgeois"],
+        target_answer: "boor",
+        meaning: "Bauer ↔ boor: the bare dweller",
+        explanation:
+          "boor is the same dweller-word as Bauer (English took it through Dutch boer): the country person, later an insult. boar is the pig — a different root that happens to look close; bore and bourgeois are unrelated. The full family: Bauer the farmer, neighbor the near-dweller, boor the bare one.",
+      },
+      {
+        id: "l5282_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble: 'The student studies in the city'",
+        tile_options: ["Der", "Student", "studiert", "in", "der", "Stadt", "Bauer", "Fahrer"],
+        target_answer: "Der Student studiert in der Stadt",
+        meaning: "The student studies in the city",
+        explanation:
+          "der Student studiert — the Latin import and its verb are one family, exactly like Fahrer/fahren. in der Stadt takes the dative the way in der Schweiz did; der Stadt is die Stadt in its dative dress.",
+      },
+      {
+        id: "l5282_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'We are driving to Italy'",
+        target_answer: "Wir fahren nach Italien",
+        meaning: "We are driving to Italy",
+        vocab_hints: [
+          {
+            word: "fahren",
+            translation: "to drive, to travel",
+            note:
+              "the verb behind der Fahrer — and the twin of English fare (wayfarer, seafarer). nach takes the destination: nach Italien, nach Deutschland.",
+          },
+        ],
+        word_bank: ["Wir", "fahren", "nach", "Italien", "Fahrer", "Deutschland", "Auto"],
+        explanation:
+          "Wir fahren nach Italien — the verb that names the driver. The bank keeps der Fahrer and der Auto-world nearby to make the point: whoever fährt is the Fahrer; the -er is waiting on the verb.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Name the -er jobs, hear singen's ablaut inside Sänger, use them with their own verbs, and recite Bauer's family: farmer, neighbor, boor.",
+      use_example: {
+        german: "Der Sänger singt schön — der Fahrer fährt den Bus.",
+        english: "The singer sings beautifully — the driver drives the bus.",
+      },
+      takeaway:
+        "-er does English -er's work on both sides; singen-sang-gesungen mirrors sing-sang-sung; Bauer is the dweller in neighbor and boor; Student is studēre's person; Arbeit has no English twin — work's twin is Werk.",
+      curiosity_teaser:
+        "Next: the borrowed row — der Ingenieur, der Friseur, der Pilot, der Kellner — and der Beruf, which is vocation translated rather than inherited.",
+    },
+  },
+
+  {
+    id: 5291,
+    slug: "berufe-iii-ingenieur-friseur-beruf-pilot-kellner",
+    title: "Berufe III: der Ingenieur, der Friseur, der Beruf, der Pilot, der Kellner",
+    subtitle: "where English borrowed hardest — and Beruf, vocation translated rather than inherited",
+    phase: 3,
+    shift_categories: [],
+    word_ids: [
+      "ingenieur",
+      "friseur",
+      "beruf",
+      "pilot",
+      "kellner",
+      "braun",
+      "schweiz",
+      "englisch",
+      "spanisch",
+      "italienisch",
+      "bäcker",
+      "verkäufer",
+      "student",
+      "fahrer",
+      "pass",
+      "gepäck",
+      "keller",
+      "kamm",
+      "spiegel",
+      "fliegen",
+      "frankreich",
+      "flughafen",
+      "französisch",
+      "brücke",
+      "essen",
+      "kaffee",
+    ],
+    table_word_ids: ["ingenieur", "friseur", "beruf", "pilot", "kellner"],
+    hook: {
+      title: "The French Shelf, the Cellar Man, and the Translated Word",
+      content:
+        "Three of today's five came off the French shelf — and English was in the same store. der Ingenieur is French ingénieur, built on Latin ingenium, 'what you are born with' — in- plus the root of gignere, 'to beget': inborn talent. English borrowed the same French word as engineer, and the Latin root had already crossed twice more: Old French engin meant 'cleverness, skill' before it ever meant a machine, which is why engine, engineer, ingenious and der Ingenieur are one Latin family. The engineer is literally the ingenious one. der Friseur is French friseur, 'the curler', from friser, 'to curl' — and English kept a curling word too: frizz, which dictionaries trace to the same French verb, though some hedge and call the resemblance a coincidence of sound. English even used friseur itself for a while, as a borrowed word for hairdresser. der Pilot took the long road: French pilote, on loan from Italian pilota — and English pilot is the same loan from the same chain, so this twin is nearly identical on both sides. German only splits the work differently: der Pilot flies, and the ship's guide gets a different word entirely (der Lotse). der Kellner looks like a loan but is homegrown compound logic: der Keller, taught back in Wohnen I — the twin of English cellar, both from Latin cellarium — plus the person ending. The Kellner was originally the cellar-master, the officer who kept the wine and the stores; English's exact match is cellarer, the monastery official in charge of the cellar. The waiter was the man of the cellar. And der Beruf is none of these: it is a translation. Literally 'what you are called to' (berufen, 'to call'), it got its modern meaning when Luther needed German for the New Testament's 'calling' — Greek klēsis — and reached for Beruf. English answered the same Greek with Latin: vocare, 'to call', gave vocation. So Beruf is vocation translated rather than inherited — a calque, not a cognate — and it is the word every -er job from the last two lessons hangs under.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The -in Carries On",
+          content:
+            "German marks the women of these jobs with -in, exactly as in the last lesson: die Ingenieurin, die Friseurin, die Pilotin, die Kellnerin. Beruf itself takes no -in — it names the work, not the worker.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Asking Someone's Beruf",
+      content:
+        "1. The question: Was sind Sie von Beruf? (formal) or Was bist du von Beruf? (informal) — how German opens every job conversation. The answer stays bare: Ich bin Pilot. Ich bin Friseur — no article, as in the last two lessons. 2. The umbrella: Mein Beruf ist Ingenieur — der Beruf names the category, and every -er job from the last two lessons files under it: der Arzt, der Bäcker, der Verkäufer, der Student, der Fahrer, der Bauer, der Arbeiter. 3. The doer does the verb: Der Kellner bringt das Essen, der Pilot fliegt nach Spanien — zum Flughafen — der Ingenieur baut eine Brücke (the app's own name-word: Brücke and bridge are the same Proto-Germanic word), der Friseur schneidet die Haare. 4. Plurals: the loans reshape — die Ingenieure, die Friseure, die Piloten (the Latin-style -en, like die Studenten) — while homegrown der Kellner stays bare: die Kellner, like die Fahrer.",
+      footnotes: [],
+      linguist_note:
+        "Ingenieur and engineer are not inherited cognates but doublets: the same French word bought twice. English took engin from Old French by 1300 and built engineer on it; German waited until the sixteenth century and borrowed Ingenieur whole. When two languages shop in the same store for centuries, the aisles fill with doublets — and the older the purchase, the more it has bent: engine now means the machine, not the mind.",
+    },
+    exercises: [
+      {
+        id: "l5291_e1",
+        type: "matching_pairs",
+        prompt: "The borrowed jobs and the calling — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "be1", english: "The engineer lives in France", german: "Der Ingenieur wohnt in Frankreich" },
+          { id: "be2", english: "I go to the hairdresser's", german: "Ich gehe zum Friseur" },
+          { id: "be3", english: "My profession is shop assistant", german: "Mein Beruf ist Verkäufer" },
+          { id: "be4", english: "What do you do for a living? (formal)", german: "Was sind Sie von Beruf?" },
+          { id: "be5", english: "The pilot flies to Spain", german: "Der Pilot fliegt nach Spanien" },
+          { id: "be6", english: "The waiter brings the food", german: "Der Kellner bringt das Essen" },
+          { id: "be7", english: "The waiter was the man from the cellar", german: "Der Kellner kommt vom Keller" },
+          { id: "be8", english: "The coffee is brown", german: "Der Kaffee ist braun" },
+          { id: "be9", english: "The pilot flies to Switzerland", german: "Der Pilot fliegt zur Schweiz" },
+          { id: "be10", english: "The pilot learns English, Spanish and Italian", german: "Der Pilot lernt Englisch, Spanisch und Italienisch" },
+          { id: "be11", english: "The student has no profession yet", german: "Der Student hat noch keinen Beruf" },
+          { id: "be12", english: "The driver from the airport", german: "Der Fahrer vom Flughafen" },
+          { id: "be13", english: "My passport and my luggage", german: "Mein Pass und mein Gepäck" },
+          { id: "be14", english: "The hairdresser, the comb and the mirror", german: "Der Friseur, der Kamm und der Spiegel" },
+        ],
+        target_answer:
+          "Der Ingenieur wohnt in Frankreich, Ich gehe zum Friseur, Mein Beruf ist Verkäufer, Was sind Sie von Beruf?, Der Pilot fliegt nach Spanien, Der Kellner bringt das Essen, Der Kellner kommt vom Keller, Der Kaffee ist braun, Der Pilot fliegt zur Schweiz, Der Pilot lernt Englisch, Spanisch und Italienisch, Der Student hat noch keinen Beruf, Der Fahrer vom Flughafen, Mein Pass und mein Gepäck, Der Friseur, der Kamm und der Spiegel",
+        meaning: "live in France, go to the hairdresser, your profession, asking the job, fly to Spain, bring the food",
+        explanation:
+          "Five jobs, six frames. The jobs own their verbs: der Pilot fliegt (nach + the destination), der Kellner bringt — and bringen is English bring's own twin. Was sind Sie von Beruf? is the polite opener, answered with a bare profession: Ich bin Verkäufer — no article.",
+      },
+      {
+        id: "l5291_e2",
+        type: "shift_select",
+        prompt:
+          "Three of today's jobs came through French (one by way of Italian first). One homegrown word is the abstract noun the others hang under. Which?",
+        options: ["der Beruf", "der Friseur", "der Pilot", "der Kellner", "der Bäcker"],
+        target_answer: "der Beruf",
+        meaning: "der Beruf ← berufen, 'to call': the homegrown umbrella, not a loan",
+        explanation:
+          "Ingenieur and Friseur are straight French borrowings; Pilot is French that borrowed from Italian first. Kellner is homegrown too — but it names a person, the cellar-man. The word under all the others is der Beruf: Luther's translation of the biblical 'calling' (Greek klēsis). English answered the same Greek with Latin vocare — vocation. A calque, not a cognate.",
+      },
+      {
+        id: "l5291_e3",
+        type: "reverse_cognate",
+        prompt:
+          "der Kellner is der Keller + the person ending — the cellar-man, and Keller is the twin of English cellar (Latin cellarium). English kept the same job-title for the officer who ran a monastery's cellar. Which word is Kellner's twin?",
+        options: ["cellarer", "cellar", "cellist", "sommelier"],
+        target_answer: "cellarer",
+        meaning: "Kellner ↔ cellarer: the cellar-man",
+        explanation:
+          "cellarer is cellar + the person ending, from Latin cellarius — the monastery officer who kept the stores, exactly the Kellner's first job: der Keller + the person ending. cellar is the room, not the man; cellist is the instrument; sommelier is French's other steward-word, from a word for a pack-load — nothing to do with cellarium.",
+      },
+      {
+        id: "l5291_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble: 'My profession is engineer'",
+        tile_options: ["Mein", "Beruf", "ist", "Ingenieur", "Friseur", "Kellner"],
+        target_answer: "Mein Beruf ist Ingenieur",
+        meaning: "My profession is engineer",
+        explanation:
+          "Bare profession after ist — no article, the frame from the last two lessons, now under the umbrella: Mein Beruf ist Ingenieur. The bank keeps two more jobs to prove the frame scales: Mein Beruf ist Friseur; Mein Beruf ist Kellner.",
+      },
+      {
+        id: "l5291_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The pilot flies to France'",
+        target_answer: "Der Pilot fliegt nach Frankreich",
+        meaning: "The pilot flies to France",
+        word_bank: ["Der", "Pilot", "fliegt", "nach", "Frankreich", "Ingenieur", "Flughafen", "Kaffee"],
+        explanation:
+          "fliegt is fliegen in the third person — and fliegen, flog, geflogen is the same ablaut row as fly, flew, flown. nach marks the destination, as it did with Spanien in the first exercise. The bank's extra chips stay in the pilot's world: der Flughafen he leaves from, der Ingenieur whose Brücke he flies over, der Kaffee he hopes is waiting.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Ask what someone does for a living, name the loan jobs, file every -er job under der Beruf, and tell why the waiter was once the cellar-man.",
+      use_example: { german: "Was sind Sie von Beruf? — Ich bin Pilot.", english: "What do you do for a living? — I am a pilot." },
+      takeaway:
+        "Ingenieur and engineer are the same French word (Latin ingenium, the mind's engine); Friseur is the curler; Pilot is the French-Italian loan English shares; Kellner is the man of the Keller, twin of cellar; Beruf is vocation translated, not inherited.",
+      curiosity_teaser: "Next: when der Beruf goes home for the day — die Musik, der Sport, das Lied, tanzen, malen.",
+    },
+  },
+
+  {
+    id: 5292,
+    slug: "hobbys-i-musik-sport-lied-tanzen-malen",
+    title: "Hobbys I: die Musik, der Sport, das Lied, tanzen, malen",
+    subtitle: "what you do when the work stops — and the word German borrowed back from English",
+    phase: 3,
+    shift_categories: [],
+    word_ids: [
+      "musik",
+      "sport",
+      "lied",
+      "tanzen",
+      "malen",
+      "radio",
+      "klavier",
+      "hobby",
+      "schuh",
+      "kino",
+      "termin",
+      "wochentag",
+      "selten",
+      "verkäufer",
+      "bauer",
+      "türkei",
+      "irland",
+      "italienisch",
+      "arzt",
+      "rosa",
+      "sprache",
+      "frühstück",
+      "socke",
+      "fahrrad",
+      "beruf",
+      "feiertag",
+      "sänger",
+    ],
+    table_word_ids: ["musik", "sport", "lied", "tanzen", "malen"],
+    hook: {
+      title: "The Muses, the Reverse Loan, and the Lost Song",
+      content:
+        "Five words for what you do when the work stops — and they arrive by four different roads. die Musik is the oldest purchase: Latin musica, from Greek mousikē, 'the art of the Muses' — the nine goddesses of song, poetry and memory. English made the same Greek purchase as music; the two are one loan in two spellings, and both keep the Muses' k at the end. der Sport traveled the opposite way: English shortened Old French desport, 'amusement', into sport, and in the nineteenth century German bought the short English form outright — a reverse loan, German taking FROM English in the very decades English was taking Kindergarten and Angst from German. das Lied is the lost-cousin story: it is one and the same ancient word as Old English leod, 'song' — a word Germany kept and England dropped. When English speakers today say Lied for a German art song, they are using Germany's survivor for the twin they lost. tanzen came off the French shelf: French danser, the very word English took as dance — one French purchase, two buyers, and the difference between the d of dance and the t of tanzen is where and when each language bought the loan, not a sound law. And malen is the honest limitation: it belongs to the Germanic word behind das Mal, 'mark, spot', but its English twin died without a trace. English says paint, from Latin pingere; German says malen. That is the whole story — and every lesson is allowed one word with no twin.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Receipts Run Both Ways",
+          content:
+            "Loans are receipts for contact, and between neighbours the traffic never runs one way. German gave English Kindergarten, Angst, Zeitgeist and Doppelgänger; English gave German der Sport, das Hobby — and even der Keks, which is English cakes respelled and re-gendered by German. When a word crosses the border twice, you can watch two centuries shake hands.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Hobby Frames",
+      content:
+        "1. The verbs are regular: ich tanze, du tanzt, er tanzt; ich male, du malst, er malt — strip the -en, add the person ending. 2. The noun frames: Musik kommt aus dem Radio (music comes from the radio), Das Lied kommt vom Klavier, Mein Hobby ist Musik. 3. The frequency adverb sits right after the verb, as in English: Ich tanze selten (I seldom dance), Wir gehen oft ins Kino. 4. The idiom the drills use: Ich tanze gern — gern, 'gladly', is German's like + -ing; with sport the fixed phrase is Ich treibe gern Sport, literally 'I drive sport gladly'. 5. Three genders on one hobby shelf — learn them with the article: die Musik, der Sport, das Lied.",
+      footnotes: [],
+      linguist_note:
+        "Reverse loans are the sound of two languages at eye level. For a thousand years the heavy traffic ran Latin and French into both languages; the newer traffic — Kindergarten into English, Sport into German — only started once Germany and England were peers reading each other's newspapers. der Sport even kept the English short form, not the French desport: a borrowed word can arrive second-hand and still become the standard.",
+    },
+    exercises: [
+      {
+        id: "l5292_e1",
+        type: "matching_pairs",
+        prompt: "The free evening — match each hobby sentence with its reading:",
+        matching_pairs: [
+          { id: "hb1", english: "Music comes from the radio", german: "Musik kommt aus dem Radio" },
+          { id: "hb2", english: "The song comes from the piano", german: "Das Lied kommt vom Klavier" },
+          { id: "hb3", english: "The shoes are for sport", german: "Die Schuhe sind für den Sport" },
+          { id: "hb4", english: "My hobby is music", german: "Mein Hobby ist Musik" },
+          { id: "hb5", english: "The salesman sells the shoes", german: "Der Verkäufer verkauft die Schuhe" },
+          { id: "hb6", english: "The singer and the farmer sing a song", german: "Der Sänger und der Bauer singen ein Lied" },
+          { id: "hb7", english: "The vacation was in Turkey", german: "Der Urlaub war in der Türkei" },
+          { id: "hb8", english: "The music from Ireland is beautiful", german: "Die Musik aus Irland ist schön" },
+          { id: "hb9", english: "The song is Italian", german: "Das Lied ist italienisch" },
+          { id: "hb10", english: "The doctor says: more sport!", german: "Der Arzt sagt: mehr Sport!" },
+          { id: "hb11", english: "On the weekend we go to the cinema", german: "Am Wochenende gehen wir ins Kino" },
+          { id: "hb12", english: "We paint a house", german: "Wir malen ein Haus" },
+          { id: "hb13", english: "The shoe is too small", german: "Der Schuh ist zu klein" },
+          { id: "hb14", english: "I paint the flower pink", german: "Ich male die Blume rosa" },
+          { id: "hb15", english: "The song is in my language", german: "Das Lied ist in meiner Sprache" },
+          { id: "hb16", english: "Breakfast before sport", german: "Das Frühstück vor dem Sport" },
+          { id: "hb17", english: "I ride a bike", german: "Ich fahre Fahrrad" },
+          { id: "hb18", english: "Sport is my job", german: "Sport ist mein Beruf" },
+          { id: "hb19", english: "On the holiday there is sport on TV", german: "Am Feiertag ist Sport im Fernsehen" },
+        ],
+        target_answer:
+          "Musik kommt aus dem Radio, Das Lied kommt vom Klavier, Die Schuhe sind für den Sport, Mein Hobby ist Musik, Der Verkäufer verkauft die Schuhe, Der Sänger und der Bauer singen ein Lied, Der Urlaub war in der Türkei, Die Musik aus Irland ist schön, Das Lied ist italienisch, Der Arzt sagt: mehr Sport!, Am Wochenende gehen wir ins Kino, Wir malen ein Haus, Der Schuh ist zu klein, Ich male die Blume rosa, Das Lied ist in meiner Sprache, Das Frühstück vor dem Sport, Ich fahre Fahrrad, Sport ist mein Beruf, Am Feiertag ist Sport im Fernsehen",
+        meaning: "music, songs, sport, shoes, painting — the free evening",
+        explanation:
+          "Thirteen sentences, one free evening. Music owns its prepositions — aus dem Radio, vom Klavier — and the old professions join in: der Bauer singt ein Lied, der Verkäufer verkauft die Schuhe. The hobbies hang on the people you already know.",
+      },
+      {
+        id: "l5292_e2",
+        type: "shift_select",
+        prompt: "One of today's five is a reverse loan: German took it FROM English. Which?",
+        options: ["der Sport", "die Musik", "das Lied", "tanzen"],
+        target_answer: "der Sport",
+        meaning: "der Sport ← English sport ← Old French desport: the reverse loan",
+        explanation:
+          "die Musik is a Greek loan both languages made separately; das Lied is native Germanic; tanzen is French, the same purchase as dance. der Sport is the odd one: English shortened Old French desport to sport, and German bought the short English form in the nineteenth century.",
+        diagnosis: {
+          slip: "guessing die Musik because it looks modern",
+          cue: "die Musik is the oldest word here — Greek via Latin; the modern-looking one is the loan from English",
+        },
+      },
+      {
+        id: "l5292_e3",
+        type: "reverse_cognate",
+        prompt: "'tanzen' is the same French word English borrowed after 1066 — give the English twin:",
+        options: ["dance", "donate", "dent", "tenant"],
+        target_answer: "dance",
+        meaning: "tanzen ↔ dance: one French word, two buyers",
+        explanation:
+          "French danser went to both languages: English took it at court, German borrowed tanzen from the same neighbour. The aha is free — you already owned the word, dressed in English sounds.",
+      },
+      {
+        id: "l5292_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the frequency sentence: 'I seldom dance'",
+        tile_options: ["Ich", "tanze", "selten", "oft", "nie", "Musik"],
+        target_answer: "Ich tanze selten",
+        meaning: "I seldom dance",
+        explanation:
+          "selten lands right after the verb, like English seldom. oft and nie live in the same slot: Ich tanze oft, Ich tanze nie.",
+        affirmation: "Selten is not never — the sentence leaves the door open.",
+        diagnosis: { slip: "reaching for ich tanzt — the -t ending", cue: "ich takes the bare stem: ich tanze, du tanzt" },
+      },
+      {
+        id: "l5292_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the weekday sentence: 'On a weekday I have an appointment'",
+        target_answer: "Am Wochentag habe ich einen Termin",
+        meaning: "On a weekday I have an appointment",
+        vocab_hints: [
+          { word: "Am", translation: "on (am = an + dem)", note: "am Wochentag — on the weekday; am is the contraction of an + dem." },
+        ],
+        word_bank: ["Am", "Wochentag", "habe", "ich", "einen", "Termin", "Musik", "Kino", "selten"],
+        explanation:
+          "der Termin — the appointment — lives on the Wochentag, the weekday; the weekend belongs to the hobbies. And Wochentag decomposes exactly like its English cousins: Woche is week, Tag is day.",
+      },
+    ],
+    summary: {
+      outcome: "Name the hobbies — Musik, Sport, Lied, tanzen, malen — and say how often you do them.",
+      use_example: { german: "Mein Hobby ist Musik — ich tanze selten, ich singe oft.", english: "My hobby is music — I seldom dance, I often sing." },
+      takeaway:
+        "die Musik is the Muses' art, der Sport is English's own word sold back to German, das Lied's Old English twin leod is lost — and tanzen/dance are the same French purchase.",
+      curiosity_teaser: "Next: when the hobbies throw a party — die Party, die Gitarre, reiten, das Schach, die Freizeit.",
+    },
+  },
+
+  {
+    id: 5301,
+    slug: "hobbys-ii-party-gitarre-reiten-schach-freizeit",
+    title: "Hobbys II: die Party, die Gitarre, reiten, das Schach, die Freizeit",
+    subtitle: "the party set — a Persian king, a Greek harp, and the free time you already speak",
+    phase: 3,
+    shift_categories: ["strong_verbs_ablaut", "t_to_s_ss_z"],
+    word_ids: [
+      "party",
+      "gitarre",
+      "reiten",
+      "schach",
+      "freizeit",
+      "endlich",
+      "radio",
+      "klavier",
+      "hobby",
+      "taxi",
+      "theater",
+      "friseur",
+      "beruf",
+      "sänger",
+      "sport",
+      "musik",
+      "lied",
+      "tanzen",
+      "schokolade",
+      "keks",
+      "torte",
+      "brötchen",
+      "toast",
+      "malen",
+    ],
+    table_word_ids: ["party", "gitarre", "reiten", "schach", "freizeit"],
+    hook: {
+      title: "The King's Game, the Kithara, and Free Time",
+      content:
+        "The past-time set, and every word is a passport stamp. die Party is English party bought back — and English party is Old French partie, 'a part, a side': first the people on your side, then the gathering itself. die Gitarre took the grand tour: Spanish guitarra, on loan from Greek kithara, the concert lyre of Apollo — and English guitar is the same Spanish purchase, so the word crossed the Mediterranean twice and landed in both languages. reiten is the native one, and it conjugates strong: reiten, ritt, geritten — ride, rode, ridden — the same vowel-ablaut both languages inherited, still turning on the same hinge. das Schach is royalty in hiding: Persian shāh, 'king', carried through Arabic into French échec and German Schach — and when you say checkmate, you are saying the Persian sentence shāh māt, 'the king is helpless'. Check, Schach, checkmate: one king, three coins. And die Freizeit is the compound engine at full power: frei + Zeit — frei is English free, and Zeit is English tide in its older meaning of 'time' (time and tide wait for no man). German glues it on and builds Freizeitpark, Freizeitstress, Freizeitprogramm — free time as an industry.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Zither Cousin",
+          content:
+            "English zither is the same Greek kithara that built die Gitarre — it came through Latin cithara into German die Zither, and English bought it from German. Guitar, Gitarre, zither: one Greek lyre, three descendants.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Invited to the Party",
+      content:
+        "1. reiten runs strong: ich reite, du reitest, er reitet — ritt — geritten; the vowel changes with the tense, exactly like ride/rode/ridden. 2. The frames: Das Schach ist mein Hobby, Wir tanzen auf der Party, Die Musik auf der Party kommt aus dem Radio. 3. The compound: die Freizeit = frei + Zeit, and German keeps gluing: der Freizeitpark, der Freizeitstress. 4. The logistics: Mit dem Taxi zur Party, Wir gehen ins Theater, Vor der Party kommt der Friseur. 5. endlich lands where the joy is: Endlich kommt die Freizeit — finally, the weekend.",
+      footnotes: [],
+      linguist_note:
+        "Schach is the oldest word in the room. When the Arabic-speaking world learned chess from Persia, it kept the king's title — shāh — and Europe borrowed the Arabic form as French eschec, German Schach, English check. The game's most feared word, checkmate, is the Persian sentence shāh māt, 'the king is helpless': the game ends when the king has no move left, and the etymology says exactly that.",
+    },
+    exercises: [
+      {
+        id: "l5301_e1",
+        type: "matching_pairs",
+        prompt: "The party begins — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "pt1", english: "The music at the party comes from the radio", german: "Die Musik auf der Party kommt aus dem Radio" },
+          { id: "pt2", english: "The piano is old, the guitar is new", german: "Das Klavier ist alt, die Gitarre ist neu" },
+          { id: "pt3", english: "By taxi to the party", german: "Mit dem Taxi zur Party" },
+          { id: "pt4", english: "We are going to the theater", german: "Wir gehen ins Theater" },
+          { id: "pt5", english: "Before the party comes the hairdresser", german: "Vor der Party kommt der Friseur" },
+          { id: "pt6", english: "Music is my profession", german: "Musik ist mein Beruf" },
+          { id: "pt7", english: "The singer at the party sings a song", german: "Der Sänger auf der Party singt ein Lied" },
+          { id: "pt8", english: "Chess is my hobby", german: "Das Schach ist mein Hobby" },
+          { id: "pt9", english: "The farmer rides", german: "Der Bauer reitet" },
+          { id: "pt10", english: "Sport on TV, music at the party", german: "Sport im Fernsehen, Musik auf der Party" },
+          { id: "pt11", english: "The chocolate is for the party", german: "Die Schokolade ist für die Party" },
+          { id: "pt12", english: "Cookies and cake with the coffee", german: "Kekse und Torte zum Kaffee" },
+          { id: "pt13", english: "Rolls and toast at the party", german: "Brötchen und Toast auf der Party" },
+          { id: "pt14", english: "Painting is my hobby", german: "Malen ist mein Hobby" },
+        ],
+        target_answer:
+          "Die Musik auf der Party kommt aus dem Radio, Das Klavier ist alt, die Gitarre ist neu, Mit dem Taxi zur Party, Wir gehen ins Theater, Vor der Party kommt der Friseur, Musik ist mein Beruf, Der Sänger auf der Party singt ein Lied, Das Schach ist mein Hobby, Der Bauer reitet, Sport im Fernsehen, Musik auf der Party, Die Schokolade ist für die Party, Kekse und Torte zum Kaffee, Brötchen und Toast auf der Party, Malen ist mein Hobby",
+        meaning: "party, guitar, riding, chess, free time — the invitation",
+        explanation:
+          "Eleven sentences, one invitation. auf der Party is where the music lives, zur Party is how you travel — German splits 'at' and 'to' where English uses one word. The old words attend too: der Bauer reitet, der Sänger singt, die Schokolade waits on the table.",
+      },
+      {
+        id: "l5301_e2",
+        type: "shift_select",
+        prompt: "Which of today's five conjugates strong — reiten, ritt, geritten — like English ride, rode, ridden?",
+        options: ["reiten", "die Party", "das Schach", "die Freizeit"],
+        target_answer: "reiten",
+        meaning: "reiten is the strong verb: the same ablaut as ride/rode/ridden",
+        explanation:
+          "die Party, das Schach and die Freizeit are borrowed or built. reiten is the inherited verb, and its vowel dance — reiten, ritt, geritten — is the same ablaut English rides through in ride, rode, ridden.",
+      },
+      {
+        id: "l5301_e3",
+        type: "reverse_cognate",
+        prompt:
+          "'die Gitarre' and its English twin took the same road: Spanish guitarra, from Greek kithara. Give the English twin:",
+        options: ["guitar", "zither", "lyre", "cello"],
+        target_answer: "guitar",
+        meaning: "die Gitarre ↔ guitar: one Greek lyre, two languages",
+        explanation:
+          "Spanish guitarra came from Greek kithara, and both German and English bought it from Spanish. The distractor zither is family too — the same Greek word through German die Zither.",
+      },
+      {
+        id: "l5301_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the dancing sentence: 'We dance at the party'",
+        tile_options: ["Wir", "tanzen", "auf", "der", "Party", "Musik", "Kino"],
+        target_answer: "Wir tanzen auf der Party",
+        meaning: "We dance at the party",
+        explanation:
+          "auf + dative der Party — at the party, the location. The Kino and Musik tiles belong to other evenings; the frame stays.",
+        affirmation: "Auf der Party the location and the fun share one preposition.",
+      },
+      {
+        id: "l5301_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the Friday feeling: 'Finally the free time comes'",
+        target_answer: "Endlich kommt die Freizeit",
+        meaning: "Finally the free time comes",
+        word_bank: ["Endlich", "kommt", "die", "Freizeit", "Party", "das", "Taxi", "Kino", "Musik"],
+        explanation:
+          "endlich — finally — is the little word that opens the weekend: Endlich kommt die Freizeit. And die Freizeit is a compound you can already read: frei (free) + Zeit (tide, in its old meaning of time).",
+        affirmation: "Freizeit is two words you own, glued into one you can read.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Talk about parties, guitars, riding, chess and free time — and hear the Persian king inside checkmate.",
+      use_example: {
+        german: "Endlich kommt die Freizeit — wir tanzen auf der Party.",
+        english: "Finally the free time comes — we dance at the party.",
+      },
+      takeaway:
+        "die Gitarre and guitar share a Greek kithara, das Schach is the Persian shāh, reiten ritt geritten is ride rode ridden — and die Freizeit is free + tide.",
+      curiosity_teaser: "Next: the people around the music — wir, die Schule, der Gast, die Gruppe, der Held.",
+    },
+  },
+
+  {
+    id: 5302,
+    slug: "menschen-wir-schule-gast-gruppe-held",
+    title: "Menschen: wir, die Schule, der Gast, die Gruppe, der Held",
+    subtitle: "we, school, guest, group, hero — and the ancient word that means stranger and friend",
+    phase: 3,
+    shift_categories: ["th_to_d"],
+    word_ids: [
+      "wir",
+      "schule",
+      "gast",
+      "gruppe",
+      "held",
+      "dorf",
+      "ausflug",
+      "tourist",
+      "deutschland",
+      "england",
+      "polizist",
+      "schüler",
+      "student",
+      "fahrer",
+      "kellner",
+      "bäcker",
+      "malen",
+      "party",
+      "gitarre",
+      "schach",
+      "freizeit",
+      "arbeiter",
+      "ingenieur",
+      "reiten",
+      "klingel",
+      "butterbrot",
+      "marmelade",
+      "pilot",
+      "etage",
+      "bunt",
+      "französisch",
+      "englisch",
+      "spanisch",
+      "pass",
+      "gepäck",
+    ],
+    table_word_ids: ["wir", "schule", "gast", "gruppe", "held"],
+    hook: {
+      title: "The Guest, the Group, and the Hero English Lost",
+      content:
+        "wir is the only new pronoun the A1 shelf adds: ich, du, er, sie, es — wir. It is English we with one letter moved, and it has been the same word since before either language existed. die Schule and school are the same purchase from Rome: Latin schola, from Greek scholē — a word that first meant 'leisure', the time held free for learning. der Gast is the gorgeous one: guest and Gast are the same Proto-Germanic word, and the family goes back to an ancient Indo-European word for 'stranger' that Latin adopted as hostis — whence English hostile. The stranger at your door is either the guest you welcome or the enemy you fight; one root, both futures. die Gruppe is a newer, lighter purchase: French groupe, probably from Italian gruppo, 'knot, bunch' — English bought the same French word as group. And der Held is the word English lost: Held and Old English hæleþ, 'man, warrior', are one and the same word — Germany kept it, England let it die and had to borrow Greek hērōs as hero. The hero of the German lesson is not a loan at all; it is the native Germanic champion that English still misses.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "One Root, Three Doors",
+          content:
+            "The ancient root behind Gast and guest — *ghos-ti-, 'stranger' — opened three doors. Germanic walked through one and got Gast/guest. Latin walked through another and got hostis, 'stranger, enemy', which became English hostile — and its other form hospes, 'the one who receives', became hospitable. Guest, hostile, hospitable: the same stranger, welcomed or fought.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Talking About the People",
+      content:
+        "1. wir works like every pronoun: Wir wohnen in Deutschland, Wir tanzen auf der Party. 2. The people own their verbs: Der Polizist kennt den Gast, Der Fahrer bringt den Gast, Der Kellner bringt dem Gast das Essen — the -er words from the Berufe lessons all gather here. 3. The collective takes a singular verb: Die Gruppe malt, Die Gruppe macht einen Ausflug. 4. The school frames: Die Schüler sind in der Schule, Nach der Schule ist Freizeit. 5. The stories: Der Gast kommt aus dem Dorf, Der Held mit der Gitarre, Schach mit dem Gast.",
+      footnotes: [],
+      linguist_note:
+        "Schule is the Greek idea of learning-as-leisure wearing a Roman coat: scholē meant the free time a Greek citizen owned, then the lecture he filled it with, then the room he filled it in. English and German both bought the Roman word whole. The native Germanic alternative was to say it straight — die Freizeit, free time — which is exactly what the last lesson built.",
+    },
+    exercises: [
+      {
+        id: "l5302_e1",
+        type: "matching_pairs",
+        prompt: "The whole cast gathers — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "me1", english: "We live in Germany", german: "Wir wohnen in Deutschland" },
+          { id: "me2", english: "The guest comes from the village", german: "Der Gast kommt aus dem Dorf" },
+          { id: "me3", english: "The group takes a trip", german: "Die Gruppe macht einen Ausflug" },
+          { id: "me4", english: "The tourist is a guest", german: "Der Tourist ist ein Gast" },
+          { id: "me5", english: "The guest from England lives in the hotel", german: "Der Gast aus England wohnt im Hotel" },
+          { id: "me6", english: "The policeman knows the guest", german: "Der Polizist kennt den Gast" },
+          { id: "me7", english: "The pupils are in the school", german: "Die Schüler sind in der Schule" },
+          { id: "me8", english: "The student in the group", german: "Der Student in der Gruppe" },
+          { id: "me9", english: "The driver brings the guest", german: "Der Fahrer bringt den Gast" },
+          { id: "me10", english: "The waiter brings the guest the food", german: "Der Kellner bringt dem Gast das Essen" },
+          { id: "me11", english: "The roll from the baker", german: "Das Brötchen vom Bäcker" },
+          { id: "me12", english: "The group paints", german: "Die Gruppe malt" },
+          { id: "me13", english: "The worker and the engineer", german: "Der Arbeiter und der Ingenieur" },
+          { id: "me14", english: "The group at the party", german: "Die Gruppe auf der Party" },
+          { id: "me15", english: "Chess with the guest", german: "Schach mit dem Gast" },
+          { id: "me16", english: "The group rides", german: "Die Gruppe reitet" },
+          { id: "me17", english: "The guest at the bell", german: "Der Gast an der Klingel" },
+          { id: "me18", english: "Bread with jam for school", german: "Das Butterbrot mit Marmelade für die Schule" },
+          { id: "me19", english: "The hero is a pilot", german: "Der Held ist Pilot" },
+          { id: "me20", english: "The school has two floors", german: "Die Schule hat zwei Etagen" },
+          { id: "me21", english: "The group is colorful", german: "Die Gruppe ist bunt" },
+          { id: "me22", english: "The guest speaks English, the waiter French and Spanish", german: "Der Gast spricht Englisch, der Kellner Französisch und Spanisch" },
+          { id: "me23", english: "The passport and the luggage of the guest", german: "Der Pass und das Gepäck vom Gast" },
+        ],
+        target_answer:
+          "Wir wohnen in Deutschland, Der Gast kommt aus dem Dorf, Die Gruppe macht einen Ausflug, Der Tourist ist ein Gast, Der Gast aus England wohnt im Hotel, Der Polizist kennt den Gast, Die Schüler sind in der Schule, Der Student in der Gruppe, Der Fahrer bringt den Gast, Der Kellner bringt dem Gast das Essen, Das Brötchen vom Bäcker, Die Gruppe malt, Der Arbeiter und der Ingenieur, Die Gruppe auf der Party, Schach mit dem Gast, Die Gruppe reitet, Der Gast an der Klingel, Das Butterbrot mit Marmelade für die Schule, Der Held ist Pilot, Die Schule hat zwei Etagen, Die Gruppe ist bunt, Der Gast spricht Englisch, der Kellner Französisch und Spanisch, Der Pass und das Gepäck vom Gast",
+        meaning: "guest, group, school, hero — and the whole cast",
+        explanation:
+          "Fifteen sentences and the campaign shows up: the jobs from the Berufe lessons, the travel words from the Reisen lessons, the party from the last one. der Gast stands at the center — the guest is who all these people work for.",
+      },
+      {
+        id: "l5302_e2",
+        type: "shift_select",
+        prompt:
+          "One of these four wears the TH→D badge — German d where English keeps th (Dorn/thorn, der/the). Which?",
+        options: ["das Dorf", "die Schule", "der Gast", "die Gruppe"],
+        target_answer: "das Dorf",
+        meaning: "das Dorf ↔ thorp: the TH→D family",
+        explanation:
+          "das Dorf is English thorp — a word English kept only in place names, every -thorpe on the map. der Held wears the same badge against Old English hæleþ. Schule, Gast and Gruppe are loans, not shift words.",
+      },
+      {
+        id: "l5302_e3",
+        type: "reverse_cognate",
+        prompt:
+          "'der Gast' and its English twin are the same Proto-Germanic word — and Latin borrowed the same root as hostis, 'enemy'. Give the English twin:",
+        options: ["guest", "ghost", "host", "goat"],
+        target_answer: "guest",
+        meaning: "der Gast ↔ guest — and the same root gave hostile",
+        explanation:
+          "guest and Gast are one word. The deeper aha: the ancient root meant 'stranger', and Latin turned it into hostis, enemy — whence hostile. The guest and the enemy are the same person, depending on the door.",
+      },
+      {
+        id: "l5302_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the hero's sentence: 'The hero with the guitar'",
+        tile_options: ["Der", "Held", "mit", "der", "Gitarre", "Gruppe", "Schule"],
+        target_answer: "Der Held mit der Gitarre",
+        meaning: "The hero with the guitar",
+        explanation:
+          "der Held is the Old English hæleþ that English lost — Germany kept the native hero-word. And the hero, naturally, holds the Gitarre from the last lesson.",
+        affirmation: "Held was here before hero — English just forgot.",
+      },
+      {
+        id: "l5302_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the after-school sentence: 'After school there is free time'",
+        target_answer: "Nach der Schule ist Freizeit",
+        meaning: "After school there is free time",
+        word_bank: ["Nach", "der", "Schule", "ist", "Freizeit", "die", "Gruppe", "Party", "Kino"],
+        explanation:
+          "nach + dative: nach der Schule. The sentence closes a loop — the Schule from this lesson hands the day over to the Freizeit from the last one.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Speak about us and the people around you — wir, die Schule, der Gast, die Gruppe, der Held — with the whole cast of the Berufe and Reisen lessons.",
+      use_example: {
+        german: "Wir wohnen in Deutschland, und der Gast kommt aus England.",
+        english: "We live in Germany, and the guest comes from England.",
+      },
+      takeaway:
+        "wir is we, der Gast and guest share a root with hostile, der Held is the Old English hæleþ English lost — and das Dorf wears the TH→D badge as thorp.",
+      curiosity_teaser: "Next: the feelings — die Liebe, nett, wütend, stolz, die Freude: love, nice, fury, pride and joy.",
+    },
+  },
+
+  {
+    id: 5311,
+    slug: "gefuehle-liebe-nett-wuetend-stolz-freude",
+    title: "Gefühle: die Liebe, nett, wütend, stolz, die Freude",
+    subtitle: "love you already own, nice you already bought — and the proud ones with no twin",
+    phase: 3,
+    shift_categories: ["v_to_b"],
+    word_ids: [
+      "liebe",
+      "nett",
+      "wütend",
+      "stolz",
+      "freude",
+      "arzt",
+      "bauer",
+      "honig",
+      "musik",
+      "sport",
+      "lied",
+      "tanzen",
+      "pilot",
+      "ingenieur",
+      "wir",
+      "schule",
+      "gast",
+      "gruppe",
+      "held",
+      "party",
+      "gitarre",
+      "reiten",
+      "schach",
+      "freizeit",
+    ],
+    table_word_ids: ["liebe", "nett", "wütend", "stolz", "freude"],
+    hook: {
+      title: "Love, Neat Gone Warm, and the Two With No Twin",
+      content:
+        "die Liebe is the twin you already own: love and Liebe are the same ancient root — Proto-Germanic *leubʰ-, 'to hold dear' — with English turning the b-sound to v (give/geben, live/leben, love/Liebe). The family is bigger than it looks: archaic English lief, 'dear', is the same word, and English believe and German glauben are the same verb with the same prefix, built on the root of love. nett is the double purchase: French net, 'clean, pure', from Latin nitidus, 'shining' — English bought it as neat and kept it tidy; German bought it as nett and warmed it into 'nice'. Same French word, two temperatures. die Freude is the joy of froh, 'glad' — and English frolic is the same word through Dutch vrolijk, 'merry'. wütend is die Wut, rage, wearing the adjective ending — Old English had the same word, wōd 'furious', which survives in archaic English wood, 'mad'; the dictionaries record it even though everyday English forgot it. And stolz is the honest limitation: no safe English twin exists — English proud came from Old French prud, 'valiant', a completely different family. When English needed 'proud', it bought French.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The b/v Ledger",
+          content:
+            "The love/Liebe correspondence is one of German's steadiest: give/geben, live/leben, grave/Grab — English writes v or f where German writes b. And the ledger has a verb entry too: glauben and believe are the same old compound, ge- + the love-root on one side, be- + the love-root on the other.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Saying How You Feel",
+      content:
+        "1. The adjective stands after sein with no ending: Ich bin stolz, Du bist wütend, Er ist nett. 2. The fixed prepositions: stolz auf + accusative — Ich bin stolz auf das Haus; wütend auf — Er ist wütend auf seinen Bruder. 3. Fear takes vor + dative: Ich habe Angst vor dem Arzt — German's 'afraid of' says 'afraid before'. 4. Joy takes mit: Die Gruppe tanzt mit Freude. 5. The noun hides inside the adjective: stolz ↔ der Stolz — German builds the noun with zero change where English reshapes proud into pride.",
+      footnotes: [],
+      linguist_note:
+        "nett and neat are what linguists call doublets: one French word, two languages, two divergent meanings. English neat stayed close to the Latin 'shining, clean'; German nett drifted through 'precise' into 'pleasant' — helped, some dictionaries say, by English nice, which itself wandered all the way from Latin nescius, 'ignorant'. Words wander: the tidy one became the kind one.",
+    },
+    exercises: [
+      {
+        id: "l5311_e1",
+        type: "matching_pairs",
+        prompt: "The feelings, named — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "gf1", english: "Love is sweet as honey", german: "Die Liebe ist süß wie Honig" },
+          { id: "gf2", english: "I am afraid of the doctor", german: "Ich habe Angst vor dem Arzt" },
+          { id: "gf3", english: "The farmer has pride", german: "Der Bauer hat Stolz" },
+          { id: "gf4", english: "The pilot is proud", german: "Der Pilot ist stolz" },
+          { id: "gf5", english: "The engineer is proud of the house", german: "Der Ingenieur ist stolz auf das Haus" },
+          { id: "gf6", english: "The guest is very nice", german: "Der Gast ist sehr nett" },
+          { id: "gf7", english: "The waiter is angry", german: "Der Kellner ist wütend" },
+          { id: "gf8", english: "The song brings joy", german: "Das Lied macht Freude" },
+          { id: "gf9", english: "The hero has no fear", german: "Der Held hat keine Angst" },
+          { id: "gf10", english: "The group dances with joy", german: "Die Gruppe tanzt mit Freude" },
+          { id: "gf11", english: "The party makes joy, the joy of riding", german: "Die Party macht Freude, die Freude am Reiten" },
+          { id: "gf12", english: "Chess and guitar in the free time", german: "Schach und Gitarre in der Freizeit" },
+        ],
+        target_answer:
+          "Die Liebe ist süß wie Honig, Ich habe Angst vor dem Arzt, Der Bauer hat Stolz, Der Pilot ist stolz, Der Ingenieur ist stolz auf das Haus, Der Gast ist sehr nett, Der Kellner ist wütend, Das Lied macht Freude, Der Held hat keine Angst, Die Gruppe tanzt mit Freude, Die Party macht Freude, die Freude am Reiten, Schach und Gitarre in der Freizeit",
+        meaning: "love, pride, anger, joy, fear — the five feelings",
+        explanation:
+          "Ten sentences, five feelings. The frame never changes — sein + adjective — and the preposition carries the relationship: stolz auf, Angst vor, Freude mit. The old words feel them too: der Bauer hat Stolz, der Held hat keine Angst, der Kellner ist wütend.",
+      },
+      {
+        id: "l5311_e2",
+        type: "shift_select",
+        prompt: "Four feelings are native or ancient. One is a French loan that English also bought. Which?",
+        options: ["nett", "stolz", "wütend", "die Liebe"],
+        target_answer: "nett",
+        meaning: "nett ← French net ← Latin nitidus: the loan",
+        explanation:
+          "die Liebe, wütend and stolz are native Germanic; die Freude is the froh family. nett is the new arrival: French net, 'clean', the same word English bought as neat — neat kept tidy, nett went warm.",
+      },
+      {
+        id: "l5311_e3",
+        type: "reverse_cognate",
+        prompt:
+          "'die Liebe' is the same ancient root as its English twin — with the b where English writes v. Give the English twin:",
+        options: ["love", "hope", "life", "like"],
+        target_answer: "love",
+        meaning: "die Liebe ↔ love: the *leubʰ- family",
+        explanation:
+          "love and Liebe are one root. The family also holds archaic English lief, 'dear', and the believe/glauben pair — the same verb with the same prefix, built on the root of love.",
+      },
+      {
+        id: "l5311_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the evening sentence: 'We dance to the music'",
+        tile_options: ["Wir", "tanzen", "zur", "Musik", "Freude", "Angst"],
+        target_answer: "Wir tanzen zur Musik",
+        meaning: "We dance to the music",
+        explanation:
+          "zur = zu der, to the — music takes zu where English says to. And the pronoun is wir, the new one from the last lesson, doing its first feeling.",
+        affirmation: "Wir is we — the same word, one letter moved.",
+      },
+      {
+        id: "l5311_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the schedule sentence: 'After school comes the sport'",
+        target_answer: "Nach der Schule kommt der Sport",
+        meaning: "After school comes the sport",
+        word_bank: ["Nach", "der", "Schule", "kommt", "der", "Sport", "mit", "Freude", "Lied", "Musik"],
+        explanation:
+          "nach + dative der Schule, and the verb comes second: Nach der Schule kommt der Sport. Time phrase first, verb second, subject third — the order German loves.",
+      },
+    ],
+    summary: {
+      outcome: "Name the feelings — Liebe, nett, wütend, stolz, Freude — and attach them with auf, vor and mit.",
+      use_example: { german: "Ich bin stolz auf das Haus — die Musik macht Freude.", english: "I am proud of the house — the music brings joy." },
+      takeaway:
+        "die Liebe is love's twin with the b, nett is neat gone warm, die Freude is frolic's German home — and stolz has no twin: English bought French proud.",
+      curiosity_teaser:
+        "Next: five high-value adjectives — richtig, falsch, sauber, leer, offen — the last new words of the campaign.",
+    },
+  },
+
+  {
+    id: 5312,
+    slug: "adjektive-richtig-falsch-sauber-leer-offen",
+    title: "Adjektive: richtig, falsch, sauber, leer, offen",
+    subtitle: "five adjectives English kept almost intact — and the proof that German is English in other sounds",
+    phase: 3,
+    shift_categories: ["y_gh_to_g_ch"],
+    word_ids: [
+      "richtig",
+      "falsch",
+      "sauber",
+      "leer",
+      "offen",
+      "schwarz",
+      "keller",
+      "flur",
+      "teppich",
+      "schrank",
+      "spiegel",
+      "vorhang",
+      "balkon",
+      "herd",
+      "seife",
+      "kamm",
+      "klingel",
+      "zucker",
+      "gast",
+      "gruppe",
+      "held",
+      "arbeiter",
+      "kellner",
+      "lila",
+      "wir",
+      "schule",
+      "friseur",
+      "farbe",
+    ],
+    table_word_ids: ["richtig", "falsch", "sauber", "leer", "offen"],
+    hook: {
+      title: "Right, False, Open — and the Closing Proof",
+      content:
+        "The last new words of the campaign, and they prove the method one final time. richtig is right — one Proto-Germanic word, *rehtaz, that both languages kept: English right, German recht, and richtig is recht with the adjective tail -ig, 'right-ish' turned exact. The gh in right and the ch-sound in recht are the same ancient letter — the family that made light/Licht and night/Nacht — and das Recht, 'the right, the law', lives in the idiom Du hast recht, 'you are right'. falsch is the borrowed one: Latin falsus, 'deceived, false' — German took it straight from Latin, English took it through Old French as false; same word, two routes, one meaning. offen and open are twins that never shifted: one ancient word, and notice the p — German's great P→PF law turned pipe into Pfeife, but offen kept the plain p, exactly like open. sauber and leer are the honest limitations: no safe English twin has been proven for either — clean and empty are places where English and German walked apart. Sisters share most of their words; they do not share all of them. That is the whole method in five adjectives: two twins, one double purchase, one p that stayed, and two words with no twin at all.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The p That Stayed",
+          content:
+            "The P→PF law filled German with pf-words — Pfeife (pipe), Pfeffer (pepper), Pfund (pound) — but it skipped the p in offen. Open and offen are the same word with the same p: the shift had exceptions, and this one you can hold in your hand every morning.",
+        },
+      ],
+    },
+    pattern: {
+      title: "The Adjective After sein",
+      content:
+        "1. Predicate position, no ending: Das Glas ist leer, Das Fenster ist offen, Die Klingel ist richtig laut. 2. The judging pair: Die Zahl ist richtig, die Zahl ist falsch — richtig approves, falsch rejects. The fixed idiom: Du hast recht — 'you are right' — uses das Recht, the older noun. 3. richtig doubles as an intensifier: Der Kellner ist richtig nett — 'really nice'. 4. Everything can be sauber or leer: Seife macht sauber; Nach dem Frühstück ist der Herd sauber; der Keller ist leer. 5. Colors fit the same frame: Die Farbe der Mütze ist lila.",
+      footnotes: [],
+      linguist_note:
+        "This is the last lesson with new words, and it closes on the campaign's oldest truth: most of German is already English wearing different sounds. richtig/right, falsch/false and offen/open are single words in two costumes; even falsch, the foreign-looking one, is the same Latin falsus both languages bought. What remains is raw material — a language you can now read through its shifts, its loans and its twins. The whole compendium waits in review, and every review is a reunion.",
+    },
+    exercises: [
+      {
+        id: "l5312_e1",
+        type: "matching_pairs",
+        prompt: "The house, judged — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "ad1", english: "The hallway is clean", german: "Der Flur ist sauber" },
+          { id: "ad2", english: "The mirror and the rug are clean", german: "Der Spiegel und der Teppich sind sauber" },
+          { id: "ad3", english: "The wardrobe is open", german: "Der Schrank ist offen" },
+          { id: "ad4", english: "The curtain is green", german: "Der Vorhang ist grün" },
+          { id: "ad5", english: "The door to the balcony is open", german: "Die Tür zum Balkon ist offen" },
+          { id: "ad6", english: "After breakfast the stove is clean", german: "Nach dem Frühstück ist der Herd sauber" },
+          { id: "ad7", english: "Soap makes clean", german: "Seife macht sauber" },
+          { id: "ad8", english: "The comb is new", german: "Der Kamm ist neu" },
+          { id: "ad9", english: "The doorbell is really loud", german: "Die Klingel ist richtig laut" },
+          { id: "ad10", english: "Sugar in tea? Wrong!", german: "Zucker im Tee? Falsch!" },
+          { id: "ad11", english: "Black and white are colors", german: "Schwarz und weiß sind Farben" },
+          { id: "ad12", english: "The color of the cap is purple", german: "Die Farbe der Mütze ist lila" },
+          { id: "ad13", english: "The guest leaves, the house is empty", german: "Der Gast geht, das Haus ist leer" },
+          { id: "ad14", english: "The group counts correctly", german: "Die Gruppe zählt richtig" },
+          { id: "ad15", english: "The hero is never wrong", german: "Der Held ist nie falsch" },
+          { id: "ad16", english: "The worker is right", german: "Der Arbeiter hat recht" },
+          { id: "ad17", english: "We are right, the school is empty", german: "Wir sind richtig, die Schule ist leer" },
+          { id: "ad18", english: "Clean like at the hairdresser's", german: "Sauber wie beim Friseur" },
+        ],
+        target_answer:
+          "Der Flur ist sauber, Der Spiegel und der Teppich sind sauber, Der Schrank ist offen, Der Vorhang ist grün, Die Tür zum Balkon ist offen, Nach dem Frühstück ist der Herd sauber, Seife macht sauber, Der Kamm ist neu, Die Klingel ist richtig laut, Zucker im Tee? Falsch!, Schwarz und weiß sind Farben, Die Farbe der Mütze ist lila, Der Gast geht, das Haus ist leer, Die Gruppe zählt richtig, Der Held ist nie falsch, Der Arbeiter hat recht, Wir sind richtig, die Schule ist leer, Sauber wie beim Friseur",
+        meaning: "clean, empty, open, right, wrong — the house, judged",
+        explanation:
+          "Sixteen sentences, five adjectives, the whole house. sauber does the chores — der Flur, der Spiegel, der Herd — while leer and offen move through the rooms. And the campaign's people get judged one last time: die Gruppe zählt richtig, der Arbeiter hat recht, der Held ist nie falsch.",
+      },
+      {
+        id: "l5312_e2",
+        type: "shift_select",
+        prompt: "One of today's five is a Latin loan that English also bought. Which?",
+        options: ["falsch", "richtig", "sauber", "leer"],
+        target_answer: "falsch",
+        meaning: "falsch ← Latin falsus → false: the double purchase",
+        explanation:
+          "richtig and offen are inherited twins; sauber and leer have no proven twin. falsch is the purchase: Latin falsus, taken directly into German and through Old French into English as false.",
+      },
+      {
+        id: "l5312_e3",
+        type: "reverse_cognate",
+        prompt:
+          "'richtig' is recht + -ig — and recht is the same ancient word as its English twin, the gh and ch being one letter. Give the English twin:",
+        options: ["right", "write", "rich", "ride"],
+        target_answer: "right",
+        meaning: "richtig ↔ right: the gh↔ch family",
+        explanation:
+          "right and recht are one word — the same family as light/Licht and night/Nacht. English spelled the old sound gh and went silent; German kept ch. richtig adds the -ig tail: right-ish, made exact.",
+      },
+      {
+        id: "l5312_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the basement verdict: 'The cellar is empty'",
+        tile_options: ["Der", "Keller", "ist", "leer", "offen", "sauber", "falsch"],
+        target_answer: "Der Keller ist leer",
+        meaning: "The cellar is empty",
+        explanation:
+          "der Keller, masculine, from the Wohnen lessons. The other tiles are the lesson's other verdicts — the frame never changes: der/die/das + ist + adjective.",
+        affirmation: "The frame is five words long and judges a whole house.",
+      },
+      {
+        id: "l5312_e5",
+        type: "syntax_builder",
+        prompt: "Assemble the waiter's review: 'The waiter is really nice'",
+        target_answer: "Der Kellner ist richtig nett",
+        meaning: "The waiter is really nice",
+        word_bank: ["Der", "Kellner", "ist", "richtig", "nett", "leer", "offen", "sauber", "falsch"],
+        explanation:
+          "richtig does double duty: it judges (die Zahl ist richtig) and it intensifies (richtig nett, richtig laut). The sentence borrows the Kellner from the Berufe lessons and the nett from the last one.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Judge and describe with richtig, falsch, sauber, leer, offen — and close the campaign on its oldest proof.",
+      use_example: {
+        german: "Der Gast geht, das Haus ist leer — die Tür zum Balkon ist offen.",
+        english: "The guest leaves, the house is empty — the door to the balcony is open.",
+      },
+      takeaway:
+        "richtig is right with the gh↔ch badge, falsch is Latin falsus bought twice, offen kept the p that open kept — and sauber and leer have no twins: even sisters have words the other never had.",
+      curiosity_teaser:
+        "This campaign ends here — the shifts, the twins, the borrowed shelves: the whole compendium waits in review.",
     },
   },
 ];

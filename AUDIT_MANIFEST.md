@@ -31,7 +31,7 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 ## 3. Four Core Functional Pillars
 
 ### Pillar 1: The Trail (`/trail` and `/trail/[id]`)
-- **Curriculum Scope**: 30 topic clusters with the entire curriculum authored — 30 cores + 78 sprigs + 40 branch lessons = **148 lessons**, all fully interactive. Unknown lesson ids 404 at the router level (`dynamicParams = false`).
+- **Curriculum Scope**: 30 topic clusters with the entire curriculum authored — 30 cores + 78 sprigs + 60 branch lessons = **168 lessons**, all fully interactive. Unknown lesson ids 404 at the router level (`dynamicParams = false`).
 - **5-Segment Card-by-Card Wizard (`LessonReader.tsx`)**:
   1. **Part 01: The Hook**: Historical intuition and living English cognate framing.
   2. **Part 02: The Pattern**: Mechanical shift rules, suffix patterns (`-en`), with margin philological notes.
@@ -151,7 +151,7 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 │   │   └── audio.ts           # Web Speech API German speech synthesis wrapper
 │   ├── data/
 │   │   ├── compendium.json    # 1226 words, 9 shifts, 32 compounds, 16 false friends, 28 insights
-│   │   └── lessons.ts         # All 148 authored lesson definitions, exercises, and clues
+│   │   └── lessons.ts         # All 168 authored lesson definitions, exercises, and clues
 │   └── tests/                 # 29 test files (Vitest) — whole-curriculum integrity, timezone boundaries, persistence merging, security
 │       ├── store.test.ts
 │       ├── exercises.test.ts

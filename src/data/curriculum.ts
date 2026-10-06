@@ -581,8 +581,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Essen I: Fisch, Fleisch, Käse, Suppe, Gemüse",
     blurb: "The German table's backbone — and four words English borrowed and wrote down as German.",
     lessons: [
-      { ...shell(5221, "Essen I: der Fisch, das Fleisch, der Käse, die Suppe, das Gemüse", "The meat-and-bread-and-milk set, with the loanwords flagged honestly: Käse ← cheese, Suppe ← soup, Gemüse ← vegetable. Fleisch is native, and its English cousin is the flesh it no longer is.") },
-      { ...shell(5222, "Essen II: das Obst, die Kartoffel, die Tomate, die Gurke, die Zwiebel", "Fruit and vegetables, where German and English are the same words in different clothes: Kartoffel ← potato, Tomate ← tomato, Gurke ← gourd, Zwiebel (with the T→S Z).") },
+      { ...shell(5221, "Essen I: der Fisch, das Fleisch, der Käse, die Suppe, das Gemüse", "The table's backbone sorted by kinship: Fisch and Fleisch are pure twins (Fleisch is the flesh English narrowed), Käse and Suppe are shared Latin loans, and das Gemüse grew inside German alone."), authored: true },
+      { ...shell(5222, "Essen II: das Obst, die Kartoffel, die Tomate, die Gurke, die Zwiebel", "Fruit and vegetables with their passports: Kartoffel is the Italian truffle's name (tartufo), Tomate came from Nahuatl through Spanish, Gurke from Polish ogórek, and Zwiebel is Latin cepula — English chive's grandmother."), authored: true },
     ],
   },
   {
@@ -591,8 +591,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Essen III & der Frühstückstisch",
     blurb: "Sweet things — Zucker, Honig, Schokolade, Keks, Torte — and the breakfast set: Frühstück, Brötchen, Marmelade, Toast.",
     lessons: [
-      { ...shell(5231, "Essen III: der Zucker, der Honig, die Schokolade, der Keks, die Torte", "The sweet shelf, and three words English is merely spelling: Zucker ← sugar, Keks ← cakes, Torte ← Italian torta. Die Torte is the birthday cake you already know from topic 21.") },
-      { ...shell(5232, "Frühstück: das Frühstück, das Brötchen, die Marmelade, der Toast, die Butter", "The one meal with its own noun: das Frühstück literally 'break-fast'. The Brötchen is the little bread — the diminutive -chen, the same job as English -let.") },
+      { ...shell(5231, "Essen III: der Zucker, der Honig, die Schokolade, der Keks, die Torte", "The sweet shelf, and three words English is merely spelling: Zucker ← sugar, Keks ← cakes, Torte ← Italian torta. Die Torte is the birthday cake you already know from topic 21."), authored: true },
+      { ...shell(5232, "Frühstück: das Frühstück, das Brötchen, die Marmelade, der Toast, die Butter", "The one meal with its own noun: das Frühstück is früh + Stück, the early piece (English named the broken fast instead). The Brötchen is the little bread — the diminutive -chen, the same job as English -let."), authored: true },
     ],
   },
   {
@@ -601,8 +601,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Farben",
     blurb: "The colour set in two lessons: rot, blau, grün, schwarz, bunt — then braun, grau, rosa, lila, Farbe.",
     lessons: [
-      { ...shell(5241, "Farben I: rot, blau, grün, schwarz, bunt", "The primaries plus bunt (coloured) and schwarz — where the T→D shift ran the other way: English red's German R is still there, but German rot kept its T.") },
-      { ...shell(5242, "Farben II: braun, grau, rosa, lila, die Farbe", "The second row, all of them noun-shaped adjectives: braun ← brown, grau ← grey, rosa ← rosa, lila ← lilac. die Farbe (colour) is the head noun that compounds them.") },
+      { ...shell(5241, "Farben I: rot, blau, grün, schwarz, bunt", "The primaries plus bunt (coloured) — where rot is red wearing the D→T hardening (Tag/day's law), blau and grün are pure twins, and schwarz survives in English only as the poetic swarthy."), authored: true },
+      { ...shell(5242, "Farben II: braun, grau, rosa, lila, die Farbe", "The second row, all of them noun-shaped adjectives: braun ← brown, grau ← grey, rosa ← rosa, lila ← lilac. die Farbe (colour) is the head noun that compounds them."), authored: true },
     ],
   },
   {
@@ -611,8 +611,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Reisen I: Fahrrad, Koffer, Karte, Haltestelle, Dorf",
     blurb: "Getting around on land, and the paperwork that comes with it.",
     lessons: [
-      { ...shell(5251, "Reisen I: das Fahrrad, der Koffer, die Karte, die Haltestelle, das Dorf", "Bike, suitcase, map, stop, village: die Karte is English's card/chart by way of Latin charta, and die Haltestelle keeps the T→S shift you drilled in halten.") },
-      { ...shell(5252, "Reisen II: die Fahrkarte, der Fahrplan, die Abfahrt, die Ankunft, der Flughafen", "The travel-timetable set, and the pair that answers 'when does it leave / when does it arrive' — Abfahrt and Ankunft share the fahren verb from topic 28.") },
+      { ...shell(5251, "Reisen I: das Fahrrad, der Koffer, die Karte, die Haltestelle, das Dorf", "Bike, suitcase, map, stop, village: die Karte is English's card/chart by way of Latin charta, and die Haltestelle keeps the D→T shift you drilled in halten (hold)."), authored: true },
+      { ...shell(5252, "Reisen II: die Fahrkarte, der Fahrplan, die Abfahrt, die Ankunft, der Flughafen", "The travel-timetable set, and the pair that answers 'when does it leave / when does it arrive' — die Abfahrt freezes fahren, die Ankunft freezes kommen."), authored: true },
     ],
   },
   {
@@ -621,8 +621,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Reisen III & Länder I",
     blurb: "Tourists and their luggage, then the country names: Deutschland, Frankreich, England, Spanien, Italien.",
     lessons: [
-      { ...shell(5261, "Reisen III: der Ausflug, der Tourist, das Gepäck, der Pass, die Fähre", "The excursion set — der Ausflug (out-trip), das Gepäck (singular collective, no plural in the everyday), der Pass for the border, die Fähre for the crossing.") },
-      { ...shell(5262, "Länder I: Deutschland, Frankreich, England, Spanien, Italien", "Five country names that English mostly abandoned (Deutschland/Germany, Frankreich/France) alongside the ones it kept (England, Spanien/Spain, Italien/Italy).") },
+      { ...shell(5261, "Reisen III: der Ausflug, der Tourist, das Gepäck, der Pass, die Fähre", "The excursion set — der Ausflug (out-trip), das Gepäck (singular collective, no plural in the everyday), der Pass for the border, die Fähre for the crossing."), authored: true },
+      { ...shell(5262, "Länder I: Deutschland, Frankreich, England, Spanien, Italien", "Five country names that English mostly abandoned (Deutschland/Germany, Frankreich/France) alongside the ones it kept (England, Spanien/Spain, Italien/Italy)."), authored: true },
     ],
   },
   {
@@ -631,8 +631,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Länder II & Sprachen",
     blurb: "Schweiz, Österreich, Türkei, Polen, Irland — plus Sprache and the four language adjectives.",
     lessons: [
-      { ...shell(5271, "Länder II: die Schweiz, Österreich, die Türkei, Polen, Irland", "The second row of country names, with their -ei and -land endings intact, and the two that hide an umlaut: die Türkei, Irland.") },
-      { ...shell(5272, "Sprachen: die Sprache, französisch, englisch, spanisch, italienisch", "Language names as adjectives — ich spreche Französisch — built on Sprache, whose K→CH shift is the same law as Milch and Bücher.") },
+      { ...shell(5271, "Länder II: die Schweiz, Österreich, die Türkei, Polen, Irland", "The second row of country names, with their -ei and -land endings intact, and the two that hide an umlaut: die Türkei, Irland."), authored: true },
+      { ...shell(5272, "Sprachen: die Sprache, französisch, englisch, spanisch, italienisch", "Language names as adjectives — ich spreche Französisch — built on Sprache, whose K→CH shift is the same law as Milch and Bücher."), authored: true },
     ],
   },
   {
@@ -641,8 +641,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Berufe I & II",
     blurb: "What people do for work: Arzt, Bäcker, Verkäufer, Polizist, Schüler — then Student, Fahrer, Sänger, Bauer, Arbeiter.",
     lessons: [
-      { ...shell(5281, "Berufe I: der Arzt, der Bäcker, der Verkäufer, der Polizist, der Schüler", "The five jobs a first conversation needs. Four are agent-nouns off a verb (verkaufen, polizeilich, Schüler from Schule); der Arzt comes to us by coinage, and English borrowed it as surgeon.") },
-      { ...shell(5282, "Berufe II: der Student, der Fahrer, der Sänger, der Bauer, der Arbeiter", "The -er job suffix does the same work English's -er does, but German also feminises and lengthens: die Sängerin, die Arbeiterin. Der Bauer is the farmer, not the builder.") },
+      { ...shell(5281, "Berufe I: der Arzt, der Bäcker, der Verkäufer, der Polizist, der Schüler", "The five jobs a first conversation needs. Four are agent-nouns off a verb (verkaufen, polizeilich, Schüler from Schule); der Arzt comes to us by coinage, and English borrowed it as surgeon."), authored: true },
+      { ...shell(5282, "Berufe II: der Student, der Fahrer, der Sänger, der Bauer, der Arbeiter", "The -er job suffix does the same work English's -er does, but German also feminises and lengthens: die Sängerin, die Arbeiterin. Der Bauer is the farmer, not the builder."), authored: true },
     ],
   },
   {
@@ -651,8 +651,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Berufe III & Hobbys I",
     blurb: "Ingenieur, Friseur, Beruf, Pilot, Kellner — then Musik, Sport, Lied, tanzen, malen.",
     lessons: [
-      { ...shell(5291, "Berufe III: der Ingenieur, der Friseur, der Beruf, der Pilot, der Kellner", "Beruf is the abstract noun the -er jobs hang under, and the list is where English borrowed hardest: Ingenieur, Pilot. Kellner comes from kelnern — to serve.") },
-      { ...shell(5292, "Hobbys I: die Musik, der Sport, das Lied, tanzen, malen", "What you do with the free time — including two words English took FROM German's neighbourhood: Sport and Musik, both with the K→CH shift law hiding inside.") },
+      { ...shell(5291, "Berufe III: der Ingenieur, der Friseur, der Beruf, der Pilot, der Kellner", "Beruf is the abstract noun the -er jobs hang under, and the list is where English borrowed hardest: Ingenieur, Pilot. Kellner comes from kelnern — to serve."), authored: true },
+      { ...shell(5292, "Hobbys I: die Musik, der Sport, das Lied, tanzen, malen", "What you do with the free time — Musik from the Greek Muses, Sport a reverse loan from English, tanzen the French word English dances to, and das Lied with its lost Old English cousin."), authored: true },
     ],
   },
   {
@@ -661,8 +661,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Hobbys II & Menschen",
     blurb: "Party, Gitarre, reiten, Schach, Freizeit — then wir, Schule, Gast, Gruppe, Held.",
     lessons: [
-      { ...shell(5301, "Hobbys II: die Party, die Gitarre, reiten, das Schach, die Freizeit", "The past-time set, and die Freizeit — free-time — the compound engine turning Freizeit into Freizeitpool, Freizeitstress and, for parents, the weekend's end.") },
-      { ...shell(5302, "Menschen: wir, die Schule, der Gast, die Gruppe, der Held", "The pronouns and the people around you: wir is the only new pronoun A1 adds, and der Held is English hero wearing a German H — Held was 'the one who shines' before it was the champion.") },
+      { ...shell(5301, "Hobbys II: die Party, die Gitarre, reiten, das Schach, die Freizeit", "The past-time set, and die Freizeit — free-time — the compound engine turning Freizeit into Freizeitpool, Freizeitstress and, for parents, the weekend's end."), authored: true },
+      { ...shell(5302, "Menschen: wir, die Schule, der Gast, die Gruppe, der Held", "The pronouns and the people around you: wir is the only new pronoun A1 adds, der Gast is guest with Latin hostis as its PIE cousin, and der Held is the Old English hæleþ — the warrior word English let go."), authored: true },
     ],
   },
   {
@@ -671,8 +671,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Gefühle & Adjektive",
     blurb: "The emotional set — Liebe, nett, wütend, stolz, Freude — and five high-value adjectives: richtig, falsch, sauber, leer, offen.",
     lessons: [
-      { ...shell(5311, "Gefühle: die Liebe, nett, wütend, stolz, die Freude", "The feeling nouns, where the -ung suffix does the same job English's -ness does (Freude/joy, Liebe/love), and wütend/stolz show the dative-free adjective turning back into a noun: der Zorn, der Stolz.") },
-      { ...shell(5312, "Adjektive: richtig, falsch, sauber, leer, offen", "Five adjectives English kept almost intact — richtig/right, falsch/false, offen/open — with sauber (clean) and leer (empty, with a silent colleague: leer's near-empty leer) around them.") },
+      { ...shell(5311, "Gefühle: die Liebe, nett, wütend, stolz, die Freude", "The feeling nouns, where the -ung suffix does the same job English's -ness does (Freude/joy, Liebe/love), and wütend/stolz show the dative-free adjective turning back into a noun: der Zorn, der Stolz."), authored: true },
+      { ...shell(5312, "Adjektive: richtig, falsch, sauber, leer, offen", "Five adjectives English kept almost intact — richtig/right, falsch/false, offen/open — with sauber (clean) and leer (empty, with a silent colleague: leer's near-empty leer) around them."), authored: true },
     ],
   },
 ];

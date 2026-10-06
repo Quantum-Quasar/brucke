@@ -73,6 +73,10 @@ const PRE_EXISTING = new Set([
   // l1701's bus fare, l21's compound tile "schuh" (Zahn/arzt/haus/zeug/schuh),
   // l5052's cat-on-the-sofa reading, l8/l802's -ieren Computer sentences.
   "1701:bus", "21:schuh", "5052:sofa", "8:computer", "802:computer",
+  // Activated by Campaign 2's late lessons, verified original prose:
+  // l21's compound tile "arzt" (Zahn/arzt/haus/zeug/schuh), l5071's
+  // "Herr Braun" — a surname, homonym of the color (the weißt/weiß class).
+  "21:arzt", "5071:braun",
 ]);
 
 // Weaves that are planned but not yet executed: word -> host lessons that will
@@ -143,11 +147,11 @@ const WEAVE_PLAN: Record<string, number[]> = {
   // wardrobe the Kleidung II and -er-job lessons.
   hinten: [5202, 5282],
   norden: [5172, 5262],
-  osten: [5172, 5262],
+  osten: [5172, 5271],
   westen: [5172, 5262],
   "süden": [5172, 5262],
   "nähe": [5201, 5252],
-  weit: [5201, 5251],
+  weit: [5201, 5261],
   fern: [5262, 5271],
   quer: [5261, 5251],
   entlang: [5202, 5251],
@@ -170,7 +174,7 @@ const WEAVE_PLAN: Record<string, number[]> = {
   // lessons (the last two lessons' words fall under the tail rule instead —
   // fewer than two later lessons exist, so the floor reports thin, not failed).
   socke: [5282, 5292],
-  tasche: [5251, 5261],
+  tasche: [5261, 5252],
   "mütze": [5242, 5271],
   schal: [5241, 5282],
   hut: [5261, 5282],
@@ -186,7 +190,7 @@ const WEAVE_PLAN: Record<string, number[]> = {
   balkon: [5241, 5312],
   gabel: [5221, 5232],
   messer: [5221, 5232],
-  flasche: [5221, 5252],
+  flasche: [5221, 5232],
   becher: [5221, 5232],
   kanne: [5221, 5232],
   herd: [5232, 5312],
@@ -230,14 +234,14 @@ const WEAVE_PLAN: Record<string, number[]> = {
   haltestelle: [5252, 5261],
   dorf: [5261, 5302],
   fahrkarte: [5261, 5271],
-  fahrplan: [5271, 5282],
+  fahrplan: [5261, 5282],
   abfahrt: [5261, 5271],
   ankunft: [5261, 5271],
   flughafen: [5271, 5291],
   ausflug: [5271, 5302],
   tourist: [5271, 5302],
-  "gepäck": [5271, 5291],
-  pass: [5271, 5291],
+  "gepäck": [5291, 5302],
+  pass: [5291, 5302],
   "fähre": [5262, 5271],
   deutschland: [5271, 5302],
   frankreich: [5271, 5291],
@@ -278,6 +282,7 @@ const WEAVE_PLAN: Record<string, number[]> = {
   gitarre: [5302, 5311],
   schach: [5302, 5311],
   freizeit: [5302, 5311],
+  reiten: [5302, 5311],
 };
 
 // Zero-new lessons that are deliberately deferred rather than filled (see
