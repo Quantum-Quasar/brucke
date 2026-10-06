@@ -552,7 +552,7 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     blurb: "The everyday wardrobe in two lessons: Schuh, Hose, Hemd, Mantel, Jacke — then Socke, Tasche, Mütze, Schal, Hut.",
     lessons: [
       { ...shell(5191, "Kleidung I: der Schuh, die Hose, das Hemd, der Mantel, die Jacke", "Tragen takes clothes like a subject takes a state: Ich trage einen Mantel. Four of the five are English twins — Schuh, Hose, Mantel, Jacke; das Hemd is the honest loss."), authored: true },
-      { ...shell(5192, "Kleidung II: die Socke, die Tasche, die Mütze, der Schal, der Hut", "The small gear, where German's compound logic shines: die Sonnenbrille is a sun-glasses, the Regenmantel a rain-coat. All of them take an.") },
+      { ...shell(5192, "Kleidung II: die Socke, die Tasche, die Mütze, der Schal, der Hut", "The small gear, where the borrowing runs both ways: die Socke and English sock share Latin soccus, and der Schal is a loan FROM English shawl. Tasche and Mütze are the honest losses."), authored: true },
     ],
   },
   {
@@ -561,8 +561,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Die Wohnung: Räume & Möbel",
     blurb: "Where things live: Zimmer, Wohnung, Flur, Keller, Etage — then Teppich, Schrank, Spiegel, Vorhang, Balkon.",
     lessons: [
-      { ...shell(5201, "Wohnen I: das Zimmer, die Wohnung, der Flur, der Keller, die Etage", "The rooms of a flat, and the compound engine that builds the rest: Wohnzimmer, Schlafzimmer, Badezimmer, Esszimmer — one head noun, four prefixes.") },
-      { ...shell(5202, "Wohnen II: der Teppich, der Schrank, der Spiegel, der Vorhang, der Balkon", "Furniture and fittings, where die/das flips without warning: der Teppich but das Sofa. The Vorhang (curtain) is a literal 'hang-before' — an inseparable prefix wearing a noun.") },
+      { ...shell(5201, "Wohnen I: das Zimmer, die Wohnung, der Flur, der Keller, die Etage", "The rooms of a flat, and the compound engine that builds the rest: Wohnzimmer, Schlafzimmer, Badezimmer, Esszimmer — one head noun, four prefixes. das Zimmer is English timber's shifted twin."), authored: true },
+      { ...shell(5202, "Wohnen II: der Teppich, der Schrank, der Spiegel, der Vorhang, der Balkon", "Furniture and fittings, where die/das flips without warning: der Teppich but das Sofa. The Vorhang (curtain) is a literal 'hang-before' — an inseparable prefix wearing a noun."), authored: true },
     ],
   },
   {
@@ -571,8 +571,8 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Tisch & Küche",
     blurb: "Telling: Gabel, Messer, Flasche, Becher, Kanne — then the kitchen's machines: Herd, Ofen, Seife, Kamm, Klingel.",
     lessons: [
-      { ...shell(5211, "Am Tisch: die Gabel, das Messer, die Flasche, der Becher, die Kanne", "Table words where the T→S shift runs both ways: die Gabel is a four-tine Zinke, das Messer kept its S in English too, and die Kanne is the coffee-pot.") },
-      { ...shell(5212, "In der Küche: der Herd, der Ofen, die Seife, der Kamm, die Klingel", "The kitchen's real estate — Herd (herd, and stove) and Ofen (oven, a true doublet) — plus the bathroom and door objects that share the room.") },
+      { ...shell(5211, "Am Tisch: die Gabel, das Messer, die Flasche, der Becher, die Kanne", "Table words with old stories: das Messer is the ancient meat-blade (*matisahsą), and die Flasche, der Becher and die Kanne are Latin words English borrowed too — flask, beaker, can."), authored: true },
+      { ...shell(5212, "In der Küche: der Herd, der Ofen, die Seife, der Kamm, die Klingel", "The kitchen's real estate — der Herd is hearth's cousin, die Seife and soap are twins with Rome holding a loan-copy, and der Ofen is the false twin: German's Latin furnus next to English's native oven."), authored: true },
     ],
   },
   {

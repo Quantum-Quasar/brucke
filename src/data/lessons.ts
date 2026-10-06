@@ -13944,7 +13944,7 @@ export const LESSONS: Lesson[] = [
     subtitle: "left, right, and the words that point the way — one twin, one loner, three builders",
     phase: 3,
     shift_categories: ["y_gh_to_g_ch"],
-    word_ids: ["links", "rechts", "geradeaus", "oben", "unten", "familie", "wohnen", "auto", "kirche", "garten", "fünf", "sechs", "manchmal", "endlich"],
+    word_ids: ["links", "rechts", "geradeaus", "oben", "unten", "hier", "drüben", "dort", "familie", "wohnen", "auto", "kirche", "garten", "fünf", "sechs", "manchmal", "endlich"],
     table_word_ids: ["links", "rechts", "geradeaus", "oben", "unten"],
     hook: {
       title: "Left Is the Loner",
@@ -13980,9 +13980,11 @@ export const LESSONS: Lesson[] = [
           { id: "lr5", english: "The garden is below", german: "Der Garten ist unten" },
           { id: "lr6", english: "Six families live upstairs", german: "Oben wohnen sechs Familien" },
           { id: "lr7", english: "Finally I am home", german: "Endlich bin ich zu Hause" },
+          { id: "lr8", english: "We live here — the church is over there", german: "Wir wohnen hier — die Kirche ist drüben" },
+          { id: "lr9", english: "The car is parked over there", german: "Das Auto steht dort" },
         ],
         target_answer:
-          "Die Kirche ist links, Das Auto steht rechts, Gehen Sie geradeaus, Der Himmel ist oben, Der Garten ist unten, Oben wohnen sechs Familien, Endlich bin ich zu Hause",
+          "Die Kirche ist links, Das Auto steht rechts, Gehen Sie geradeaus, Der Himmel ist oben, Der Garten ist unten, Oben wohnen sechs Familien, Endlich bin ich zu Hause, Wir wohnen hier — die Kirche ist drüben, Das Auto steht dort",
         meaning: "left, right, straight ahead, up, down",
         explanation:
           "One word per direction, no prepositions, no endings. And the vertical pair stays busy: oben wohnen sechs Familien — upstairs, where the families are — while der Garten waits unten.",
@@ -14570,6 +14572,562 @@ export const LESSONS: Lesson[] = [
       takeaway:
         "Schuh ↔ shoe, Hose ↔ hose, Mantel ↔ mantle, Jacke ↔ jacket — and Hemd, the word English lost; tragen wears einen, eine or ein.",
       curiosity_teaser: "Next: the small gear — die Socke, die Tasche, die Mütze, der Schal, der Hut.",
+    },
+  },
+
+  {
+    id: 5192,
+    slug: "kleidung-ii-socke-tasche-muetze-schal-hut",
+    title: "Kleidung II: die Socke, die Tasche, die Mütze, der Schal, der Hut",
+    subtitle: "the small gear — two Latin loans, one word Germany borrowed back from English, and two honest losses",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["socke", "tasche", "mütze", "schal", "hut", "nummer", "schuh", "hose", "hemd", "mantel", "jacke", "tragen"],
+    table_word_ids: ["socke", "tasche", "mütze", "schal", "hut"],
+    hook: {
+      title: "Words That Travel in Both Directions",
+      content:
+        "Kleidung I gave you four English twins; the small gear tells a messier, more human story. die Socke and English sock are the same Latin word, soccus — the light slipper Roman comic actors wore — which walked into both Germanic languages separately. der Schal travelled the wrong way: Germany borrowed it FROM English shawl (which itself started life in Persian). der Hut is the honest ancient twin of hat, straight from Proto-Germanic *hattuz. And then two honest losses: die Tasche and die Mütze have no safe English twin — English lost those words somewhere in the last thousand years, and pretending otherwise would be fabrication. Borrowing is a two-way street: German lent and borrowed, and the wardrobe keeps the receipts.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "The Slipper of Roman Comedy",
+          content:
+            "Latin soccus was the low, slipper-like shoe worn by the actors of Roman comedy — the sock of 'sock and buskin', the old phrase for comedy and tragedy. English sock and German Socke both take their word from that stage floor.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Tragen Takes an Object",
+      content:
+        "Three frames. 1. tragen + accusative: Ich trage einen Schal (masc.), eine Mütze (fem.), einen Hut — the clothing is the object, so einen/eine ride along: Ich trage den Regenmantel. 2. Position with dative: Der Schal ist über dem Hemd (the scarf is over the shirt) — über + dem for where something hangs. 3. Inside-compounds: Die Tasche ist im Mantel (the bag is in the coat), Meine Nummer ist in der Tasche. And the compound engine from Kleidung I keeps running: der Regenmantel is literally der Regen + der Mantel, a rain-coat for the rain.",
+      footnotes: [],
+      linguist_note:
+        "English 'shawl' entered from Persian shāl via India in the 18th century and was so fashionable that German borrowed it right back as der Schal — a reverse loan, the linguistic equivalent of re-exporting a fashion.",
+    },
+    exercises: [
+      {
+        id: "l5192_e1",
+        type: "matching_pairs",
+        prompt: "The small gear, in position — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "k21", english: "The sock and the shoe belong together", german: "Die Socke und der Schuh" },
+          { id: "k22", english: "The scarf is over the shirt", german: "Der Schal ist über dem Hemd" },
+          { id: "k23", english: "The bag is in the coat", german: "Die Tasche ist im Mantel" },
+          { id: "k24", english: "My number is in the bag", german: "Meine Nummer ist in der Tasche" },
+          { id: "k25", english: "The jacket is new, the trousers are old", german: "Die Jacke ist neu, die Hose ist alt" },
+          { id: "k26", english: "The rain-coat is for the rain", german: "Der Regenmantel ist für den Regen" },
+        ],
+        target_answer:
+          "Die Socke und der Schuh, Der Schal ist über dem Hemd, Die Tasche ist im Mantel, Meine Nummer ist in der Tasche, Die Jacke ist neu, die Hose ist alt, Der Regenmantel ist für den Regen",
+        meaning: "socks and shoes, scarves over shirts, bags inside coats, a rain-coat for the rain",
+        explanation:
+          "Six positions, one wardrobe. über dem Hemd is dative because the scarf merely hangs there; für den Regen is accusative because the coat is destined for it. And die Socke pairs with der Schuh — two genders the English words never had to learn.",
+      },
+      {
+        id: "l5192_e2",
+        type: "reverse_cognate",
+        prompt: "One of these words travelled the wrong way: Germany took IT from English. Which?",
+        options: ["der Schal ← shawl", "die Socke ← soccus", "der Hut ↔ hat", "die Mütze ← ?"],
+        target_answer: "der Schal ← shawl",
+        meaning: "der Schal is a reverse loan: German took it FROM English",
+        explanation:
+          "der Schal came from English shawl in the 19th century, when shawls were the height of fashion. die Socke and English sock both borrowed separately from Latin soccus, and der Hut ↔ hat is an ancient Germanic twin — but only the Schal crossed from English into German.",
+      },
+      {
+        id: "l5192_e3",
+        type: "morpheme_tiles",
+        prompt: "Assemble the pair that belongs together: 'The sock and the shoe'",
+        tile_options: ["Die", "Socke", "und", "der", "Schuh", "das", "Hemd"],
+        target_answer: "Die Socke und der Schuh",
+        meaning: "The sock and the shoe",
+        explanation:
+          "die Socke, der Schuh — the article rides with the noun, and und simply stacks them. das Hemd sits in the bank to prove the article changes with the noun: das Hemd, die Socke, der Schuh.",
+      },
+      {
+        id: "l5192_e4",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The jacket is new and the trousers are old'",
+        target_answer: "Die Jacke ist neu und die Hose ist alt",
+        meaning: "The jacket is new and the trousers are old",
+        word_bank: ["Die", "Jacke", "ist", "neu", "und", "die", "Hose", "alt", "der", "Hut"],
+        explanation:
+          "One und, two clauses. die Jacke and die Hose are both feminine, so the same article fronts each noun — the contrast between neu and alt carries the whole sentence.",
+      },
+      {
+        id: "l5192_e5",
+        type: "transcribe",
+        prompt: "Say it in German:",
+        idea: "you are getting dressed and announce what goes on top: you are wearing the hat and the cap",
+        cues: [
+          "The verb is tragen — it takes an object, like English 'wear' takes one",
+          "der Hut becomes den Hut (masculine accusative); die Mütze stays die Mütze",
+          "und joins the two pieces of gear",
+        ],
+        target_answer: "Ich trage den Hut und die Mütze",
+        meaning: "I am wearing the hat and the cap",
+        word_bank: ["Ich", "trage", "den", "Hut", "und", "die", "Mütze", "Schal", "meine"],
+        explanation:
+          "tragen is the wardrobe's verb: Ich trage den Hut (masc. → den), die Mütze (fem. → die). The masculine is the only one that changes its article in the accusative — the feminine and neuter stay put.",
+        diagnosis: {
+          slip: "the masculine article stayed der in the accusative",
+          cue:
+            "Only the masculine changes: der Hut → den Hut. die Mütze and das Hemd keep their articles in every case you will meet this week.",
+        },
+      },
+    ],
+    summary: {
+      outcome:
+        "Talk about the small gear, put a scarf over a shirt and a bag in a coat — and know which words Germany borrowed, lent, and lost.",
+      use_example: {
+        german: "Der Schal ist über dem Hemd — ich trage den Hut und die Mütze.",
+        english: "The scarf is over the shirt — I am wearing the hat and the cap.",
+      },
+      takeaway:
+        "Socke and sock share Latin soccus, der Schal is a loan FROM English shawl, der Hut is hat's ancient twin — and die Tasche, die Mütze stand alone, honestly.",
+      curiosity_teaser:
+        "Next: the rooms you live in — das Zimmer, die Wohnung, der Flur, der Keller, die Etage — and the word hiding inside English timber.",
+    },
+  },
+
+  {
+    id: 5201,
+    slug: "wohnen-i-zimmer-wohnung-flur-keller-etage",
+    title: "Wohnen I: das Zimmer, die Wohnung, der Flur, der Keller, die Etage",
+    subtitle: "the rooms of a flat — and the twin hiding inside English timber",
+    phase: 3,
+    shift_categories: ["t_to_s_ss_z"],
+    word_ids: ["zimmer", "wohnung", "flur", "keller", "etage", "dort", "gegenüber", "oben", "unten", "nähe", "weit", "sofa", "fenster"],
+    table_word_ids: ["zimmer", "wohnung", "flur", "keller", "etage"],
+    hook: {
+      title: "The Room and the Timber",
+      content:
+        "das Zimmer and English timber are the same Proto-Germanic word, *timrą — the building material. English kept the boards; German shifted the T to a Z-sound (the zehn/two shift) and kept the meaning 'room', because a room is what the timber builds. die Wohnung is wohnen's noun, the place where the living happens. der Keller is a Roman import both languages share: Latin cellarium became German Keller and English cellar. die Etage came from French étage — and English stage is its doublet, both from Old French estage, a 'standing place', which is why a stage is where actors stand and an Etage is where a flat stands. der Flur looks like floor, and the two may be distant cousins — but the trail is muddy, so treat the resemblance as a hint, not a proof. English lost the twin, if it ever had one.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "One Head Noun, Four Rooms",
+          content:
+            "German builds rooms with a compound engine: das Wohnzimmer (living room, wohnen + Zimmer), das Schlafzimmer (schlafen + Zimmer), das Badezimmer (Bad + Zimmer), das Esszimmer (essen + Zimmer). Learn das Zimmer once and four rooms come free.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Where the Rooms Stand",
+      content:
+        "Position words do the navigating. 1. With sein: Der Keller ist dort unten (the basement is down there), Das Zimmer ist oben (the room is up top). 2. gegenüber after the noun: Das Haus gegenüber ist alt (the house opposite is old) — no preposition, the word leans back on its noun. 3. die Nähe with in: Der Markt ist in der Nähe (the market is nearby), Das Sofa ist in der Nähe vom Fenster (the sofa is near the window) — and the opposite is weit: der Weg ist weit (the way is far). 4. The compound engine: das Wohnzimmer, das Schlafzimmer, das Badezimmer, das Esszimmer — one head noun, four prefixes.",
+      footnotes: [],
+      linguist_note:
+        "*timrą meant 'material for building', and its verb *timrjan 'to build' survives in English 'to timber' — to brace something with beams. English kept the engineer's word; German narrowed the noun to the finished product: the room.",
+    },
+    exercises: [
+      {
+        id: "l5201_e1",
+        type: "matching_pairs",
+        prompt: "A flat, navigated — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "w11", english: "The basement is down there", german: "Der Keller ist dort unten" },
+          { id: "w12", english: "The house opposite is old", german: "Das Haus gegenüber ist alt" },
+          { id: "w13", english: "The room is up top", german: "Das Zimmer ist oben" },
+          { id: "w14", english: "The sofa is near the window", german: "Das Sofa ist in der Nähe vom Fenster" },
+          { id: "w15", english: "My flat is big and bright", german: "Meine Wohnung ist groß und hell" },
+          { id: "w16", english: "The shoes are standing in the hallway", german: "Die Schuhe stehen im Flur" },
+        ],
+        target_answer:
+          "Der Keller ist dort unten, Das Haus gegenüber ist alt, Das Zimmer ist oben, Das Sofa ist in der Nähe vom Fenster, Meine Wohnung ist groß und hell, Die Schuhe stehen im Flur",
+        meaning:
+          "a basement down there, a house opposite, a room up top, a sofa near the window, a big bright flat, shoes in the hallway",
+        explanation:
+          "Five rooms and four position words. gegenüber follows its noun like an afterthought, and die Schuhe stehen im Flur is where German boots live — standing, not lying, because stehen is the verb furniture prefers.",
+      },
+      {
+        id: "l5201_e2",
+        type: "shift_select",
+        prompt: "Which of these rooms wears the T→Z badge that turned English timber into German Zimmer?",
+        options: ["das Zimmer", "der Keller", "die Etage", "der Flur"],
+        target_answer: "das Zimmer",
+        meaning: "das Zimmer ↔ timber: the T→Z shift inside a doublet",
+        explanation:
+          "*timrą kept its T in English timber and hardened it to a Z-sound in German Zimmer — the same law that made zwei out of two and zehn out of ten. One word became the material in English and the room in German. der Keller and die Etage are Latin and French imports, and der Flur's trail goes cold.",
+      },
+      {
+        id: "l5201_e3",
+        type: "reverse_cognate",
+        prompt:
+          "der Keller is German's borrowing of Latin cellarium — give the English word that borrowed the same Latin:",
+        target_answer: "cellar",
+        meaning: "der Keller ↔ cellar — both from Latin cellarium",
+        explanation:
+          "Latin cellarium, a store-room, was borrowed whole by German (der Keller) and by English (cellar). And die Etage has its own doublet: French étage and English stage both come from Old French estage — English just kept the S.",
+      },
+      {
+        id: "l5201_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the distance sentence: 'The market is nearby, the way is far'",
+        tile_options: ["Der", "Markt", "ist", "in", "der", "Nähe", "Weg", "weit", "Zimmer", "Keller"],
+        target_answer: "Der Markt ist in der Nähe, der Weg ist weit",
+        meaning: "The market is nearby, the way is far",
+        explanation:
+          "in der Nähe is the fixed frame for 'nearby' — die Nähe always wears in der here — and weit answers it from the other end. der Weg is the same word family as German's way-verbs: the road you walk every day.",
+      },
+      {
+        id: "l5201_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The bedroom is up there'",
+        target_answer: "Das Schlafzimmer ist dort oben",
+        meaning: "The bedroom is up there",
+        word_bank: ["Das", "Schlafzimmer", "ist", "dort", "oben", "Badezimmer", "unten", "im", "Keller"],
+        explanation:
+          "das Schlafzimmer is schlafen + Zimmer, built by the compound engine — and das Badezimmer in the bank shows the same engine again. Stack the position words: dort oben, dort unten — German lets them pile up in that order.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Name the rooms, place them with oben, unten, dort and gegenüber, and say what is in der Nähe and what is weit.",
+      use_example: { german: "Der Keller ist dort unten — das Schlafzimmer ist oben.", english: "The basement is down there — the bedroom is up top." },
+      takeaway:
+        "Zimmer is timber's shifted twin (T→Z), Keller and cellar share Latin cellarium, Etage and stage share estage — and das Schlafzimmer builds itself from schlafen + Zimmer.",
+      curiosity_teaser:
+        "Next: the things inside the rooms — der Teppich, der Schrank, der Spiegel, der Vorhang, der Balkon — and a wardrobe related to English shrink.",
+    },
+  },
+
+  {
+    id: 5202,
+    slug: "wohnen-ii-teppich-schrank-spiegel-vorhang-balkon",
+    title: "Wohnen II: der Teppich, der Schrank, der Spiegel, der Vorhang, der Balkon",
+    subtitle: "a carpet that began in Greek, a wardrobe related to shrink, and a curtain that is a literal hang-before",
+    phase: 3,
+    shift_categories: [],
+    word_ids: ["teppich", "schrank", "spiegel", "vorhang", "balkon", "oben", "unten", "hinten", "sofa", "computer", "entlang", "flur", "fenster"],
+    table_word_ids: ["teppich", "schrank", "spiegel", "vorhang", "balkon"],
+    hook: {
+      title: "Furniture with Passports",
+      content:
+        "der Teppich is the well-travelled one: German took it from Latin tapetium, which took it from Greek tápēs, 'heavy cloth' — and English tapestry descends from the same Greek carpet-word, by way of French tapisserie. der Schrank never left the Germanic house: it shares its ancient root with English shrink — a Schrank was originally the enclosing, bending-in thing, the cabinet that squeezes your clothes into place. der Vorhang is transparent German: vor + hängen, a literal hang-before, built the way English once built compounds before it borrowed 'curtain' from French. der Balkon is a boomerang: a Germanic word for beam, *balko, walked south, became Italian balcone and French balcon, and returned to German as a balcony — while English kept the original beam as balk. der Spiegel keeps its history to itself: from Latin speculum, but with no clean English twin in everyday words, so we leave it honest and unstressed.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Der Schrank's Family Reunion",
+          content:
+            "The root behind Schrank and shrink is the Germanic *skrenkw-, 'to bend, to draw in'. English made it a verb (shrink), German made it a noun (der Schrank) — the wardrobe as the thing that 'draws in' what you hang inside it.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Placing the Furniture",
+      content:
+        "1. Above and below: Der Vorhang ist oben, der Teppich ist unten — position words without articles, the room mapped in two words. 2. At the back: Der Schrank steht hinten — stehen is the furniture verb, and hinten reaches back to Richtung II. 3. Under: Der Teppich ist unter dem Sofa — unter + dem for what lies beneath. 4. Along: Wir gehen den Flur entlang — entlang trails behind its noun phrase when the motion runs the length of it, and the Flur from Wohnen I is the hallway it walks. 5. One loan in the bank: Der Computer ist neu — Wohnen II has room for the machines too.",
+      footnotes: [],
+      linguist_note:
+        "English balk survives mostly in the fixed phrase 'balk at' and in baseball's 'balk', but its older sense is a beam or ridge of land — the same Germanic *balko that Italian dressed up as balcone. The beam became a balcony: architecture as etymology.",
+    },
+    exercises: [
+      {
+        id: "l5202_e1",
+        type: "matching_pairs",
+        prompt: "The room, furnished — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "m11", english: "The curtain is up top, the rug is down below", german: "Der Vorhang ist oben, der Teppich ist unten" },
+          { id: "m12", english: "The wardrobe stands at the back", german: "Der Schrank steht hinten" },
+          { id: "m13", english: "The rug is under the sofa", german: "Der Teppich ist unter dem Sofa" },
+          { id: "m14", english: "The computer is new", german: "Der Computer ist neu" },
+          { id: "m15", english: "The mirror is on the wall", german: "Der Spiegel ist an der Wand" },
+          { id: "m16", english: "The balcony is big", german: "Der Balkon ist groß" },
+        ],
+        target_answer:
+          "Der Vorhang ist oben, der Teppich ist unten, Der Schrank steht hinten, Der Teppich ist unter dem Sofa, Der Computer ist neu, Der Spiegel ist an der Wand, Der Balkon ist groß",
+        meaning:
+          "a curtain above and a rug below, a wardrobe at the back, a rug under the sofa, a new computer, a mirror on the wall, a big balcony",
+        explanation:
+          "Five fittings and their places. oben/unten/hinten need no article — they are directions, not nouns — while unter dem Sofa takes the dative because the rug merely lies there.",
+      },
+      {
+        id: "l5202_e2",
+        type: "reverse_cognate",
+        prompt:
+          "One Germanic word went south, became Italian balcone, and came back dressed as a balcony. Which word here is that boomerang?",
+        options: ["der Balkon ← balk", "der Teppich ← tapestry", "der Schrank ← shrink", "der Vorhang ← hang"],
+        target_answer: "der Balkon ← balk",
+        meaning: "der Balkon and English balk share the Germanic beam-word *balko",
+        explanation:
+          "*balko meant 'beam'. Italian balcone borrowed it, French passed it on, and German took der Balkon back from the south — while English balk quietly kept the original beam. der Teppich and tapestry share Greek tápēs instead, and der Schrank's cousin shrink never left the verb shelf.",
+      },
+      {
+        id: "l5202_e3",
+        type: "morpheme_tiles",
+        prompt: "Assemble the walk through the flat: 'We walk along the hallway'",
+        tile_options: ["Wir", "gehen", "den", "Flur", "entlang", "hinten", "Teppich"],
+        target_answer: "Wir gehen den Flur entlang",
+        meaning: "We walk along the hallway",
+        explanation:
+          "entlang is the straggler: when the motion runs the length of something, it trails AFTER the noun phrase — den Flur entlang, not entlang den Flur. hinten sits in the bank as the decoy: a direction word, not this postposition.",
+      },
+      {
+        id: "l5202_e4",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The curtain is up top and the rug is down below'",
+        target_answer: "Der Vorhang ist oben und der Teppich ist unten",
+        meaning: "The curtain is up top and the rug is down below",
+        word_bank: ["Der", "Vorhang", "ist", "oben", "und", "der", "Teppich", "unten", "Schrank", "am"],
+        explanation:
+          "The room in one sentence: oben and unten divide it vertically, und joins the halves, and every noun keeps der — der Vorhang, der Teppich — because furniture gender in German is fixed at the factory.",
+      },
+      {
+        id: "l5202_e5",
+        type: "transcribe",
+        prompt: "Say it in German:",
+        idea: "you are showing a friend the living room: the computer is new and the wardrobe is old",
+        cues: [
+          "der Computer — the loan from Lehnwörter I, still masculine",
+          "der Schrank — the wardrobe, cousin of English shrink",
+          "neu and alt carry the contrast, und joins the clauses",
+        ],
+        target_answer: "Der Computer ist neu und der Schrank ist alt",
+        meaning: "The computer is new and the wardrobe is old",
+        word_bank: ["Der", "Computer", "ist", "neu", "und", "der", "Schrank", "alt", "Teppich", "vor"],
+        explanation:
+          "Two loans from different centuries in one sentence: der Computer borrowed in our lifetime, der Schrank pure Germanic — and the alt in the bank reminds you which end of the contrast the wardrobe sits at.",
+        diagnosis: {
+          slip: "the two clauses lost their second der",
+          cue:
+            "und starts a fresh clause, so der Schrank needs its article again — German does not share articles across und the way English shares 'the'.",
+        },
+      },
+    ],
+    summary: {
+      outcome:
+        "Furnish a room in German: place things oben, unten, hinten and unter dem Sofa, walk den Flur entlang, and trace four words back to Greek, Germanic beams and a hang-before.",
+      use_example: {
+        german: "Der Vorhang ist oben, der Teppich ist unten — der Computer ist neu.",
+        english: "The curtain is up top, the rug is down below — the computer is new.",
+      },
+      takeaway:
+        "Teppich and tapestry share Greek tápēs, Schrank and shrink share *skrenkw-, Vorhang is vor + hängen, Balkon is the beam-word balk returning from Italy — and der Spiegel keeps its own counsel.",
+      curiosity_teaser:
+        "Next: the table is laid — die Gabel, das Messer, die Flasche, der Becher, die Kanne — and a knife that is a 1,500-year-old compound.",
+    },
+  },
+
+  {
+    id: 5211,
+    slug: "am-tisch-gabel-messer-flasche-becher-kanne",
+    title: "Am Tisch: die Gabel, das Messer, die Flasche, der Becher, die Kanne",
+    subtitle: "a knife that is literally a meat-saw, and three words Latin handed to both languages",
+    phase: 3,
+    shift_categories: ["t_to_s_ss_z"],
+    word_ids: ["gabel", "messer", "flasche", "becher", "kanne", "zahl", "hälfte", "moment", "teller", "tisch", "heiß", "wasser", "kaffee"],
+    table_word_ids: ["gabel", "messer", "flasche", "becher", "kanne"],
+    hook: {
+      title: "The Knife Is a Meat-Saw",
+      content:
+        "das Messer is the oldest compound at the table: Proto-Germanic *matisahsą, built from *mati, 'food' — the exact word English meat comes from, which originally meant food of any kind — plus *sahs, 'blade', the word Old Norse preserved as sax. German shifted food's T to a Z (mati → mezzi, the zehn/two shift) and squeezed the compound down to Messer. The knife literally is a meat-blade. die Flasche and English flask are the same Germanic word, *flaska — but English had to borrow its own word BACK through Medieval Latin flasco, a boomerang loan. der Becher is Latin bicarium, which English borrowed as beaker; die Kanne goes back to Latin canna, 'reed', the little tube that became German Kanne and English can. die Gabel is the honest loss: pure Germanic *gabulō, with no English twin — English took 'fork' from Latin furca instead.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Meat Once Meant Food",
+          content:
+            "In Old English, mete meant food in general — 'sweetmeats', originally, were just sweets. So *matisahsą was not a 'meat-knife' in the modern sense; it was simply the food-knife, the blade you cut dinner with. German compressed the whole idea into seven letters: Messer.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Pouring, Cutting, Counting",
+      content:
+        "1. aus for what comes out: Ich trinke den Kaffee aus dem Becher — aus + dem, the drink leaves the vessel. 2. in for what goes in: Das Wasser ist in der Flasche — in + der, the water stays put. 3. Hot things get a warning frame: Einen Moment, bitte, die Kanne ist heiß — einen because der Moment is masculine accusative, bitte because politeness is free. 4. Counting the table: Die Zahl ist vier (the number is four), and the numeral again takes the bare plural — vier Teller, vier Gabeln, no article. 5. The half: Die Hälfte der Teller ist hier — die Hälfte governs the genitive, and the verb agrees with the singular Hälfte, not the plural Teller.",
+      footnotes: [],
+      linguist_note:
+        "Latin canna 'reed' gave Germanic *kannō, 'small container'. English kept it tiny (can), German made it elegant (die Kanne) — and both languages still pour from the same Latin reed.",
+    },
+    exercises: [
+      {
+        id: "l5211_e1",
+        type: "matching_pairs",
+        prompt: "Am Tisch — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "t11", english: "A moment please, the pot is hot", german: "Einen Moment, bitte, die Kanne ist heiß" },
+          { id: "t12", english: "The water is in the bottle", german: "Das Wasser ist in der Flasche" },
+          { id: "t13", english: "I drink the coffee from the mug", german: "Ich trinke den Kaffee aus dem Becher" },
+          { id: "t14", english: "Half of the plates are here", german: "Die Hälfte der Teller ist hier" },
+          { id: "t15", english: "The number is four", german: "Die Zahl ist vier" },
+          { id: "t16", english: "The fork and the knife are on the table", german: "Die Gabel und das Messer sind auf dem Tisch" },
+        ],
+        target_answer:
+          "Einen Moment, bitte, die Kanne ist heiß, Das Wasser ist in der Flasche, Ich trinke den Kaffee aus dem Becher, Die Hälfte der Teller ist hier, Die Zahl ist vier, Die Gabel und das Messer sind auf dem Tisch",
+        meaning:
+          "a hot pot and a polite warning, water in the bottle, coffee from the mug, half the plates here, the number four, fork and knife on the table",
+        explanation:
+          "The table set in six sentences. in der Flasche is dative because the water rests there; aus dem Becher is dative because the coffee only leaves it; and die Gabel und das Messer shows the gender flip — die, then das — with no warning.",
+      },
+      {
+        id: "l5211_e2",
+        type: "shift_select",
+        prompt:
+          "Which of these table words wears the T→Z badge that turned *mati into mezzi-, food into meat's German twin?",
+        options: ["das Messer", "die Flasche", "der Becher", "die Kanne"],
+        target_answer: "das Messer",
+        meaning: "messer's first half wears the T→Z badge: *mati → mezzi",
+        explanation:
+          "das Messer is ancient *matisahsą: *mati 'food' + *sahs 'blade'. English meat kept the T of *mati; German hardened it to a Z-sound, exactly as in zwei/two and zehn/ten. The second half, *sahs 'blade', survives intact in Old Norse sax — the meat-saw that became das Messer. die Flasche, der Becher and die Kanne wear no shift badge; they are loans.",
+      },
+      {
+        id: "l5211_e3",
+        type: "reverse_cognate",
+        prompt:
+          "der Becher is German's version of Latin bicarium — give the English word borrowed from the same Latin:",
+        target_answer: "beaker",
+        meaning: "der Becher ↔ beaker — both from Latin bicarium",
+        explanation:
+          "Latin bicarium served both languages: German took der Becher straight, English took beaker (and via Old Norse, bikarr). The same Latin poured die Flasche's cousin flask back into English and turned die Kanne's reed into a can.",
+      },
+      {
+        id: "l5211_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the warning: 'A moment please, the pot is hot'",
+        tile_options: ["Einen", "Moment", "bitte", "die", "Kanne", "ist", "heiß", "Teller", "Wasser"],
+        target_answer: "Einen Moment, bitte, die Kanne ist heiß",
+        meaning: "A moment please, the pot is hot",
+        explanation:
+          "der Moment is masculine, so the accusative warning takes einen — a giveaway that English 'moment' never had. bitte softens it, and die Kanne ist heiß closes with the dangerous fact. The tiles Teller and Wasser are decoys from the rest of the table.",
+      },
+      {
+        id: "l5211_e5",
+        type: "syntax_builder",
+        prompt: "Assemble: 'The number is four and the half is two'",
+        target_answer: "Die Zahl ist vier und die Hälfte ist zwei",
+        meaning: "The number is four and the half is two",
+        word_bank: ["Die", "Zahl", "ist", "vier", "und", "die", "Hälfte", "zwei", "Teller", "Gabeln"],
+        explanation:
+          "Setting the table with Zählen-I and Zählen-II grammar: die Zahl announces the count, die Hälfte halves it — vier Teller, zwei Gabeln — and the numeral again takes the bare plural with no article. The Teller and Gabeln in the bank are the pieces waiting to be counted.",
+      },
+    ],
+    summary: {
+      outcome:
+        "Set a table in German: pour from die Kanne, drink aus dem Becher, warn politely about what is heiß — and count die Zahl with bare plurals.",
+      use_example: {
+        german: "Einen Moment, bitte — die Kanne ist heiß, und die Zahl ist vier: vier Teller, vier Gabeln.",
+        english: "A moment please — the pot is hot, and the number is four: four plates, four forks.",
+      },
+      takeaway:
+        "Messer is *matisahsą, the meat-saw (meat + the T→Z shift), Flasche and flask are one boomerang word, Becher and beaker share bicarium, Kanne and can share canna — and die Gabel stands alone, honestly.",
+      curiosity_teaser:
+        "Next: the kitchen's real estate — der Herd, der Ofen, die Seife, der Kamm, die Klingel — and why der Ofen is not oven's twin, whatever it looks like.",
+    },
+  },
+
+  {
+    id: 5212,
+    slug: "in-der-kueche-herd-ofen-seife-kamm-klingel",
+    title: "In der Küche: der Herd, der Ofen, die Seife, der Kamm, die Klingel",
+    subtitle: "the stove and its hearth-cousin, soap's old P→F badge — and a look-alike that is not a twin",
+    phase: 3,
+    shift_categories: ["th_to_d", "p_to_pf_f"],
+    word_ids: ["herd", "ofen", "seife", "kamm", "klingel", "sekunde", "küche", "heiß", "wasser", "tür", "hand", "bad", "kuchen"],
+    table_word_ids: ["herd", "ofen", "seife", "kamm", "klingel"],
+    hook: {
+      title: "Cousins, Twins, and One False Twin",
+      content:
+        "der Herd and English hearth are cousins, not twins: two old words for the fire-place, *herþuz and *kerþą, that wandered apart at the very start — German hardened the old þ to d (Herd), English kept the th (hearth), the same law that made drei out of three. die Seife and soap are genuine twins from Proto-Germanic *saipō — a word so good that Rome bought it: Latin sapo, the Romans' hair-dye soap, is Germanic in origin, and German shifted the P to F (Seife) while English kept it (soap). der Kamm ↔ comb is the plain twin, *kambaz on both sides of the North Sea. die Klingel is klingen made into a thing — and klingen's own cousin is English clink, the same bell-root with an echo. And then the trap: der Ofen looks like oven, twin for twin — but German borrowed der Ofen from Latin furnus, while English oven is the native Germanic word. They are strangers that happen to match. The kitchen is where honesty pays: cousins, twins, and one beautiful false twin.",
+      footnotes: [
+        {
+          marker: "1",
+          title: "Rome Bought Its Soap-Word",
+          content:
+            "Pliny the Elder writes that sapo — a mix of tallow and beech ash — was a Gaulish invention the Romans used on their hair, not their bodies. The word is Germanic *saipō borrowed into Latin, which is why die Seife and soap can be twins across the North Sea while Latin holds a loan-copy.",
+        },
+      ],
+    },
+    pattern: {
+      title: "Hot Things, Closed Doors, Small Machines",
+      content:
+        "1. The warning frame: Eine Sekunde, bitte, der Herd ist heiß — eine because die Sekunde is feminine, bitte because the stove does not negotiate. 2. Location: Der Kuchen ist im Ofen, die Klingel ist an der Tür — im for what bakes inside, an der for what hangs on the surface. 3. The imperative: Wasch die Hände mit Seife — waschen drops to Wasch in the du-imperative, mit + dative for the tool. 4. Carrying things between rooms: Der Kamm ist in der Tasche — the comb travels, the Wohnen-II Tasche holds it.",
+      footnotes: [],
+      linguist_note:
+        "The h/k pair in *herþuz and *kerþą is an old variation inside Germanic, not a one-off: the same wobble separates German Hürde from English hurdle, two words for a woven frame. That is why dictionaries print the hearth and Herd reconstructions as two related forms rather than one word — cousins with a shared fire-place, diverging before either language had a spelling to argue about.",
+    },
+    exercises: [
+      {
+        id: "l5212_e1",
+        type: "matching_pairs",
+        prompt: "In der Küche — match each sentence with its reading:",
+        matching_pairs: [
+          { id: "c11", english: "One second please, the stove is hot", german: "Eine Sekunde, bitte, der Herd ist heiß" },
+          { id: "c12", english: "The cake is in the oven", german: "Der Kuchen ist im Ofen" },
+          { id: "c13", english: "Wash your hands with soap", german: "Wasch die Hände mit Seife" },
+          { id: "c14", english: "The bell is at the door", german: "Die Klingel ist an der Tür" },
+          { id: "c15", english: "The comb is in the bag", german: "Der Kamm ist in der Tasche" },
+          { id: "c16", english: "We are cooking in the kitchen", german: "Wir kochen in der Küche" },
+        ],
+        target_answer:
+          "Eine Sekunde, bitte, der Herd ist heiß, Der Kuchen ist im Ofen, Wasch die Hände mit Seife, Die Klingel ist an der Tür, Der Kamm ist in der Tasche, Wir kochen in der Küche",
+        meaning:
+          "a hot stove and one second of patience, a cake in the oven, washed hands, a bell at the door, a comb in the bag, cooking in the kitchen",
+        explanation:
+          "Five rooms' worth of small machines. im Ofen is dative because the cake rests inside; an der Tür because the bell hangs at the surface; and Wasch is the bare du-imperative — the ending left with the hands it washes.",
+      },
+      {
+        id: "l5212_e2",
+        type: "shift_select",
+        prompt: "Which kitchen word wears the P→F badge that separates English soap from German Seife?",
+        options: ["die Seife", "der Kamm", "die Klingel", "der Ofen"],
+        target_answer: "die Seife",
+        meaning: "Seife ↔ soap: the P→F shift, with Rome holding a loan-copy",
+        explanation:
+          "*saipō kept its P in English soap and shifted it to F in German Seife — the pool/Pfuhl law at work in your bathroom. Rome liked the word enough to borrow it as sapo, so the Latin copy sits between the two Germanic twins.",
+      },
+      {
+        id: "l5212_e3",
+        type: "reverse_cognate",
+        prompt: "Three of these pairs are true twins or cousins. One is a FALSE twin. Which?",
+        options: ["der Kamm ↔ comb", "die Klingel ↔ clink", "der Ofen ↔ oven", "die Seife ↔ soap"],
+        target_answer: "der Ofen ↔ oven",
+        meaning: "der Ofen and oven look alike and are unrelated",
+        explanation:
+          "der Ofen is German's borrowing of Latin furnus; English oven is the native Germanic word. The resemblance is coincidence. der Kamm ↔ comb is a true twin (*kambaz), die Klingel runs on klingen's root with English clink, and die Seife ↔ soap share *saipō.",
+      },
+      {
+        id: "l5212_e4",
+        type: "morpheme_tiles",
+        prompt: "Assemble the warning: 'One second please, the stove is hot'",
+        tile_options: ["Eine", "Sekunde", "bitte", "der", "Herd", "ist", "heiß", "Kamm"],
+        target_answer: "Eine Sekunde, bitte, der Herd ist heiß",
+        meaning: "One second please, the stove is hot",
+        explanation:
+          "die Sekunde is feminine, so the counted time takes eine — Eine Sekunde, bitte — and der Herd ist heiß delivers the reason. The Herd is the hearth-cousin: German's d where hearth keeps its th.",
+      },
+      {
+        id: "l5212_e5",
+        type: "transcribe",
+        prompt: "Say it in German:",
+        idea: "you are baking and need the kitchen to yourself: the cake is in the oven and the water is hot",
+        cues: [
+          "der Ofen — the false twin: borrowed from Latin furnus, nothing to do with English oven",
+          "das Wasser ist heiß — the T→S shift running through both words",
+          "und joins the two facts",
+        ],
+        target_answer: "Der Kuchen ist im Ofen und das Wasser ist heiß",
+        meaning: "The cake is in the oven and the water is hot",
+        word_bank: ["Der", "Kuchen", "ist", "im", "Ofen", "und", "das", "Wasser", "heiß", "Herd", "Tür"],
+        explanation:
+          "im Ofen contracts in + dem for the masculine — the cake bakes inside, so dative. das Wasser ist heiß carries the shift story twice over: Wasser and heiß both wear the T→S badge, the kitchen's most common sound law.",
+        diagnosis: {
+          slip: "the dative in the Ofen phrase collapsed to den",
+          cue:
+            "in + the masculine dative is im — in dem Ofen contracts. The accusative den would mean motion INTO the oven, and nobody wants that sentence.",
+        },
+      },
+    ],
+    summary: {
+      outcome:
+        "Run a German kitchen: warn about the hot Herd, bake im Ofen, wash mit Seife, and spot the one false twin on the shelf.",
+      use_example: {
+        german: "Eine Sekunde, bitte — der Herd ist heiß und der Kuchen ist im Ofen.",
+        english: "One second please — the stove is hot and the cake is in the oven.",
+      },
+      takeaway:
+        "Herd and hearth are cousins (þ→d), Seife and soap are twins with Rome holding a loan-copy, Kamm ↔ comb and Klingel ↔ clink ring true — and der Ofen is Latin furnus wearing oven's face.",
+      curiosity_teaser:
+        "Next: Essen I — der Fisch, das Fleisch, der Käse, die Suppe, das Gemüse — the meal itself, after all this kitchen talk.",
     },
   },
 ];
