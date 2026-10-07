@@ -145,6 +145,40 @@ export const TrailMap: React.FC = () => {
             const ca = edgeCenter(a);
             const cb = edgeCenter(b);
             const lit = state.litEdges.has(`${Math.min(a, b)}-${Math.max(a, b)}`);
+            const na = nodeById.get(a);
+            const nb = nodeById.get(b);
+            const isSide = na?.kind !== "core" || nb?.kind !== "core";
+
+            if (isSide) {
+              // Side sprig/branch: a curved connector bowed off to the side so it
+              // clearly reads as a branch hanging off the main spine.
+              const mx = (ca.x + cb.x) / 2;
+              const my = (ca.y + cb.y) / 2;
+              const dx = cb.x - ca.x;
+              const dy = cb.y - ca.y;
+              const len = Math.hypot(dx, dy) || 1;
+              // bow perpendicular to the segment — the branch visibly swings
+              // out to the side instead of following a straight diagonal
+              const bow = Math.min(70, Math.max(30, len * 0.35));
+              const nx = -dy / len;
+              const ny = dx / len;
+              const cpx = mx + nx * bow;
+              const cpy = my + ny * bow;
+              return (
+                <path
+                  key={`${a}-${b}`}
+                  d={`M ${ca.x} ${ca.y} Q ${cpx} ${cpy} ${cb.x} ${cb.y}`}
+                  fill="none"
+                  stroke="var(--sub-color)"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeDasharray="1 8"
+                  opacity={lit ? 0.55 : 0.16}
+                  style={{ transition: "opacity 400ms" }}
+                />
+              );
+            }
+
             return (
               <line
                 key={`${a}-${b}`}
@@ -153,10 +187,10 @@ export const TrailMap: React.FC = () => {
                 x2={cb.x}
                 y2={cb.y}
                 stroke="var(--sub-color)"
-                strokeWidth={3}
+                strokeWidth={3.25}
                 strokeLinecap="round"
                 strokeDasharray="1 9"
-                opacity={lit ? 0.85 : 0.22}
+                opacity={lit ? 0.85 : 0.3}
                 style={{ transition: "opacity 400ms" }}
               />
             );
