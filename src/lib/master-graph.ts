@@ -14,9 +14,12 @@ export interface MasterNode {
   y: number;
 }
 
+export type MasterEdgeKind = "family" | "phrase" | "compound" | "falsefriend" | "insight";
+
 export interface MasterEdge {
   a: number;
   b: number;
+  kind: MasterEdgeKind;
 }
 
 const WIDTH = 2600;
@@ -66,30 +69,16 @@ export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; e
     const key = a < b ? `${a}-${b}` : `${b}-${a}`;
     if (edgeSet.has(key)) return;
     edgeSet.add(key);
-    edges.push({ a: Math.min(a, b), b: Math.max(a, b) });
+    const ka = nodes[a].kind;
+    const kb = nodes[b].kind;
+    const kind: MasterEdgeKind =
+      ka === "word" && kb === "word" ? "family" : ka === "word" ? (kb as MasterEdgeKind) : (ka as MasterEdgeKind);
+    edges.push({ a: Math.min(a, b), b: Math.max(a, b), kind });
   };
 
-  // --- words on a jittered grid -------------------------------------------
   const words = data.wordList;
-  const cols = Math.max(4, Math.ceil(Math.sqrt(words.length * (WIDTH / HEIGHT))));
-  const rows = Math.ceil(words.length / cols);
-  const cellW = WIDTH / cols;
-  const cellH = HEIGHT / rows;
-  const wordPos = new Map<string, { x: number; y: number }>();
-  words.forEach((w, i) => {
-    const col = i % cols;
-    const row = Math.floor(i / cols);
-    const x = Math.min(WIDTH - 40, Math.max(40, (col + 0.5) * cellW + (rng() - 0.5) * cellW * 0.7));
-    const y = Math.min(HEIGHT - 40, Math.max(40, (row + 0.5) * cellH + (rng() - 0.5) * cellH * 0.7));
-    wordPos.set(w.id, { x, y });
-    addNode(
-      { id: `w:${w.id}`, kind: "word", label: w.target_word, sub: w.english_cognate, wordId: w.id },
-      x,
-      y,
-    );
-  });
 
-  // Inverted index: target prefixes (len >= 3) -> word ids, plus exact map and
+  // Prefix index: target prefixes (len >= 3) -> word ids, plus exact map and
   // words grouped by target length for the edit-distance fallback. This avoids
   // an O(phrases × words) fuzzy scan over the whole dictionary.
   const prefixIndex = new Map<string, Set<string>>();
@@ -141,28 +130,64 @@ export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; e
     return out.slice(0, cap);
   };
 
-  const near = (anchorId: string, spread = 60): { x: number; y: number } => {
-    const p = wordPos.get(anchorId) ?? { x: WIDTH / 2, y: HEIGHT / 2 };
+  // Only "important" phrases earn a node: ones that genuinely wire words
+  // together (matching >= 2 other words), capped to the strongest 60.
+  const keptPhrases: { owner: (typeof words)[number]; hits: string[] }[] = [];
+  for (const w of words) {
+    if (!w.context_phrase || w.context_phrase.trim().length < 4) continue;
+    const hits = matchedWords(w.context_phrase, 6).filter((id) => id !== w.id);
+    if (hits.length >= 2) keptPhrases.push({ owner: w, hits });
+  }
+  keptPhrases.sort((a, b) => b.hits.length - a.hits.length);
+  const topPhrases = keptPhrases.slice(0, 60);
+
+  // Words that matter: everything in a shift family, every word touched by a
+  // kept phrase/compound/false-friend/insight. Plain unused vocabulary is
+  // left out so the web stays legible.
+  const keptWords = new Set<string>();
+  for (const family of Object.values(data.shifts)) {
+    for (const id of family.word_ids) keptWords.add(id);
+  }
+  for (const p of topPhrases) {
+    keptWords.add(p.owner.id);
+    for (const h of p.hits) keptWords.add(h);
+  }
+  for (const c of data.compounds) for (const h of matchedWords(`${c.compound} ${c.literal_morphemes}`, 6)) keptWords.add(h);
+  for (const f of data.falseFriends) for (const h of matchedWords(f.german_word, 4)) keptWords.add(h);
+  for (const ins of data.dailyInsights) for (const h of matchedWords(ins.german_expression, 6)) keptWords.add(h);
+
+  const keptList = words.filter((w) => keptWords.has(w.id));
+  keptList.forEach((w) => {
+    addNode(
+      { id: `w:${w.id}`, kind: "word", label: w.target_word, sub: w.english_cognate, wordId: w.id },
+      WIDTH / 2 + (rng() - 0.5) * 1400,
+      HEIGHT / 2 + (rng() - 0.5) * 1000,
+    );
+  });
+
+  const near = (anchorWordId: string | undefined, spread = 60): { x: number; y: number } => {
+    const anchorNodeId = anchorWordId ? `w:${anchorWordId}` : undefined;
+    const anchorIdx = anchorNodeId ? nodeIndex.get(anchorNodeId) : undefined;
+    const p = anchorIdx !== undefined ? nodes[anchorIdx] : { x: WIDTH / 2, y: HEIGHT / 2 };
     const ang = rng() * Math.PI * 2;
     const r = 30 + rng() * spread;
     return {
-      x: Math.min(WIDTH - 30, Math.max(30, p.x + Math.cos(ang) * r)),
-      y: Math.min(HEIGHT - 30, Math.max(30, p.y + Math.sin(ang) * r)),
+      x: p.x + Math.cos(ang) * r,
+      y: p.y + Math.sin(ang) * r,
     };
   };
 
-  // --- context phrases (one per word), clustered around their owner -------
-  for (const w of words) {
-    if (!w.context_phrase || w.context_phrase.trim().length < 4) continue;
-    const p = near(w.id);
+  // --- context phrases (the kept, connector phrases only) -----------------
+  for (const { owner, hits } of topPhrases) {
+    const p = near(owner.id);
     addNode(
-      { id: `p:${w.id}`, kind: "phrase", label: w.context_phrase, sub: w.context_translation },
+      { id: `p:${owner.id}`, kind: "phrase", label: owner.context_phrase, sub: owner.context_translation },
       p.x,
       p.y,
     );
-    addEdge(`p:${w.id}`, `w:${w.id}`);
-    for (const other of matchedWords(w.context_phrase, 4)) {
-      if (other !== w.id) addEdge(`p:${w.id}`, `w:${other}`);
+    addEdge(`p:${owner.id}`, `w:${owner.id}`);
+    for (const other of hits.slice(0, 4)) {
+      if (keptWords.has(other)) addEdge(`p:${owner.id}`, `w:${other}`);
     }
   }
 
@@ -170,7 +195,7 @@ export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; e
   for (const c of data.compounds) {
     const hits = matchedWords(`${c.compound} ${c.literal_morphemes}`, 4);
     const anchor = hits[0];
-    const p = near(anchor ?? words[Math.floor(rng() * words.length)].id, 90);
+    const p = near(anchor ?? keptList[Math.floor(rng() * keptList.length)].id, 90);
     addNode(
       { id: `c:${c.id}`, kind: "compound", label: c.compound, sub: c.real_meaning },
       p.x,
@@ -183,7 +208,7 @@ export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; e
   for (const f of data.falseFriends) {
     const hits = matchedWords(f.german_word, 3);
     const anchor = hits[0];
-    const p = near(anchor ?? words[Math.floor(rng() * words.length)].id, 90);
+    const p = near(anchor ?? keptList[Math.floor(rng() * keptList.length)].id, 90);
     addNode(
       { id: `f:${f.id}`, kind: "falsefriend", label: f.german_word, sub: `looks like "${f.looks_like}"` },
       p.x,
@@ -196,7 +221,7 @@ export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; e
   for (const ins of data.dailyInsights) {
     const hits = matchedWords(ins.german_expression, 4);
     const anchor = hits[0];
-    const p = near(anchor ?? words[Math.floor(rng() * words.length)].id, 90);
+    const p = near(anchor ?? keptList[Math.floor(rng() * keptList.length)].id, 90);
     addNode(
       { id: `i:${ins.day}`, kind: "insight", label: ins.german_expression, sub: ins.english_meaning },
       p.x,
@@ -215,6 +240,88 @@ export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; e
       const a = ids[Math.floor(rng() * ids.length)];
       const b = ids[Math.floor(rng() * ids.length)];
       if (a && b) addEdge(`w:${a}`, `w:${b}`);
+    }
+  }
+
+  // --- force-directed layout -------------------------------------------------
+  // Springs along edges (short for phrase→word, longer for family chains),
+  // collision repulsion sized by each node's label, and weak centering gravity.
+  // Connected clusters bunch together without collapsing into one blob.
+  const ITERATIONS = 200;
+  const cx = WIDTH / 2;
+  const cy = HEIGHT / 2;
+  const radii = nodes.map((n) =>
+    n.kind === "word" ? 7 : Math.min(110, Math.max(12, n.label.length * 2.4 + 14)),
+  );
+  const targetLen = (kind: MasterEdgeKind): number =>
+    kind === "family" ? 100 : kind === "phrase" ? 58 : 78;
+  const vx = new Float64Array(nodes.length);
+  const vy = new Float64Array(nodes.length);
+  const cellSize = 100;
+  for (let it = 0; it < ITERATIONS; it++) {
+    const alpha = 1 - it / ITERATIONS;
+
+    // collision / short-range repulsion via spatial grid
+    const grid = new Map<string, number[]>();
+    for (let i = 0; i < nodes.length; i++) {
+      const key = `${Math.floor(nodes[i].x / cellSize)},${Math.floor(nodes[i].y / cellSize)}`;
+      const bucket = grid.get(key);
+      if (bucket) bucket.push(i);
+      else grid.set(key, [i]);
+    }
+    for (let i = 0; i < nodes.length; i++) {
+      const gx = Math.floor(nodes[i].x / cellSize);
+      const gy = Math.floor(nodes[i].y / cellSize);
+      for (let ox = -1; ox <= 1; ox++) {
+        for (let oy = -1; oy <= 1; oy++) {
+          const bucket = grid.get(`${gx + ox},${gy + oy}`);
+          if (!bucket) continue;
+          for (const j of bucket) {
+            if (j <= i) continue;
+            const a = nodes[i];
+            const b = nodes[j];
+            let dx = b.x - a.x;
+            let dy = b.y - a.y;
+            let dist = Math.hypot(dx, dy);
+            const minDist = radii[i] + radii[j] + 4;
+            if (dist >= minDist) continue;
+            if (dist < 0.01) {
+              dx = (i - j) * 0.5;
+              dy = (i % 7) - 3;
+              dist = Math.hypot(dx, dy) || 1;
+            }
+            const push = ((minDist - dist) / dist) * 0.5 * (0.4 + alpha);
+            vx[i] -= dx * push;
+            vy[i] -= dy * push;
+            vx[j] += dx * push;
+            vy[j] += dy * push;
+          }
+        }
+      }
+    }
+
+    // springs
+    for (const e of edges) {
+      const a = nodes[e.a];
+      const b = nodes[e.b];
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const dist = Math.hypot(dx, dy) || 1;
+      const pull = ((dist - targetLen(e.kind)) / dist) * 0.06 * (0.4 + alpha);
+      vx[e.a] += dx * pull;
+      vy[e.a] += dy * pull;
+      vx[e.b] -= dx * pull;
+      vy[e.b] -= dy * pull;
+    }
+
+    // gentle gravity + damping + clamp
+    for (let i = 0; i < nodes.length; i++) {
+      vx[i] += (cx - nodes[i].x) * 0.0035 * alpha;
+      vy[i] += (cy - nodes[i].y) * 0.0035 * alpha;
+      nodes[i].x = Math.min(WIDTH - 40, Math.max(40, nodes[i].x + vx[i]));
+      nodes[i].y = Math.min(HEIGHT - 40, Math.max(40, nodes[i].y + vy[i]));
+      vx[i] *= 0.6;
+      vy[i] *= 0.6;
     }
   }
 

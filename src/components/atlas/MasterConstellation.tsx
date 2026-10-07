@@ -56,9 +56,9 @@ export const MasterConstellation: React.FC = () => {
               y1={graph.nodes[e.a].y}
               x2={graph.nodes[e.b].x}
               y2={graph.nodes[e.b].y}
-              stroke="var(--sub-color)"
-              strokeOpacity={0.18}
-              strokeWidth={1}
+              stroke={e.kind === "family" ? "var(--sub-color)" : STROKE[e.kind]}
+              strokeOpacity={e.kind === "family" ? 0.07 : 0.28}
+              strokeWidth={e.kind === "family" ? 0.9 : 1.25}
             />
           ))}
           {graph.nodes.map((n) => {
