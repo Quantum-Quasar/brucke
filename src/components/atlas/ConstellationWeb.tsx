@@ -130,8 +130,9 @@ export const ConstellationWeb: React.FC<ConstellationWebProps> = ({
   return (
     <div className="space-y-4 font-sans">
       {/* Desktop Web Canvas */}
-      <div className="hidden md:block relative w-full h-[460px] bg-[var(--sub-alt-color)] rounded-lg border border-[var(--sub-color)]/20 overflow-hidden">
-        <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox={`0 0 ${WIDTH} ${HEIGHT}`}>
+      <div className="hidden md:block relative w-full h-[460px] bg-[var(--sub-alt-color)] rounded-lg border border-[var(--sub-color)]/20 overflow-auto">
+        <div className="relative" style={{ width: WIDTH, height: HEIGHT }}>
+          <svg className="absolute inset-0 pointer-events-none" width={WIDTH} height={HEIGHT}>
           {web.edges.map((e, i) => (
             <line
               key={i}
@@ -180,6 +181,7 @@ export const ConstellationWeb: React.FC<ConstellationWebProps> = ({
             </button>
           );
         })}
+        </div>
       </div>
 
       {/* Mobile Expandable Vertical Tree */}
