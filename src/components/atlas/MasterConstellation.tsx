@@ -24,6 +24,16 @@ export const MasterConstellation: React.FC = () => {
   const graph = React.useMemo(() => buildMasterGraph(data), [activeLanguageId, data]);
   const mastery = mounted ? wordMastery : {};
 
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  // Center the viewport on the graph (which is bunched in the middle)
+  React.useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
+    el.scrollTop = (el.scrollHeight - el.clientHeight) / 2;
+  }, [graph]);
+
   if (!data.wordList.length) {
     return (
       <p className="text-xs font-mono text-[var(--sub-color)] p-8 text-center">
@@ -36,18 +46,8 @@ export const MasterConstellation: React.FC = () => {
   for (const n of graph.nodes) counts[n.kind]++;
 
   return (
-    <div className="space-y-3 font-sans">
-      <div className="flex flex-wrap items-center gap-3 text-[11px] font-mono text-[var(--sub-color)]">
-        <span className="text-[var(--main-color)] font-bold">{counts.word} words</span>·
-        <span style={{ color: STROKE.phrase }}>{counts.phrase} phrases</span>·
-        <span style={{ color: STROKE.compound }}>{counts.compound} compounds</span>·
-        <span style={{ color: STROKE.falsefriend }}>{counts.falsefriend} false friends</span>·
-        <span style={{ color: STROKE.insight }}>{counts.insight} expressions</span>·
-        <span>{graph.edges.length} links</span>
-        <span className="ml-auto">scroll to explore · click a word to open it</span>
-      </div>
-
-      <div className="w-full h-[70vh] overflow-auto rounded-lg border border-[var(--sub-color)]/20 bg-[var(--sub-alt-color)]">
+    <div className="absolute inset-0 flex flex-col font-sans">
+      <div ref={scrollRef} className="flex-1 overflow-auto bg-[var(--bg-color)]">
         <svg width={2600} height={2000} className="block">
           {graph.edges.map((e, i) => (
             <line
@@ -103,6 +103,17 @@ export const MasterConstellation: React.FC = () => {
             );
           })}
         </svg>
+      </div>
+
+      {/* Totals sit in a small hover chip at the bottom of the map */}
+      <div className="absolute bottom-3 left-3 z-10 group">
+        <div className="rounded-lg bg-[var(--sub-alt-color)]/80 backdrop-blur border border-[var(--sub-color)]/20 px-3 py-1.5 text-[11px] font-mono text-[var(--sub-color)] opacity-60 group-hover:opacity-100 transition">
+          <span className="text-[var(--main-color)] font-bold">{counts.word} words</span> ·{" "}
+          <span style={{ color: STROKE.phrase }}>{counts.phrase} phrases</span> ·{" "}
+          <span style={{ color: STROKE.compound }}>{counts.compound} compounds</span> ·{" "}
+          <span style={{ color: STROKE.falsefriend }}>{counts.falsefriend} false friends</span> ·{" "}
+          <span style={{ color: STROKE.insight }}>{counts.insight} expressions</span> · {graph.edges.length} links
+        </div>
       </div>
     </div>
   );

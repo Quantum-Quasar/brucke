@@ -247,14 +247,14 @@ export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; e
   // Springs along edges (short for phrase→word, longer for family chains),
   // collision repulsion sized by each node's label, and weak centering gravity.
   // Connected clusters bunch together without collapsing into one blob.
-  const ITERATIONS = 200;
+  const ITERATIONS = 260;
   const cx = WIDTH / 2;
   const cy = HEIGHT / 2;
   const radii = nodes.map((n) =>
-    n.kind === "word" ? 7 : Math.min(110, Math.max(12, n.label.length * 2.4 + 14)),
+    n.kind === "word" ? 9 : Math.min(110, Math.max(14, n.label.length * 2.6 + 16)),
   );
   const targetLen = (kind: MasterEdgeKind): number =>
-    kind === "family" ? 100 : kind === "phrase" ? 58 : 78;
+    kind === "family" ? 135 : kind === "phrase" ? 85 : 105;
   const vx = new Float64Array(nodes.length);
   const vy = new Float64Array(nodes.length);
   const cellSize = 100;
@@ -283,7 +283,7 @@ export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; e
             let dx = b.x - a.x;
             let dy = b.y - a.y;
             let dist = Math.hypot(dx, dy);
-            const minDist = radii[i] + radii[j] + 4;
+            const minDist = radii[i] + radii[j] + 10;
             if (dist >= minDist) continue;
             if (dist < 0.01) {
               dx = (i - j) * 0.5;
@@ -307,7 +307,7 @@ export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; e
       const dx = b.x - a.x;
       const dy = b.y - a.y;
       const dist = Math.hypot(dx, dy) || 1;
-      const pull = ((dist - targetLen(e.kind)) / dist) * 0.06 * (0.4 + alpha);
+      const pull = ((dist - targetLen(e.kind)) / dist) * 0.045 * (0.4 + alpha);
       vx[e.a] += dx * pull;
       vy[e.a] += dy * pull;
       vx[e.b] -= dx * pull;
@@ -316,8 +316,8 @@ export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; e
 
     // gentle gravity + damping + clamp
     for (let i = 0; i < nodes.length; i++) {
-      vx[i] += (cx - nodes[i].x) * 0.0035 * alpha;
-      vy[i] += (cy - nodes[i].y) * 0.0035 * alpha;
+      vx[i] += (cx - nodes[i].x) * 0.0012 * alpha;
+      vy[i] += (cy - nodes[i].y) * 0.0012 * alpha;
       nodes[i].x = Math.min(WIDTH - 40, Math.max(40, nodes[i].x + vx[i]));
       nodes[i].y = Math.min(HEIGHT - 40, Math.max(40, nodes[i].y + vy[i]));
       vx[i] *= 0.6;
