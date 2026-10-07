@@ -370,10 +370,10 @@ export const LESSONS: Lesson[] = [
       curiosity_teaser: "Next: the PF- openers — path becomes Pfad, pound becomes Pfund: the word-initial explosion of the shift.",
     },
     twist: {
-      prompt: "Same hope, new target: you don't hope she visits — you hope the show comes on: I hope we watch TV. Put it in German.",
-      target_answer: "Ich hoffe wir fernsehen",
-      word_bank: ["Ich", "hoffe", "wir", "fernsehen", "kommt"],
-      explanation: "A person swap: du → wir pulls the ending -st → -en (thou comest → we come), and fernsehen rides bare at the end — no 'that', no comma.",
+      prompt: "Same hope, new cargo: this time you hope your friend is in — I hope you want to watch TV. Put it in German.",
+      target_answer: "Ich hoffe du willst fernsehen",
+      word_bank: ["Ich", "hoffe", "du", "willst", "fernsehen", "kommst"],
+      explanation: "Two clauses, so the full sentence takes a comma: Ich hoffe, du willst fernsehen. The modal willst takes the bare infinitive fernsehen at the end — no zu, no 'that' — and the person lives in willst, not in fernsehen.",
     },
   },
   {
@@ -13012,7 +13012,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "Five Numbers, Three Shift Families",
       content:
-        "You already own drei, zwei and hundert. These five fill the gaps you actually use — and they arrive wearing three different shift badges. zehn is the T→S family: German zehn and English ten are the same sound with the T hardened to a Z-sound, exactly like zwei/two and Tag/day. drei is the opposite badge, TH→D, which is why German three keeps its D and English three lost the H. eins has no badge at all: German eins and English one both fall back to Proto-Germanic *ainaz, the very first number any Indo-European language ever had. fünf and sechs are the plain ones — sound twins with no shift, which is precisely why they are easy. The number system is not a chore. It is the shift atlas with the volume turned up.",
+        "You already own drei, zwei and hundert. These five fill the gaps you actually use — and they arrive wearing three different shift badges. zehn is the T→S family: German zehn and English ten are the same sound with the T hardened to a Z-sound, exactly like zwei/two and Zahn/tooth. drei is the opposite badge, TH→D: German hardened the þ to d (drei), while English kept the breathy th sound and changed only the letter (three). eins has no badge at all: German eins and English one both fall back to Proto-Germanic *ainaz, the very first number any Indo-European language ever had. fünf and sechs are the plain ones — sound twins with no shift, which is precisely why they are easy. The number system is not a chore. It is the shift atlas with the volume turned up.",
       footnotes: [
         {
           marker: "1",
@@ -13051,7 +13051,7 @@ export const LESSONS: Lesson[] = [
       {
         id: "l5121_e2",
         type: "shift_select",
-        prompt: "Which of these five numbers wears the T→S shift badge (Tag→day, zwei→two)?",
+        prompt: "Which of these five numbers wears the T→S shift badge (zehn→ten, zwei→two)?",
         options: ["zehn", "vier", "eins", "sechs"],
         target_answer: "zehn",
         meaning: "zehn ↔ ten: the T→S/SS shift family",
@@ -13061,9 +13061,9 @@ export const LESSONS: Lesson[] = [
       {
         id: "l5121_e3",
         type: "reverse_cognate",
-        prompt: "'drei' keeps its D where English three lost its H — which shift is that?",
-        options: ["TH→D (drei ↔ three)", "P→F", "K→CH", "V→B"],
-        target_answer: "TH→D (drei ↔ three)",
+        prompt: "'drei' wears the TH→D badge: German hardened the th to d. Which English word is its twin?",
+        options: ["three", "tree", "there", "tooth"],
+        target_answer: "three",
         meaning: "drei ↔ three: the TH→D family runs the other way from T→S",
         explanation:
           "Both languages start from Proto-Germanic *þrīz. German hardened the þ to d; English kept the breathy th and later dropped it. Same ancient numeral, two sound laws pulling in opposite directions.",
@@ -13115,7 +13115,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "Zero Is a Latecomer",
       content:
-        "null is a Roman import: Latin nullus ('not one') walked into German through the universities and stayed. English took the same Latin word through a different door — null. Between them, German and English share one number and one nothing. The four nouns are older friends wearing Latin clothes: die Zahl counts things, die Nummer is the number you look up (a phone number, a house number — Latin numerus, and English number is the same word), die Hälfte is 'half', doubled from halb the way zweimal doubles zwei, and die Million is Latin milio, the great Latin counting unit that English kept whole. Every one of them is die feminine — and every one of them is the same Z-sound as zehn, null's silent companion.",
+        "null is a Roman import: Latin nullus ('not one') walked into German through the universities and stayed. English took the same Latin word through a different door — null. Between them, German and English share one number and one nothing. The four nouns are older friends wearing Latin clothes: die Zahl counts things, die Nummer is the number you look up (a phone number, a house number — Latin numerus, and English number is the same word), die Hälfte is 'half', doubled from halb the way zweimal doubles zwei, and die Million is Italian milione — 'a great thousand', built on Latin mille — which both languages bought whole through the same Renaissance French channel. Every one of them is die feminine — and only die Zahl, like zehn, carries the Z-sound.",
       footnotes: [
         {
           marker: "1",
@@ -13128,10 +13128,10 @@ export const LESSONS: Lesson[] = [
     pattern: {
       title: "Counting Nouns in Sentences",
       content:
-        "Zero: Die Temperatur ist null Grad (the temperature is zero degrees) — null is an adjective here, uninflected in the commonest readings and declined like one when it stands alone. Nouns: eine Zahl / eine Nummer / eine Million take ihre normal die-forms. Doubling: die Hälfte des Kuchens (half of the cake) — des is genitive, and halb is hiding inside. Scale: eine Million Menschen, zwei Millionen. Time: null Uhr is midnight, and the frame you already own still holds — Es ist null Uhr.",
+        "Zero: Die Zahl ist null (the count is zero) — null is an adjective here, uninflected in the commonest readings and declined like one when it stands alone. Nouns: eine Zahl / eine Nummer / eine Million take ihre normal die-forms. Doubling: die Hälfte des Kuchens (half of the cake) — des is genitive, and halb is hiding inside. Scale: eine Million Menschen, zwei Millionen. Time: null Uhr is midnight, and the frame you already own still holds — Es ist null Uhr.",
       footnotes: [],
       linguist_note:
-        "English dropped the num- root from 'number' and kept it in 'numeric', 'numerous'. German kept the noun and gave English the adjective. Both kept die Million intact because both borrowed Latin milio at roughly the same moment, through the same scholarly channel.",
+        "English dropped the num- root from 'number' and kept it in 'numeric', 'numerous'. German kept the noun and gave English the adjective. Both kept die Million intact because both bought the same Italian coinage — milione, 'a great thousand', built on Latin mille — at roughly the same moment, through the same French channel.",
     },
     exercises: [
       {
@@ -13143,9 +13143,9 @@ export const LESSONS: Lesson[] = [
           { id: "nz2", english: "my phone number", german: "meine Telefonnummer" },
           { id: "nz3", english: "half of the cake", german: "die Hälfte des Kuchens" },
           { id: "nz4", english: "one million people", german: "eine Million Menschen" },
-          { id: "nz5", english: "the temperature is zero degrees", german: "Die Temperatur ist null Grad" },
+          { id: "nz5", english: "the count is zero", german: "Die Zahl ist null" },
         ],
-        target_answer: "die Zahl sieben, meine Telefonnummer, die Hälfte des Kuchens, eine Million Menschen, Die Temperatur ist null Grad",
+        target_answer: "die Zahl sieben, meine Telefonnummer, die Hälfte des Kuchens, eine Million Menschen, Die Zahl ist null",
         meaning: "count, lookup number, half, million, zero",
         explanation:
           "Zahl counts, Nummer labels. Hälfte doubles halb and takes genitive des. Million is singular with its Million Menschen.",
@@ -13194,12 +13194,12 @@ export const LESSONS: Lesson[] = [
         ],
         word_bank: ["Die", "Stadt", "hat", "eine", "Million", "Menschen", "Zahl"],
         explanation:
-          "Million is Latin milio, borrowed whole. After a numeral the noun stands bare: eine Million Menschen, nicht eine Million die Menschen.",
+          "Million is Italian milione — 'a great thousand', from Latin mille — borrowed whole. After a numeral the noun stands bare: eine Million Menschen, nicht eine Million die Menschen.",
       },
     ],
     summary: {
       outcome: "Say zero, and reach for the right counting noun: Zahl, Nummer, Hälfte or Million.",
-      use_example: { german: "Die Zahl ist null — meine Nummer bleibt geheim.", english: "The count is zero — my number stays secret." },
+      use_example: { german: "Die Hälfte von null ist null.", english: "Half of zero is zero." },
       takeaway:
         "null is Latin nullus, die Zahl counts, die Nummer labels, die Hälfte doubles halb — and all four are die.",
       curiosity_teaser: "Next: how often, in one word — immer, oft, manchmal, selten, einmal.",
@@ -13218,13 +13218,13 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "English Needs a Helper, German Doesn't",
       content:
-        "To say how often in English you reach for a helper: I always drink coffee, I often drink coffee, I sometimes drink coffee. German needs none of that — immer, oft, manchmal are single words that drop straight into the sentence and stay put. There is no do-support, no -ly, no position rule to memorise. Two of the five hide a shift you already own: selten wears the D→T badge backwards (compare English seldom, where the T hardened while German kept the D), and einmal is ein + Mal — one + time — the same doubling that built zweimal in topic 5. English kept the -mal half of that family and lost the German word for it.",
+        "To say how often in English you reach for a helper: I always drink coffee, I often drink coffee, I sometimes drink coffee. German needs none of that — immer, oft, manchmal are single words that drop straight into the sentence and stay put. There is no do-support, no -ly, no position rule to memorise. Two of the five hide a shift you already own: selten is seldom's twin wearing Tag's badge — German hardened seldom's seld- to selt- while English kept the D — and einmal is ein + Mal — one + time — the same doubling that built zweimal in topic 5. English kept the -mal half of that family and lost the German word for it.",
       footnotes: [
         {
           marker: "1",
           title: "The Mal Family",
           content:
-            "Jedes Mal, ein Mal, zwei Mal — English and German split this word in half. English kept Mal as the noun 'time' and dropped Mal from the adverbs; German kept das Mal as noun AND built einmal, zweimal, dreimal on it. Both languages still say it: once and once.",
+            "Jedes Mal, ein Mal, zwei Mal — English and German split this word's jobs. English kept the root as the noun meal — das Mal's old twin, both from a root meaning 'mark, measure' — and built once and twice on it; German kept das Mal as noun AND built einmal, zweimal, dreimal on it. Both languages still say it: once and once.",
         },
       ],
     },
@@ -13259,9 +13259,9 @@ export const LESSONS: Lesson[] = [
         prompt: "'Ich trinke _____ Kaffee.' (I seldom drink coffee) — which word wears the D→T badge?",
         options: ["selten", "immer", "manchmal", "oft"],
         target_answer: "selten",
-        meaning: "selten ↔ seldom: German kept the D, English hardened it to T",
+        meaning: "selten ↔ seldom: German hardened the D to T (seld- → selt-), English kept the D",
         explanation:
-          "selten is the D→T family's mirror image: English turned the d into a t (seldom), German left the d alone. Same word, same meaning, opposite outcome.",
+          "selten is seldom's twin, and Tag's law is at work in it: German hardened the d of seld- to t (selt-), while English kept the D. Same word, same meaning — the shift simply worked on the German side.",
       },
       {
         id: "l5131_e3",
@@ -13276,12 +13276,12 @@ export const LESSONS: Lesson[] = [
       {
         id: "l5131_e4",
         type: "reverse_cognate",
-        prompt: "'einmal' = one + Mal — and English kept the noun 'time'. What is the English word that survives?",
-        options: ["time", "often", "again", "never"],
-        target_answer: "time",
-        meaning: "das Mal ↔ time: German kept the noun and built einmal on it",
+        prompt: "'einmal' = one + Mal — and das Mal has an English twin hiding in plain sight. What is the English word that survives?",
+        options: ["meal", "often", "again", "never"],
+        target_answer: "meal",
+        meaning: "das Mal ↔ meal: the same old 'mark, measure' root, each language keeping a piece",
         explanation:
-          "German kept das Mal as 'time' AND the adverbs (einmal, zweimal). English kept only the noun — once, twice, and the noun time are two halves of the same German family.",
+          "das Mal is meal's twin — both from an ancient root meaning 'mark, measure' (English still keeps it in piecemeal). German kept das Mal as noun AND built the adverbs (einmal, zweimal) on it; English built once and twice on the same root. Time is a different root entirely.",
       },
       {
         id: "l5131_e5",
@@ -13298,7 +13298,7 @@ export const LESSONS: Lesson[] = [
         ],
         word_bank: ["Ich", "trinke", "immer", "Kaffee", "am", "Morgen"],
         explanation:
-          "Verb in slot 2, immer in the slot behind it, then the object. am Morgen is the accusative time phrase with the article already inside the preposition.",
+          "Verb in slot 2, immer in the slot behind it, then the object. am Morgen folds an + dem into one word — the dative of time; the accusative version is jeden Morgen, 'every morning'.",
       },
     ],
     summary: {
@@ -13380,12 +13380,12 @@ export const LESSONS: Lesson[] = [
       {
         id: "l5132_e4",
         type: "reverse_cognate",
-        prompt: "'früh' has one f and a long ü — which English word is its true twin?",
-        options: ["early", "first", "fast", "soon"],
-        target_answer: "early",
-        meaning: "früh ↔ early: the same root, the same vowel",
+        prompt: "'Der Zug fährt sehr früh' — the verb behind fährt has a living English twin. Which?",
+        options: ["fare", "far", "early", "drive"],
+        target_answer: "fare",
+        meaning: "fahren ↔ fare: the same old go-verb, alive in wayfarer and seafarer",
         explanation:
-          "Both come from Proto-Germanic *frēz, 'earlier than'. German kept the long ü where English drifted to ea — the cognate is audible the moment you say the pair aloud.",
+          "fahren is English fare's twin — the same ancient go-verb that survives in wayfarer and seafarer (der Fahrer is the one who fares). früh, for honesty's sake, has no twin at all: English lost that word, and the German cousin of English early lives in the ere-family as eher.",
       },
       {
         id: "l5132_e5",
@@ -13426,7 +13426,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "Latin Names, German Mouths",
       content:
-        "Every month in this lesson is a Latin month that never left. Januar, Februar, März, April, Mai — and the giveaway is German's pronunciation rule: all five keep the stress on the FIRST syllable, ja-NU-ar, fe-BRU-ar, MÄRZ, a-PRIL. English often pulls the stress to the second syllable, and when you learn German's months by ear you will be tempted to follow. Don't. And the grammar behind them is a one-off worth learning once: month names are masculine even though they end in -r, they take der (der Januar, not die Januare), and in dates they stand bare after the day — am 5. Mai, with no article in front of the name. One Monat has vier Wochen; a Jahr has zwölf Monate. The calendar is the one place where German and Latin never stopped talking.",
+        "Every month in this lesson is a Latin month that never left. Januar, Februar, März, April, Mai — and the giveaway is German's stress: Januar, Februar and April carry it on the SECOND syllable — ja-NU-ar, fe-BRU-ar, a-PRIL — while one-syllable MÄRZ and Mai have nowhere else to put it. English tends to hold January on its first syllable, and when you learn German's months by ear you will be tempted to follow. Don't. And the grammar behind them is a one-off worth learning once: month names are masculine even though they end in -r, they take der (der Januar, not die Januare), and in dates they stand bare after the day — am 5. Mai, with no article in front of the name. One Monat has vier Wochen; a Jahr has zwölf Monate. The calendar is the one place where German and Latin never stopped talking.",
       footnotes: [
         {
           marker: "1",
@@ -13442,7 +13442,7 @@ export const LESSONS: Lesson[] = [
         "Three frames, all of them old. 1. With a preposition: im Januar, im Februar, im März, im April, im Mai — 'im' is in + dem, and dem is the masculine, so the month name follows it bare. 2. As a subject: Der Januar ist kalt (January is cold). 3. In a date: am 5. Mai, am 1. April — the ordinal number, a dot, then the name with no article. And the arithmetic you already own: ein Monat hat vier Wochen; ein Jahr hat zwölf Monate.",
       footnotes: [],
       linguist_note:
-        "The masculine gender of the months is a Latin leftover: Latin Ianuarius was a masculine proper name, and proper names kept their gender when they turned into common nouns. English lost the gender along with the names; German kept it, so you get der Januar and das Jahr — one masculine, one neuter, both Latin.",
+        "The masculine gender of the months is a Latin leftover: Latin Ianuarius was a masculine proper name, and proper names kept their gender when they turned into common nouns. English lost the gender along with the names; German kept it, so you get der Januar and das Jahr — one Latin, one Germanic: das Jahr is the same old word as English year, native to the family, not a Latin guest.",
     },
     exercises: [
       {
@@ -13631,7 +13631,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "The Count Closes, the Parties Begin",
       content:
-        "The last two months finish the count the Romans started. November is Latin novem, 'nine', and Dezember is decem, 'ten' — and decem is your old friend wearing Latin clothes: it is the same ancient word as German zehn and English ten, the T hardened to a Z-sound exactly as in zwei/two and zu/to. The Roman count still sits inside the name. Then the calendar stops counting and starts celebrating. Der Feiertag is feiern + Tag — a day for celebrating — and Tag is the same ancient word as English day. Der Wochentag is Woche + Tag, the build that runs the whole week: Montag, Dienstag, Freitag — each one is a Wochentag. And then Ostern, the one holiday whose name English also kept: Ostern and Easter are the same Germanic name, built on *aust-, 'dawn, east' — the season when the light comes back. One name, two languages, and neither ever let it go.",
+        "The last two months finish the count the Romans started. November is Latin novem, 'nine', and Dezember is decem, 'ten' — and decem is your old friend wearing Latin clothes: the same ancient word as German zehn and English ten. But Dezember's z is not the shift at work — it is simply how German spells the Latin c, the same writing habit as Zentrum; the shift's own T→Z work lives in zehn. The Roman count still sits inside the name. Then the calendar stops counting and starts celebrating. Der Feiertag is feiern + Tag — a day for celebrating — and Tag is the same ancient word as English day. Der Wochentag is Woche + Tag, the build that runs the whole week: Montag, Dienstag, Freitag — each one is a Wochentag. And then Ostern, the one holiday whose name English also kept: Ostern and Easter are the same Germanic name, built on *aust-, 'dawn, east' — the season when the light comes back. One name, two languages, and neither ever let it go.",
       footnotes: [
         {
           marker: "1",
@@ -13687,9 +13687,9 @@ export const LESSONS: Lesson[] = [
           "Dezember is Latin decem. Which German number is hiding inside it — the same ancient word as English ten?",
         options: ["zehn", "zwei", "zwölf", "drei"],
         target_answer: "zehn",
-        meaning: "decem ↔ zehn: the T→Z hardening inside Dezember",
+        meaning: "decem ↔ zehn: the same ancient 'ten', by different roads",
         explanation:
-          "Latin decem and German zehn both descend from the same Proto-Indo-European 'ten' — German hardened the T to a Z-sound, exactly zwei/two and zu/to. Dezember was the tenth month of the old Roman count, and the number never left the name.",
+          "Latin decem and German zehn both descend from the same Proto-Indo-European 'ten' — and in zehn you can watch the shift do its work: the T hardened to a Z-sound, exactly as in zwei/two and zu/to. Dezember is a later, learned borrowing, so its z is just German's spelling for the Latin c (as in Zentrum). Either way the number never left the name: it was the tenth month of the old Roman count.",
       },
       {
         id: "l5143_e4",
@@ -13848,13 +13848,13 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "English Points Twice, German Points Four Times",
       content:
-        "English points with here and there and then gives up. German points four times. hier and here are the purest twins you will ever meet — both come from the same Proto-Germanic *hiar, untouched, with no shift to explain. dort is there's twin with a badge: the same ancient adverb *þar, with German hardening the breathy th to d — the same law that made drei out of three and das out of that. drüben is über wearing its adverb coat — 'on the over side' — and über ↔ over is the V→B twin you know from geben/give. gegenüber stacks gegen ('against') on über ('over') — over-against — a relation English writes as a whole phrase. Der Umweg is um + Weg, a way-around, and Weg ↔ way is a twin as old as the road. So the honest score: English kept here and there, but lost drüben and gegenüber as single words and spells the detour with borrowed letters; German still runs three rungs of distance — hier, dort, drüben.",
+        "English points with here and there and then gives up. German points four times. hier and here are the purest twins you will ever meet — both come from the same Proto-Germanic *hiar, untouched, with no shift to explain. dort is da wearing a pointing suffix — and da is there's plain twin: the same ancient adverb *þar, with German hardening the breathy th to d — the same law that made drei out of three and das out of that. drüben is über wearing its adverb coat — 'on the over side' — and über ↔ over is the V→B twin you know from geben/give. gegenüber stacks gegen ('against') on über ('over') — over-against — a relation English writes as a whole phrase. Der Umweg is um + Weg, a way-around, and Weg ↔ way is a twin as old as the road. So the honest score: English kept here and there, but lost drüben and gegenüber as single words and spells the detour with borrowed letters; German still runs three rungs of distance — hier, dort, drüben.",
       footnotes: [
         {
           marker: "1",
           title: "The TH→D Family Reunion",
           content:
-            "Once you hear TH→D you hear it everywhere: three/drei, that/das, thou/du, there/dort. One sound law, one family, thousands of years old — and German never stopped inviting the th to harden. Say dort and there back to back and feel the d and the th be the same consonant wearing two dialects.",
+            "Once you hear TH→D you hear it everywhere: three/drei, that/das, thou/du, there/da — and dort is just da with the pointing suffix. One sound law, one family, thousands of years old — and German never stopped inviting the th to harden. Say da and there back to back and feel the d and the th be the same consonant wearing two dialects.",
         },
       ],
     },
@@ -14073,7 +14073,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "One Body Word, Four Sky Words",
       content:
-        "Five direction words — one for your body, four for the sky. hinten is the body word: German built it on the same ancient behind-root that gave English behind (be-hind, 'by the hind part') — German hardened the D to T, the d_to_t family at work, the same law that turned day into Tag. English keeps the hin family only in the archaic-sounding hence and hither; German still says hin every day — hin und her, back and forth. The four compass points are pure twins, because German and English read the same sky. der Norden ↔ north. der Osten ↔ east — from the dawn-word *austrōn, 'toward the sunrise', the same dawn-root Latin turned into aurora. der Süden ↔ south — from *sunþrą, literally 'the sun side', the warm side of the sky. der Westen ↔ west — from the evening-root Latin keeps in vesper. Four sky twins, one body twin, and a lesson you can navigate by.",
+        "Five direction words — one for your body, four for the sky. hinten is the body word: German built it on the same ancient behind-root that gave English behind (be-hind, 'by the hind part') — and the t in hinten is German's old directional suffix, not the D→T shift: the shift never touches this word, behind simply kept the d. English keeps the hin family only in the archaic-sounding hence and hither; German still says hin every day — hin und her, back and forth. The four compass points are pure twins, because German and English read the same sky. der Norden ↔ north. der Osten ↔ east — from the dawn-word *austrōn, 'toward the sunrise', the same dawn-root Latin turned into aurora. der Süden ↔ south — from *sunþrą, literally 'the sun side', the warm side of the sky. der Westen ↔ west — from the evening-root Latin keeps in vesper. Four sky twins, one body twin, and a lesson you can navigate by.",
       footnotes: [
         {
           marker: "1",
@@ -14157,7 +14157,7 @@ export const LESSONS: Lesson[] = [
         "Use hinten for the space behind you and the four compass points for the world's directions — im Norden, aus dem Osten, in den Süden.",
       use_example: { german: "Der Zug kommt um zehn Uhr aus dem Süden.", english: "The train comes from the south at ten o'clock." },
       takeaway:
-        "hinten is behind's D→T twin; Norden, Osten, Westen and Süden are pure sky twins — dawn, evening, sun-side and the left hand.",
+        "hinten is behind's twin — German built it with a t-suffix, not the D→T shift; Norden, Osten, Westen and Süden are pure sky twins — dawn, evening, sun-side and the left hand.",
       curiosity_teaser: "Next: the distance axis — die Nähe, weit, fern, quer, entlang.",
     },
   },
@@ -14277,7 +14277,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "German Borrows Back",
       content:
-        "For most of its history German lent English words; this lesson is the border crossing in the other direction — and every word that crosses, German says with its own mouth. der Computer is Latin computare, 'to reckon up' — English kept the Latin, and German kept the very same Latin. das Klavier came through French clavier, from Latin clavis, 'key' — the piano is literally a key-board, and English kept the same key-root in clavichord (and in clavicle, the shoulder's 'little key'). das Kino is a German shortening of Kinematograph — Greek kinēma, 'movement' — and cinema is the same Greek word English uses. das Radio hides Latin radius, 'ray' — the ray that carries the signal. das Sofa walked the longest road: Arabic ṣuffa, a cushioned bench, that both languages borrowed whole. German writes them almost as English does — then pronounces them as if it had invented them: KEE-no, kla-VEER.",
+        "For most of its history German lent English words; this lesson is the border crossing in the other direction — and every word that crosses, German says with its own mouth. der Computer is an English loan: English built it on Latin computare, 'to reckon up', and German bought the finished English word — the newest purchase on your shelf. das Klavier came through French clavier, from Latin clavis, 'key' — the piano is literally a key-board, and English kept the same key-root in clavichord (and in clavicle, the shoulder's 'little key'). das Kino is a German shortening of Kinematograph — Greek kinēma, 'movement' — and cinema is the same Greek word English uses. das Radio hides Latin radius, 'ray' — the ray that carries the signal. das Sofa walked the longest road: Arabic ṣuffa, a cushioned bench, that both languages borrowed whole. German writes them almost as English does — then pronounces them as if it had invented them: KEE-no, kla-VEER.",
       footnotes: [
         {
           marker: "1",
@@ -14363,7 +14363,7 @@ export const LESSONS: Lesson[] = [
         english: "The piano is big and heavy — at the cinema we watch a film.",
       },
       takeaway:
-        "Sofa, Radio, Klavier, Computer, Kino — Arabic, Latin and Greek roots that German writes like English and says like German; four of the five are das.",
+        "Sofa, Radio, Klavier, Computer, Kino — Arabic, Latin and Greek roots, with Computer the English-built one — that German writes like English and says like German; four of the five are das.",
       curiosity_teaser: "Next: Hotel, Taxi, Bus, Theater, Hobby — the travel-and-leisure layer.",
     },
   },
@@ -14531,7 +14531,7 @@ export const LESSONS: Lesson[] = [
         target_answer: "Selten",
         meaning: "Selten trage ich einen Mantel — fronted frequency, verb in slot 2",
         explanation:
-          "Fronting an adverb swaps positions 1 and 2 — the same move as Heute kaufe ich ein. Selten is English seldom's twin (German kept the D, English hardened it to T); Immer would say the opposite, Später only shifts the hour.",
+          "Fronting an adverb swaps positions 1 and 2 — the same move as Heute kaufe ich ein. Selten is English seldom's twin (German hardened the D to T, English kept the D); Immer would say the opposite, Später only shifts the hour.",
       },
       {
         id: "l5191_e3",
@@ -14630,8 +14630,8 @@ export const LESSONS: Lesson[] = [
         id: "l5192_e2",
         type: "reverse_cognate",
         prompt: "One of these words travelled the wrong way: Germany took IT from English. Which?",
-        options: ["der Schal ← shawl", "die Socke ← soccus", "der Hut ↔ hat", "die Mütze ← ?"],
-        target_answer: "der Schal ← shawl",
+        options: ["der Schal", "die Socke", "der Hut", "die Mütze"],
+        target_answer: "der Schal",
         meaning: "der Schal is a reverse loan: German took it FROM English",
         explanation:
           "der Schal came from English shawl in the 19th century, when shawls were the height of fashion. die Socke and English sock both borrowed separately from Latin soccus, and der Hut ↔ hat is an ancient Germanic twin — but only the Schal crossed from English into German.",
@@ -14662,9 +14662,7 @@ export const LESSONS: Lesson[] = [
         prompt: "Say it in German:",
         idea: "you are getting dressed and announce what goes on top: you are wearing the hat and the cap",
         cues: [
-          "The verb is tragen — it takes an object, like English 'wear' takes one",
           "der Hut becomes den Hut (masculine accusative); die Mütze stays die Mütze",
-          "und joins the two pieces of gear",
         ],
         target_answer: "Ich trage den Hut und die Mütze",
         meaning: "I am wearing the hat and the cap",
@@ -14849,8 +14847,8 @@ export const LESSONS: Lesson[] = [
         type: "reverse_cognate",
         prompt:
           "One Germanic word went south, became Italian balcone, and came back dressed as a balcony. Which word here is that boomerang?",
-        options: ["der Balkon ← balk", "der Teppich ← tapestry", "der Schrank ← shrink", "der Vorhang ← hang"],
-        target_answer: "der Balkon ← balk",
+        options: ["der Balkon", "der Teppich", "der Schrank", "der Vorhang"],
+        target_answer: "der Balkon",
         meaning: "der Balkon and English balk share the Germanic beam-word *balko",
         explanation:
           "*balko meant 'beam'. Italian balcone borrowed it, French passed it on, and German took der Balkon back from the south — while English balk quietly kept the original beam. der Teppich and tapestry share Greek tápēs instead, and der Schrank's cousin shrink never left the verb shelf.",
@@ -14881,9 +14879,7 @@ export const LESSONS: Lesson[] = [
         prompt: "Say it in German:",
         idea: "you are showing a friend the living room: the computer is new and the wardrobe is old",
         cues: [
-          "der Computer — the loan from Lehnwörter I, still masculine",
           "der Schrank — the wardrobe, cousin of English shrink",
-          "neu and alt carry the contrast, und joins the clauses",
         ],
         target_answer: "Der Computer ist neu und der Schrank ist alt",
         meaning: "The computer is new and the wardrobe is old",
@@ -14923,7 +14919,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "The Knife Is a Meat-Saw",
       content:
-        "das Messer is the oldest compound at the table: Proto-Germanic *matisahsą, built from *mati, 'food' — the exact word English meat comes from, which originally meant food of any kind — plus *sahs, 'blade', the word Old Norse preserved as sax. German shifted food's T to a Z (mati → mezzi, the zehn/two shift) and squeezed the compound down to Messer. The knife literally is a meat-blade. die Flasche and English flask are the same Germanic word, *flaska — but English had to borrow its own word BACK through Medieval Latin flasco, a boomerang loan. der Becher is Latin bicarium, which English borrowed as beaker; die Kanne goes back to Latin canna, 'reed', the little tube that became German Kanne and English can. die Gabel is the honest loss: pure Germanic *gabulō, with no English twin — English took 'fork' from Latin furca instead.",
+        "das Messer is the oldest compound at the table: Proto-Germanic *matisahsą, built from *mati, 'food' — the exact word English meat comes from, which originally meant food of any kind — plus *sahs, 'blade', the word Old Norse preserved as sax. German shifted food's T to a Z (mati → mezzi, the zehn/two shift) and squeezed the compound down to Messer. The knife literally is a meat-blade. die Flasche and English flask are the same Germanic word, *flaska — but English had to borrow its own word BACK through Medieval Latin flasco, a boomerang loan. der Becher is Latin bicarium, which English borrowed as beaker; die Kanne most likely goes back to Latin canna, 'reed', the little tube that became German Kanne and English can — the standard guess, though not a settled fact. die Gabel is the honest loss: pure Germanic *gabulō, with no English twin — English took 'fork' from Latin furca instead.",
       footnotes: [
         {
           marker: "1",
@@ -14939,7 +14935,7 @@ export const LESSONS: Lesson[] = [
         "1. aus for what comes out: Ich trinke den Kaffee aus dem Becher — aus + dem, the drink leaves the vessel. 2. in for what goes in: Das Wasser ist in der Flasche — in + der, the water stays put. 3. Hot things get a warning frame: Einen Moment, bitte, die Kanne ist heiß — einen because der Moment is masculine accusative, bitte because politeness is free. 4. Counting the table: Die Zahl ist vier (the number is four), and the numeral again takes the bare plural — vier Teller, vier Gabeln, no article. 5. The half: Die Hälfte der Teller ist hier — die Hälfte governs the genitive, and the verb agrees with the singular Hälfte, not the plural Teller.",
       footnotes: [],
       linguist_note:
-        "Latin canna 'reed' gave Germanic *kannō, 'small container'. English kept it tiny (can), German made it elegant (die Kanne) — and both languages still pour from the same Latin reed.",
+        "The standard guess: Latin canna 'reed' gave Germanic *kannō, 'small container' — perhaps, not proven. English kept it tiny (can), German made it elegant (die Kanne) — and if the guess holds, both languages still pour from the same Latin reed.",
     },
     exercises: [
       {
@@ -15011,7 +15007,7 @@ export const LESSONS: Lesson[] = [
         english: "A moment please — the pot is hot, and the number is four: four plates, four forks.",
       },
       takeaway:
-        "Messer is *matisahsą, the meat-saw (meat + the T→Z shift), Flasche and flask are one boomerang word, Becher and beaker share bicarium, Kanne and can share canna — and die Gabel stands alone, honestly.",
+        "Messer is *matisahsą, the meat-saw (meat + the T→Z shift), Flasche and flask are one boomerang word, Becher and beaker share bicarium, Kanne and can probably share canna — and die Gabel stands alone, honestly.",
       curiosity_teaser:
         "Next: the kitchen's real estate — der Herd, der Ofen, die Seife, der Kamm, die Klingel — and why der Ofen is not oven's twin, whatever it looks like.",
     },
@@ -15029,7 +15025,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "Cousins, Twins, and One False Twin",
       content:
-        "der Herd and English hearth are cousins, not twins: two old words for the fire-place, *herþuz and *kerþą, that wandered apart at the very start — German hardened the old þ to d (Herd), English kept the th (hearth), the same law that made drei out of three. die Seife and soap are genuine twins from Proto-Germanic *saipō — a word so good that Rome bought it: Latin sapo, the Romans' hair-dye soap, is Germanic in origin, and German shifted the P to F (Seife) while English kept it (soap). der Kamm ↔ comb is the plain twin, *kambaz on both sides of the North Sea. die Klingel is klingen made into a thing — and klingen's own cousin is English clink, the same bell-root with an echo. And then the trap: der Ofen looks like oven, twin for twin — but German borrowed der Ofen from Latin furnus, while English oven is the native Germanic word. They are strangers that happen to match. The kitchen is where honesty pays: cousins, twins, and one beautiful false twin.",
+        "der Herd and English hearth are cousins, not twins: two old words for the fire-place, *herþuz and *kerþą, that wandered apart at the very start — German hardened the old þ to d (Herd), English kept the th (hearth), the same law that made drei out of three. die Seife and soap are genuine twins from Proto-Germanic *saipō — a word so good that Rome bought it: Latin sapo, the Romans' hair-dye soap, is Germanic in origin, and German shifted the P to F (Seife) while English kept it (soap). der Kamm ↔ comb is the plain twin, *kambaz on both sides of the North Sea. die Klingel is klingen made into a thing — and klingen's own cousin is English clink, the same bell-root with an echo. And then the surprise: der Ofen looks like oven because it IS oven's twin — the same ancient Germanic word, on record since the eighth century on both shores (OHG ovan, OE ofen), originally the cooking pot, with English wearing the v where German wears the f. The stranger in this family is English furnace — Latin furnus, a different root entirely — the look-alike that ended up in English, not German. The kitchen is where honesty pays: cousins, twins, and one beautiful false twin — and the false twin is furnace, not Ofen.",
       footnotes: [
         {
           marker: "1",
@@ -15080,12 +15076,12 @@ export const LESSONS: Lesson[] = [
       {
         id: "l5212_e3",
         type: "reverse_cognate",
-        prompt: "Three of these pairs are true twins or cousins. One is a FALSE twin. Which?",
-        options: ["der Kamm ↔ comb", "die Klingel ↔ clink", "der Ofen ↔ oven", "die Seife ↔ soap"],
-        target_answer: "der Ofen ↔ oven",
-        meaning: "der Ofen and oven look alike and are unrelated",
+        prompt: "One of these kitchen words is the twin everyone misreads — people call it a Latin borrowing, but it is the family's own, on record since the eighth century. Which?",
+        options: ["der Ofen", "der Kamm", "die Klingel", "die Seife"],
+        target_answer: "der Ofen",
+        meaning: "der Ofen and oven are the same old Germanic word — the twin that survived on both shores",
         explanation:
-          "der Ofen is German's borrowing of Latin furnus; English oven is the native Germanic word. The resemblance is coincidence. der Kamm ↔ comb is a true twin (*kambaz), die Klingel runs on klingen's root with English clink, and die Seife ↔ soap share *saipō.",
+          "der Ofen is oven's true twin — the same ancient Germanic word (OHG ovan, OE ofen; it began as the cooking pot), with English wearing the v where German wears the f. The real Latin stranger is English furnace, from furnus — a different root entirely. der Kamm is comb's twin (*kambaz), die Klingel runs on klingen's root with English clink, and die Seife is soap's twin (*saipō).",
       },
       {
         id: "l5212_e4",
@@ -15103,9 +15099,7 @@ export const LESSONS: Lesson[] = [
         prompt: "Say it in German:",
         idea: "you are baking and need the kitchen to yourself: the cake is in the oven and the water is hot",
         cues: [
-          "der Ofen — the false twin: borrowed from Latin furnus, nothing to do with English oven",
-          "das Wasser ist heiß — the T→S shift running through both words",
-          "und joins the two facts",
+          "der Ofen — oven's own twin: English wears the v where German wears the f",
         ],
         target_answer: "Der Kuchen ist im Ofen und das Wasser ist heiß",
         meaning: "The cake is in the oven and the water is hot",
@@ -15121,13 +15115,13 @@ export const LESSONS: Lesson[] = [
     ],
     summary: {
       outcome:
-        "Run a German kitchen: warn about the hot Herd, bake im Ofen, wash mit Seife, and spot the one false twin on the shelf.",
+        "Run a German kitchen: warn about the hot Herd, bake im Ofen, wash mit Seife, and spot the twin everyone misreads on the shelf.",
       use_example: {
         german: "Eine Sekunde, bitte — der Herd ist heiß und der Kuchen ist im Ofen.",
         english: "One second please — the stove is hot and the cake is in the oven.",
       },
       takeaway:
-        "Herd and hearth are cousins (þ→d), Seife and soap are twins with Rome holding a loan-copy, Kamm ↔ comb and Klingel ↔ clink ring true — and der Ofen is Latin furnus wearing oven's face.",
+        "Herd and hearth are cousins (þ→d), Seife and soap are twins with Rome holding a loan-copy, Kamm ↔ comb and Klingel ↔ clink ring true — and der Ofen is oven itself: the twin both shores kept, with English furnace as the family's real Latin stranger.",
       curiosity_teaser:
         "Next: Essen I — der Fisch, das Fleisch, der Käse, die Suppe, das Gemüse — the meal itself, after all this kitchen talk.",
     },
@@ -15274,7 +15268,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "Every Name Here Carries a Passport",
       content:
-        "das Obst is the shelf, and everything on it came by a different road. die Kartoffel — the potato — wears an Italian mushroom's name: German borrowed Italian tartufo, 'truffle', in the 1500s, because the new tuber looked like a truffle growing underground. (English potato is a Caribbean word, Taíno batata through Spanish — the two languages named the same vegetable from two different continents.) die Tomate walked one road in both languages: Nahuatl tomatl, through Spanish tomate, into German and English almost unchanged. die Gurke came overland — German took it from Polish ogórek. die Zwiebel is the old Latin onion, cepa, in its diminutive dress — cepula, 'little onion' — and English kept the same root in the smallest onion of all: the chive. And das Obst itself is Latin obsonium, a word for bought provisions; English took Latin fructus instead and got 'fruit'. Five foods, five roads, one shared table.",
+        "das Obst is the shelf, and everything on it came by a different road. die Kartoffel — the potato — wears an Italian mushroom's name: German borrowed Italian tartufolo, 'truffle', in the 17th century — first as Tartuffel — because the new tuber looked like a truffle growing underground. (English potato is a Caribbean word, Taíno batata through Spanish — the two languages named the same vegetable from two different continents.) die Tomate walked one road in both languages: Nahuatl tomatl, through Spanish tomate, into German and English almost unchanged. die Gurke came overland — German took it from Polish ogórek. die Zwiebel is the old Latin onion, cepa, in its diminutive dress — cepula, 'little onion' — and English kept the same root in the smallest onion of all: the chive. And das Obst itself is Latin obsonium, a word for bought provisions; English took Latin fructus instead and got 'fruit'. Five foods, five roads, one shared table.",
       footnotes: [
         {
           marker: "1",
@@ -15320,7 +15314,7 @@ export const LESSONS: Lesson[] = [
         target_answer: "die Gurke",
         meaning: "die Gurke ← Polish ogórek",
         explanation:
-          "Gurke is German's borrowing of Polish ogórek. Kartoffel took the Italian road (tartufo, 'truffle'), Tomate the Spanish road from Nahuatl, Obst the Latin door — and English gourd is a separate word entirely, from Latin cucurbita, with no family tie to any of them.",
+          "Gurke is German's borrowing of Polish ogórek. Kartoffel took the Italian road (tartufolo, 'truffle', in the 1600s), Tomate the Spanish road from Nahuatl, Obst the Latin door — and English gourd is a separate word entirely, from Latin cucurbita, with no family tie to any of them.",
       },
       {
         id: "l5222_e3",
@@ -15380,7 +15374,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "Sugar Was Gravel",
       content:
-        "The sweet shelf is where the borrowings go deepest. der Zucker made the longest journey of any word you own: Sanskrit śarkarā meant 'gravel, grit', Greek borrowed it as sákkharon for the crystalline sand that sweetens, Latin made it saccharum, and both languages carried it home — Zucker and sugar are the same ancient gravel, ground fine. der Honig is the opposite: no journey at all, the pure twin of honey, one Proto-Germanic word in both mouths. die Schokolade is Nahuatl chocolātl through Spanish chocolate — the same door the tomato used. der Keks is the delicious one: German borrowed the English plural cakes whole, s and all, and respelled it — Keks is 'cakes' with a German accent. die Torte came from Italian torta, and English tart is the same word through French: both go back to Latin torquere, 'to twist' — the twisted pastry dough. One twin, one gravel, one ocean-crosser, one baked-in plural, one twist.",
+        "The sweet shelf is where the borrowings go deepest. der Zucker made the longest journey of any word you own: Sanskrit śarkarā meant 'gravel, grit', Greek borrowed it as sákkharon for the crystalline sand that sweetens, Latin made it saccharum — and there the road splits: saccharum fathered only the saccharine branch, while sugar and Zucker took the trade road home — Persian shakar, Arabic sukkar, Medieval Latin succarum — then split again, English buying through French sucre and German through Italian zucchero. Same ancient gravel, ground fine. der Honig is the opposite: no journey at all, the pure twin of honey, one Proto-Germanic word in both mouths. die Schokolade is Nahuatl chocolātl through Spanish chocolate — the same door the tomato used. der Keks is the delicious one: German borrowed the English plural cakes whole, s and all, and respelled it — Keks is 'cakes' with a German accent. die Torte came from Italian torta, and English tart is the same word through French: both go back to Latin torquere, 'to twist' — the twisted pastry dough. One twin, one gravel, one ocean-crosser, one baked-in plural, one twist.",
       footnotes: [
         {
           marker: "1",
@@ -15436,7 +15430,7 @@ export const LESSONS: Lesson[] = [
         target_answer: "sugar",
         meaning: "der Zucker ↔ sugar: both from Sanskrit śarkarā, 'gravel'",
         explanation:
-          "Sanskrit śarkarā became Greek sákkharon, Latin saccharum, and finally sugar and Zucker. The sweetest word on the shelf began as the grit under your feet — the crystals looked like sand.",
+          "Sanskrit śarkarā became Greek sákkharon and Latin saccharum — the saccharine branch — but sugar and Zucker took the trade road: Persian shakar, Arabic sukkar, Medieval Latin succarum, and on to French sucre and Italian zucchero. The sweetest word on the shelf began as the grit under your feet — the crystals looked like sand.",
       },
       {
         id: "l5231_e4",
@@ -15617,7 +15611,7 @@ export const LESSONS: Lesson[] = [
       },
       takeaway:
         "Frühstück is früh + Stück, 'early piece' (English named the broken fast instead), Brötchen is the -chen little bread, Marmelade hides Greek honey, Toast is English's Latin — and Butterbrot is butter + Brot, both lesson-101 words.",
-      curiosity_teaser: "Next: Farben I — rot, blau, grün, schwarz, bunt, where rot keeps the T that English red let go.",
+      curiosity_teaser: "Next: Farben I — rot, blau, grün, schwarz, bunt, where German hardens red's d into rot's t.",
     },
   },
 
@@ -15770,7 +15764,7 @@ export const LESSONS: Lesson[] = [
           marker: "1",
           title: "The Color That Sailed from India",
           content:
-            "lila began as Sanskrit nī́laḥ, 'dark blue', became Persian līläǧ, 'indigo', then Arabic līlāk, then French lilas — the lilac shrub and its color — and finally German lila, clipped from the French in the 19th century. English took the identical loan as lilac: same Persian indigo, same Arabic and French doorway, one purple arrival with two names.",
+            "lila began as Sanskrit nī́laḥ, 'dark blue', became Persian līlak/nīlak, 'bluish', then Arabic līlāk, then French lilas — the lilac shrub and its color — and finally German lila, clipped from the French in the 19th century. English took the identical loan as lilac: same Persian blue, same Arabic and French doorway, one purple arrival with two names.",
         },
       ],
     },
@@ -16524,7 +16518,7 @@ export const LESSONS: Lesson[] = [
     pattern: {
       title: "Countries in Frames, Articles Attached",
       content:
-        "The three frames from Länder I still do all the work — only the articles change. 1. Dwell: Ich wohne in der Schweiz, Ich wohne in Polen — the feminine names take die, and in + die collapses to der. 2. Move: Ich fahre nach Österreich, Ich fahre in die Türkei — bare names ride after nach, feminine names prefer in die. 3. Originate: Meine Familie kommt aus Polen, Irland ist grün und schön. Time drops into position 1 as always: Im März fahre ich nach Österreich, Im Januar bin ich in der Schweiz — im is in + dem, the month's own little contraction.",
+        "The three frames from Länder I still do all the work — only the cases change. 1. Dwell: Ich wohne in der Schweiz, Ich wohne in Polen — dwelling takes in + dative, and the dative of die is der. 2. Move: Ich fahre nach Österreich, Ich fahre in die Türkei — bare names ride after nach, and movement keeps in + die, the accusative: in der is where you are, in die is where you are going. 3. Originate: Meine Familie kommt aus Polen, Irland ist grün und schön. Time drops into position 1 as always: Im März fahre ich nach Österreich, Im Januar bin ich in der Schweiz — im is in + dem, the month's own little contraction.",
       footnotes: [],
       linguist_note:
         "The place-suffixes are old money. -land is the Germanic land (England, Irland, Deutschland — one recipe, three countries), -ei is Latin -ia in German clothes (Türkei, Bäckerei), and -reich is the old ruler-word. English writes the same Latin suffix as -y: Turkey, Hungary, Italy — the ending is identical, only the costume changed.",
@@ -17238,7 +17232,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "The Muses, the Reverse Loan, and the Lost Song",
       content:
-        "Five words for what you do when the work stops — and they arrive by four different roads. die Musik is the oldest purchase: Latin musica, from Greek mousikē, 'the art of the Muses' — the nine goddesses of song, poetry and memory. English made the same Greek purchase as music; the two are one loan in two spellings, and both keep the Muses' k at the end. der Sport traveled the opposite way: English shortened Old French desport, 'amusement', into sport, and in the nineteenth century German bought the short English form outright — a reverse loan, German taking FROM English in the very decades English was taking Kindergarten and Angst from German. das Lied is the lost-cousin story: it is one and the same ancient word as Old English leod, 'song' — a word Germany kept and England dropped. When English speakers today say Lied for a German art song, they are using Germany's survivor for the twin they lost. tanzen came off the French shelf: French danser, the very word English took as dance — one French purchase, two buyers, and the difference between the d of dance and the t of tanzen is where and when each language bought the loan, not a sound law. And malen is the honest limitation: it belongs to the Germanic word behind das Mal, 'mark, spot', but its English twin died without a trace. English says paint, from Latin pingere; German says malen. That is the whole story — and every lesson is allowed one word with no twin.",
+        "Five words for what you do when the work stops — and they arrive by four different roads. die Musik is the oldest purchase: Latin musica, from Greek mousikē, 'the art of the Muses' — the nine goddesses of song, poetry and memory. English made the same Greek purchase as music; the two are one loan in two spellings, and both keep the Muses' k at the end. der Sport traveled the opposite way: English shortened Old French desport, 'amusement', into sport, and in the nineteenth century German bought the short English form outright — sport had never been a German word before, so this is a straight purchase from English, made in the very decades English was buying Kindergarten and Angst from German. das Lied is the lost-cousin story: it is one and the same ancient word as Old English leod, 'song' — a word Germany kept and England dropped. When English speakers today say Lied for a German art song, they are using Germany's survivor for the twin they lost. tanzen came off the French shelf: French danser, the very word English took as dance — one French purchase, two buyers, and the difference between the d of dance and the t of tanzen is where and when each language bought the loan, not a sound law. And malen keeps the strangest twin of the five: it belongs to the Germanic word behind das Mal, 'mark, spot' — and that word's English twin is alive in the least expected place: the mole, the small dark mark on the skin, from Old English māl. English paints with Latin pingere, but it kept the old mark-word — it just moved it to the skin. That is the whole story — and the lesson's one word with no twin is das Lied, whose Old English partner leod England dropped.",
       footnotes: [
         {
           marker: "1",
@@ -17254,7 +17248,7 @@ export const LESSONS: Lesson[] = [
         "1. The verbs are regular: ich tanze, du tanzt, er tanzt; ich male, du malst, er malt — strip the -en, add the person ending. 2. The noun frames: Musik kommt aus dem Radio (music comes from the radio), Das Lied kommt vom Klavier, Mein Hobby ist Musik. 3. The frequency adverb sits right after the verb, as in English: Ich tanze selten (I seldom dance), Wir gehen oft ins Kino. 4. The idiom the drills use: Ich tanze gern — gern, 'gladly', is German's like + -ing; with sport the fixed phrase is Ich treibe gern Sport, literally 'I drive sport gladly'. 5. Three genders on one hobby shelf — learn them with the article: die Musik, der Sport, das Lied.",
       footnotes: [],
       linguist_note:
-        "Reverse loans are the sound of two languages at eye level. For a thousand years the heavy traffic ran Latin and French into both languages; the newer traffic — Kindergarten into English, Sport into German — only started once Germany and England were peers reading each other's newspapers. der Sport even kept the English short form, not the French desport: a borrowed word can arrive second-hand and still become the standard.",
+        "Borrowings that run both ways are the sound of two languages at eye level. For a thousand years the heavy traffic ran Latin and French into both languages; the newer traffic — Kindergarten into English, Sport into German — only started once Germany and England were peers reading each other's newspapers. der Sport even kept the English short form, not the French desport: a borrowed word can arrive second-hand and still become the standard.",
     },
     exercises: [
       {
@@ -17291,10 +17285,10 @@ export const LESSONS: Lesson[] = [
       {
         id: "l5292_e2",
         type: "shift_select",
-        prompt: "One of today's five is a reverse loan: German took it FROM English. Which?",
+        prompt: "One of today's five is German's straight purchase from English — a word German had never had before the nineteenth century. Which?",
         options: ["der Sport", "die Musik", "das Lied", "tanzen"],
         target_answer: "der Sport",
-        meaning: "der Sport ← English sport ← Old French desport: the reverse loan",
+        meaning: "der Sport ← English sport ← Old French desport: German's 19th-century purchase",
         explanation:
           "die Musik is a Greek loan both languages made separately; das Lied is native Germanic; tanzen is French, the same purchase as dance. der Sport is the odd one: English shortened Old French desport to sport, and German bought the short English form in the nineteenth century.",
         diagnosis: {
@@ -17682,7 +17676,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "Love, Neat Gone Warm, and the Two With No Twin",
       content:
-        "die Liebe is the twin you already own: love and Liebe are the same ancient root — Proto-Germanic *leubʰ-, 'to hold dear' — with English turning the b-sound to v (give/geben, live/leben, love/Liebe). The family is bigger than it looks: archaic English lief, 'dear', is the same word, and English believe and German glauben are the same verb with the same prefix, built on the root of love. nett is the double purchase: French net, 'clean, pure', from Latin nitidus, 'shining' — English bought it as neat and kept it tidy; German bought it as nett and warmed it into 'nice'. Same French word, two temperatures. die Freude is the joy of froh, 'glad' — and English frolic is the same word through Dutch vrolijk, 'merry'. wütend is die Wut, rage, wearing the adjective ending — Old English had the same word, wōd 'furious', which survives in archaic English wood, 'mad'; the dictionaries record it even though everyday English forgot it. And stolz is the honest limitation: no safe English twin exists — English proud came from Old French prud, 'valiant', a completely different family. When English needed 'proud', it bought French.",
+        "die Liebe is the twin you already own: love and Liebe are the same ancient root — Proto-Germanic *leub-, 'to hold dear' — with English turning the b-sound to v (give/geben, live/leben, love/Liebe). The family is bigger than it looks: archaic English lief, 'dear', is the same word, and English believe and German glauben are the same root with the same prefix pattern — one prefix slot filled on each side, be- in English, ge- in German — all built on the root of love. nett is the double purchase: French net, 'clean, pure', from Latin nitidus, 'shining' — English bought it as neat and kept it tidy; German bought it as nett and warmed it into 'nice'. Same French word, two temperatures. die Freude is the joy of froh, 'glad' — and English frolic is the same word through Dutch vrolijk, 'merry'. wütend is die Wut, rage, wearing the adjective ending — Old English had the same word, wōd 'furious', which survives in archaic English wood, 'mad'; the dictionaries record it even though everyday English forgot it. And stolz is the honest limitation: no safe English twin exists — English proud came from Old French prud, 'valiant', a completely different family. When English needed 'proud', it bought French.",
       footnotes: [
         {
           marker: "1",
@@ -17742,9 +17736,9 @@ export const LESSONS: Lesson[] = [
           "'die Liebe' is the same ancient root as its English twin — with the b where English writes v. Give the English twin:",
         options: ["love", "hope", "life", "like"],
         target_answer: "love",
-        meaning: "die Liebe ↔ love: the *leubʰ- family",
+        meaning: "die Liebe ↔ love: the *leub- family",
         explanation:
-          "love and Liebe are one root. The family also holds archaic English lief, 'dear', and the believe/glauben pair — the same verb with the same prefix, built on the root of love.",
+          "love and Liebe are one root. The family also holds archaic English lief, 'dear', and the believe/glauben pair — the same root with the same prefix pattern, built on the root of love.",
       },
       {
         id: "l5311_e4",
@@ -17819,13 +17813,13 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "Right, False, Open — and the Closing Proof",
       content:
-        "The last new words of the campaign, and they prove the method one final time. richtig is right — one Proto-Germanic word, *rehtaz, that both languages kept: English right, German recht, and richtig is recht with the adjective tail -ig, 'right-ish' turned exact. The gh in right and the ch-sound in recht are the same ancient letter — the family that made light/Licht and night/Nacht — and das Recht, 'the right, the law', lives in the idiom Du hast recht, 'you are right'. falsch is the borrowed one: Latin falsus, 'deceived, false' — German took it straight from Latin, English took it through Old French as false; same word, two routes, one meaning. offen and open are twins that never shifted: one ancient word, and notice the p — German's great P→PF law turned pipe into Pfeife, but offen kept the plain p, exactly like open. sauber and leer are the honest limitations: no safe English twin has been proven for either — clean and empty are places where English and German walked apart. Sisters share most of their words; they do not share all of them. That is the whole method in five adjectives: two twins, one double purchase, one p that stayed, and two words with no twin at all.",
+        "The last new words of the campaign, and they prove the method one final time. richtig is right — one Proto-Germanic word, *rehtaz, that both languages kept: English right, German recht, and richtig is recht with the adjective tail -ig, 'right-ish' turned exact. The gh in right and the ch-sound in recht are the same ancient letter — the family that made light/Licht and night/Nacht — and das Recht, 'the right, the law', lives in the idiom Du hast recht, 'you are right'. falsch is the borrowed one: Latin falsus, 'deceived, false' — German took it straight from Latin, English took it through Old French as false; same word, two routes, one meaning. offen and open are the same ancient word — and the shift is right there in its middle: German's great P→PF law turned pipe into Pfeife, and it did the same quiet work here, turning open's p into offen's ff, exactly as it did in pepper/Pfeffer and apple/Apfel. Same word, one shift, and you can hear it every morning. sauber and leer are the honest limitations: no safe English twin has been proven for either — clean and empty are places where English and German walked apart. Sisters share most of their words; they do not share all of them. That is the whole method in five adjectives: two twins, one double purchase, one twin with the shift working in its middle, and two words with no twin at all.",
       footnotes: [
         {
           marker: "1",
-          title: "The p That Stayed",
+          title: "The Shift, Working in the Middle",
           content:
-            "The P→PF law filled German with pf-words — Pfeife (pipe), Pfeffer (pepper), Pfund (pound) — but it skipped the p in offen. Open and offen are the same word with the same p: the shift had exceptions, and this one you can hold in your hand every morning.",
+            "The P→PF law filled German with pf-words — Pfeife (pipe), Pfeffer (pepper), Pfund (pound) — and offen is one of its successes, not one of its exceptions. Open and offen are the same ancient word, and the law did its quiet work in the middle: English p became German ff, the same shift you can see in apple/Apfel and hear in pepper/Pfeffer. No exception to file away — this one you can hold in your hand every morning precisely because the shift kept the word recognizable.",
         },
       ],
     },
@@ -17919,7 +17913,7 @@ export const LESSONS: Lesson[] = [
         english: "The guest leaves, the house is empty — the door to the balcony is open.",
       },
       takeaway:
-        "richtig is right with the gh↔ch badge, falsch is Latin falsus bought twice, offen kept the p that open kept — and sauber and leer have no twins: even sisters have words the other never had.",
+        "richtig is right with the gh↔ch badge, falsch is Latin falsus bought twice, offen is open with the shift working in its middle (p became ff, as in Apfel) — and sauber and leer have no twins: even sisters have words the other never had.",
       curiosity_teaser:
         "This campaign ends here — the shifts, the twins, the borrowed shelves: the whole compendium waits in review.",
     },
