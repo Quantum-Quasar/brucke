@@ -7,6 +7,7 @@ import { DonutChart } from "@/components/common/DonutChart";
 import { useAppStore } from "@/lib/store";
 import { getLanguageDefinition } from "@/data/languages";
 import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
+import { getAtlasFamilies } from "@/lib/atlas-families";
 
 export default function AtlasPage() {
   const [mounted, setMounted] = useState(false);
@@ -20,7 +21,7 @@ export default function AtlasPage() {
     setMounted(true);
   }, []);
 
-  const shiftList = Object.values(data.shifts);
+  const shiftList = getAtlasFamilies(data);
 
   // Filter shifts by query
   const filteredShifts = shiftList.filter((s) => {
@@ -62,7 +63,7 @@ export default function AtlasPage() {
             Sound Shift Families
           </h1>
           <p className="text-xs sm:text-sm text-[var(--sub-color)] mt-0.5">
-            The 9 historical sound shift families linking English cognates to High German vocabulary.
+            The 9 historical sound shift families linking English cognates to High German vocabulary — plus every dictionary word that sits outside them.
           </p>
         </div>
 
@@ -106,6 +107,21 @@ export default function AtlasPage() {
         </div>
         <span className="text-[var(--sub-color)]">{totalWords} total indexed</span>
       </div>
+
+      <Link
+        href="/atlas/master"
+        className="block p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--main-color)]/40 hover:border-[var(--main-color)] transition group flex items-center justify-between gap-3"
+      >
+        <div>
+          <h3 className="text-sm sm:text-base font-bold text-[var(--text-color)] group-hover:text-[var(--main-color)] transition">
+            Master Web — every word, phrase &amp; shift, linked
+          </h3>
+          <p className="text-xs text-[var(--sub-color)] mt-0.5">
+            One graph joining all shift families, compounds, false friends and expressions like „Es tut mir leid." to the words within them.
+          </p>
+        </div>
+        <ChevronRight className="w-5 h-5 text-[var(--main-color)] shrink-0 group-hover:translate-x-0.5 transition" />
+      </Link>
 
       {/* Shift Families Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">

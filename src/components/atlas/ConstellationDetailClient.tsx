@@ -3,12 +3,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, BookOpen, Info } from "lucide-react";
-import { RadialConstellation } from "@/components/atlas/RadialConstellation";
+import { ConstellationWeb } from "@/components/atlas/ConstellationWeb";
 import { BranchDrillModal } from "@/components/atlas/BranchDrillModal";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { useAppStore } from "@/lib/store";
 import { getLanguageDefinition } from "@/data/languages";
 import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
+import { getAtlasFamily, UNSHIFTED_FAMILY_ID } from "@/lib/atlas-families";
 import type { ShiftFamily } from "@/lib/types";
 
 export function ConstellationDetailClient({ familyId }: { familyId: string }) {
@@ -17,7 +18,7 @@ export function ConstellationDetailClient({ familyId }: { familyId: string }) {
   const language = getLanguageDefinition(activeLanguageId);
   const data = getLanguageContent(activeLanguageId).compendium ?? EMPTY_COMPENDIUM;
 
-  const family: ShiftFamily | undefined = data.shifts[familyId || ""];
+  const family: ShiftFamily | undefined = getAtlasFamily(data, familyId || "");
 
   if (!family) {
     // German-only shift families are German-only routes: another language's
@@ -43,6 +44,8 @@ export function ConstellationDetailClient({ familyId }: { familyId: string }) {
   }
 
   const words = family.word_ids.map((id) => data.words[id]).filter(Boolean);
+  // render the roster capped so very large layers (e.g. the unshifted set) stay fast
+  const rosterWords = words.slice(0, 60);
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 space-y-6 font-sans">
@@ -68,8 +71,8 @@ export function ConstellationDetailClient({ familyId }: { familyId: string }) {
         </div>
       </div>
 
-      {/* Radial Spatial Spoke Visualization (Desktop) & Tree (Mobile) */}
-      <RadialConstellation family={family} onPracticeBranch={() => setIsDrillOpen(true)} />
+      {/* Web Constellation (Desktop) & List (Mobile) */}
+      <ConstellationWeb family={family} onPracticeBranch={() => setIsDrillOpen(true)} />
 
       {/* Philological & Historical Linguistics Deep-Dive */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -88,7 +91,9 @@ export function ConstellationDetailClient({ familyId }: { familyId: string }) {
           <p className="text-xs text-[var(--text-color)]/80 leading-relaxed">{family.literature_source}</p>
           <div className="pt-2 border-t border-[var(--sub-color)]/15">
             <span className="text-[11px] font-mono text-[var(--sub-color)]">
-              {words.length} vocabulary roots participating in this sound shift.
+              {family.id === UNSHIFTED_FAMILY_ID
+                ? `${words.length} dictionary words outside the shift families.`
+                : `${words.length} vocabulary roots participating in this sound shift.`}
             </span>
           </div>
         </div>
@@ -102,7 +107,7 @@ export function ConstellationDetailClient({ familyId }: { familyId: string }) {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
-          {words.map((w) => (
+          {rosterWords.map((w) => (
             <div
               key={w.id}
               className="p-2.5 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20"
@@ -118,6 +123,11 @@ export function ConstellationDetailClient({ familyId }: { familyId: string }) {
             </div>
           ))}
         </div>
+        {words.length > rosterWords.length && (
+          <p className="text-[11px] font-mono text-[var(--sub-color)]">
+            showing first {rosterWords.length} of {words.length} words in this layer.
+          </p>
+        )}
       </div>
 
       {/* 5-Question Branch Practice Drill Modal */}
