@@ -49,16 +49,14 @@ export const MasterConstellation: React.FC = () => {
     <div className="absolute inset-0 flex flex-col font-sans">
       <div ref={scrollRef} className="flex-1 overflow-auto bg-[var(--bg-color)]">
         <svg width={2600} height={2000} className="block">
-          {graph.edges.map((e, i) => (
-            <line
-              key={i}
-              x1={graph.nodes[e.a].x}
-              y1={graph.nodes[e.a].y}
-              x2={graph.nodes[e.b].x}
-              y2={graph.nodes[e.b].y}
-              stroke={e.kind === "family" ? "var(--sub-color)" : STROKE[e.kind]}
-              strokeOpacity={e.kind === "family" ? 0.07 : 0.28}
-              strokeWidth={e.kind === "family" ? 0.9 : 1.25}
+          {graph.edgesByKind.map(([kind, d]) => (
+            <path
+              key={kind}
+              d={d}
+              stroke={kind === "family" ? "var(--sub-color)" : STROKE[kind]}
+              strokeOpacity={kind === "family" ? 0.07 : 0.28}
+              strokeWidth={kind === "family" ? 0.9 : 1.25}
+              fill="none"
             />
           ))}
           {graph.nodes.map((n) => {

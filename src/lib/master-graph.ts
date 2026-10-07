@@ -49,14 +49,30 @@ function tokenMatches(token: string, word: string): boolean {
   return diff <= 1 && Math.min(token.length, word.length) >= 3;
 }
 
-export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; edges: MasterEdge[] } {
+export interface MasterGraph {
+  nodes: MasterNode[];
+  edges: MasterEdge[];
+  edgesByKind: [MasterEdgeKind, string][];
+}
+
+const graphCache = new WeakMap<CompendiumData, MasterGraph>();
+
+export function buildMasterGraph(data: CompendiumData): MasterGraph {
+  const hit = graphCache.get(data);
+  if (hit) return hit;
+  const graph = buildMasterGraphUncached(data);
+  graphCache.set(data, graph);
+  return graph;
+}
+
+function buildMasterGraphUncached(data: CompendiumData): MasterGraph {
   const rng = mulberry32(hashSeed("master-graph-v1"));
   const nodes: MasterNode[] = [];
   const edges: MasterEdge[] = [];
   const edgeSet = new Set<string>();
   const nodeIndex = new Map<string, number>();
 
-  if (!data.wordList.length) return { nodes, edges };
+  if (!data.wordList.length) return { nodes, edges, edgesByKind: [] };
 
   const addNode = (n: Omit<MasterNode, "x" | "y">, x: number, y: number) => {
     nodeIndex.set(n.id, nodes.length);
@@ -257,31 +273,36 @@ export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; e
     kind === "family" ? 135 : kind === "phrase" ? 85 : 105;
   const vx = new Float64Array(nodes.length);
   const vy = new Float64Array(nodes.length);
+  const xs = new Float64Array(nodes.length);
+  const ys = new Float64Array(nodes.length);
+  for (let i = 0; i < nodes.length; i++) {
+    xs[i] = nodes[i].x;
+    ys[i] = nodes[i].y;
+  }
   const cellSize = 100;
+  const cellOf = (v: number) => (v < 0 ? 0 : Math.floor(v / cellSize));
   for (let it = 0; it < ITERATIONS; it++) {
     const alpha = 1 - it / ITERATIONS;
 
-    // collision / short-range repulsion via spatial grid
-    const grid = new Map<string, number[]>();
+    // collision / short-range repulsion via spatial grid (numeric keys)
+    const grid = new Map<number, number[]>();
     for (let i = 0; i < nodes.length; i++) {
-      const key = `${Math.floor(nodes[i].x / cellSize)},${Math.floor(nodes[i].y / cellSize)}`;
+      const key = cellOf(xs[i]) * 256 + cellOf(ys[i]);
       const bucket = grid.get(key);
       if (bucket) bucket.push(i);
       else grid.set(key, [i]);
     }
     for (let i = 0; i < nodes.length; i++) {
-      const gx = Math.floor(nodes[i].x / cellSize);
-      const gy = Math.floor(nodes[i].y / cellSize);
+      const gx = cellOf(xs[i]);
+      const gy = cellOf(ys[i]);
       for (let ox = -1; ox <= 1; ox++) {
         for (let oy = -1; oy <= 1; oy++) {
-          const bucket = grid.get(`${gx + ox},${gy + oy}`);
+          const bucket = grid.get((gx + ox) * 256 + (gy + oy));
           if (!bucket) continue;
           for (const j of bucket) {
             if (j <= i) continue;
-            const a = nodes[i];
-            const b = nodes[j];
-            let dx = b.x - a.x;
-            let dy = b.y - a.y;
+            let dx = xs[j] - xs[i];
+            let dy = ys[j] - ys[i];
             let dist = Math.hypot(dx, dy);
             const minDist = radii[i] + radii[j] + 10;
             if (dist >= minDist) continue;
@@ -302,10 +323,8 @@ export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; e
 
     // springs
     for (const e of edges) {
-      const a = nodes[e.a];
-      const b = nodes[e.b];
-      const dx = b.x - a.x;
-      const dy = b.y - a.y;
+      const dx = xs[e.b] - xs[e.a];
+      const dy = ys[e.b] - ys[e.a];
       const dist = Math.hypot(dx, dy) || 1;
       const pull = ((dist - targetLen(e.kind)) / dist) * 0.045 * (0.4 + alpha);
       vx[e.a] += dx * pull;
@@ -316,14 +335,31 @@ export function buildMasterGraph(data: CompendiumData): { nodes: MasterNode[]; e
 
     // gentle gravity + damping + clamp
     for (let i = 0; i < nodes.length; i++) {
-      vx[i] += (cx - nodes[i].x) * 0.0012 * alpha;
-      vy[i] += (cy - nodes[i].y) * 0.0012 * alpha;
-      nodes[i].x = Math.min(WIDTH - 40, Math.max(40, nodes[i].x + vx[i]));
-      nodes[i].y = Math.min(HEIGHT - 40, Math.max(40, nodes[i].y + vy[i]));
+      vx[i] += (cx - xs[i]) * 0.0012 * alpha;
+      vy[i] += (cy - ys[i]) * 0.0012 * alpha;
+      xs[i] = Math.min(WIDTH - 40, Math.max(40, xs[i] + vx[i]));
+      ys[i] = Math.min(HEIGHT - 40, Math.max(40, ys[i] + vy[i]));
       vx[i] *= 0.6;
       vy[i] *= 0.6;
     }
   }
 
-  return { nodes, edges };
+  for (let i = 0; i < nodes.length; i++) {
+    nodes[i].x = xs[i];
+    nodes[i].y = ys[i];
+  }
+
+  // Pre-join edges into one path string per kind so the SVG renders ~5 <path>
+  // elements instead of thousands of <line> nodes.
+  const byKind = new Map<MasterEdgeKind, string[]>();
+  for (const e of edges) {
+    const a = nodes[e.a];
+    const b = nodes[e.b];
+    const arr = byKind.get(e.kind) ?? [];
+    arr.push(`M${a.x.toFixed(1)} ${a.y.toFixed(1)}L${b.x.toFixed(1)} ${b.y.toFixed(1)}`);
+    byKind.set(e.kind, arr);
+  }
+  const edgesByKind = [...byKind.entries()].map(([kind, parts]) => [kind, parts.join("")] as [MasterEdgeKind, string]);
+
+  return { nodes, edges, edgesByKind };
 }
