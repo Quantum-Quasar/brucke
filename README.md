@@ -23,7 +23,7 @@ Rather than relying on rote memorization or gamified streaks without substance, 
 - **Styling**: Tailwind CSS v4 (native CSS tokens, dark mode default)
 - **State Management**: [Zustand](https://github.com/pmndrs/zustand) 5 (dual `localStorage` + size-guarded cookie persistence)
 - **Icons**: Lucide React
-- **Testing**: Vitest / `bun run test` (29 test files, ~215 automated tests) <!-- corrected 2026-10-03: was "21 test suites, 119 automated tests" — package.json only defines "test": "vitest run" -->
+- **Testing**: Vitest / `bun run test` (28 test files, 230 automated tests) <!-- corrected 2026-10-08 against the actual vitest run; counts pinned by src/tests/docs-sync.test.ts -->
 - **Audio Engine**: Zero-dependency browser-native Web Speech API (`window.speechSynthesis`) + Web Audio click synthesizer
 
 ---
@@ -46,7 +46,7 @@ bun run parse-data
 
 ### Run Automated Tests
 
-Executes the full Vitest suite — 29 test files, ~215 automated tests:
+Executes the full Vitest suite — 28 test files, 230 automated tests:
 
 ```bash
 bun run test
@@ -140,7 +140,7 @@ src/
 │   ├── store.ts          # Zustand store with dual persistence (+ lessonStars)
 │   ├── trail-map.ts      # Map graph, responsive layout engine, unlock/recommend logic
 │   └── types.ts          # Core domain TypeScript interfaces
-└── tests/                # 29 test files (Vitest)
+└── tests/                # 28 test files (Vitest)
 ```
 
 ---
