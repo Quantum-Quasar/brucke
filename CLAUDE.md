@@ -1,3 +1,5 @@
+> **Read `docs/NORTH_STAR.md` first.** Brücke teaches German; etymology is only a memory hook.
+> Do not make changes whose only effect is deeper or more precise etymology.
 
 Default to using Bun instead of Node.js.
 

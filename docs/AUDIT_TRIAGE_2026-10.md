@@ -1,0 +1,38 @@
+# Audit triage — October 2026
+
+The October audit of lessons 5121–5312 produced 39 findings. They were sorted with the
+rule in [`NORTH_STAR.md`](./NORTH_STAR.md): fix what blocks or misleads a learner of German;
+log (don't do) what only refines etymology.
+
+## Done
+
+| Area | What changed |
+|---|---|
+| Unfinishable exercises | 8 tile exercises could not be completed (a word needed twice with one tile, or a pronoun with no tile): l901_e1, l902_e1, l5162_e5, l5192_e4, l5201_e4, l5202_e4, l5211_e5, l5252_e4. Tiles added. |
+| Grading | Commas inside a sentence are ignored (tiles can't produce them; l5211_e4 / l5212_e4 were marked wrong on a perfect answer). `das`+`Wass`+`er` is read as one word (lessons 5, 102, 901, 902 were graded "almost" + forced retry). |
+| Playability | 11 matching exercises with 13–23 pairs trimmed to 12 (median is 6); each lesson's headline words kept. |
+| German correctness | küssst → küsst, tringe → trinke, "Manchmal trinke ich immer Kaffee", "geradeaus nach rechts", Schwarz und Weiß, "Himmel the ceiling", false "zu = too, nach = to" hint, 5272 mixed frames. |
+| Taught-first | 5291 `schneidet` (untaught), 5021_e3/e5 untaught antidote words, `langweilig` credited in l2903. |
+| Practice matches lesson | l202_e5 restored to a bracket sentence; l301_e5 / l401_e5 restored to their shift-bearing lines. |
+| Presence | suppe (5222), abfahrt/ankunft (5261), socke (5292), Französisch (5291) now appear in an exercise. |
+| Text matches lesson | 5211 teaser + 5212 blurb (Ofen), stale sentence counts, garbled shell blurbs, 5251 footnote, 501_e5 explanation. |
+| Guards | Tests: tile exercises solvable, matching ≤ 12 pairs, grader comma/tile behaviour. |
+
+## Deliberately not done (etymology precision — see North Star)
+
+- #14 shift-badge nuance (Dezember z, hinten d→t, …)
+- #15 Zucker / Arabic loan chain
+- #30 `shift_categories` orphans (frozen field; prose-only etymologies)
+- #32 `reverse_cognate` dual-use relabelling and option-label leaks
+- #33 "soften the partly-true set" (dort, Computer, Kanne, lila, …)
+- #34 blurb nits that were purely etymological (kept only the ones that were garbled or false on the page)
+- #35 beyond the "four prefixes" wording; #36 cosmetics about Latin/Greek labels and Kleid↔cloth hedging
+- #37 / #38 watch-item and a cosmetic slug (`l5151`, frozen)
+- #21 `Rad` is already glossed inline in 5251 — no change needed
+
+## Left as is, on purpose
+
+- #29 `word_ids` "dead" entries (hundert, minute @5122; zeit, morgen, garten @5132; bad @5212): the words are taught in the
+  lesson prose but have no exercise line. Removing them risks the 650-word floor; adding pairs would break the 12-pair cap.
+  Revisit only if a learner-facing reason appears. The "used-but-unlisted" words (regnen, fallen, wand) are already taught earlier.
+- Matching pairs duplicated between a core lesson and its side lesson (single-word recap pairs) — that is the recap design.

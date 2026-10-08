@@ -15,6 +15,7 @@
 Rather than relying on rote memorization or gamified streaks without substance, Brücke leverages the **Second High German Consonant Shift (500–800 AD)** to reveal that English speakers already understand hundreds of German words.
 
 - **Comprehensive Audit Manifest**: See [`AUDIT_MANIFEST.md`](./AUDIT_MANIFEST.md) for full architectural specifications, data schemas, and audit instructions.
+- **North Star**: See [`NORTH_STAR.md`](./NORTH_STAR.md) — Brücke teaches German; etymology is the hook, not the subject. Read before changing content.
 - **Design Specification**: See [`german_learning_platform_design-final.md`](./german_learning_platform_design-final.md). <!-- corrected 2026-09-30: was "./docs/german_learning_platform_design-final.md" — there is no docs/ directory -->
 
 ---
