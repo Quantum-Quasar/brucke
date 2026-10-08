@@ -18,6 +18,25 @@ log (don't do) what only refines etymology.
 | Text matches lesson | 5211 teaser + 5212 blurb (Ofen), stale sentence counts, garbled shell blurbs, 5251 footnote, 501_e5 explanation. |
 | Guards | Tests: tile exercises solvable, matching ≤ 12 pairs, grader comma/tile behaviour. |
 
+## Essence pass — anti-drift (North Star audit)
+
+Six exercises had drifted into etymology trivia where the answer required knowledge
+unrelated to German (Middle English phonology, Latin/Greek roots, KJV English) and no
+corresponding German was practised. Converted to German practice; the connection stays as
+a one-line hook in the explanation:
+
+- l18_e2 (Middle English y-) → pick the ge- participle that closes the Perfekt bracket (gemacht).
+- l1905_e4 (KJV "wist") → which verb freezes to wusste (wissen).
+- l5171_e3 (Latin aurora) → Osten's everyday English twin (east).
+- l5181_e2 (clavichord) → which instrument das Klavier names (piano).
+- l5182_e3 (Greek théatron → theory) → which place das Theater names (theater).
+- l5232_e3 (Greek "honey-apple") → which spread die Marmelade names (jam).
+
+Deliberately left: reverse-cognate twins that are taught in-lesson and map to the German
+word being learned (warum↔wherefore, wohin↔whither, heiße↔hight, genug/enough, methinks),
+and all loan-vs-native classification quizzes — the prose teaches them; the recall
+reinforces the German word.
+
 ## Deliberately not done (etymology precision — see North Star)
 
 - #14 shift-badge nuance (Dezember z, hinten d→t, …)

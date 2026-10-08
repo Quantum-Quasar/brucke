@@ -4968,11 +4968,11 @@ export const LESSONS: Lesson[] = [
       {
         id: "l18_e2",
         type: "shift_select",
-        prompt: "What did the ancient prefix ge- sound like in Middle English?",
-        options: ["y- (as in yclept and ywis)", "g- (as in go)", "It never existed in English", "ch- (as in church)"],
-        target_answer: "y- (as in yclept and ywis)",
-        meaning: "ge- ↔ y- — the participle prefix connection",
-        explanation: "OE ge- weakened to y- in Middle English (yclept = 'called'). German ge- is the unweakened survivor — and genug/enough keeps the fossil in both. The calendar loves the bracket too: im Sommer, im Winter, am Wochenende — every calendar word opens a Perfekt story.",
+        prompt: "Which form closes the Perfekt bracket: 'Ich habe es _____' (I have made/done it)?",
+        options: ["gemacht", "mache", "machte", "machen"],
+        target_answer: "gemacht",
+        meaning: "Ich habe es gemacht — the ge- participle closes the bracket",
+        explanation: "ge- + stem + -t builds the weak participle: gemacht, gesagt. (It is the same ge- English once wore as y- in yclept.) The calendar loves the bracket too: im Sommer, im Winter, am Wochenende — every calendar word opens a Perfekt story.",
       },
       {
         id: "l18_e3",
@@ -11633,10 +11633,10 @@ export const LESSONS: Lesson[] = [
       {
         id: "l1905_e4",
         type: "reverse_cognate",
-        prompt: "Which archaic English past of 'wit' (to know) is the twin of 'wusste'? (KJV: 'they knew not nor ___')",
-        target_answer: "wist",
-        meaning: "wusste ↔ wist (the frozen know-past)",
-        explanation: "wissen/wusste ↔ wit/wist: the same s-bearing know-verb, and English kept wist alive into the King James Bible. schlagen and stehlen freeze differently — schlug, stahl — the ablaut melodies again.",
+        prompt: "wusste is the frozen past of which verb — the German 'to know'?",
+        target_answer: "wissen",
+        meaning: "wissen → wusste (the frozen know-past)",
+        explanation: "wissen freezes to wusste exactly as können freezes to konnte and müssen to musste — one weak -te past, one stem. schlagen and stehlen freeze differently — schlug, stahl — the ablaut melodies again.",
       },
       {
         id: "l1905_e5",
@@ -14118,12 +14118,12 @@ export const LESSONS: Lesson[] = [
       {
         id: "l5171_e3",
         type: "reverse_cognate",
-        prompt: "Osten and east are twins from the dawn-word *austrōn. Which Latin word shares the same dawn-root?",
-        options: ["aurora", "terra", "audire", "augustus"],
-        target_answer: "aurora",
-        meaning: "Osten ↔ east ↔ aurora: one dawn-root across three languages",
+        prompt: "Osten is the pure twin of an everyday English direction word. Which one?",
+        options: ["east", "easy", "aster", "oyster"],
+        target_answer: "east",
+        meaning: "Osten ↔ east — the dawn direction",
         explanation:
-          "Proto-Germanic *austrōn ('toward the sunrise') and Latin aurora ('dawn') both grow from the same ancient dawn-root. East is the dawn-land; the goddess of dawn is its name in Latin. terra, audire and augustus are unrelated.",
+          "Osten and east both grow from the old dawn-word *austrōn — 'toward the sunrise'; even Latin aurora (dawn) is a cousin. The compass points are world-fixed: der Osten always lies where the sun rises.",
       },
       {
         id: "l5171_e4",
@@ -14310,13 +14310,12 @@ export const LESSONS: Lesson[] = [
       {
         id: "l5181_e2",
         type: "reverse_cognate",
-        prompt:
-          "Klavier came through French clavier — Latin clavis, 'key'. Which English instrument still hides the same Latin word?",
-        options: ["clavichord", "harpsichord", "piano", "organ"],
-        target_answer: "clavichord",
-        meaning: "Klavier ↔ clavichord: one Latin key-word, clavis",
+        prompt: "das Klavier names which instrument in German?",
+        options: ["piano", "violin", "organ", "drum"],
+        target_answer: "piano",
+        meaning: "das Klavier = the piano",
         explanation:
-          "Latin clavis, 'key', became French clavier and German Klavier — and English names the clavichord with the same Latin key. The harpsichord is harp-and-chord, the piano is Italian for 'soft', the organ is Greek — none of them carries the key.",
+          "Klavier came through French clavier from Latin clavis, 'key' — the black-and-white keys are the whole word. English named the clavichord with that same Latin key, but German's Klavier is the everyday piano.",
       },
       {
         id: "l5181_e3",
@@ -14423,13 +14422,12 @@ export const LESSONS: Lesson[] = [
       {
         id: "l5182_e3",
         type: "reverse_cognate",
-        prompt:
-          "Theater is Greek théatron, 'the viewing place'. Which everyday English word is the same Greek viewing-root?",
-        options: ["theory", "theme", "thermal", "throne"],
-        target_answer: "theory",
-        meaning: "Theater ↔ theory: one Greek root — a viewing",
+        prompt: "das Theater names which place?",
+        options: ["theater", "cinema", "museum", "stadium"],
+        target_answer: "theater",
+        meaning: "das Theater = the theater",
         explanation:
-          "Greek théatron ('viewing place') and theōria ('a viewing, a speculation') share the root thea, 'a look'. A theory is, etymologically, a way of seeing — theme, thermal and throne are different Greek roots.",
+          "Theater is the same Greek viewing-word English kept: théatron, 'the viewing place'. ins Theater gehen — off to the viewing place. (das Kino, from lesson 5181, is where you watch films instead.)",
       },
       {
         id: "l5182_e4",
@@ -15609,13 +15607,12 @@ export const LESSONS: Lesson[] = [
       {
         id: "l5232_e3",
         type: "reverse_cognate",
-        prompt:
-          "Marmelade's Greek grandmother is melímēlon — 'honey-apple'. Which English word hides in the first half?",
-        options: ["honey", "marmot", "mellow", "melon"],
-        target_answer: "honey",
-        meaning: "die Marmelade ← marmelo ← Greek melímēlon: méli = honey",
+        prompt: "die Marmelade names which spread?",
+        options: ["jam", "honey", "butter", "syrup"],
+        target_answer: "jam",
+        meaning: "die Marmelade = jam",
         explanation:
-          "Portuguese marmelo (quince) is Latin melimēlum from Greek melímēlon, 'honey-apple' — and méli is Greek honey, the root English keeps in mellifluous, 'flowing with honey'. The honey itself German owns as Honig, lesson 5231's pure twin. English melon keeps the apple half.",
+          "Marmelade traveled from Portuguese marmelo (quince) — Greek melímēlon, 'honey-apple', hides inside. The honey itself German owns as Honig, lesson 5231's pure twin. On your Toast: Butter und Marmelade.",
       },
       {
         id: "l5232_e4",
