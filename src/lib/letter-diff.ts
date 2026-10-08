@@ -101,14 +101,59 @@ export interface EvaluationOptions {
   capitalizationTolerance?: boolean;
 }
 
+const stripTrailingPunctuation = (s: string) => s.replace(/[.,!?;:]+$/, "").trim();
+
+// Commas inside a sentence are punctuation, not spelling. Tile exercises cannot
+// produce them (tiles drop trailing punctuation) and a learner who types a
+// sentence without them has still said the German correctly, so they are
+// ignored when comparing — the learner still sees the target with its commas.
+const foldCommas = (s: string) =>
+  stripTrailingPunctuation(s).replace(/\s*,\s*/g, " ").replace(/\s{2,}/g, " ").trim();
+
 export function evaluateAnswerAccuracy(
   userInput: string,
   expected: string,
   options?: EvaluationOptions
 ): EvaluationResult {
-  const stripPunctuation = (s: string) => s.replace(/[.,!?;:]+$/, "").trim();
-  const user = stripPunctuation(userInput);
-  const target = stripPunctuation(expected);
+  const result = evaluateFolded(foldCommas(userInput), foldCommas(expected), options);
+  if (result.warningNote) {
+    // keep the commas visible when we quote the target back to the learner
+    const folded = foldCommas(expected);
+    const shown = stripTrailingPunctuation(expected);
+    if (folded !== shown) {
+      return { ...result, warningNote: result.warningNote.split(`"${folded}"`).join(`"${shown}"`) };
+    }
+  }
+  return result;
+}
+
+const ACCURACY_RANK: Record<AnswerAccuracy, number> = { exact: 2, almost: 1, incorrect: 0 };
+
+/**
+ * Grade several equivalent readings of the same answer and keep the best one.
+ * Used by tile exercises, where a learner who builds "das" + "Wass" + "er" has
+ * assembled one word, not four.
+ */
+export function evaluateBestOf(
+  candidates: string[],
+  expected: string,
+  options?: EvaluationOptions
+): { result: EvaluationResult; answer: string } {
+  let best = { result: evaluateAnswerAccuracy(candidates[0] ?? "", expected, options), answer: candidates[0] ?? "" };
+  for (const candidate of candidates.slice(1)) {
+    const result = evaluateAnswerAccuracy(candidate, expected, options);
+    if (ACCURACY_RANK[result.accuracy] > ACCURACY_RANK[best.result.accuracy]) {
+      best = { result, answer: candidate };
+    }
+  }
+  return best;
+}
+
+function evaluateFolded(
+  user: string,
+  target: string,
+  options?: EvaluationOptions
+): EvaluationResult {
 
   // ponytail: guard against huge pasted text
   if (Math.abs(user.length - target.length) > 10 || user.length > 200) {

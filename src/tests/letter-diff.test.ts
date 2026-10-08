@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { computeLetterDiff, getLevenshteinDistance, evaluateAnswerAccuracy } from "../lib/letter-diff";
+import {
+  computeLetterDiff,
+  getLevenshteinDistance,
+  evaluateAnswerAccuracy,
+  evaluateBestOf,
+} from "../lib/letter-diff";
 
 describe("Letter-by-Letter Diff", () => {
   it("marks exact matches as all correct", () => {
@@ -100,5 +105,40 @@ describe("Letter-by-Letter Diff", () => {
     const long = "a".repeat(250);
     expect(evaluateAnswerAccuracy(long, "Wasser").accuracy).toBe("incorrect");
     expect(getLevenshteinDistance("a".repeat(40), "b".repeat(10))).toBe(30);
+  });
+});
+
+describe("Sentence punctuation and tile readings", () => {
+  const opts = { umlautTolerance: false, capitalizationTolerance: false };
+
+  it("ignores commas inside a sentence — tiles can never produce them", () => {
+    expect(
+      evaluateAnswerAccuracy("Einen Moment bitte die Kanne ist heiß", "Einen Moment, bitte, die Kanne ist heiß", opts)
+    ).toEqual({ accuracy: "exact" });
+    expect(
+      evaluateAnswerAccuracy("Die Abfahrt ist früh die Ankunft ist spät", "Die Abfahrt ist früh, die Ankunft ist spät", opts).accuracy
+    ).toBe("exact");
+  });
+
+  it("still accepts the commas when the learner types them", () => {
+    expect(evaluateAnswerAccuracy("Das Buch, das ich lese", "Das Buch, das ich lese", opts).accuracy).toBe("exact");
+  });
+
+  it("still catches real mistakes in a comma sentence, and quotes the target with its commas", () => {
+    const r = evaluateAnswerAccuracy("das Buch das ich lese", "Das Buch, das ich lese", opts);
+    expect(r.accuracy).toBe("almost");
+    expect(r.warningNote).toContain("Das Buch, das ich lese");
+  });
+
+  it("reads 'das' + 'Wass' + 'er' as one assembled word", () => {
+    expect(evaluateAnswerAccuracy("das Wass er", "das Wasser", opts).accuracy).not.toBe("exact");
+    const best = evaluateBestOf(["das Wass er", "das Wasser"], "das Wasser", opts);
+    expect(best.result.accuracy).toBe("exact");
+    expect(best.answer).toBe("das Wasser");
+  });
+
+  it("keeps the first reading when no reading is better", () => {
+    const best = evaluateBestOf(["ich lernt", "ich lernt"], "ich lerne", opts);
+    expect(best.answer).toBe("ich lernt");
   });
 });

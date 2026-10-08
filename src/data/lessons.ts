@@ -3106,7 +3106,7 @@ export const LESSONS: Lesson[] = [
         id: "l901_e1",
         type: "morpheme_tiles",
         prompt: "Rebuild 'we come' from the stem (stem + the full ending):",
-        tile_options: ["komm", "en", "st", "t", "e"],
+        tile_options: ["wir", "komm", "en", "st", "t", "e"],
         target_answer: "wir kommen",
         meaning: "we come",
         explanation: "Stem 'komm-' + wir's full '-en' = kommen — the dictionary form does double duty as the wir-form.",
@@ -3204,7 +3204,7 @@ export const LESSONS: Lesson[] = [
         id: "l902_e1",
         type: "morpheme_tiles",
         prompt: "Assemble the thou-form of denken (mind the nk):",
-        tile_options: ["denk", "st", "t", "en", "e"],
+        tile_options: ["du", "denk", "st", "t", "en", "e"],
         target_answer: "du denkst",
         meaning: "you think / thou thinkest",
         explanation: "Stem 'denk-' + the Shakespearean '-st' = denkst. The nk is think's k, surviving intact.",
@@ -14025,7 +14025,7 @@ export const LESSONS: Lesson[] = [
         prompt: "Assemble: 'Sometimes I go left and sometimes right'",
         target_answer: "Manchmal gehe ich nach links und manchmal nach rechts",
         meaning: "Sometimes I go left and sometimes right",
-        word_bank: ["Manchmal", "gehe", "ich", "nach", "links", "und", "manchmal", "rechts", "oben", "geradeaus"],
+        word_bank: ["Manchmal", "gehe", "ich", "nach", "links", "und", "manchmal", "rechts", "nach", "oben", "geradeaus"],
         explanation:
           "manchmal opens the sentence and pushes gehe to slot 2 — the V2 swap again. nach is the pointing preposition: nach links, nach rechts, nach Hause. The repetition is the rhythm of real street directions.",
       },
@@ -14652,7 +14652,7 @@ export const LESSONS: Lesson[] = [
         prompt: "Assemble: 'The jacket is new and the trousers are old'",
         target_answer: "Die Jacke ist neu und die Hose ist alt",
         meaning: "The jacket is new and the trousers are old",
-        word_bank: ["Die", "Jacke", "ist", "neu", "und", "die", "Hose", "alt", "der", "Hut"],
+        word_bank: ["Die", "Jacke", "ist", "neu", "und", "die", "Hose", "alt", "ist", "der", "Hut"],
         explanation:
           "One und, two clauses. die Jacke and die Hose are both feminine, so the same article fronts each noun — the contrast between neu and alt carries the whole sentence.",
       },
@@ -14764,7 +14764,7 @@ export const LESSONS: Lesson[] = [
         id: "l5201_e4",
         type: "morpheme_tiles",
         prompt: "Assemble the distance sentence: 'The market is nearby, the way is far'",
-        tile_options: ["Der", "Markt", "ist", "in", "der", "Nähe", "Weg", "weit", "Zimmer", "Keller"],
+        tile_options: ["Der", "Markt", "ist", "in", "der", "Nähe", "Weg", "weit", "ist", "der", "Zimmer", "Keller"],
         target_answer: "Der Markt ist in der Nähe, der Weg ist weit",
         meaning: "The market is nearby, the way is far",
         explanation:
@@ -14869,7 +14869,7 @@ export const LESSONS: Lesson[] = [
         prompt: "Assemble: 'The curtain is up top and the rug is down below'",
         target_answer: "Der Vorhang ist oben und der Teppich ist unten",
         meaning: "The curtain is up top and the rug is down below",
-        word_bank: ["Der", "Vorhang", "ist", "oben", "und", "der", "Teppich", "unten", "Schrank", "am"],
+        word_bank: ["Der", "Vorhang", "ist", "oben", "und", "der", "Teppich", "unten", "ist", "Schrank", "am"],
         explanation:
           "The room in one sentence: oben and unten divide it vertically, und joins the halves, and every noun keeps der — der Vorhang, der Teppich — because furniture gender in German is fixed at the factory.",
       },
@@ -14994,7 +14994,7 @@ export const LESSONS: Lesson[] = [
         prompt: "Assemble: 'The number is four and the half is two'",
         target_answer: "Die Zahl ist vier und die Hälfte ist zwei",
         meaning: "The number is four and the half is two",
-        word_bank: ["Die", "Zahl", "ist", "vier", "und", "die", "Hälfte", "zwei", "Teller", "Gabeln"],
+        word_bank: ["Die", "Zahl", "ist", "vier", "und", "die", "Hälfte", "zwei", "ist", "Teller", "Gabeln"],
         explanation:
           "Setting the table with Zählen-I and Zählen-II grammar: die Zahl announces the count, die Hälfte halves it — vier Teller, zwei Gabeln — and the numeral again takes the bare plural with no article. The Teller and Gabeln in the bank are the pieces waiting to be counted.",
       },
@@ -16106,7 +16106,7 @@ export const LESSONS: Lesson[] = [
         id: "l5252_e4",
         type: "morpheme_tiles",
         prompt: "Assemble the timetable pair: 'The departure is early, the arrival is late'",
-        tile_options: ["Die", "Abfahrt", "ist", "früh", "Ankunft", "spät", "Zug"],
+        tile_options: ["Die", "Abfahrt", "ist", "früh", "Ankunft", "spät", "die", "ist", "Zug"],
         target_answer: "Die Abfahrt ist früh, die Ankunft ist spät",
         meaning: "The departure is early, the arrival is late",
         explanation:

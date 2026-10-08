@@ -278,4 +278,40 @@ describe("Progressive Bite-Sized Exercise Architecture", () => {
     expect(evaluateAnswerAccuracy("Ich will lernen Deutsch", "Ich will Deutsch lernen").accuracy).toBe("incorrect");
     expect(evaluateAnswerAccuracy("Ich will Deutsch lernen", "Ich will Deutsch lernen").accuracy).toBe("exact");
   });
+  it("is solvable: single-use tiles can actually spell the target (duplicates need duplicate tiles)", () => {
+    const stripEnd = (t: string) => t.replace(/[.,!?;:]+$/, "");
+    // can `word` be spelled by gluing tiles from the pool, each used once?
+    const segment = (word: string, pool: string[]): boolean => {
+      if (!word) return true;
+      return pool.some((tile, i) => {
+        const bare = tile.replace(/^-/, "");
+        return bare && word.startsWith(bare) && segment(word.slice(bare.length), pool.filter((_, j) => j !== i));
+      });
+    };
+    const problems: string[] = [];
+    for (const lesson of LESSONS) {
+      for (const ex of lesson.exercises) {
+        const single = ex.type === "syntax_builder" ? ex.word_bank : ex.type === "morpheme_tiles" ? ex.tile_options : undefined;
+        if (!single || (ex.type === "morpheme_tiles" && !ex.target_answer.includes(" "))) continue;
+        const pool = single.map(stripEnd);
+        const tokens = ex.target_answer.replace(/,/g, "").trim().split(/\s+/);
+        const left = [...pool];
+        const missing: string[] = [];
+        for (const tok of tokens) {
+          const i = left.indexOf(tok);
+          if (i < 0) missing.push(tok);
+          else left.splice(i, 1);
+        }
+        if (missing.length === 0) continue;
+        // word-assembly tiles: "das" + "Wass" + "er" -> "das Wasser"
+        const [first, ...rest] = tokens;
+        const fragmentsOk =
+          ex.type === "morpheme_tiles" &&
+          pool.includes(first) &&
+          segment(rest.join(""), pool.filter((_, i) => i !== pool.indexOf(first)));
+        if (!fragmentsOk) problems.push(`${ex.id}: no tile for ${JSON.stringify(missing)}`);
+      }
+    }
+    expect(problems).toEqual([]);
+  });
 });

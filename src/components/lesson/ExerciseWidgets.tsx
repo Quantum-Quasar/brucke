@@ -9,7 +9,7 @@ import { ErrorFeedbackSheet } from "./ErrorFeedbackSheet";
 import { SuccessFeedbackSheet } from "./SuccessFeedbackSheet";
 import { TranscribeExercise } from "./TranscribeExercise";
 import { LiteralGloss } from "./LiteralGloss";
-import { evaluateAnswerAccuracy } from "@/lib/letter-diff";
+import { evaluateAnswerAccuracy, evaluateBestOf } from "@/lib/letter-diff";
 import { diagnoseAttempt, affirmationFor } from "@/lib/shift-diagnosis";
 import { useAppStore } from "@/lib/store";
 import { soundEngine } from "@/lib/sound";
@@ -295,6 +295,8 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
   const handleVerify = () => {
     inputRef.current?.blur();
     let answerToCheck = userInput.trim();
+    // Other equally valid readings of the same tile selection (see below)
+    let alternateReadings: string[] = [];
 
     // 1. Morpheme tiles or Syntax builder
     const expected = exercise.target_answer.trim();
@@ -305,6 +307,11 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
       const joinedDirect = cleanTiles.join("").trim();
       const joinedSpace = selectedTiles.join(" ").trim();
       answerToCheck = expected.includes(" ") ? joinedSpace : joinedDirect;
+      if (expected.includes(" ") && cleanTiles.length > 2) {
+        // "das" + "Wass" + "er": a leading article/pronoun tile followed by word
+        // pieces that glue together into one word
+        alternateReadings = [`${cleanTiles[0]} ${cleanTiles.slice(1).join("")}`.trim()];
+      }
     } else if (exercise.type === "syntax_builder") {
       const options = sanitizedWordBank;
       const selectedTiles = selectedIndices.map((i) => options[i] || "");
@@ -325,7 +332,9 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
       umlautTolerance: Boolean(settings.lazyMode ?? tolerance.umlautTolerance),
       capitalizationTolerance: Boolean(settings.capitalizationTolerance ?? tolerance.capitalizationTolerance),
     };
-    const evaluation = evaluateAnswerAccuracy(answerToCheck, expected, evalOptions);
+    const graded = evaluateBestOf([answerToCheck, ...alternateReadings], expected, evalOptions);
+    const evaluation = graded.result;
+    answerToCheck = graded.answer;
 
     if (evaluation.accuracy === "exact") {
       setStatus("correct");
