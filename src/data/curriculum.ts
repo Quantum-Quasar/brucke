@@ -501,7 +501,7 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Der Kalender: Monate & Feiertage",
     blurb: "All twelve months as a phonetic set, plus Feiertag, Ostern and der Wochentag — the calendar is one of the easiest A1 wins in the language.",
     lessons: [
-      { ...shell(5141, "Kalender I: Januar bis Mai", "Januar, Februar, März, April, Mai — five -ar months that German kept as Latin names; the stress never moves to the second syllable, unlike English."), authored: true },
+      { ...shell(5141, "Kalender I: Januar bis Mai", "Januar, Februar, März, April, Mai — the first five month names, close enough to English that you already half-know them; then im Januar, im Mai tells you when."), authored: true },
       { ...shell(5142, "Kalender II: Juni bis Oktober", "Juni, Juli, August, September, Oktober — the second half of the year, with the -us/-er endings intact and September hiding your old -ber friend."), authored: true },
       { ...shell(5143, "Kalender III: November, Dezember, Feiertag, Ostern, Wochentag", "The year's last two months plus the word for a holiday (Feiertag) and the one German holiday English kept (Ostern/easter). Der Wochentag builds the whole week."), authored: true },
     ],
@@ -561,7 +561,7 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Die Wohnung: Räume & Möbel",
     blurb: "Where things live: Zimmer, Wohnung, Flur, Keller, Etage — then Teppich, Schrank, Spiegel, Vorhang, Balkon.",
     lessons: [
-      { ...shell(5201, "Wohnen I: das Zimmer, die Wohnung, der Flur, der Keller, die Etage", "The rooms of a flat, and the compound engine that builds the rest: Wohnzimmer, Schlafzimmer, Badezimmer, Esszimmer — one head noun, four prefixes. das Zimmer is English timber's shifted twin."), authored: true },
+      { ...shell(5201, "Wohnen I: das Zimmer, die Wohnung, der Flur, der Keller, die Etage", "The rooms of a flat, and the compound engine that builds the rest: Wohnzimmer, Schlafzimmer, Badezimmer, Esszimmer — one head noun, four different front halves. das Zimmer is English timber's shifted twin."), authored: true },
       { ...shell(5202, "Wohnen II: der Teppich, der Schrank, der Spiegel, der Vorhang, der Balkon", "Furniture and fittings, where die/das flips without warning: der Teppich but das Sofa. The Vorhang (curtain) is a literal 'hang-before' — an inseparable prefix wearing a noun."), authored: true },
     ],
   },
@@ -571,15 +571,15 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Tisch & Küche",
     blurb: "Telling: Gabel, Messer, Flasche, Becher, Kanne — then the kitchen's machines: Herd, Ofen, Seife, Kamm, Klingel.",
     lessons: [
-      { ...shell(5211, "Am Tisch: die Gabel, das Messer, die Flasche, der Becher, die Kanne", "Table words with old stories: das Messer is the ancient meat-blade (*matisahsą), and die Flasche, der Becher and die Kanne are Latin words English borrowed too — flask, beaker, can."), authored: true },
-      { ...shell(5212, "In der Küche: der Herd, der Ofen, die Seife, der Kamm, die Klingel", "The kitchen's real estate — der Herd is hearth's cousin, die Seife and soap are twins with Rome holding a loan-copy, and der Ofen is the false twin: German's Latin furnus next to English's native oven."), authored: true },
+      { ...shell(5211, "Am Tisch: die Gabel, das Messer, die Flasche, der Becher, die Kanne", "Table words with old stories: das Messer is the ancient meat-blade (*matisahsą), and die Flasche, der Becher and die Kanne have English cousins too — flask, beaker, can."), authored: true },
+      { ...shell(5212, "In der Küche: der Herd, der Ofen, die Seife, der Kamm, die Klingel", "The kitchen's real estate — der Herd is hearth's cousin, die Seife and soap are twins with Rome holding a loan-copy, and der Ofen is oven's own twin — an f where English wears a v."), authored: true },
     ],
   },
   {
     id: 5220,
     attach: 6,
     title: "Essen I: Fisch, Fleisch, Käse, Suppe, Gemüse",
-    blurb: "The German table's backbone — and four words English borrowed and wrote down as German.",
+    blurb: "The German table's backbone: fish, meat, cheese, soup and vegetables.",
     lessons: [
       { ...shell(5221, "Essen I: der Fisch, das Fleisch, der Käse, die Suppe, das Gemüse", "The table's backbone sorted by kinship: Fisch and Fleisch are pure twins (Fleisch is the flesh English narrowed), Käse and Suppe are shared Latin loans, and das Gemüse grew inside German alone."), authored: true },
       { ...shell(5222, "Essen II: das Obst, die Kartoffel, die Tomate, die Gurke, die Zwiebel", "Fruit and vegetables with their passports: Kartoffel is the Italian truffle's name (tartufo), Tomate came from Nahuatl through Spanish, Gurke from Polish ogórek, and Zwiebel is Latin cepula — English chive's grandmother."), authored: true },
@@ -631,7 +631,7 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Länder II & Sprachen",
     blurb: "Schweiz, Österreich, Türkei, Polen, Irland — plus Sprache and the four language adjectives.",
     lessons: [
-      { ...shell(5271, "Länder II: die Schweiz, Österreich, die Türkei, Polen, Irland", "The second row of country names, with their -ei and -land endings intact, and the two that hide an umlaut: die Türkei, Irland."), authored: true },
+      { ...shell(5271, "Länder II: die Schweiz, Österreich, die Türkei, Polen, Irland", "The second row of country names, with their -ei and -land endings intact, and the two that carry an umlaut: die Türkei and Österreich."), authored: true },
       { ...shell(5272, "Sprachen: die Sprache, französisch, englisch, spanisch, italienisch", "Language names as adjectives — ich spreche Französisch — built on Sprache, whose K→CH shift is the same law as Milch and Bücher."), authored: true },
     ],
   },
@@ -641,7 +641,7 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Berufe I & II",
     blurb: "What people do for work: Arzt, Bäcker, Verkäufer, Polizist, Schüler — then Student, Fahrer, Sänger, Bauer, Arbeiter.",
     lessons: [
-      { ...shell(5281, "Berufe I: der Arzt, der Bäcker, der Verkäufer, der Polizist, der Schüler", "The five jobs a first conversation needs. Four are agent-nouns off a verb (verkaufen, polizeilich, Schüler from Schule); der Arzt comes to us by coinage, and English borrowed it as surgeon."), authored: true },
+      { ...shell(5281, "Berufe I: der Arzt, der Bäcker, der Verkäufer, der Polizist, der Schüler", "The five jobs a first conversation needs. Four are built from a word you can see inside them (verkaufen, backen, Polizei, Schule); der Arzt is the odd one out."), authored: true },
       { ...shell(5282, "Berufe II: der Student, der Fahrer, der Sänger, der Bauer, der Arbeiter", "The -er job suffix does the same work English's -er does, but German also feminises and lengthens: die Sängerin, die Arbeiterin. Der Bauer is the farmer, not the builder."), authored: true },
     ],
   },
@@ -661,7 +661,7 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     title: "Hobbys II & Menschen",
     blurb: "Party, Gitarre, reiten, Schach, Freizeit — then wir, Schule, Gast, Gruppe, Held.",
     lessons: [
-      { ...shell(5301, "Hobbys II: die Party, die Gitarre, reiten, das Schach, die Freizeit", "The past-time set, and die Freizeit — free-time — the compound engine turning Freizeit into Freizeitpool, Freizeitstress and, for parents, the weekend's end."), authored: true },
+      { ...shell(5301, "Hobbys II: die Party, die Gitarre, reiten, das Schach, die Freizeit", "The past-time set, and die Freizeit — free-time — the compound engine turning Freizeit into Freizeitpark and Freizeitstress."), authored: true },
       { ...shell(5302, "Menschen: wir, die Schule, der Gast, die Gruppe, der Held", "The pronouns and the people around you: wir is the only new pronoun A1 adds, der Gast is guest with Latin hostis as its PIE cousin, and der Held is the Old English hæleþ — the warrior word English let go."), authored: true },
     ],
   },
@@ -672,7 +672,7 @@ export const TRAIL_BRANCHES: TrailBranch[] = [
     blurb: "The emotional set — Liebe, nett, wütend, stolz, Freude — and five high-value adjectives: richtig, falsch, sauber, leer, offen.",
     lessons: [
       { ...shell(5311, "Gefühle: die Liebe, nett, wütend, stolz, die Freude", "The feeling nouns, where the -ung suffix does the same job English's -ness does (Freude/joy, Liebe/love), and wütend/stolz show the dative-free adjective turning back into a noun: der Zorn, der Stolz."), authored: true },
-      { ...shell(5312, "Adjektive: richtig, falsch, sauber, leer, offen", "Five adjectives English kept almost intact — richtig/right, falsch/false, offen/open — with sauber (clean) and leer (empty, with a silent colleague: leer's near-empty leer) around them."), authored: true },
+      { ...shell(5312, "Adjektive: richtig, falsch, sauber, leer, offen", "Five adjectives, three of them near-twins of English — richtig/right, falsch/false, offen/open — plus sauber (clean) and leer (empty)."), authored: true },
     ],
   },
 ];

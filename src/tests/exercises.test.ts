@@ -314,4 +314,15 @@ describe("Progressive Bite-Sized Exercise Architecture", () => {
     }
     expect(problems).toEqual([]);
   });
+  it("keeps matching exercises playable: at most 12 pairs (the corpus median is 6)", () => {
+    const tooBig: string[] = [];
+    for (const lesson of LESSONS) {
+      for (const ex of lesson.exercises) {
+        if (ex.type === "matching_pairs" && (ex.matching_pairs?.length ?? 0) > 12) {
+          tooBig.push(`${ex.id}: ${ex.matching_pairs!.length} pairs`);
+        }
+      }
+    }
+    expect(tooBig).toEqual([]);
+  });
 });

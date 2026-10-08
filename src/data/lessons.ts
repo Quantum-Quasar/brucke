@@ -1868,23 +1868,23 @@ export const LESSONS: Lesson[] = [
         id: "l301_e5",
         type: "transcribe",
         prompt: "Tell me:",
-        idea: "the market shopping is done and the evening calls: you want to watch TV",
+        idea: "you're at the market stall asking for a quantity: a pound of pepper, please",
         cues: [
-          "Want → ich will (desire, never the future)",
-          "The bare infinitive closes the bracket: fernsehen goes last",
-          "fern + sehen — 'far-see', the exact logic inside English television",
+          "English p explodes to Pf- at the front door: pound → Pfund, pepper → Pfeffer",
+          "German drops the 'of' in measure phrases: ein Pfund Pfeffer",
+          "Seal it with 'please': bitte — the cognate of English 'bid'",
         ],
-        target_answer: "Ich will fernsehen",
-        meaning: "I want to watch TV",
+        target_answer: "Ein Pfund Pfeffer bitte",
+        meaning: "A pound of pepper please",
         vocab_hints: [
           {
-            word: "fernsehen",
-            translation: "to watch TV",
-            note: "fern = far (as in English 'far'), sehen = see — television is literally 'far-seeing' too",
+            word: "bitte",
+            translation: "please",
+            note: "cognate with English 'bid' — literally '[I] bid/request it'",
           },
         ],
-        word_bank: ["Ich", "will", "fernsehen", "Pfirsich", "wollen"],
-        explanation: "The modal bracket from topic 2, now carrying your PF- shopping home: will opens, fernsehen closes — far-seeing, like the television English named from Greek.",
+        word_bank: ["Ein", "Pfund", "Pfeffer", "bitte", "Pfanne", "und"],
+        explanation: "Measure phrase without 'of', PF- receipts on both nouns, and bitte to close — you just ordered at a German market.",
       },
     ],
     summary: {
@@ -2090,23 +2090,23 @@ export const LESSONS: Lesson[] = [
         id: "l401_e5",
         type: "transcribe",
         prompt: "You want to say:",
-        idea: "you're at a friend's closet admiring her new dress: I like the dress",
+        idea: "someone just helped you, and you want to thank them personally: I thank thee",
         cues: [
-          "Like → ich mag — mögen, the modal that English bent into 'may'",
-          "The dress → das Kleid (neuter — the old word behind English 'cloth')",
-          "Mag holds position 2; the thing you like rides behind it",
+          "Who thanks? → ich danke (thank with TH → D)",
+          "German thanks TO a person: danke + dir",
+          "dir is the 'to thee' form of du — the thanks travel TO someone",
         ],
-        target_answer: "Ich mag das Kleid",
-        meaning: "I like the dress",
+        target_answer: "Ich danke dir",
+        meaning: "I thank thee / I thank you",
         vocab_hints: [
           {
-            word: "das",
-            translation: "the (neuter)",
-            note: "das Kleid — English 'cloth' is the same word with its th intact; German hardened it to d",
+            word: "dir",
+            translation: "to thee (you, informal)",
+            note: "danke gives the gift TO someone — dir is the 'to thee' form of du (as in 'I give it thee')",
           },
         ],
-        word_bank: ["Ich", "mag", "das", "Kleid", "Magst", "Mund"],
-        explanation: "ich mag das Kleid — desire again, cloth with a hardened th. Compliment delivered.",
+        word_bank: ["Ich", "danke", "dir", "dich", "dank"],
+        explanation: "ich danke dir — German thanks TO a person, the same dative logic as archaic English 'I give it thee'.",
       },
     ],
     summary: {
@@ -2310,7 +2310,7 @@ export const LESSONS: Lesson[] = [
           },
         ],
         word_bank: ["Zwei", "Zungen", "und", "ein", "Mund", "Monat", "Zunge"],
-        explanation: "Zunge pluralizes to Zungen, und joins the two — and German measure nouns stay singular after numbers: zwei Glas Wasser, no plural -s on Glas.",
+        explanation: "Zunge pluralizes to Zungen, und joins the two — and ein Mund keeps its singular article.",
       },
     ],
     summary: {
@@ -14709,7 +14709,7 @@ export const LESSONS: Lesson[] = [
     pattern: {
       title: "Where the Rooms Stand",
       content:
-        "Position words do the navigating. 1. With sein: Der Keller ist dort unten (the basement is down there), Das Zimmer ist oben (the room is up top). 2. gegenüber after the noun: Das Haus gegenüber ist alt (the house opposite is old) — no preposition, the word leans back on its noun. 3. die Nähe with in: Der Markt ist in der Nähe (the market is nearby), Das Sofa ist in der Nähe vom Fenster (the sofa is near the window) — and the opposite is weit: der Weg ist weit (the way is far). 4. The compound engine: das Wohnzimmer, das Schlafzimmer, das Badezimmer, das Esszimmer — one head noun, four prefixes.",
+        "Position words do the navigating. 1. With sein: Der Keller ist dort unten (the basement is down there), Das Zimmer ist oben (the room is up top). 2. gegenüber after the noun: Das Haus gegenüber ist alt (the house opposite is old) — no preposition, the word leans back on its noun. 3. die Nähe with in: Der Markt ist in der Nähe (the market is nearby), Das Sofa ist in der Nähe vom Fenster (the sofa is near the window) — and the opposite is weit: der Weg ist weit (the way is far). 4. The compound engine: das Wohnzimmer, das Schlafzimmer, das Badezimmer, das Esszimmer — one head noun, four different front halves.",
       footnotes: [],
       linguist_note:
         "*timrą meant 'material for building', and its verb *timrjan 'to build' survives in English 'to timber' — to brace something with beams. English kept the engineer's word; German narrowed the noun to the finished product: the room.",
@@ -15003,7 +15003,7 @@ export const LESSONS: Lesson[] = [
       takeaway:
         "Messer is *matisahsą, the meat-saw (meat + the T→Z shift), Flasche and flask are one boomerang word, Becher and beaker share bicarium, Kanne and can probably share canna — and die Gabel stands alone, honestly.",
       curiosity_teaser:
-        "Next: the kitchen's real estate — der Herd, der Ofen, die Seife, der Kamm, die Klingel — and why der Ofen is not oven's twin, whatever it looks like.",
+        "Next: the kitchen's real estate — der Herd, der Ofen, die Seife, der Kamm, die Klingel — and a word that really is oven's twin, with an f where English wears a v.",
     },
   },
 
@@ -16790,19 +16790,39 @@ export const LESSONS: Lesson[] = [
         type: "matching_pairs",
         prompt: "Talking about languages — match each sentence with its reading:",
         matching_pairs: [
-          { id: "sp1", english: "I speak English and German", german: "Ich spreche Englisch und Deutsch" },
+          {
+            id: "sp1",
+            english: "I speak English and German",
+            german: "Ich spreche Englisch und Deutsch",
+          },
           { id: "sp2", english: "Do you speak Spanish?", german: "Sprechen Sie Spanisch" },
-          { id: "sp3", english: "The French language is beautiful", german: "Die französische Sprache ist schön" },
+          {
+            id: "sp3",
+            english: "The French language is beautiful",
+            german: "Die französische Sprache ist schön",
+          },
           { id: "sp4", english: "We often eat Italian", german: "Wir essen oft italienisch" },
           { id: "sp5", english: "We speak three languages", german: "Wir sprechen drei Sprachen" },
-          { id: "sp6", english: "Switzerland has four languages", german: "Die Schweiz hat vier Sprachen" },
-          { id: "sp7", english: "In Austria one speaks German", german: "In Österreich spricht man Deutsch" },
-          { id: "sp8", english: "The language of Turkey", german: "Die Sprache der Türkei" },
-          { id: "sp9", english: "The language of Poland", german: "Die Sprache von Polen" },
-          { id: "sp10", english: "In Ireland one speaks English", german: "In Irland spricht man Englisch" },
+          {
+            id: "sp6",
+            english: "Switzerland has four languages",
+            german: "Die Schweiz hat vier Sprachen",
+          },
+          {
+            id: "sp7",
+            english: "In Austria one speaks German",
+            german: "In Österreich spricht man Deutsch",
+          },
+          { id: "sp8", english: "The language in Turkey", german: "Die Sprache in der Türkei" },
+          { id: "sp9", english: "The language in Poland", german: "Die Sprache in Polen" },
+          {
+            id: "sp10",
+            english: "In Ireland one speaks English",
+            german: "In Irland spricht man Englisch",
+          },
         ],
         target_answer:
-          "Ich spreche Englisch und Deutsch, Sprechen Sie Spanisch, Die französische Sprache ist schön, Wir essen oft italienisch, Wir sprechen drei Sprachen, Die Schweiz hat vier Sprachen, In Österreich spricht man Deutsch, Die Sprache der Türkei, Die Sprache von Polen, In Irland spricht man Englisch",
+          "Ich spreche Englisch und Deutsch, Sprechen Sie Spanisch, Die französische Sprache ist schön, Wir essen oft italienisch, Wir sprechen drei Sprachen, Die Schweiz hat vier Sprachen, In Österreich spricht man Deutsch, Die Sprache in der Türkei, Die Sprache in Polen, In Irland spricht man Englisch",
         meaning: "speak, ask about languages, the language noun, eat Italian-style, count languages",
         explanation:
           "Every country name from the last two lessons reappears wearing -isch. The capitalized forms (Englisch, Spanisch) are nouns — the language itself; the lowercase französische and italienisch are adjectives doing describing work.",
