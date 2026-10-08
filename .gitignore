@@ -37,3 +37,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 # playwright browser smoke artifacts
 test-results
 playwright-report
+
+# internal review artifacts (local only — never commit or push)
+auditreview.md
