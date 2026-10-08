@@ -28,6 +28,7 @@ const FUNCTION_WORDS = new Set(
     "gibt", "und", "oder", "aber", "weil", "dass", "wenn", "als", "wie",
     "nicht", "ja", "nein", "bitte", "danke", "sehr", "gut", "hier",
     "in", "an", "auf", "aus", "bei", "mit", "nach", "von", "zu", "zum", "zur", "vor",
+    "im", "am", "ins", "vom", "beim",
     "durch", "über", "unter", "ohne", "für",
     "morgen", "heute", "gestern", "früh", "drei", "zwei", "zwölf", "eins",
     "was", "wo", "wer", "wann", "warum", "wohin",
@@ -79,7 +80,7 @@ function resolves(token: string): boolean {
   const raw = token.toLowerCase().replace(/[.,!?;:]+$/, "");
   if (!raw) return true;
   if (FUNCTION_WORDS.has(raw)) return true;
-  if (RESOLVED_FORMS[raw]) return resolveLemma(RESOLVED_FORMS[raw]);
+  if (Object.hasOwn(RESOLVED_FORMS, raw)) return resolveLemma(RESOLVED_FORMS[raw]);
   if (compendiumIds.has(raw) || compendiumTargets.has(raw)) return true;
   if (hintedWords.has(raw)) return true;
   // past participles: ge- + stem + t/en (gelernt, gegessen, gekommen)

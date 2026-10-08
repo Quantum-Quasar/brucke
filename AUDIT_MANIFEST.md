@@ -203,7 +203,7 @@ All commands should be executed from `/home/shaurya/gemini-tmp/german-app-2`:
 # 1. Run Data Compilation Pipeline
 bun run parse-data
 
-# 2. Run All Automated Test Suites (28 test files / 230 tests)
+# 2. Run All Automated Test Suites (28 test files / 234 tests)
 bun run test
 
 # 3. Compile Production Build (Turbopack + SSG verification)
@@ -230,5 +230,5 @@ When auditing the codebase, verify:
   - State changes in Zustand persist to `localStorage`.
   - Cookie backup stays within safe browser limits (lean payload ≤ 2048 URL-encoded bytes).
 - [ ] **Build & Tests**:
-  - `bun run test` (Vitest) passes with 0 failures across all 28 test files (230 tests).
+  - `bun run test` (Vitest) passes with 0 failures across all 28 test files (234 tests).
   - `bun run build` generates all static pages (6 static routes + 9 atlas families + 128 lesson pages) without TypeScript or Turbopack errors.

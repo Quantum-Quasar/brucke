@@ -108,6 +108,18 @@ for (const topic of TOPICS) {
   }
 }
 
+// Fail loudly if curriculum data would silently vanish from the guide: every
+// gate and branch must attach to a topic that exists in the walk above.
+const topicIds = new Set(TOPICS.map((t) => t.id));
+const orphanGates = TRAIL_GATES.filter((g) => !topicIds.has(g.afterTopic));
+const orphanBranches = TRAIL_BRANCHES.filter((b) => !topicIds.has(b.attach));
+if (orphanGates.length > 0 || orphanBranches.length > 0) {
+  throw new Error(
+    `TRAIL.md export would drop data: gates ${orphanGates.map((g) => g.title).join(", ") || "none"}; ` +
+      `branches ${orphanBranches.map((b) => b.title).join(", ") || "none"} do not attach to an existing topic`,
+  );
+}
+
 line("*End of the trail — willkommen auf der anderen Seite der Brücke.* 🌉");
 line();
 

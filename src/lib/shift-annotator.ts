@@ -47,7 +47,7 @@ function sliceSegments(word: string, idx: number, len: number): TextSegment[] {
 }
 
 export function alignShiftPair(english: string, german: string, fallbackRule?: string): AnnotatedShiftPair {
-  const cacheKey = `${english}|${german}|${fallbackRule || ""}`;
+  const cacheKey = JSON.stringify([english, german, fallbackRule ?? ""]);
   const cached = alignCache.get(cacheKey);
   if (cached) return cached;
 

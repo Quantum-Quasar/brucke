@@ -16,9 +16,13 @@ for (const t of TOPICS) {
 }
 const byId = new Map(LESSONS.map((l) => [l.id, l]));
 
-const STOP = new Set(["the", "a", "an", "and", "of", "in", "to", "next", "with", "for", "your", "its", "into", "from", "prove", "prove", "where", "what", "when", "both", "english", "german", "germans", "lesson", "lessons"]);
+const STOP: Record<string, true> = {
+  the: true, a: true, an: true, and: true, of: true, in: true, to: true, next: true, with: true, for: true,
+  your: true, its: true, into: true, from: true, prove: true, where: true, what: true, when: true, both: true,
+  english: true, german: true, germans: true, lesson: true, lessons: true,
+};
 const tokens = (s: string) =>
-  s.toLowerCase().replace(/[^\p{L}\p{N} ]/gu, " ").split(/\s+/).filter((w) => w.length >= 5 && !STOP.has(w));
+  s.toLowerCase().replace(/[^\p{L}\p{N} ]/gu, " ").split(/\s+/).filter((w) => w.length >= 5 && !STOP[w]);
 
 console.log(`authored lessons: ${LESSONS.length} / ${order.length} trail nodes\n`);
 
@@ -56,11 +60,11 @@ for (let i = 0; i < order.length; i++) {
   const hits = tokens(probe).filter((w) => teaser.includes(w));
   const nextAuthored = byId.get(next.id);
   const mark = nextAuthored === undefined ? "?" : hits.length > 0 ? "✓" : "⚠";
-  if (mark === "⚠") flagged++;
+  if (mark !== "✓") flagged++;
   console.log(
     `${mark} [${node.id}] ${node.title}` +
       `\n     teaser → ${teaser.slice(0, 100)}` +
-      `\n     next   → [${next.id}] ${next.title}${nextAuthored ? "" : " (hollow)"}`
+      `\n     next   → [${next.id}] ${next.title}${nextAuthored ? "" : " (hollow)"}${probeNote}`
   );
 }
 
