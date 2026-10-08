@@ -1055,12 +1055,12 @@ export const LESSONS: Lesson[] = [
         matching_pairs: [
           { id: "cj1", english: "thou standest", german: "du stehst" },
           { id: "cj2", english: "he shows", german: "er zeigt" },
-          { id: "cj3", english: "thou kissest", german: "du küssst" },
+          { id: "cj3", english: "thou kissest", german: "du küsst" },
           { id: "cj4", english: "we kiss", german: "wir küssen" },
           { id: "cj5", english: "we stand", german: "wir stehen" },
           { id: "cj6", english: "thou makest", german: "du machst" },
         ],
-        target_answer: "du stehst, er zeigt, du küssst, wir küssen, wir stehen, du machst",
+        target_answer: "du stehst, er zeigt, du küsst, wir küssen, wir stehen, du machst",
         meaning: "you stand, he shows, you kiss, we kiss, we stand, you make",
         explanation: "The person lives in the ending: du takes the Shakespearean -st, er the archaic -t, wir the full dictionary -en — stehen, zeigen and küssen just wear them.",
       },
@@ -1748,22 +1748,16 @@ export const LESSONS: Lesson[] = [
         id: "l202_e5",
         type: "transcribe",
         prompt: "Tell me:",
-        idea: "you're eyeing the cake at the bakery, but the price stops you: the cake is too expensive",
+        idea: "you're eyeing the cake at the bakery and guessing about the price: it can be expensive",
         cues: [
           "The thing → der Kuchen (der is the masculine flag)",
-          "zu = too; the verb ist holds position 2",
+          "The modal kann holds position 2",
+          "The bare infinitive closes the bracket: sein goes last",
         ],
-        target_answer: "Der Kuchen ist zu teuer",
-        meaning: "The cake is too expensive",
-        vocab_hints: [
-          {
-            word: "zu",
-            translation: "too (as in too expensive)",
-            note: "same little word as the 'to' in 'to the station' — German keeps both jobs apart: zu = too, nach = to (places)",
-          },
-        ],
-        word_bank: ["Der", "Kuchen", "ist", "zu", "teuer", "sind"],
-        explanation: "ist holds position 2, zu scales teuer — and teuer is 'dear' with its d hardened to t.",
+        target_answer: "Der Kuchen kann teuer sein",
+        meaning: "The cake can be expensive",
+        word_bank: ["Der", "Kuchen", "kann", "teuer", "sein", "ist", "kannst"],
+        explanation: "kann holds position 2, the bare infinitive sein closes the bracket — and teuer is 'dear' with its d hardened to t.",
       },
     ],
     summary: {
@@ -8709,7 +8703,7 @@ export const LESSONS: Lesson[] = [
         english_hint: "the dative of er",
         target_answer: "ihm",
         meaning: "Ihm ist kalt = He is cold (to-him it is cold)",
-        explanation: "Ihm — the dative of er, the twin of English 'give it him'. Feelings transfer person to person with one word. Der Mensch is the experiencer, die Leute the crowd, der Himmel the ceiling — the whole dative cast.",
+        explanation: "Ihm — the dative of er, the twin of English 'give it him'. Feelings transfer person to person with one word. Der Mensch is the experiencer, die Leute the crowd, der Himmel the sky — the whole dative cast.",
       },
       {
         id: "l2903_e5",
@@ -13231,7 +13225,7 @@ export const LESSONS: Lesson[] = [
     pattern: {
       title: "Where the Frequency Word Lands",
       content:
-        "Default slot: right after the verb, before the object. Ich trinke immer Kaffee (I always drink coffee). Freestyle fronting for emphasis: Immer trinke ich Kaffee — the adverb takes position 1 and pushes the conjugated verb to position 2, the same swap you do with heute and morgen. With negation: Ich tringe nicht oft Kaffee; nie is the absolute ('never') and sits exactly where nicht would. And the one-off: einmal means 'once', and its opposite einmalig is not needed — Einmal im Jahr fahre ich ans Meer does the job with an ordinary time phrase.",
+        "Default slot: right after the verb, before the object. Ich trinke immer Kaffee (I always drink coffee). Freestyle fronting for emphasis: Immer trinke ich Kaffee — the adverb takes position 1 and pushes the conjugated verb to position 2, the same swap you do with heute and morgen. With negation: Ich trinke nicht oft Kaffee; nie is the absolute ('never') and sits exactly where nicht would. And the one-off: einmal means 'once', and its opposite einmalig is not needed — Einmal im Jahr fahre ich ans Meer does the job with an ordinary time phrase.",
       footnotes: [],
       linguist_note:
         "German's frequency adverbs are uninflected single words, which is why they never drift away from the verb. English bolted them on with -ly and let them wander to the front of the sentence; German's wandered and settled back into the same slot every time.",
@@ -13303,7 +13297,7 @@ export const LESSONS: Lesson[] = [
     ],
     summary: {
       outcome: "Answer 'how often?' with one word, and slot it after the verb without a helper.",
-      use_example: { german: "Manchmal trinke ich immer Kaffee.", english: "Sometimes I always drink coffee." },
+      use_example: { german: "Manchmal trinke ich Kaffee.", english: "Sometimes I drink coffee." },
       takeaway:
         "immer, oft, manchmal, selten, einmal — five helperless adverbs, and selten is English seldom's D→T twin.",
       curiosity_teaser: "Next: point-in-time adverbs — jetzt, sofort, später, früh, endlich.",
@@ -14103,10 +14097,10 @@ export const LESSONS: Lesson[] = [
           { id: "rw4", english: "The bridge is in the south", german: "Die Brücke ist im Süden" },
           { id: "rw5", english: "There are four streets in the north", german: "Es gibt vier Straßen im Norden" },
           { id: "rw6", english: "The church is in the west", german: "Die Kirche ist im Westen" },
-          { id: "rw7", english: "Go straight ahead to the right", german: "Gehen Sie geradeaus nach rechts" },
+          { id: "rw7", english: "Go straight ahead, not to the right", german: "Gehen Sie geradeaus, nicht nach rechts" },
         ],
         target_answer:
-          "Der Garten ist hinten links, Das Auto kommt von hinten, Der Zug kommt aus dem Osten, Die Brücke ist im Süden, Es gibt vier Straßen im Norden, Die Kirche ist im Westen, Gehen Sie geradeaus nach rechts",
+          "Der Garten ist hinten links, Das Auto kommt von hinten, Der Zug kommt aus dem Osten, Die Brücke ist im Süden, Es gibt vier Straßen im Norden, Die Kirche ist im Westen, Gehen Sie geradeaus, nicht nach rechts",
         meaning: "behind, east, south, north, west",
         explanation:
           "hinten needs no article; the compass points take im or aus dem. The frame is always the same: place phrase, verb, rest — Der Zug kommt aus dem Osten.",
@@ -15203,7 +15197,7 @@ export const LESSONS: Lesson[] = [
         id: "l5221_e2",
         type: "shift_select",
         prompt:
-          "Which of these five words did English never take — no twin, no loan, the one that grew inside German alone?",
+          "Which of these four words did English never take — no twin, no loan, the one that grew inside German alone?",
         options: ["der Käse", "die Suppe", "der Fisch", "das Gemüse"],
         target_answer: "das Gemüse",
         meaning: "das Gemüse = the one English never got",
@@ -15309,7 +15303,7 @@ export const LESSONS: Lesson[] = [
       {
         id: "l5222_e2",
         type: "shift_select",
-        prompt: "Which of these five wears a Polish name?",
+        prompt: "Which of these four wears a Polish name?",
         options: ["die Gurke", "die Tomate", "die Kartoffel", "das Obst"],
         target_answer: "die Gurke",
         meaning: "die Gurke ← Polish ogórek",
@@ -15653,7 +15647,7 @@ export const LESSONS: Lesson[] = [
           marker: "1",
           title: "The Flag Reads Itself",
           content:
-            "Die deutsche Fahne ist schwarz, rot und gold — the German flag is black, red and gold. Two of the flag's three colors are in this lesson, and das Gold has been yours since lesson 101. The sentence needs no new words at all — which is exactly what a first-row color lesson is for.",
+            "Die deutsche Fahne ist schwarz, rot und gold — the German flag is black, red and gold. Two of the flag's three colors are in this lesson, and das Gold has been yours since lesson 101. The sentence needs only one new word, die Fahne (the flag) — the colors do the rest, which is exactly what a first-row color lesson is for.",
         },
       ],
     },
@@ -15788,10 +15782,10 @@ export const LESSONS: Lesson[] = [
           { id: "fc4", english: "The cap is purple", german: "Die Mütze ist lila" },
           { id: "fc5", english: "The flower is red", german: "Die Blume ist rot" },
           { id: "fc6", english: "The color of the cap", german: "Die Farbe der Mütze" },
-          { id: "fc7", english: "Black and white are colors too", german: "Schwarz und weiß sind Farben" },
+          { id: "fc7", english: "Black and white are colors too", german: "Schwarz und Weiß sind Farben" },
         ],
         target_answer:
-          "Mein Auto ist grau, Die Katze ist braun, Die Blume ist rosa, Die Mütze ist lila, Die Blume ist rot, Die Farbe der Mütze, Schwarz und weiß sind Farben",
+          "Mein Auto ist grau, Die Katze ist braun, Die Blume ist rosa, Die Mütze ist lila, Die Blume ist rot, Die Farbe der Mütze, Schwarz und Weiß sind Farben",
         meaning: "gray, brown, pink, purple, red, the color",
         explanation:
           "The same Blume wears rot from Farben I and rosa from Farben II — old row and new row in one sentence. And die Farbe is the head noun: the color OF the cap, genitive der.",
@@ -17847,7 +17841,7 @@ export const LESSONS: Lesson[] = [
           { id: "ad8", english: "The comb is new", german: "Der Kamm ist neu" },
           { id: "ad9", english: "The doorbell is really loud", german: "Die Klingel ist richtig laut" },
           { id: "ad10", english: "Sugar in tea? Wrong!", german: "Zucker im Tee? Falsch!" },
-          { id: "ad11", english: "Black and white are colors", german: "Schwarz und weiß sind Farben" },
+          { id: "ad11", english: "Black and white are colors", german: "Schwarz und Weiß sind Farben" },
           { id: "ad12", english: "The color of the cap is purple", german: "Die Farbe der Mütze ist lila" },
           { id: "ad13", english: "The guest leaves, the house is empty", german: "Der Gast geht, das Haus ist leer" },
           { id: "ad14", english: "The group counts correctly", german: "Die Gruppe zählt richtig" },
@@ -17857,7 +17851,7 @@ export const LESSONS: Lesson[] = [
           { id: "ad18", english: "Clean like at the hairdresser's", german: "Sauber wie beim Friseur" },
         ],
         target_answer:
-          "Der Flur ist sauber, Der Spiegel und der Teppich sind sauber, Der Schrank ist offen, Der Vorhang ist grün, Die Tür zum Balkon ist offen, Nach dem Frühstück ist der Herd sauber, Seife macht sauber, Der Kamm ist neu, Die Klingel ist richtig laut, Zucker im Tee? Falsch!, Schwarz und weiß sind Farben, Die Farbe der Mütze ist lila, Der Gast geht, das Haus ist leer, Die Gruppe zählt richtig, Der Held ist nie falsch, Der Arbeiter hat recht, Wir sind richtig, die Schule ist leer, Sauber wie beim Friseur",
+          "Der Flur ist sauber, Der Spiegel und der Teppich sind sauber, Der Schrank ist offen, Der Vorhang ist grün, Die Tür zum Balkon ist offen, Nach dem Frühstück ist der Herd sauber, Seife macht sauber, Der Kamm ist neu, Die Klingel ist richtig laut, Zucker im Tee? Falsch!, Schwarz und Weiß sind Farben, Die Farbe der Mütze ist lila, Der Gast geht, das Haus ist leer, Die Gruppe zählt richtig, Der Held ist nie falsch, Der Arbeiter hat recht, Wir sind richtig, die Schule ist leer, Sauber wie beim Friseur",
         meaning: "clean, empty, open, right, wrong — the house, judged",
         explanation:
           "Sixteen sentences, five adjectives, the whole house. sauber does the chores — der Flur, der Spiegel, der Herd — while leer and offen move through the rooms. And the campaign's people get judged one last time: die Gruppe zählt richtig, der Arbeiter hat recht, der Held ist nie falsch.",
