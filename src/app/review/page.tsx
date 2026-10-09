@@ -2,7 +2,7 @@
 
 // ponytail: cohesive multi-modal review hub with 4 decks, selectable review styles, and unified SM-2 grading
 
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import {
   RotateCcw,
   Flame,
@@ -13,6 +13,7 @@ import {
   Check,
   X,
   RefreshCw,
+  Globe,
   HelpCircle,
   Volume2,
   AlertCircle,
@@ -24,6 +25,7 @@ import { GenderGuideBanner } from "@/components/common/GenderGuideBanner";
 import { useAppStore } from "@/lib/store";
 import { getDueCards, getWeakestCards, localDateKey, type ReviewGrade } from "@/lib/srs";
 import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
+import { getAtlasFamilies } from "@/lib/atlas-families";
 import { playTargetAudio } from "@/lib/audio";
 import { computeLetterDiff, evaluateAnswerAccuracy } from "@/lib/letter-diff";
 import { soundEngine } from "@/lib/sound";
@@ -33,7 +35,10 @@ import { getWordEntityMap } from "@/lib/word-entities";
 import type { ReviewMode, SRSCard, WordEntity } from "@/lib/types";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
 
-type DeckType = "due" | "shift" | "weakest" | "recent" | "compounds" | "domain";
+type DeckType = "due" | "shift" | "weakest" | "recent" | "compounds" | "domain" | "everything";
+
+/** Sentinel select value meaning "every family" / "every domain". */
+const ALL_ID = "all";
 
 interface PendingDeckStart {
   deck: DeckType;
@@ -119,6 +124,25 @@ export default function ReviewPage() {
   const dueCards = getDueCards(srsCards);
   const weakestCards = getWeakestCards(srsCards);
 
+  /** Fresh un-seen SM-2 card, so a word with no history is still reviewable. */
+  const blankCard = useCallback(
+    (wordId: string): SRSCard =>
+      srsCards[wordId] || {
+        word_id: wordId,
+        interval: 1,
+        repetitions: 0,
+        ease_factor: 2.5,
+        due_date: localDateKey(),
+        lapses: 0,
+        last_reviewed: null,
+      },
+    [srsCards]
+  );
+
+  // Atlas families include the nine authored shifts plus the unshifted layer,
+  // so "all families" genuinely spans the whole dictionary.
+  const atlasFamilies = useMemo(() => getAtlasFamilies(data), [data]);
+
   // Sync preferred review mode from store when hydrated
   useEffect(() => {
     if (preferredReviewMode) {
@@ -200,6 +224,27 @@ export default function ReviewPage() {
     }
   }, [domainGroups, selectedDomainId]);
 
+  // "Review everything": the entire dictionary, every thematic domain, plus the
+  // compound calques and false-friend traps — the longest possible session.
+  const everythingCards: SRSCard[] = useMemo(
+    () => [...data.wordList.map((w) => blankCard(w.id)), ...compoundCards],
+    [blankCard, data, compoundCards]
+  );
+
+  /** Every word covered by the atlas, de-duplicated across overlapping families. */
+  const allFamilyWordIds = useMemo(
+    () => Array.from(new Set(atlasFamilies.flatMap((f) => f.word_ids))),
+    [atlasFamilies]
+  );
+
+  const shiftDeckSize =
+    selectedShiftId === ALL_ID ? allFamilyWordIds.length : (data.shifts[selectedShiftId]?.word_ids.length ?? 0);
+
+  const domainDeckSize =
+    selectedDomainId === ALL_ID
+      ? data.wordList.length
+      : (domainGroups.find((g) => g.id === selectedDomainId)?.words.length ?? 0);
+
   // 1-Click direct deck start
   const startDeck = (deck: DeckType, customCards?: SRSCard[]) => {
     setActiveDeck(deck);
@@ -224,53 +269,25 @@ export default function ReviewPage() {
     } else if (deck === "weakest") {
       setSessionCards(weakestCards);
     } else if (deck === "shift") {
-      const family = data.shifts[selectedShiftId];
-      const familyWordIds = family ? family.word_ids : [];
-      const shiftCards = familyWordIds.map(
-        (wid: string) =>
-          srsCards[wid] || {
-            word_id: wid,
-            interval: 1,
-            repetitions: 0,
-            ease_factor: 2.5,
-            due_date: localDateKey(),
-            lapses: 0,
-            last_reviewed: null,
-          }
-      );
-      setSessionCards(shiftCards);
+      // "all" merges every atlas family (nine shifts + the unshifted layer).
+      const selectedFamilies =
+        selectedShiftId === ALL_ID ? atlasFamilies : [data.shifts[selectedShiftId]].filter(Boolean);
+      const familyWordIds = Array.from(new Set(selectedFamilies.flatMap((f) => f.word_ids)));
+      setSessionCards(familyWordIds.map(blankCard));
     } else if (deck === "recent") {
       const recentWords = data.wordList.slice(0, 20);
-      const recentCards = recentWords.map(
-        (w) =>
-          srsCards[w.id] || {
-            word_id: w.id,
-            interval: 1,
-            repetitions: 0,
-            ease_factor: 2.5,
-            due_date: localDateKey(),
-            lapses: 0,
-            last_reviewed: null,
-          }
-      );
+      const recentCards = recentWords.map((w) => blankCard(w.id));
       setSessionCards(recentCards);
     } else if (deck === "compounds") {
       setSessionCards(compoundCards);
     } else if (deck === "domain") {
-      const group = domainGroups.find((g) => g.id === selectedDomainId);
-      const domainCards = (group ? group.words : []).map(
-        (w) =>
-          srsCards[w.id] || {
-            word_id: w.id,
-            interval: 1,
-            repetitions: 0,
-            ease_factor: 2.5,
-            due_date: localDateKey(),
-            lapses: 0,
-            last_reviewed: null,
-          }
-      );
-      setSessionCards(domainCards);
+      const domainWords =
+        selectedDomainId === ALL_ID
+          ? domainGroups.flatMap((g) => g.words)
+          : (domainGroups.find((g) => g.id === selectedDomainId)?.words ?? []);
+      setSessionCards(domainWords.map((w) => blankCard(w.id)));
+    } else if (deck === "everything") {
+      setSessionCards(everythingCards);
     }
   };
 
@@ -1252,25 +1269,41 @@ export default function ReviewPage() {
                   <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">by shift family</h4>
                 </div>
                 <p className="text-xs font-mono text-[var(--sub-color)]">
-                  review all words belonging to a single structural consonant shift.
+                  review all words belonging to a single structural consonant shift — or every family at once.
                 </p>
 
                 <select
                   value={selectedShiftId}
                   onChange={(e) => setSelectedShiftId(e.target.value)}
+                  aria-label="Choose a sound-shift family to review"
                   className="w-full mt-2 px-3 py-1.5 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--text-color)] outline-none"
                 >
-                  {Object.values(data.shifts).map((s) => (
+                  <option value={ALL_ID}>
+                    All families ({allFamilyWordIds.length} words)
+                  </option>
+                  {atlasFamilies.map((s) => (
                     <option key={s.id} value={s.id}>
-                      {s.symbol} ({s.word_ids.length} words)
+                      {s.symbol} — {s.name} ({s.word_ids.length})
                     </option>
                   ))}
                 </select>
+                <div className="text-[11px] font-mono text-[var(--main-color)]">
+                  {selectedShiftId === ALL_ID
+                    ? `all ${atlasFamilies.length} families selected`
+                    : `${data.shifts[selectedShiftId]?.phonetic_rule ?? ""}`}
+                </div>
               </div>
 
               <button
-                onClick={() => requestDeckStart("shift")}
-                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer"
+                onClick={() =>
+                  requestDeckStart(
+                    "shift",
+                    undefined,
+                    selectedShiftId === ALL_ID ? "every shift family" : data.shifts[selectedShiftId]?.name
+                  )
+                }
+                disabled={shiftDeckSize === 0}
+                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 review shift family
               </button>
@@ -1290,8 +1323,10 @@ export default function ReviewPage() {
                 <select
                   value={selectedDomainId}
                   onChange={(e) => setSelectedDomainId(e.target.value)}
+                  aria-label="Choose a thematic domain to review"
                   className="w-full mt-2 px-3 py-1.5 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--text-color)] outline-none"
                 >
+                  <option value={ALL_ID}>All domains ({data.wordList.length} words)</option>
                   {domainGroups.map((g) => (
                     <option key={g.id} value={g.id}>
                       {g.label} ({g.words.length} words)
@@ -1301,8 +1336,17 @@ export default function ReviewPage() {
               </div>
 
               <button
-                onClick={() => requestDeckStart("domain", undefined, domainGroups.find((g) => g.id === selectedDomainId)?.label)}
-                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer"
+                onClick={() =>
+                  requestDeckStart(
+                    "domain",
+                    undefined,
+                    selectedDomainId === ALL_ID
+                      ? "every domain"
+                      : domainGroups.find((g) => g.id === selectedDomainId)?.label
+                  )
+                }
+                disabled={domainDeckSize === 0}
+                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 review domain
               </button>
@@ -1377,6 +1421,33 @@ export default function ReviewPage() {
                 review compounds
               </button>
             </div>
+
+            {/* Everything Deck */}
+            <div className="p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--main-color)]/40 space-y-3 flex flex-col justify-between transition">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-[var(--main-color)]">
+                  <Globe className="w-4 h-4" />
+                  <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">everything</h4>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/30">
+                    full run
+                  </span>
+                </div>
+                <p className="text-xs font-mono text-[var(--sub-color)]">
+                  no filter. every word in every family and domain, plus compounds and false-friend traps.
+                </p>
+                <div className="text-xs font-mono text-[var(--main-color)] pt-1">
+                  {everythingCards.length} cards
+                </div>
+              </div>
+
+              <button
+                onClick={() => requestDeckStart("everything", undefined, "everything")}
+                disabled={everythingCards.length === 0}
+                className="w-full py-2 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] text-xs font-mono font-bold transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                review everything
+              </button>
+            </div>
           </div>
         </div>
         </>
@@ -1406,11 +1477,15 @@ export default function ReviewPage() {
                         : pendingDeck.deck === "due"
                         ? "due cards"
                         : pendingDeck.deck === "shift"
-                        ? "shift family"
+                        ? selectedShiftId === ALL_ID
+                          ? "every shift family"
+                          : data.shifts[selectedShiftId]?.name ?? "shift family"
                         : pendingDeck.deck === "weakest"
                         ? "weakest words"
                         : pendingDeck.deck === "recent"
                         ? "recent lessons"
+                        : pendingDeck.deck === "everything"
+                        ? "everything"
                         : "compounds & traps"
                     }?`
                   : "how do you want to review?"}
