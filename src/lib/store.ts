@@ -195,9 +195,9 @@ function normalizeParsedState(parsed: Record<string, any>): Partial<AppState> {
   if (!Array.isArray(parsed.weeklyActivity)) parsed.weeklyActivity = [false, false, false, false, false, false, false];
   if (parsed.settings) {
     parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
-    // "enter" was removed; "tab" hijacks keyboard focus navigation, so the
-    // old "tab" default is treated as accidental and falls back to "off"
-    if (parsed.settings.quickRestart === "enter" || parsed.settings.quickRestart === "tab") {
+    // "enter" and "tab" were removed (tab hijacks keyboard focus navigation);
+    // ensure quickRestart is valid
+    if (parsed.settings.quickRestart !== "off" && parsed.settings.quickRestart !== "esc") {
       parsed.settings.quickRestart = DEFAULT_SETTINGS.quickRestart;
     }
   }

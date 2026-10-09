@@ -187,10 +187,7 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
       if (e.getModifierState) {
         setIsCapsLock(e.getModifierState("CapsLock"));
       }
-      if (
-        (settings.quickRestart === "esc" && e.key === "Escape") ||
-        (settings.quickRestart === "tab" && e.key === "Tab")
-      ) {
+      if (settings.quickRestart === "esc" && e.key === "Escape") {
         e.preventDefault();
         resetCurrentExercise();
         return;
@@ -312,10 +309,7 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
             if (e.getModifierState) {
               setIsCapsLock(e.getModifierState("CapsLock"));
             }
-            if (
-              (settings.quickRestart === "esc" && e.key === "Escape") ||
-              (settings.quickRestart === "tab" && e.key === "Tab")
-            ) {
+            if (settings.quickRestart === "esc" && e.key === "Escape") {
               e.preventDefault();
               resetCurrentExercise();
               return;

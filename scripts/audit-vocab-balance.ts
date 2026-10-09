@@ -408,7 +408,7 @@ const EXTRA_FUNCTION = new Set(["werden", "werde"]);
 const RESOLVED: Record<string, string> = {
   kannst: "können", kann: "können", willst: "wollen", hast: "haben", hilft: "helfen",
   hilf: "helfen", gefunden: "finden", fand: "finden", gegessen: "essen", stehe: "aufstehen",
-  steht: "aufstehen", genommen: "nehmen", gibst: "geben",
+  steht: "aufstehen", genommen: "nehmen", gibst: "geben", kaufe: "einkaufen",
 };
 const stemOf = (id: string) => (id.length > 4 && id.endsWith("en") ? id.slice(0, -2) : id);
 const stems = new Map<string, string[]>();

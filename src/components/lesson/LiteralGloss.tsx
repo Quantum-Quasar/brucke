@@ -118,10 +118,7 @@ export const LiteralGloss: React.FC<LiteralGlossProps> = ({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        (settings.quickRestart === "esc" && e.key === "Escape") ||
-        (settings.quickRestart === "tab" && e.key === "Tab")
-      ) {
+      if (settings.quickRestart === "esc" && e.key === "Escape") {
         e.preventDefault();
         resetCurrentExercise();
         return;

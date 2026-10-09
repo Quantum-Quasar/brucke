@@ -26,6 +26,9 @@ export function playTargetAudio(text: string, locale = "de-DE"): boolean {
   try {
     window.speechSynthesis.cancel();
     activeUtterances.clear();
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    }
     const cleanText = text.replace(/^[\[\(].*?[\]\)]\s*/, "").trim();
     if (!cleanText) return false;
 
@@ -35,7 +38,11 @@ export function playTargetAudio(text: string, locale = "de-DE"): boolean {
     utterance.pitch = 1.0;
 
     const voices = cachedVoices.length > 0 ? cachedVoices : window.speechSynthesis.getVoices();
-    const voice = voices.find((v) => v.lang.startsWith(locale.slice(0, 2)));
+    const exactVoice = voices.find(
+      (v) => v.lang === locale || v.lang.replace(/_/g, "-") === locale
+    );
+    const prefixVoice = voices.find((v) => v.lang.startsWith(locale.slice(0, 2)));
+    const voice = exactVoice ?? prefixVoice;
     if (voice) {
       utterance.voice = voice;
     }

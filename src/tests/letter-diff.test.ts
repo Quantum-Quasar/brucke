@@ -62,11 +62,23 @@ describe("Letter-by-Letter Diff", () => {
     expect(nEndingResult.reason).toBe("infinitive");
     expect(nEndingResult.warningNote).toContain("infinitive ending \"-n\"");
 
-    // Article omission / inclusion checking (e.g. "Wasser" vs "das Wasser")
+    // Article omission / inclusion checking (e.g. "Wasser" vs "das Wasser", accusative/dative/negative)
     const articleResult = evaluateAnswerAccuracy("Wasser", "das Wasser");
     expect(articleResult.accuracy).toBe("almost");
     expect(articleResult.reason).toBe("article");
     expect(articleResult.warningNote).toContain("gender article");
+
+    const accResult = evaluateAnswerAccuracy("Kaffee", "den Kaffee");
+    expect(accResult.accuracy).toBe("almost");
+    expect(accResult.reason).toBe("article");
+
+    const datResult = evaluateAnswerAccuracy("dem Mann", "Mann");
+    expect(datResult.accuracy).toBe("almost");
+    expect(datResult.reason).toBe("article");
+
+    const negResult = evaluateAnswerAccuracy("Problem", "kein Problem");
+    expect(negResult.accuracy).toBe("almost");
+    expect(negResult.reason).toBe("article");
 
     // Punctuation and full stop normalization (e.g. "Ich kann kommen." vs "Ich kann kommen")
     expect(evaluateAnswerAccuracy("Ich kann kommen", "Ich kann kommen.")).toEqual({ accuracy: "exact" });

@@ -1,4 +1,4 @@
-export type QuickRestart = "off" | "esc" | "tab";
+export type QuickRestart = "off" | "esc";
 export type StopOnError = "off" | "letter";
 export type ConfidenceMode = "off" | "on";
 export type ShowCharBar = "always" | "on_focus" | "off";

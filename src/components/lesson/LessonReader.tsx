@@ -113,7 +113,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
             e.preventDefault();
             handleCompleteAll();
             const nextId = getNextPlayableLessonId(lesson.id);
-            router.push(nextId ? `/trail/${nextId}` : "/");
+            router.push(nextId ? `/trail/${nextId}` : "/trail");
           }
         }
       }
@@ -230,7 +230,11 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
             <ArrowLeft className="w-3.5 h-3.5" /> Back to Trail
           </Link>
           <span className="text-xs font-mono text-[var(--main-color)] font-medium px-2 py-0.5 rounded bg-[var(--main-color)]/10 border border-[var(--main-color)]/20">
-            Lesson {lesson.id} of 30
+            {lesson.id <= 30
+              ? `Topic ${lesson.id} of 30 · Core`
+              : lesson.id >= 5000
+              ? `Branch Track · ${lesson.id}`
+              : `Topic ${Math.floor(lesson.id / 100)} · Sprig ${lesson.id % 100}`}
           </span>
         </div>
 
@@ -244,7 +248,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
         {/* Lesson Title */}
         <div className="pt-2">
           <span className="text-xs font-mono text-[var(--main-color)] uppercase tracking-wider font-semibold">
-            Phase {lesson.phase} · Core Shift
+            Phase {lesson.phase} · {lesson.id <= 30 ? "Core Shift" : lesson.id >= 5000 ? "Support Track" : "Practice Sprig"}
           </span>
           <h1 className="text-3xl sm:text-4xl font-bold font-sans text-[var(--text-color)] tracking-tight mt-1">
             {lesson.title}
@@ -705,13 +709,13 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                     <Link
                       href={(() => {
                         const nextId = getNextPlayableLessonId(lesson.id);
-                        return nextId ? `/trail/${nextId}` : "/";
+                        return nextId ? `/trail/${nextId}` : "/trail";
                       })()}
                       onClick={(event) => {
                         event.preventDefault();
                         handleCompleteAll();
                         const nextId = getNextPlayableLessonId(lesson.id);
-                        router.push(nextId ? `/trail/${nextId}` : "/");
+                        router.push(nextId ? `/trail/${nextId}` : "/trail");
                       }}
                       className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs transition cursor-pointer"
                     >

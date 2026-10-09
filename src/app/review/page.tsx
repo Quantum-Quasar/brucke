@@ -510,8 +510,9 @@ export default function ReviewPage() {
       // Quick restart hotkey
       if (
         activeDeck &&
-        ((settings.quickRestart === "tab" && e.key === "Tab") ||
-          (settings.quickRestart === "esc" && e.key === "Escape" && isRevealed))
+        settings.quickRestart === "esc" &&
+        e.key === "Escape" &&
+        isRevealed
       ) {
         e.preventDefault();
         setIsRevealed(false);
@@ -1002,10 +1003,7 @@ export default function ReviewPage() {
                     e.preventDefault();
                     return;
                   }
-                  if (
-                    (settings.quickRestart === "esc" && e.key === "Escape") ||
-                    (settings.quickRestart === "tab" && e.key === "Tab")
-                  ) {
+                  if (settings.quickRestart === "esc" && e.key === "Escape") {
                     e.preventDefault();
                     setInputGuess("");
                     return;

@@ -311,9 +311,9 @@ export default function SettingsPage() {
             icon={RotateCcw}
             title="quick restart"
             description="Press a hotkey to instantly restart the current lesson question or review card."
-            matchesSearch={matches(["quick restart", "esc", "tab", "restart", "behavior"])}
+            matchesSearch={matches(["quick restart", "esc", "restart", "behavior"])}
           >
-            {(["off", "esc", "tab"] as QuickRestart[]).map((mode) => (
+            {(["off", "esc"] as QuickRestart[]).map((mode) => (
               <button
                 key={mode}
                 type="button"

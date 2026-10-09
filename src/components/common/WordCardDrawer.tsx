@@ -195,7 +195,18 @@ export const WordCardDrawer: React.FC = () => {
 
           {/* Context Phrase / Example */}
           <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-1.5 font-mono">
-            <div className="text-xs uppercase tracking-wider text-[var(--sub-color)]">context</div>
+            <div className="flex items-center justify-between">
+              <div className="text-xs uppercase tracking-wider text-[var(--sub-color)]">context</div>
+              <button
+                type="button"
+                onClick={() => playTargetAudio(word.context_phrase, language.ttsLocale)}
+                className="p-1 rounded bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 text-[var(--main-color)] border border-[var(--sub-color)]/20 transition cursor-pointer"
+                title={`Listen to full phrase: "${word.context_phrase}"`}
+                aria-label={`Listen to German context phrase: "${word.context_phrase}"`}
+              >
+                <Volume2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
             <p className="text-sm text-[var(--text-color)] font-medium">&quot;{word.context_phrase}&quot;</p>
             <p className="text-xs text-[var(--sub-color)]">{word.context_translation}</p>
           </div>

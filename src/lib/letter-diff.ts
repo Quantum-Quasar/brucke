@@ -270,7 +270,7 @@ function evaluateFolded(
   }
 
   // 5. Gender article inclusion or omission (e.g. "Wasser" vs "das Wasser") -> Yellow
-  const stripArticle = (s: string) => s.replace(/^(der|die|das|ein|eine|einen)\s+/i, "").trim();
+  const stripArticle = (s: string) => s.replace(/^(der|die|das|den|dem|des|ein|eine|einen|einem|einer|eines|kein|keine|keinen|keinem|keiner|keines)\s+/i, "").trim();
   const targetStripped = stripArticle(targetLower);
   const userStripped = stripArticle(userLower);
 

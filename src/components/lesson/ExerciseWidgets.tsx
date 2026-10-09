@@ -150,11 +150,8 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
         setIsCapsLock(e.getModifierState("CapsLock"));
       }
 
-      // Quick restart hotkey (esc / tab / enter)
-      if (
-        (settings.quickRestart === "esc" && e.key === "Escape") ||
-        (settings.quickRestart === "tab" && e.key === "Tab")
-      ) {
+      // Quick restart hotkey (esc)
+      if (settings.quickRestart === "esc" && e.key === "Escape") {
         e.preventDefault();
         resetCurrentExercise();
         return;
@@ -701,10 +698,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
                   e.preventDefault();
                   return;
                 }
-                if (
-                  (settings.quickRestart === "esc" && e.key === "Escape") ||
-                  (settings.quickRestart === "tab" && e.key === "Tab")
-                ) {
+                if (settings.quickRestart === "esc" && e.key === "Escape") {
                   e.preventDefault();
                   resetCurrentExercise();
                   return;
