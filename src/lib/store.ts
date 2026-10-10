@@ -36,6 +36,16 @@ export interface LanguageProgress {
   lastActivityWeek?: string;
 }
 
+/**
+ * What "back" in a review session restores: the card's SM-2 state and its
+ * word-mastery entry as they were before this session graded the word.
+ * `mastery: null` means the word had no mastery entry at all.
+ */
+export interface ReviewSnapshot {
+  card: SRSCard;
+  mastery: MasteryState | null;
+}
+
 export interface AppState {
   /** which language the user is currently learning (global preference) */
   activeLanguageId: string;
@@ -83,6 +93,18 @@ export interface AppState {
   completeLesson: (lessonId: number, opts?: { perfect?: boolean }) => void;
   setLessonProgress: (lessonId: number, progress: LessonProgress) => void;
   recordReview: (wordId: string, grade: ReviewGrade) => void;
+  /**
+   * Undoes a grade this review session applied, restoring the card to the state
+   * it had before the session touched it, along with the word's mastery entry.
+   * SM-2 grading is destructive and not invertible (ease/interval/lapses all
+   * move in one direction), so the session snapshots each card's state on its
+   * first grade and restores the snapshot here. A word never graded this session
+   * keeps whatever it had.
+   *
+   * `mastery: null` means the word had no mastery entry — recordReview would
+   * have set "encountered"/"mastered", so the entry is removed again.
+   */
+  restoreSrsCard: (wordId: string, snapshot: ReviewSnapshot) => void;
   setPreferredReviewMode: (mode: ReviewMode) => void;
   completeOnboarding: () => void;
   openOnboarding: () => void;
@@ -659,6 +681,25 @@ export const useAppStore = create<AppState>((set, get) => ({
       return next;
     });
     get().logDailyActivity();
+  },
+
+  restoreSrsCard: (wordId, snapshot) => {
+    const id = wordId.trim();
+    if (!id || !snapshot || typeof snapshot !== "object" || !snapshot.card) return;
+    const card = snapshot.card;
+    const mastery = snapshot.mastery ?? null;
+    set((s) => {
+      // only restore a card this session actually graded — a stale snapshot must
+      // not resurrect old scheduling
+      if (!s.srsCards[id]) return s;
+      const srsCards = { ...s.srsCards, [id]: card };
+      const wordMastery = { ...s.wordMastery };
+      if (mastery === null) delete wordMastery[id];
+      else wordMastery[id] = mastery;
+      const next = { ...s, srsCards, wordMastery };
+      saveState(next);
+      return next;
+    });
   },
 
   openWordDrawer: (wordId) => {

@@ -17,6 +17,8 @@ import {
   HelpCircle,
   Volume2,
   AlertCircle,
+  ArrowLeft,
+  ArrowRight,
 } from "lucide-react";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
@@ -33,6 +35,7 @@ import { getLanguageDefinition } from "@/data/languages";
 import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
 import { getWordEntityMap } from "@/lib/word-entities";
 import type { ReviewMode, SRSCard, WordEntity } from "@/lib/types";
+import type { ReviewSnapshot } from "@/lib/store";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
 
 type DeckType = "due" | "shift" | "weakest" | "recent" | "compounds" | "domain" | "everything";
@@ -63,6 +66,29 @@ const EMPTY_SESSION_STATS: ReviewSessionStats = {
   easy: 0,
 };
 
+/**
+ * Per-card log of the grades applied during this session, indexed by deck
+ * position (null = not graded this session). SM-2 grading only moves a card in
+ * one direction, so "back" restores the card's pre-session snapshot instead of
+ * trying to invert the schedule math.
+ */
+type SessionGrades = (ReviewGrade | null)[];
+
+/** A session log with every card ungraded. */
+const blankSessionGrades = (length: number): SessionGrades => Array.from({ length }, () => null);
+
+/** Session stats with one grade subtracted — the mirror of the increment in
+ * handleGrade, used when a card is re-graded instead of graded for the first time. */
+function undoGradeInStats(stats: ReviewSessionStats, grade: ReviewGrade): ReviewSessionStats {
+  return {
+    reviewed: Math.max(0, stats.reviewed - 1),
+    correct: Math.max(0, stats.correct - (grade >= 3 ? 1 : 0)),
+    again: Math.max(0, stats.again - (grade === 1 ? 1 : 0)),
+    hard: Math.max(0, stats.hard - (grade === 3 ? 1 : 0)),
+    easy: Math.max(0, stats.easy - (grade === 5 ? 1 : 0)),
+  };
+}
+
 export default function ReviewPage() {
   const activeLanguageId = useAppStore((s) => s.activeLanguageId);
   const language = getLanguageDefinition(activeLanguageId);
@@ -81,6 +107,21 @@ export default function ReviewPage() {
   const [sessionStats, setSessionStats] = useState<ReviewSessionStats>(EMPTY_SESSION_STATS);
   const [sessionComplete, setSessionComplete] = useState(false);
   const [completedDeck, setCompletedDeck] = useState<DeckType | null>(null);
+
+  /**
+   * Grades applied to each deck position during this session, parallel to
+   * sessionCards. Drives both "back" (undo the grade) and the per-card
+   * re-grade semantics: going back to a word you already graded restores its
+   * pre-session card so the next grade is a fresh SM-2 step, not a second one
+   * stacked on top.
+   */
+  const [sessionGrades, setSessionGrades] = useState<SessionGrades>([]);
+  /**
+   * Each graded card's state before this session touched it, keyed by wordId.
+   * Written on the card's first grade only, so stepping back and re-grading the
+   * same word restores the same pre-session state every time.
+   */
+  const preGradeSnapshots = useRef<Record<string, ReviewSnapshot>>({});
 
   // Review Style Mode State
   const preferredReviewMode = useAppStore((s) => s.preferredReviewMode);
@@ -120,6 +161,7 @@ export default function ReviewPage() {
   const srsCards = useAppStore((s) => s.srsCards);
   const wordMastery = useAppStore((s) => s.wordMastery);
   const recordReview = useAppStore((s) => s.recordReview);
+  const restoreSrsCard = useAppStore((s) => s.restoreSrsCard);
 
   const dueCards = getDueCards(srsCards);
   const weakestCards = getWeakestCards(srsCards);
@@ -258,36 +300,47 @@ export default function ReviewPage() {
     setSessionStats(EMPTY_SESSION_STATS);
     setSessionComplete(false);
     setCompletedDeck(null);
+    preGradeSnapshots.current = {};
 
     if (customCards) {
       setSessionCards(customCards);
+      setSessionGrades(blankSessionGrades(customCards.length));
       return;
     }
 
     if (deck === "due") {
       setSessionCards(dueCards);
+      setSessionGrades(blankSessionGrades(dueCards.length));
     } else if (deck === "weakest") {
       setSessionCards(weakestCards);
+      setSessionGrades(blankSessionGrades(weakestCards.length));
     } else if (deck === "shift") {
       // "all" merges every atlas family (nine shifts + the unshifted layer).
       const selectedFamilies =
         selectedShiftId === ALL_ID ? atlasFamilies : [data.shifts[selectedShiftId]].filter(Boolean);
       const familyWordIds = Array.from(new Set(selectedFamilies.flatMap((f) => f.word_ids)));
-      setSessionCards(familyWordIds.map(blankCard));
+      const shiftCards = familyWordIds.map(blankCard);
+      setSessionCards(shiftCards);
+      setSessionGrades(blankSessionGrades(shiftCards.length));
     } else if (deck === "recent") {
       const recentWords = data.wordList.slice(0, 20);
       const recentCards = recentWords.map((w) => blankCard(w.id));
       setSessionCards(recentCards);
+      setSessionGrades(blankSessionGrades(recentCards.length));
     } else if (deck === "compounds") {
       setSessionCards(compoundCards);
+      setSessionGrades(blankSessionGrades(compoundCards.length));
     } else if (deck === "domain") {
       const domainWords =
         selectedDomainId === ALL_ID
           ? domainGroups.flatMap((g) => g.words)
           : (domainGroups.find((g) => g.id === selectedDomainId)?.words ?? []);
-      setSessionCards(domainWords.map((w) => blankCard(w.id)));
+      const domainCards = domainWords.map((w) => blankCard(w.id));
+      setSessionCards(domainCards);
+      setSessionGrades(blankSessionGrades(domainCards.length));
     } else if (deck === "everything") {
       setSessionCards(everythingCards);
+      setSessionGrades(blankSessionGrades(everythingCards.length));
     }
   };
 
@@ -349,16 +402,38 @@ export default function ReviewPage() {
       void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
     }
 
-    recordReview(currentCard.word_id, grade);
+    // A card this session already graded has moved away from its pre-session
+    // state; undo that first so the new grade schedules from where the session
+    // started rather than compounding on top of the previous one.
+    const previousGrade = sessionGrades[currentIndex] ?? null;
+    if (previousGrade === null && !(currentCard.word_id in preGradeSnapshots.current)) {
+      // first grade this session: remember where the card — and the word's
+      // mastery entry — started, so "back" can restore them
+      preGradeSnapshots.current[currentCard.word_id] = {
+        card: srsCards[currentCard.word_id] ?? blankCard(currentCard.word_id),
+        mastery: wordMastery[currentCard.word_id] ?? null,
+      };
+    }
 
-    const nextStats: ReviewSessionStats = {
-      reviewed: sessionStats.reviewed + 1,
-      correct: sessionStats.correct + (grade >= 3 ? 1 : 0),
-      again: sessionStats.again + (grade === 1 ? 1 : 0),
-      hard: sessionStats.hard + (grade === 3 ? 1 : 0),
-      easy: sessionStats.easy + (grade === 5 ? 1 : 0),
-    };
-    setSessionStats(nextStats);
+    const stats: ReviewSessionStats = previousGrade === null ? { ...sessionStats } : undoGradeInStats(sessionStats, previousGrade);
+    if (previousGrade !== null) {
+      const snapshot = preGradeSnapshots.current[currentCard.word_id];
+      if (snapshot) restoreSrsCard(currentCard.word_id, snapshot);
+    }
+
+    recordReview(currentCard.word_id, grade);
+    setSessionGrades((prev) => {
+      const next = [...prev];
+      next[currentIndex] = grade;
+      return next;
+    });
+
+    stats.reviewed += 1;
+    stats.correct += grade >= 3 ? 1 : 0;
+    stats.again += grade === 1 ? 1 : 0;
+    stats.hard += grade === 3 ? 1 : 0;
+    stats.easy += grade === 5 ? 1 : 0;
+    setSessionStats(stats);
 
     setIsRevealed(false);
     setInputGuess("");
@@ -385,6 +460,44 @@ export default function ReviewPage() {
     setCurrentAutoGrade(null);
     setCurrentFeedbackNote(null);
   };
+
+  /**
+   * Step back to the previous card in this session. The card's SM-2 state is
+   * restored to what it was before the session graded it, so the learner sees
+   * the word un-revealed and can answer again — the re-grade then lands as the
+   * card's only graded step this session, not one stacked on the earlier one.
+   * The session stats drop the previous grade so a re-graded card is counted once.
+   */
+  const goBack = () => {
+    if (currentIndex <= 0 || sessionCards.length === 0) return;
+    void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
+
+    // Leaving the current card: undo the grade it may have received this session.
+    const leavingGrade = sessionGrades[currentIndex] ?? null;
+    if (leavingGrade !== null) {
+      const leaving = sessionCards[currentIndex];
+      const snapshot = preGradeSnapshots.current[leaving.word_id];
+      if (snapshot) restoreSrsCard(leaving.word_id, snapshot);
+      setSessionGrades((prev) => {
+        const next = [...prev];
+        next[currentIndex] = null;
+        return next;
+      });
+      setSessionStats((prev) => undoGradeInStats(prev, leavingGrade));
+    }
+
+    setCurrentIndex((i) => Math.max(0, i - 1));
+  };
+
+  /** Step forward again after going back (same behaviour as advancing). */
+  const goForward = () => {
+    if (currentIndex + 1 >= sessionCards.length) return;
+    void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
+    setCurrentIndex((i) => Math.min(sessionCards.length - 1, i + 1));
+  };
+
+  const canGoBack = activeDeck !== null && currentIndex > 0;
+  const canGoForward = activeDeck !== null && currentIndex < sessionCards.length - 1;
 
   // MCQ Selection Handler
   const handleSelectMCQ = (option: string) => {
@@ -574,6 +687,16 @@ export default function ReviewPage() {
         return;
       }
 
+      // Back / forward through the cards of this session. Arrow keys are left
+      // alone while the typing input has focus so caret movement still works.
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        if (e.target === inputRef.current) return;
+        e.preventDefault();
+        if (e.key === "ArrowLeft") goBack();
+        else goForward();
+        return;
+      }
+
       // If user is inside an input other than our review input, ignore
       if (e.target instanceof HTMLInputElement && e.target !== inputRef.current) {
         return;
@@ -682,6 +805,7 @@ export default function ReviewPage() {
     isModeSelectorOpen,
     activeDeck,
     sessionCards,
+    sessionGrades,
     isRevealed,
     reviewMode,
     mcqOptions,
@@ -692,6 +816,11 @@ export default function ReviewPage() {
     currentIndex,
     sessionStats,
     settings,
+    restoreSrsCard,
+    srsCards,
+    blankCard,
+    goBack,
+    goForward,
   ]);
 
   const masteredCount = Object.values(wordMastery).filter((m) => m === "mastered").length;
@@ -809,19 +938,47 @@ export default function ReviewPage() {
               </div>
             </div>
 
-            <button
-              type="button"
-              tabIndex={-1}
-              onClick={exitDeck}
-              onKeyDown={(e) => {
-                if (e.key === " " || e.key === "Enter") e.preventDefault();
-              }}
-              className="text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-2.5 py-1 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 transition cursor-pointer flex items-center gap-1.5"
-              title="Exit Session (Esc)"
-            >
-              <span>exit</span>
-              <span className="keycap text-[10px]">esc</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={goBack}
+                disabled={!canGoBack}
+                className="text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-2.5 py-1 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 transition flex items-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                title="Previous card (←)"
+              >
+                <ArrowLeft className="w-3 h-3" />
+                <span>back</span>
+                {settings.showKeyTips && <span className="keycap text-[10px]">←</span>}
+              </button>
+
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={goForward}
+                disabled={!canGoForward}
+                className="text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-2.5 py-1 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 transition flex items-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                title="Next card (→)"
+              >
+                <span>next</span>
+                {settings.showKeyTips && <span className="keycap text-[10px]">→</span>}
+                <ArrowRight className="w-3 h-3" />
+              </button>
+
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={exitDeck}
+                onKeyDown={(e) => {
+                  if (e.key === " " || e.key === "Enter") e.preventDefault();
+                }}
+                className="text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-2.5 py-1 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 transition cursor-pointer flex items-center gap-1.5"
+                title="Exit Session (Esc)"
+              >
+                <span>exit</span>
+                <span className="keycap text-[10px]">esc</span>
+              </button>
+            </div>
           </div>
 
           {/* Front Prompt */}

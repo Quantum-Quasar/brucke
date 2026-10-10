@@ -30,7 +30,7 @@ function readPitchDoc(name: string): string {
 const TEST_FILE_COUNT = fs
   .readdirSync(path.join(ROOT, "src", "tests"))
   .filter((f) => f.endsWith(".test.ts")).length;
-const TEST_COUNT = 234; // update when adding tests
+const TEST_COUNT = 269; // update when adding tests
 const THEME_COUNT = Object.keys(THEMES).length;
 const FONT_COUNT = FONT_LIST.length;
 const TAUGHT_WORDS = 656; // update after running scripts/audit-vocab-balance.ts
@@ -79,8 +79,8 @@ describe("Documentation stays in sync with the data", () => {
         `${TEST_FILE_COUNT} test files`
       );
       expect(text, `${doc} must quote the current test count`).toContain(`${TEST_COUNT}`);
-      expect(text, `${doc} still claims the stale 29-test-file count`).not.toContain(
-        "29 test files"
+      expect(text, `${doc} still claims the stale 28-test-file count`).not.toContain(
+        "28 test files"
       );
       expect(text, `${doc} still claims the stale ~215-test count`).not.toContain("~215");
     }

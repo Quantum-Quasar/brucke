@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import type { SRSCard } from "@/lib/types";
 
 // Browser smoke suite: onboarding, lesson progress, review + SRS persistence,
 // keyboard navigation, and static-route boundaries. Unit-level coverage for
@@ -95,9 +96,56 @@ test.describe("browser smoke", () => {
       );
       expect(graded.length).toBeGreaterThanOrEqual(1);
 
+      // back returns to the first card, which must be un-revealed and answerable
+      await page.getByRole("button", { name: /^back/i }).click();
+      await expect(page.getByText(/card 1 \/ 20/i)).toBeVisible();
+      await expect(page.getByRole("button", { name: /show answer/i })).toBeVisible();
+      await expect(page.getByRole("button", { name: /^back/i })).toBeDisabled();
+
       // escape exits the session cleanly back to the deck hub
       await page.keyboard.press("Escape");
       await expect(page.getByRole("heading", { name: /due today/i })).toBeVisible();
+    });
+
+    test("review session: back after grading restores the card so the re-grade counts once", async ({ page }) => {
+      await page.goto("/review");
+
+      // "recent lessons" is deterministic in word order; card 1 is a known word
+      await page.getByRole("button", { name: /review recent/i }).click();
+      await expect(page.locator("#review-style-title")).toBeVisible();
+      await page.getByRole("button", { name: /recall \(flashcard\)/i }).click();
+      await expect(page.getByText(/card 1 \/ 20/i)).toBeVisible();
+
+      // grade card 1 Easy, then go back and grade it Hard instead
+      await page.keyboard.press("Space");
+      await page.keyboard.press("4");
+      await expect(page.getByText(/card 2 \/ 20/i)).toBeVisible();
+
+      const easyState = await readAppState(page);
+      await page.keyboard.press("ArrowLeft");
+      await expect(page.getByText(/card 1 \/ 20/i)).toBeVisible();
+
+      await page.keyboard.press("Space");
+      await page.keyboard.press("2"); // Hard
+      await expect(page.getByText(/card 2 \/ 20/i)).toBeVisible();
+
+      const state = await readAppState(page);
+      const firstWordId = Object.keys(easyState?.srsCards ?? {})[0];
+      const finalCard = state?.srsCards?.[firstWordId];
+
+      // the card went back to its pre-session state, so the Hard grade is the
+      // only graded step — interval stays at the first successful step (1 day)
+      // instead of compounding from the Easy schedule
+      expect(finalCard?.repetitions).toBe(1);
+      expect(finalCard?.lapses).toBe(0);
+      expect(finalCard?.interval).toBe(1);
+
+      // exactly one card was graded in this session
+      const gradedCount = Object.values(state?.srsCards ?? {}).filter(
+        (card) => (card as SRSCard | undefined) !== undefined &&
+          (card as SRSCard).repetitions >= 1
+      ).length;
+      expect(gradedCount).toBe(1);
     });
 
     test("static routes render and unknown dynamic params 404", async ({ page }) => {

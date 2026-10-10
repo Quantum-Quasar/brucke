@@ -161,7 +161,6 @@ describe("Full Review Session Lifecycle Integration", () => {
 
   it("handles empty decks and full queue completion gracefully", () => {
     const store = useAppStore.getState();
-
     // Empty state: no cards scheduled
     const emptyCards = store.srsCards;
     const due = getDueCards(emptyCards);
@@ -180,5 +179,60 @@ describe("Full Review Session Lifecycle Integration", () => {
 
     const remainingDue = getDueCards(useAppStore.getState().srsCards, todayStr);
     expect(remainingDue).toHaveLength(0); // Deck is now 100% complete for today
+  });
+
+  // "back" in the review hub. Stepping back after grading a card must undo that
+  // grade's SM-2 effects, so the learner can re-answer and the re-grade lands as
+  // the card's only graded step this session — not a second step stacked on the
+  // first (which would double every interval and count the card twice).
+  it("restores the pre-session card when stepping back, so a re-grade is not double-counted", () => {
+    const store = useAppStore.getState();
+    const wordId = "winter";
+    store.markWordEncountered(wordId);
+    const before = { ...useAppStore.getState().srsCards[wordId] };
+    const wordMasteryBefore = useAppStore.getState().wordMastery[wordId] ?? null;
+
+    // grade the card once, as the session's first pass does
+    store.recordReview(wordId, 5);
+    const graded = useAppStore.getState().srsCards[wordId];
+    expect(graded.repetitions).toBe(before.repetitions + 1);
+
+    // stepping back restores the card to where the session found it
+    store.restoreSrsCard(wordId, { card: before, mastery: wordMasteryBefore });
+    const restored = useAppStore.getState().srsCards[wordId];
+    expect(restored).toEqual(before);
+    expect(restored.due_date).toBe(before.due_date);
+
+    // re-grading on the way back forward schedules from the restored state
+    store.recordReview(wordId, 5);
+    const reGraded = useAppStore.getState().srsCards[wordId];
+    // last_reviewed is a wall-clock timestamp, so compare the schedule fields
+    expect(reGraded).toEqual({ ...graded, last_reviewed: reGraded.last_reviewed });
+    expect(reGraded.interval).toBe(graded.interval);
+    expect(reGraded.ease_factor).toBe(graded.ease_factor);
+    expect(reGraded.lapses).toBe(graded.lapses);
+  });
+
+  it("restoring a card rolls back the mastery a too-generous grade had awarded", () => {
+    const store = useAppStore.getState();
+    store.markWordEncountered("milch");
+    const before = { ...useAppStore.getState().srsCards["milch"] };
+    const masteryBefore = useAppStore.getState().wordMastery["milch"] ?? null;
+
+    // drive the word to mastery with the session's grades
+    store.recordReview("milch", 4);
+    store.recordReview("milch", 4);
+    store.recordReview("milch", 4);
+    store.recordReview("milch", 5);
+    expect(isMastered(useAppStore.getState().srsCards["milch"])).toBe(true);
+    expect(useAppStore.getState().wordMastery["milch"]).toBe("mastered");
+
+    // the word is no longer graded in the session after "back", so the card
+    // must go back to its pre-session state instead of staying mastered
+    store.restoreSrsCard("milch", { card: before, mastery: masteryBefore });
+    const card = useAppStore.getState().srsCards["milch"];
+    expect(card.repetitions).toBe(before.repetitions);
+    expect(isMastered(card)).toBe(false);
+    expect(useAppStore.getState().wordMastery["milch"]).toBe(masteryBefore);
   });
 });

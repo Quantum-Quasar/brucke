@@ -21,7 +21,7 @@ English and German are siblings split by one historical event: the Second High G
 
 **Behind them:**
 - **A 1,226-word sourced etymological compendium** — every derivation tagged with its source (Wiktionary/etymonline; 8 entries flagged UNVERIFIED pending review); invented connections are a fireable offense
-- 234 automated tests, WCAG-audited design system, 187 themes, 43 fonts — craft quality aimed at the Monkeytype/polyglot community
+- 269 automated tests, WCAG-audited design system, 187 themes, 43 fonts — craft quality aimed at the Monkeytype/polyglot community
 - **100% static, local-first, account-free**: zero telemetry, zero marginal infra cost, full data export
 
 ## Why now
