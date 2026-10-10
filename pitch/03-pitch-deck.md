@@ -32,7 +32,7 @@ Show 2–3 screenshots: trail map, a shift-pair transformation, a transcribe exe
 
 ## Slide 5 — The moat: verified content engine
 - 1,226-word etymological compendium; **every** derivation source-tagged (Wiktionary/etymonline; 8 entries flagged UNVERIFIED pending review)
-- A published no-invention protocol + audit scripts + 269 automated tests enforce it in the test suite
+- A published no-invention protocol + audit scripts + 270 automated tests enforce it in the test suite
 - Why it matters: content credibility is the product. AI content farms cannot copy trust.
 - Reuse-density law: every exercise only uses words the learner has already met — the app feels *fair*.
 

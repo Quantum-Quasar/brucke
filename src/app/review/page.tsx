@@ -1169,6 +1169,11 @@ export default function ReviewPage() {
                 type="text"
                 value={inputGuess}
                 onChange={(e) => handleTypingInputChange(e.target.value)}
+                lang="de"
+                spellCheck={false}
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
                 onKeyDown={(e) => {
                   if (e.getModifierState) {
                     setIsCapsLock(e.getModifierState("CapsLock"));

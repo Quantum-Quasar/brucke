@@ -300,6 +300,11 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
           value={userInput}
           onFocus={() => setIsInputFocused(true)}
           onBlur={() => setIsInputFocused(false)}
+          lang="de"
+          spellCheck={false}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
           onChange={(e) => {
             setUserInput(e.target.value);
             if (status !== "idle") setStatus("idle");

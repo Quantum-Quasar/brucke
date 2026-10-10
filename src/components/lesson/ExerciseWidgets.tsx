@@ -687,6 +687,10 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
               value={userInput}
               aria-label={exercise.prompt || "Enter German translation"}
               lang="de"
+              spellCheck={false}
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
               onFocus={() => setIsInputFocused(true)}
               onBlur={() => setIsInputFocused(false)}
               onChange={(e) => handleInputChange(e.target.value)}

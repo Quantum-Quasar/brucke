@@ -77,6 +77,11 @@ export const TwistCard: React.FC<TwistCardProps> = ({ twist, onDone }) => {
               ref={inputRef}
               type="text"
               value={userInput}
+              lang="de"
+              spellCheck={false}
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
               onChange={(e) => setUserInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
