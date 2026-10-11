@@ -1,0 +1,863 @@
+--- a/src/data/lessons.ts
++++ b/src/data/lessons.ts
+@@ -238,9 +238,9 @@
+           },
+         ],
+         idea_parts: [
+-          "who wants? → ich will (will = want, never the future)",
++          "who can? → ich kann (can = know-how)",
+           "when? → morgen",
+-          "what? → Deutsch lernen, and the bare infinitive closes the bracket",
++          "what? → kommen, and the bare infinitive closes the bracket",
+         ],
+         word_bank: ["Ich", "kann", "morgen", "kommen", "kannst"],
+         explanation: "The Satzklammer wraps around 'morgen', placing bare infinitive 'kommen' at the caboose.",
+@@ -287,7 +287,7 @@
+     pattern: {
+       title: "Post-Vocalic P becomes F / FF",
+       content:
+-        "After a vowel, English 'P' systematically becomes German 'F' or 'FF'. Hope becomes hoffen. Help becomes helfen. Sleep becomes schlafen. Ship becomes Schiff (a ship's captain is still called a skipper in English!). Ape becomes Affe. Ripe becomes reifen (fruit that has ripened is reif). At the start of words, drop the German 'F' in 'PF-' to reveal the English twin: Pfad ↔ path, Pfund ↔ pound, Pfeffer ↔ pepper, Apfel ↔ apple!",
++        "After a vowel, English 'P' systematically becomes German 'F' or 'FF'. Hope becomes hoffen. Help becomes helfen. Sleep becomes schlafen. Ship becomes Schiff (a ship's captain is still called a skipper in English!). Ape becomes Affe. Ripe becomes reif (reifen means 'to ripen'). At the start of words, drop the German 'F' in 'PF-' to reveal the English twin: Pfad ↔ path, Pfund ↔ pound, Pfeffer ↔ pepper, Apfel ↔ apple!",
+       footnotes: [
+         {
+           marker: "2",
+@@ -685,7 +685,7 @@
+           marker: "3",
+           title: "Say What You Read",
+           content:
+-            "German spells the way it sounds: each vowel letter holds one sound — the I of finden is always the /ee/ of seen — and the letter laws own the consonants, so every word you read tells you how to say it. When a cluster like the schl- of schlafen tangles on your tongue, slow down; the sounds sit together fine at half speed. And don't let regional accents shake you: you might hear a harder /ick/ in Berlin or an /ish/-tinged ich in the south — variants to recognize, never to learn.",
++            "German spells the way it sounds: each vowel letter holds one sound — the i of finden is short, like the i of English 'bit' — and the letter laws own the consonants, so every word you read tells you how to say it. When a cluster like the schl- of schlafen tangles on your tongue, slow down; the sounds sit together fine at half speed. And don't let regional accents shake you: you might hear a harder /ick/ in Berlin or an /ish/-tinged ich in the south — variants to recognize, never to learn.",
+         },
+       ],
+       trap_note:
+@@ -762,7 +762,7 @@
+           { word: "machst", translation: "do / make (2nd person)", note: "K → CH shift: make ↔ mach + Shakespearean -st" },
+           { word: "Küche", translation: "kitchen", note: "K → CH shift: kitchen ↔ Küche" },
+         ],
+-        word_bank: ["Was", "machst", "du", "in", "der", "Küche", "kochst"],
++        word_bank: ["Was", "machst", "du", "in", "der", "Küche"],
+         explanation: "Question order: W-word, verb in position 2, subject, then the place — the frame you just built, from a thought.",
+       },
+     ],
+@@ -874,7 +874,7 @@
+         cues: [
+           "Greet first: Guten Tag — both words run D → T",
+           "Who drinks? → ich trinke (drink → trink-)",
+-          "What? → kaltes Wasser: cold → kalt with the das-Wasser ending",
++          "What? → kaltes Wasser: cold → kalt, with the -es ending of neuter Wasser",
+         ],
+         target_answer: "Guten Tag ich trinke kaltes Wasser",
+         meaning: "Good day! I drink cold water",
+@@ -896,7 +896,7 @@
+     twist: {
+       prompt: "Same water, shared: I drink cold water becomes we drink cold water. (The verb ending goes back to the stem.)",
+       target_answer: "Wir trinken kaltes Wasser",
+-      word_bank: ["Wir", "Trinken", "trinken", "trinke", "kaltes", "Wasser"],
++      word_bank: ["Wir", "trinken", "trinke", "kaltes", "Wasser"],
+       explanation: "ich trinke → wir trinken: the ending returns to the bare stem's -en, the one the dictionary form wears. And kaltes Wasser doesn't budge.",
+     },
+   },
+@@ -924,7 +924,7 @@
+     pattern: {
+       title: "The -ieren Formula & The No-'ge-' Secret",
+       content:
+-        "Any English intellectual, technical, or Latinate verb ending in -ate, -ize, -ify, or -ish maps directly to German -ieren: study ↔ studieren, repair ↔ reparieren, organize ↔ organisieren, function ↔ funktionieren, grasp ↔ kapieren (from Latin capere), accept ↔ akzeptieren, and reserve ↔ reservieren. Unlike Germanic verbs, verbs in -ieren always stress the suffix (stu-DIE-ren). Because German phonotactics rejects the prefix 'ge-' on verbs without initial root stress, -ieren verbs NEVER take 'ge-' in the past participle: studiert, repariert, funktioniert!",
++        "Any English intellectual, technical, or Latinate verb ending in -ate, -ize, or -ify maps to a German -ieren verb (-ize and -ify add -is- or -ifiz- before -ieren: organisieren, klassifizieren): study ↔ studieren, repair ↔ reparieren, organize ↔ organisieren, function ↔ funktionieren, grasp ↔ kapieren (from Latin capere), accept ↔ akzeptieren, and reserve ↔ reservieren. Unlike Germanic verbs, verbs in -ieren always stress the suffix (stu-DIE-ren). Because German phonotactics rejects the prefix 'ge-' on verbs without initial root stress, -ieren verbs NEVER take 'ge-' in the past participle: studiert, repariert, funktioniert!",
+       footnotes: [
+         {
+           marker: "2",
+@@ -1273,7 +1273,7 @@
+     twist: {
+       prompt: "Same three nouns, but now something is being done to them: I see the table, the hand, the book. The pronoun test now says him, her, it — watch what the D- tail does.",
+       target_answer: "Ich sehe den Tisch und die Hand und das Buch",
+-      word_bank: ["Ich", "sehe", "den", "die", "das", "der", "dem", "und", "Tisch", "Hand", "Buch"],
++      word_bank: ["Ich", "sehe", "den", "die", "das", "der", "dem", "und", "und", "Tisch", "Hand", "Buch"],
+       explanation: "Accusative only touches the masculine tail: der → den, because er → ihn. The feminine and the neuter stay exactly where they were — die Hand, das Buch. One tail moves; two do not. That asymmetry is the whole Him-Case from topic 10, and it is why the pronoun test is worth installing.",
+     },
+     foreshadow: {
+@@ -1959,7 +1959,7 @@
+     pattern: {
+       title: "The PF- Family at the Front Door",
+       content:
+-        "English p + everything = German Pf- at the start of a native word: path → Pfad, pound → Pfund, pepper → Pfeffer, pipe → Pfeife, plow → Pflug, pan → Pfanne, plant → Pflanze. Watch for double duty inside a word: Pfeffer shifts twice (initial pp... initial p → pf AND medial pp → ff), and Pfeife does the same trick (p → pf, then p → f). Even horse got the treatment: Pferd. Read any German PF- word aloud and the English twin falls out of your mouth.",
++        "English p + everything = German Pf- at the start of a native word: path → Pfad, pound → Pfund, pepper → Pfeffer, pipe → Pfeife, plow → Pflug, pan → Pfanne, plant → Pflanze. Watch for double duty inside a word: Pfeffer shifts twice (initial p → pf AND medial pp → ff), and Pfeife does the same trick (p → pf, then p → f). Even horse got the treatment: Pferd. Read any German PF- word aloud and the English twin falls out of your mouth.",
+       footnotes: [
+         {
+           interest: true,
+@@ -1993,7 +1993,7 @@
+       {
+         id: "l301_e2",
+         type: "matching_pairs",
+-        prompt: "Match the English p-words with their PF- receipts:",
++        prompt: "Match each English word with its German twin:",
+         matching_pairs: [
+           { id: "pf1", english: "path", german: "Pfad" },
+           { id: "pf2", english: "pound", german: "Pfund" },
+@@ -2249,7 +2249,7 @@
+       {
+         id: "l401_e4",
+         type: "derive",
+-        prompt: "Complete with the thou-form of haben: 'Du _____ ein Bruder' (thou hast):",
++        prompt: "Complete with the thou-form of haben: 'Du _____ einen Bruder' (thou hast):",
+         english_hint: "haben → du + the ancient -st",
+         target_answer: "hast",
+         meaning: "Du hast = you have (thou hast)",
+@@ -2271,7 +2271,7 @@
+           {
+             word: "dir",
+             translation: "to thee (you, informal)",
+-            note: "danke gives the gift TO someone — dir is the 'to thee' form of du (as in 'I give it thee')",
++            note: "danken takes the dative: you thank someone (jemandem danken) — dir is the dative 'to thee' form of du",
+           },
+         ],
+         word_bank: ["Ich", "danke", "dir", "dich", "dank"],
+@@ -2775,12 +2775,12 @@
+         type: "shift_select",
+         prompt: "Which of these German k-words will NEVER become a ch — and why?",
+         options: [
+-          "Kaffee — Latin loans kept their hard k",
++          "Kaffee — loanwords kept their hard k",
+           "Koch — the shift skips cook-words",
+           "Küche — ch words reject k",
+-          "Kind — children's words are protected",
++          "Kuchen — cake-words are exempt",
+         ],
+-        target_answer: "Kaffee — Latin loans kept their hard k",
++        target_answer: "Kaffee — loanwords kept their hard k",
+         meaning: "Loanwords escape the shift",
+         explanation: "The shift only hit native Germanic words standing in Germany around 500 AD. Kaffee arrived centuries later, k intact.",
+       },
+@@ -3474,7 +3474,7 @@
+       {
+         id: "l1001_e1",
+         type: "matching_pairs",
+-        prompt: "Match the German with its English — articles pay the -n toll, and the last two are wir-forms for free:",
++        prompt: "Match each phrase with its partner — masculine articles pay the -n toll as objects, and the last two are wir-forms for free:",
+         matching_pairs: [
+           { id: "cg1", english: "der Kaffee (subject)", german: "den Kaffee (object)" },
+           { id: "cg2", english: "ein Traum (subject)", german: "einen Traum (object)" },
+@@ -3698,7 +3698,7 @@
+         options: ["meinen", "mein", "meine", "meiner"],
+         target_answer: "meinen",
+         meaning: "Ich habe meinen Teller = I have my plate",
+-        explanation: "mein copies ein exactly: masculine accusative adds -en (the Him-Case): der Teller → meinen Teller. And the wir-forms of your verbs keep their dictionaries while objects pay the toll: wir sitzen, wir halten, wir setzen — every one a dictionary form.",
++        explanation: "mein copies ein exactly: masculine accusative adds -en (the Him-Case): der Teller → meinen Teller.",
+       },
+       {
+         id: "l11_e3",
+@@ -3954,7 +3954,7 @@
+             note: "twin of 'morrow' — the word hiding inside to-morrow",
+           },
+         ],
+-        word_bank: ["Kommst", "du", "morgen", "kommen", "Du"],
++        word_bank: ["Kommst", "du", "morgen", "kommen"],
+         explanation: "The verb takes position 1 and the subject falls in behind — no do, no helper: 'Comest thou tomorrow?' in modern dress.",
+       },
+       {
+@@ -4050,7 +4050,7 @@
+           { id: "wo8", english: "I'm coming right away", german: "Gleich komme ich" },
+           { id: "wo9", english: "I never come", german: "Ich komme nie" },
+         ],
+-        target_answer: "Ich weiß, dass du kommst, Ich lerne, weil ich will, Ich weiß, dass der Hund groß ist, Ich weiß, dass du Sorge hast, Ich kenne niemand, Ich weiß nichts, Ich kenne deine Meinung, Gleich komme ich, Ich komme nie",
++        target_answer: "Ich weiß, dass du kommst, Ich lerne, weil ich will, Ich weiß, dass der Hund groß ist, Ich weiß, dass du Sorge hast, Ich kenne niemanden, Ich weiß nichts, Ich kenne deine Meinung, Gleich komme ich, Ich komme nie",
+         meaning: "I know that you are coming, I learn because I want to, I know that the dog is big, I know that you have worry, I know nobody, I know nothing, I know your opinion, I'm coming right away, I never come",
+         explanation: "Main clauses keep the verb in position 2; dass and weil throw it to the end of their clause. kennen is 'to know a person or thing' — it takes your new nouns along for free.",
+       },
+@@ -4294,7 +4294,7 @@
+     hook: {
+       title: "The Bound Prefixes",
+       content:
+-        "Some prefixes never fly. ver-, be-, and er- are welded to their verbs: they take the stress together, never split, and never leave for the sentence end. And the oldest of them, ver-, has been hiding in English all along: it is for-. vergessen is forget — the same for- plus the same get. verlieren is lose — and English's forlorn is literally 'for-lost', the identical construction. verboten is forbidden, vernehmt? no — vernehmen is 'hear forth'... just remember: when a German verb starts with ver-, an English for- is usually dead ahead.",
++        "Some prefixes never fly. ver-, be-, and er- are welded to their verbs: they take the stress together, never split, and never leave for the sentence end. And the oldest of them, ver-, has been hiding in English all along: it is for-. vergessen is forget — the same for- plus the same get. verlieren is lose — and English's forlorn is literally 'for-lost', the identical construction. verboten is forbidden. When a German verb starts with ver-, an English for- is usually dead ahead.",
+       footnotes: [
+         {
+           marker: "1",
+@@ -4534,7 +4534,7 @@
+         ],
+         target_answer: "dieser, jener, das, der, jener Baum, dieser Nebel, jene Insel, dieser Teller",
+         meaning: "this, yon, that, the/he, yon tree, this fog, yon island, this plate",
+-        explanation: "One map, three distances: dieser (near), das (mid), jener (far) — with der/die/das as the default articles. The new nouns ride the map like everything else.",
++        explanation: "One map: dieser (near), jener (far) — with der/die/das as the default articles. The new nouns ride the map like everything else.",
+       },
+       {
+         id: "l1102_e2",
+@@ -4802,7 +4802,7 @@
+         id: "l1302_e1",
+         type: "shift_select",
+         prompt: "Flip it: 'Du weißt es' as a yes/no question:",
+-        options: ["Weißt du es?", "Du weißt es?", "Es weißt du?", "Tust du wissen es?"],
++        options: ["Weißt du es?", "Wissen du es?", "Es weißt du?", "Tust du wissen es?"],
+         target_answer: "Weißt du es?",
+         meaning: "Do you know it? (Knowest thou it?)",
+         explanation: "Verb to position 1, subject second: Weißt du es? The 'tust du' option is the do-support German never grew.",
+@@ -4835,12 +4835,12 @@
+         type: "shift_select",
+         prompt: "Which question adds an unnecessary auxiliary German does not have?",
+         options: [
+-          "Tust du morgen kommen? — do-support is not German",
++          "Tust du morgen kommen?",
+           "Kommst du morgen?",
+           "Wann kommst du?",
+           "Warum kommst du nicht?",
+         ],
+-        target_answer: "Tust du morgen kommen? — do-support is not German",
++        target_answer: "Tust du morgen kommen?",
+         meaning: "German asks with a flip, not with 'do'",
+         explanation: "English bolted on do-support; German still flips the bare verb: Kommst du morgen?",
+       },
+@@ -4893,7 +4893,7 @@
+     pattern: {
+       title: "Front Anything, Move Nothing Else",
+       content:
+-        "Neutral: Ich lerne morgen Deutsch. Fronted time: Morgen lerne ich Deutsch — verb glued at 2, subject slides to 3. Fronted object: Das Buch lese ich heute — same glue. Fronted place: Im Hause? no — Im Haus lerne ich — same glue. The subject must still appear somewhere: if it is not in position 1, it lands immediately after the verb. One warning pair: Ich will... (modal in 2, infinitive at the end) versus Willst du...? (flipped question) — both keep the verb in the wall.",
++        "Neutral: Ich lerne morgen Deutsch. Fronted time: Morgen lerne ich Deutsch — verb glued at 2, subject slides to 3. Fronted object: Das Buch lese ich heute — same glue. Fronted place: Im Haus lerne ich — same glue. The subject must still appear somewhere: if it is not in position 1, it lands immediately after the verb. One warning pair: Ich will... (modal in 2, infinitive at the end) versus Willst du...? (flipped question) — both keep the verb in the wall.",
+       footnotes: [],
+       linguist_note:
+         "Adverb order inside the sentence follows the famous TeKaMoLo guideline — Time, Cause, Manner, Place — but at your level one adverb at a time is plenty: Morgen lerne ich. Heute trinken wir.",
+@@ -5502,7 +5502,7 @@
+       outcome: "Recognize the shared ablaut melodies and form strong pasts and participles.",
+       use_example: { german: "Ich habe das Buch gefunden.", english: "I have found the book." },
+       takeaway: "Strong verbs change the root vowel — sing/sang ↔ singen/sang — and wear ge- + -en as participles.",
+-      curiosity_teaser: "Next: sing/sang/sung Mirrors — map fourteen English irregulars onto their German ablauf pairs.",
++      curiosity_teaser: "Next: sing/sang/sung Mirrors — map ten English irregulars onto their German ablauf pairs.",
+     },
+     twist: {
+       prompt: "Now ask it: you have found the book → HAVE you found the book? (The helper flips to position 1.)",
+@@ -5675,7 +5675,7 @@
+       {
+         id: "l1801_e3",
+         type: "matching_pairs",
+-        prompt: "Match each infinitive with its participle (the last one changes its vowel — a preview):",
++        prompt: "Match each infinitive with its participle (the last one breaks the -t pattern — a preview):",
+         matching_pairs: [
+           { id: "gy1", english: "sagen → ?", german: "gesagt" },
+           { id: "gy2", english: "kaufen → ?", german: "gekauft" },
+@@ -5685,7 +5685,7 @@
+         ],
+         target_answer: "gesagt, gekauft, gemacht, gewandert, getragen",
+         meaning: "said, bought, made, hiked, carried/worn",
+-        explanation: "ge- + stem + -t every time — even the motion verb gewandert, which just switches its auxiliary to sein. getragen sneaks in a vowel change: the strong verbs are coming (next lesson).",
++        explanation: "ge- + stem + -t for the first four — even the motion verb gewandert, which just switches its auxiliary to sein. getragen sneaks in -en instead of -t: the strong verbs are coming (next lesson).",
+       },
+       {
+         id: "l1801_e4",
+@@ -5798,7 +5798,7 @@
+           {
+             word: "nach",
+             translation: "to (for cities and countries)",
+-            note: "nach Berlin — the 'to' of destination; cities and countries take nach",
++            note: "nach Berlin — the 'to' of destination; cities and article-free countries take nach (nach Deutschland)",
+           },
+         ],
+         word_bank: ["Ich", "bin", "gestern", "nach", "Berlin", "gefahren"],
+@@ -5807,7 +5807,7 @@
+     ],
+     summary: {
+       outcome: "Choose haben or sein correctly across transitive, motion, and sneaky-verb cases.",
+-      use_example: { german: "Ich bin gestern nach Berlin gefahren.", english: "I went (am-driven) to Berlin yesterday." },
++      use_example: { german: "Ich bin gestern nach Berlin gefahren.", english: "I drove to Berlin yesterday." },
+       takeaway: "Object → haben; motion or change → sein; bleiben always sein — the KJV's 'he is come' logic, still living.",
+       curiosity_teaser: "Next: Gestern habe ich… Story Drills — narrate a whole weekend in Perfekt sentences from taught words.",
+     },
+@@ -5861,7 +5861,7 @@
+       {
+         id: "l1702_e2",
+         type: "shift_select",
+-        prompt: "Which German weekday refused the god-name entirely?",
++        prompt: "Which German weekday swapped its god-name for plain geography?",
+         options: ["Mittwoch (mid-week) — the church replaced Woden", "Montag", "Freitag", "Sonntag"],
+         target_answer: "Mittwoch (mid-week) — the church replaced Woden",
+         meaning: "Mittwoch = Mitte + Woche",
+@@ -6103,22 +6103,22 @@
+       outcome: "Narrate a multi-sentence weekend in the Perfekt with chained brackets.",
+       use_example: { german: "Gestern haben wir Brot gegessen und Bier getrunken.", english: "Yesterday we ate bread and drank beer." },
+       takeaway: "gestern habe ich… + participle is the door; danach/dann glue the rooms; sein handles every move.",
+-      curiosity_teaser: "Next: sing/sang/sung Mirrors — fourteen English irregular verbs mapped onto their German melodies.",
++      curiosity_teaser: "Next: sing/sang/sung Mirrors — ten English irregular verbs mapped onto their German melodies.",
+     },
+   },
+   {
+     id: 1901,
+     slug: "sing-sang-sung-mirrors",
+     title: "sing/sang/sung Mirrors",
+-    subtitle: "Map fourteen English irregulars onto their German ablauf pairs",
++    subtitle: "Map ten English irregulars onto their German ablauf pairs",
+     phase: 3,
+     shift_categories: ["strong_verbs_ablaut"],
+     word_ids: ["singen", "trinken", "finden", "geben", "nehmen", "fahren", "sprechen", "kommen", "schreiben", "schlafen"],
+     table_word_ids: ["singen", "trinken", "geben", "sprechen", "fahren", "schreiben"],
+     hook: {
+-      title: "Fourteen Mirrors on the Wall",
++      title: "Ten Mirrors on the Wall",
+       content:
+-        "You have heard the melody in pairs. Today is the gallery: fourteen English irregular verbs hung beside their German twins, class by class. sing ↔ singen. drink ↔ trinken. find ↔ finden. give ↔ geben. speak ↔ sprechen. come ↔ kommen. write? no — schreiben's true English family is the scribe family (scribe, describe, script). drive ↔ treiben. fare ↔ fahren. sleep ↔ schlafen (sleep/slept ↔ schlafen/schlief — the vowels drift but the CLASS is identical). Stand in front of each pair and the recognition does the memorizing: the melody is not similar. It is the same.",
++        "You have heard the melody in pairs. Today is the gallery: ten English irregular verbs hung beside their German twins, class by class. sing ↔ singen. drink ↔ trinken. find ↔ finden. give ↔ geben. speak ↔ sprechen. come ↔ kommen. schreiben's English kin is the scribe family (scribe, describe, script). drive ↔ treiben. fare ↔ fahren. sleep ↔ schlafen (sleep/slept ↔ schlafen/schlief — the vowels drift but the CLASS is identical). Stand in front of each pair and the recognition does the memorizing: the melody is not similar. It is the same.",
+       footnotes: [
+         {
+           marker: "1",
+@@ -6131,7 +6131,7 @@
+     pattern: {
+       title: "The Gallery Walk",
+       content:
+-        "Walk it: singen, sang, gesungen ↔ sing, sang, sung. trinken, trank, getrunken ↔ drink, drank, drunk. finden, fand, gefunden ↔ find, found. geben, gab, gegeben ↔ give, gave, given. kommen, kam, gekommen ↔ come, came (the vowel wandered, the class held). schreiben, schrieb, geschrieben ↔ describe, described (scribe family). fahren, fuhr, gefahren ↔ fare, fared. schlafen, schlief, geschlafen ↔ sleep, slept. Fourteen frames, one artist — the melody is the same artist in every language.",
++        "Walk it: singen, sang, gesungen ↔ sing, sang, sung. trinken, trank, getrunken ↔ drink, drank, drunk. finden, fand, gefunden ↔ find, found. geben, gab, gegeben ↔ give, gave, given. kommen, kam, gekommen ↔ come, came (the vowel wandered, the class held). schreiben, schrieb, geschrieben ↔ describe, described (scribe family). fahren, fuhr, gefahren ↔ fare, fared. schlafen, schlief, geschlafen ↔ sleep, slept. Ten frames, one artist — the melody is the same artist in every language.",
+       footnotes: [],
+       linguist_note:
+         "schlafen/schlief ↔ sleep/slept is the cleanest proof that classes are inherited, not coincidence: the consonants match, the vowels follow the same class drift, and neither language arranged this on purpose.",
+@@ -6154,11 +6154,11 @@
+       {
+         id: "l1901_e2",
+         type: "shift_select",
+-        prompt: "Which English verb sings the SAME class as 'schreiben / schrieb / geschrieben'?",
++        prompt: "Which English verb family is the true relative of 'schreiben / schrieb / geschrieben'?",
+         options: ["describe / described (scribe family)", "write / wrote", "ride / rode", "drive / drove"],
+         target_answer: "describe / described (scribe family)",
+-        meaning: "schreiben belongs to the scribe family, not write's class",
+-        explanation: "schreiben is Latin scribere Germanicized — its English relatives are scribe, describe, script. Write/wrote is a different class entirely.",
++        meaning: "schreiben belongs to the scribe family, not write's family",
++        explanation: "schreiben is Latin scribere Germanicized — its English relatives are scribe, describe, script. Write/wrote is an unrelated native word.",
+       },
+       {
+         id: "l1901_e3",
+@@ -6188,9 +6188,9 @@
+       },
+     ],
+     summary: {
+-      outcome: "Map fourteen English irregulars to their German ablauf twins by class.",
++      outcome: "Map ten English irregulars to their German ablauf twins by class.",
+       use_example: { german: "Wir haben gestern Deutsch gesprochen.", english: "We spoke German yesterday." },
+-      takeaway: "The irregular verbs are not lists — they are fourteen mirrors of one Germanic melody system.",
++      takeaway: "The irregular verbs are not lists — they are ten mirrors of one Germanic melody system.",
+       curiosity_teaser: "Next: Ablaut Families I — the e→i and a→o classes drilled with geben, sprechen and fahren.",
+     },
+   },
+@@ -6206,7 +6206,7 @@
+     hook: {
+       title: "The Family Albums",
+       content:
+-        "Strong verbs come in families, and the families are recognizable by their melody. Family one: short e in the infinitive becomes a in the past — geben, gab, gegeben. sprechen, sprach, gesprochen. nehmen, nahm, genommen. Family two: long a becomes long u — fahren, fuhr, gefahren. Family three: ä in the du/er present then a in the past, ie in the past of the sleep class — schlafen, schlief, geschlafen. Each family has its English twins standing right beside it: give/gave, speak/spoke, fare/fared, sleep/slept. You are not learning fourteen verbs. You are learning three melodies that cover them.",
++        "Strong verbs come in families, and the families are recognizable by their melody. Family one: short e in the infinitive becomes a in the past — geben, gab, gegeben. sprechen, sprach, gesprochen. nehmen, nahm, genommen. Family two: long a becomes long u — fahren, fuhr, gefahren. Family three: ä in the du/er present then a in the past, ie in the past of the sleep class — schlafen, schlief, geschlafen. Each family has its English twins standing right beside it: give/gave, speak/spoke, fare/fared, sleep/slept. You are not learning ten verbs. You are learning three melodies that cover them.",
+       footnotes: [
+         {
+           marker: "1",
+@@ -6219,7 +6219,7 @@
+     pattern: {
+       title: "Three Melodies, Full Paradigms",
+       content:
+-        "Family e→i/a: geben, gibst?, gibt, gab, gegeben ↔ give, gave, given. sprechen, sprichst, spricht, sprach, gesprochen ↔ speak, spoke, spoken. nehmen, nimmst, nimmt, nahm, genommen. Family a→u: fahren, fährst?, fährt, fuhr, gefahren ↔ fare, fared. laden? skip — two exemplars per family is plenty. The sleep class: schlafen, schläfst, schläft, schlief, geschlafen ↔ sleep, slept. And kommen sits in its own honest corner: kommen, kam, gekommen ↔ come, came, come — the melody you already drilled.",
++        "Family e→i/a: geben, gibst, gibt, gab, gegeben ↔ give, gave, given. sprechen, sprichst, spricht, sprach, gesprochen ↔ speak, spoke, spoken. nehmen, nimmst, nimmt, nahm, genommen. Family a→u: fahren, fährst, fährt, fuhr, gefahren ↔ fare, fared. The sleep class: schlafen, schläfst, schläft, schlief, geschlafen ↔ sleep, slept. And kommen sits in its own honest corner: kommen, kam, gekommen ↔ come, came, come — the melody you already drilled.",
+       footnotes: [],
+       linguist_note:
+         "The du/er present-tense vowel change (gibt, nimmt, fährt, schläft) is i-mutation — the same umlaut that will build plurals and comparatives later. The strong verbs are where it has been hiding all along.",
+@@ -6228,11 +6228,11 @@
+       {
+         id: "l1902_e1",
+         type: "matching_pairs",
+-        prompt: "Family album one (e→a) — match the paradigms:",
++        prompt: "Family album one — match the paradigms:",
+         matching_pairs: [
+           { id: "af1", english: "give / gave / given", german: "geben / gab / gegeben" },
+           { id: "af2", english: "speak / spoke / spoken", german: "sprechen / sprach / gesprochen" },
+-          { id: "af3", english: "take (nim) / took", german: "nehmen / nahm / genommen" },
++          { id: "af3", english: "take / took / taken", german: "nehmen / nahm / genommen" },
+           { id: "af4", english: "fare / fared", german: "fahren / fuhr / gefahren" },
+           { id: "af5", english: "fall / fell / fallen", german: "fallen / fiel / gefallen" },
+           { id: "af6", english: "spring / sprang / sprung", german: "springen / sprang / gesprungen" },
+@@ -6419,7 +6419,7 @@
+     pattern: {
+       title: "Fossil ↔ Living Word",
+       content:
+-        "Fossil one: methinks = mich dünkt's? no — mir dünkt's: 'it thinks ITSELF to me' — the experiencer dative, alive in German as Mir ist kalt, Mir ist schlecht. Fossil two: 'give it me' ↔ Gib es mir — the receiver marked by case, not by preposition. Fossil three: 'me seems' / 'seems to me' ↔ Es scheint mir. Fossil four: wham — 'give it him' ↔ Gib es ihm. The pattern: wherever English once let the pronoun alone mark the receiver, German still does — mir, dir, ihm are the entire living system, three words doing the work of English prepositions.",
++        "Fossil one: methinks = mir dünkt's: 'it seems TO me' — the experiencer dative, alive in German as Mir ist kalt, Mir ist schlecht. Fossil two: 'give it me' ↔ Gib es mir — the receiver marked by case, not by preposition. Fossil three: 'me seems' / 'seems to me' ↔ Es scheint mir. Fossil four: wham — 'give it him' ↔ Gib es ihm. The pattern: wherever English once let the pronoun alone mark the receiver, German still does — mir, dir, ihm are the entire living system, three words doing the work of English prepositions.",
+       footnotes: [],
+       linguist_note:
+         "The dative experiencer is German's favorite feeling-grammar: Mir ist kalt/langweilig/schlecht — cold, bored, and bad all happen TO you. English needs 'I am' phrases; German keeps the ancient 'it is X to-me' frame.",
+@@ -6430,16 +6430,16 @@
+         type: "matching_pairs",
+         prompt: "Match each English fossil with its living German form:",
+         matching_pairs: [
+-          { id: "md1", english: "methinks (it seems to me)", german: "Mir ist kalt (it is cold TO ME)" },
++          { id: "md1", english: "methinks (it seems to me)", german: "Es scheint mir (it seems TO ME)" },
+           { id: "md2", english: "give it me", german: "Gib es mir" },
+           { id: "md3", english: "give it him", german: "Gib es ihm" },
+           { id: "md4", english: "I give it thee", german: "Ich gebe es dir" },
+           { id: "md5", english: "luck", german: "das Glück" },
+           { id: "md6", english: "courage (mood's twin)", german: "der Mut" },
+         ],
+-        target_answer: "Mir ist kalt, Gib es mir, Gib es ihm, Ich gebe es dir, das Glück, der Mut",
+-        meaning: "it is cold to me, give it me, give it him, I give it thee, luck, courage",
+-        explanation: "Every English dative fossil has a working German relative — the case never died on the continent. And the feeling-nouns ride the dative: Glück and Mut happen TO you.",
++        target_answer: "Es scheint mir, Gib es mir, Gib es ihm, Ich gebe es dir, das Glück, der Mut",
++        meaning: "it seems to me, give it me, give it him, I give it thee, luck, courage",
++        explanation: "Every English dative fossil has a working German relative — the case never died on the continent. Glück and Mut are plain nouns; the dative sits on the person they reach: Ich wünsche dir Glück.",
+       },
+       {
+         id: "l2001_e2",
+@@ -6457,12 +6457,12 @@
+         options: ["der", "die", "den", "dem"],
+         target_answer: "der",
+         meaning: "Ich helfe der Frau = I help the woman",
+-        explanation: "Feminine dative = der — the article that does double duty as 'to the' and 'the' (feminine). The fortress adjectives wait outside the case: jung, stark, schwach, gesund — they never decline.",
++        explanation: "Feminine dative = der — the article that does double duty as 'to the' and 'the' (feminine). The fortress adjectives wait outside the case: jung, stark, schwach, gesund — they decline only before a noun; after sein (er ist jung) they stay bare.",
+       },
+       {
+         id: "l2001_e4",
+         type: "reverse_cognate",
+-        prompt: "What archaic English verb-phrase (Shakespeare's favorite) means the same as 'Mir ist kalt'?",
++        prompt: "What archaic English verb-phrase (Shakespeare's favorite) means the same as 'Es scheint mir'?",
+         target_answer: "methinks",
+         meaning: "methinks ↔ the dative experiencer",
+         explanation: "Both are 'it happens TO me' — the dative experiencer that German kept as its daily feeling-grammar.",
+@@ -6550,7 +6550,7 @@
+       {
+         id: "l2002_e4",
+         type: "derive",
+-        prompt: "Say thanks: 'Ich danke ___!' (to YOU, plural — Ihnen):",
++        prompt: "Say thanks: 'Ich danke ___!' (to YOU, formal):",
+         english_hint: "the polite dative of Sie",
+         target_answer: "Ihnen",
+         meaning: "Ich danke Ihnen = I thank you (formal)",
+@@ -7116,7 +7116,7 @@
+             note: "das Bier — a mass noun here, no plural marker",
+           },
+         ],
+-        word_bank: ["Die", "die", "Männer", "trinken", "Bier", "und", "Frauen", "Tee", "das", "Mann"],
++        word_bank: ["Die", "die", "Männer", "trinken", "trinken", "Bier", "und", "Frauen", "Tee", "das", "Mann"],
+         explanation: "Two umlaut plurals (Männer, Frauen) in one sentence — the fossil pair in the wild, built from a thought.",
+       },
+     ],
+@@ -7550,7 +7550,7 @@
+     pattern: {
+       title: "The Complete Ghost Map",
+       content:
+-        "gh → ch: night ↔ Nacht, light ↔ Licht, laugh ↔ lachen, daughter ↔ Tochter, eight ↔ acht, right ↔ Recht, might ↔ Macht, knight ↔ Knecht (the word that got noble in English and stayed farmhand in German!), freight ↔ Fracht. y → g: say ↔ sagen, way ↔ Weg, yesterday ↔ gestern, eye ↔ Auge? — eye is eǒage's descendant, the g hides mid-word. rain ↔ Regen, nail ↔ Nagel. Double-shift royalty: Tochter carries D→T AND gh→ch; dachte/thought closes the loop you opened in the suppletion lesson. This completes all nine Atlas families — the full decode engine.",
++        "gh → ch: night ↔ Nacht, light ↔ Licht, laugh ↔ lachen, daughter ↔ Tochter, eight ↔ acht, right ↔ Recht, might ↔ Macht, knight ↔ Knecht (the word that got noble in English and stayed farmhand in German!), freight ↔ Fracht. y → g: say ↔ sagen, way ↔ Weg, yesterday ↔ gestern, eye ↔ Auge (the g hides mid-word). rain ↔ Regen, nail ↔ Nagel. Double-shift royalty: Tochter carries D→T AND gh→ch; dachte/thought closes the loop you opened in the suppletion lesson. This completes all nine Atlas families — the full decode engine.",
+       footnotes: [],
+       linguist_note:
+         "English 'laugh' still spells the gh but pronounces an f — a last derangement. German lachen kept the original [x]. When you say 'ich lache', you are pronouncing what 'I laugh' looked like in 700 AD.",
+@@ -7665,7 +7665,7 @@
+         "Case one: man/men ↔ Mann/Männer — the a pulled forward. Case two: foot/feet ↔ Fuß/Füße. Case three: mouse/mice ↔ Maus/Mäuse. Case four: tooth/teeth ↔ Zahn/Zähne (hinted: the t→z twin you own from the sibilant family). Case five: goose/geese ↔ Gans/Gänse (hint: the gans family). Case six, the broken pair: child/children ↔ Kind/Kinder — English went even MORE irregular (the old plural -r survives in children!), German stayed regular. Case seven: house/houses ↔ Haus/Häuser — English took the regular exit; German kept the umlaut. Every case is one law: the vanished i pulled, the languages kept different evidence.",
+       footnotes: [],
+       linguist_note:
+-        "The -r plural in 'children' (kinder-ch-...) is the same -r suffix German uses in Kinder, Bücher, Männer — English's children is a double plural, -r plus -en, the only place the Germanic -r plural survives in English spelling.",
++        "The -r plural in 'children' is the same -r suffix German uses in Kinder, Bücher, Männer — English's children is a double plural, -r plus -en, the only place the Germanic -r plural survives in English spelling.",
+     },
+     exercises: [
+       {
+@@ -7765,7 +7765,7 @@
+     pattern: {
+       title: "The Dynasty Walk",
+       content:
+-        "The verb: geben, gab, gegeben ↔ give, gave, given. The impersonal: es gibt ↔ there is ('it gives') — Es gibt ein Problem. The noun: die Gabe (the gift/talent — 'a giving'), with English gift as the twin. The prefix verb: vergeben, vergab, vergeben ↔ forgive, forgave, forgiven — ver-/for- + geben/give, the complete dynasty in one word. The feeling form: gefallen (it falls to me = it pleases me) — a different root but the same dative grammar: Es gefällt mir. Sentence plan: Ich habe dir? — Ich habe ihm das Buch gegeben — geben, dative receiver, accusative thing, participle closing the bracket.",
++        "The verb: geben, gab, gegeben ↔ give, gave, given. The impersonal: es gibt ↔ there is ('it gives') — Es gibt ein Problem. The noun: die Gabe (the gift/talent — 'a giving'), with English gift as the twin. The prefix verb: vergeben, vergab, vergeben ↔ forgive, forgave, forgiven — ver-/for- + geben/give, the complete dynasty in one word. The feeling form: gefallen (it falls to me = it pleases me) — a different root but the same dative grammar: Es gefällt mir. Sentence plan: Ich habe ihm das Buch gegeben — geben, dative receiver, accusative thing, participle closing the bracket.",
+       footnotes: [],
+       linguist_note:
+         "'Es gibt' is the Germanic version of existence-as-giving: God gives, therefore there is. English kept the construction only in fossil phrases ('there's' was once 'there is' the same way). The Perfekt: es hat gegeben — though Germans prefer es gab for the past.",
+@@ -7860,7 +7860,7 @@
+     pattern: {
+       title: "Sound the Ghosts",
+       content:
+-        "The night row: night ↔ Nacht, light ↔ Licht, fright ↔ Freude's family? no — fright is frucht's cousin, just take: fight ↔ fechten (hint). The number row: eight ↔ acht, right ↔ Recht (Du hast recht — you are right). The might row: might ↔ Macht (Wissen ist Macht — knowledge is power). The servile row: knight ↔ Knecht — in English the servant became a nobleman; in German the Knecht stayed a farmhand. The freight row: freight ↔ Fracht (cargo). And the crown: think/thought ↔ denken/dachte — the double shift you can now fully decode: th→d, gh→ch, vowel included.",
++        "The night row: night ↔ Nacht, light ↔ Licht. The number row: eight ↔ acht, right ↔ Recht (Du hast recht — you are right). The might row: might ↔ Macht (Wissen ist Macht — knowledge is power). The servile row: knight ↔ Knecht — in English the servant became a nobleman; in German the Knecht stayed a farmhand. The freight row: freight ↔ Fracht (cargo). And the crown: think/thought ↔ denken/dachte — the double shift you can now fully decode: th→d, gh→ch, vowel included.",
+       footnotes: [],
+       linguist_note:
+         "The gh→ch correspondence is your ninth and final Atlas family. With it, the decode engine is complete: PF-, TH-, T-, K-, D-, V-, GH-, Y-, and the ablaut melodies — every Germanic consonant correspondence accounted for.",
+@@ -7914,7 +7914,7 @@
+         prompt: "What English word is the twin of 'Macht'?",
+         target_answer: "might",
+         meaning: "might ↔ Macht (gh → ch)",
+-        explanation: "'Might is right' and 'Wissen ist Macht' — the same word about power, both still sounding their guttural. Predicates rest bare meanwhile: der Kühlschrank ist voll, die Straße ist nass — and selbst stays bare too: ich selbst, I myself.",
++        explanation: "'Might is right' and 'Wissen ist Macht' — the same word about power, both still sounding their guttural.",
+       },
+       {
+         id: "l2601_e5",
+@@ -7986,7 +7986,7 @@
+         id: "l27_e2",
+         type: "shift_select",
+         prompt: "'Die Katze ist _____ dem Tisch.' (The cat is lying under the table — no motion):",
+-        options: ["unter (dative — location)", "unter (accusative)", "durch", "ohne"],
++        options: ["unter (dative — location)", "über (dative — location)", "durch", "ohne"],
+         target_answer: "unter (dative — location)",
+         meaning: "Die Katze ist unter dem Tisch",
+         explanation: "wo? (where-at?) → dative: dem. The cat is AT REST under the table — am Strand too (the beach; strand is the shore-word English kept): location, dative. legen lays things somewhere and takes the destination: Ich lege das Buch auf den Tisch — lay's y→g twin, accusative on arrival.",
+@@ -8568,7 +8568,7 @@
+     hook: {
+       title: "The Tree, Read Aloud",
+       content:
+-        "Yesterday I traveled to Berlin: Ich bin gestern nach Berlin gefahren. The journey took an hour: Die Fahrt hat eine Stunde gedauert? — keep it Perfekt-light: Die Fahrt war kurz. I drove? no car — I rode the train: Ich bin mit dem Zug gefahren. The train departed at eight: Der Zug ist um acht abgefahren. Notice the dynasty working: fahren (the verb), gefahren (its participle), die Fahrt (the journey-noun), abgefahren (departed — the separable prefix rides ON the participle!). One root carries the whole travel story.",
++        "Yesterday I traveled to Berlin: Ich bin gestern nach Berlin gefahren. The journey was short: Die Fahrt war kurz. I did not drive a car — I rode the train: Ich bin mit dem Zug gefahren. The train departed at eight: Der Zug ist um acht abgefahren. Notice the dynasty working: fahren (the verb), gefahren (its participle), die Fahrt (the journey-noun), abgefahren (departed — the separable prefix rides ON the participle!). One root carries the whole travel story.",
+       footnotes: [
+         {
+           marker: "1",
+@@ -8581,7 +8581,7 @@
+     pattern: {
+       title: "The Travel Story Machine",
+       content:
+-        "The forms: fahren, fuhr, gefahren ↔ fare, fared. The Perfekt with sein: Ich bin gefahren (motion — no object), Ich habe das Auto gefahren (object — haben). The noun: die Fahrt (the journey), die Abfahrt (the departure), die Autofahrt? coin it yourself — the compound law from topic 21 still works. The separable: abfahren, ist abgefahren; ausfahren? skip — two is plenty. Reading plan: any German travel sentence is fahren + a preposition (nach + city, mit + vehicle) + a time word. You can now build all three parts.",
++        "The forms: fahren, fuhr, gefahren ↔ fare, fared. The Perfekt with sein: Ich bin gefahren (motion — no object), Ich habe das Auto gefahren (object — haben). The noun: die Fahrt (the journey), die Abfahrt (the departure), die Autofahrt (car ride — the compound law from topic 21 still works). The separable: abfahren, ist abgefahren. Reading plan: any German travel sentence is fahren + a preposition (nach + city, mit + vehicle) + a time word. You can now build all three parts.",
+       footnotes: [],
+       linguist_note:
+         "Ich bin mit dem Zug gefahren — three systems in seven words: sein for motion, mit + dative (the mid-preposition!), and fahren's ablaut in the participle. The dynasty is the curriculum in miniature.",
+@@ -8619,7 +8619,7 @@
+         id: "l2801_e3",
+         type: "derive",
+         prompt: "Participle check: 'Der Zug ist um acht _____. ' (departed — abfahren):",
+-        english_hint: "prefix + ge + stem + t? no — prefix + ge + fahren",
++        english_hint: "prefix + ge + fahren",
+         target_answer: "abgefahren",
+         meaning: "departed (abgefahren)",
+         explanation: "ab + ge + fahren: the prefix takes first position, ge- slots inside, the ablaut stays.",
+@@ -8667,14 +8667,14 @@
+           marker: "1",
+           title: "The Simple Past Returns",
+           content:
+-            "Perfekt replaced the spoken simple past for most verbs — but sein and haben keep their simple pasts in daily speech: ich war, ich hatte. Nobody says 'ich bin gewesen' for 'I was'. The two most common verbs are the fortress where the old past tense survives.",
++            "Perfekt replaced the spoken simple past for most verbs — but sein and haben keep their simple pasts in daily speech: ich war, ich hatte. 'ich bin gewesen' exists but is far rarer than 'ich war' for 'I was'. The two most common verbs are the fortress where the old past tense survives.",
+         },
+       ],
+     },
+     pattern: {
+       title: "The Paradigm, Twin by Twin",
+       content:
+-        "ich bin ↔ I am / I be. du bist ↔ thou art. er ist ↔ he is (letter for letter). wir sind ↔ we are (different branch, same verb). sie sind ↔ they are. And the past: ich war ↔ I was, du warst ↔ thou wast, er war ↔ he was. The Perfekt loop closes: Ich bin gewesen ↔ I have been; Ich bin gestern nach Berlin gefahren — sein doing motion duty. Sentence pattern for storytelling: Gestern war gut. Als Kind? untaught — keep it: Das Haus war alt. Der Kaffee war gut. war is the storyteller's tense for the copula — drill it until war/was feels like one word, because it is.",
++        "ich bin ↔ I am / I be. du bist ↔ thou art. er ist ↔ he is (letter for letter). wir sind ↔ we are (different branch, same verb). sie sind ↔ they are. And the past: ich war ↔ I was, du warst ↔ thou wast, er war ↔ he was. The Perfekt loop closes: Ich bin gewesen ↔ I have been; Ich bin gestern nach Berlin gefahren — sein doing motion duty. Sentence pattern for storytelling: Gestern war gut. Das Haus war alt. Der Kaffee war gut. war is the storyteller's tense for the copula — drill it until war/was feels like one word, because it is.",
+       footnotes: [],
+       linguist_note:
+         "bist ↔ art is the oldest 2nd-person singular in either language — thou art and du bist are the same construction, with the -st ending you have drilled since the Shakespeare lesson and the b-root of 'be'.",
+@@ -8693,7 +8693,7 @@
+         ],
+         target_answer: "ist, war, du bist, gewesen, ich bin ein Mensch",
+         meaning: "is, was, thou art, been, I am a person",
+-        explanation: "Three roots, one verb, identical across the sea — the most conservative words in Germanic. der Mensch (human — the mannish kin) is sein's most frequent subject.",
++        explanation: "Three roots, one verb, identical across the sea — the most conservative words in Germanic. der Mensch (human — the mannish kin) takes sein like any noun: der Mensch ist alt.",
+       },
+       {
+         id: "l2901_e2",
+@@ -8707,7 +8707,7 @@
+       {
+         id: "l2901_e3",
+         type: "derive",
+-        prompt: "Thou-form: 'Du _____ dost? no — art.' Complete: 'Du _____ alt.' (you are old):",
++        prompt: "Thou-form: 'Du _____ alt.' (you are old):",
+         english_hint: "b + the Shakespearean -st",
+         target_answer: "bist",
+         meaning: "Du bist alt = you are old (thou art old)",
+@@ -8719,7 +8719,7 @@
+         prompt: "Close the Perfekt loop: which sentence uses sein for MOTION?",
+         options: [
+           "Ich bin nach Berlin gefahren",
+-          "Ich bin das Auto gefahren? — no: Ich habe das Auto gefahren",
++          "Ich bin das Auto gefahren",
+           "Ich bin Kaffee getrunken",
+           "Ich bin das Buch gelesen",
+         ],
+@@ -8764,7 +8764,7 @@
+     hook: {
+       title: "Two More Dynasties",
+       content:
+-        "ziehen's family: der Zug (the pull — the train), der Aufzug (the up-pull — the elevator), der Umzug (the around-pull — moving house), umziehen (to move house), ausziehen (to move out), aufziehen (to raise). ziehen's English cousins are tow and tug — the train is named for pulling, just like the tugboat. nehmen's family: nehmen (take), nehmen's du/er forms nehmen? — du nimmst, er nimmt (the vowel mutates!), nehmen's past nahm, participle genommen, and the separable mitnehmen (take along — you have drilled it since topic 15). Two roots, a dozen words, and every suffix law you own on display.",
++        "ziehen's family: der Zug (the pull — the train), der Aufzug (the up-pull — the elevator), der Umzug (the around-pull — moving house), umziehen (to move house), ausziehen (to move out), aufziehen (to raise). ziehen's English cousins are tow and tug — the train is named for pulling, just like the tugboat. nehmen's family: nehmen (take), nehmen's du/er forms — du nimmst, er nimmt (the vowel mutates!), nehmen's past nahm, participle genommen, and the separable mitnehmen (take along — you have drilled it since topic 15). Two roots, a dozen words, and every suffix law you own on display.",
+       footnotes: [
+         {
+           interest: true,
+@@ -8778,7 +8778,7 @@
+     pattern: {
+       title: "Radiate, Then Read",
+       content:
+-        "The ziehen radiation: ziehen, zog, gezogen (the a→o→o melody with an -en participle). Der Zug (train/pull/draught/move — a chess move is ein Zug!). Umziehen: Ich ziehe nach Berlin um — separable, prefix last. Der Umzug ist teuer? untaught — keep it: Der Umzug ist morgen (the move is tomorrow). The nehmen radiation: nehmen, nimmst/nimmt, nahm, genommen. Mitnehmen: Ich nehme das Essen mit (takeaway food!). And the stand-family cross-check: verstehen/verstehen? — verstehen = understand, aufstehen = stand up — the same radiation English built with stand.",
++        "The ziehen radiation: ziehen, zog, gezogen (the a→o→o melody with an -en participle). Der Zug (train/pull/draught/move — a chess move is ein Zug!). Umziehen: Ich ziehe nach Berlin um — separable, prefix last. Der Umzug ist morgen (the move is tomorrow). The nehmen radiation: nehmen, nimmst/nimmt, nahm, genommen. Mitnehmen: Ich nehme das Essen mit (takeaway food!). And the stand-family cross-check: verstehen = understand, aufstehen = stand up — the same radiation English built with stand.",
+       footnotes: [],
+       linguist_note:
+         "ziehen's -ogen participle (gezogen) marks it as a class-2 strong verb with an ancient -ug- suffix — the same class as English's lost 'towen'. The vowel melody a-o-o matches English's own old forms.",
+@@ -8803,10 +8803,10 @@
+         id: "l2802_e2",
+         type: "shift_select",
+         prompt: "The mutation check: 'er _____' (nehmen, 3rd person present):",
+-        options: ["nimmt", "nehmt", "nimmt?", "nahm"],
++        options: ["nimmt", "nehmt", "nimmst", "nahm"],
+         target_answer: "nimmt",
+         meaning: "er nimmt = he takes",
+-        explanation: "nehmen mutates in du/er: nimmst/nimmt — the i-mutation law you met in geben → gibt. The past nahm is a different note. The journey verbs ride their own rails: aufstehen, mitnehmen, schauen — one trip in three words, und jeder gewinnt: everyone wins.",
++        explanation: "nehmen mutates in du/er: nimmst/nimmt — the i-mutation law you met in geben → gibt. The past nahm is a different note. mitnehmen mutates just like nehmen, and its prefix flies to the end: Er nimmt das Essen mit.",
+       },
+       {
+         id: "l2802_e3",
+@@ -8976,7 +8976,7 @@
+     pattern: {
+       title: "The Feeling Fridge",
+       content:
+-        "Temperature: Mir ist kalt / warm / heiß (to-me it is cold/warm/hot). States: Mir ist langweilig (bored), Mir ist schlecht (I feel sick), Mir ist schwindlig (dizzy — hint), Mir ist es? — plain: Mir ist gut? rare — 'es geht mir gut' covers well-being. Sorrow: Es tut mir leid (it does me sorrow — I am sorry), Es tut mir nicht leid? negate later. Recipient: Das tut mir weh (that does me pain — that hurts). Grammar recipe: [Es] + ist/tut + [dative pronoun] + [the feeling]. Swap mir for dir/ihm and you can diagnose anyone: Ist dir kalt? (are YOU cold — to-thee?).",
++        "Temperature: Mir ist kalt / warm / heiß (to-me it is cold/warm/hot). States: Mir ist langweilig (bored), Mir ist schlecht (I feel sick), Mir ist schwindlig (dizzy); for well-being say 'es geht mir gut'. Sorrow: Es tut mir leid (it does me sorrow — I am sorry). Recipient: Das tut mir weh (that does me pain — that hurts). Grammar recipe: [Es] + ist/tut + [dative pronoun] + [the feeling]. Swap mir for dir/ihm and you can diagnose anyone: Ist dir kalt? (are YOU cold — to-thee?).",
+       footnotes: [],
+       linguist_note:
+         "These are the same dative-experiencer constructions English kept only in fossils ('me seems', 'it grieves me to say'). German's everyday emotional vocabulary is grammatically archaic English — and fully alive.",
+@@ -9294,7 +9294,7 @@
+       {
+         id: "l3003_e2",
+         type: "shift_select",
+-        prompt: "Grammar gauntlet: 'Ich weiß, dass er mir das Buch _____.' (geben — participle? No — present, du/er form!):",
++        prompt: "Grammar gauntlet: 'Ich weiß, dass er mir das Buch _____.' (geben — present tense, er-form!):",
+         options: ["gibt", "gab", "gegeben hat", "geben"],
+         target_answer: "gibt",
+         meaning: "...dass er mir das Buch gibt",
+@@ -9793,7 +9793,7 @@
+         type: "shift_select",
+         prompt: "A NEW verb: 'werfen' (to throw) goes 'warf, geworfen'. Which room does it live in?",
+         options: [
+-          "Room III — the i–a–u room, with singen and trinken? no: e–a–o with sprechen",
++          "Room III — the i–a–u room, with singen and trinken",
+           "Room III/IV melody: e–a–o like sprechen, sprach, gesprochen",
+           "Room VI with fahren (u-past)",
+           "No room — it is a weak verb",
+@@ -9992,7 +9992,7 @@
+         type: "matching_pairs",
+         prompt: "Match each full sentence with its case logic:",
+         matching_pairs: [
+-          { id: "wp1", english: "We drive through? no — INTO the city (motion)", german: "Wir fahren in die Stadt" },
++          { id: "wp1", english: "We drive INTO the city (motion)", german: "Wir fahren in die Stadt" },
+           { id: "wp2", english: "We are in the city (rest)", german: "Wir sind in der Stadt" },
+           { id: "wp3", english: "The cat jumps onto the table", german: "Die Katze springt auf den Tisch" },
+           { id: "wp4", english: "The cat sleeps on the sofa", german: "Die Katze schläft auf dem Sofa" },
+@@ -11016,7 +11016,7 @@
+           { id: "sg1", english: "I am older than you", german: "Ich bin älter als du" },
+           { id: "sg2", english: "The water is too cold", german: "Das Wasser ist zu kalt" },
+           { id: "sg3", english: "Coffee is better than tea", german: "Kaffee ist besser als Tee" },
+-          { id: "sg4", english: "The house is as big as a castle? — as big as it gets", german: "Das Haus ist so groß wie ein Schloss" },
++          { id: "sg4", english: "The house is as big as a castle", german: "Das Haus ist so groß wie ein Schloss" },
+           { id: "sg5", english: "The test is harder than the game", german: "Der Test ist schwerer als das Spiel" },
+         ],
+         target_answer: "Ich bin älter als du, Das Wasser ist zu kalt, Kaffee ist besser als Tee, Das Haus ist so groß wie ein Schloss, Der Test ist schwerer als das Spiel",
+@@ -11061,7 +11061,7 @@
+     hook: {
+       title: "The Hunt",
+       content:
+-        "The Atlas bridge card for this family lists every v→b word in the compendium — today you hunt them all. The verbs: geben, leben, lieben, glauben. The numbers and measures: sieben, halb. The preposition: über. The materials and creatures: Silber/silver, gelb/yellow, Kalb/calf, Leber/liver, Laub/leaf, Rabe/raven. Thirteen words, one law: English v/f between vowels, German b. The hunt's trick is direction — you can run it German→English (Silber → silver?) or English→German (heaven → Himmel? no — different family! Only true v→b words answer).",
++        "The Atlas bridge card for this family lists every v→b word in the compendium — today you hunt them all. The verbs: geben, leben, lieben, glauben. The numbers and measures: sieben, halb. The preposition: über. The materials and creatures: Silber/silver, gelb/yellow, Kalb/calf, Leber/liver, Laub/leaf, Rabe/raven. Thirteen words, one law: English v/f between vowels, German b. The hunt's trick is direction — you can run it German→English (Silber → silver?) or English→German (heaven → Himmel is no pair — different family; only true v→b words answer).",
+       footnotes: [
+         {
+           marker: "1",
+@@ -11471,8 +11471,8 @@
+         id: "l2003_e2",
+         type: "shift_select",
+         prompt: "Club check: 'Ich folge _____ Mann.' (I follow the man — folgen!):",
+-        options: ["dem (dative — folgen demands it)", "den (accusative)", "der", "das"],
+-        target_answer: "dem (dative — folgen demands it)",
++        options: ["dem", "den", "der", "das"],
++        target_answer: "dem",
+         meaning: "Ich folge dem Mann = I follow the man (to-the-man)",
+         explanation: "folgen joined the dative club — following goes TO the followed. dem Mann, never den Mann. wünschen joined too: Ich wünsche dir Glück — the wish aims at its receiver.",
+       },
+@@ -11480,8 +11480,8 @@
+         id: "l2003_e3",
+         type: "shift_select",
+         prompt: "The double-object verb: 'Gib _____ das Buch!' (give HIM the book — receiver):",
+-        options: ["ihm (dative receiver)", "ihn (accusative — wrong club)", "ihren", "seine"],
+-        target_answer: "ihm (dative receiver)",
++        options: ["ihm", "ihn", "ihren", "seine"],
++        target_answer: "ihm",
+         meaning: "Gib ihm das Buch = Give him the book",
+         explanation: "geben plays both sides: the thing given is accusative, the receiver is dative — ihm, the 'give it him' fossil.",
+       },
+@@ -11811,7 +11811,7 @@
+     hook: {
+       title: "The Two Verbs That Never Surrendered",
+       content:
+-        "Topic 18 handed you the Perfekt — ge- participles closing brackets everywhere. But two verbs refused the surrender. Nobody says 'ich habe gehabt' for 'I had', and nobody says 'ich bin gewesen' for 'I was'. Speech keeps the old simple pasts: ich hatte, ich war. These are the fortress verbs — the last place the ancient past tense lives in daily German. And the ending on the fortress wall spells its own history: hatte ↔ had. That -te is the same dental suffix as your -ed (Old English hæfde — 'I had' — ends in -de). German never stopped conjugating with the ending English still wears.",
++        "Topic 18 handed you the Perfekt — ge- participles closing brackets everywhere. But two verbs refused the surrender. Storytelling reaches for the old simple pasts first: ich hatte, ich war. The Perfekt versions, 'ich habe gehabt' and 'ich bin gewesen', are heard in everyday speech too, but they are not the default for 'I had' and 'I was'. These are the fortress verbs — the last place the ancient past tense lives in daily German. And the ending on the fortress wall spells its own history: hatte ↔ had. That -te is the same dental suffix as your -ed (Old English hæfde — 'I had' — ends in -de). German never stopped conjugating with the ending English still wears.",
+       footnotes: [
+         {
+           marker: "1",
+@@ -11824,7 +11824,7 @@
+     pattern: {
+       title: "The Fortress Wall, Person by Person",
+       content:
+-        "haben: ich hatte ↔ I had, du hattest ↔ thou hadst, er hatte ↔ he had, wir hatten ↔ we had. sein: ich war ↔ I was, du warst ↔ thou wast, er war ↔ he was, wir waren ↔ we were. The storytelling frames: Gestern hatte ich keine Zeit (yesterday I had no time). Das Haus war alt (the house was old). Wir waren in Berlin (we were in Berlin). One honest note: the Perfekt forms exist — gehabt, gewesen — and appear in formal writing; but in speech the fortress holds. habe gehabt is a construction you will hear only in drills and apologies.",
++        "haben: ich hatte ↔ I had, du hattest ↔ thou hadst, er hatte ↔ he had, wir hatten ↔ we had. sein: ich war ↔ I was, du warst ↔ thou wast, er war ↔ he was, wir waren ↔ we were. The storytelling frames: Gestern hatte ich keine Zeit (yesterday I had no time). Das Haus war alt (the house was old). Wir waren in Berlin (we were in Berlin). One honest note: the Perfekt forms exist — gehabt, gewesen — and you will hear them in everyday speech too, but the simple pasts remain the default for telling a story.",
+       footnotes: [],
+       linguist_note:
+         "war ↔ was is the *wes- root from the sein lesson's three-verb trench coat — and hattest ↔ hadst is the same -st you have drilled since the Shakespeare lesson, riding on the dental suffix. Two histories, one ending.",
+@@ -11920,7 +11920,7 @@
+     pattern: {
+       title: "One Weak Past, Six Ways",
+       content:
+-        "können → konnte ↔ could; müssen → musste ↔ must/had to; dürfen → durfte ↔ was allowed (archaic English durst!); sollen → sollte ↔ should; wollen → wollte ↔ wanted to; wissen → wusste ↔ knew (wist). Conjugation is boring on purpose: ich/er konnte, du konntest, wir konnten — one past stem for everybody, the dental -te doing all the work. And the bracket rule rides along: the bare infinitive stays at the end — Ich konnte nicht kommen, Ich musste gestern arbeiten, Wir wollten nach Berlin. Watch the trap: wollte (wanted) has one L in the past but wollen has two in the present — du wolltest, never du wolltest with double-t.",
++        "können → konnte ↔ could; müssen → musste ↔ must/had to; dürfen → durfte ↔ was allowed (archaic English durst!); sollen → sollte ↔ should; wollen → wollte ↔ wanted to; wissen → wusste ↔ knew (wist). Conjugation is boring on purpose: ich/er konnte, du konntest, wir konnten — one past stem for everybody, the dental -te doing all the work. And the bracket rule rides along: the bare infinitive stays at the end — Ich konnte nicht kommen, Ich musste gestern arbeiten, Wir wollten nach Berlin. Watch the trap: the double L of wollen survives into the past — wollte, du wolltest, wir wollten. Spell it with ll every time.",
+       footnotes: [],
+       linguist_note:
+         "Preterite-presents go back to Proto-Indo-European perfect forms — old stative 'has-been-able' constructions re-anchored to the present. That is why the modals have no -en infinitive stress and no ge- participle in older speech: they were never ordinary verbs.",
+@@ -11948,7 +11948,7 @@
+         options: ["konnte", "kann", "können", "konnten"],
+         target_answer: "konnte",
+         meaning: "Ich konnte nicht kommen = I couldn't come",
+-        explanation: "ich/er konnte — one past stem for every person, with the bare infinitive stehen at the bracket's end.",
++        explanation: "ich/er konnte — one past stem for every person, with the bare infinitive kommen at the bracket's end.",
+       },
+       {
+         id: "l1905_e3",
+@@ -11957,7 +11957,7 @@
+         options: ["musste", "muss", "müssen", "musst"],
+         target_answer: "musste",
+         meaning: "Ich musste gestern arbeiten = I had to work yesterday",
+-        explanation: "must has no living past of its own — but German musste is that past, still working. The adjectives waited outside the bracket: jung, stark, schwach, gesund — they stay present-tense while the verbs freeze.",
++        explanation: "must has no living past of its own — but German musste is that past, still working.",
+       },
+       {
+         id: "l1905_e4",
+@@ -12106,7 +12106,7 @@
+     pattern: {
+       title: "The Four Formulas",
+       content:
+-        "1. Ich heiße Anna. — 'I am called Anna'; question form: Wie heißt du? (informal) / Wie heißen Sie? (formal). 2. Ich komme aus England. — come from; the country takes aus with no article: aus Deutschland, aus der Schweiz (feminine keeps hers). 3. Ich wohne in Berlin. — reside; city = bare in, country = in + dative: in Deutschland, in der Schweiz. 4. Ich bin zwanzig Jahre alt. — literally 'I am twenty years old', word for word English. Stack them and the self-introduction builds itself: Ich heiße Anna. Ich komme aus England, und ich wohne jetzt in Berlin.",
++        "1. Ich heiße Anna. — 'I am called Anna'; question form: Wie heißt du? (informal) / Wie heißen Sie? (formal). 2. Ich komme aus England. — come from; most countries take aus with no article: aus Deutschland; feminine and plural countries keep theirs: aus der Schweiz. 3. Ich wohne in Berlin. — reside; city = bare in, country = in + dative: in Deutschland, in der Schweiz. 4. Ich bin zwanzig Jahre alt. — literally 'I am twenty years old', word for word English. Stack them and the self-introduction builds itself: Ich heiße Anna. Ich komme aus England, und ich wohne jetzt in Berlin.",
+       footnotes: [],
+       linguist_note:
+         "Heißen and hight share the s of *haitaną's present stem — heißt keeps it, hight wore it down. The question 'Wie heißen Sie?' literally asks 'How are you called?', the same logic as archaic 'How are you hight?' — both languages asking for a name by way of a calling.",
+@@ -12135,7 +12135,7 @@
+         options: ["aus", "von", "in", "bei"],
+         target_answer: "aus",
+         meaning: "Ich komme aus Deutschland = I come from Germany",
+-        explanation: "aus = out of — origins run through the out-of preposition, and countries stand bare: aus Deutschland.",
++        explanation: "aus = out of — origins run through the out-of preposition, and most countries stand bare: aus Deutschland (but aus der Schweiz keeps its article).",
+       },
+       {
+         id: "l5071_e3",
+@@ -12202,7 +12202,7 @@
+     pattern: {
+       title: "Spelling Aloud, the German Way",
+       content:
+-        "The trap letters: W = veh (English V's sound), V = fow (English F's sound), J = yot (English Y's sound), Z = tsett (English TS), ß = Eszett (sharp S). The s you reach for at the start of English words is often German's Sch- or St- in speech: sprechen, schreiben. On the phone, Germans spell with the formula: 'Wie schreibt man das? — Buchstabieren Sie bitte: B wie Berta, E wie Emil...' The verb is regular except for the stress: buchstabieren, ich buchstabiere, past participle buchstabiert — and remember the Latin Bridge rule: no ge- on -ieren verbs.",
++        "The trap letters: W = veh (English V's sound), V = fow (English F's sound), J = yot (English Y's sound), Z = tsett (English TS), ß = Eszett (sharp S). In speech, German sp- and st- at the start of a word sound like 'shp-' and 'sht-', and Sch- is always 'sh': sprechen, Stein, schreiben. On the phone, Germans spell with the formula: 'Wie schreibt man das? — Buchstabieren Sie bitte: B wie Berta, E wie Emil...' The verb is regular except for the stress: buchstabieren, ich buchstabiere, past participle buchstabiert — and remember the Latin Bridge rule: no ge- on -ieren verbs.",
+       footnotes: [],
+       linguist_note:
+         "Letter names fossilize pronunciation history: German kept the continental Romance values (V = [f] before it shifted, J = [j]) while English drifted to its own. When you say 'fow' for V, you are pronouncing the medieval consonant system out loud — the same one that makes Vater a [f]-word.",
+@@ -12262,7 +12262,7 @@
+           { word: "ausziehen", translation: "to take off (clothes)", note: "sich ausziehen — reflexive, with the aus- 'out' prefix from topic 15 — and it hides a Z, the tsett-letter from exercise one" },
+         ],
+         word_bank: ["Kannst", "du", "das", "bitte", "buchstabieren"],
+-        explanation: "Modal kann in position 2, the -ieren infinitive at the bracket's end — and no ge- ever touches its participle.",
++        explanation: "Modal kannst in position 2, the -ieren infinitive at the bracket's end — and no ge- ever touches its participle.",
+       },
+     ],
+     summary: {
+@@ -12333,7 +12333,7 @@
+         id: "l5091_e3",
+         type: "shift_select",
+         prompt: "Eltern literally means:",
+-        options: ["the elder ones", "the parents", "the old ones' house", "the family tree"],
++        options: ["the elder ones", "the grandparents", "the old ones' house", "the family tree"],
+         target_answer: "the elder ones",
+         meaning: "Eltern = parents, literally 'the elder ones'",
+         explanation: "A frozen comparative of alt (old): elter- is elder. German says 'the elders' where English coined 'parents'.",
+@@ -12487,7 +12487,7 @@
+     pattern: {
+       title: "The Strong Endings Are the Demonstrative Endings",
+       content:
+-        "Watch the pattern: the strong adjective borrows the endings of der/die/das itself — guter Wein (masculine -er, like der), kaltes Wasser (neuter -es, like das), gute Butter (feminine -e, like die). The article-less noun phrase is its own little demonstrative. Mixed recap: ein hides its flag in the masculine nominative (ein guter Wein) and neuter (ein kaltes Wasser) — the adjective covers for it — but einen, eine, einer carry their own flags, so the adjective falls back to weak: einen besseren Kaffee (the very form the capstone whispered). And in the no-article plural the adjective takes -e: alte Bücher, gute Freunde? — Freunde arrives with its own lesson; for now: alte Wörter.",
++        "Watch the pattern: the strong adjective borrows the endings of der/die/das itself — guter Wein (masculine -er, like der), kaltes Wasser (neuter -es, like das), gute Butter (feminine -e, like die). The article-less noun phrase is its own little demonstrative. Mixed recap: ein hides its flag in the masculine nominative (ein guter Wein) and neuter (ein kaltes Wasser) — the adjective covers for it — but einen, eine, einer carry their own flags, so the adjective falls back to weak: einen besseren Kaffee (the very form the capstone whispered). And in the no-article plural the adjective takes -e: alte Bücher, alte Wörter.",
+       footnotes: [],
+       linguist_note:
+         "The strong endings are the old demonstrative pronoun endings (*sa, *sō, *þat) — German spread them onto the adjective so that even a bare noun phrase still announces case and gender. English kept the pronouns (he, she, that) but let the adjective go naked.",
+@@ -12858,7 +12858,7 @@
+           marker: "1",
+           title: "wurde vs würde — One Umlaut, Different Worlds",
+           content:
+-            "werden's plain past is wurde (it became / it got: Es wurde kalt). Its subjunctive is würde (it would: Es würde kalt). The umlaut is the would-world signal, same as hatte/hätte. Hear the dots or mishear the reality.",
++            "werden's plain past is wurde (it became / it got: Es wurde kalt). Its subjunctive is würde (it would: Es würde kalt werden). The umlaut is the would-world signal, same as hatte/hätte. Hear the dots or mishear the reality.",
+         },
+       ],
+     },
+@@ -13212,7 +13212,7 @@
+         prompt: "wann and wenn are doublets of one ancient word. Which English word is their twin?",
+         target_answer: "when",
+         meaning: "wann/wenn ↔ when (Proto-Germanic *hwan)",
+-        explanation: "All three descend from *hwan: English kept one spelling, German split asking (wann) from linking (wenn).",
++        explanation: "wann and wenn descend from the same word as English when: English kept one spelling, German split asking (wann) from linking (wenn).",
+       },
+       {
+         id: "l5111_e5",
+@@ -13378,7 +13378,7 @@
+       {
+         id: "l5121_e2",
+         type: "shift_select",
+-        prompt: "Which of these five numbers wears the T→S shift badge (zehn→ten, zwei→two)?",
++        prompt: "Which of these numbers wears the T→S shift badge (as in zwei→two)?",
+         options: ["zehn", "vier", "eins", "sechs"],
+         target_answer: "zehn",
+         meaning: "zehn ↔ ten: the T→S/SS shift family",
+@@ -14138,7 +14138,7 @@
+         id: "l5151_e4",
+         type: "reverse_cognate",
+         prompt:
+-          "'Das Datum' is Latin datum, 'the given'. Which English word is the same Latin word — the one you type every day?",
++          "'Das Datum' is Latin datum, 'the given'. Which English word is that same Latin word in the plural — the one you type every day?",
+         options: ["data", "date", "dozen", "detail"],
+         target_answer: "data",
+         meaning: "Datum ↔ data: one Latin participle, two languages",
+@@ -15076,7 +15076,7 @@
+       {
+         id: "l5201_e2",
+         type: "shift_select",
+-        prompt: "Which of these rooms wears the T→Z badge that turned English timber into German Zimmer?",
++        prompt: "Which of these rooms wears the T→Z badge that turned English timber into its German twin?",
+         options: ["das Zimmer", "der Keller", "die Etage", "der Flur"],
+         target_answer: "das Zimmer",
+         meaning: "das Zimmer ↔ timber: the T→Z shift inside a doublet",
+@@ -15216,7 +15216,7 @@
+         ],
+         target_answer: "Der Computer ist neu und der Schrank ist alt",
+         meaning: "The computer is new and the wardrobe is old",
+-        word_bank: ["Der", "Computer", "ist", "neu", "und", "der", "Schrank", "alt", "Teppich", "vor"],
++        word_bank: ["Der", "Computer", "ist", "ist", "neu", "und", "der", "Schrank", "alt", "Teppich", "vor"],
+         explanation:
+           "Two loans from different centuries in one sentence: der Computer borrowed in our lifetime, der Schrank pure Germanic — and the alt in the bank reminds you which end of the contrast the wardrobe sits at.",
+         diagnosis: {
+@@ -15401,7 +15401,7 @@
+       {
+         id: "l5212_e2",
+         type: "shift_select",
+-        prompt: "Which kitchen word wears the P→F badge that separates English soap from German Seife?",
++        prompt: "Which kitchen word wears the P→F badge that separates English soap from its German twin?",
+         options: ["die Seife", "der Kamm", "die Klingel", "der Ofen"],
+         target_answer: "die Seife",
+         meaning: "Seife ↔ soap: the P→F shift, with Rome holding a loan-copy",
+@@ -15438,7 +15438,7 @@
+         ],
+         target_answer: "Der Kuchen ist im Ofen und das Wasser ist heiß",
+         meaning: "The cake is in the oven and the water is hot",
+-        word_bank: ["Der", "Kuchen", "ist", "im", "Ofen", "und", "das", "Wasser", "heiß", "Herd", "Tür"],
++        word_bank: ["Der", "Kuchen", "ist", "ist", "im", "Ofen", "und", "das", "Wasser", "heiß", "Herd", "Tür"],
+         explanation:
+           "im Ofen contracts in + dem for the masculine — the cake bakes inside, so dative. das Wasser ist heiß carries the shift story twice over: Wasser and heiß both wear the T→S badge, the kitchen's most common sound law.",
+         diagnosis: {
+@@ -17021,7 +17021,7 @@
+       {
+         id: "l5271_e2",
+         type: "shift_select",
+-        prompt: "'Ich wohne in _____.' — which of these country names refuses to travel without its article?",
++        prompt: "Which of these country names refuses to travel without its article?",
+         options: ["die Türkei", "Österreich", "Polen", "Irland"],
+         target_answer: "die Türkei",
+         meaning: "die Türkei is one of the two feminines — die Schweiz is the other",
+@@ -17060,7 +17060,7 @@
+             word: "im",
+             translation: "in the",
+             note:
+-              "im is in + dem, fused into one word — months take it bare: im Januar, im März, im Februar. For the feminine countries the fusion makes in + die → in der Schweiz.",
++              "im is in + dem, fused into one word — months take it bare: im Januar, im März, im Februar. The feminine countries never fuse: in der Schweiz (dwelling), in die Türkei (going).",
+           },
+         ],
+         word_bank: ["Im", "Februar", "fahre", "ich", "nach", "Polen", "Januar", "Familie", "Türkei", "Fahrkarte", "Abfahrt", "Ankunft", "Flughafen", "Ausflug"],
+@@ -18023,11 +18023,11 @@
+         type: "reverse_cognate",
+         prompt:
+           "'die Gitarre' and its English twin took the same road: Spanish guitarra, from Greek kithara. Give the English twin:",
+-        options: ["guitar", "zither", "lyre", "cello"],
++        options: ["guitar", "harp", "lyre", "cello"],
+         target_answer: "guitar",
+         meaning: "die Gitarre ↔ guitar: one Greek lyre, two languages",
+         explanation:
+-          "Spanish guitarra came from Greek kithara, and both German and English bought it from Spanish. The distractor zither is family too — the same Greek word through German die Zither.",
++          "Spanish guitarra came from Greek kithara, and both German and English bought it from Spanish. harp is a Germanic word (German Harfe) for a different instrument, so it is not a twin.",
+       },
+       {
+         id: "l5301_e4",
