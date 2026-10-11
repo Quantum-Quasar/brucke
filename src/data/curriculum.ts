@@ -129,6 +129,7 @@ export const TOPICS: TopicCluster[] = [
     sprigs: [
       { ...shell(sprigId(10, 1), "den / einen / ihn Case Gym", "18 accusative-object drills with table words: Ich trinke den Kaffee, Ich suche ihn."), authored: true },
       { ...shell(sprigId(10, 2), "Him & Whom Proof Texts", "Spot the ancient nasal in English him/them/whom, then mirror it in German mich/dich/ihn/wen."), authored: true },
+      { ...shell(sprigId(10, 3), "The Articles Are Pronouns in Disguise", "die = D- + sie, der = D- + er, das = D- + es. Read every German 'the' as a pronoun wearing a hat, then prove it in the dative."), authored: true },
     ],
   },
 

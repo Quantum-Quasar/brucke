@@ -27,6 +27,8 @@ interface TranscribeExerciseProps {
   onSuccess: () => void;
   onError: (errorType: "spelling" | "umlaut" | "capitalization") => void;
   onQueueRetry?: () => void;
+  /** TM-6: the learner got it right but did not trust it (guidebook §1.8/§1.9) */
+  onFlagGuessed?: () => void;
   /** using the cue ladder forfeits the purple star for the run */
   onPurpleForfeit?: () => void;
 }
@@ -45,8 +47,10 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
   onError,
   onQueueRetry,
   onPurpleForfeit,
+  onFlagGuessed,
 }) => {
   const [userInput, setUserInput] = useState("");
+  const [showIdeaParts, setShowIdeaParts] = useState(false);
   const [cuesRevealed, setCuesRevealed] = useState(0);
   const [status, setStatus] = useState<"idle" | "correct" | "almost" | "incorrect">("idle");
   const [sheetVariant, setSheetVariant] = useState<"exact" | "almost">("exact");
@@ -70,6 +74,7 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
 
   const resetCurrentExercise = () => {
     setUserInput("");
+    setShowIdeaParts(false);
     setCuesRevealed(0);
     setStatus("idle");
     setSheetVariant("exact");
@@ -238,6 +243,34 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
           Build the German. The words are yours to choose — not all are needed.
         </p>
       </div>
+
+      {/* TM-6 (guidebook §0.3): a thought is multidimensional and must be split into
+          elements before German can order them. This is a *skill*, not decoration —
+          the whole course exists to install it, so it gets its own explicit step. */}
+      {exercise.idea_parts && exercise.idea_parts.length > 0 && (
+        <div className="p-3 rounded-lg bg-[var(--bg-color)] border border-dashed border-[var(--main-color)]/40 space-y-2">
+          <button
+            type="button"
+            onClick={() => setShowIdeaParts((v) => !v)}
+            className="w-full flex items-center justify-between text-[11px] uppercase tracking-wider text-[var(--main-color)] font-bold"
+          >
+            <span>break the thought up first</span>
+            <span className="text-[var(--sub-color)] normal-case tracking-normal">
+              {showIdeaParts ? "hide" : "show"}
+            </span>
+          </button>
+          {showIdeaParts && (
+            <ul className="space-y-1">
+              {exercise.idea_parts.map((part, i) => (
+                <li key={i} className="flex items-start gap-2 text-xs text-[var(--text-color)] leading-relaxed">
+                  <span className="text-[var(--main-color)] font-bold shrink-0">{i + 1}.</span>
+                  <span>{part}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
 
       {/* Pre-exercise Vocabulary Hints */}
       {exercise.vocab_hints && exercise.vocab_hints.length > 0 && (
@@ -415,6 +448,7 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
 
       {showSuccessSheet && (
         <SuccessFeedbackSheet
+          onFlagGuessed={!isRetry ? onFlagGuessed : undefined}
           targetAnswer={target}
           meaning={exercise.meaning}
           explanation={exercise.explanation}

@@ -3,7 +3,20 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, BookOpen, Sparkles, Info, Compass, HeartHandshake, Zap } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  Sparkles,
+  Info,
+  Compass,
+  HeartHandshake,
+  Zap,
+  Ear,
+  TriangleAlert,
+  Compass as CompassIcon,
+  Brain,
+} from "lucide-react";
 import { ProgressBar5, type LessonSegment } from "./ProgressBar5";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { ExerciseWidget } from "./ExerciseWidgets";
@@ -11,6 +24,10 @@ import { TwistCard } from "./TwistCard";
 import { useAppStore } from "@/lib/store";
 import { getNextPlayableLessonId } from "@/data/curriculum";
 import { whisperCuesForLesson } from "@/data/posture-cues";
+import { RETRY_INTENT_LINE, retryVariant } from "@/lib/retry-variation";
+import { isListeningSkipped, listeningSkipLabel } from "@/lib/listening";
+import { consciousnessLineFor } from "@/data/consciousness";
+import { SOUND_IMPORTS, importLineFor, type SoundImport } from "@/data/sound-imports";
 import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
 import type { Lesson, ExerciseItem } from "@/lib/types";
 
@@ -43,6 +60,36 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   const [mercyRevealFor, setMercyRevealFor] = useState<string | null>(null);
 
   const showPostureCues = useAppStore((s) => s.settings.showPostureCues);
+  const listeningSkippedUntil = useAppStore((s) => s.settings.listeningSkippedUntil);
+  const flagGuessed = useAppStore((s) => s.flagGuessed);
+  // TM-6: rotating retry surfaces — attempt number per exercise id, in memory only
+  const [retryAttempts, setRetryAttempts] = useState<Record<string, number>>({});
+  // TM-6: the offshoot trough — one genuine tangent, shown once, never grading anything
+  const [detourDismissed, setDetourDismissed] = useState(false);
+  const detourFootnote = React.useMemo(
+    () =>
+      [...(lesson.hook.footnotes ?? []), ...(lesson.pattern.footnotes ?? [])].find((fn) => fn.interest) ?? null,
+    [lesson.id]
+  );
+  // TM-6 (guidebook §1.4): "you already make this sound" — only the imports whose
+  // grapheme actually appears in this lesson's table words, so it never lectures
+  // about a sound the learner is not meeting right now.
+  const soundImports = React.useMemo<SoundImport[]>(() => {
+    if (currentSegment !== "table") return [];
+    const onPage = new Set(
+      lesson.table_word_ids
+        .map((wid) => data.words[wid.toLowerCase()]?.target_word.toLowerCase() ?? "")
+        .join(" ")
+    );
+    return SOUND_IMPORTS.filter((imp) =>
+      onPage.has(imp.grapheme[0].toLowerCase()) || [...onPage].some((w) => w.includes(imp.grapheme[0].toLowerCase()))
+    ).slice(0, 3);
+  }, [currentSegment, lesson.id, data.words]);
+
+  const showDetour = Boolean(detourFootnote) && !detourDismissed && practiceIndex === 2 && !inRetryPhase && !twistPhase;
+  // TM-6: re-whisper learning consciousness on a deterministic subset of the trail
+  const consciousnessLine = React.useMemo(() => consciousnessLineFor(lesson.id), [lesson.id]);
+  const listeningOff = isListeningSkipped(listeningSkippedUntil);
   const whisperCues = React.useMemo(
     () => whisperCuesForLesson(lesson.id, lesson.exercises.map((e) => e.type), showPostureCues),
     [lesson.id, lesson.exercises, showPostureCues]
@@ -139,6 +186,8 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   // TM-4c: count misses per item during reinforcement so "Walk me through it" can appear
   const handleRetryError = (exercise: ExerciseItem) => {
     setFailCounts((prev) => ({ ...prev, [exercise.id]: (prev[exercise.id] ?? 0) + 1 }));
+    // TM-6: the next presentation of this item gets a fresh surface (§1.7/§1.9)
+    setRetryAttempts((prev) => ({ ...prev, [exercise.id]: (prev[exercise.id] ?? 0) + 1 }));
     handleExerciseError(exercise);
   };
 
@@ -215,7 +264,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   };
 
   const currentExercise = inRetryPhase
-    ? retryQueue[retryIndex]
+    ? retryVariant(retryQueue[retryIndex], retryAttempts[retryQueue[retryIndex]?.id] ?? 0)
     : lesson.exercises[practiceIndex];
 
   return (
@@ -256,6 +305,15 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
           <p className="text-base sm:text-lg text-[var(--sub-color)] mt-2 font-normal leading-relaxed">
             {lesson.subtitle}
           </p>
+
+          {/* TM-6: hearing is off for now — said once, plainly, never as an error */}
+          {listeningOff && (
+            <p className="mt-3 text-xs font-mono text-[var(--sub-color)] inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20">
+              <Brain className="w-3.5 h-3.5" /> {listeningSkipLabel(
+                (listeningSkippedUntil ?? 0) - Date.now()
+              )} — listening exercises read from the page instead
+            </p>
+          )}
         </div>
       </div>
 
@@ -274,6 +332,33 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
               </div>
 
               <p className="text-[var(--sub-color)] text-sm leading-relaxed">{lesson.hook.content}</p>
+
+              {/* TM-6: preventative correction — name the shortcut before the mind takes it (§1.9/§1.10) */}
+              {lesson.hook.trap_note && (
+                <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-dashed border-[var(--main-color)]/40 space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-[var(--main-color)] font-semibold">
+                    <TriangleAlert className="w-3.5 h-3.5" /> the shortcut your mind will offer
+                  </div>
+                  <p className="text-xs text-[var(--sub-color)] leading-relaxed">{lesson.hook.trap_note}</p>
+                </div>
+              )}
+
+              {/* TM-6: a reference made on purpose, resolved later (§1.6) */}
+              {lesson.foreshadow && (
+                <p className="text-xs font-mono italic text-[var(--main-color)] border-l-2 border-[var(--main-color)]/40 pl-2.5">
+                  {lesson.foreshadow.line}
+                </p>
+              )}
+
+              {/* TM-6: pays off a foreshadow planted by an earlier lesson */}
+              {lesson.payoff && (
+                <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--main-color)]/30 space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-[var(--main-color)] font-semibold">
+                    <Sparkles className="w-3.5 h-3.5" /> remember when this was left open
+                  </div>
+                  <p className="text-xs text-[var(--sub-color)] leading-relaxed">{lesson.payoff.text}</p>
+                </div>
+              )}
 
               {lesson.hook.footnotes && lesson.hook.footnotes.length > 0 && (
                 <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 space-y-2 lg:hidden font-mono">
@@ -316,6 +401,16 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
               </div>
 
               <p className="text-[var(--sub-color)] text-sm leading-relaxed">{lesson.pattern.content}</p>
+
+              {/* TM-6: the same preventative-correction slot on the pattern card */}
+              {lesson.pattern.trap_note && (
+                <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-dashed border-[var(--main-color)]/40 space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-[var(--main-color)] font-semibold">
+                    <TriangleAlert className="w-3.5 h-3.5" /> the shortcut your mind will offer
+                  </div>
+                  <p className="text-xs text-[var(--sub-color)] leading-relaxed">{lesson.pattern.trap_note}</p>
+                </div>
+              )}
 
               {lesson.pattern.linguist_note && (
                 <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 space-y-1.5 text-xs font-mono">
@@ -385,6 +480,23 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                 </div>
               </div>
 
+              {/* TM-6: sound import — the English word that already contains this sound */}
+              {soundImports.length > 0 && (
+                <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--main-color)]/25 space-y-2 font-mono">
+                  <div className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-[var(--main-color)] font-semibold">
+                    <Ear className="w-3.5 h-3.5" /> you already make these sounds
+                  </div>
+                  <ul className="space-y-1.5">
+                    {soundImports.map((imp) => (
+                      <li key={imp.grapheme} className="text-xs text-[var(--sub-color)] leading-relaxed">
+                        <strong className="text-[var(--main-color)] font-mono">{imp.grapheme}</strong>{" "}
+                        <span className="text-[var(--text-color)]">{importLineFor(imp)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               {/* Atlas Constellation Bridge */}
               {primaryShift && (
                 <div className="p-4 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 font-mono">
@@ -429,6 +541,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                     setTwistResurfaced(false);
                     setFailCounts({});
                     setMercyRevealFor(null);
+                    setRetryAttempts({});
                     markSegmentDone("table", "practice");
                   }}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-mono font-medium text-sm transition cursor-pointer active:scale-95"
@@ -453,6 +566,37 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                     {whisperCues[practiceIndex]}
                   </p>
                 )}
+
+              {/* TM-6 (guidebook §1.10): one re-whispered line, on this lesson only if it is a stop */}
+              {!inRetryPhase && !twistPhase && practiceIndex === 0 && showPostureCues && consciousnessLine && (
+                <p className="text-xs italic text-[var(--sub-color)] font-mono pl-2.5 border-l-2 border-[var(--main-color)]/30">
+                  {consciousnessLine}
+                </p>
+              )}
+
+              {/* TM-6 (guidebook §1.3): the load-reset trough — a 30-second detour, skippable,
+                  ungraded, never inside the queue, at the lesson's natural mid-point */}
+              {showDetour && detourFootnote && (
+                <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/25 space-y-2 font-mono animate-in fade-in duration-200">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-[var(--main-color)] font-semibold">
+                      <CompassIcon className="w-3.5 h-3.5" /> 30-second detour
+                    </div>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-[var(--sub-color)] uppercase tracking-wider">
+                      for interest — not on the test
+                    </span>
+                  </div>
+                  <p className="text-sm font-bold text-[var(--text-color)]">{detourFootnote.title}</p>
+                  <p className="text-xs text-[var(--sub-color)] leading-relaxed">{detourFootnote.content}</p>
+                  <button
+                    type="button"
+                    onClick={() => setDetourDismissed(true)}
+                    className="w-full py-2 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-[var(--sub-color)] hover:text-[var(--main-color)] text-xs font-mono transition cursor-pointer"
+                  >
+                    back to the exercise
+                  </button>
+                </div>
+              )}
 
               {/* Exercise Step Tracker */}
               <div className="flex items-center justify-between px-1">
@@ -547,6 +691,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                   <p className="text-[var(--sub-color)]">
                     These come back in Review either way — you can&apos;t lose them.
                   </p>
+                  <p className="text-[var(--sub-color)]/80 italic">{RETRY_INTENT_LINE}</p>
                 </div>
               )}
 
@@ -561,6 +706,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                 }
                 onQueueRetry={() => handleExerciseError(currentExercise)}
                 onPurpleForfeit={() => setEverQueued(true)}
+                onFlagGuessed={() => flagGuessed(lesson.word_ids)}
               />
 
               {/* TM-4c queue mercy: after a second miss on the same item, offer a guided re-learn */}

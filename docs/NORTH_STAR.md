@@ -46,6 +46,7 @@ Audits are useful; unlimited audits slowly turn the app into an etymology refere
 ## Guard rails that already exist (keep them green)
 
 `bun run test` · `bun run typecheck` · `bun run lint` · `bun scripts/audit-word-refs.ts` ·
-`bun scripts/audit-teasers.ts` · `bun scripts/audit-vocab-balance.ts --strict`.
+`bun scripts/audit-teasers.ts` · `bun scripts/audit-wording.ts` ·
+`bun scripts/audit-vocab-balance.ts --strict`.
 The tests include solvability (every tile exercise can be completed) and playability
 (matching exercises have at most 12 pairs).

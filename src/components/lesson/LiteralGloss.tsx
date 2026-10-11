@@ -21,6 +21,8 @@ interface LiteralGlossProps {
   onSuccess: () => void;
   onError: (errorType: "spelling" | "umlaut" | "capitalization") => void;
   onQueueRetry?: () => void;
+  /** TM-6: the learner got it right but did not trust it (§1.8/§1.9) */
+  onFlagGuessed?: () => void;
 }
 
 const token = (s: string) => s.toLowerCase().replace(/[.,!?;:]+$/, "");
@@ -31,6 +33,7 @@ export const LiteralGloss: React.FC<LiteralGlossProps> = ({
   onSuccess,
   onError,
   onQueueRetry,
+  onFlagGuessed,
 }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "correct" | "almost" | "incorrect">("idle");
@@ -222,6 +225,7 @@ export const LiteralGloss: React.FC<LiteralGlossProps> = ({
 
       {showSuccessSheet && (
         <SuccessFeedbackSheet
+          onFlagGuessed={!isRetry ? onFlagGuessed : undefined}
           targetAnswer={exercise.target_answer}
           meaning={exercise.meaning}
           explanation={exercise.explanation}

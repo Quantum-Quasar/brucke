@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, Info, Map, RotateCcw, Sliders } from "lucide-react";
+import { Compass, Info, Map, RotateCcw, Sliders, Table2 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { getDueCards } from "@/lib/srs";
 
@@ -26,6 +26,7 @@ export const BottomNav: React.FC = () => {
       badge: 0,
     },
     { href: "/atlas", label: "atlas", icon: Compass, isActive: pathname.startsWith("/atlas"), badge: 0 },
+    { href: "/panorama", label: "panorama", icon: Table2, isActive: pathname.startsWith("/panorama"), badge: 0 },
     { href: "/review", label: "review", icon: RotateCcw, isActive: pathname.startsWith("/review"), badge: dueCount },
     { href: "/settings", label: "settings", icon: Sliders, isActive: pathname.startsWith("/settings"), badge: 0 },
     { href: "/about", label: "about", icon: Info, isActive: pathname.startsWith("/about"), badge: 0 },

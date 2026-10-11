@@ -132,6 +132,34 @@ export function findUnresolvedWordRefs(): WordRefMiss[] {
           if (!resolves(t)) misses.push({ lesson: lesson.id, where: `literal_gloss ${ex.id} german`, token: t });
         }
       }
+      // TM-6 dictation: the spoken string is the answer, in audio form
+      if (ex.type === "dictation") {
+        for (const t of germanTokens(ex.spoken ?? ex.target_answer)) {
+          if (!resolves(t)) misses.push({ lesson: lesson.id, where: `dictation ${ex.id} spoken`, token: t });
+        }
+        for (const t of germanTokens(ex.target_answer)) {
+          if (!resolves(t)) misses.push({ lesson: lesson.id, where: `dictation ${ex.id} answer`, token: t });
+        }
+      }
+      // TM-6 family_matrix: every cell's German, plus the graded cell
+      if (ex.type === "family_matrix") {
+        for (const row of ex.cells ?? []) {
+          for (const cell of row) {
+            for (const t of germanTokens(cell.german)) {
+              if (!resolves(t)) misses.push({ lesson: lesson.id, where: `family_matrix ${ex.id} cell`, token: t });
+            }
+          }
+        }
+        for (const t of germanTokens(ex.target_answer)) {
+          if (!resolves(t)) misses.push({ lesson: lesson.id, where: `family_matrix ${ex.id} answer`, token: t });
+        }
+      }
+      // TM-6 variant_english: the German sentence must be trail-legal
+      if (ex.type === "variant_english" && ex.german) {
+        for (const t of germanTokens(ex.german)) {
+          if (!resolves(t)) misses.push({ lesson: lesson.id, where: `variant_english ${ex.id} german`, token: t });
+        }
+      }
     }
     if (lesson.twist) {
       for (const t of germanTokens(lesson.twist.target_answer)) {

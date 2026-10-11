@@ -9,6 +9,9 @@ import { ErrorFeedbackSheet } from "./ErrorFeedbackSheet";
 import { SuccessFeedbackSheet } from "./SuccessFeedbackSheet";
 import { TranscribeExercise } from "./TranscribeExercise";
 import { LiteralGloss } from "./LiteralGloss";
+import { DictationExercise } from "./DictationExercise";
+import { FamilyMatrixExercise } from "./FamilyMatrixExercise";
+import { VariantEnglishExercise } from "./VariantEnglishExercise";
 import { evaluateAnswerAccuracy, evaluateBestOf } from "@/lib/letter-diff";
 import { diagnoseAttempt, affirmationFor } from "@/lib/shift-diagnosis";
 import { useAppStore } from "@/lib/store";
@@ -21,6 +24,8 @@ interface ExerciseWidgetProps {
   onError: (errorType: "spelling" | "umlaut" | "capitalization") => void;
   isRetry?: boolean;
   onQueueRetry?: () => void;
+  /** TM-6: the learner got it right but did not trust it (guidebook §1.8/§1.9) */
+  onFlagGuessed?: () => void;
   /** TM-1: using a transcribe cue ladder forfeits the purple star (help is honest) */
   onPurpleForfeit?: () => void;
 }
@@ -32,6 +37,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
   isRetry = false,
   onQueueRetry,
   onPurpleForfeit,
+  onFlagGuessed,
 }) => {
   // TM-1/TM-2: the two production-drill types are self-contained widgets with their
   // own cue ladders / option flow; they reuse the same feedback sheets.
@@ -44,6 +50,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
         onError={onError}
         onQueueRetry={onQueueRetry}
         onPurpleForfeit={onPurpleForfeit}
+        onFlagGuessed={onFlagGuessed}
       />
     );
   }
@@ -55,6 +62,44 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
         onSuccess={onSuccess}
         onError={onError}
         onQueueRetry={onQueueRetry}
+        onFlagGuessed={onFlagGuessed}
+      />
+    );
+  }
+  if (exercise.type === "dictation") {
+    return (
+      <DictationExercise
+        exercise={exercise}
+        isRetry={isRetry}
+        onSuccess={onSuccess}
+        onError={onError}
+        onQueueRetry={onQueueRetry}
+        onPurpleForfeit={onPurpleForfeit}
+        onFlagGuessed={onFlagGuessed}
+      />
+    );
+  }
+  if (exercise.type === "family_matrix") {
+    return (
+      <FamilyMatrixExercise
+        exercise={exercise}
+        isRetry={isRetry}
+        onSuccess={onSuccess}
+        onError={onError}
+        onQueueRetry={onQueueRetry}
+        onFlagGuessed={onFlagGuessed}
+      />
+    );
+  }
+  if (exercise.type === "variant_english") {
+    return (
+      <VariantEnglishExercise
+        exercise={exercise}
+        isRetry={isRetry}
+        onSuccess={onSuccess}
+        onError={onError}
+        onQueueRetry={onQueueRetry}
+        onFlagGuessed={onFlagGuessed}
       />
     );
   }
@@ -65,15 +110,17 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
     onError={onError}
     isRetry={isRetry}
     onQueueRetry={onQueueRetry}
+    onFlagGuessed={onFlagGuessed}
   />;
 };
 
-const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit">> = ({
+const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
   exercise,
   onSuccess,
   onError,
   isRetry = false,
   onQueueRetry,
+  onFlagGuessed,
 }) => {
   const [userInput, setUserInput] = useState("");
   const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
@@ -867,6 +914,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, "onPurpleForfeit"
       {/* Success / Almost Right Breakdown Pop-up / Bottom Sheet */}
       {showSuccessSheet && (
         <SuccessFeedbackSheet
+          onFlagGuessed={!isRetry ? onFlagGuessed : undefined}
           targetAnswer={exercise.target_answer}
           meaning={exercise.meaning}
           explanation={exercise.explanation}

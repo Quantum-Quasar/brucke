@@ -31,7 +31,7 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 ## 3. Four Core Functional Pillars
 
 ### Pillar 1: The Trail (`/trail` and `/trail/[id]`)
-- **Curriculum Scope**: 30 topic clusters with the entire curriculum authored — 30 cores + 78 sprigs + 60 branch lessons = **168 lessons**, all fully interactive. Unknown lesson ids 404 at the router level (`dynamicParams = false`).
+- **Curriculum Scope**: 30 topic clusters with the entire curriculum authored — 30 cores + 79 sprigs + 60 branch lessons = **169 lessons**, all fully interactive. Unknown lesson ids 404 at the router level (`dynamicParams = false`).
 - **5-Segment Card-by-Card Wizard (`LessonReader.tsx`)**:
   1. **Part 01: The Hook**: Historical intuition and living English cognate framing.
   2. **Part 02: The Pattern**: Mechanical shift rules, suffix patterns (`-en`), with margin philological notes.
@@ -100,7 +100,11 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 ├── next.config.mjs            # Next.js configuration with React strict mode
 ├── tsconfig.json              # TypeScript config with '@/*' path aliases
 ├── scripts/
-│   └── parse-compendium.ts    # Parses markdown dictionaries into compendium.json
+│   ├── parse-compendium.ts    # Parses markdown dictionaries into compendium.json
+│   ├── audit-word-refs.ts     # Every vocabulary reference resolves (incl. the 3 new types)
+│   ├── audit-teasers.ts       # Title + curiosity_teaser chain drift must stay 0
+│   ├── audit-wording.ts       # No copy-pasted prose/prompt formulas between neighbours
+│   └── audit-vocab-balance.ts # Taught-word balance across the trail
 ├── src/
 │   ├── app/                   # Next.js App Router
 │   │   ├── layout.tsx         # Root HTML structure, dark background, TopNav & BottomNav
@@ -112,6 +116,8 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 │   │   ├── atlas/
 │   │   │   ├── page.tsx       # Atlas index: grid of 9 consonant shift families
 │   │   │   └── [family]/page.tsx # Server component exporting generateStaticParams()
+│   │   ├── panorama/
+│   │   │   └── page.tsx       # Grammar Panorama: five consultable structure diagrams
 │   │   └── review/
 │   │       └── page.tsx       # Multi-modal SRS Review Hub with 4 styles & 5 decks
 │   ├── components/
@@ -128,7 +134,10 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 │   │   │   ├── LessonDetailClient.tsx # Client boundary for [id]/page.tsx
 │   │   │   ├── LessonReader.tsx       # 5-step wizard container with progress bar & Atlas bridge
 │   │   │   ├── ProgressBar5.tsx       # 5-segment interactive step navigation bar
-│   │   │   ├── ExerciseWidgets.tsx    # Morpheme tiles, matching pairs, shift select, syntax builder
+│   │   │   ├── ExerciseWidgets.tsx    # Morpheme tiles, matching pairs, shift select, syntax builder, dictation, family grid, variant English
+│   │   │   ├── DictationExercise.tsx  # TM-6 played-audio listening drill with a capped replay budget
+│   │   │   ├── FamilyMatrixExercise.tsx # TM-6 prefix × base grid: one cell graded, the family revealed
+│   │   │   ├── VariantEnglishExercise.tsx # TM-6 every honest English rendering + word-match traps
 │   │   │   ├── SuccessFeedbackSheet.tsx # Explicit answer meaning & explanation sheet
 │   │   │   ├── ErrorFeedbackSheet.tsx # Letter-by-letter diff comparison sheet
 │   │   │   └── RetryQueue.tsx         # End-of-lesson reinforcement queue
@@ -211,6 +220,15 @@ bun run build
 
 # 4. Launch Local Development Server
 bun run dev
+
+# 5. Run the content integrity audits (all must stay green)
+bun scripts/audit-word-refs.ts    # every word/table_word/transcribe/dictation/family_matrix/variant_english/twist/literal_gloss reference resolves
+bun scripts/audit-teasers.ts      # title + curiosity_teaser chain drift (must be 0)
+bun scripts/audit-wording.ts      # no copy-pasted prose or prompt formulas between neighbouring lessons
+bun scripts/audit-vocab-balance.ts --strict
+
+# 6. Browser smoke suite (Playwright; starts its own dev server on :3111)
+bun run test:e2e
 ```
 
 ---

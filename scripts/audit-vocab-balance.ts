@@ -31,7 +31,7 @@ const STRICT = process.argv.includes("--strict");
 const PATTERN = new Set([1, 3, 4, 5, 6, 7, 8, 15, 16, 25, 26, 3002, 101, 301, 302, 401, 402, 501, 502, 601, 602, 701, 801, 2601]);
 const GRAMMAR_CORE = new Set([2, 9, 10, 11, 12, 13, 14, 17, 18, 19, 20, 21, 22, 23, 24, 27, 28, 29]);
 // Deliberate zero-new revision lessons (drill/gym/reading/review; never accidental).
-const REVISION = new Set([30, 702, 902, 1002, 1101, 1201, 1302, 1401, 1501, 1803, 1901, 2002, 2202, 2501, 3001, 3003, 5012, 5041, 5052, 5061, 5062, 5063]);
+const REVISION = new Set([30, 702, 902, 1002, 1003, 1101, 1201, 1302, 1401, 1501, 1803, 1901, 2002, 2202, 2501, 3001, 3003, 5012, 5041, 5052, 5061, 5062, 5063]);
 const BANDS: Record<string, [number, number]> = {
   pattern: [4, 11], grammarCore: [3, 6], consolidation: [2, 4], revision: [0, 2], branch: [0, 8],
 };

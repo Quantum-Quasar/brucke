@@ -77,6 +77,8 @@ export interface SRSCard {
   due_date: string; // ISO date
   lapses: number;
   last_reviewed: string | null;
+  /** TM-6: how many times the learner answered correctly but flagged "I guessed" */
+  guessed?: number;
 }
 
 export type ExerciseType =
@@ -87,7 +89,15 @@ export type ExerciseType =
   | "derive"
   | "reverse_cognate"
   | "transcribe"
-  | "literal_gloss";
+  | "literal_gloss"
+  | "dictation"
+  | "family_matrix"
+  | "variant_english";
+
+export const PRODUCTION_TYPES: ExerciseType[] = ["derive", "reverse_cognate", "transcribe", "dictation", "family_matrix"];
+
+/** Types that must never open a lesson — they demand production, not recognition. */
+export const COLD_OPEN_FORBIDDEN: ExerciseType[] = ["derive", "reverse_cognate", "transcribe", "literal_gloss", "dictation", "family_matrix", "variant_english"];
 
 export interface MatchingPairItem {
   id: string;
@@ -129,9 +139,26 @@ export interface ExerciseItem {
   // --- transcribe (TM-1): the thought the learner must render into German ---
   idea?: string;
   cues?: string[]; // 1–3 scaled prompts, ordered easy→late, revealed on demand or on failure
+  // --- TM-6: break the thought up before German orders it (guidebook §0.3) ---
+  /** The elements of the thought, one per line. Taught skill, not decoration. */
+  idea_parts?: string[];
   // --- literal_gloss (TM-2): the German sentence and its natural English ---
   german?: string;
   natural?: string;
+  // --- variant_english (TM-6): one thought, several valid English renderings ---
+  renderings?: string[];
+  traps?: string[];
+  // --- dictation (TM-6): the only form the learner gets before answering ---
+  spoken?: string;
+  replays?: number;
+  // --- family_matrix (TM-6): prefix × base families ---
+  rows?: string[];
+  columns?: string[];
+  cells?: Array<Array<{ german: string; english: string }>>;
+  seed?: Array<[number, number]>;
+  task?: { row: number; column: number };
+  row_law?: string;
+  column_law?: string;
 }
 
 /**
@@ -179,6 +206,11 @@ export interface LessonSection {
   content: string;
   footnotes?: Footnote[];
   linguist_note?: string;
+  /**
+   * TM-6 (guidebook §1.9/§1.10): name the over-simplification the mind will reach for,
+   * *before* the learner reaches for it — preventative correction, not reactive diagnosis.
+   */
+  trap_note?: string;
 }
 
 export interface Lesson {
@@ -195,6 +227,13 @@ export interface Lesson {
   exercises: ExerciseItem[];
   /** TM-5a: rendered after the last exercise, before the reinforcement queue. Ungraded, skippable. */
   twist?: LessonTwist;
+  /**
+   * TM-6 (guidebook §1.6): an unresolved reference made on purpose. `resolvedIn` is the id
+   * of the lesson that carries the matching `payoff`. Unresolved tension is a contour tool.
+   */
+  foreshadow?: { line: string; resolvedIn: number };
+  /** TM-6: resolves a `foreshadow` planted by `ofLesson`. `ofLesson` is that lesson's id. */
+  payoff?: { ofLesson: number; text: string };
   summary: {
     outcome: string;
     use_example: { german: string; english: string };

@@ -28,6 +28,11 @@ export interface CustomizationSettings {
   // Posture (TM-4): how the course asks to be taken
   showPostureCues: boolean;
   posturePrimerSeen: boolean;
+
+  // Listening (TM-6): Epoch ms until which dictation exercises are skipped.
+  // One skip silences every dictation for 15 minutes — a learner in a quiet
+  // library or on a train must never be punished for their environment.
+  listeningSkippedUntil: number;
 }
 
 export const DEFAULT_SETTINGS: CustomizationSettings = {
@@ -50,4 +55,6 @@ export const DEFAULT_SETTINGS: CustomizationSettings = {
 
   showPostureCues: true,
   posturePrimerSeen: false,
+
+  listeningSkippedUntil: 0,
 };

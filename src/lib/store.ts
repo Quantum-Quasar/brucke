@@ -105,6 +105,15 @@ export interface AppState {
    * have set "encountered"/"mastered", so the entry is removed again.
    */
   restoreSrsCard: (wordId: string, snapshot: ReviewSnapshot) => void;
+  /**
+   * TM-6: the learner answered correctly but flagged "I guessed". Honest signal —
+   * re-grade the involved words as Hard so they return soon, and count the guess.
+   * The guidebook's promise ("we will revisit everything you are uncertain of")
+   * only holds if uncertainty is observable even when the answer is right.
+   */
+  flagGuessed: (wordIds: string[]) => void;
+  /** TM-6: silence every dictation exercise for `ms` (default 15 minutes). */
+  skipListeningFor: (ms?: number) => void;
   setPreferredReviewMode: (mode: ReviewMode) => void;
   completeOnboarding: () => void;
   openOnboarding: () => void;
@@ -702,14 +711,39 @@ export const useAppStore = create<AppState>((set, get) => ({
     });
   },
 
+  // TM-6: a correct answer the learner did not trust. Re-grade as Hard (grade 3)
+  // so the word returns soon, and record the guess so the guess rate is visible
+  // anywhere cards are inspected. Nothing here touches completion or stars.
+  flagGuessed: (wordIds) => {
+    const ids = Array.from(new Set((wordIds || []).map((w) => w.trim()).filter(Boolean)));
+    if (ids.length === 0) return;
+    set((s) => {
+      const srsCards = { ...s.srsCards };
+      for (const id of ids) {
+        const current = srsCards[id] || createInitialCard(id);
+        srsCards[id] = gradeCard(current, 3);
+        srsCards[id] = { ...srsCards[id], guessed: (srsCards[id].guessed ?? 0) + 1 };
+      }
+      const next = { ...s, srsCards };
+      saveState(next);
+      return next;
+    });
+  },
+
+  skipListeningFor: (ms = 15 * 60 * 1000) => {
+    const settings = { ...get().settings, listeningSkippedUntil: Date.now() + ms };
+    const next = { settings };
+    set(next);
+    saveState({ ...get(), ...next });
+  },
+
   openWordDrawer: (wordId) => {
     set({ activeWordDrawerId: wordId });
     get().markWordExplored(wordId);
   },
 
   closeWordDrawer: () => {
-    set({ activeWordDrawerId: null });
-  },
+    set({ activeWordDrawerId: null });  },
 
   setUmlautTolerance: (enabled) => {
     set((s) => {

@@ -16,6 +16,7 @@ Rather than relying on rote memorization or gamified streaks without substance, 
 
 - **Comprehensive Audit Manifest**: See [`AUDIT_MANIFEST.md`](./AUDIT_MANIFEST.md) for full architectural specifications, data schemas, and audit instructions.
 - **North Star**: See [`NORTH_STAR.md`](./NORTH_STAR.md) — Brücke teaches German; etymology is the hook, not the subject. Read before changing content.
+- **Grammar Panorama**: See [`german-panorama.md`](./german-panorama.md) — every German structure mapped to the lesson ids that teach it, with a `taught` / `inferred` / `partial` column. The repo artifact companion to `/panorama`; `inferred` rows are the honest backlog.
 - **Design Specification**: See [`german_learning_platform_design-final.md`](./german_learning_platform_design-final.md). <!-- corrected 2026-09-30: was "./docs/german_learning_platform_design-final.md" — there is no docs/ directory -->
 
 ---
@@ -51,10 +52,17 @@ bun run parse-data
 
 ### Run Automated Tests
 
-Executes the full Vitest suite — 28 test files, 234 automated tests: <!-- corrected 2026-09-30: was "119 unit and integration tests across 21 suites"; counts updated 2026-10-03 -->
+Executes the full Vitest suite — 29 test files, 270 automated tests: <!-- corrected 2026-09-30: was "119 unit and integration tests across 21 suites"; counts updated 2026-10-03 -->
 
 ```bash
 bun run test
+```
+
+Browser smoke suite (Playwright) — onboarding, segment progression, SRS persistence, static
+routes, and the TM-6 surfaces (`/panorama`, sprig 1003, the dictation skip, the trap note):
+
+```bash
+bun run test:e2e
 ```
 
 ### Production Build
@@ -81,10 +89,10 @@ Visit `http://localhost:3000` in your browser.
    - Baba Is You-style node map: 30 topic clusters on one linear spine, with skip-able extra-practice nodes ("sprigs") and support-material branches hanging off each cluster.
    - All adjacent nodes unlock at once when a node is completed; the spine itself stays strictly ordered, but a **closed star gate** blocks the spine at its topic boundary until the stretch's star quota is met.
    - Climb the map bottom-to-top; the pulsing theme-colored selector marks your recommended node.
-   - 1 core lesson per topic plus 2–3 sprigs; the entire curriculum is authored — 30 cores + 78 sprigs + 60 branch lessons = 168 lessons, each with a title, plan and full `Lesson` object (`src/data/curriculum.ts`, `src/data/lessons.ts`). <!-- corrected 2026-09-30: was "topics 1–10 fully authored, 11–30 shipped as titled shells with authoring plans" — no shells remain; composition updated 2026-10-03 from "30 + 72 + 7 = 109" -->
+   - 1 core lesson per topic plus 2–3 sprigs; the entire curriculum is authored — 30 cores + 79 sprigs + 60 branch lessons = 169 lessons, each with a title, plan and full `Lesson` object (`src/data/curriculum.ts`, `src/data/lessons.ts`). <!-- corrected 2026-09-30: was "topics 1–10 fully authored, 11–30 shipped as titled shells with authoring plans" — no shells remain; composition updated 2026-10-03 from "30 + 72 + 7 = 109" -->
    - Custom DOM+SVG renderer (no game libraries) with `content-visibility` windowing per topic cluster, sized for hundreds of future lessons.
    - 5-part card-by-card lesson wizard (Hook, Pattern, Transformation Table, Bite-Sized Practice, Summary & Retries) at `/trail/[id]`.
-   - Scaffolded exercises across 8 types (`src/lib/types.ts:82`): morpheme tiles, matching pairs, shift select, syntax builder, derivation typing, reverse-cognate typing, **transcribe** production drills (thought + lexicon + cue ladder), and **literal gloss** direct translations (TM-1/TM-2, `docs/THINKING_METHOD_UPGRADE.md`). <!-- updated 2026-10-02: added the Thinking Method exercise types (was "6 types") -->
+   - Scaffolded exercises across 11 types (`src/lib/types.ts`): morpheme tiles, matching pairs, shift select, syntax builder, derivation typing, reverse-cognate typing, **transcribe** production drills (thought + lexicon + cue ladder), **literal gloss** direct translations, **dictation** listening drills (played audio, capped replays, a 15-minute listening skip), **family grid** prefix × base matrices, and **variant English** "every honest rendering" drills (TM-1/TM-2/TM-6, `docs/THINKING_METHOD_UPGRADE.md`). <!-- updated 2026-10-02: added the Thinking Method exercise types (was "6 types") -->
    - Core lessons 2–30 end with an ungraded, skippable **Twist** card (deliberate friction, outside the 5-exercise contract) and may whisper up to two **posture cues** per lesson; the onboarding tour ends with a 4-card **Posture Primer** (TM-4/TM-5, same document). <!-- added 2026-10-02 -->
    - Pre-exercise vocabulary hints (`vocab_hints`) for auxiliary words (e.g., `mit`).
    - End-of-lesson Retry Queue ensuring mastery before progression; a flawless first-try run earns a **purple star** (gold otherwise).
@@ -98,7 +106,7 @@ Visit `http://localhost:3000` in your browser.
    - 5 playable decks: *Due Today*, *By Shift Family*, *Weakest Words*, *Recent Lessons*, and *Compound Calques & False Friends*.
    - 4 selectable review styles: *Quick Flip*, *Multiple Choice (MCQ)*, *Tile Builder*, and *Derivation Typing*.
    - Anti-spoiler gender shields: Front card prompts with `[ der / die / das ? ]` instead of leaking the article before recall.
-   - Desktop keyboard navigation (`1`–`4`, `Space`, `Enter`, `Backspace`, `[R]` audio replay, `Esc`).
+   - Desktop keyboard navigation (`1`–`4`, `Space`, `Enter`, `Backspace`, `←`/`→` back and forward between cards, `[R]` audio replay, `Esc`).
 
 4. **3-Color Grammatical Gender System**:
    - `der` (Masculine): Azure Blue
@@ -153,7 +161,9 @@ src/
 │   ├── common/           # GenderBadge, ShiftPair, WordCardDrawer, GermanCharBar,
 │   │                     # OnboardingModal, theme/font selectors, DailyInsightCard
 │   ├── lesson/           # 5-step wizard, exercise widgets (incl. TranscribeExercise,
-│   │                     # LiteralGloss, TwistCard), retry queue, feedback sheets
+│   │                     # LiteralGloss, TwistCard, DictationExercise,
+│   │                     # FamilyMatrixExercise, VariantEnglishExercise), retry queue,
+│   │                     # feedback sheets
 │   ├── navigation/       # Game-style bottom dock (all destinations) + slim TopNav
 │   ├── settings/         # SettingItem row primitive
 │   └── trail/            # TrailMap (incl. star-gate pills), LessonNodeDrawer
@@ -161,9 +171,11 @@ src/
 │   ├── compendium.json   # 1226 core words, 9 shifts, 32 compounds, 16 traps, 28 insights
 │   ├── compendium.ts     # Typed view over the raw JSON (derives wordList at runtime)
 │   ├── curriculum.ts     # 30 topic clusters: cores, sprigs, 11 branches, 6 star gates
-│   ├── lessons.ts        # All 168 authored lessons (cores 1–30, sprigs, branches 50xx–53xx)
+│   ├── lessons.ts        # All 169 authored lessons (cores 1–30, sprigs, branches 50xx–53xx)
 │   ├── insights.json     # 28 daily insights (generated by parse-data)
+│   ├── consciousness.ts  # TM-6 learning-consciousness lines, re-whispered ~1 lesson in 7
 │   ├── posture-cues.ts   # TM-4b whisper-cue pools + deterministic per-lesson picker
+│   ├── sound-imports.ts  # "you already make this sound" — the English source word per sound
 │   ├── shift-diagnosis-table.ts # TM-3 slip messages keyed by shift-family id
 │   └── ...               # themes, fonts, settings, phonetics, languages
 ├── lib/
@@ -176,13 +188,15 @@ src/
 │   ├── shift-annotator.ts# Sound shift letter aligner with memoization
 │   ├── shift-diagnosis.ts# TM-3 wrong-answer → shift-law diagnosis + affirmation fallback
 │   ├── sound.ts          # Web Audio sample engine for click/error .wav packs
+│   ├── listening.ts      # 15-minute listening-skip window (environment honesty)
+│   ├── retry-variation.ts # TM-6 deterministic surface rotation for retry attempts
 │   ├── srs.ts            # SuperMemo SM-2 interval scheduler
 │   ├── store.ts          # Zustand store with dual persistence (+ lessonStars)
 │   ├── trail-map.ts      # Map graph, responsive layout engine, unlock/recommend/gate logic
 │   ├── types.ts          # Core domain TypeScript interfaces
 │   ├── use-dialog-focus.ts # Shared Esc-to-close + focus-trap hook
 │   └── word-entities.ts  # Merges compounds + false friends onto the WordEntity map
-└── tests/                # 28 test files (Vitest) <!-- updated 2026-10-03: whole-curriculum integrity + timezone + persistence suites (was "24", already stale before) -->
+└── tests/                # 29 test files (Vitest) <!-- updated 2026-10-03: whole-curriculum integrity + timezone + persistence suites (was "24", already stale before) -->
 ```
 <!-- corrected 2026-09-30: tree previously omitted app/error.tsx, app/fonts.css, app/globals.css, components/settings/, data/compendium.ts, data/insights.json, lib/sound.ts, lib/appearance.ts, lib/word-entities.ts and lib/use-dialog-focus.ts; it also claimed 218 compendium words, lessons "ids 1–10", a "Footer" component that does not exist, "MapNode" (folded into TrailMap.tsx) and "(Vitest / Bun)". Updated 2026-10-03: 619 words, 128 lessons, lib/word-refs-audit.ts added. -->
 
@@ -193,4 +207,6 @@ src/
 - **No Third-Party Component Bloat**: The UI strictly avoids component libraries like Radix, Headless UI, or Framer Motion. Standard DOM and Tailwind CSS are used.
 - **Zero Cloud TTS Dependency**: Pronunciation uses the browser's native `window.speechSynthesis` (`de-DE`), avoiding external API costs, latency, or asset downloads.
 - **Durable Local Storage**: Progress is preserved across sessions using `localStorage` with a size-guarded cookie fallback: the lean payload is only written if it URL-encodes to ≤ 2048 bytes, otherwise a minimal `{theme, font}` cookie is written instead (`src/lib/store.ts:179-197`). <!-- corrected 2026-09-30: was "< 3800 bytes" — the guard is 2048, pinned by src/tests/store-security.test.ts:64 -->
+- **No Cargo-Cult Repetition**: `bun scripts/audit-wording.ts` blocks `explanation` strings, prose sentences and prompt formulas copy-pasted between neighbouring lessons, while an explicit allowlist protects the widget labels that are *meant* to stay identical (guidebook §1.7/§1.8).
+- **Deferred Ideas Live in `docs/ideas to add in future/`**: fully-specified but unimplemented work (sentence-level SRS, cognitive-load adaptivity, native-speaker naturalness audit, finishing the Thinking Method upgrade). These are write-ups, not commitments — nothing in them is wired into the app.
 - **All Routes Static**: Every route in `/app` must pre-render via `generateStaticParams()` to guarantee instant navigation.

@@ -25,6 +25,13 @@ interface SuccessFeedbackSheetProps {
   affirmation?: string;
   /** TM-2 literal-gloss reveal: the word-for-word English beside its natural form. */
   literalPair?: LiteralGlossPair;
+  /**
+   * TM-6: offered only when the learner got it right. A correct answer the learner
+   * did not trust is still an uncertainty — the guidebook promises "we will revisit
+   * everything you are uncertain of", which is unkeepable if the only observable
+   * signal is failure. Never rendered in the retry queue.
+   */
+  onFlagGuessed?: () => void;
   onContinue: () => void;
 }
 
@@ -39,6 +46,7 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
   warningNote,
   affirmation,
   literalPair,
+  onFlagGuessed,
   onContinue,
 }) => {
   const continueBtnRef = React.useRef<HTMLButtonElement>(null);
@@ -202,6 +210,20 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
             <BookOpen className="w-4 h-4 text-[var(--main-color)] shrink-0 mt-0.5" />
             <div>{explanation}</div>
           </div>
+        )}
+
+        {/* TM-6: uncertainty is observable even when the answer is right (§1.8/§1.9) */}
+        {onFlagGuessed && (
+          <button
+            type="button"
+            onClick={() => {
+              onFlagGuessed();
+              onContinue();
+            }}
+            className="w-full py-2 rounded-lg border border-[var(--sub-color)]/30 text-[var(--sub-color)] hover:text-[var(--text-color)] hover:border-[var(--main-color)]/40 font-mono text-[11px] transition cursor-pointer"
+          >
+            I guessed — bring this one back sooner
+          </button>
         )}
 
         {/* Continue Button */}

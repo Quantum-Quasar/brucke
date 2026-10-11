@@ -9,7 +9,7 @@ import { findUnresolvedWordRefs } from "../src/lib/word-refs-audit";
 const misses = findUnresolvedWordRefs();
 
 if (misses.length === 0) {
-  console.log("✓ all word references resolve (word_ids, table_word_ids, transcribe, twist, literal_gloss)");
+  console.log("✓ all word references resolve (word_ids, table_word_ids, transcribe, dictation, family_matrix, variant_english, twist, literal_gloss)");
 } else {
   console.log(`✗ ${misses.length} unresolved word references:`);
   for (const m of misses) console.log(`  lesson ${m.lesson} · ${m.where} · "${m.token}"`);
