@@ -2860,9 +2860,9 @@ export const LESSONS: Lesson[] = [
           { id: "ds4", english: "damp", german: "Dampf" },
           { id: "ds5", english: "roof / thatch", german: "Dach" },
           { id: "ds6", english: "devil", german: "Teufel" },
-          { id: "ds7", english: "thousand", german: "Tausend" },
+          { id: "ds7", english: "thousand", german: "tausend" },
         ],
-        target_answer: "tief, Tochter, Tropfen, Dampf, Dach, Teufel, Tausend",
+        target_answer: "tief, Tochter, Tropfen, Dampf, Dach, Teufel, tausend",
         meaning: "deep, daughter, drop, damp, roof, devil, thousand",
         shift_hint: "D → T + P → F / GH → CH",
         explanation: "Each German word obeyed two shift laws at once — read it rule by rule, devil and thousand included.",
@@ -5266,8 +5266,8 @@ export const LESSONS: Lesson[] = [
         idea_parts: [
           "who? → ich",
           "the auxiliary → habe in position 2",
-          "what? → das Buch",
-          "the participle → gefunden, the melody's third note, at the very end",
+          "when? → gestern (yesterday — the y→g twin)",
+          "the participle → gelernt, ge- + lern + t, at the very end",
         ],
         cues: [
           "haben opens, the participle closes: ich habe ... gelernt — ge- + lern + t",
@@ -5470,9 +5470,9 @@ export const LESSONS: Lesson[] = [
         type: "variant_english",
         prompt: "English for Gib ihm das Buch — pick every shape that really says it:",
         german: "Gib ihm das Buch",
-        renderings: ["Give him the book", "Give it to him", "Give the book to him"],
+        renderings: ["Give him the book", "Give the book to him"],
         traps: ["Give to him the book", "Give him to the book"],
-        target_answer: "Give him the book, Give it to him, Give the book to him",
+        target_answer: "Give him the book, Give the book to him",
         meaning: "Give him the book",
         explanation: "English says the same thought three ways and drops the 'to' in all of them. German never drops it — ihm *is* 'to him', in the dative's own shape. That is why German sounds like the word-for-word version: German kept the construction English quietly discarded.",
         affirmation: "All three natural shapes, neither literal one — you matched the thought, not the word order.",
@@ -6693,7 +6693,7 @@ export const LESSONS: Lesson[] = [
     hook: {
       title: "The Suffix Tells You",
       content:
-        "You were told gender is arbitrary. Mostly false: German gender is written on the word's tail. Endings in -ung, -heit, -keit, -schaft, -ion are feminine — die Wahrnehmung (perception), die Zeitung (newspaper, 'a timing'). -chen and -lein are neuter, no exceptions — das Mädchen ('the little girl', the famous paradox). Nouns built from verbs with -er are masculine — der Staubsauger, the dust-sucker. Most plain -e nouns are feminine — die Straße, die Butter, die Zeit. Learn a dozen suffix laws and you can guess the gender of thousands of words you have never seen.",
+        "You were told gender is arbitrary. Mostly false: German gender is written on the word's tail. Endings in -ung, -heit, -keit, -schaft, -ion are feminine — die Wahrnehmung (perception), die Zeitung (newspaper, 'a timing'). -chen and -lein are neuter, no exceptions — das Mädchen ('the little girl', the famous paradox). Nouns built from verbs with -er are masculine — der Staubsauger, the dust-sucker. Most plain -e nouns are feminine — die Straße, die Woche, die Lampe. Learn a dozen suffix laws and you can guess the gender of thousands of words you have never seen.",
       footnotes: [
         {
           interest: true,
@@ -6707,7 +6707,7 @@ export const LESSONS: Lesson[] = [
     pattern: {
       title: "The Suffix Court",
       content:
-        "Feminine squad: -ung (die Zeitung, die Wahrnehmung — built from verbs!), -heit, -keit (die Gesundheit — health), -schaft (die Wissenschaft — knowledge-ship, science), -ion (die Nation), and most -e (die Straße, die Zeit, die Woche). Masculine squad: -er from verbs (der Sauger, der Fernseher), -ling (der Zwilling!), -ismus (der Tourismus). Neuter squad: -chen, -lein (das Mädchen, das Fräulein), and all -zeug words (das Feuerzeug — the -zeug law you know from the compounds). Collect the suffixes and every new word arrives pre-gendered.",
+        "Feminine squad: -ung (die Zeitung, die Wahrnehmung — built from verbs!), -heit, -keit (die Gesundheit — health), -schaft (die Wissenschaft — knowledge-ship, science), -ion (die Nation), and most -e (die Straße, die Woche, die Lampe). Masculine squad: -er from verbs (der Sauger, der Fernseher), -ling (der Zwilling!), -ismus (der Tourismus). Neuter squad: -chen, -lein (das Mädchen, das Fräulein), and all -zeug words (das Feuerzeug — the -zeug law you know from the compounds). Collect the suffixes and every new word arrives pre-gendered.",
       footnotes: [],
       linguist_note:
         "These suffixes are the app's compendium in miniature: Wahrnehmung is the calque of Latin perceptio (truth-taking), Begriff the calque of conceptus (by-grip) — the abstract suffixes rode in with the Latin calques and kept their gender accordingly.",
@@ -8075,7 +8075,7 @@ export const LESSONS: Lesson[] = [
       {
         id: "l28_e1",
         type: "matching_pairs",
-        prompt: "The fahren dynasty — match each member with its meaning:",
+        prompt: "Verb families — match each word with its meaning:",
         matching_pairs: [
           { id: "vf1", english: "the journey / ride", german: "die Fahrt" },
           { id: "vf2", english: "the vehicle (drive-stuff)", german: "das Fahrzeug" },
@@ -8325,8 +8325,8 @@ export const LESSONS: Lesson[] = [
         id: "l30_e3",
         type: "shift_select",
         prompt: "'Das Haus war dunkel' — which decode runs through 'dunkel'?",
-        options: ["TH → D — dark/dusk ↔ dunkel", "P → F", "V → B", "No shift — pure guesswork"],
-        target_answer: "TH → D — dark/dusk ↔ dunkel",
+        options: ["D → D cousin — dark/dusk ↔ dunkel", "P → F", "V → B", "No shift — pure guesswork"],
+        target_answer: "D → D cousin — dark/dusk ↔ dunkel",
         meaning: "dunkel ↔ dark/dusk — the dental hardening",
         explanation: "One of the trail's first shifts closes the capstone: the d-words answer to English th.",
       },
