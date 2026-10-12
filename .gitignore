@@ -25,6 +25,7 @@ lcov-report
 allure-results
 allure-report
 gui-test-screenshots
+demo-images
 
 # ===== logs =====
 logs
