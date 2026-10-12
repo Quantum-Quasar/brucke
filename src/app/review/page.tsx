@@ -25,7 +25,17 @@ import { GermanCharBar } from "@/components/common/GermanCharBar";
 import { GenderBadge } from "@/components/common/GenderBadge";
 import { GenderGuideBanner } from "@/components/common/GenderGuideBanner";
 import { useAppStore } from "@/lib/store";
-import { getDueCards, getWeakestCards, localDateKey, type ReviewGrade } from "@/lib/srs";
+import { getDueCards, localDateKey, type ReviewGrade } from "@/lib/srs";
+import {
+  SESSION_SIZES,
+  filterByLearned,
+  getRecentLessonWordIds,
+  prepareSession,
+  rankWeakestCards,
+  sortDueCards,
+  type LearnedFilter,
+  type SessionSize,
+} from "@/lib/review-decks";
 import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
 import { getAtlasFamilies } from "@/lib/atlas-families";
 import { playTargetAudio } from "@/lib/audio";
@@ -100,6 +110,10 @@ export default function ReviewPage() {
   const [activeDeck, setActiveDeck] = useState<DeckType | null>(null);
   const [selectedShiftId, setSelectedShiftId] = useState<string>("p_to_pf_f");
   const [selectedDomainId, setSelectedDomainId] = useState<string>("");
+  // Scope + size for the open-ended decks (shift family, domain, everything)
+  const [learnedFilter, setLearnedFilter] = useState<LearnedFilter>("all");
+  const [sessionSize, setSessionSize] = useState<SessionSize>(20);
+  const [shuffleSession, setShuffleSession] = useState(true);
   const [sessionCards, setSessionCards] = useState<SRSCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
@@ -163,8 +177,9 @@ export default function ReviewPage() {
   const recordReview = useAppStore((s) => s.recordReview);
   const restoreSrsCard = useAppStore((s) => s.restoreSrsCard);
 
-  const dueCards = getDueCards(srsCards);
-  const weakestCards = getWeakestCards(srsCards);
+  const completedLessons = useAppStore((s) => s.completedLessons);
+  const dueCards = useMemo(() => sortDueCards(getDueCards(srsCards)), [srsCards]);
+  const weakestCards = useMemo(() => rankWeakestCards(srsCards), [srsCards]);
 
   /** Fresh un-seen SM-2 card, so a word with no history is still reviewable. */
   const blankCard = useCallback(
@@ -266,26 +281,56 @@ export default function ReviewPage() {
     }
   }, [domainGroups, selectedDomainId]);
 
-  // "Review everything": the entire dictionary, every thematic domain, plus the
-  // compound calques and false-friend traps — the longest possible session.
-  const everythingCards: SRSCard[] = useMemo(
-    () => [...data.wordList.map((w) => blankCard(w.id)), ...compoundCards],
-    [blankCard, data, compoundCards]
-  );
-
   /** Every word covered by the atlas, de-duplicated across overlapping families. */
   const allFamilyWordIds = useMemo(
     () => Array.from(new Set(atlasFamilies.flatMap((f) => f.word_ids))),
     [atlasFamilies]
   );
 
-  const shiftDeckSize =
-    selectedShiftId === ALL_ID ? allFamilyWordIds.length : (data.shifts[selectedShiftId]?.word_ids.length ?? 0);
+  /** Applies the learned / not-yet-learned scope to a list of word ids. */
+  const scopeIds = useCallback(
+    (ids: string[]): string[] =>
+      filterByLearned(
+        ids.map((id) => ({ id })),
+        learnedFilter,
+        wordMastery,
+        srsCards
+      ).map((w) => w.id),
+    [learnedFilter, wordMastery, srsCards]
+  );
 
-  const domainDeckSize =
-    selectedDomainId === ALL_ID
-      ? data.wordList.length
-      : (domainGroups.find((g) => g.id === selectedDomainId)?.words.length ?? 0);
+  const shiftWordIds = (shiftId: string): string[] =>
+    scopeIds(
+      shiftId === ALL_ID
+        ? allFamilyWordIds
+        : Array.from(new Set(data.shifts[shiftId]?.word_ids ?? []))
+    );
+
+  const domainWordIds = (domainId: string): string[] =>
+    scopeIds(
+      domainId === ALL_ID
+        ? data.wordList.map((w) => w.id)
+        : (domainGroups.find((g) => g.id === domainId)?.words.map((w) => w.id) ?? [])
+    );
+
+  const shiftDeckSize = shiftWordIds(selectedShiftId).length;
+  const domainDeckSize = domainWordIds(selectedDomainId).length;
+  const everythingCount = useMemo(
+    () => scopeIds(data.wordList.map((w) => w.id)).length + compoundCards.length,
+    [scopeIds, data, compoundCards]
+  );
+
+  // "Recent lessons": words from the last few lessons you actually completed.
+  const recentWordIds = useMemo(
+    () =>
+      getRecentLessonWordIds(
+        content.lessons,
+        completedLessons,
+        3,
+        new Set(data.wordList.map((w) => w.id))
+      ),
+    [content, completedLessons, data]
+  );
 
   // 1-Click direct deck start
   const startDeck = (deck: DeckType, customCards?: SRSCard[]) => {
@@ -302,45 +347,26 @@ export default function ReviewPage() {
     setCompletedDeck(null);
     preGradeSnapshots.current = {};
 
-    if (customCards) {
-      setSessionCards(customCards);
-      setSessionGrades(blankSessionGrades(customCards.length));
-      return;
-    }
+    const begin = (cards: SRSCard[]) => {
+      setSessionCards(cards);
+      setSessionGrades(blankSessionGrades(cards.length));
+    };
+    // Queue-driven decks (due / weakest / compounds / recent) keep their own
+    // order; open-ended scoped decks are shuffled and capped to the chosen size.
+    const scoped = (ids: string[]) =>
+      begin(prepareSession(ids.map(blankCard), sessionSize, shuffleSession));
 
-    if (deck === "due") {
-      setSessionCards(dueCards);
-      setSessionGrades(blankSessionGrades(dueCards.length));
-    } else if (deck === "weakest") {
-      setSessionCards(weakestCards);
-      setSessionGrades(blankSessionGrades(weakestCards.length));
-    } else if (deck === "shift") {
-      // "all" merges every atlas family (nine shifts + the unshifted layer).
-      const selectedFamilies =
-        selectedShiftId === ALL_ID ? atlasFamilies : [data.shifts[selectedShiftId]].filter(Boolean);
-      const familyWordIds = Array.from(new Set(selectedFamilies.flatMap((f) => f.word_ids)));
-      const shiftCards = familyWordIds.map(blankCard);
-      setSessionCards(shiftCards);
-      setSessionGrades(blankSessionGrades(shiftCards.length));
-    } else if (deck === "recent") {
-      const recentWords = data.wordList.slice(0, 20);
-      const recentCards = recentWords.map((w) => blankCard(w.id));
-      setSessionCards(recentCards);
-      setSessionGrades(blankSessionGrades(recentCards.length));
-    } else if (deck === "compounds") {
-      setSessionCards(compoundCards);
-      setSessionGrades(blankSessionGrades(compoundCards.length));
-    } else if (deck === "domain") {
-      const domainWords =
-        selectedDomainId === ALL_ID
-          ? domainGroups.flatMap((g) => g.words)
-          : (domainGroups.find((g) => g.id === selectedDomainId)?.words ?? []);
-      const domainCards = domainWords.map((w) => blankCard(w.id));
-      setSessionCards(domainCards);
-      setSessionGrades(blankSessionGrades(domainCards.length));
-    } else if (deck === "everything") {
-      setSessionCards(everythingCards);
-      setSessionGrades(blankSessionGrades(everythingCards.length));
+    if (customCards) return begin(customCards);
+
+    if (deck === "due") begin(dueCards);
+    else if (deck === "weakest") begin(weakestCards);
+    else if (deck === "shift") scoped(shiftWordIds(selectedShiftId));
+    else if (deck === "recent") begin(recentWordIds.map(blankCard));
+    else if (deck === "compounds") begin(prepareSession(compoundCards, 0, shuffleSession));
+    else if (deck === "domain") scoped(domainWordIds(selectedDomainId));
+    else if (deck === "everything") {
+      const ids = scopeIds(data.wordList.map((w) => w.id));
+      begin(prepareSession([...ids.map(blankCard), ...compoundCards], sessionSize, shuffleSession));
     }
   };
 
@@ -1421,6 +1447,64 @@ export default function ReviewPage() {
             </button>
           </div>
 
+          {/* Scope & session size for the open-ended decks */}
+          <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 flex flex-col lg:flex-row lg:items-center gap-4 text-xs font-mono">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[var(--sub-color)]">which words</span>
+              {(
+                [
+                  ["all", "all"],
+                  ["learned", "learned"],
+                  ["new", "not yet learned"],
+                ] as Array<[LearnedFilter, string]>
+              ).map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  aria-pressed={learnedFilter === id}
+                  onClick={() => setLearnedFilter(id)}
+                  className={`px-3 py-1 rounded-lg border transition cursor-pointer ${
+                    learnedFilter === id
+                      ? "bg-[var(--main-color)] text-[var(--bg-color)] border-[var(--main-color)] font-bold"
+                      : "bg-[var(--bg-color)] text-[var(--text-color)] border-[var(--sub-color)]/20 hover:border-[var(--main-color)]/40"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[var(--sub-color)]">session</span>
+              {SESSION_SIZES.map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  aria-pressed={sessionSize === n}
+                  onClick={() => setSessionSize(n)}
+                  className={`px-3 py-1 rounded-lg border transition cursor-pointer ${
+                    sessionSize === n
+                      ? "bg-[var(--main-color)] text-[var(--bg-color)] border-[var(--main-color)] font-bold"
+                      : "bg-[var(--bg-color)] text-[var(--text-color)] border-[var(--sub-color)]/20 hover:border-[var(--main-color)]/40"
+                  }`}
+                >
+                  {n === 0 ? "all" : n}
+                </button>
+              ))}
+              <label className="flex items-center gap-1.5 ml-2 text-[var(--text-color)] cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={shuffleSession}
+                  onChange={(e) => setShuffleSession(e.target.checked)}
+                  className="accent-[var(--main-color)]"
+                />
+                shuffle
+              </label>
+            </div>
+            <p className="text-[var(--sub-color)] lg:ml-auto">
+              applies to shift family, domain and everything.
+            </p>
+          </div>
+
           {/* 5 Secondary Decks */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* By Shift Deck */}
@@ -1453,6 +1537,9 @@ export default function ReviewPage() {
                   {selectedShiftId === ALL_ID
                     ? `all ${atlasFamilies.length} families selected`
                     : `${data.shifts[selectedShiftId]?.phonetic_rule ?? ""}`}
+                </div>
+                <div className="text-[11px] font-mono text-[var(--sub-color)]">
+                  {mounted ? shiftDeckSize : 0} {learnedFilter === "all" ? "" : learnedFilter === "new" ? "unlearned " : "learned "}words in scope
                 </div>
               </div>
 
@@ -1495,6 +1582,9 @@ export default function ReviewPage() {
                     </option>
                   ))}
                 </select>
+                <div className="text-[11px] font-mono text-[var(--sub-color)]">
+                  {mounted ? domainDeckSize : 0} {learnedFilter === "all" ? "" : learnedFilter === "new" ? "unlearned " : "learned "}words in scope
+                </div>
               </div>
 
               <button
@@ -1522,10 +1612,10 @@ export default function ReviewPage() {
                   <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">weakest words</h4>
                 </div>
                 <p className="text-xs font-mono text-[var(--sub-color)]">
-                  focus on words that caused repeated lapses or hesitation.
+                  words you forgot or only guessed, hardest first.
                 </p>
                 <div className="text-xs font-mono text-[var(--error-color)] pt-1">
-                  {mounted ? weakestCards.length : 0} words with lapses
+                  {mounted ? weakestCards.length : 0} tricky words
                 </div>
               </div>
 
@@ -1546,16 +1636,19 @@ export default function ReviewPage() {
                   <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">recent lessons</h4>
                 </div>
                 <p className="text-xs font-mono text-[var(--sub-color)]">
-                  reinforce vocabulary encountered across your most recent trail lessons.
+                  words from the last three trail lessons you completed, newest first.
                 </p>
                 <div className="text-xs font-mono text-[var(--main-color)] pt-1">
-                  20 core words
+                  {mounted && recentWordIds.length > 0
+                    ? `${recentWordIds.length} words`
+                    : "finish a lesson to unlock"}
                 </div>
               </div>
 
               <button
                 onClick={() => requestDeckStart("recent")}
-                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer"
+                disabled={recentWordIds.length === 0}
+                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 review recent
               </button>
@@ -1595,16 +1688,16 @@ export default function ReviewPage() {
                   </span>
                 </div>
                 <p className="text-xs font-mono text-[var(--sub-color)]">
-                  no filter. every word in every family and domain, plus compounds and false-friend traps.
+                  every word in every family and domain, plus compounds and false-friend traps. respects the scope and session size above.
                 </p>
                 <div className="text-xs font-mono text-[var(--main-color)] pt-1">
-                  {everythingCards.length} cards
+                  {everythingCount} cards
                 </div>
               </div>
 
               <button
                 onClick={() => requestDeckStart("everything", undefined, "everything")}
-                disabled={everythingCards.length === 0}
+                disabled={everythingCount === 0}
                 className="w-full py-2 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] text-xs font-mono font-bold transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 review everything

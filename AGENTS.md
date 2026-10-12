@@ -93,7 +93,7 @@ bun install                # deps
 bun run parse-data         # regenerate compendium.json + insights.json
 bun run dev                # dev server :3000
 bun run build              # parse-data + next build (production SSG)
-bun run test               # vitest — 29 test files in src/tests/
+bun run test               # vitest — 30 test files in src/tests/
 bun run lint               # eslint
 bun run typecheck          # tsc --noEmit
 bun run test:e2e           # playwright smoke suite (tests/e2e/)
