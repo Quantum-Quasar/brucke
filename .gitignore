@@ -60,5 +60,6 @@ auditreview.md
 pitch/
 documented docs/
 old documentation/
-docs/dont open untill mentioned/
+
+# diagrams stay local — thinking-method.md links them relatively
 docs/thinking-method-images/
