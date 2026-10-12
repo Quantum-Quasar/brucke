@@ -20,6 +20,8 @@ import {
   ArrowLeft,
   ArrowRight,
 } from "lucide-react";
+import { ExampleSentence } from "@/components/common/ExampleSentence";
+import { clozeSentence } from "@/lib/sentence";
 import { ShiftPair } from "@/components/common/ShiftPair";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
 import { GenderBadge } from "@/components/common/GenderBadge";
@@ -392,6 +394,12 @@ export default function ReviewPage() {
 
   const currentCard = sessionCards[currentIndex];
   const currentWord: WordEntity | undefined = currentCard ? allWordsMap[currentCard.word_id] : undefined;
+
+  // Example sentence with the answer blanked out: a context clue before reveal.
+  const currentCloze = useMemo(
+    () => (currentWord ? clozeSentence(currentWord.context_phrase, currentWord.target_word) : null),
+    [currentWord]
+  );
 
   // MCQ Options for current card
   const mcqOptions = useMemo(() => {
@@ -1028,6 +1036,12 @@ export default function ReviewPage() {
               {currentWord.english_cognate}
             </h2>
             <p className="text-sm font-mono text-[var(--sub-color)]">&quot;{currentWord.english_meaning}&quot;</p>
+            {!isRevealed && currentCloze && (
+              <div className="mx-auto max-w-md pt-2 text-xs font-mono text-[var(--sub-color)]">
+                <p lang="de" className="text-[var(--text-color)]">{currentCloze}</p>
+                {currentWord.context_translation && <p>{currentWord.context_translation}</p>}
+              </div>
+            )}
           </div>
 
           {/* MODE 1: QUICK FLIP (FLASHCARD) */}
@@ -1306,8 +1320,23 @@ export default function ReviewPage() {
                   <span className="text-xs font-mono text-[var(--sub-color)]">{currentWord.ipa}</span>
                 </div>
                 <p className="text-xs font-mono text-[var(--sub-color)] max-w-md mx-auto">{currentWord.etymology_derivation}</p>
-                <div className="p-2.5 rounded bg-[var(--sub-alt-color)] text-xs font-mono text-[var(--text-color)] italic max-w-md mx-auto border border-[var(--sub-color)]/15">
-                  &quot;{currentWord.context_phrase}&quot;
+                <div className="p-3 rounded bg-[var(--sub-alt-color)] font-mono max-w-md mx-auto border border-[var(--sub-color)]/15 text-left">
+                  <div className="flex items-start justify-between gap-2">
+                    <ExampleSentence
+                      sentence={currentWord.context_phrase}
+                      translation={currentWord.context_translation}
+                      word={currentWord.target_word}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => playTargetAudio(currentWord.context_phrase, language.ttsLocale)}
+                      className="shrink-0 p-1 rounded bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 text-[var(--main-color)] border border-[var(--sub-color)]/20 transition cursor-pointer"
+                      title="Listen to the example sentence"
+                      aria-label="Listen to the example sentence"
+                    >
+                      <Volume2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
 

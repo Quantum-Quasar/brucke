@@ -18524,7 +18524,9 @@
       "literal_morphemes": "cool-cabinet",
       "real_meaning": "refrigerator / fridge",
       "english_counterpart": "refrigerator",
-      "lore": "**Parts:** **kühl** (cool) + **Schrank** (cabinet / cupboard) A cabinet designed to keep things cool. German describes the exact engineering function. The \"oo\" to \"ü\" vowel shift connects \"cool\" and \"kühl\"."
+      "lore": "Parts: kühl (cool) + Schrank (cabinet / cupboard) A cabinet designed to keep things cool. German describes the exact engineering function. The \"oo\" to \"ü\" vowel shift connects \"cool\" and \"kühl\".",
+      "example_sentence": "Die Milch steht im Kühlschrank.",
+      "example_translation": "The milk is in the fridge."
     },
     {
       "id": "handschuh",
@@ -18533,7 +18535,9 @@
       "literal_morphemes": "hand-shoe",
       "real_meaning": "glove",
       "english_counterpart": "glove",
-      "lore": "**Parts:** **Hand** (hand) + **Schuh** (shoe) Why invent a new word when you can just call it a \"shoe for your hand\"? In German, a thimble is a \"Fingerhut\" (finger-hat) and a glove is a \"Handschuh\" (hand-shoe)!"
+      "lore": "Parts: Hand (hand) + Schuh (shoe) Why invent a new word when you can just call it a \"shoe for your hand\"? In German, a thimble is a \"Fingerhut\" (finger-hat) and a glove is a \"Handschuh\" (hand-shoe)!",
+      "example_sentence": "Im Winter trage ich warme Handschuhe.",
+      "example_translation": "In winter I wear warm gloves."
     },
     {
       "id": "kummerspeck",
@@ -18542,7 +18546,9 @@
       "literal_morphemes": "grief-bacon / sorrow-fat",
       "real_meaning": "weight gain from comfort eating during emotional stress",
       "english_counterpart": "weight gained from emotional overeating",
-      "lore": "**Parts:** **Kummer** (grief / sorrow / worry) + **Speck** (bacon / pork fat) The physical accumulation of \"bacon\" you put on when comforting sorrow with comfort food! A uniquely vivid German cultural term with no single-word English equivalent."
+      "lore": "Parts: Kummer (grief / sorrow / worry) + Speck (bacon / pork fat) The physical accumulation of \"bacon\" you put on when comforting sorrow with comfort food! A uniquely vivid German cultural term with no single-word English equivalent.",
+      "example_sentence": "Nach der Trennung hat sie viel Kummerspeck angesetzt.",
+      "example_translation": "After the breakup she put on a lot of comfort-eating weight."
     },
     {
       "id": "backpfeife",
@@ -18551,7 +18557,9 @@
       "literal_morphemes": "cheek-whistle",
       "real_meaning": "a stinging slap across the face",
       "english_counterpart": "slap across the cheek / face",
-      "lore": "**Parts:** **Backe** (cheek (of face)) + **Pfeife** (whistle / pipe (p → pf)) A slap delivered with such force that it makes the cheek \"whistle\" with a ringing sound! Leads to the famous compound \"Backpfeifengesicht\" — a face that looks like it urgently needs to be slapped."
+      "lore": "Parts: Backe (cheek (of face)) + Pfeife (whistle / pipe (p → pf)) A slap delivered with such force that it makes the cheek \"whistle\" with a ringing sound! Leads to the famous compound \"Backpfeifengesicht\" — a face that looks like it urgently needs to be slapped.",
+      "example_sentence": "Für den Witz hat er eine Backpfeife bekommen.",
+      "example_translation": "He got a slap in the face for that joke."
     },
     {
       "id": "gegenstand",
@@ -18560,7 +18568,9 @@
       "literal_morphemes": "against-stand",
       "real_meaning": "physical object or subject matter",
       "english_counterpart": "object / item / subject matter",
-      "lore": "**Parts:** **gegen** (against / opposite (cf. again)) + **Stand** (standing / posture) A direct medieval calque of Latin \"ob-jectum\" (ob = against/gegen + jacere/jectum = thrown/standing). German scholars translated abstract Latin philosophy into tangible Germanic physical roots."
+      "lore": "Parts: gegen (against / opposite (cf. again)) + Stand (standing / posture) A direct medieval calque of Latin \"ob-jectum\" (ob = against/gegen + jacere/jectum = thrown/standing). German scholars translated abstract Latin philosophy into tangible Germanic physical roots.",
+      "example_sentence": "Was ist das für ein Gegenstand auf dem Tisch?",
+      "example_translation": "What kind of object is that on the table?"
     },
     {
       "id": "begriff",
@@ -18569,7 +18579,9 @@
       "literal_morphemes": "by-grip / grasp-together",
       "real_meaning": "mental concept or term",
       "english_counterpart": "concept / notion / idea",
-      "lore": "**Parts:** **be-** (prefix forming transitives) + **Griff** (grip / grasp (p → f)) A direct loan-translation of Latin \"conceptus\" (from con- + capere, to grasp/seize together). To understand something mentally is literally to \"grasp\" it (begreifen)."
+      "lore": "Parts: be- (prefix forming transitives) + Griff (grip / grasp (p → f)) A direct loan-translation of Latin \"conceptus\" (from con- + capere, to grasp/seize together). To understand something mentally is literally to \"grasp\" it (begreifen).",
+      "example_sentence": "Dieser Begriff ist schwer zu erklären.",
+      "example_translation": "This term is hard to explain."
     },
     {
       "id": "wahrnehmung",
@@ -18578,7 +18590,9 @@
       "literal_morphemes": "truth-taking",
       "real_meaning": "sensory perception / noticing",
       "english_counterpart": "perception / sensory awareness",
-      "lore": "**Parts:** **wahr** (true / real (cognate with very/veracity)) + **Nehmung** (taking (from nehmen)) A philosophical calque of Latin \"per-ceptio\" — literally \"taking something to be true\". To perceive is \"wahrnehmen\" (to take as true)."
+      "lore": "Parts: wahr (true / real (cognate with very/veracity)) + Nehmung (taking (from nehmen)) A philosophical calque of Latin \"per-ceptio\" — literally \"taking something to be true\". To perceive is \"wahrnehmen\" (to take as true).",
+      "example_sentence": "Seine Wahrnehmung der Welt ist sehr scharf.",
+      "example_translation": "His perception of the world is very sharp."
     },
     {
       "id": "leidenschaft",
@@ -18587,7 +18601,9 @@
       "literal_morphemes": "suffering-state",
       "real_meaning": "passion / intense enthusiasm",
       "english_counterpart": "passion / ardent love",
-      "lore": "**Parts:** **Leid** (suffering / sorrow / loath) + **-schaft** (-ship / condition (suffix)) A 17th-century calque of Latin \"passio\" (from pati = to suffer). True passion involves suffering for what you love! Coined in 1640 by German grammarian Christian Gueintz."
+      "lore": "Parts: Leid (suffering / sorrow / loath) + -schaft (-ship / condition (suffix)) A 17th-century calque of Latin \"passio\" (from pati = to suffer). True passion involves suffering for what you love! Coined in 1640 by German grammarian Christian Gueintz.",
+      "example_sentence": "Sie spielt Klavier mit großer Leidenschaft.",
+      "example_translation": "She plays piano with great passion."
     },
     {
       "id": "wasserstoff",
@@ -18596,7 +18612,9 @@
       "literal_morphemes": "water-stuff",
       "real_meaning": "the chemical element hydrogen",
       "english_counterpart": "hydrogen",
-      "lore": "**Parts:** **Wasser** (water (t → ss)) + **Stoff** (matter / stuff / element) Direct calque of Greek \"hydro-gen\" (water-maker). German straightforwardly called it \"water-stuff\"! Oxygen is similarly \"Sauerstoff\" (sour-stuff, from Greek oxy-gen) and Nitrogen is \"Stickstoff\" (suffocate-stuff)."
+      "lore": "Parts: Wasser (water (t → ss)) + Stoff (matter / stuff / element) Direct calque of Greek \"hydro-gen\" (water-maker). German straightforwardly called it \"water-stuff\"! Oxygen is similarly \"Sauerstoff\" (sour-stuff, from Greek oxy-gen) and Nitrogen is \"Stickstoff\" (suffocate-stuff).",
+      "example_sentence": "Wasser besteht aus Wasserstoff und Sauerstoff.",
+      "example_translation": "Water consists of hydrogen and oxygen."
     },
     {
       "id": "krankenhaus",
@@ -18605,7 +18623,9 @@
       "literal_morphemes": "sick-people-house",
       "real_meaning": "hospital",
       "english_counterpart": "hospital",
-      "lore": "**Parts:** **krank** (sick / ill) + **Haus** (house) No Latin obfuscation: it is simply the house for the sick. A nurse is a \"Krankenschwester\" (sick-sister) or \"Krankenpfleger\" (sick-carer)."
+      "lore": "Parts: krank (sick / ill) + Haus (house) No Latin obfuscation: it is simply the house for the sick. A nurse is a \"Krankenschwester\" (sick-sister) or \"Krankenpfleger\" (sick-carer).",
+      "example_sentence": "Mein Onkel liegt im Krankenhaus.",
+      "example_translation": "My uncle is in the hospital."
     },
     {
       "id": "krankenschwester",
@@ -18614,7 +18634,9 @@
       "literal_morphemes": "sick-sister",
       "real_meaning": "female nurse",
       "english_counterpart": "nurse",
-      "lore": "**Parts:** **krank** (sick / ill) + **Schwester** (sister (cognate)) Historical origin from religious nursing orders where caregivers were addressed as \"sister\". Male nurses are traditionally \"Krankenpfleger\" (sick-carer)."
+      "lore": "Parts: krank (sick / ill) + Schwester (sister (cognate)) Historical origin from religious nursing orders where caregivers were addressed as \"sister\". Male nurses are traditionally \"Krankenpfleger\" (sick-carer).",
+      "example_sentence": "Die Krankenschwester misst mein Fieber.",
+      "example_translation": "The nurse takes my temperature."
     },
     {
       "id": "staubsauger",
@@ -18623,7 +18645,9 @@
       "literal_morphemes": "dust-sucker",
       "real_meaning": "vacuum cleaner",
       "english_counterpart": "vacuum cleaner",
-      "lore": "**Parts:** **Staub** (dust) + **Sauger** (sucker / suction device) A machine that literally sucks dust. Straight to the point. German nouns ending in \"-er\" derived from verbs (saugen → Sauger) are always masculine (der)."
+      "lore": "Parts: Staub (dust) + Sauger (sucker / suction device) A machine that literally sucks dust. Straight to the point. German nouns ending in \"-er\" derived from verbs (saugen → Sauger) are always masculine (der).",
+      "example_sentence": "Der Staubsauger ist sehr laut.",
+      "example_translation": "The vacuum cleaner is very loud."
     },
     {
       "id": "flugzeug",
@@ -18632,7 +18656,9 @@
       "literal_morphemes": "flight-stuff / flight-gear",
       "real_meaning": "airplane / aircraft",
       "english_counterpart": "airplane",
-      "lore": "**Parts:** **Flug** (flight) + **Zeug** (stuff / apparatus / gear) The word \"-zeug\" means \"stuff\". An airplane is \"flight-stuff\", a lighter is \"Feuerzeug\" (fire-stuff), and a vehicle is \"Fahrzeug\" (drive-stuff)! Toys are \"Spielzeug\" (play-stuff) and tools are \"Werkzeug\" (work-stuff)."
+      "lore": "Parts: Flug (flight) + Zeug (stuff / apparatus / gear) The word \"-zeug\" means \"stuff\". An airplane is \"flight-stuff\", a lighter is \"Feuerzeug\" (fire-stuff), and a vehicle is \"Fahrzeug\" (drive-stuff)! Toys are \"Spielzeug\" (play-stuff) and tools are \"Werkzeug\" (work-stuff).",
+      "example_sentence": "Das Flugzeug landet um acht Uhr.",
+      "example_translation": "The plane lands at eight o'clock."
     },
     {
       "id": "feuerzeug",
@@ -18641,7 +18667,9 @@
       "literal_morphemes": "fire-stuff",
       "real_meaning": "cigarette lighter",
       "english_counterpart": "lighter",
-      "lore": "**Parts:** **Feuer** (fire) + **Zeug** (stuff / apparatus) Apparatus designed to produce fire. Compound with \"-zeug\" is always neuter (das)."
+      "lore": "Parts: Feuer (fire) + Zeug (stuff / apparatus) Apparatus designed to produce fire. Compound with \"-zeug\" is always neuter (das).",
+      "example_sentence": "Hast du ein Feuerzeug?",
+      "example_translation": "Do you have a lighter?"
     },
     {
       "id": "fahrzeug",
@@ -18650,7 +18678,9 @@
       "literal_morphemes": "drive-stuff",
       "real_meaning": "vehicle / automobile / cart",
       "english_counterpart": "vehicle",
-      "lore": "**Parts:** **fahren** (to drive / fare) + **Zeug** (stuff / apparatus) Any apparatus used for faring or journeying on wheels. Compare with \"Schlagzeug\" (hit-stuff = drum set)!"
+      "lore": "Parts: fahren (to drive / fare) + Zeug (stuff / apparatus) Any apparatus used for faring or journeying on wheels. Compare with \"Schlagzeug\" (hit-stuff = drum set)!",
+      "example_sentence": "Das Fahrzeug steht vor dem Haus.",
+      "example_translation": "The vehicle is parked in front of the house."
     },
     {
       "id": "schlagzeug",
@@ -18659,7 +18689,9 @@
       "literal_morphemes": "hit-stuff / strike-gear",
       "real_meaning": "drum set / percussion instruments",
       "english_counterpart": "drum kit / percussion",
-      "lore": "**Parts:** **schlagen** (to strike / hit (slay)) + **Zeug** (gear / apparatus) A collection of instruments whose entire purpose is to be hit with sticks. A stroke or heartbeat is a \"Herzschlag\" (heart-strike)."
+      "lore": "Parts: schlagen (to strike / hit (slay)) + Zeug (gear / apparatus) A collection of instruments whose entire purpose is to be hit with sticks. A stroke or heartbeat is a \"Herzschlag\" (heart-strike).",
+      "example_sentence": "Mein Bruder spielt Schlagzeug in einer Band.",
+      "example_translation": "My brother plays drums in a band."
     },
     {
       "id": "spielzeug",
@@ -18668,7 +18700,9 @@
       "literal_morphemes": "play-stuff",
       "real_meaning": "toy / plaything",
       "english_counterpart": "toy",
-      "lore": "**Parts:** **spielen** (to play) + **Zeug** (stuff / gear) Any gear designed for playing games. A video game is a \"Computerspiel\"."
+      "lore": "Parts: spielen (to play) + Zeug (stuff / gear) Any gear designed for playing games. A video game is a \"Computerspiel\".",
+      "example_sentence": "Das Kind räumt sein Spielzeug auf.",
+      "example_translation": "The child tidies up his toys."
     },
     {
       "id": "spätkauf",
@@ -18677,7 +18711,9 @@
       "literal_morphemes": "late-buy",
       "real_meaning": "corner store open late at night",
       "english_counterpart": "late-night convenience store (Späti)",
-      "lore": "**Parts:** **spät** (late) + **Kauf** (purchase / buy) The famous Berlin \"Späti\" is shorthand for Spätkauf — literally where you buy things late. English \"cheap\" and German \"kaufen\" share Proto-Germanic *kaup- (trade/market)."
+      "lore": "Parts: spät (late) + Kauf (purchase / buy) The famous Berlin \"Späti\" is shorthand for Spätkauf — literally where you buy things late. English \"cheap\" and German \"kaufen\" share Proto-Germanic *kaup- (trade/market).",
+      "example_sentence": "Nach zehn Uhr kaufe ich Wasser im Spätkauf.",
+      "example_translation": "After ten o'clock I buy water at the late-night shop."
     },
     {
       "id": "fernseher",
@@ -18686,7 +18722,9 @@
       "literal_morphemes": "far-seer",
       "real_meaning": "television set",
       "english_counterpart": "television",
-      "lore": "**Parts:** **fern** (far / distant) + **Seher** (seer / viewer) An exact morphological mirror of Greek tele (far) + Latin vision (seeing). German used its native Germanic roots! A telescope is similarly a \"Fernrohr\" (far-tube)."
+      "lore": "Parts: fern (far / distant) + Seher (seer / viewer) An exact morphological mirror of Greek tele (far) + Latin vision (seeing). German used its native Germanic roots! A telescope is similarly a \"Fernrohr\" (far-tube).",
+      "example_sentence": "Der Fernseher läuft den ganzen Tag.",
+      "example_translation": "The TV is on all day."
     },
     {
       "id": "aufzug",
@@ -18695,7 +18733,9 @@
       "literal_morphemes": "up-pull / upward-draw",
       "real_meaning": "elevator",
       "english_counterpart": "elevator / lift",
-      "lore": "**Parts:** **auf** (up / upon) + **Zug** (pull / train / draught) A contraption that pulls you upwards. A train is \"der Zug\" (the puller), an elevator is \"der Aufzug\" (the up-puller), and a parade is \"der Umzug\" (the around-pull)."
+      "lore": "Parts: auf (up / upon) + Zug (pull / train / draught) A contraption that pulls you upwards. A train is \"der Zug\" (the puller), an elevator is \"der Aufzug\" (the up-puller), and a parade is \"der Umzug\" (the around-pull).",
+      "example_sentence": "Der Aufzug ist leider kaputt.",
+      "example_translation": "Unfortunately the elevator is broken."
     },
     {
       "id": "apfelkuchen",
@@ -18704,7 +18744,9 @@
       "literal_morphemes": "apple-cake",
       "real_meaning": "apple cake / pie",
       "english_counterpart": "apple cake",
-      "lore": "**Parts:** **Apfel** (apple) + **Kuchen** (cake) Both components are English cognates shifted: Apple (p→pf) + Cake (k→ch)! Compound nouns in German always take the gender and plural form of the LAST word: der Kuchen → der Apfelkuchen."
+      "lore": "Parts: Apfel (apple) + Kuchen (cake) Both components are English cognates shifted: Apple (p→pf) + Cake (k→ch)! Compound nouns in German always take the gender and plural form of the LAST word: der Kuchen → der Apfelkuchen.",
+      "example_sentence": "Meine Oma backt den besten Apfelkuchen.",
+      "example_translation": "My grandma bakes the best apple cake."
     },
     {
       "id": "kindergarten",
@@ -18713,7 +18755,9 @@
       "literal_morphemes": "children-garden",
       "real_meaning": "preschool / kindergarten",
       "english_counterpart": "kindergarten",
-      "lore": "**Parts:** **Kinder** (children) + **Garten** (garden) Coined by German educator Friedrich Fröbel in 1840 to symbolize children growing naturally like plants. Borrowed directly into English without translation."
+      "lore": "Parts: Kinder (children) + Garten (garden) Coined by German educator Friedrich Fröbel in 1840 to symbolize children growing naturally like plants. Borrowed directly into English without translation.",
+      "example_sentence": "Unsere Tochter geht schon in den Kindergarten.",
+      "example_translation": "Our daughter already goes to kindergarten."
     },
     {
       "id": "glühbirne",
@@ -18722,7 +18766,9 @@
       "literal_morphemes": "glowing-pear",
       "real_meaning": "incandescent light bulb",
       "english_counterpart": "light bulb",
-      "lore": "**Parts:** **glühen** (to glow (cognate with glow)) + **Birne** (pear (fruit)) Germans saw the glass bulb shape and named it a \"glowing pear\"! German describes shapes by comparing them to common orchard fruits."
+      "lore": "Parts: glühen (to glow (cognate with glow)) + Birne (pear (fruit)) Germans saw the glass bulb shape and named it a \"glowing pear\"! German describes shapes by comparing them to common orchard fruits.",
+      "example_sentence": "Die Glühbirne im Flur ist durchgebrannt.",
+      "example_translation": "The light bulb in the hallway has burned out."
     },
     {
       "id": "fingerhut",
@@ -18731,7 +18777,9 @@
       "literal_morphemes": "finger-hat",
       "real_meaning": "sewing thimble",
       "english_counterpart": "thimble",
-      "lore": "**Parts:** **Finger** (finger) + **Hut** (hat / cap (hood)) A protective metal cap is simply a little hat for your finger. Foxglove flowers are also called \"Fingerhut\" in German because the blossoms look like tiny thimbles!"
+      "lore": "Parts: Finger (finger) + Hut (hat / cap (hood)) A protective metal cap is simply a little hat for your finger. Foxglove flowers are also called \"Fingerhut\" in German because the blossoms look like tiny thimbles!",
+      "example_sentence": "Beim Nähen trägt sie einen Fingerhut.",
+      "example_translation": "When sewing she wears a thimble."
     },
     {
       "id": "zahnarzt",
@@ -18740,7 +18788,9 @@
       "literal_morphemes": "tooth-doctor",
       "real_meaning": "dentist",
       "english_counterpart": "dentist",
-      "lore": "**Parts:** **Zahn** (tooth (t → z)) + **Arzt** (doctor / physician) Direct and transparent: the doctor who fixes teeth. An eye doctor is an \"Augenarzt\" (eye-doctor), a vet is a \"Tierarzt\" (animal-doctor)."
+      "lore": "Parts: Zahn (tooth (t → z)) + Arzt (doctor / physician) Direct and transparent: the doctor who fixes teeth. An eye doctor is an \"Augenarzt\" (eye-doctor), a vet is a \"Tierarzt\" (animal-doctor).",
+      "example_sentence": "Morgen habe ich einen Termin beim Zahnarzt.",
+      "example_translation": "Tomorrow I have an appointment at the dentist."
     },
     {
       "id": "eisenbahn",
@@ -18749,7 +18799,9 @@
       "literal_morphemes": "iron-track / iron-way",
       "real_meaning": "railway system",
       "english_counterpart": "railroad / train",
-      "lore": "**Parts:** **Eisen** (iron (cognate with iron)) + **Bahn** (track / path / way) The track made of iron. Parallels French \"chemin de fer\" (iron road)."
+      "lore": "Parts: Eisen (iron (cognate with iron)) + Bahn (track / path / way) The track made of iron. Parallels French \"chemin de fer\" (iron road).",
+      "example_sentence": "Die Eisenbahn verbindet die beiden Städte.",
+      "example_translation": "The railway connects the two cities."
     },
     {
       "id": "autobahn",
@@ -18758,7 +18810,9 @@
       "literal_morphemes": "auto-track / car-way",
       "real_meaning": "highway / freeway",
       "english_counterpart": "highway / expressway",
-      "lore": "**Parts:** **Auto** (automobile) + **Bahn** (track / way) The dedicated track for cars. The German Autobahn is famous worldwide for having sections without advisory speed limits."
+      "lore": "Parts: Auto (automobile) + Bahn (track / way) The dedicated track for cars. The German Autobahn is famous worldwide for having sections without advisory speed limits.",
+      "example_sentence": "Auf der Autobahn gibt es oft Stau.",
+      "example_translation": "There is often a traffic jam on the highway."
     },
     {
       "id": "donnerstag",
@@ -18767,7 +18821,9 @@
       "literal_morphemes": "thunder-day",
       "real_meaning": "Thursday",
       "english_counterpart": "Thursday",
-      "lore": "**Parts:** **Donner** (thunder (th → d)) + **Tag** (day (d → t & y → g)) Day of the Norse thunder god Thor. Days of the week in German are always masculine (der)."
+      "lore": "Parts: Donner (thunder (th → d)) + Tag (day (d → t & y → g)) Day of the Norse thunder god Thor. Days of the week in German are always masculine (der).",
+      "example_sentence": "Am Donnerstag gehen wir ins Kino.",
+      "example_translation": "On Thursday we are going to the cinema."
     },
     {
       "id": "mittwoch",
@@ -18776,7 +18832,9 @@
       "literal_morphemes": "mid-week",
       "real_meaning": "Wednesday",
       "english_counterpart": "Wednesday",
-      "lore": "**Parts:** **Mitte** (middle / mid) + **Woche** (week (k → ch)) Replaced pagan Woden's day with geographical mid-week. The only German weekday name that doesn't end in \"-tag\"."
+      "lore": "Parts: Mitte (middle / mid) + Woche (week (k → ch)) Replaced pagan Woden's day with geographical mid-week. The only German weekday name that doesn't end in \"-tag\".",
+      "example_sentence": "Der Kurs findet jeden Mittwoch statt.",
+      "example_translation": "The course takes place every Wednesday."
     },
     {
       "id": "übermorgen",
@@ -18785,7 +18843,9 @@
       "literal_morphemes": "over-tomorrow / beyond-tomorrow",
       "real_meaning": "the day after tomorrow",
       "english_counterpart": "the day after tomorrow",
-      "lore": "**Parts:** **über** (over / beyond) + **morgen** (tomorrow) English used to have the word \"overmorrow\" (an exact twin), but abandoned it. German kept it! Similarly, \"vorgestern\" means \"before-yesterday\" (the day before yesterday)."
+      "lore": "Parts: über (over / beyond) + morgen (tomorrow) English used to have the word \"overmorrow\" (an exact twin), but abandoned it. German kept it! Similarly, \"vorgestern\" means \"before-yesterday\" (the day before yesterday).",
+      "example_sentence": "Übermorgen fahre ich nach Berlin.",
+      "example_translation": "The day after tomorrow I am going to Berlin."
     },
     {
       "id": "vorgestern",
@@ -18794,7 +18854,9 @@
       "literal_morphemes": "before-yesterday",
       "real_meaning": "the day before yesterday",
       "english_counterpart": "the day before yesterday",
-      "lore": "**Parts:** **vor** (before / fore-) + **gestern** (yesterday (y → g)) Symmetrical twin to übermorgen. Yester- in English is the same root as German gestern."
+      "lore": "Parts: vor (before / fore-) + gestern (yesterday (y → g)) Symmetrical twin to übermorgen. Yester- in English is the same root as German gestern.",
+      "example_sentence": "Vorgestern habe ich meine Tante besucht.",
+      "example_translation": "The day before yesterday I visited my aunt."
     },
     {
       "id": "nachbar",
@@ -18803,7 +18865,9 @@
       "literal_morphemes": "near-dweller / near-builder",
       "real_meaning": "neighbor",
       "english_counterpart": "neighbor",
-      "lore": "**Parts:** **nach / nah** (near / toward) + **Bauer / bar** (dweller / builder) Old English neahgebur (nigh + boor) is the exact same structure as German Nach-bar. The silent \"gh\" in English neighbor preserves the German \"ch\" [x] in Nachbar."
+      "lore": "Parts: nach / nah (near / toward) + Bauer / bar (dweller / builder) Old English neahgebur (nigh + boor) is the exact same structure as German Nach-bar. The silent \"gh\" in English neighbor preserves the German \"ch\" [x] in Nachbar.",
+      "example_sentence": "Unser Nachbar grüßt immer freundlich.",
+      "example_translation": "Our neighbor always greets us in a friendly way."
     }
   ],
   "falseFriends": [
@@ -18812,112 +18876,144 @@
       "german_word": "das Gift",
       "looks_like": "gift / present",
       "actual_meaning": "poison / toxin",
-      "trap_note": "In German, a \"Gift\" can kill you. (For a present, use \"das Geschenk\")."
+      "trap_note": "In German, a \"Gift\" can kill you. (For a present, use \"das Geschenk\").",
+      "example_sentence": "Vorsicht, das Gift ist gefährlich!",
+      "example_translation": "Careful, the poison is dangerous!"
     },
     {
       "id": "bekommen",
       "german_word": "bekommen",
       "looks_like": "to become / turn into",
       "actual_meaning": "to get / receive",
-      "trap_note": "You \"bekommen\" a package from the postman, not a butterfly! (For \"to become\", use \"werden\")."
+      "trap_note": "You \"bekommen\" a package from the postman, not a butterfly! (For \"to become\", use \"werden\").",
+      "example_sentence": "Ich habe heute ein Paket bekommen.",
+      "example_translation": "I got a package today."
     },
     {
       "id": "chef",
       "german_word": "der Chef",
       "looks_like": "culinary chef / cook",
       "actual_meaning": "boss / manager / supervisor",
-      "trap_note": "Your \"Chef\" is the person signing your paycheck, not necessarily someone holding a spatula! (For kitchen cook, use \"der Koch\")."
+      "trap_note": "Your \"Chef\" is the person signing your paycheck, not necessarily someone holding a spatula! (For kitchen cook, use \"der Koch\").",
+      "example_sentence": "Mein Chef ist heute nicht im Büro.",
+      "example_translation": "My boss is not in the office today."
     },
     {
       "id": "handy",
       "german_word": "das Handy",
       "looks_like": "handy (useful / convenient)",
       "actual_meaning": "mobile phone / smartphone",
-      "trap_note": "Your \"Handy\" is the phone in your hand. A pseudo-Anglicism coined in Germany in the 1990s!"
+      "trap_note": "Your \"Handy\" is the phone in your hand. A pseudo-Anglicism coined in Germany in the 1990s!",
+      "example_sentence": "Mein Handy liegt auf dem Tisch.",
+      "example_translation": "My mobile phone is on the table."
     },
     {
       "id": "aktuell",
       "german_word": "aktuell",
       "looks_like": "actual / real / true",
       "actual_meaning": "current / up-to-date / present",
-      "trap_note": "Die \"aktuelle Nachricht\" is the latest breaking news, not the \"actual\" truth! (For actual, use \"tatsächlich\" or \"wirklich\")."
+      "trap_note": "Die \"aktuelle Nachricht\" is the latest breaking news, not the \"actual\" truth! (For actual, use \"tatsächlich\" or \"wirklich\").",
+      "example_sentence": "Hier finde ich die aktuellen Nachrichten.",
+      "example_translation": "Here I find the current news."
     },
     {
       "id": "rat",
       "german_word": "der Rat",
       "looks_like": "rodent / rat",
       "actual_meaning": "advice / counsel / council",
-      "trap_note": "Asking someone for \"Rat\" means asking for advice, not a rodent! (For rat, use \"die Ratte\")."
+      "trap_note": "Asking someone for \"Rat\" means asking for advice, not a rodent! (For rat, use \"die Ratte\").",
+      "example_sentence": "Ich brauche deinen Rat.",
+      "example_translation": "I need your advice."
     },
     {
       "id": "brav",
       "german_word": "brav",
       "looks_like": "brave / courageous",
       "actual_meaning": "well-behaved / obedient / good",
-      "trap_note": "Ein \"braves Kind\" is a well-behaved good child, not a fearless warrior!"
+      "trap_note": "Ein \"braves Kind\" is a well-behaved good child, not a fearless warrior!",
+      "example_sentence": "Sei brav und hör auf deine Mutter.",
+      "example_translation": "Be good and listen to your mother."
     },
     {
       "id": "fabrik",
       "german_word": "die Fabrik",
       "looks_like": "fabric / cloth / textile",
       "actual_meaning": "factory / manufacturing plant",
-      "trap_note": "A \"Fabrik\" is the factory building where things are fabricated! (For cloth, use \"der Stoff\")."
+      "trap_note": "A \"Fabrik\" is the factory building where things are fabricated! (For cloth, use \"der Stoff\").",
+      "example_sentence": "Er arbeitet in einer Fabrik.",
+      "example_translation": "He works in a factory."
     },
     {
       "id": "gymnasium",
       "german_word": "das Gymnasium",
       "looks_like": "gym / athletic fitness center",
       "actual_meaning": "academic college-prep high school",
-      "trap_note": "You study calculus and literature at a \"Gymnasium\", you do not do bench presses!"
+      "trap_note": "You study calculus and literature at a \"Gymnasium\", you do not do bench presses!",
+      "example_sentence": "Mein Sohn geht aufs Gymnasium.",
+      "example_translation": "My son goes to the Gymnasium (academic high school)."
     },
     {
       "id": "rente",
       "german_word": "die Rente",
       "looks_like": "rent (apartment payment)",
       "actual_meaning": "pension / retirement income",
-      "trap_note": "In \"Rente\" gehen means to retire on a pension! (For apartment rent, use \"die Miete\")."
+      "trap_note": "In \"Rente\" gehen means to retire on a pension! (For apartment rent, use \"die Miete\").",
+      "example_sentence": "Mein Opa bekommt jeden Monat seine Rente.",
+      "example_translation": "My grandpa gets his pension every month."
     },
     {
       "id": "dom",
       "german_word": "der Dom",
       "looks_like": "dome / cupola roof",
       "actual_meaning": "cathedral / major church",
-      "trap_note": "Der Kölner Dom is the massive Cologne Cathedral, regardless of whether it has a curved dome!"
+      "trap_note": "Der Kölner Dom is the massive Cologne Cathedral, regardless of whether it has a curved dome!",
+      "example_sentence": "Der Dom in Köln ist riesig.",
+      "example_translation": "The cathedral in Cologne is huge."
     },
     {
       "id": "art",
       "german_word": "die Art",
       "looks_like": "art / painting / gallery",
       "actual_meaning": "kind / type / manner / species",
-      "trap_note": "Eine \"Art\" is a type or species! (For artistic fine arts, use \"die Kunst\")."
+      "trap_note": "Eine \"Art\" is a type or species! (For artistic fine arts, use \"die Kunst\").",
+      "example_sentence": "Welche Art von Musik magst du?",
+      "example_translation": "What kind of music do you like?"
     },
     {
       "id": "fast",
       "german_word": "fast",
       "looks_like": "fast / quick / rapid",
       "actual_meaning": "almost / nearly",
-      "trap_note": "If you are \"fast da\", you are almost there, not running quickly! (For quick, use \"schnell\")."
+      "trap_note": "If you are \"fast da\", you are almost there, not running quickly! (For quick, use \"schnell\").",
+      "example_sentence": "Ich bin fast fertig.",
+      "example_translation": "I am almost done."
     },
     {
       "id": "bald",
       "german_word": "bald",
       "looks_like": "bald (hairless)",
       "actual_meaning": "soon / in a short time",
-      "trap_note": "\"Bis bald!\" means see you soon, not see you bald! (For hairless, use \"kahl\" or \"Glatze\")."
+      "trap_note": "\"Bis bald!\" means see you soon, not see you bald! (For hairless, use \"kahl\" or \"Glatze\").",
+      "example_sentence": "Wir sehen uns bald wieder.",
+      "example_translation": "We will see each other again soon."
     },
     {
       "id": "eventuell",
       "german_word": "eventuell",
       "looks_like": "eventually / in the end",
       "actual_meaning": "possibly / perhaps / maybe",
-      "trap_note": "If a German says \"eventuell\", they mean maybe, not definitely in the end! (For eventually, use \"schließlich\" or \"am Ende\")."
+      "trap_note": "If a German says \"eventuell\", they mean maybe, not definitely in the end! (For eventually, use \"schließlich\" or \"am Ende\").",
+      "example_sentence": "Eventuell komme ich später.",
+      "example_translation": "Maybe I will come later."
     },
     {
       "id": "kaution",
       "german_word": "die Kaution",
       "looks_like": "caution / warning / care",
       "actual_meaning": "security deposit / bail money",
-      "trap_note": "When renting an apartment in Berlin, you must pay 3 months \"Kaution\" (deposit)! (For caution/care, use \"die Vorsicht\")."
+      "trap_note": "When renting an apartment in Berlin, you must pay 3 months \"Kaution\" (deposit)! (For caution/care, use \"die Vorsicht\").",
+      "example_sentence": "Für die Wohnung zahle ich drei Monate Kaution.",
+      "example_translation": "For the apartment I pay a three-month deposit."
     }
   ],
   "dailyInsights": [

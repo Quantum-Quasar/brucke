@@ -37,8 +37,9 @@ function buildWordEntityMaps(
       ipa: ipa.compound[compound.id] || "/kɔmˈpoːzɪtʊm/",
       sound_shift_ids: [],
       shift_rule: "Compound Calque",
-      context_phrase: compound.compound,
-      context_translation: `${compound.english_counterpart} (${compound.literal_morphemes})`,
+      context_phrase: compound.example_sentence ?? compound.compound,
+      context_translation:
+        compound.example_translation ?? `${compound.english_counterpart} (${compound.literal_morphemes})`,
       etymology_derivation: compound.lore,
     };
   });
@@ -54,8 +55,10 @@ function buildWordEntityMaps(
       ipa: ipa.falseFriend[falseFriend.id] || "/faɫʃɐ fʁɔʏ̯nt/",
       sound_shift_ids: [],
       shift_rule: "False Friend Trap",
-      context_phrase: `${falseFriend.german_word} means "${falseFriend.actual_meaning}"`,
-      context_translation: `NOT English "${falseFriend.looks_like}"!`,
+      context_phrase: falseFriend.example_sentence ?? `${falseFriend.german_word} means "${falseFriend.actual_meaning}"`,
+      context_translation: falseFriend.example_translation
+        ? `${falseFriend.example_translation} (NOT English "${falseFriend.looks_like}")`
+        : `NOT English "${falseFriend.looks_like}"!`,
       etymology_derivation: falseFriend.trap_note,
     };
   });

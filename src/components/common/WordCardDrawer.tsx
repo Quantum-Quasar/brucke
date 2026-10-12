@@ -2,6 +2,7 @@
 
 // ponytail: native css slide-over drawer and mobile bottom sheet with zero heavy drawer libs
 
+import { ExampleSentence } from "@/components/common/ExampleSentence";
 import React, { useRef } from "react";
 import Link from "next/link";
 import { X, ExternalLink, Compass, BookOpen, CheckCircle2, Circle, Disc, Minus, Volume2 } from "lucide-react";
@@ -207,8 +208,11 @@ export const WordCardDrawer: React.FC = () => {
                 <Volume2 className="w-3.5 h-3.5" />
               </button>
             </div>
-            <p className="text-sm text-[var(--text-color)] font-medium">&quot;{word.context_phrase}&quot;</p>
-            <p className="text-xs text-[var(--sub-color)]">{word.context_translation}</p>
+            <ExampleSentence
+              sentence={word.context_phrase}
+              translation={word.context_translation}
+              word={word.target_word}
+            />
           </div>
 
           {/* Related Compounds (if any) */}

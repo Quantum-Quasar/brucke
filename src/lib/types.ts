@@ -51,6 +51,9 @@ export interface CompoundCalque {
   real_meaning: string;
   english_counterpart: string;
   lore: string;
+  /** A full German sentence using the compound, with its English translation. */
+  example_sentence?: string;
+  example_translation?: string;
 }
 
 export interface FalseFriend {
@@ -59,6 +62,9 @@ export interface FalseFriend {
   looks_like: string;
   actual_meaning: string;
   trap_note: string;
+  /** A full German sentence using the word in its real meaning, with its English translation. */
+  example_sentence?: string;
+  example_translation?: string;
 }
 
 export interface DailyInsight {

@@ -187,6 +187,14 @@ if (sec2Match) {
   }
 }
 
+/** "German sentence. *("English translation.")*" → example fields (empty when the column is absent). */
+function parseExample(raw: string | undefined): { example_sentence?: string; example_translation?: string } {
+  if (!raw) return {};
+  const m = raw.match(/^(.*?)\s*\*\("?(.*?)"?\)\*$/);
+  if (!m) return {};
+  return { example_sentence: m[1].trim(), example_translation: m[2].trim() };
+}
+
 // 3. Parse Compounds
 const compounds: CompoundCalque[] = [];
 const sec3Match = content.match(/## 3\. Complete Morphological Compound Calques \(All \d+ Compounds\)([\s\S]*?)## 4\./);
@@ -201,7 +209,7 @@ if (sec3Match) {
     const literal = cols[2].replace(/\*|"/g, "").trim();
     const realMeaning = cols[3].replace(/\*\*/g, "").trim();
     const englishCounterpart = cols[4].trim();
-    const lore = cols[5].replace(/<br>/g, " ").trim();
+    const lore = cols[5].replace(/<br>/g, " ").replace(/\*\*/g, "").trim();
 
     let gender: Gender | null = null;
     let cleanWord = rawCompound;
@@ -216,6 +224,8 @@ if (sec3Match) {
       cleanWord = rawCompound.substring(4);
     }
 
+    const example = parseExample(cols[6]);
+
     compounds.push({
       id: cleanWord.toLowerCase(),
       compound: rawCompound,
@@ -224,6 +234,7 @@ if (sec3Match) {
       real_meaning: realMeaning,
       english_counterpart: englishCounterpart,
       lore,
+      ...example,
     });
   }
 }
@@ -243,12 +254,15 @@ if (sec4Match) {
     const actualMeaning = cols[3].replace(/\*\*/g, "").trim();
     const trapNote = cols[4].trim();
 
+    const example = parseExample(cols[5]);
+
     falseFriends.push({
       id: germanWord.replace(/^(der|die|das)\s+/, "").toLowerCase(),
       german_word: germanWord,
       looks_like: looksLike,
       actual_meaning: actualMeaning,
       trap_note: trapNote,
+      ...example,
     });
   }
 }
