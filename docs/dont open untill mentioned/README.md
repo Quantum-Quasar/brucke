@@ -17,7 +17,6 @@ flight.
 | --- | --- | --- | --- |
 | `thinking-method.md` | 691 KB · 4,326 lines | 2026-10-01 | The largest document in the repo. The Thinking Method design and its worked examples. |
 | `op suggestions.md` | 239 KB · 3,028 lines | 2026-10-03 | Proposals for improvements, most recent edit of anything here. |
-| `AUDIT_MANIFEST.md` | 41 KB · 423 lines | 2026-10-01 | Audit instructions. **Not the same file** as the root [`AUDIT_MANIFEST.md`](../../AUDIT_MANIFEST.md) (18 KB) — that one is the shipped architectural spec; this one is the working copy used during audits. |
 | `CORRECTIONS.md` | 31 KB · 290 lines | 2026-10-01 | Every correction applied to [`docs/README.md`](../README.md), each with its `path:line` evidence. |
 | `baba_trail_map_spec.md` | 24 KB · 360 lines | 2026-09-30 | Spec for the Baba-style Trail map. |
 | `future plans.md` | 8 KB · 30 lines | 2026-10-01 | Short, high-level list. The cheapest file to read first. |
@@ -44,6 +43,13 @@ flight.
 
 ## Known issues in these files
 
+- **This folder had its own `AUDIT_MANIFEST.md` (41 KB, last edited 2026-10-01);
+  it was deleted as a stale duplicate.** The canonical audit manifest is the one
+  at the repo root, [`AUDIT_MANIFEST.md`](../../AUDIT_MANIFEST.md) (18 KB, last
+  edited 2026-10-11), which is what `README.md`, `docs/README.md` and
+  `src/tests/docs-sync.test.ts` all point at. If you find a relative link to
+  `./AUDIT_MANIFEST.md` inside this folder, it now resolves to the root copy
+  only if written as `../../AUDIT_MANIFEST.md`.
 - **The diagrams are not in git.** `thinking-method.md` links five images via
   relative paths (`thinking-method-images/diagram-000.png` … `diagram-004.png`).
   That directory is gitignored, so those five images will not resolve for anyone
