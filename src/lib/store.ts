@@ -89,6 +89,8 @@ export interface AppState {
   markWordExplored: (wordId: string) => void;
   markWordEncountered: (wordId: string) => void;
   markWordsEncountered: (wordIds: string[]) => void;
+  /** Gives every given word a fresh SM-2 card (due today) unless it already has one, so finished lessons feed "due today". */
+  seedSrsCards: (wordIds: string[]) => void;
   markWordMastered: (wordId: string) => void;
   completeLesson: (lessonId: number, opts?: { perfect?: boolean }) => void;
   setLessonProgress: (lessonId: number, progress: LessonProgress) => void;
@@ -585,6 +587,18 @@ export const useAppStore = create<AppState>((set, get) => ({
         srsCards[id] = createInitialCard(id);
       }
       const next = { ...s, wordMastery: updated, srsCards };
+      saveState(next);
+      return next;
+    });
+  },
+
+  seedSrsCards: (wordIds) => {
+    set((s) => {
+      const missing = Array.from(new Set(wordIds.map((w) => w.trim()))).filter((id) => id && !s.srsCards[id]);
+      if (missing.length === 0) return s;
+      const srsCards = { ...s.srsCards };
+      for (const id of missing) srsCards[id] = createInitialCard(id);
+      const next = { ...s, srsCards };
       saveState(next);
       return next;
     });

@@ -56,3 +56,19 @@ describe("review decks", () => {
     expect(prepareSession(cards, 0, true).sort()).toEqual(cards);
   });
 });
+
+describe("seedSrsCards", () => {
+  it("creates cards due today for new words only, leaving existing cards untouched", async () => {
+    const { useAppStore } = await import("../lib/store");
+    const { localDateKey } = await import("../lib/srs");
+    const st = useAppStore.getState();
+    st.resetProgress();
+    st.recordReview("hand", 5);
+    const before = useAppStore.getState().srsCards["hand"];
+    useAppStore.getState().seedSrsCards(["hand", "arm", "arm", " "]);
+    const cards = useAppStore.getState().srsCards;
+    expect(cards["hand"]).toEqual(before);
+    expect(cards["arm"].due_date).toBe(localDateKey());
+    expect(Object.keys(cards).sort()).toEqual(["arm", "hand"]);
+  });
+});

@@ -848,8 +848,8 @@
         "y_gh_to_g_ch"
       ],
       "shift_rule": "D → T + Y/GH → G/CH",
-      "context_phrase": "Guten Tag!",
-      "context_translation": "Good day!",
+      "context_phrase": "Heute ist ein schöner Tag.",
+      "context_translation": "Today is a beautiful day.",
       "etymology_derivation": "Double shift: d → t and y → g.",
       "domain": "time"
     },
@@ -1226,8 +1226,8 @@
         "d_to_t"
       ],
       "shift_rule": "TH → D + D → T",
-      "context_phrase": "Tausend Dank!",
-      "context_translation": "A thousand thanks!",
+      "context_phrase": "Das Buch hat tausend Seiten.",
+      "context_translation": "The book has a thousand pages.",
       "etymology_derivation": "Initial th → t and final d → t [t].",
       "domain": "numbers"
     },
@@ -2668,8 +2668,8 @@
         "y_gh_to_g_ch"
       ],
       "shift_rule": "Y/GH → G/CH",
-      "context_phrase": "Gute Nacht!",
-      "context_translation": "Good night!",
+      "context_phrase": "In der Nacht ist es hier sehr ruhig.",
+      "context_translation": "At night it is very quiet here.",
       "etymology_derivation": "gh → ch.",
       "domain": "time"
     },
@@ -4020,8 +4020,8 @@
       "ipa": "/miːɐ̯/",
       "sound_shift_ids": [],
       "shift_rule": "Direct Cognate",
-      "context_phrase": "Hilf mir!",
-      "context_translation": "Help me! (literally: help to me!)",
+      "context_phrase": "Kannst du mir bitte helfen?",
+      "context_translation": "Can you please help me? (literally: help to me)",
       "etymology_derivation": "Dative of ich — the same ancient pronoun as English me, keeping the 'to me' meaning (mir ist kalt = it is cold to me). [wiktionary]",
       "domain": "core"
     },
@@ -4522,8 +4522,8 @@
       "ipa": "/balt/",
       "sound_shift_ids": [],
       "shift_rule": "Direct Cognate",
-      "context_phrase": "Bis bald!",
-      "context_translation": "See you soon!",
+      "context_phrase": "Der Zug kommt bald.",
+      "context_translation": "The train is coming soon.",
       "etymology_derivation": "Proto-Germanic *balþaz — kin to English bold; the 'daring' became 'soon'. Trap: bald = SOON. (Hairless: kahl.) [wiktionary]",
       "domain": "time"
     },
@@ -4762,8 +4762,8 @@
       "ipa": "/ˈaːbənt/",
       "sound_shift_ids": [],
       "shift_rule": "Direct Cognate",
-      "context_phrase": "Guten Abend!",
-      "context_translation": "Good evening!",
+      "context_phrase": "Am Abend lese ich ein Buch.",
+      "context_translation": "In the evening I read a book.",
       "etymology_derivation": "The twin of archaic English even/eve ('evening') — the same *ēbandaz root; Guten Abend keeps the wish-accusative. [wiktionary]",
       "domain": "time"
     },

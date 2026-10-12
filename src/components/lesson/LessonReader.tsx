@@ -99,6 +99,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   const primaryShift = primaryShiftId ? data.shifts[primaryShiftId] : null;
 
   const completeLesson = useAppStore((s) => s.completeLesson);
+  const seedSrsCards = useAppStore((s) => s.seedSrsCards);
   const markWordsEncountered = useAppStore((s) => s.markWordsEncountered);
   const setLessonProgress = useAppStore((s) => s.setLessonProgress);
 
@@ -254,6 +255,8 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
 
   const handleCompleteAll = () => {
     completeLesson(lesson.id, { perfect: !everQueued });
+    // Finished-lesson words enter the SM-2 queue so "due today" isn't empty for new learners.
+    seedSrsCards(lesson.word_ids.filter((id) => id in data.words));
     setIsLessonFinished(true);
     setCompletedSegments(["hook", "pattern", "table", "practice", "summary"]);
   };

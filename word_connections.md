@@ -128,7 +128,7 @@ An exhaustive, unabridged reference repository containing every single word, sou
 | 53 | **Erde** | earth | die (f) | /ˈeːɐ̯də/ | `th_to_d` | Die Erde dreht sich. *("The earth rotates.")* | th → d (Proto-Germanic *erþō). | nature |
 | 54 | **Darm** | gut / tharm | der (m) | /daʁm/ | `th_to_d` | Der Magen und der Darm verdauen das Essen. *("The stomach and the intestine digest the food.")* | th → d (archaic English tharm). | body |
 | 55 | **Dach** | thatch / roof | das (n) | /dax/ | `th_to_d, k_to_ch` | Auf dem Dach sitzt ein Vogel. *("A bird sits on the roof.")* | Double shift: th → d and k/t → ch (thatch ↔ Dach). | home |
-| 56 | **Tag** | day | der (m) | /taːk/ | `d_to_t, y_gh_to_g_ch` | Guten Tag! *("Good day!")* | Double shift: d → t and y → g. | time |
+| 56 | **Tag** | day | der (m) | /taːk/ | `d_to_t, y_gh_to_g_ch` | Heute ist ein schöner Tag. *("Today is a beautiful day.")* | Double shift: d → t and y → g. | time |
 | 57 | **Tür** | door | die (f) | /tyːɐ/ | `d_to_t` | Bitte mach die Tür zu. *("Please close the door.")* | d → t with vowel mutation to ü. | home |
 | 58 | **tief** | deep | - | /tiːf/ | `d_to_t, p_to_pf_f` | Das Wasser ist sehr tief. *("The water is very deep.")* | Double shift: d → t and p → f. | core |
 | 59 | **Tanz** | dance | der (m) | /tants/ | `d_to_t` | Der Tanz macht Spaß. *("Dancing is fun.")* | d → t. | hobbies |
@@ -151,7 +151,7 @@ An exhaustive, unabridged reference repository containing every single word, sou
 | 76 | **Tal** | dale / valley | das (n) | /taːl/ | `d_to_t` | Der Fluss fließt durch das Tal. *("The river flows through the valley / dale.")* | d → t (cognate with English dale). | nature |
 | 77 | **Tau** | dew | der (m) | /taʊ/ | `d_to_t` | Morgens liegt Tau auf dem Gras. *("In the morning dew lies on the grass.")* | d → t. | weather |
 | 78 | **Teil** | deal / part | der (m) | /taɪl/ | `d_to_t` | Das ist ein wichtiger Teil. *("That is an important part.")* | d → t (cognate with English "deal" as in a great deal / dole). | core |
-| 79 | **tausend** | thousand | - | /ˈtaʊzn̩t/ | `th_to_d, d_to_t` | Tausend Dank! *("A thousand thanks!")* | Initial th → t and final d → t [t]. | numbers |
+| 79 | **tausend** | thousand | - | /ˈtaʊzn̩t/ | `th_to_d, d_to_t` | Das Buch hat tausend Seiten. *("The book has a thousand pages.")* | Initial th → t and final d → t [t]. | numbers |
 | 80 | **Teufel** | devil | der (m) | /ˈtɔɪfl̩/ | `d_to_t, v_to_b` | Der Teufel steckt im Detail. *("The devil is in the details.")* | Greek diabolos → d → t. | core |
 | 81 | **hoffen** | to hope | - | /ˈhɔfn̩/ | `p_to_pf_f` | Ich hoffe, du kommst. *("I hope you come.")* | p → ff. | emotions |
 | 82 | **helfen** | to help | - | /ˈhɛlfn̩/ | `p_to_pf_f` | Kannst du mir helfen? *("Can you help me?")* | p → f. Governs the dative case (mir). | core |
@@ -240,7 +240,7 @@ An exhaustive, unabridged reference repository containing every single word, sou
 | 165 | **Nagel** | nail | der (m) | /ˈnaːɡl̩/ | `y_gh_to_g_ch` | Er schlägt den Nagel in die Wand. *("He hammers the nail into the wall.")* | y → g (nail ↔ Nagel). | home |
 | 166 | **Auge** | eye | das (n) | /ˈaʊɡə/ | `y_gh_to_g_ch` | Sie hat blaue Augen. *("She has blue eyes.")* | y → g (eye ↔ Auge). | body |
 | 167 | **Fliege** | fly | die (f) | /ˈfliːɡə/ | `y_gh_to_g_ch` | Eine Fliege summt im Raum. *("A fly buzzes in the room.")* | y → g (fly ↔ Fliege). | nature |
-| 168 | **Nacht** | night | die (f) | /naxt/ | `y_gh_to_g_ch` | Gute Nacht! *("Good night!")* | gh → ch. | time |
+| 168 | **Nacht** | night | die (f) | /naxt/ | `y_gh_to_g_ch` | In der Nacht ist es hier sehr ruhig. *("At night it is very quiet here.")* | gh → ch. | time |
 | 169 | **lachen** | to laugh | - | /ˈlaxn̩/ | `y_gh_to_g_ch` | Die Kinder lachen viel. *("The children laugh a lot.")* | gh → ch. | emotions |
 | 170 | **Nachbar** | neighbor | der (m) | /ˈnaxbaːɐ̯/ | `y_gh_to_g_ch` | Mein Nachbar ist sehr freundlich. *("My neighbor is very friendly.")* | nach (near) + bauer (dweller). Silent gh in neighbor preserves German ch. | family |
 | 171 | **Vorsicht** | caution / foresight | die (f) | /ˈfoːɐ̯zɪçt/ | `y_gh_to_g_ch` | Vorsicht an der Bahnsteigkante! *("Caution at the platform edge!")* | vor (fore) + sicht (sight, with gh → ch). | core |
@@ -329,7 +329,7 @@ An exhaustive, unabridged reference repository containing every single word, sou
 | 254 | **genug** | enough | - | /ɡəˈnuːk/ | `Direct Cognate` | Es ist genug. *("It is enough.")* | Proto-Germanic *ganōgaz with the ancient ge- prefix — the same prefix English wore down to y- (yclept, ywis) and buried inside 'enough'. [wiktionary] | core |
 | 255 | **fahren** | to drive / fare | - | /ˈfaːʁən/ | `Direct Cognate` | Ich fahre nach Berlin. *("I am going / driving to Berlin.")* | Proto-Germanic *faraną — the twin of English fare (farewell, bus fare, 'how did you fare?'). [wiktionary] | travel |
 | 256 | **nehmen** | to take | - | /ˈneːmən/ | `Direct Cognate` | Ich nehme den Bus. *("I am taking the bus.")* | Proto-Germanic *nemaną — the twin of archaic English nim 'to take', surviving in nimble ('quick to grasp'); English take is a Norse import. [wiktionary] | core |
-| 257 | **mir** | to me (dative) | - | /miːɐ̯/ | `Direct Cognate` | Hilf mir! *("Help me! (literally: help to me!)")* | Dative of ich — the same ancient pronoun as English me, keeping the 'to me' meaning (mir ist kalt = it is cold to me). [wiktionary] | core |
+| 257 | **mir** | to me (dative) | - | /miːɐ̯/ | `Direct Cognate` | Kannst du mir bitte helfen? *("Can you please help me? (literally: help to me)")* | Dative of ich — the same ancient pronoun as English me, keeping the 'to me' meaning (mir ist kalt = it is cold to me). [wiktionary] | core |
 | 258 | **mit** | with | - | /mɪt/ | `Direct Cognate` | Ich trinke Kaffee mit Milch. *("I drink coffee with milk.")* | The exact twin of archaic English mid 'with' — fossilized in midwife, 'with-woman'. Governs the dative. [wiktionary] | core |
 | 259 | **bei** | by / at | - | /baɪ/ | `Direct Cognate` | Ich wohne bei Berlin. *("I live near / by Berlin.")* | The exact twin of English by — both from Proto-Germanic *bi. Governs the dative. [wiktionary] | core |
 | 260 | **gefallen** | to please | - | /ɡəˈfalən/ | `Direct Cognate, strong_verbs_ablaut` | Es gefällt mir. *("I like it (it falls well to me).")* | ge- + fallen — 'to fall to someone' (by lot or liking), like English 'as it falls out'. Strong verb: gefiel, gefallen. [wiktionary] | emotions |
@@ -364,7 +364,7 @@ An exhaustive, unabridged reference repository containing every single word, sou
 | 289 | **Dom** | cathedral / dome | der (m) | /doːm/ | `Direct Cognate` | Der Dom ist alt. *("The cathedral is old.")* | Both from Latin domus (church-house) — true cognates, drifted senses. Trap: der Dom = CATHEDRAL. (Dome: die Kuppel.) [wiktionary] | travel |
 | 290 | **Art** | kind / type / art | die (f) | /aːɐ̯t/ | `Direct Cognate` | Diese Art von Buch ist gut. *("This kind of book is good.")* | Both from Latin ars/artis — true cognates, drifted senses. Trap: die Art = KIND/TYPE. (Fine art: die Kunst.) [wiktionary] | core |
 | 291 | **fast** | almost / fast | - | /fast/ | `Direct Cognate` | Ich bin fast fertig. *("I am almost done.")* | Ancient Germanic 'firmly, almost' — true cognate of fast in its 'firm' sense. Trap: fast = ALMOST. (Quick: schnell.) [wiktionary] | core |
-| 292 | **bald** | soon / bold | - | /balt/ | `Direct Cognate` | Bis bald! *("See you soon!")* | Proto-Germanic *balþaz — kin to English bold; the 'daring' became 'soon'. Trap: bald = SOON. (Hairless: kahl.) [wiktionary] | time |
+| 292 | **bald** | soon / bold | - | /balt/ | `Direct Cognate` | Der Zug kommt bald. *("The train is coming soon.")* | Proto-Germanic *balþaz — kin to English bold; the 'daring' became 'soon'. Trap: bald = SOON. (Hairless: kahl.) [wiktionary] | time |
 | 293 | **eventuell** | possibly / eventually | - | /evɛntuˈɛl/ | `Direct Cognate` | Es regnet eventuell. *("It might possibly rain.")* | Both from Latin eventus — true cognates, drifted senses. Trap: eventuell = POSSIBLY. (Eventually: schließlich/am Ende.) [wiktionary] | core |
 | 294 | **Kaution** | deposit / caution | die (f) | /kaʊˈt͡si̯oːn/ | `Direct Cognate` | Die Kaution kostet viel. *("The deposit costs a lot.")* | Both from Latin cautio — true cognates, drifted senses. Trap: die Kaution = SECURITY DEPOSIT. (Caution: die Vorsicht.) [wiktionary] | shopping |
 | 295 | **dein** | thy / thine | - | /daɪn/ | `Direct Cognate` | Das ist dein Haus. *("That is thy house.")* | The exact twin of thine (Proto-Germanic *þīnaz with th → d) — the KJV's 'thine' and 'mine eyes' are this word's living family. [wiktionary] | core |
@@ -381,7 +381,7 @@ An exhaustive, unabridged reference repository containing every single word, sou
 | 306 | **Auto** | car / auto | das (n) | /ˈaʊto/ | `Direct Cognate` | Das Auto ist neu. *("The car is new.")* | Short for Automobil — the same Greek autos ('self') loan as English auto, clipped German-style. [wiktionary] | travel |
 | 307 | **klein** | small / clean | - | /klaɪn/ | `Direct Cognate` | Das Kind ist klein. *("The child is small.")* | Proto-Germanic *klainiz 'clean, fine' — the TRUE twin of English clean; the meaning drifted from 'clean' to 'small'. [wiktionary] | core |
 | 308 | **als** | than / as / else | - | /als/ | `Direct Cognate` | Ich bin älter als du. *("I am older than you.")* | Kin to English else (both from the *alja- 'other' family) — the comparative particle. [wiktionary] | core |
-| 309 | **Abend** | evening / eve | der (m) | /ˈaːbənt/ | `Direct Cognate` | Guten Abend! *("Good evening!")* | The twin of archaic English even/eve ('evening') — the same *ēbandaz root; Guten Abend keeps the wish-accusative. [wiktionary] | time |
+| 309 | **Abend** | evening / eve | der (m) | /ˈaːbənt/ | `Direct Cognate` | Am Abend lese ich ein Buch. *("In the evening I read a book.")* | The twin of archaic English even/eve ('evening') — the same *ēbandaz root; Guten Abend keeps the wish-accusative. [wiktionary] | time |
 | 310 | **sehen** | to see | - | /ˈzeːən/ | `Direct Cognate` | Ich sehe dich. *("I see you.")* | Proto-Germanic *sehwaną — the identical twin of see (and gesehen ↔ seen); initial s voiced before vowels. [wiktionary] | core |
 
 | 311 | **Vater** | father | der (m) | /ˈfaːtər/ | `Direct Cognate` | Mein Vater arbeitet in Berlin. *("My father works in Berlin.")* | Proto-Germanic *fadēr; English f ↔ German v=[f] reflects Verner's-law voicing, not the v→b shift family. [wiktionary] | family |
