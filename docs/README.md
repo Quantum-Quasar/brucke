@@ -1,6 +1,6 @@
 > **Corrected copy — verified against the implementation on 2026-09-30.**
-> The original append-only version is preserved verbatim in `old documentation/`.
-> Every correction applied here, with its `path:line` evidence, is listed in [`CORRECTIONS.md`](./CORRECTIONS.md).
+> The original append-only version was kept in `old documentation/`, now removed as superseded.
+> Every correction applied here, with its `path:line` evidence, is listed in [`CORRECTIONS.md`](./dont open untill mentioned/CORRECTIONS.md).
 
 # Brücke (Bridge) — Etymological German Learning Platform
 
@@ -14,7 +14,7 @@
 
 Rather than relying on rote memorization or gamified streaks without substance, Brücke leverages the **Second High German Consonant Shift (500–800 AD)** to reveal that English speakers already understand hundreds of German words.
 
-- **Comprehensive Audit Manifest**: See [`AUDIT_MANIFEST.md`](./AUDIT_MANIFEST.md) for full architectural specifications, data schemas, and audit instructions.
+- **Comprehensive Audit Manifest**: See [`AUDIT_MANIFEST.md`](../AUDIT_MANIFEST.md) for full architectural specifications, data schemas, and audit instructions.
 - **North Star**: See [`NORTH_STAR.md`](./NORTH_STAR.md) — Brücke teaches German; etymology is the hook, not the subject. Read before changing content.
 - **Grammar Panorama**: See [`german-panorama.md`](./german-panorama.md) — every German structure mapped to the lesson ids that teach it, with a `taught` / `inferred` / `partial` column. The repo artifact companion to `/panorama`; `inferred` rows are the honest backlog.
 - **Design Specification**: See [`german_learning_platform_design-final.md`](./german_learning_platform_design-final.md). <!-- corrected 2026-09-30: was "./docs/german_learning_platform_design-final.md" — there is no docs/ directory -->

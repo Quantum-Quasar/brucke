@@ -165,6 +165,32 @@ src/
 
 ---
 
+## Repository Layout & Documentation
+
+The `src/` tree above is the app. Everything else in the repo:
+
+| Path | What it is |
+| --- | --- |
+| `word_connections.md` | **The source of truth for all content data.** The hand-maintained compendium — every word, shift family, compound, false-friend trap, and insight, each derivation cited. Parsed by `scripts/parse-compendium.ts` into `src/data/compendium.json`. Edit the markdown, never the generated JSON. Tracked on purpose: the build depends on it. |
+| `src/data/compendium.json` | **Generated.** Do not hand-edit — run `bun run parse-data`. |
+| `scripts/` | Build and audit tooling. See [`scripts/README.md`](./scripts/README.md). |
+| `tests/` | Playwright browser smoke suite (`bun run test:e2e`). Unit and integration tests live in `src/tests/`. |
+| `docs/` | Specifications, audits, and design notes. See [`docs/README.md`](./docs/README.md) — the longer, correction-tracked twin of this file. |
+| `docs/dont open untill mentioned/` | Live working notes and in-flight thinking. Tracked for handoff; **not** reference material. See its [`README.md`](./docs/dont%20open%20untill%20mentioned/README.md). |
+| `AUDIT_MANIFEST.md` | Architectural spec and data schemas. |
+| `TRAIL.md` | Trail map / curriculum export. |
+
+### Deliberately not in this repository
+
+Some material is local-only and gitignored: `pitch/` (investor material),
+`docs/thinking-method-images/`, `auditreview.md`, superseded copies under
+`old documentation/` and `documented docs/`, and local agent config
+(`CLAUDE.md`, `REBALANCE_PROMPT.md`, `.zcodeignore`). See `.gitignore` for the
+current list. If a fresh clone is missing something you expected, it is
+deliberate.
+
+---
+
 ## Architecture Invariants
 
 - **No Third-Party Component Bloat**: The UI strictly avoids component libraries like Radix, Headless UI, or Framer Motion. Standard DOM and Tailwind CSS are used.

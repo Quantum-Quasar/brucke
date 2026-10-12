@@ -35,6 +35,10 @@ const THEME_COUNT = Object.keys(THEMES).length;
 const FONT_COUNT = FONT_LIST.length;
 const TAUGHT_WORDS = 656; // update after running scripts/audit-vocab-balance.ts
 
+// pitch/ is private and gitignored, so it is absent from a fresh clone. The
+// pitch assertions skip themselves instead of failing the suite with ENOENT.
+const PITCH_PRESENT = fs.existsSync(path.join(ROOT, "pitch"));
+
 describe("Documentation stays in sync with the data", () => {
   const wordCount = Object.keys(compendium.words).length;
   const lessonCount = LESSONS.length;
@@ -86,7 +90,7 @@ describe("Documentation stays in sync with the data", () => {
     }
   });
 
-  it("pitch/ quotes the current taught-word count", () => {
+  it.skipIf(!PITCH_PRESENT)("pitch/ quotes the current taught-word count", () => {
     for (const doc of [
       "01-market-research.md",
       "02-executive-summary.md",
@@ -103,7 +107,7 @@ describe("Documentation stays in sync with the data", () => {
     }
   });
 
-  it("pitch/ quotes the current test-suite count", () => {
+  it.skipIf(!PITCH_PRESENT)("pitch/ quotes the current test-suite count", () => {
     for (const doc of ["02-executive-summary.md", "03-pitch-deck.md"]) {
       const text = readPitchDoc(doc);
       expect(text, `pitch/${doc} must quote the current test count`).toContain(
@@ -115,7 +119,7 @@ describe("Documentation stays in sync with the data", () => {
     }
   });
 
-  it("pitch/ quotes the current theme and font counts", () => {
+  it.skipIf(!PITCH_PRESENT)("pitch/ quotes the current theme and font counts", () => {
     for (const doc of [
       "01-market-research.md",
       "02-executive-summary.md",
