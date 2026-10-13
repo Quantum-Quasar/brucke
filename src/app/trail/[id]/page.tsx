@@ -1,5 +1,6 @@
 import { LessonDetailClient } from "@/components/lesson/LessonDetailClient";
 import { LESSONS } from "@/data/lessons";
+import { FR_LESSONS } from "@/data/french/lessons-fr";
 import { notFound } from "next/navigation";
 
 // 100% SSG: only ids emitted by generateStaticParams may render; anything
@@ -7,7 +8,11 @@ import { notFound } from "next/navigation";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return LESSONS.map((l) => ({ id: l.id.toString() }));
+  // Union of every language's authored lesson ids. Id spaces overlap across
+  // languages by design (progress is language-scoped), so dedupe.
+  const ids = new Set<string>();
+  for (const lesson of [...LESSONS, ...FR_LESSONS]) ids.add(lesson.id.toString());
+  return [...ids].map((id) => ({ id }));
 }
 
 interface PageProps {

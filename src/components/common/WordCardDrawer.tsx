@@ -10,6 +10,7 @@ import { useAppStore } from "@/lib/store";
 import { GenderBadge } from "@/components/common/GenderBadge";
 import { playTargetAudio } from "@/lib/audio";
 import { getLanguageDefinition } from "@/data/languages";
+import { displayArticle } from "@/lib/gender";
 import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
 import { getWordEntity, getWordLessonMap } from "@/lib/word-entities";
 import type { WordEntity } from "@/lib/types";
@@ -55,6 +56,15 @@ export const WordCardDrawer: React.FC = () => {
       </div>
     );
   }
+
+  // le/la collapse to l' before a vowel — speak the elided form the French do
+  const spokenArticle = word.gender ? displayArticle(word.gender, word.target_word, activeLanguageId) : null;
+  const spokenWord =
+    spokenArticle === null
+      ? word.target_word
+      : spokenArticle.endsWith("'")
+        ? `${spokenArticle}${word.target_word}`
+        : `${spokenArticle} ${word.target_word}`;
 
   const shiftFamily = word.sound_shift_ids[0] ? data.shifts[word.sound_shift_ids[0]] : null;
   const lessonId = word ? getWordLessonMap(activeLanguageId)[word.id] : undefined;
@@ -129,10 +139,10 @@ export const WordCardDrawer: React.FC = () => {
               <h2 id="word-drawer-title" className="text-3xl font-mono font-bold text-[var(--main-color)] tracking-tight">{word.target_word}</h2>
               <button
                 type="button"
-                onClick={() => playTargetAudio(word.gender ? `${word.gender} ${word.target_word}` : word.target_word, language.ttsLocale)}
+                onClick={() => playTargetAudio(spokenWord, language.ttsLocale)}
                 className="p-1.5 rounded bg-[var(--sub-alt-color)] hover:bg-[var(--main-color)]/10 text-[var(--main-color)] border border-[var(--sub-color)]/20 transition cursor-pointer"
-                title={`Listen to "${word.gender ? `${word.gender} ` : ""}${word.target_word}"`}
-                aria-label={`Listen to German pronunciation of ${word.gender ? `${word.gender} ` : ""}${word.target_word}`}
+                title={`Listen to "${spokenWord}"`}
+                aria-label={`Listen to ${language.name} pronunciation of ${spokenWord}`}
               >
                 <Volume2 className="w-4 h-4" />
               </button>

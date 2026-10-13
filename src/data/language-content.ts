@@ -11,6 +11,10 @@ import { compendium as germanCompendium } from "./compendium";
 import { TOPICS, TRAIL_BRANCHES, TRAIL_GATES, TOTAL_TOPICS } from "./curriculum";
 import { LESSONS as GERMAN_LESSONS } from "./lessons";
 import germanInsights from "./insights.json";
+import { frenchCompendium } from "./french/compendium-fr";
+import { FR_TOPICS, FR_TRAIL_BRANCHES, FR_TRAIL_GATES, FR_TOTAL_TOPICS } from "./french/curriculum-fr";
+import { FR_LESSONS } from "./french/lessons-fr";
+import { FRENCH_INSIGHTS } from "./french/insights-fr";
 import type { CompendiumData, DailyInsight, Lesson } from "@/lib/types";
 import type { LessonShell, TrailBranch, TrailGate, TopicCluster } from "@/lib/types";
 import { DEFAULT_LANGUAGE_ID } from "./languages";
@@ -55,8 +59,19 @@ const GERMAN_CONTENT: LanguageContent = {
   insights: germanInsights as DailyInsight[],
 };
 
+const FRENCH_CONTENT: LanguageContent = {
+  compendium: frenchCompendium,
+  topics: FR_TOPICS,
+  trailBranches: FR_TRAIL_BRANCHES,
+  trailGates: FR_TRAIL_GATES,
+  totalTopics: FR_TOTAL_TOPICS,
+  lessons: FR_LESSONS,
+  insights: FRENCH_INSIGHTS,
+};
+
 const CONTENT_MAP: Record<string, LanguageContent> = {
   de: GERMAN_CONTENT,
+  fr: FRENCH_CONTENT,
 };
 
 /** Content bundle for a language id — empty bundle when nothing is authored yet. */
@@ -73,3 +88,18 @@ export function getTotalWordCount(languageId: string): number {
 
 /** Convenience for the default (German) content, for German-specific tooling. */
 export const DEFAULT_CONTENT: LanguageContent = getLanguageContent(DEFAULT_LANGUAGE_ID);
+
+/**
+ * Next authored spine core after the given node, in the active language's own
+ * curriculum (null = caught up). Mirrors data/curriculum.ts's German helper:
+ * core ids only, ordered by topic.
+ */
+export function getNextPlayableLessonIdFor(languageId: string, currentId: number): number | null {
+  const content = getLanguageContent(languageId);
+  for (const topic of content.topics) {
+    if (topic.core.id > currentId && topic.id <= content.totalTopics && topic.core.authored) {
+      return topic.core.id;
+    }
+  }
+  return null;
+}

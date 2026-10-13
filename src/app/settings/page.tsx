@@ -462,7 +462,7 @@ export default function SettingsPage() {
             id="show-char-bar"
             icon={Keyboard}
             title="special character bar"
-            description="Controls when the quick accent bar for the language you are learning (German: ä, ö, ü, ß) is shown beneath typing inputs."
+            description="Controls when the quick accent bar for the language you are learning (German: ä, ö, ü, ß — French: é, à, ç, ê) is shown beneath typing inputs."
             matchesSearch={matches(["german character bar", "special character bar", "char bar", "umlaut buttons", "input"])}
           >
             {(["always", "on_focus", "off"] as ShowCharBar[]).map((mode) => (

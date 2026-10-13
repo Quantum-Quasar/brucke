@@ -7,13 +7,19 @@ import type { DailyInsight } from "@/lib/types";
 interface DailyInsightCardProps {
   insight: DailyInsight;
   className?: string;
+  /** Course whose insights are shown — flavours the shared-text label. */
+  languageName?: string;
 }
 
-export const DailyInsightCard: React.FC<DailyInsightCardProps> = ({ insight, className = "" }) => {
+export const DailyInsightCard: React.FC<DailyInsightCardProps> = ({
+  insight,
+  className = "",
+  languageName = "German",
+}) => {
   const [copied, setCopied] = useState(false);
 
   const handleShare = async () => {
-    const textToShare = `German Etymology Note:
+    const textToShare = `${languageName} Etymology Note:
 "${insight.german_expression}" (${insight.english_meaning})
 ${insight.cultural_etymology}
 Principle: ${insight.takeaway_principle}`;

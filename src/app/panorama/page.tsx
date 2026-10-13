@@ -222,6 +222,10 @@ export default function PanoramaPage() {
           Nothing here is a lesson, nothing unlocks, nothing is graded. Come when you want the
           whole picture at once, and leave when you have what you came for.
         </p>
+        <p className="text-[11px] font-mono text-[var(--sub-color)]/80 max-w-2xl">
+          german-course reference layer — the french trail teaches its grammar inside the lessons
+          themselves, so it has no panorama page of its own.
+        </p>
       </header>
 
       <div className="space-y-12">

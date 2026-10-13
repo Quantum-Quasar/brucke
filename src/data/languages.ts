@@ -68,6 +68,8 @@ export interface LanguageDefinition {
   status: LanguageStatus;
   /** one-line description on the language picker */
   blurb: string;
+  /** faint watermark characters scattered behind the trail map */
+  decoChars?: string[];
   onboarding: LanguageOnboarding;
 }
 
@@ -208,7 +210,7 @@ const FRENCH_ONBOARDING: LanguageOnboarding = {
       "french nouns carry grammatical gender — le (masculine) and la (feminine) — which this course will highlight with color-coded badges once the french trail opens.",
   },
   ready: {
-    body: "the french trail is in active development. pick german to start learning today, or switch back here from settings the moment french content lands.",
+    body: "the french trail is open: the conversion bridges first, then the sentence machine, the pasts and the deep engine. all progress is stored locally in your browser.",
   },
 };
 
@@ -236,6 +238,7 @@ export const LANGUAGES: LanguageDefinition[] = [
     },
     status: "available",
     blurb: "The full cognate engine: 30 topics, 9 shift families, 1226 words.",
+    decoChars: ["ß", "ü", "ö", "ä", "ß", "§"],
     onboarding: GERMAN_ONBOARDING,
   },
   {
@@ -286,8 +289,9 @@ export const LANGUAGES: LanguageDefinition[] = [
       labels: ["masculine", "feminine"],
       colors: ["blue", "rose"],
     },
-    status: "coming-soon",
-    blurb: "Norman doublet engine. Trail under construction.",
+    status: "available",
+    blurb: "The Norman doublet engine: 30 topics, 9 conversion bridges, 90+ words.",
+    decoChars: ["é", "à", "ç", "œ", "è", "ê"],
     onboarding: FRENCH_ONBOARDING,
   },
 ];

@@ -60,10 +60,12 @@ export default function AtlasPage() {
             <Compass className="w-3.5 h-3.5" /> phonological atlas
           </span>
           <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-color)] tracking-tight mt-0.5">
-            Sound Shift Families
+            {activeLanguageId === "fr" ? "Conversion Bridge Families" : "Sound Shift Families"}
           </h1>
           <p className="text-xs sm:text-sm text-[var(--sub-color)] mt-0.5">
-            The 9 historical sound shift families linking English cognates to High German vocabulary — plus every dictionary word that sits outside them.
+            {activeLanguageId === "fr"
+              ? "The 9 conversion bridge families linking English cognates to French vocabulary — plus every dictionary word that sits outside them."
+              : "The 9 historical sound shift families linking English cognates to High German vocabulary — plus every dictionary word that sits outside them."}
           </p>
         </div>
 

@@ -28,7 +28,8 @@ import { RETRY_INTENT_LINE, retryVariant } from "@/lib/retry-variation";
 import { isListeningSkipped, listeningSkipLabel } from "@/lib/listening";
 import { consciousnessLineFor } from "@/data/consciousness";
 import { SOUND_IMPORTS, importLineFor, type SoundImport } from "@/data/sound-imports";
-import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
+import { getLanguageContent, EMPTY_COMPENDIUM, getNextPlayableLessonIdFor } from "@/data/language-content";
+import { getLanguageDefinition } from "@/data/languages";
 import type { Lesson, ExerciseItem } from "@/lib/types";
 
 interface LessonReaderProps {
@@ -97,6 +98,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
 
   const primaryShiftId = lesson.shift_categories && lesson.shift_categories[0];
   const primaryShift = primaryShiftId ? data.shifts[primaryShiftId] : null;
+  const isFrench = activeLanguageId === "fr";
 
   const completeLesson = useAppStore((s) => s.completeLesson);
   const seedSrsCards = useAppStore((s) => s.seedSrsCards);
@@ -825,16 +827,20 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                     <TwistCard twist={lesson.twist} onDone={() => setTwistResurfaced(false)} />
                   )}
 
-                  {/* Atlas Deep-Dive Trail Bridge */}
+                  {/* Atlas Deep-Dive Trail Bridge — the detail route emits every
+                      language's family ids, so French lessons bridge into the
+                      conversion-bridge atlas the same way. */}
                   <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <div className="space-y-0.5">
                       <div className="text-xs uppercase tracking-wider flex items-center gap-1.5 font-semibold text-[var(--main-color)]">
-                        <Compass className="w-3.5 h-3.5" /> sound shift atlas bridge
+                        <Compass className="w-3.5 h-3.5" /> {isFrench ? "conversion bridge atlas" : "sound shift atlas bridge"}
                       </div>
                       <p className="text-xs text-[var(--sub-color)]">
                         {primaryShift
-                          ? `explore all ${primaryShift.word_ids.length} cognates governed by ${primaryShift.symbol} across high german history.`
-                          : "explore all 9 historical shift families connecting english and german."}
+                          ? `explore all ${primaryShift.word_ids.length} cognates governed by ${primaryShift.symbol} ${isFrench ? "across the norman conversion bridges." : "across high german history."}`
+                          : isFrench
+                            ? "explore all 9 conversion bridge families connecting english and french."
+                            : "explore all 9 historical shift families connecting english and german."}
                       </p>
                     </div>
                     <Link
@@ -857,20 +863,20 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
 
                     <Link
                       href={(() => {
-                        const nextId = getNextPlayableLessonId(lesson.id);
+                        const nextId = getNextPlayableLessonIdFor(activeLanguageId, lesson.id);
                         return nextId ? `/trail/${nextId}` : "/trail";
                       })()}
                       onClick={(event) => {
                         event.preventDefault();
                         handleCompleteAll();
-                        const nextId = getNextPlayableLessonId(lesson.id);
+                        const nextId = getNextPlayableLessonIdFor(activeLanguageId, lesson.id);
                         router.push(nextId ? `/trail/${nextId}` : "/trail");
                       }}
                       className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs transition cursor-pointer"
                     >
                       <span>
                         {(() => {
-                          const nextId = getNextPlayableLessonId(lesson.id);
+                          const nextId = getNextPlayableLessonIdFor(activeLanguageId, lesson.id);
                           return nextId ? `next lesson (${nextId})` : "back to the trail";
                         })()}
                       </span>
@@ -913,7 +919,11 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
               ))}
               <div className="p-3 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 space-y-1">
                 <span className="text-[var(--main-color)] font-bold">cognate clue</span>
-                <p>high german shifted consonants 1,300 years ago, leaving english as a living time capsule of ancestral germanic roots.</p>
+                <p>
+                  {activeLanguageId === "fr"
+                    ? "in 1066 norman french crossed the channel — thousands of cognates entered english and never left."
+                    : "high german shifted consonants 1,300 years ago, leaving english as a living time capsule of ancestral germanic roots."}
+                </p>
               </div>
             </div>
           </div>

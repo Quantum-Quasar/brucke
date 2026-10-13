@@ -42,7 +42,9 @@ export default function HomePage() {
             the trail
           </span>
           <h1 className="text-lg sm:text-xl font-bold text-[var(--text-color)] tracking-tight leading-tight">
-            {language.status === "available" ? "30 topics, one bridge" : `${language.flag} ${language.name} is on the way`}
+            {language.status === "available"
+              ? `${content.totalTopics} topics, one bridge`
+              : `${language.flag} ${language.name} is on the way`}
           </h1>
         </div>
         {language.status === "available" && (
@@ -72,7 +74,7 @@ export default function HomePage() {
 
       {language.status === "available" ? (
         <>
-          <DailyInsightCard insight={todayInsight} />
+          <DailyInsightCard insight={todayInsight} languageName={language.name} />
           <TrailMap />
         </>
       ) : (

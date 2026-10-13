@@ -1,6 +1,6 @@
 export const TOTAL_COMPENDIUM_WORDS = 1226;
 
-export type Gender = "der" | "die" | "das";
+export type Gender = "der" | "die" | "das" | "le" | "la";
 
 export type MasteryState = "unexplored" | "explored" | "encountered" | "mastered";
 

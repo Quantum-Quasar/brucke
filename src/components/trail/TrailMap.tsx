@@ -4,14 +4,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation";
 import { BookOpen, Check, GitBranch, Lock, Star } from "lucide-react";
 import { useAppStore } from "@/lib/store";
-import { TRAIL_EDGE_PAIRS } from "@/lib/trail-map";
-import {
-  buildTrailLayout,
-  getTrailState,
-  type TrailNode,
-  type NodeStatus,
-  type GateView,
-} from "@/lib/trail-map";
+import { buildTrailEdgePairs, buildTrailLayout, getTrailState, GERMAN_TRAIL_DATA, type TrailData, type TrailNode, type NodeStatus, type GateView } from "@/lib/trail-map";
+import { getLanguageDefinition } from "@/data/languages";
+import { getLanguageContent } from "@/data/language-content";
 import { LessonNodeDrawer, GateDrawer } from "./LessonNodeDrawer";
 
 const GOLD_STAR = "#eab308";
@@ -57,6 +52,21 @@ export const TrailMap: React.FC = () => {
   const completedLessons = useAppStore((s) => s.completedLessons);
   const lessonStars = useAppStore((s) => s.lessonStars);
   const lessonProgress = useAppStore((s) => s.lessonProgress);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+
+  // the trail graph is language-scoped: German data by default, the French
+  // bundle when French is active (see lib/trail-map.ts TrailData)
+  const trailData: TrailData = useMemo(() => {
+    const content = getLanguageContent(activeLanguageId);
+    if (content.topics.length === 0) return GERMAN_TRAIL_DATA;
+    return {
+      topics: content.topics,
+      branches: content.trailBranches,
+      gates: content.trailGates,
+      totalTopics: content.totalTopics,
+    };
+  }, [activeLanguageId]);
+  const edgePairs = useMemo(() => buildTrailEdgePairs(trailData), [trailData]);
 
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [width, setWidth] = useState(640);
@@ -75,10 +85,11 @@ export const TrailMap: React.FC = () => {
     return () => observer.disconnect();
   }, [width]);
 
-  const layout = useMemo(() => buildTrailLayout(width), [width]);
+  const decoChars = getLanguageDefinition(activeLanguageId).decoChars;
+  const layout = useMemo(() => buildTrailLayout(width, trailData, decoChars), [width, trailData, decoChars]);
   const state = useMemo(
-    () => getTrailState(completedLessons, lessonStars, layout.nodes),
-    [completedLessons, lessonStars, layout]
+    () => getTrailState(completedLessons, lessonStars, layout.nodes, trailData),
+    [completedLessons, lessonStars, layout, trailData]
   );
   const nodeById = useMemo(() => new Map(layout.nodes.map((n) => [n.id, n])), [layout]);
   const groups = useMemo(() => groupNodesByTopic(layout.nodes, layout.topicAnchors), [layout]);
@@ -104,7 +115,7 @@ export const TrailMap: React.FC = () => {
 
   const lockHint = useMemo(() => {
     if (!selected) return null;
-    const neighborIds = TRAIL_EDGE_PAIRS.filter((e) => e.a === selected.id || e.b === selected.id).map((e) =>
+    const neighborIds = edgePairs.filter((e) => e.a === selected.id || e.b === selected.id).map((e) =>
       e.a === selected.id ? e.b : e.a
     );
     if (neighborIds.length === 0) return null;
@@ -113,7 +124,7 @@ export const TrailMap: React.FC = () => {
       .filter((n): n is TrailNode => Boolean(n))
       .map((n) => (n.kind === "core" ? `topic ${n.topicId}` : `“${n.title}”`));
     return `Unlocks when you complete any adjacent lesson: ${parts.join(", ")}.`;
-  }, [selected, nodeById]);
+  }, [selected, nodeById, edgePairs]);
 
   const edgeCenter = useCallback(
     (id: number) => {

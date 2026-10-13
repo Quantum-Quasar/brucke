@@ -48,5 +48,47 @@ export function getGenderInfo(gender: Gender | string | null | undefined): Gende
     };
   }
 
+  if (g === "le") {
+    return {
+      gender: "le",
+      label: "Masculine",
+      article: "le",
+      colorName: "Azure Blue",
+      badgeClass: "text-blue-700 dark:text-blue-300 bg-blue-500/10 dark:bg-blue-500/15 border-blue-500/30",
+      dotColor: "#60A5FA",
+    };
+  }
+
+  if (g === "la") {
+    return {
+      gender: "la",
+      label: "Feminine",
+      article: "la",
+      colorName: "Vivid Rose",
+      badgeClass: "text-rose-700 dark:text-rose-300 bg-rose-500/10 dark:bg-rose-500/15 border-rose-500/30",
+      dotColor: "#FB7185",
+    };
+  }
+
   return null;
+}
+
+const ELISION_RE = /^[aeiouàâäéèêëîïôöùûüœh]/i;
+
+/**
+ * The article to speak/write in front of a word, elided where the language does.
+ * French drops the vowel of le/la before a vowel or mute h (l'opinion, l'hôtel);
+ * German never elides. Returns null when the word has no gender.
+ */
+export function displayArticle(
+  gender: Gender | string | null | undefined,
+  targetWord: string,
+  languageId: string
+): string | null {
+  const info = getGenderInfo(gender);
+  if (!info) return null;
+  if (languageId === "fr" && (info.article === "le" || info.article === "la")) {
+    if (ELISION_RE.test(targetWord.trim())) return "l'";
+  }
+  return info.article;
 }

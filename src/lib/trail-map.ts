@@ -1,8 +1,13 @@
 import { TOPICS, TRAIL_BRANCHES, TRAIL_GATES, TOTAL_TOPICS } from "@/data/curriculum";
-import type { LessonStar, TrailGate } from "./types";
+import type { LessonStar, TopicCluster, TrailBranch, TrailGate } from "./types";
 
 // ---------------------------------------------------------------------------
 // Baba-style trail map engine — pure, deterministic, testable.
+//
+// The engine is language-agnostic: every function takes a TrailData bundle
+// (topics + branches + gates) and defaults to the German trail, so existing
+// callers and tests keep working unchanged. The French trail passes its own
+// bundle from data/french/curriculum-fr.ts via the language-content registry.
 //
 // Graph rules:
 //   · a node is unlocked when ANY adjacent node is completed (Baba OR-join),
@@ -17,6 +22,21 @@ import type { LessonStar, TrailGate } from "./types";
 //   · sprigs fan out beside their core (left, right, then second row)
 //   · branches chain horizontally on the freer side, falling back to below
 // ---------------------------------------------------------------------------
+
+/** Everything the engine needs about one language's trail. */
+export interface TrailData {
+  topics: TopicCluster[];
+  branches: TrailBranch[];
+  gates: TrailGate[];
+  totalTopics: number;
+}
+
+export const GERMAN_TRAIL_DATA: TrailData = {
+  topics: TOPICS,
+  branches: TRAIL_BRANCHES,
+  gates: TRAIL_GATES,
+  totalTopics: TOTAL_TOPICS,
+};
 
 export type NodeKind = "core" | "sprig" | "branch";
 export type NodeStatus = "completed" | "available" | "locked";
@@ -96,13 +116,13 @@ export const nodeSize = (kind: NodeKind) =>
 const clampX = (x: number, w: number, width: number) => Math.min(Math.max(x, EDGE_PAD), width - EDGE_PAD - w);
 
 /** Unique undirected edge pairs of the trail graph (id-space only, layout-free). */
-export function buildTrailEdgePairs(): TrailEdge[] {
+export function buildTrailEdgePairs(data: TrailData = GERMAN_TRAIL_DATA): TrailEdge[] {
   const edges: TrailEdge[] = [];
-  for (let t = 1; t < TOTAL_TOPICS; t++) edges.push({ a: t, b: t + 1 });
-  for (const topic of TOPICS) {
+  for (let t = 1; t < data.totalTopics; t++) edges.push({ a: t, b: t + 1 });
+  for (const topic of data.topics) {
     for (const sprig of topic.sprigs) edges.push({ a: topic.core.id, b: sprig.id });
   }
-  for (const branch of TRAIL_BRANCHES) {
+  for (const branch of data.branches) {
     let prev = branch.attach;
     for (const lesson of branch.lessons) {
       edges.push({ a: prev, b: lesson.id });
@@ -112,11 +132,9 @@ export function buildTrailEdgePairs(): TrailEdge[] {
   return edges;
 }
 
-export const TRAIL_EDGE_PAIRS = buildTrailEdgePairs();
-
-const adjacency = () => {
+const buildAdjacency = (edges: TrailEdge[]) => {
   const map = new Map<number, number[]>();
-  for (const { a, b } of TRAIL_EDGE_PAIRS) {
+  for (const { a, b } of edges) {
     if (!map.has(a)) map.set(a, []);
     if (!map.has(b)) map.set(b, []);
     map.get(a)!.push(b);
@@ -125,12 +143,18 @@ const adjacency = () => {
   return map;
 };
 
-const ADJACENCY = adjacency();
+const GERMAN_EDGES = buildTrailEdgePairs(GERMAN_TRAIL_DATA);
+
+/** Unique undirected edge pairs of the German trail (legacy export, German-bound). */
+export const TRAIL_EDGE_PAIRS: TrailEdge[] = GERMAN_EDGES;
+
+const GERMAN_ADJACENCY = buildAdjacency(GERMAN_EDGES);
 
 /**
  * Full layout for a given canvas width. Deterministic — same width, same map.
+ * `decoChars` scatters the faint watermark characters (per-language).
  */
-export function buildTrailLayout(width: number): TrailLayout {
+export function buildTrailLayout(width: number, data: TrailData = GERMAN_TRAIL_DATA, decoChars?: string[]): TrailLayout {
   const safeWidth = Number.isFinite(width) ? width : 640;
   const w = Math.min(Math.max(Math.round(safeWidth), 320), 980);
   const centerX = w / 2;
@@ -140,7 +164,7 @@ export function buildTrailLayout(width: number): TrailLayout {
 
   let cursor = TOP_PAD;
 
-  for (const topic of TOPICS) {
+  for (const topic of data.topics) {
     const clusterTop = cursor;
     const coreX = clampX(centerX + swing * Math.sin(topic.id * 1.7), CORE_W, w);
     const coreY = clusterTop + LABEL_H;
@@ -205,7 +229,7 @@ export function buildTrailLayout(width: number): TrailLayout {
 
     let clusterBottom = Math.max(...cluster.map((n) => n.y + n.h));
 
-    for (const branch of TRAIL_BRANCHES) {
+    for (const branch of data.branches) {
       if (branch.attach !== topic.core.id) continue;
       // branches tuck into a side pocket below the cluster (sprigs own the flanks)
       const sprigSides = topic.sprigs.map((_, j) => (j % 2 === 0 ? -1 : 1));
@@ -247,12 +271,12 @@ export function buildTrailLayout(width: number): TrailLayout {
   for (const node of nodes) node.y = height - node.y - node.h;
   for (const anchor of anchors) anchor.y = height - anchor.y - 34;
 
-  const decorations = buildDecorations(w, height);
+  const decorations = buildDecorations(w, height, decoChars);
 
   // gate checkpoint pills sit on the spine line between the gated pair of cores
   const nodeById = new Map(nodes.map((n) => [n.id, n]));
   const gates: GateMarker[] = [];
-  for (const gate of TRAIL_GATES) {
+  for (const gate of data.gates) {
     const a = nodeById.get(gate.afterTopic);
     const b = nodeById.get(gate.afterTopic + 1);
     if (!a || !b) continue;
@@ -261,12 +285,13 @@ export function buildTrailLayout(width: number): TrailLayout {
     gates.push({ ...gate, x: clampX(midX, GATE_W, w), y: Math.min(Math.max(midY, EDGE_PAD), height - EDGE_PAD - GATE_H) });
   }
 
-  return { width: w, height, nodes, edges: TRAIL_EDGE_PAIRS, decorations, topicAnchors: anchors, gates };
+  return { width: w, height, nodes, edges: buildTrailEdgePairs(data), decorations, topicAnchors: anchors, gates };
 }
 
-const DECO_CHARS = ["ß", "ü", "ö", "ä", "ß", "§"];
+const GERMAN_DECO_CHARS = ["ß", "ü", "ö", "ä", "ß", "§"];
 
-function buildDecorations(width: number, height: number): Decoration[] {
+function buildDecorations(width: number, height: number, chars?: string[]): Decoration[] {
+  const decoChars = chars && chars.length > 0 ? chars : GERMAN_DECO_CHARS;
   const count = Math.floor(height / 150);
   const out: Decoration[] = [];
   let seed = 42;
@@ -278,7 +303,7 @@ function buildDecorations(width: number, height: number): Decoration[] {
     out.push({
       x: 24 + rand() * (width - 48),
       y: rand() * height,
-      char: DECO_CHARS[i % DECO_CHARS.length],
+      char: decoChars[i % decoChars.length],
       size: 34 + Math.floor(rand() * 80),
       rotate: Math.round(rand() * 50 - 25),
     });
@@ -325,33 +350,36 @@ export interface TrailState {
 
 const edgeKey = (a: number, b: number) => `${Math.min(a, b)}-${Math.max(a, b)}`;
 
-/** topic range each gate closes: (previous gate's afterTopic, gate.afterTopic] */
-const gateRegion = (index: number): { fromTopic: number; toTopic: number } => ({
-  fromTopic: index === 0 ? 1 : TRAIL_GATES[index - 1].afterTopic + 1,
-  toTopic: TRAIL_GATES[index].afterTopic,
-});
-
+/**
+ * Trail state for a language's graph. `data` defaults to the German trail so
+ * existing callers (and tests) are unaffected; the French trail passes its own.
+ */
 export function getTrailState(
   completed: number[],
   stars: Record<number, LessonStar> = {},
-  nodes?: Array<Pick<TrailNode, "id" | "kind" | "topicId">>
+  nodes?: Array<Pick<TrailNode, "id" | "kind" | "topicId">>,
+  data: TrailData = GERMAN_TRAIL_DATA
 ): TrailState {
   const completedSet = new Set(completed);
   const view = new Map<number, NodeView>();
   const fallback: Array<Pick<TrailNode, "id" | "kind" | "topicId">> = [
-    ...TOPICS.flatMap((t) => [
+    ...data.topics.flatMap((t) => [
       { id: t.core.id, kind: "core" as const, topicId: t.id },
       ...t.sprigs.map((s) => ({ id: s.id, kind: "sprig" as const, topicId: t.id })),
     ]),
-    ...TRAIL_BRANCHES.flatMap((b) => b.lessons.map((l) => ({ id: l.id, kind: "branch" as const, topicId: b.attach }))),
+    ...data.branches.flatMap((b) => b.lessons.map((l) => ({ id: l.id, kind: "branch" as const, topicId: b.attach }))),
   ];
   const allNodes = nodes ?? fallback;
+
+  const gates = data.gates;
+  const edgePairs = buildTrailEdgePairs(data);
+  const adjacency = data === GERMAN_TRAIL_DATA ? GERMAN_ADJACENCY : buildAdjacency(edgePairs);
 
   // star gates: stars earned inside each gate's stretch decide whether it is open
   const topicById = new Map(allNodes.map((n) => [n.id, n.topicId]));
   const gateViews = new Map<number, GateView>();
-  TRAIL_GATES.forEach((gate, i) => {
-    const { fromTopic, toTopic } = gateRegion(i);
+  gates.forEach((gate, i) => {
+    const { fromTopic, toTopic } = gateRegion(gates, i);
     const regionStars = Array.from(completedSet).filter((id) => {
       const t = topicById.get(id);
       return t !== undefined && t >= fromTopic && t <= toTopic;
@@ -361,10 +389,10 @@ export function getTrailState(
   // the first closed gate at or before a node's topic blocks it (the spine is strict,
   // so a closed gate locks everything beyond it)
   const closedGateBefore = (topicId: number) => {
-    for (let i = 0; i < TRAIL_GATES.length; i++) {
-      if (TRAIL_GATES[i].afterTopic < topicId && !gateViews.get(TRAIL_GATES[i].id)!.open) {
-        const { fromTopic, toTopic } = gateRegion(i);
-        return { gate: TRAIL_GATES[i], stars: gateViews.get(TRAIL_GATES[i].id)!.stars, fromTopic, toTopic };
+    for (let i = 0; i < gates.length; i++) {
+      if (gates[i].afterTopic < topicId && !gateViews.get(gates[i].id)!.open) {
+        const { fromTopic, toTopic } = gateRegion(gates, i);
+        return { gate: gates[i], stars: gateViews.get(gates[i].id)!.stars, fromTopic, toTopic };
       }
     }
     return null;
@@ -376,7 +404,7 @@ export function getTrailState(
       ? "completed"
       : blocked
       ? "locked"
-      : node.id === FIRST_NODE_ID || (ADJACENCY.get(node.id) ?? []).some((n) => completedSet.has(n))
+      : node.id === FIRST_NODE_ID || (adjacency.get(node.id) ?? []).some((n) => completedSet.has(n))
       ? "available"
       : "locked";
     view.set(node.id, {
@@ -397,10 +425,10 @@ export function getTrailState(
   }
 
   const litEdges = new Set<string>();
-  for (const { a, b } of TRAIL_EDGE_PAIRS) {
+  for (const { a, b } of edgePairs) {
     const sa = view.get(a)?.status ?? "locked";
     const sb = view.get(b)?.status ?? "locked";
-    const crossesClosedGate = TRAIL_GATES.some(
+    const crossesClosedGate = gates.some(
       (g) => !gateViews.get(g.id)!.open && ((a === g.afterTopic && b === g.afterTopic + 1) || (b === g.afterTopic && a === g.afterTopic + 1))
     );
     if (crossesClosedGate) continue;
@@ -414,14 +442,14 @@ export function getTrailState(
   // then mop up leftover sprigs/branches nearest the progress front
   const isAvailable = (id: number) => view.get(id)?.status === "available";
   let recommendedId: number | null = null;
-  for (const topic of TOPICS) {
+  for (const topic of data.topics) {
     if (topic.core.authored && isAvailable(topic.core.id)) {
       recommendedId = topic.core.id;
       break;
     }
   }
   if (recommendedId === null) {
-    outer: for (const topic of [...TOPICS].reverse()) {
+    outer: for (const topic of [...data.topics].reverse()) {
       if (isAvailable(topic.core.id)) {
         recommendedId = topic.core.id;
         break;
@@ -435,7 +463,7 @@ export function getTrailState(
     }
   }
   if (recommendedId === null) {
-    for (const branch of [...TRAIL_BRANCHES].reverse()) {
+    for (const branch of [...data.branches].reverse()) {
       for (const lesson of [...branch.lessons].reverse()) {
         if (isAvailable(lesson.id)) {
           recommendedId = lesson.id;
@@ -449,8 +477,14 @@ export function getTrailState(
   return { nodes: view, litEdges, recommendedId, gates: gateViews };
 }
 
+/** topic range each gate closes: (previous gate's afterTopic, gate.afterTopic] */
+const gateRegion = (gates: TrailGate[], index: number): { fromTopic: number; toTopic: number } => ({
+  fromTopic: index === 0 ? 1 : gates[index - 1].afterTopic + 1,
+  toTopic: gates[index].afterTopic,
+});
+
 /** Order used for the recommendation fallback and list views: topic cores, sprigs, then branches. */
-export const trailNodeOrder = (): number[] => [
-  ...TOPICS.flatMap((t) => [t.core.id, ...t.sprigs.map((s) => s.id)]),
-  ...TRAIL_BRANCHES.flatMap((b) => b.lessons.map((l) => l.id)),
+export const trailNodeOrder = (data: TrailData = GERMAN_TRAIL_DATA): number[] => [
+  ...data.topics.flatMap((t) => [t.core.id, ...t.sprigs.map((s) => s.id)]),
+  ...data.branches.flatMap((b) => b.lessons.map((l) => l.id)),
 ];

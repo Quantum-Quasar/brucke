@@ -1023,7 +1023,7 @@ export default function ReviewPage() {
               </span>
               {currentWord.gender && (
                 <span className="text-[11px] font-mono px-2 py-0.5 rounded border border-[var(--sub-color)]/20 bg-[var(--bg-color)] text-[var(--sub-color)]">
-                  gender: [ der / die / das ? ]
+                  gender: [ {activeLanguageId === "fr" ? "le / la" : "der / die / das"} ? ]
                 </span>
               )}
               {!wordMastery[currentCard.word_id] && (
@@ -1038,7 +1038,7 @@ export default function ReviewPage() {
             <p className="text-sm font-mono text-[var(--sub-color)]">&quot;{currentWord.english_meaning}&quot;</p>
             {!isRevealed && currentCloze && (
               <div className="mx-auto max-w-md pt-2 text-xs font-mono text-[var(--sub-color)]">
-                <p lang="de" className="text-[var(--text-color)]">{currentCloze}</p>
+                <p lang={language.ttsLocale} className="text-[var(--text-color)]">{currentCloze}</p>
                 {currentWord.context_translation && <p>{currentWord.context_translation}</p>}
               </div>
             )}
@@ -1048,7 +1048,7 @@ export default function ReviewPage() {
           {reviewMode === "flashcard" && !isRevealed && (
             <div className="space-y-4 max-w-md mx-auto text-center py-4">
               <p className="text-xs font-mono text-[var(--sub-color)]">
-                recall the german twin in your mind, then reveal.
+                recall the {language.name.toLowerCase()} twin in your mind, then reveal.
               </p>
               <button
                 type="button"
@@ -1233,7 +1233,7 @@ export default function ReviewPage() {
                     handleCheckTyping();
                   }
                 }}
-                placeholder="type german derivation..."
+                placeholder={`type ${language.name.toLowerCase()} derivation...`}
                 className="w-full px-4 py-3 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/30 text-[var(--main-color)] text-center font-mono font-bold text-lg outline-none focus:border-[var(--main-color)] placeholder:text-[var(--sub-color)]/40 transition"
               />
               {(settings.showCharBar === "always" || settings.showCharBar === "on_focus") && (
@@ -1836,7 +1836,7 @@ export default function ReviewPage() {
                     )}
                   </div>
                   <p className="text-xs font-mono text-[var(--sub-color)]">
-                    pick the german word from 4 options. press 1–4 keys or click.
+                    pick the {language.name.toLowerCase()} word from 4 options. press 1–4 keys or click.
                   </p>
                 </div>
                 <span className="keycap text-xs">
@@ -1896,7 +1896,7 @@ export default function ReviewPage() {
                     )}
                   </div>
                   <p className="text-xs font-mono text-[var(--sub-color)]">
-                    type the german word letter-by-letter with umlaut shortcuts.
+                    type the {language.name.toLowerCase()} word letter-by-letter with diacritic shortcuts.
                   </p>
                 </div>
                 <span className="keycap text-xs">
