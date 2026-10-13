@@ -22,6 +22,14 @@ const authoredCore = (id: number, title: string): LessonShell => ({
   authored: true,
 });
 
+/** Core of a topic whose lesson is still on the writing trail. */
+const plannedCore = (id: number, title: string): LessonShell => ({
+  id,
+  title,
+  plan: "Not yet authored — this topic's outline lives in docs/french-course/french-course-design.md.",
+  authored: false,
+});
+
 export const FR_TOPICS: TopicCluster[] = [
   {
     id: 1,
@@ -98,7 +106,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 8,
     title: "The -eur Bridge",
     blurb: "doctor → docteur, color → couleur — and the rebels that break the rule.",
-    core: authoredCore(8, "The -eur Bridge"),
+    core: plannedCore(8, "The -eur Bridge"),
     sprigs: [
       { ...shell(frSprigId(8, 1), "Couleur: The Famous Rebel", "couleur, erreur: usually-masculine -eur with its exceptions named."), authored: false },
       { ...shell(frSprigId(8, 2), "-eur Discrimination Drills", "Convert 8 -or/-er nouns; decide le/la with the squad rules."), authored: false },
@@ -108,7 +116,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 9,
     title: "vous & tu",
     blurb: "The T–V line: vous and tu, merci and bonjour — politeness as a system.",
-    core: authoredCore(9, "vous & tu"),
+    core: plannedCore(9, "vous & tu"),
     sprigs: [
       { ...shell(frSprigId(9, 1), "Merci & Bonjour Gym", "Greetings, thanks, s'il vous plaît — the politeness set in dialogue drills."), authored: false },
       { ...shell(frSprigId(9, 2), "The vous Register", "When vous is required; vous voulez vs tu veux in the same conversations."), authored: false },
@@ -118,7 +126,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 10,
     title: "avoir & the H It Lost",
     blurb: "j'ai, hôtel/hospital, homme/human — avoir is have, and French never says its H.",
-    core: authoredCore(10, "avoir & the H It Lost"),
+    core: plannedCore(10, "avoir & the H It Lost"),
     sprigs: [
       { ...shell(frSprigId(10, 1), "The H-Drop Doublets", "hôtel/hospital, homme/human, hiver/winter? — French's silent H as fingerprint."), authored: false },
       { ...shell(frSprigId(10, 2), "J'ai Gym", "J'ai un gâteau, j'ai 30 ans — have-sentences including age as possession."), authored: false },
@@ -131,7 +139,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 11,
     title: "Adjectives & the Silent -s",
     blurb: "Feminine -e, plural -s written but not said: grand, grande, grands, grandes.",
-    core: authoredCore(11, "Adjectives & the Silent -s"),
+    core: plannedCore(11, "Adjectives & the Silent -s"),
     sprigs: [
       { ...shell(frSprigId(11, 1), "The e and the s", "Feminine -e doubling drills; plural -s as English's own -s, unsaid."), authored: false },
       { ...shell(frSprigId(11, 2), "Color & Size Gym", "Le grand jardin vert: adjective placement after the noun, BAGS exceptions preview."), authored: false },
@@ -141,7 +149,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 12,
     title: "The Near Future",
     blurb: "aller + infinitive: je vais visiter — and aller is amble.",
-    core: authoredCore(12, "The Near Future"),
+    core: plannedCore(12, "The Near Future"),
     sprigs: [
       { ...shell(frSprigId(12, 1), "Amble & Go", "The ambulāre etymology; vais/vas/va drills."), authored: false },
       { ...shell(frSprigId(12, 2), "Future Gym", "8 near-future sentences with converted verbs from topic 3."), authored: false },
@@ -151,7 +159,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 13,
     title: "à, de, chez",
     blurb: "The two master prepositions, their fusions (au, du), and chez.",
-    core: authoredCore(13, "à, de, chez"),
+    core: plannedCore(13, "à, de, chez"),
     sprigs: [
       { ...shell(frSprigId(13, 1), "au & du Fusions", "à + le = au, de + le = du: the contractions as word-glue."), authored: false },
       { ...shell(frSprigId(13, 2), "Chez, the House Word", "chez Marie, chez le docteur — the preposition with no English twin."), authored: false },
@@ -161,7 +169,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 14,
     title: "Possessives Agree with the Thing",
     blurb: "mon/ma/mes, son/sa/ses — they follow the noun's gender, never the owner's.",
-    core: authoredCore(14, "Possessives Agree with the Thing"),
+    core: plannedCore(14, "Possessives Agree with the Thing"),
     sprigs: [
       { ...shell(frSprigId(14, 1), "The Trap Named", "mon frère / ma sœur but ma maison / mon hôtel: the owner's gender is a red herring."), authored: false },
       { ...shell(frSprigId(14, 2), "Famille Gym", "18 drills across père, mère, frère, sœur with correct possessives."), authored: false },
@@ -174,9 +182,9 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 15,
     title: "Numbers & the Four-Twenties",
     blurb: "1–31, j'ai 30 ans — and quatre-vingts is four score, like Gettysburg.",
-    core: authoredCore(15, "Numbers & the Four-Twenties"),
+    core: plannedCore(15, "Numbers & the Four-Twenties"),
     sprigs: [
-      { ...shell(frSprigId(15, 1), "Counting Cognates Gym", "deux/duo, trois/three, six/six — the number drills with listening."), authored: true },
+      { ...shell(frSprigId(15, 1), "Counting Cognates Gym", "deux/duo, trois/three, six/six — the number drills with listening."), authored: false },
       { ...shell(frSprigId(15, 2), "Four Score & Seven", "quatre-vingts and the vigesimal mind; ages with j'ai … ans."), authored: false },
     ],
   },
@@ -184,7 +192,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 16,
     title: "Days, Months & Dates",
     blurb: "lundi (moon-day), en janvier — and aujourd'hui is 'on the day of today'.",
-    core: authoredCore(16, "Days, Months & Dates"),
+    core: plannedCore(16, "Days, Months & Dates"),
     sprigs: [
       { ...shell(frSprigId(16, 1), "The Sky Calendar", "lundi/mardi/mercredi: the planetary week French and English share."), authored: false },
       { ...shell(frSprigId(16, 2), "En janvier Gym", "in-month with en; dates with le 14 juillet."), authored: false },
@@ -194,7 +202,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 17,
     title: "The -é Past",
     blurb: "Passé composé with avoir: j'ai mangé — the -é is the English -ed.",
-    core: authoredCore(17, "The -é Past"),
+    core: plannedCore(17, "The -é Past"),
     sprigs: [
       { ...shell(frSprigId(17, 1), "Participle Twins", "mangé/manged, décidé/decided, trouvé/trove: the -é = -ed drills."), authored: false },
       { ...shell(frSprigId(17, 2), "Gestern habe ich — non: Hier j'ai…", "Narrate a weekend in 10 passé composé sentences."), authored: false },
@@ -204,7 +212,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 18,
     title: "Motion Takes être",
     blurb: "je suis allé(e): the motion verbs form their past with être and agree.",
-    core: authoredCore(18, "Motion Takes être"),
+    core: plannedCore(18, "Motion Takes être"),
     sprigs: [
       { ...shell(frSprigId(18, 1), "The être House", "allé, arrivé, venu, né: the motion list as one house, one agreement rule."), authored: false },
       { ...shell(frSprigId(18, 2), "Agreement Drills", "allée/allés/allées: the participles wear gender only in this house."), authored: false },
@@ -214,7 +222,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 19,
     title: "The Storytelling Past",
     blurb: "The imparfait: c'était, j'habitais — the background tense of was + -ing.",
-    core: authoredCore(19, "The Storytelling Past"),
+    core: plannedCore(19, "The Storytelling Past"),
     sprigs: [
       { ...shell(frSprigId(19, 1), "Was & Was-Ing", "-ais as the continuous past; c'était was French's most-used word in stories."), authored: false },
       { ...shell(frSprigId(19, 2), "Imparfait vs Composé", "The two pasts in one story: background vs events."), authored: false },
@@ -224,7 +232,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 20,
     title: "depuis & the Perfect Split",
     blurb: "J'habite ici depuis trois ans — present tense where English reaches for have lived.",
-    core: authoredCore(20, "depuis & the Perfect Split"),
+    core: plannedCore(20, "depuis & the Perfect Split"),
     sprigs: [
       { ...shell(frSprigId(20, 1), "The Trap Lesson", "depuis + présent: the single biggest English-transfer trap, drilled."), authored: false },
       { ...shell(frSprigId(20, 2), "Since & For Gym", "10 depuis sentences; depuis quand ?"), authored: false },
@@ -234,7 +242,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 21,
     title: "Plus, Moins, aussi",
     blurb: "Comparatives with que; bon→meilleur is good→better's twin suppletion.",
-    core: authoredCore(21, "Plus, Moins, aussi"),
+    core: plannedCore(21, "Plus, Moins, aussi"),
     sprigs: [
       { ...shell(frSprigId(21, 1), "The Twin Suppletions", "bon/meilleur ↔ good/better, mauvais/pire ↔ bad/worse."), authored: false },
       { ...shell(frSprigId(21, 2), "Comparison Gym", "20 sentences: plus…que, moins…que, aussi…que."), authored: false },
@@ -247,7 +255,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 22,
     title: "en & y",
     blurb: "j'en veux (of it), j'y vais (there) — pronouns for places and quantities.",
-    core: authoredCore(22, "en & y"),
+    core: plannedCore(22, "en & y"),
     sprigs: [
       { ...shell(frSprigId(22, 1), "en: Of It", "en replaces de + noun: j'en veux, j'en ai deux."), authored: false },
       { ...shell(frSprigId(22, 2), "y: There", "j'y vais, il y en a — y as the place-pronoun."), authored: false },
@@ -257,7 +265,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 23,
     title: "Pronouns Walk Left",
     blurb: "me, te, le, la, nous, vous before the verb — topic 1's reframe, formalized.",
-    core: authoredCore(23, "Pronouns Walk Left"),
+    core: plannedCore(23, "Pronouns Walk Left"),
     sprigs: [
       { ...shell(frSprigId(23, 1), "The Full Left-Walk", "je le vois, il me parle, nous vous écoutons."), authored: false },
       { ...shell(frSprigId(23, 2), "lui & leur", "The to-him/to-them pronouns and their position."), authored: false },
@@ -267,7 +275,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 24,
     title: "Reflexives & la Routine",
     blurb: "se lever, je m'appelle — the daily round with self-directed verbs.",
-    core: authoredCore(24, "Reflexives & la Routine"),
+    core: plannedCore(24, "Reflexives & la Routine"),
     sprigs: [
       { ...shell(frSprigId(24, 1), "I Call Myself", "je m'appelle, tu t'appelles — introductions as reflexives."), authored: false },
       { ...shell(frSprigId(24, 2), "The Morning Round", "se lever, se laver, s'habiller, se coucher — routine chains."), authored: false },
@@ -277,7 +285,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 25,
     title: "il y a",
     blurb: "'It has there' = there is — and with time, ago.",
-    core: authoredCore(25, "il y a"),
+    core: plannedCore(25, "il y a"),
     sprigs: [
       { ...shell(frSprigId(25, 1), "It Has There", "il y a un café, il y a trois ans: existence and elapsed time in one phrase."), authored: false },
       { ...shell(frSprigId(25, 2), "il y a Gym", "12 sentences mixing existence and ago."), authored: false },
@@ -287,7 +295,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 26,
     title: "The Would-World",
     blurb: "je voudrais and the politeness escalator; the future tense is infinitive + avoir.",
-    core: authoredCore(26, "The Would-World"),
+    core: plannedCore(26, "The Would-World"),
     sprigs: [
       { ...shell(frSprigId(26, 1), "Je voudrais", "vouloir in the conditional: the politeness escalator from un café to pourrais-je…"), authored: false },
       { ...shell(frSprigId(26, 2), "The -ai Future", "aimerai, visiterai — the future as infinitive + avoir's shadow."), authored: false },
@@ -297,7 +305,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 27,
     title: "il faut",
     blurb: "'It is needed' — obligation without a subject, and the subjunctive door.",
-    core: authoredCore(27, "il faut"),
+    core: plannedCore(27, "il faut"),
     sprigs: [
       { ...shell(frSprigId(27, 1), "It Is Needed", "il faut partir, il me faut du pain — subjectless necessity."), authored: false },
       { ...shell(frSprigId(27, 2), "The Subjunctive Door", "il faut que je parte: the three triggers you actually need."), authored: false },
@@ -310,7 +318,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 28,
     title: "qui & que",
     blurb: "Relative pronouns — que is the most French word in French.",
-    core: authoredCore(28, "qui & que"),
+    core: plannedCore(28, "qui & que"),
     sprigs: [
       { ...shell(frSprigId(28, 1), "The Man That Knows", "qui for subjects, que for objects — the verb drops after them like a German subclause."), authored: false },
       { ...shell(frSprigId(28, 2), "Que Everywhere", "c'est que, je pense que, il faut que — que as the connective tissue."), authored: false },
@@ -320,7 +328,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 29,
     title: "The French Mind",
     blurb: "avoir faim, ça va, coup de foudre — idioms as thought, register recap.",
-    core: authoredCore(29, "The French Mind"),
+    core: plannedCore(29, "The French Mind"),
     sprigs: [
       { ...shell(frSprigId(29, 1), "Have-Hunger & Co", "avoir expressions: faim, soif, peur, raison — feelings as possessions."), authored: false },
       { ...shell(frSprigId(29, 2), "The Register Ladder Recap", "formal vs everyday across the whole course; the conversion families revisited."), authored: false },
@@ -330,7 +338,7 @@ export const FR_TOPICS: TopicCluster[] = [
     id: 30,
     title: "Capstone: Le Pont Reading",
     blurb: "One connected Paris story built from everything — conversions in plain sight.",
-    core: authoredCore(30, "Capstone: Le Pont Reading"),
+    core: plannedCore(30, "Capstone: Le Pont Reading"),
     sprigs: [
       { ...shell(frSprigId(30, 1), "A Day in Paris: Reading", "The capstone passage with tap-to-inspect words and conversion annotations."), authored: false },
       { ...shell(frSprigId(30, 2), "Trap Watch: False Friends in the Wild", "The 12 curated false friends embedded in context sentences."), authored: false },
