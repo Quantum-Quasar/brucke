@@ -290,7 +290,7 @@ export const LANGUAGES: LanguageDefinition[] = [
       colors: ["blue", "rose"],
     },
     status: "available",
-    blurb: "The Norman doublet engine: 30 topics, 9 conversion bridges, 90+ words.",
+    blurb: "The Norman doublet engine: 30 topics, 9 conversion bridges, 115 words.",
     decoChars: ["é", "à", "ç", "œ", "è", "ê"],
     onboarding: FRENCH_ONBOARDING,
   },

@@ -118,7 +118,7 @@ Visit `http://localhost:3000` in your browser.
    - Educational onboarding & dismissible gender guide banners.
 
 6. **Multi-Language Ready**:
-   - Switch the learning language from Settings or onboarding (German fully authored; Spanish & French marked coming-soon).
+   - Switch the learning language from Settings or onboarding (German fully authored; French trail open — 30 topics, 19 authored lessons, 9 conversion-bridge families; Spanish coming-soon).
    - Each language keeps its own progress slice, SRS queue, and onboarding intro (`src/data/language-content.ts`).
    - Components render language-scoped content; languages without authored content show coming-soon states instead of stale German words.
 

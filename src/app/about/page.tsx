@@ -64,6 +64,11 @@ export default function AboutPage() {
             <strong>Brücke</strong> (German for &ldquo;bridge&rdquo;) reverses this historical divergence. By training your pattern
             recognition instead of raw rote memorization, you bridge thousands of cognates in days rather than months.
           </p>
+          <p>
+            The same engine now drives a <strong>French course</strong>: the Norman conquest of 1066 flooded English with
+            French doublets, and the French trail decodes them the same way — conversion bridges instead of consonant
+            shifts, one thought at a time.
+          </p>
         </div>
       </section>
 

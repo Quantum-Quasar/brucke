@@ -14,6 +14,8 @@
 
 Rather than relying on rote memorization or gamified streaks without substance, Brücke leverages the **Second High German Consonant Shift (500–800 AD)** to reveal that English speakers already understand hundreds of German words.
 
+**French course (open trail).** The same engine now teaches French through the Norman doublets — 1066 left English and French sharing thousands of cognates, and the French trail decodes them the same way: 30 topics (19 lessons authored so far), 9 conversion-bridge families (`-ion`, `-ation→-er`, `-ité`, `-ance`, `-é`, `-ment`, `-eur`, `-able`, doublets), a 115-word compendium with 10 compound calques and 12 false friends, and its own trail/atlas/review layers. It is authored as typed modules in `src/data/french/` (not parsed from `word_connections.md`); the design doc is [`french-course/french-course-design.md`](./french-course/french-course-design.md). <!-- added 2026-10-13 with the French course launch -->
+
 - **Comprehensive Audit Manifest**: See [`AUDIT_MANIFEST.md`](../AUDIT_MANIFEST.md) for full architectural specifications, data schemas, and audit instructions.
 - **North Star**: See [`NORTH_STAR.md`](./NORTH_STAR.md) — Brücke teaches German; etymology is the hook, not the subject. Read before changing content.
 - **Grammar Panorama**: See [`german-panorama.md`](./german-panorama.md) — every German structure mapped to the lesson ids that teach it, with a `taught` / `inferred` / `partial` column. The repo artifact companion to `/panorama`; `inferred` rows are the honest backlog.

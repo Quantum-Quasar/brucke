@@ -1021,9 +1021,9 @@ export default function ReviewPage() {
               <span className="text-xs font-mono text-[var(--sub-color)] uppercase tracking-widest">
                 shift: {currentWord.shift_rule}
               </span>
-              {currentWord.gender && (
+              {currentWord.gender && language.genderSystem && (
                 <span className="text-[11px] font-mono px-2 py-0.5 rounded border border-[var(--sub-color)]/20 bg-[var(--bg-color)] text-[var(--sub-color)]">
-                  gender: [ {activeLanguageId === "fr" ? "le / la" : "der / die / das"} ? ]
+                  gender: [ {language.genderSystem.articles.join(" / ")} ? ]
                 </span>
               )}
               {!wordMastery[currentCard.word_id] && (

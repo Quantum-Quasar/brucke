@@ -9,6 +9,7 @@ import React, { useState, useRef } from "react";
 import { Zap, Eye, SkipForward, Check, RotateCcw } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { soundEngine } from "@/lib/sound";
+import { getLanguageDefinition } from "@/data/languages";
 import type { LessonTwist } from "@/lib/types";
 
 interface TwistCardProps {
@@ -22,6 +23,8 @@ export const TwistCard: React.FC<TwistCardProps> = ({ twist, onDone }) => {
   const [revealed, setRevealed] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const settings = useAppStore((s) => s.settings);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
 
   const wordBank = (twist.word_bank || []).map((w) => w.replace(/[.,!?;:]+$/, ""));
 
@@ -90,7 +93,7 @@ export const TwistCard: React.FC<TwistCardProps> = ({ twist, onDone }) => {
                   handleReveal();
                 }
               }}
-              placeholder="your german..."
+              placeholder={`your ${language.name.toLowerCase()}...`}
               className="w-full px-4 py-3 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/30 text-[var(--main-color)] text-lg font-bold font-mono outline-none focus:border-[var(--main-color)] transition placeholder:text-[var(--sub-color)]/40"
             />
             {wordBank.length > 0 && (
