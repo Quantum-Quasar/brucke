@@ -27,7 +27,7 @@ function buildWordEntityMaps(
 
   data.compounds.forEach((compound) => {
     const id = `compound_${compound.id}`;
-    const cleanWord = compound.compound.replace(/^(der|die|das)\s+/i, "");
+    const cleanWord = compound.compound.replace(/^(der|die|das|le|la|el)\s+/i, "");
     entities[id] = {
       id,
       target_word: cleanWord,

@@ -23,7 +23,7 @@ Rather than relying on rote memorization or gamified streaks without substance, 
 - **Styling**: Tailwind CSS v4 (native CSS tokens, dark mode default)
 - **State Management**: [Zustand](https://github.com/pmndrs/zustand) 5 (dual `localStorage` + size-guarded cookie persistence)
 - **Icons**: Lucide React
-- **Testing**: Vitest / `bun run test` (32 test files, 293 automated tests) <!-- corrected 2026-10-08 against the actual vitest run; counts pinned by src/tests/docs-sync.test.ts -->
+- **Testing**: Vitest / `bun run test` (33 test files, 302 automated tests) <!-- corrected 2026-10-08 against the actual vitest run; counts pinned by src/tests/docs-sync.test.ts -->
 - **Audio Engine**: Zero-dependency browser-native Web Speech API (`window.speechSynthesis`) + Web Audio click synthesizer
 
 ---
@@ -46,7 +46,7 @@ bun run parse-data
 
 ### Run Automated Tests
 
-Executes the full Vitest suite — 32 test files, 293 automated tests:
+Executes the full Vitest suite — 33 test files, 302 automated tests:
 
 ```bash
 bun run test
@@ -118,7 +118,7 @@ Visit `http://localhost:3000` in your browser.
    - Educational onboarding & dismissible gender guide banners.
 
 6. **Multi-Language Ready**:
-   - Switch the learning language from Settings or onboarding (German fully authored; French trail open — 30 topics, 19 authored lessons, 9 conversion-bridge families; Spanish coming-soon).
+   - Switch the learning language from Settings or onboarding (German fully authored; French trail open — 30 topics, 19 authored lessons, 9 conversion-bridge families; Spanish trail open — 30 topics, 19 authored lessons, 9 conversion-bridge families).
    - Each language keeps its own progress slice, SRS queue, and onboarding intro (`src/data/language-content.ts`).
    - Components render language-scoped content; languages without authored content show coming-soon states instead of stale German words.
 
@@ -160,7 +160,7 @@ src/
 │   ├── store.ts          # Zustand store with dual persistence (+ lessonStars)
 │   ├── trail-map.ts      # Map graph, responsive layout engine, unlock/recommend logic
 │   └── types.ts          # Core domain TypeScript interfaces
-└── tests/                # 32 test files (Vitest)
+└── tests/                # 33 test files (Vitest)
 ```
 
 ---

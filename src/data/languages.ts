@@ -127,45 +127,47 @@ const GERMAN_ONBOARDING: LanguageOnboarding = {
 const SPANISH_ONBOARDING: LanguageOnboarding = {
   philosophy: {
     heading: "you already speak thousands of spanish words",
-    body: "english absorbed a vast latin vocabulary — directly and through french — and spanish kept that same inheritance alive. tens of thousands of english words have an unmistakable spanish twin: family → familia, center → centro. you aren't memorizing random sounds — you are unlocking shared latin roots you already know.",
+    body: "english absorbed a vast latin vocabulary — directly and through french — and spanish kept that same inheritance alive. tens of thousands of english words have an unmistakable spanish twin: pastry → pastel, confirmation → confirmación. you aren't memorizing random sounds — you are unlocking shared latin roots you already know.",
     demoTitle: "spanish cognate pattern demo:",
     demos: [
       {
-        english: "family",
-        target: "familia",
+        english: "pastry",
+        target: "pastel",
+        gender: "el",
         rule: "direct twin",
-        note: "English 'family' and Spanish 'familia' come from the same Latin word, familia — a living anchor you already own.",
+        note: "Late Latin pasta gives English 'pastry' and Spanish pastel. A living cognate on the table.",
       },
       {
-        english: "center",
-        target: "centro",
-        rule: "-er → -ro",
-        note: "Latin endings reshape predictably: English 'center' maps to Spanish 'centro' with the same root, centro.",
+        english: "confirmation",
+        target: "confirmación",
+        gender: "la",
+        rule: "-tion → -ción",
+        note: "English -tion becomes Spanish -ción with an acute accent on ó — 100% feminine with 'la'.",
       },
       {
-        english: "excellent",
-        target: "excelente",
-        rule: "-nt → -nte",
-        note: "English adjectives ending in -nt almost always gain a final -e in Spanish: excelente, constante, elegante.",
+        english: "to confirm",
+        target: "confirmar",
+        rule: "-ation → -ar",
+        note: "Strip -ación and add -ar to unlock hundreds of active Spanish verbs: confirmar, organizar, celebrar.",
       },
       {
-        english: "dragon",
-        target: "dragón",
-        rule: "-on → -ón",
-        note: "The stressed -ón ending marks many Spanish nouns: dragón, estación, relación — the accent tells you where the stress falls.",
+        english: "fact",
+        target: "hacer",
+        rule: "Latin f- → silent h-",
+        note: "Latin facere gives English 'fact/manufacture' and Spanish 'hacer' with silent H. When you see H, think F.",
       },
     ],
   },
   notation: {
     body: "brücke makes language learning transparent, intuitive, and grounded in living english cognates.",
     anchorsBody:
-      "we connect spanish words to everyday english: familia to family and centro to center.",
+      "we connect spanish words to everyday english: pastel to pastry, confirmación to confirmation, and hacer to fact.",
     showGenders: false,
     noGenderNote:
-      "spanish nouns carry grammatical gender — el (masculine) and la (feminine) — which this course will highlight with color-coded badges once the spanish trail opens.",
+      "spanish nouns carry grammatical gender — el (masculine) and la (feminine) — which this course decodes from word endings with azure and rose badges.",
   },
   ready: {
-    body: "the spanish trail is in active development. pick german to start learning today, or switch back here from settings the moment spanish content lands.",
+    body: "the spanish trail is open: 9 conversion bridges first, then the sentence machine, time travel and the deep engine. all progress is stored locally in your browser.",
   },
 };
 
@@ -263,8 +265,9 @@ export const LANGUAGES: LanguageDefinition[] = [
       labels: ["masculine", "feminine"],
       colors: ["blue", "rose"],
     },
-    status: "coming-soon",
-    blurb: "Latin-root cognate engine. Trail under construction.",
+    status: "available",
+    blurb: "The Latin cognate engine: 30 topics, 9 conversion bridges, 65 words.",
+    decoChars: ["ñ", "á", "é", "í", "ó", "ú", "¿", "¡"],
     onboarding: SPANISH_ONBOARDING,
   },
   {

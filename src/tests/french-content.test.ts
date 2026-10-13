@@ -40,6 +40,52 @@ describe("french course content", () => {
     expect(frContent.lessons.length).toBeGreaterThanOrEqual(19);
     expect(frContent.insights).toHaveLength(28);
     expect(frContent.compendium).toBe(frenchCompendium);
+
+    // Validate exercise solvability, MCQ integrity, and narrative arcs
+    for (const lesson of FR_LESSONS) {
+      for (const ex of lesson.exercises) {
+        if (ex.type === "shift_select" || ex.type === "literal_gloss") {
+          expect(ex.options, `${lesson.id}/${ex.id} must include target_answer`).toContain(ex.target_answer);
+          expect(new Set(ex.options).size, `${lesson.id}/${ex.id} options must be unique`).toBe(ex.options?.length);
+        }
+        if (ex.type === "syntax_builder" || ex.type === "transcribe") {
+          const targetWords = ex.target_answer
+            .replace(/[?,.!]/g, "")
+            .trim()
+            .split(/\s+/);
+          const bank = [...(ex.word_bank || [])];
+          for (const w of targetWords) {
+            const idx = bank.indexOf(w);
+            expect(idx, `${lesson.id}/${ex.id} missing word "${w}" in bank`).toBeGreaterThanOrEqual(0);
+            bank.splice(idx, 1);
+          }
+          expect(bank.length, `${lesson.id}/${ex.id} must have >= 1 distractor in bank`).toBeGreaterThanOrEqual(1);
+        }
+      }
+      if (lesson.twist?.word_bank && lesson.twist?.target_answer) {
+        const targetWords = lesson.twist.target_answer
+          .replace(/[?,.!]/g, "")
+          .trim()
+          .split(/\s+/);
+        const bank = [...lesson.twist.word_bank];
+        for (const w of targetWords) {
+          const idx = bank.indexOf(w);
+          expect(idx, `${lesson.id}/twist missing word "${w}" in bank`).toBeGreaterThanOrEqual(0);
+          bank.splice(idx, 1);
+        }
+        expect(bank.length, `${lesson.id}/twist must have >= 1 distractor in bank`).toBeGreaterThanOrEqual(1);
+      }
+      if (lesson.foreshadow) {
+        const foreshadow = lesson.foreshadow;
+        const target = FR_LESSONS.find((l) => l.id === foreshadow.resolvedIn);
+        expect(target, `foreshadow in ${lesson.id} must resolve to an authored lesson`).toBeDefined();
+      }
+      if (lesson.payoff) {
+        const payoff = lesson.payoff;
+        const origin = FR_LESSONS.find((l) => l.id === payoff.ofLesson);
+        expect(origin, `payoff in ${lesson.id} must refer to an authored origin lesson`).toBeDefined();
+      }
+    }
   });
 
   it("authors shift families, compounds and false friends", () => {

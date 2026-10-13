@@ -141,7 +141,7 @@ export const FR_TOPICS: TopicCluster[] = [
     blurb: "Feminine -e, plural -s written but not said: grand, grande, grands, grandes.",
     core: plannedCore(11, "Adjectives & the Silent -s"),
     sprigs: [
-      { ...shell(frSprigId(11, 1), "The e and the s", "Feminine -e doubling drills; plural -s as English's own -s, unsaid."), authored: false },
+      { ...shell(frSprigId(11, 1), "The e and the s", "Feminine -e agreement drills; plural -s as English's own -s, unsaid."), authored: false },
       { ...shell(frSprigId(11, 2), "Color & Size Gym", "Le grand jardin vert: adjective placement after the noun, BAGS exceptions preview."), authored: false },
     ],
   },

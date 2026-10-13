@@ -10,6 +10,10 @@ describe("Grammatical Gender Engine & Color Coding", () => {
     expect(info?.label).toBe("Masculine");
     expect(info?.colorName).toBe("Azure Blue");
     expect(info?.badgeClass).toContain("blue");
+
+    const el = getGenderInfo("el");
+    expect(el?.label).toBe("Masculine");
+    expect(el?.badgeClass).toContain("blue");
   });
 
   it("maps die to feminine vivid rose metadata", () => {
@@ -19,6 +23,10 @@ describe("Grammatical Gender Engine & Color Coding", () => {
     expect(info?.label).toBe("Feminine");
     expect(info?.colorName).toBe("Vivid Rose");
     expect(info?.badgeClass).toContain("rose");
+
+    const la = getGenderInfo("la");
+    expect(la?.label).toBe("Feminine");
+    expect(la?.badgeClass).toContain("rose");
   });
 
   it("maps das to neuter emerald green metadata", () => {

@@ -144,7 +144,7 @@ export const FR_LESSONS: Lesson[] = [
     },
     foreshadow: {
       line: "One thing sits unfinished: la, the feminine 'the', has no job yet. Its moment is coming — and it will carry thousands of words on its back.",
-      resolvedIn: 3,
+      resolvedIn: 2,
     },
     summary: {
       outcome: "Convert gâteau and café from English, use je veux / tu veux, and place le or la as the word for 'it' — before the verb.",
@@ -244,8 +244,8 @@ export const FR_LESSONS: Lesson[] = [
           "is: est",
           "big — and feminine: grande",
         ],
-        explanation: "grande doubles the d before the feminine -e. est is 'is' — the same word English owns.",
-        affirmation: "You caught the d doubling — grande, not grande-shortchanged.",
+        explanation: "Adding feminine -e awakens the silent 'd' in grand: grande /ɡʁɑ̃d/. est is 'is' — the same word English owns.",
+        affirmation: "You heard the awakened 'd' — feminine -e made the silent ending speak.",
       },
     ],
     summary: {
@@ -442,7 +442,7 @@ export const FR_LESSONS: Lesson[] = [
         id: "fr2_e5",
         type: "transcribe",
         prompt: "Tell me:",
-        idea: "you want it — and the it is the confirmation",
+        idea: "I want it — and the it is the confirmation",
         cues: [
           "The it borrows la confirmation's article → la",
           "Walk it left: I it want",
@@ -478,8 +478,12 @@ export const FR_LESSONS: Lesson[] = [
     twist: {
       prompt: "Ungraded, just to feel it — 'Do you want the invitation?'",
       target_answer: "Tu veux l'invitation ?",
-      word_bank: ["Tu", "veux", "l'", "invitation", "la", "le"],
+      word_bank: ["Tu", "veux", "l'invitation", "la", "le"],
       explanation: "l'invitation — the elision fires again. Notice how the question needed no new machinery: just the voice.",
+    },
+    payoff: {
+      ofLesson: 1,
+      text: "Remember la, the feminine 'the' left waiting in lesson 1? Here is her payoff: the -ION engine made her the most loaded article in French — thousands of nouns, every one hers.",
     },
     summary: {
       outcome: "Convert any -ION noun, mark it feminine with la (elided to l'), and refer to it with la after the left-walk.",
@@ -759,10 +763,10 @@ export const FR_LESSONS: Lesson[] = [
         prompt: "Which English sentence is built the French way?",
         german: "Je veux visiter Paris",
         natural: "I want to visit Paris",
-        options: ["I want to visit Paris", "I want to visiting Paris", "I want Paris to visit"],
-        target_answer: "I want to visit Paris",
-        meaning: "The French infinitive is one word — visiter — so the order matches English here.",
-        explanation: "visiter is the rare verb whose -ation noun (visitation) is almost extinct in English — the engine still turns.",
+        options: ["I want to visit Paris", "I want visit Paris", "I want Paris to visit"],
+        target_answer: "I want visit Paris",
+        meaning: "The odd English is the lesson: French joins want + visit directly with no 'to'.",
+        explanation: "Je veux visiter Paris is word-for-word 'I want visit Paris'. French chains the infinitive directly — no 'to' needed.",
       },
       {
         id: "fr3_e6",
@@ -781,10 +785,6 @@ export const FR_LESSONS: Lesson[] = [
         affirmation: "You heard the /e/ ending and kept the final r light — that's the infinitive's sound.",
       },
     ],
-    payoff: {
-      ofLesson: 1,
-      text: "Remember la, the feminine 'the' left waiting in lesson 1? Here is her payoff: the -ION engine made her the most loaded article in French — thousands of nouns, every one hers.",
-    },
     summary: {
       outcome: "Convert any -ation noun into an -er verb, chain it after je veux, and dodge the célébrer trap.",
       use_example: { german: "Je veux réserver une table.", english: "I want to reserve a table." },
@@ -934,7 +934,7 @@ export const FR_LESSONS: Lesson[] = [
         ],
         target_answer: "Tu veux organiser l'invitation",
         meaning: "You want to organize the invitation",
-        word_bank: ["Tu", "veux", "organiser", "l'", "invitation", "la"],
+        word_bank: ["Tu", "veux", "organiser", "l'invitation", "la"],
         idea_parts: ["the want → tu veux", "the verb → organiser", "the thing → l'invitation"],
         explanation: "Two conversions in one sentence: the engine (-ation) and the elision (l').",
         diagnosis: {
@@ -945,7 +945,7 @@ export const FR_LESSONS: Lesson[] = [
       {
         id: "fr302_e4",
         type: "literal_gloss",
-        prompt: "Which English sentence is built the French way?",
+        prompt: "Which English is the everyday meaning of the French?",
         german: "Je veux participer",
         natural: "I want to get involved",
         options: ["I want to get involved", "I want to participate formally", "I want participation"],
@@ -1025,7 +1025,7 @@ export const FR_LESSONS: Lesson[] = [
           { word: "ne", translation: "not (first slice)", note: "goes before the verb" },
           { word: "pas", translation: "not (second slice)", note: "literally 'a step' — goes after the verb" },
         ],
-        word_bank: ["Je", "ne", "veux", "pas", "le", "gâteau"],
+        word_bank: ["Je", "ne", "veux", "pas", "le", "gâteau", "la"],
         explanation: "ne + veux + pas is the sandwich; le gâteau rides after, untouched.",
       },
       {
@@ -1087,7 +1087,7 @@ export const FR_LESSONS: Lesson[] = [
     twist: {
       prompt: "One more, ungraded — 'Do you want the invitation?' as a NEGATIVE question.",
       target_answer: "Tu ne veux pas l'invitation ?",
-      word_bank: ["Tu", "ne", "veux", "pas", "l'", "invitation"],
+      word_bank: ["Tu", "ne", "veux", "pas", "l'invitation", "la"],
       explanation: "Everything you own in one sentence: the sandwich, the elision, the -ION noun, the intonation question.",
     },
     summary: {
@@ -1152,17 +1152,17 @@ export const FR_LESSONS: Lesson[] = [
         id: "fr401_e3",
         type: "transcribe",
         prompt: "Tell me:",
-        idea: "you're refusing firmly: you don't want to celebrate, not even a little",
+        idea: "you're refusing firmly: you don't want to celebrate",
         cues: [
           "Sandwich: ne … veux … pas",
           "célébration → célébrer (strip whole)",
-          "the tag goes after: pas un peu",
+          "je ne veux pas célébrer",
         ],
-        target_answer: "Je ne veux pas célébrer, pas un peu",
-        meaning: "I don't want to celebrate, not even a little",
-        word_bank: ["Je", "ne", "veux", "pas", "célébrer", "un", "peu", "célébrater"],
-        idea_parts: ["the refusal → je ne veux pas", "the verb → célébrer", "the emphasis → pas un peu"],
-        explanation: "Two pas in one sentence — the second one back on its feet as a real footstep of emphasis.",
+        target_answer: "Je ne veux pas célébrer",
+        meaning: "I don't want to celebrate",
+        word_bank: ["Je", "ne", "veux", "pas", "célébrer", "célébrater", "un"],
+        idea_parts: ["the refusal → je ne veux pas", "the verb → célébrer (célébration minus -ation)"],
+        explanation: "je ne veux pas célébrer — the negation sandwich wraps around the want, and the verb stays whole.",
       },
       {
         id: "fr401_e4",
@@ -1246,11 +1246,11 @@ export const FR_LESSONS: Lesson[] = [
       {
         id: "fr402_e4",
         type: "shift_select",
-        prompt: "Spoken French — which rendering would you actually hear?",
-        options: ["Je ne veux pas", "Je veux pas", "Pas je veux"],
+        prompt: "In casual everyday speech, how is 'I don't want' typically shortened?",
+        options: ["Je veux pas", "Je ne veux", "Pas je veux"],
         target_answer: "Je veux pas",
         meaning: "Spoken French drops the ne",
-        explanation: "In conversation, the first slice falls: je veux pas. Understand it as the sandwich, lazily served — and keep both slices in writing.",
+        explanation: "In casual conversation, the first slice falls: je veux pas. Understand it as the sandwich, lazily served — and keep both slices in writing.",
       },
       {
         id: "fr402_e5",
@@ -1378,14 +1378,14 @@ export const FR_LESSONS: Lesson[] = [
           "très — the trans-root",
           "gentille — feminine -e (and -lle) at work",
         ],
-        explanation: "gentille doubles the l before the feminine e — the same doubling instinct as grande.",
+        explanation: "gentille doubles the l before the feminine e — just like bon doubles its n to bonne.",
         affirmation: "You caught the double-l — gentille, the feminine that spells its doubling.",
       },
     ],
     twist: {
       prompt: "Ungraded — 'It's not very good, but that's life.'",
       target_answer: "Ce n'est pas très bon, mais c'est la vie",
-      word_bank: ["Ce", "n'est", "pas", "très", "bon", "mais", "c'est", "la", "vie"],
+      word_bank: ["Ce", "n'est", "pas", "très", "bon", "mais", "c'est", "la", "vie", "il"],
       explanation: "The sandwich un-fuses c'est, mais re-fuses it two words later. You are now assembling philosophy.",
     },
     summary: {
@@ -1458,7 +1458,7 @@ export const FR_LESSONS: Lesson[] = [
       {
         id: "fr501_e4",
         type: "literal_gloss",
-        prompt: "Which English sentence is built the French way?",
+        prompt: "Which English sentence is the natural modern meaning?",
         german: "Je suis ici, tu es là",
         natural: "I'm here, you're there",
         options: ["I'm here, you're there", "I follow here, you follow there", "Here am I, there are you"],
@@ -1534,7 +1534,7 @@ export const FR_LESSONS: Lesson[] = [
         prompt: "Assemble the question: 'Is it that you want the cake?' (natural English: Do you want the cake?)",
         target_answer: "Est-ce que tu veux le gâteau",
         meaning: "Do you want the cake?",
-        word_bank: ["Est-ce", "que", "tu", "veux", "le", "gâteau"],
+        word_bank: ["Est-ce", "que", "tu", "veux", "le", "gâteau", "la"],
         explanation: "Statement in, question out — the words inside never move.",
       },
       {
@@ -1709,12 +1709,12 @@ export const FR_LESSONS: Lesson[] = [
     hook: {
       title: "Twenty-Six Letters, Some Wearing Disguises",
       content:
-        "The French alphabet is the English alphabet with a French voice — but a few letters have new names: w is double-v (double vé), y is i-grec (Greek i), z is zède, g is jé and j is ji. When a reservation requires spelling, French spells: B comme Béatrice.",
+        "The French alphabet is the English alphabet with a French voice — but a few letters have new names: w is double-v (double vé), y is i-grec (Greek i), z is zède, g is gé and j is ji. When a reservation requires spelling, French spells: B comme Béatrice.",
       footnotes: [
         {
           marker: "1",
           title: "comme-spelling",
-          content: "French spells names by analogy: 'M comme Marie, A comme阿Anita…' — the word comme ('like') does the pointing. Keep a small stock of proper nouns ready.",
+          content: "French spells names by analogy: 'M comme Marie, A comme Anita…' — the word comme ('like') does the pointing. Keep a small stock of proper nouns ready.",
         },
       ],
     },
@@ -1740,10 +1740,10 @@ export const FR_LESSONS: Lesson[] = [
         matching_pairs: [
           { id: "p1", english: "w", german: "double vé" },
           { id: "p2", english: "y", german: "i grec" },
-          { id: "p3", english: "g", german: "jé" },
+          { id: "p3", english: "g", german: "gé" },
           { id: "p4", english: "z", german: "zède" },
         ],
-        target_answer: "double vé, i grec, jé, zède",
+        target_answer: "double vé, i grec, gé, zède",
         meaning: "the disguised letters",
         explanation: "double-v is honest: the letter IS two vees. English renamed it double-u and didn't update the shape.",
       },
@@ -1779,7 +1779,7 @@ export const FR_LESSONS: Lesson[] = [
         vocab_hints: [
           { word: "comment", translation: "how", note: "from Latin quam modum? — 'by what measure'" },
         ],
-        word_bank: ["Comment", "tu", "t'", "appelles", "m'"],
+        word_bank: ["Comment", "tu", "t'appelles", "m'appelle"],
         idea_parts: ["the question word → comment", "the subject → tu", "the reflexive → t'appelles (te + appelles, elided)"],
         explanation: "te walks left and elides, exactly like me did. The machinery is identical — only the person changes.",
       },
@@ -1869,10 +1869,10 @@ export const FR_LESSONS: Lesson[] = [
       {
         id: "fr5021_e3",
         type: "derive",
-        prompt: "Pronunciation map: where does the N land in 'bonjour'?",
-        english_hint: "the first syllable only",
+        prompt: "Pronunciation map: which syllable contains the nasal vowel in 'bonjour'?",
+        english_hint: "the first syllable",
         target_answer: "bon",
-        meaning: "the N is leaned into inside bon- and never lands",
+        meaning: "the nasal vowel is inside bon- — and the N never lands",
         explanation: "bon /bɔ̃/ + jour /ʒuʁ/. The first syllable hums; the second is clean.",
       },
       {

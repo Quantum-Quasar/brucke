@@ -86,12 +86,14 @@ describe("language content registry", () => {
 });
 
 describe("language-scoped word entities", () => {
-  test("german resolves real words; empty languages resolve nothing", () => {
+  test("german and spanish resolve real words; unconfigured languages resolve nothing", () => {
     expect(getWordEntity("wasser", "de")?.target_word).toBe("Wasser");
     expect(getWordEntity("compound_kühlschrank", "de")).toBeDefined();
-    expect(Object.keys(getWordEntityMap("es"))).toHaveLength(0);
-    expect(getWordEntity("wasser", "es")).toBeUndefined();
-    expect(Object.keys(getWordLessonMap("es"))).toHaveLength(0);
+    expect(getWordEntity("pastel", "es")?.target_word).toBe("pastel");
+    expect(getWordEntity("compound_rascacielos", "es")).toBeDefined();
+    expect(Object.keys(getWordEntityMap("it"))).toHaveLength(0);
+    expect(getWordEntity("wasser", "it")).toBeUndefined();
+    expect(Object.keys(getWordLessonMap("it"))).toHaveLength(0);
     expect(EMPTY_COMPENDIUM.wordList).toHaveLength(0);
   });
 });

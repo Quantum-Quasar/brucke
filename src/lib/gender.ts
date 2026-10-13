@@ -70,6 +70,17 @@ export function getGenderInfo(gender: Gender | string | null | undefined): Gende
     };
   }
 
+  if (g === "el") {
+    return {
+      gender: "el",
+      label: "Masculine",
+      article: "el",
+      colorName: "Azure Blue",
+      badgeClass: "text-blue-700 dark:text-blue-300 bg-blue-500/10 dark:bg-blue-500/15 border-blue-500/30",
+      dotColor: "#60A5FA",
+    };
+  }
+
   return null;
 }
 

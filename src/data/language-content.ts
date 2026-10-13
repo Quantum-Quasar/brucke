@@ -15,6 +15,10 @@ import { frenchCompendium } from "./french/compendium-fr";
 import { FR_TOPICS, FR_TRAIL_BRANCHES, FR_TRAIL_GATES, FR_TOTAL_TOPICS } from "./french/curriculum-fr";
 import { FR_LESSONS } from "./french/lessons-fr";
 import { FRENCH_INSIGHTS } from "./french/insights-fr";
+import { spanishCompendium } from "./spanish/compendium-es";
+import { ES_TOPICS, ES_TRAIL_BRANCHES, ES_TRAIL_GATES, ES_TOTAL_TOPICS } from "./spanish/curriculum-es";
+import { ES_LESSONS } from "./spanish/lessons-es";
+import { SPANISH_INSIGHTS } from "./spanish/insights-es";
 import type { CompendiumData, DailyInsight, Lesson } from "@/lib/types";
 import type { LessonShell, TrailBranch, TrailGate, TopicCluster } from "@/lib/types";
 import { DEFAULT_LANGUAGE_ID } from "./languages";
@@ -69,8 +73,19 @@ const FRENCH_CONTENT: LanguageContent = {
   insights: FRENCH_INSIGHTS,
 };
 
+const SPANISH_CONTENT: LanguageContent = {
+  compendium: spanishCompendium,
+  topics: ES_TOPICS,
+  trailBranches: ES_TRAIL_BRANCHES,
+  trailGates: ES_TRAIL_GATES,
+  totalTopics: ES_TOTAL_TOPICS,
+  lessons: ES_LESSONS,
+  insights: SPANISH_INSIGHTS,
+};
+
 const CONTENT_MAP: Record<string, LanguageContent> = {
   de: GERMAN_CONTENT,
+  es: SPANISH_CONTENT,
   fr: FRENCH_CONTENT,
 };
 
