@@ -209,7 +209,7 @@ const FRENCH_ONBOARDING: LanguageOnboarding = {
       "we connect french words to everyday english: château to castle and gardien to warden.",
     showGenders: false,
     noGenderNote:
-      "french nouns carry grammatical gender — le (masculine) and la (feminine) — which this course will highlight with color-coded badges once the french trail opens.",
+      "french nouns carry grammatical gender — le (masculine) and la (feminine) — which this course decodes from word endings with azure and rose badges.",
   },
   ready: {
     body: "the french trail is open: the conversion bridges first, then the sentence machine, the pasts and the deep engine. all progress is stored locally in your browser.",
@@ -266,7 +266,7 @@ export const LANGUAGES: LanguageDefinition[] = [
       colors: ["blue", "rose"],
     },
     status: "available",
-    blurb: "The Latin cognate engine: 30 topics, 9 conversion bridges, 65 words.",
+    blurb: "The Latin cognate engine: 30 topics, 123 lessons, 9 conversion bridges, 293 words.",
     decoChars: ["ñ", "á", "é", "í", "ó", "ú", "¿", "¡"],
     onboarding: SPANISH_ONBOARDING,
   },
@@ -293,7 +293,7 @@ export const LANGUAGES: LanguageDefinition[] = [
       colors: ["blue", "rose"],
     },
     status: "available",
-    blurb: "The Norman doublet engine: 30 topics, 9 conversion bridges, 115 words.",
+    blurb: "The Norman doublet engine: 30 topics, 123 lessons, 9 conversion bridges, 306 words.",
     decoChars: ["é", "à", "ç", "œ", "è", "ê"],
     onboarding: FRENCH_ONBOARDING,
   },

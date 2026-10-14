@@ -99,3 +99,19 @@
 3. **The Past Gate** (after topic 21)
 4. **The Engine Gate** (after topic 26)
 5. **The Capstone Gate** (after topic 29)
+
+
+### Expanded Cluster Sprigs & Spanish-Specific Grammatical Modules (123 Authored Lessons)
+- **30 Spine Cores (`1–30`)**: All 30 topics fully authored with hooks, patterns, trap notes, foreshadow/payoff arcs, twists, and 5 varied exercises per lesson.
+- **72 Cluster Sprigs**: Including 10 new Spanish-specific grammatical sprigs not needed in German:
+  - `303` **The -er & -ir Verb Bridges** (`comer`, `beber`, `comprender`, `vender`, `vivir`, `decidir`, `abrir`)
+  - `503` **Chameleon Adjectives: listo, aburrido & rico** (`ser` vs `estar` semantic flips)
+  - `1003` **Boot Verbs: e→ie, o→ue & e→i Under Stress** (why `nosotros` stays outside the boot)
+  - `1103` **Diminutives & Augmentatives: -ito, -illo & -ón** (`poquito`, `bocadillo`, `pesadilla`, `limón`)
+  - `1203` **Pronoun Hook vs Left-Walk: lo quiero vs quiero verlo** (enclitic vs proclitic placement)
+  - `1403` **Three Distances of Space: este, ese & aquel** (person-aligned demonstrative zones + neuter `esto/eso`)
+  - `1503` **Tener Expressions: hambre, sed & razón** (possessing states with `tener` + `mucho/mucha`)
+  - `2303` **Saber vs Conocer** (facts/skills vs people/places + personal `a`)
+  - `2603` **Ojalá & W.E.I.R.D.O. Triggers** (Arabic heritage + opposite-vowel subjunctive)
+  - `2803` **Verb Dynasties: poner, tener, traer & mostrar Matrices** (Latin prefix × root matrices)
+- **15 Support Branches (21 Lessons, `5011–5152`)**: Covering greetings (`5010`), pure vowels (`5020`), false friends (`5030`), `tú/usted/ustedes` (`5040`), city navigation (`5050`), shopping & euros (`5060`), perfect past (`5070`), daily routine (`5080`), relative clauses (`5090`), conditional/hypotheticals (`5100`), the Boot-Verb & `-go` Gym (`5110`), Tapas & `el agua fría` (`5120`), rail travel (`5130`), professions without `un/una` & passions (`5140`), and body parts (`la mano`) & clothing (`5150`).

@@ -216,3 +216,19 @@ src/data/french/
 8. IPAs filled; `sound_shift_ids` reference real conversion families; `shift_rule` names the rule.
 9. Run: `bun run test`, `bun run lint`, `bun run typecheck`, and `bun run build`.
 10. Update the lesson counts in this doc and the README "Multi-Language Ready" bullet.
+
+
+## 6. Expanded Coursework Inventory (123 Authored Lessons, 306 Words)
+- **30 Spine Cores (`1–30`)**: All 30 topics fully authored.
+- **72 Cluster Sprigs**: Including 10 new French-specific grammatical sprigs:
+  - `303` **The -ir & -re Verb Bridges** (`finir`, `choisir`, `vendre`, `répondre`, `attendre`)
+  - `603` **The -ment & -able Twin Bridges** (`exactement`, `naturellement`, `possible`, `capable`)
+  - `1003` **Liaison & Silent Consonants: The CaReFuL Rule**
+  - `1103` **BAGS: Adjectives That Step Before the Noun** (`beau/bel`, `nouveau/nouvel`, `vieux/vieil`, `bon`, `grand`, `petit`)
+  - `1303` **The Partitive Article: du, de la, des & Negative pas de**
+  - `1403` **Demonstratives (ce/cet/cette/ces) & Stressed Pronouns (moi, toi, lui)**
+  - `2303` **The Double-Pronoun Highway (me le, le lui, y, en)**
+  - `2703` **Savoir vs Connaître: Facts vs Familiarity**
+  - `2803` **Verb Dynasties: The venir, tenir & prendre Matrices**
+  - `2903` **Spoken French Shortcuts: on = nous & Dropping ne**
+- **15 Support Branches (21 Lessons, `5011–5152`)**: Including the Partitive & `Avoir` Expressions Gym (`5110`), Bistro & Table French (`5120`), SNCF & Train Travel (`5130`), Professions (without `un/une`) & Passions (`5140`), and Body (`avoir mal à`) & Wardrobe (`5150`).
