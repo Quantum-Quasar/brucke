@@ -27,7 +27,7 @@ import { whisperCuesForLesson } from "@/data/posture-cues";
 import { RETRY_INTENT_LINE, retryVariant } from "@/lib/retry-variation";
 import { isListeningSkipped, listeningSkipLabel } from "@/lib/listening";
 import { consciousnessLineFor } from "@/data/consciousness";
-import { SOUND_IMPORTS, importLineFor, type SoundImport } from "@/data/sound-imports";
+import { getSoundImportsForLanguage, importLineFor, type SoundImport } from "@/data/sound-imports";
 import { getLanguageContent, EMPTY_COMPENDIUM, getNextPlayableLessonIdFor } from "@/data/language-content";
 import { getLanguageDefinition } from "@/data/languages";
 import type { Lesson, ExerciseItem } from "@/lib/types";
@@ -82,10 +82,10 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
         .map((wid) => data.words[wid.toLowerCase()]?.target_word.toLowerCase() ?? "")
         .join(" ")
     );
-    return SOUND_IMPORTS.filter((imp) =>
+    return getSoundImportsForLanguage(activeLanguageId).filter((imp) =>
       onPage.has(imp.grapheme[0].toLowerCase()) || [...onPage].some((w) => w.includes(imp.grapheme[0].toLowerCase()))
     ).slice(0, 3);
-  }, [currentSegment, lesson.id, data.words]);
+  }, [currentSegment, lesson.id, data.words, activeLanguageId]);
 
   const showDetour = Boolean(detourFootnote) && !detourDismissed && practiceIndex === 2 && !inRetryPhase && !twistPhase;
   // TM-6: re-whisper learning consciousness on a deterministic subset of the trail
@@ -162,7 +162,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
           if (e.key === "Enter" || e.key === " " || e.code === "Space") {
             e.preventDefault();
             handleCompleteAll();
-            const nextId = getNextPlayableLessonId(lesson.id);
+            const nextId = getNextPlayableLessonIdFor(activeLanguageId, lesson.id);
             router.push(nextId ? `/trail/${nextId}` : "/trail");
           }
         }
@@ -175,8 +175,9 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
 
   // Register all lesson words as encountered when viewing
   React.useEffect(() => {
-    markWordsEncountered(lesson.word_ids);
-  }, [lesson.word_ids, markWordsEncountered]);
+    const allWords = Array.from(new Set([...lesson.word_ids, ...(lesson.table_word_ids ?? [])]));
+    markWordsEncountered(allWords);
+  }, [lesson.word_ids, lesson.table_word_ids, markWordsEncountered]);
 
   const handleExerciseError = (exercise: ExerciseItem) => {
     setEverQueued(true);
@@ -258,7 +259,10 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   const handleCompleteAll = () => {
     completeLesson(lesson.id, { perfect: !everQueued });
     // Finished-lesson words enter the SM-2 queue so "due today" isn't empty for new learners.
-    seedSrsCards(lesson.word_ids.filter((id) => id in data.words));
+    const allWords = Array.from(new Set([...lesson.word_ids, ...(lesson.table_word_ids ?? [])]));
+    const toSeed = allWords.filter((id) => id in data.words);
+    if (lesson.summary?.use_example?.german) toSeed.push(`sentence_${lesson.id}`);
+    seedSrsCards(toSeed);
     setIsLessonFinished(true);
     setCompletedSegments(["hook", "pattern", "table", "practice", "summary"]);
   };
@@ -922,6 +926,8 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                 <p>
                   {activeLanguageId === "fr"
                     ? "in 1066 norman french crossed the channel — thousands of cognates entered english and never left."
+                    : activeLanguageId === "es"
+                    ? "spanish and english share thousands of latin roots — castilian melted initial f- to silent h-, -ct- to -ch-, and -tion to -ción."
                     : "high german shifted consonants 1,300 years ago, leaving english as a living time capsule of ancestral germanic roots."}
                 </p>
               </div>

@@ -1,7 +1,7 @@
 "use client";
 
 // TM-1 production drill: the learner gets the thought (idea) and a lexicon
-// (word_bank), and must produce the German themselves — choose the elements,
+// (word_bank), and must produce the target sentence themselves — choose the elements,
 // decide the order, type the sentence. The word bank is vocabulary, not a jigsaw:
 // tapping a chip inserts the word into a free-text input, and the learner can type
 // inflections the bank doesn't carry. First attempt gets no cues; the cue ladder
@@ -14,9 +14,11 @@ import { Check, AlertCircle, Sparkles, Lightbulb, Quote } from "lucide-react";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
 import { ErrorFeedbackSheet } from "./ErrorFeedbackSheet";
 import { SuccessFeedbackSheet } from "./SuccessFeedbackSheet";
+import { arrangeTilesDeterministically } from "./ExerciseWidgets";
 import { evaluateAnswerAccuracy } from "@/lib/letter-diff";
 import { diagnoseAttempt, affirmationFor } from "@/lib/shift-diagnosis";
-import { GERMAN_DIAGNOSIS } from "@/data/shift-diagnosis-table";
+import { DIAGNOSIS_BY_LANGUAGE, GERMAN_DIAGNOSIS } from "@/data/shift-diagnosis-table";
+import { getLanguageDefinition } from "@/data/languages";
 import { useAppStore } from "@/lib/store";
 import { soundEngine } from "@/lib/sound";
 import type { ExerciseDiagnosis, ExerciseItem } from "@/lib/types";
@@ -67,9 +69,14 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const tolerance = useAppStore((s) => s.tolerance);
   const settings = useAppStore((s) => s.settings);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
 
   const cues = exercise.cues ?? [];
-  const wordBank = (exercise.word_bank || []).map((w) => w.replace(/[.,!?;:]+$/, ""));
+  const wordBank = React.useMemo(() => {
+    const cleaned = (exercise.word_bank || []).map((w) => w.replace(/[.,!?;:]+$/, ""));
+    return arrangeTilesDeterministically(cleaned, `${exercise.id}#wb`, exercise.target_answer);
+  }, [exercise.word_bank, exercise.id, exercise.target_answer]);
   const target = exercise.target_answer.trim();
 
   const resetCurrentExercise = () => {
@@ -111,13 +118,14 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
 
   const diagnoseFailure = (attempt: string): ExerciseDiagnosis | undefined => {
     if (exercise.diagnosis) return exercise.diagnosis;
+    const diagTable = DIAGNOSIS_BY_LANGUAGE[activeLanguageId] ?? GERMAN_DIAGNOSIS;
     const attemptTokens = tokensOf(attempt);
     const targetTokens = tokensOf(target);
     const sameMultiset =
       attemptTokens.length === targetTokens.length &&
       [...attemptTokens].sort().join(" ") === [...targetTokens].sort().join(" ");
     if (sameMultiset && attempt.trim() !== target) {
-      return GERMAN_DIAGNOSIS.word_order;
+      return diagTable.word_order;
     }
     const targetSet = new Set(targetTokens);
     const bankSet = new Set(wordBank.map((w) => w.toLowerCase()));
@@ -125,7 +133,7 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
       (t) => bankSet.has(t) && !targetSet.has(t)
     );
     if (distractorUsed) {
-      return GERMAN_DIAGNOSIS.wrong_word;
+      return diagTable.wrong_word;
     }
     return diagnoseAttempt(target, attempt, exercise.shift_hint) ?? undefined;
   };
@@ -240,13 +248,12 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
         <Quote className="w-4 h-4 text-[var(--main-color)]" />
         <p className="text-base text-[var(--text-color)] italic leading-relaxed">{exercise.idea}</p>
         <p className="text-[11px] text-[var(--sub-color)] pt-1 border-t border-[var(--sub-color)]/15">
-          Build the German. The words are yours to choose — not all are needed.
+          Build the {language.name}. The words are yours to choose — not all are needed.
         </p>
       </div>
 
       {/* TM-6 (guidebook §0.3): a thought is multidimensional and must be split into
-          elements before German can order them. This is a *skill*, not decoration —
-          the whole course exists to install it, so it gets its own explicit step. */}
+          elements before the target language orders them. */}
       {exercise.idea_parts && exercise.idea_parts.length > 0 && (
         <div className="p-3 rounded-lg bg-[var(--bg-color)] border border-dashed border-[var(--main-color)]/40 space-y-2">
           <button

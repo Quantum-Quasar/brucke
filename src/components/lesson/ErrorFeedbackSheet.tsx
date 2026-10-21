@@ -3,9 +3,12 @@
 // ponytail: focused bottom modal sheet presenting letter-by-letter diff and mechanical shift explanation
 
 import React, { useEffect } from "react";
-import { AlertCircle, ArrowRight, Stethoscope } from "lucide-react";
+import { AlertCircle, ArrowRight, Stethoscope, Volume2 } from "lucide-react";
 import { computeLetterDiff } from "@/lib/letter-diff";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
+import { useAppStore } from "@/lib/store";
+import { getLanguageDefinition } from "@/data/languages";
+import { playTargetAudio } from "@/lib/audio";
 import type { ExerciseDiagnosis } from "@/lib/types";
 
 interface ErrorFeedbackSheetProps {
@@ -15,6 +18,9 @@ interface ErrorFeedbackSheetProps {
   shiftRule?: string;
   explanation?: string;
   diagnosis?: ExerciseDiagnosis;
+  answerLabel?: string;
+  audioText?: string;
+  audioLocale?: string;
   onContinue: () => void;
 }
 
@@ -25,11 +31,18 @@ export const ErrorFeedbackSheet: React.FC<ErrorFeedbackSheetProps> = ({
   shiftRule,
   explanation,
   diagnosis,
+  answerLabel,
+  audioText,
+  audioLocale,
   onContinue,
 }) => {
   const diff = computeLetterDiff(userInput, expectedAnswer);
   const continueBtnRef = React.useRef<HTMLButtonElement>(null);
   const dialogRef = React.useRef<HTMLDivElement>(null);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
+  const spokenText = audioText ?? expectedAnswer;
+  const spokenLocale = audioLocale ?? language.ttsLocale;
 
   useDialogFocus({
     open: true,
@@ -92,13 +105,26 @@ export const ErrorFeedbackSheet: React.FC<ErrorFeedbackSheetProps> = ({
           </div>
 
           {/* Correct Target Form */}
-          <div className="pt-2 border-t border-[var(--sub-color)]/15">
-            <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block mb-1">
-              target word:
-            </span>
-            <div className="text-lg font-mono font-bold text-[var(--main-color)]">
-              {expectedAnswer}
+          <div className="pt-2 border-t border-[var(--sub-color)]/15 flex items-start justify-between gap-2">
+            <div>
+              <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block mb-1">
+                {answerLabel ?? `target ${language.name.toLowerCase()}:`}
+              </span>
+              <div className="text-lg font-mono font-bold text-[var(--main-color)]">
+                {expectedAnswer}
+              </div>
             </div>
+            {spokenText && (
+              <button
+                type="button"
+                onClick={() => playTargetAudio(spokenText, spokenLocale)}
+                className="shrink-0 p-1.5 rounded bg-[var(--bg-color)] hover:bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--sub-color)]/20 transition cursor-pointer"
+                title="Listen to pronunciation"
+                aria-label="Listen to pronunciation"
+              >
+                <Volume2 className="w-4 h-4" />
+              </button>
+            )}
           </div>
 
           {englishPrompt && (

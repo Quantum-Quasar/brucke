@@ -26,10 +26,13 @@ import { ShiftPair } from "@/components/common/ShiftPair";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
 import { GenderBadge } from "@/components/common/GenderBadge";
 import { GenderGuideBanner } from "@/components/common/GenderGuideBanner";
+import { VoiceStatusBanner } from "@/components/common/VoiceStatusBanner";
 import { useAppStore } from "@/lib/store";
 import { getDueCards, localDateKey, type ReviewGrade } from "@/lib/srs";
 import {
   SESSION_SIZES,
+  DECK_CAPABILITIES,
+  resolveCardReviewMode,
   filterByLearned,
   getRecentLessonWordIds,
   prepareSession,
@@ -37,6 +40,7 @@ import {
   sortDueCards,
   type LearnedFilter,
   type SessionSize,
+  type ReviewDeckType,
 } from "@/lib/review-decks";
 import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
 import { getAtlasFamilies } from "@/lib/atlas-families";
@@ -45,12 +49,12 @@ import { computeLetterDiff, evaluateAnswerAccuracy } from "@/lib/letter-diff";
 import { soundEngine } from "@/lib/sound";
 import { getLanguageDefinition } from "@/data/languages";
 import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
-import { getWordEntityMap } from "@/lib/word-entities";
+import { getWordEntityMap, getSentenceEntities, getArticleEntities } from "@/lib/word-entities";
 import type { ReviewMode, SRSCard, WordEntity } from "@/lib/types";
 import type { ReviewSnapshot } from "@/lib/store";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
 
-type DeckType = "due" | "shift" | "weakest" | "recent" | "compounds" | "domain" | "everything";
+type DeckType = ReviewDeckType;
 
 /** Sentinel select value meaning "every family" / "every domain". */
 const ALL_ID = "all";
@@ -234,6 +238,49 @@ export default function ReviewPage() {
     return items;
   }, [srsCards, data]);
 
+  const sentenceEntities: WordEntity[] = useMemo(
+    () => getSentenceEntities(activeLanguageId),
+    [activeLanguageId]
+  );
+
+  const sentenceCards: SRSCard[] = useMemo(() => {
+    const completedSet = new Set(completedLessons);
+    const filtered = sentenceEntities.filter((s) => {
+      const lessonNum = Number(s.id.replace("sentence_", ""));
+      const isLearned =
+        completedSet.has(lessonNum) ||
+        wordMastery[s.id] === "encountered" ||
+        wordMastery[s.id] === "mastered" ||
+        Boolean(srsCards[s.id]?.last_reviewed);
+      if (learnedFilter === "learned") return isLearned;
+      if (learnedFilter === "new") return !isLearned;
+      return true;
+    });
+    return filtered.map((s) => blankCard(s.id));
+  }, [sentenceEntities, completedLessons, wordMastery, srsCards, learnedFilter, blankCard]);
+
+  const articleEntities: WordEntity[] = useMemo(
+    () => getArticleEntities(activeLanguageId),
+    [activeLanguageId]
+  );
+
+  const articleCards: SRSCard[] = useMemo(() => {
+    const filtered = articleEntities.filter((a) => {
+      const baseWordId = a.id.replace(/^article_/, "");
+      const isLearned =
+        wordMastery[baseWordId] === "encountered" ||
+        wordMastery[baseWordId] === "mastered" ||
+        wordMastery[a.id] === "encountered" ||
+        wordMastery[a.id] === "mastered" ||
+        Boolean(srsCards[baseWordId]?.last_reviewed) ||
+        Boolean(srsCards[a.id]?.last_reviewed);
+      if (learnedFilter === "learned") return isLearned;
+      if (learnedFilter === "new") return !isLearned;
+      return true;
+    });
+    return filtered.map((a) => blankCard(a.id));
+  }, [articleEntities, wordMastery, srsCards, learnedFilter, blankCard]);
+
   // Thematic domain decks: the full compendium sliced by each word's domain.
   // Deliberately NOT gated by encounter history — every word in the compendium
   // is reviewable immediately, even if it never appeared in a lesson.
@@ -318,8 +365,8 @@ export default function ReviewPage() {
   const shiftDeckSize = shiftWordIds(selectedShiftId).length;
   const domainDeckSize = domainWordIds(selectedDomainId).length;
   const everythingCount = useMemo(
-    () => scopeIds(data.wordList.map((w) => w.id)).length + compoundCards.length,
-    [scopeIds, data, compoundCards]
+    () => scopeIds(data.wordList.map((w) => w.id)).length + compoundCards.length + sentenceCards.length + articleCards.length,
+    [scopeIds, data, compoundCards, sentenceCards, articleCards]
   );
 
   // "Recent lessons": words from the last few lessons you actually completed.
@@ -365,15 +412,24 @@ export default function ReviewPage() {
     else if (deck === "shift") scoped(shiftWordIds(selectedShiftId));
     else if (deck === "recent") begin(recentWordIds.map(blankCard));
     else if (deck === "compounds") begin(prepareSession(compoundCards, 0, shuffleSession));
+    else if (deck === "sentences") begin(prepareSession(sentenceCards, sessionSize, shuffleSession));
+    else if (deck === "articles") begin(prepareSession(articleCards, sessionSize, shuffleSession));
     else if (deck === "domain") scoped(domainWordIds(selectedDomainId));
     else if (deck === "everything") {
       const ids = scopeIds(data.wordList.map((w) => w.id));
-      begin(prepareSession([...ids.map(blankCard), ...compoundCards], sessionSize, shuffleSession));
+      begin(prepareSession([...ids.map(blankCard), ...compoundCards, ...sentenceCards, ...articleCards], sessionSize, shuffleSession));
     }
   };
 
-  // Request deck start: prompts the 4 review style options
+  // Request deck start: checks DECK_CAPABILITIES[deck].supportedModes.
+  // If the deck only supports a single mode (e.g. "articles" -> ["mcq"]), starts immediately in that mode!
   const requestDeckStart = (deck: DeckType, customCards?: SRSCard[], deckLabel?: string) => {
+    const spec = DECK_CAPABILITIES[deck];
+    if (spec && spec.supportedModes.length === 1) {
+      setReviewMode(spec.supportedModes[0]);
+      startDeck(deck, customCards);
+      return;
+    }
     setPendingDeck({ deck, customCards, deckLabel });
     setIsModeSelectorOpen(true);
   };
@@ -394,18 +450,32 @@ export default function ReviewPage() {
 
   const currentCard = sessionCards[currentIndex];
   const currentWord: WordEntity | undefined = currentCard ? allWordsMap[currentCard.word_id] : undefined;
+  const supportedModesForCard: ReviewMode[] = useMemo(() => {
+    if (currentWord?.supportedModes && currentWord.supportedModes.length > 0) {
+      return currentWord.supportedModes;
+    }
+    if (activeDeck && DECK_CAPABILITIES[activeDeck]) {
+      return DECK_CAPABILITIES[activeDeck].supportedModes;
+    }
+    return ["flashcard", "mcq", "tiles", "typing"];
+  }, [currentWord, activeDeck]);
+  const effectiveReviewMode: ReviewMode = useMemo(
+    () => resolveCardReviewMode(currentWord, reviewMode, activeDeck),
+    [currentWord, reviewMode, activeDeck]
+  );
 
   // Example sentence with the answer blanked out: a context clue before reveal.
   const currentCloze = useMemo(
-    () => (currentWord ? clozeSentence(currentWord.context_phrase, currentWord.target_word) : null),
+    () => (currentWord && !currentWord.id.startsWith("sentence_") && !currentWord.id.startsWith("article_") ? clozeSentence(currentWord.context_phrase, currentWord.target_word) : null),
     [currentWord]
   );
 
   // MCQ Options for current card
   const mcqOptions = useMemo(() => {
     if (!currentWord) return [];
-    return generateMCQOptions(currentWord, data.wordList, 4);
-  }, [currentWord, data]);
+    const pool = currentWord.id.startsWith("sentence_") && sentenceEntities.length >= 4 ? sentenceEntities : data.wordList;
+    return generateMCQOptions(currentWord, pool, 4);
+  }, [currentWord, data, sentenceEntities]);
 
   // Tiles for current card
   const tileData = useMemo(() => {
@@ -576,8 +646,13 @@ export default function ReviewPage() {
 
   const handleCheckTiles = () => {
     if (isRevealed || !currentWord) return;
-    const assembled = selectedTiles.join("");
-    const isCorrect = assembled.toLowerCase() === currentWord.target_word.toLowerCase();
+    const isSentenceCard = currentWord.id.startsWith("sentence_") || currentWord.target_word.includes(" ");
+    const assembled = isSentenceCard ? selectedTiles.join(" ") : selectedTiles.join("");
+    const evalResult = evaluateAnswerAccuracy(assembled, currentWord.target_word, {
+      umlautTolerance: Boolean(settings.lazyMode),
+      capitalizationTolerance: Boolean(settings.capitalizationTolerance),
+    });
+    const isCorrect = evalResult.accuracy === "exact" || evalResult.accuracy === "almost";
     if (isCorrect) {
       void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
     } else {
@@ -647,13 +722,13 @@ export default function ReviewPage() {
 
   // Auto-focus input when in typing mode unrevealed
   useEffect(() => {
-    if (activeDeck && !isRevealed && reviewMode === "typing") {
+    if (activeDeck && !isRevealed && effectiveReviewMode === "typing") {
       const timer = setTimeout(() => {
         inputRef.current?.focus();
       }, 50);
       return () => clearTimeout(timer);
     }
-  }, [activeDeck, currentIndex, isRevealed, reviewMode]);
+  }, [activeDeck, currentIndex, isRevealed, effectiveReviewMode]);
 
   // Global review keyboard controls:
   // - In Modal: 1-4 chooses style, Esc cancels
@@ -744,12 +819,12 @@ export default function ReviewPage() {
 
       // 3. Card is UNREVEALED
       if (!isRevealed) {
-        if (reviewMode === "flashcard") {
+        if (effectiveReviewMode === "flashcard") {
           if (e.key === "Enter" || e.key === " " || e.code === "Space") {
             e.preventDefault();
             setIsRevealed(true);
           }
-        } else if (reviewMode === "mcq") {
+        } else if (effectiveReviewMode === "mcq") {
           if (e.key === "1" || e.code === "Digit1" || e.code === "Numpad1") {
             e.preventDefault();
             if (mcqOptions[0]) handleSelectMCQ(mcqOptions[0]);
@@ -766,7 +841,7 @@ export default function ReviewPage() {
             e.preventDefault();
             setIsRevealed(true);
           }
-        } else if (reviewMode === "tiles") {
+        } else if (effectiveReviewMode === "tiles") {
           if (e.key === "Enter") {
             e.preventDefault();
             if (selectedTiles.length > 0) {
@@ -784,7 +859,13 @@ export default function ReviewPage() {
               const lastTile = selectedTiles[lastIdx];
               handleUnpickTile(lastTile, lastIdx);
             }
-          } else if (/^[a-zA-ZäöüÄÖÜß]$/.test(e.key)) {
+          } else if (/^[1-9]$/.test(e.key)) {
+            const idx = parseInt(e.key, 10) - 1;
+            if (idx >= 0 && idx < availableTiles.length) {
+              e.preventDefault();
+              handlePickTile(availableTiles[idx], idx);
+            }
+          } else if (/^[a-zA-ZäöüÄÖÜßéèêëàâùûîïôçáíóúñ]$/.test(e.key)) {
             const matchIdx = availableTiles.findIndex((t) =>
               t.toLowerCase().startsWith(e.key.toLowerCase())
             );
@@ -793,7 +874,7 @@ export default function ReviewPage() {
               handlePickTile(availableTiles[matchIdx], matchIdx);
             }
           }
-        } else if (reviewMode === "typing") {
+        } else if (effectiveReviewMode === "typing") {
           if (e.key === "Enter") {
             e.preventDefault();
             handleCheckTyping();
@@ -932,6 +1013,7 @@ export default function ReviewPage() {
 
       {/* Gender Guide Banner (Dismissible on first encounter) */}
       <GenderGuideBanner />
+      <VoiceStatusBanner />
 
       {/* ACTIVE REVIEW SESSION MODAL / CARD */}
       {activeDeck && currentCard && currentWord ? (
@@ -943,32 +1025,46 @@ export default function ReviewPage() {
                 card {currentIndex + 1} / {sessionCards.length}
               </span>
 
-              {/* Mid-Session Style Switcher */}
+              {/* Mid-Session Style Switcher (filtered by card/deck supportedModes) */}
               <div className="flex items-center gap-1.5 bg-[var(--bg-color)] border border-[var(--sub-color)]/25 px-2 py-0.5 rounded">
                 <span className="text-[11px] font-mono text-[var(--sub-color)]">style:</span>
-                <select
-                  value={reviewMode}
-                  onChange={(e) => {
-                    const mode = e.target.value as ReviewMode;
-                    setReviewMode(mode);
-                    setPreferredReviewMode(mode);
-                  }}
-                  className="bg-transparent text-xs font-mono text-[var(--main-color)] outline-none cursor-pointer"
-                  title="Switch Review Style mid-session"
-                >
-                  <option value="flashcard" className="bg-[var(--bg-color)] text-[var(--text-color)]">
-                    recall
-                  </option>
-                  <option value="mcq" className="bg-[var(--bg-color)] text-[var(--text-color)]">
-                    mcq
-                  </option>
-                  <option value="tiles" className="bg-[var(--bg-color)] text-[var(--text-color)]">
-                    tiles
-                  </option>
-                  <option value="typing" className="bg-[var(--bg-color)] text-[var(--text-color)]">
-                    typing
-                  </option>
-                </select>
+                {supportedModesForCard.length === 1 ? (
+                  <span className="text-xs font-mono text-[var(--main-color)] font-bold">
+                    {supportedModesForCard[0]} only
+                  </span>
+                ) : (
+                  <select
+                    value={effectiveReviewMode}
+                    onChange={(e) => {
+                      const mode = e.target.value as ReviewMode;
+                      setReviewMode(mode);
+                      setPreferredReviewMode(mode);
+                    }}
+                    className="bg-transparent text-xs font-mono text-[var(--main-color)] outline-none cursor-pointer"
+                    title="Switch Review Style mid-session"
+                  >
+                    {supportedModesForCard.includes("flashcard") && (
+                      <option value="flashcard" className="bg-[var(--bg-color)] text-[var(--text-color)]">
+                        recall
+                      </option>
+                    )}
+                    {supportedModesForCard.includes("mcq") && (
+                      <option value="mcq" className="bg-[var(--bg-color)] text-[var(--text-color)]">
+                        mcq
+                      </option>
+                    )}
+                    {supportedModesForCard.includes("tiles") && (
+                      <option value="tiles" className="bg-[var(--bg-color)] text-[var(--text-color)]">
+                        tiles
+                      </option>
+                    )}
+                    {supportedModesForCard.includes("typing") && (
+                      <option value="typing" className="bg-[var(--bg-color)] text-[var(--text-color)]">
+                        typing
+                      </option>
+                    )}
+                  </select>
+                )}
               </div>
             </div>
 
@@ -1045,7 +1141,7 @@ export default function ReviewPage() {
           </div>
 
           {/* MODE 1: QUICK FLIP (FLASHCARD) */}
-          {reviewMode === "flashcard" && !isRevealed && (
+          {effectiveReviewMode === "flashcard" && !isRevealed && (
             <div className="space-y-4 max-w-md mx-auto text-center py-4">
               <p className="text-xs font-mono text-[var(--sub-color)]">
                 recall the {language.name.toLowerCase()} twin in your mind, then reveal.
@@ -1064,7 +1160,7 @@ export default function ReviewPage() {
           )}
 
           {/* MODE 2: MULTIPLE CHOICE (MCQ) */}
-          {reviewMode === "mcq" && (
+          {effectiveReviewMode === "mcq" && (
             <div className="space-y-4 max-w-lg mx-auto py-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {mcqOptions.map((opt, idx) => {
@@ -1119,12 +1215,12 @@ export default function ReviewPage() {
           )}
 
           {/* MODE 3: TILE BUILDER */}
-          {reviewMode === "tiles" && (
+          {effectiveReviewMode === "tiles" && (
             <div className="space-y-4 max-w-lg mx-auto py-2">
               {/* Selected Tiles Assembly Rack */}
               <div className="p-3.5 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/25 min-h-[60px] flex flex-wrap items-center justify-center gap-2">
                 {selectedTiles.length === 0 ? (
-                  <span className="text-xs font-mono text-[var(--sub-color)]/60 italic">tap tiles below to assemble word...</span>
+                  <span className="text-xs font-mono text-[var(--sub-color)]/60 italic">{currentWord.id.startsWith("sentence_") ? "tap word tiles below in sentence order (or press 1–9)..." : "tap tiles below to assemble word..."}</span>
                 ) : (
                   selectedTiles.map((tile, idx) => (
                     <button
@@ -1196,7 +1292,7 @@ export default function ReviewPage() {
           )}
 
           {/* MODE 4: DERIVATION TYPING (LAST) */}
-          {reviewMode === "typing" && !isRevealed && (
+          {effectiveReviewMode === "typing" && !isRevealed && (
             <div className="space-y-4 max-w-md mx-auto">
               {settings.capsLockWarning && isCapsLock && (
                 <div className="flex items-center justify-center gap-1.5 text-xs text-[var(--error-color)] font-mono animate-pulse">
@@ -1279,7 +1375,7 @@ export default function ReviewPage() {
                 />
 
                 {/* Character-level Diff for Typing Mode */}
-                {reviewMode === "typing" && inputGuess.trim().length > 0 && (
+                {effectiveReviewMode === "typing" && inputGuess.trim().length > 0 && (
                   <div className="p-3 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-center space-y-1 max-w-md mx-auto">
                     <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block">
                       your attempt:
@@ -1706,6 +1802,60 @@ export default function ReviewPage() {
               </button>
             </div>
 
+            {/* Sentence Patterns SRS Deck */}
+            <div className="p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--main-color)]/35 space-y-3 flex flex-col justify-between hover:border-[var(--main-color)]/60 transition">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-[var(--main-color)]">
+                  <Layers className="w-4 h-4" />
+                  <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">sentence patterns</h4>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/30">
+                    full clauses
+                  </span>
+                </div>
+                <p className="text-xs font-mono text-[var(--sub-color)]">
+                  spaced repetition for full {language.name.toLowerCase()} sentences from every trail lesson — practice word order, brackets, and pronouns in context.
+                </p>
+                <div className="text-xs font-mono text-[var(--main-color)] pt-1">
+                  {mounted ? sentenceCards.length : sentenceEntities.length} sentences in scope
+                </div>
+              </div>
+
+              <button
+                onClick={() => requestDeckStart("sentences", undefined, "sentence patterns")}
+                disabled={sentenceCards.length === 0}
+                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--main-color)]/30 text-xs font-mono font-bold text-[var(--main-color)] transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                review sentences
+              </button>
+            </div>
+
+            {/* Article & Gender MCQ Drill Deck */}
+            <div className="p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--main-color)]/35 space-y-3 flex flex-col justify-between hover:border-[var(--main-color)]/60 transition">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-[var(--main-color)]">
+                  <HelpCircle className="w-4 h-4" />
+                  <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">article &amp; gender drill</h4>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/30">
+                    mcq only
+                  </span>
+                </div>
+                <p className="text-xs font-mono text-[var(--sub-color)]">
+                  rapid-fire 4-option article mcq ({language.genderSystem ? language.genderSystem.articles.join(" / ") : "der / die / das"}) for every gendered {language.name.toLowerCase()} noun. launches directly into mcq.
+                </p>
+                <div className="text-xs font-mono text-[var(--main-color)] pt-1">
+                  {mounted ? articleCards.length : articleEntities.length} nouns in scope
+                </div>
+              </div>
+
+              <button
+                onClick={() => requestDeckStart("articles", undefined, "article & gender drill")}
+                disabled={articleCards.length === 0}
+                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--main-color)]/30 text-xs font-mono font-bold text-[var(--main-color)] transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                start article mcq
+              </button>
+            </div>
+
             {/* Everything Deck */}
             <div className="p-5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--main-color)]/40 space-y-3 flex flex-col justify-between transition">
               <div className="space-y-2">
@@ -1717,7 +1867,7 @@ export default function ReviewPage() {
                   </span>
                 </div>
                 <p className="text-xs font-mono text-[var(--sub-color)]">
-                  every word in every family and domain, plus compounds and false-friend traps. respects the scope and session size above.
+                  every word in every family and domain, plus compounds, false friends, sentence patterns, and article drills (each card automatically uses its supported review modes).
                 </p>
                 <div className="text-xs font-mono text-[var(--main-color)] pt-1">
                   {everythingCount} cards
@@ -1829,7 +1979,7 @@ export default function ReviewPage() {
                     <span className="font-bold font-mono text-sm text-[var(--text-color)] group-hover:text-[var(--main-color)] transition">
                       multiple choice (mcq)
                     </span>
-                    {reviewMode === "mcq" && (
+                    {effectiveReviewMode === "mcq" && (
                       <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/30">
                         active
                       </span>
@@ -1859,7 +2009,7 @@ export default function ReviewPage() {
                     <span className="font-bold font-mono text-sm text-[var(--text-color)] group-hover:text-[var(--main-color)] transition">
                       tile builder
                     </span>
-                    {reviewMode === "tiles" && (
+                    {effectiveReviewMode === "tiles" && (
                       <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/30">
                         active
                       </span>

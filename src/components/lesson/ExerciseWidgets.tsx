@@ -12,11 +12,104 @@ import { LiteralGloss } from "./LiteralGloss";
 import { DictationExercise } from "./DictationExercise";
 import { FamilyMatrixExercise } from "./FamilyMatrixExercise";
 import { VariantEnglishExercise } from "./VariantEnglishExercise";
+import { PronounCompressionExercise } from "./PronounCompressionExercise";
+import { SpokenTurnReplyExercise } from "./SpokenTurnReplyExercise";
 import { evaluateAnswerAccuracy, evaluateBestOf } from "@/lib/letter-diff";
 import { diagnoseAttempt, affirmationFor } from "@/lib/shift-diagnosis";
 import { useAppStore } from "@/lib/store";
+import { getLanguageDefinition } from "@/data/languages";
 import { soundEngine } from "@/lib/sound";
 import type { ExerciseDiagnosis, ExerciseItem } from "@/lib/types";
+
+/** Deterministic 32-bit FNV-1a hash — SSR-safe and stable across renders. */
+function hashSeed(input: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < input.length; i++) {
+    h ^= input.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+/** Seeded Fisher-Yates shuffle returning a new array. */
+function seededShuffle<T>(arr: T[], seed: number): T[] {
+  const out = [...arr];
+  let s = seed || 1;
+  for (let i = out.length - 1; i > 0; i--) {
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    const r = ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    const j = Math.floor(r * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+/**
+ * Deterministically shuffle a tile or word bank so that pressing 1, 2, 3... in
+ * left-to-right order never trivially reproduces the target answer.
+ */
+export function arrangeTilesDeterministically(
+  items: string[],
+  seedKey: string,
+  targetAnswer: string
+): string[] {
+  if (items.length <= 1) return [...items];
+  const targetClean = targetAnswer.replace(/[.,!?;:¿¡]+/g, "").trim().toLowerCase();
+  const targetWords = targetClean.split(/\s+/).filter(Boolean);
+
+  const isTrivialOrder = (candidate: string[]): boolean => {
+    const candLower = candidate.map((c) => c.replace(/^-/, "").toLowerCase());
+    if (
+      targetWords.length >= 2 &&
+      candLower.length >= targetWords.length &&
+      candLower.slice(0, targetWords.length).join(" ") === targetWords.join(" ")
+    ) {
+      return true;
+    }
+    const joinedPrefix = candLower.join("");
+    const targetNoSpace = targetClean.replace(/\s+/g, "");
+    if (joinedPrefix.startsWith(targetNoSpace) && targetNoSpace.length >= 2) {
+      return true;
+    }
+    return false;
+  };
+
+  const baseSeed = hashSeed(seedKey);
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const candidate = seededShuffle(items, baseSeed + attempt * 0x9e3779b9);
+    if (!isTrivialOrder(candidate)) {
+      return candidate;
+    }
+  }
+  // Fallback swap of the first two distinct elements
+  const fallback = [...items];
+  for (let i = 1; i < fallback.length; i++) {
+    if (fallback[i].toLowerCase() !== fallback[0].toLowerCase()) {
+      [fallback[0], fallback[i]] = [fallback[i], fallback[0]];
+      break;
+    }
+  }
+  return fallback;
+}
+
+/**
+ * Extract the quoted target-language word from a reverse_cognate prompt
+ * (e.g. "What English word is the twin of 'Donnerstag'?" -> "Donnerstag")
+ * so audio playback pronounces the foreign word rather than reading the English
+ * answer in a foreign TTS voice.
+ */
+function extractPromptForeignWord(prompt: string, englishTarget: string): string | null {
+  const matches = [...prompt.matchAll(/['‘’"“”]([^'‘’"“”]+)['‘’"“”]/g)].map((m) => m[1].trim());
+  const candidates = matches.filter(
+    (m) => m.length >= 2 && m.toLowerCase() !== englishTarget.trim().toLowerCase()
+  );
+  if (candidates.length > 0) {
+    return candidates[candidates.length - 1];
+  }
+  return null;
+}
 
 interface ExerciseWidgetProps {
   exercise: ExerciseItem;
@@ -39,7 +132,7 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
   onPurpleForfeit,
   onFlagGuessed,
 }) => {
-  // TM-1/TM-2: the two production-drill types are self-contained widgets with their
+  // TM-1/TM-2: the production-drill types are self-contained widgets with their
   // own cue ladders / option flow; they reuse the same feedback sheets.
   if (exercise.type === "transcribe") {
     return (
@@ -103,15 +196,43 @@ export const ExerciseWidget: React.FC<ExerciseWidgetProps> = ({
       />
     );
   }
+  if (exercise.type === "pronoun_compression") {
+    return (
+      <PronounCompressionExercise
+        exercise={exercise}
+        isRetry={isRetry}
+        onSuccess={onSuccess}
+        onError={onError}
+        onQueueRetry={onQueueRetry}
+        onPurpleForfeit={onPurpleForfeit}
+        onFlagGuessed={onFlagGuessed}
+      />
+    );
+  }
+  if (exercise.type === "spoken_turn_reply") {
+    return (
+      <SpokenTurnReplyExercise
+        exercise={exercise}
+        isRetry={isRetry}
+        onSuccess={onSuccess}
+        onError={onError}
+        onQueueRetry={onQueueRetry}
+        onPurpleForfeit={onPurpleForfeit}
+        onFlagGuessed={onFlagGuessed}
+      />
+    );
+  }
 
-  return <LegacyExerciseWidget
-    exercise={exercise}
-    onSuccess={onSuccess}
-    onError={onError}
-    isRetry={isRetry}
-    onQueueRetry={onQueueRetry}
-    onFlagGuessed={onFlagGuessed}
-  />;
+  return (
+    <LegacyExerciseWidget
+      exercise={exercise}
+      onSuccess={onSuccess}
+      onError={onError}
+      isRetry={isRetry}
+      onQueueRetry={onQueueRetry}
+      onFlagGuessed={onFlagGuessed}
+    />
+  );
 };
 
 const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
@@ -143,6 +264,14 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const tolerance = useAppStore((s) => s.tolerance);
   const settings = useAppStore((s) => s.settings);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
+  const isReverseCognate = exercise.type === "reverse_cognate";
+
+  const reverseCognateForeignWord = React.useMemo(() => {
+    if (!isReverseCognate) return null;
+    return extractPromptForeignWord(exercise.prompt, exercise.target_answer);
+  }, [isReverseCognate, exercise.prompt, exercise.target_answer]);
 
   const displayGermanPairs = React.useMemo(() => {
     if (!exercise.matching_pairs) return [];
@@ -152,14 +281,22 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
     return [pairs[pairs.length - 1], ...pairs.slice(0, pairs.length - 1)];
   }, [exercise.matching_pairs]);
 
-  // Anti-spoiler: strip trailing periods / full stops and punctuation from tiles so the last word is never leaked
+  // Anti-spoiler: strip trailing punctuation and deterministically shuffle tiles so
+  // clicking 1, 2, 3... in order never trivially solves the sentence or word.
   const sanitizedWordBank = React.useMemo(() => {
-    return (exercise.word_bank || []).map((w) => w.replace(/[.,!?;:]+$/, ""));
-  }, [exercise.word_bank]);
+    const cleaned = (exercise.word_bank || []).map((w) => w.replace(/[.,!?;:]+$/, ""));
+    return arrangeTilesDeterministically(cleaned, `${exercise.id}#wb`, exercise.target_answer);
+  }, [exercise.word_bank, exercise.id, exercise.target_answer]);
 
   const sanitizedTileOptions = React.useMemo(() => {
-    return (exercise.tile_options || []).map((t) => t.replace(/[.,!?;:]+$/, ""));
-  }, [exercise.tile_options]);
+    const cleaned = (exercise.tile_options || []).map((t) => t.replace(/[.,!?;:]+$/, ""));
+    return arrangeTilesDeterministically(cleaned, `${exercise.id}#tiles`, exercise.target_answer);
+  }, [exercise.tile_options, exercise.id, exercise.target_answer]);
+
+  const displayOptions = React.useMemo(() => {
+    if (!exercise.options) return [];
+    return seededShuffle(exercise.options, hashSeed(`${exercise.id}#opts`));
+  }, [exercise.options, exercise.id]);
 
   const resetCurrentExercise = () => {
     setUserInput("");
@@ -227,11 +364,11 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
       }
 
       // 2. Multiple choice shift select (1-9)
-      if (exercise.type === "shift_select" && exercise.options && status === "idle") {
+      if (exercise.type === "shift_select" && displayOptions.length > 0 && status === "idle") {
         const num = parseInt(e.key, 10);
-        if (!isNaN(num) && num >= 1 && num <= exercise.options.length) {
+        if (!isNaN(num) && num >= 1 && num <= displayOptions.length) {
           e.preventDefault();
-          handleShiftOptionSelect(exercise.options[num - 1]);
+          handleShiftOptionSelect(displayOptions[num - 1]);
           return;
         }
       }
@@ -308,7 +445,21 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [userInput, selectedIndices, matchedPairs, selectedEnglish, displayGermanPairs, status, showErrorSheet, showSuccessSheet, exercise, settings]);
+  }, [
+    userInput,
+    selectedIndices,
+    matchedPairs,
+    selectedEnglish,
+    displayGermanPairs,
+    displayOptions,
+    sanitizedTileOptions,
+    sanitizedWordBank,
+    status,
+    showErrorSheet,
+    showSuccessSheet,
+    exercise,
+    settings,
+  ]);
 
   const handleInputChange = (val: string) => {
     if (val.length > userInput.length) {
@@ -318,7 +469,15 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
         const valChar = val[nextCharIndex]?.toLowerCase();
         const targetChar = expectedTarget[nextCharIndex]?.toLowerCase();
         const normalizeChar = (c: string | undefined) =>
-          (c ?? "").replace(/ä/g, "a").replace(/ö/g, "o").replace(/ü/g, "u").replace(/ß/g, "s");
+          (c ?? "")
+            .replace(/[äáàâ]/g, "a")
+            .replace(/[öóô]/g, "o")
+            .replace(/[üúùû]/g, "u")
+            .replace(/[éèêë]/g, "e")
+            .replace(/[íîï]/g, "i")
+            .replace(/ñ/g, "n")
+            .replace(/ç/g, "c")
+            .replace(/ß/g, "s");
         const isMatch =
           valChar === targetChar ||
           (settings.lazyMode && valChar !== undefined && normalizeChar(valChar) === normalizeChar(targetChar));
@@ -375,6 +534,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
     const evalOptions = {
       umlautTolerance: Boolean(settings.lazyMode ?? tolerance.umlautTolerance),
       capitalizationTolerance: Boolean(settings.capitalizationTolerance ?? tolerance.capitalizationTolerance),
+      languageId: isReverseCognate ? "en" : undefined,
     };
     const graded = evaluateBestOf([answerToCheck, ...alternateReadings], expected, evalOptions);
     const evaluation = graded.result;
@@ -418,9 +578,10 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
     onQueueRetry?.();
     setFailedAttemptText(answerToCheck);
     // TM-3: authored diagnosis wins; computed diagnosis names the violated shift law
+    // (only for target-language derivation, never for English reverse_cognate answers)
     setFailedDiagnosis(
       exercise.diagnosis ??
-        (exercise.type === "derive" || exercise.type === "reverse_cognate"
+        (exercise.type === "derive"
           ? diagnoseAttempt(expected, answerToCheck, exercise.shift_hint) ?? undefined
           : undefined)
     );
@@ -533,6 +694,8 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
               ? "shift recognition"
               : exercise.type === "syntax_builder"
               ? "sentence builder"
+              : exercise.type === "reverse_cognate"
+              ? "reverse cognate"
               : "rule application"}
           </span>
         </div>
@@ -557,7 +720,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
               key={hint.word}
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-[var(--text-color)]"
             >
-              <strong className="text-[var(--main-color)] font-bold" lang="de">{hint.word}</strong>
+              <strong className="text-[var(--main-color)] font-bold" lang={language.id}>{hint.word}</strong>
               <span className="text-[var(--sub-color)]">=</span>
               <span className="text-[var(--text-color)]">{hint.translation}</span>
               {hint.note && <span className="text-[var(--sub-color)] text-[11px] italic">({hint.note})</span>}
@@ -583,7 +746,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
                   className="px-3 py-1.5 rounded bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/40 text-sm font-bold hover:bg-[var(--error-color)]/20 hover:text-[var(--error-color)] hover:border-[var(--error-color)]/40 transition flex items-center gap-1.5 cursor-pointer"
                   title="Click or press Backspace to unpick"
                 >
-                  <span lang="de">{sanitizedTileOptions[tileIdx]}</span>
+                  <span lang={language.id}>{sanitizedTileOptions[tileIdx]}</span>
                   <span className="text-[10px] opacity-60 font-normal">×</span>
                 </button>
               ))
@@ -611,7 +774,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
                       {i + 1}
                     </span>
                   )}
-                  <span lang="de">{tile}</span>
+                  <span lang={language.id}>{tile}</span>
                 </button>
               );
             })}
@@ -669,11 +832,11 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
             })}
           </div>
 
-          {/* Right Column: Shifted German Targets */}
+          {/* Right Column: Shifted Target Words */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[11px] text-[var(--sub-color)] uppercase tracking-wider block">
-                german shifted
+                {language.name.toLowerCase()} shifted
               </span>
               {selectedEnglish && (
                 <span className="text-[10px] text-[var(--main-color)]">
@@ -706,7 +869,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
                         {unmatchedIndex + 1}
                       </span>
                     )}
-                    <span lang="de">{pair.german}</span>
+                    <span lang={language.id}>{pair.german}</span>
                   </span>
                   {isMatched && <Check className="w-4 h-4 text-[var(--main-color)]" />}
                 </button>
@@ -732,8 +895,11 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
               ref={inputRef}
               type="text"
               value={userInput}
-              aria-label={exercise.prompt || "Enter German translation"}
-              lang="de"
+              aria-label={
+                exercise.prompt ||
+                (isReverseCognate ? "Enter English cognate" : `Enter ${language.name} translation`)
+              }
+              lang={isReverseCognate ? "en" : language.id}
               spellCheck={false}
               autoComplete="off"
               autoCorrect="off"
@@ -761,21 +927,30 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
                 }
               }}
               readOnly={status === "correct" || status === "almost"}
-              placeholder={exercise.english_hint ? `type german (e.g. ${exercise.english_hint})` : "type answer..."}
+              placeholder={
+                isReverseCognate
+                  ? exercise.english_hint
+                    ? `type english cognate (${exercise.english_hint})`
+                    : "type english cognate..."
+                  : exercise.english_hint
+                  ? `type ${language.name.toLowerCase()} (e.g. ${exercise.english_hint})`
+                  : "type answer..."
+              }
               className="w-full px-4 py-3 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/30 text-[var(--main-color)] text-lg font-bold font-mono outline-none focus:border-[var(--main-color)] transition placeholder:text-[var(--sub-color)]/40"
             />
           </div>
 
-          {(settings.showCharBar === "always" || (settings.showCharBar === "on_focus" && isInputFocused)) && (
-            <GermanCharBar onInsert={(char) => handleInputChange(userInput + char)} />
-          )}
+          {!isReverseCognate &&
+            (settings.showCharBar === "always" || (settings.showCharBar === "on_focus" && isInputFocused)) && (
+              <GermanCharBar onInsert={(char) => handleInputChange(userInput + char)} />
+            )}
         </div>
       )}
 
       {/* 4. Multiple Choice Shift Select */}
-      {exercise.type === "shift_select" && exercise.options && (
+      {exercise.type === "shift_select" && displayOptions.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-          {exercise.options.map((opt, i) => (
+          {displayOptions.map((opt, i) => (
             <button
               key={opt}
               type="button"
@@ -783,7 +958,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
               disabled={status !== "idle"}
               className="flex items-center justify-between p-3 rounded-lg bg-[var(--bg-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--text-color)] transition text-left group cursor-pointer"
             >
-              <span className="group-hover:text-[var(--main-color)] font-bold" lang="de">{opt}</span>
+              <span className="group-hover:text-[var(--main-color)] font-bold" lang={language.id}>{opt}</span>
               {settings.showKeyTips && (
                 <span className="keycap text-[10px]">
                   {i + 1}
@@ -810,7 +985,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
                   className="px-3 py-1.5 rounded bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/40 text-xs font-bold hover:bg-[var(--error-color)]/20 hover:text-[var(--error-color)] hover:border-[var(--error-color)]/40 transition flex items-center gap-1.5 cursor-pointer"
                   title="Click or press Backspace to unpick"
                 >
-                  <span lang="de">{sanitizedWordBank[tileIdx]}</span>
+                  <span lang={language.id}>{sanitizedWordBank[tileIdx]}</span>
                   <span className="text-[10px] opacity-60 font-normal">×</span>
                 </button>
               ))
@@ -836,7 +1011,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
                       {i + 1}
                     </span>
                   )}
-                  <span lang="de">{tile}</span>
+                  <span lang={language.id}>{tile}</span>
                 </button>
               );
             })}
@@ -894,6 +1069,15 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
           shiftRule={exercise.shift_hint}
           explanation={exercise.explanation}
           diagnosis={failedDiagnosis}
+          answerLabel={isReverseCognate ? "target english cognate:" : undefined}
+          audioText={isReverseCognate ? reverseCognateForeignWord ?? exercise.target_answer : undefined}
+          audioLocale={
+            isReverseCognate
+              ? reverseCognateForeignWord
+                ? language.ttsLocale
+                : "en-US"
+              : undefined
+          }
           onContinue={() => {
             setShowErrorSheet(false);
             setStatus("idle");
@@ -923,6 +1107,15 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
           variant={sheetVariant}
           userAttempt={verifiedAttemptText}
           warningNote={almostWarningNote}
+          answerLabel={isReverseCognate ? "english cognate:" : undefined}
+          audioText={isReverseCognate ? reverseCognateForeignWord ?? exercise.target_answer : undefined}
+          audioLocale={
+            isReverseCognate
+              ? reverseCognateForeignWord
+                ? language.ttsLocale
+                : "en-US"
+              : undefined
+          }
           affirmation={affirmationFor(exercise.affirmation, exercise.shift_hint)}
           onContinue={() => {
             setShowSuccessSheet(false);

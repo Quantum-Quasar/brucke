@@ -33,7 +33,10 @@ export const ES_LESSONS: Lesson[] = [
       "querer",
       "tú",
       "yo",
-      "el"
+      "el",
+      "la",
+      "lo",
+      "un_poco"
     ],
     "hook": {
       "title": "You Already Speak a Vast Latin Language",
@@ -108,11 +111,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero el pastel",
         "meaning": "I want the cake",
         "word_bank": [
-          "Quiero",
-          "el",
           "pastel",
+          "Quiero",
           "la",
           "café",
+          "el",
           "lo"
         ],
         "explanation": "Quiero (I want) + el pastel (the cake). Because -o on quiero already means 'I', yo is optional.",
@@ -142,12 +145,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Lo quiero",
         "meaning": "I want it",
         "word_bank": [
-          "Lo",
-          "quiero",
-          "la",
-          "el",
           "un",
-          "café"
+          "Lo",
+          "café",
+          "el",
+          "quiero",
+          "la"
         ],
         "explanation": "Lo quiero — the object pronoun sits directly before the conjugated verb: it I want.",
         "diagnosis": {
@@ -162,10 +165,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "Lo quiero",
         "natural": "I want it",
         "options": [
-          "I want it",
           "It I want",
-          "I want to it",
-          "The I want"
+          "The I want",
+          "I want it",
+          "I want to it"
         ],
         "target_answer": "It I want",
         "meaning": "I want it (literal Spanish blueprint: It I want)",
@@ -186,13 +189,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "One more, no safety net — 'I want it, a little'?",
       "target_answer": "Lo quiero, un poco",
       "word_bank": [
-        "Lo",
-        "quiero",
-        "un",
-        "poco",
         "la",
-        "el",
-        "café"
+        "Lo",
+        "un",
+        "quiero",
+        "poco",
+        "café",
+        "el"
       ],
       "explanation": "un poco sits at the end, just like English 'a little'."
     },
@@ -225,7 +228,10 @@ export const ES_LESSONS: Lesson[] = [
       "mesa",
       "restaurante",
       "azul",
-      "rojo"
+      "rojo",
+      "grande",
+      "pequeño",
+      "es"
     ],
     "hook": {
       "title": "Direct Cognates in Everyday Space",
@@ -297,9 +303,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Which phrase properly places the adjective after the noun for 'the big restaurant'?",
         "options": [
+          "la restaurante grande",
           "el restaurante grande",
-          "el grande restaurante",
-          "la restaurante grande"
+          "el grande restaurante"
         ],
         "target_answer": "el restaurante grande",
         "meaning": "the big restaurant",
@@ -312,14 +318,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "La casa es grande",
         "meaning": "The house is big",
         "word_bank": [
-          "La",
-          "casa",
           "es",
-          "grande",
-          "El",
           "hotel",
+          "La",
           "azul",
-          "pequeño"
+          "El",
+          "pequeño",
+          "grande",
+          "casa"
         ],
         "explanation": "La casa (the house) + es (is) + grande (big). grande stays identical for masculine and feminine nouns.",
         "id": "es101_e4"
@@ -354,13 +360,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The house is blue'",
       "target_answer": "La casa es azul",
       "word_bank": [
-        "La",
+        "rojo",
         "casa",
-        "es",
-        "azul",
-        "El",
         "hotel",
-        "rojo"
+        "azul",
+        "es",
+        "El",
+        "La"
       ],
       "explanation": "La casa es azul — es links the subject and color."
     }
@@ -390,7 +396,11 @@ export const ES_LESSONS: Lesson[] = [
       "mesa",
       "restaurante",
       "minuto",
-      "momento"
+      "momento",
+      "querer",
+      "tú",
+      "lo",
+      "un_poco"
     ],
     "hook": {
       "title": "Turning Words into Living Speech",
@@ -446,8 +456,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build the informal 'you want' form of querer by pairing stem and ending:",
         "tile_options": [
-          "quier",
           "es",
+          "quier",
           "o",
           "an"
         ],
@@ -463,12 +473,12 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "Do you want the coffee?",
         "word_bank": [
           "Quieres",
-          "el",
           "café",
           "Quiero",
-          "la",
+          "el",
           "pastel",
-          "mesa"
+          "mesa",
+          "la"
         ],
         "explanation": "¿Quieres el café? — no 'do' helper exists in Spanish; vocal melody asks the question.",
         "id": "es102_e3"
@@ -490,12 +500,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Lo quieres",
         "meaning": "Do you want it?",
         "word_bank": [
-          "Lo",
+          "café",
           "quieres",
-          "La",
-          "quiero",
           "el",
-          "café"
+          "Lo",
+          "quiero",
+          "La"
         ],
         "explanation": "¿Lo quieres? — the pronoun walks before the verb, and intonation turns it into a question.",
         "diagnosis": {
@@ -510,10 +520,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "¿Quieres el pastel?",
         "natural": "Do you want the cake?",
         "options": [
-          "Do you want the cake?",
-          "Want-you the cake?",
           "Do want the cake?",
-          "You wants the cake?"
+          "You wants the cake?",
+          "Want-you the cake?",
+          "Do you want the cake?"
         ],
         "target_answer": "Want-you the cake?",
         "meaning": "Do you want the cake? (literal Spanish blueprint: Want-you the cake?)",
@@ -534,14 +544,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I want the cake, a little'",
       "target_answer": "Quiero el pastel, un poco",
       "word_bank": [
-        "Quiero",
         "el",
-        "pastel",
-        "un",
         "poco",
+        "mesa",
+        "un",
         "la",
-        "Quieres",
-        "mesa"
+        "pastel",
+        "Quiero",
+        "Quieres"
       ],
       "explanation": "Quiero el pastel, un poco combines verb, object, and qualifier."
     }
@@ -572,7 +582,10 @@ export const ES_LESSONS: Lesson[] = [
       "terminar",
       "preferir",
       "continuar",
-      "importante"
+      "importante",
+      "diferente",
+      "posible",
+      "imposible"
     ],
     "hook": {
       "title": "Your Fancy English Is Everyday Spanish",
@@ -664,12 +677,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero terminar",
         "meaning": "I want to finish",
         "word_bank": [
+          "imposible",
           "Quiero",
-          "terminar",
-          "entrar",
-          "el",
           "la",
-          "imposible"
+          "el",
+          "terminar",
+          "entrar"
         ],
         "explanation": "Quiero + terminar — no 'to' needed between quiero and the infinitive.",
         "id": "es103_e4"
@@ -691,12 +704,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Es muy importante",
         "meaning": "It is very important",
         "word_bank": [
-          "Es",
-          "muy",
-          "importante",
           "Está",
           "imposible",
-          "diferente"
+          "Es",
+          "muy",
+          "diferente",
+          "importante"
         ],
         "explanation": "Es muy importante — Spanish drops subject 'it' because es already carries it.",
         "diagnosis": {
@@ -719,10 +732,10 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I want to continue'",
       "target_answer": "Quiero continuar",
       "word_bank": [
-        "Quiero",
-        "continuar",
-        "terminar",
         "el",
+        "Quiero",
+        "terminar",
+        "continuar",
         "la"
       ],
       "explanation": "Quiero continuar stacks want + infinitive directly."
@@ -754,7 +767,10 @@ export const ES_LESSONS: Lesson[] = [
       "confirmación",
       "organización",
       "opinión",
-      "reservación"
+      "reservación",
+      "la",
+      "querer",
+      "lo"
     ],
     "hook": {
       "title": "The Most Generous Bridge in Spanish",
@@ -811,9 +827,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Convert English 'confirmation' into Spanish by snapping stem and suffix together:",
         "tile_options": [
-          "confirm",
-          "ación",
           "ation",
+          "ación",
+          "confirm",
           "ición"
         ],
         "target_answer": "confirmación",
@@ -847,10 +863,10 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "I want it (feminine)",
         "word_bank": [
           "La",
-          "quiero",
           "Lo",
-          "el",
-          "confirmación"
+          "quiero",
+          "confirmación",
+          "el"
         ],
         "explanation": "La quiero — because la confirmación is feminine, 'it' is la, placed before quiero.",
         "diagnosis": {
@@ -865,10 +881,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "La quiero",
         "natural": "I want it (the confirmation)",
         "options": [
-          "I want it (the confirmation)",
-          "It (feminine) I want",
           "The I want",
-          "I want her to"
+          "I want it (the confirmation)",
+          "I want her to",
+          "It (feminine) I want"
         ],
         "target_answer": "It (feminine) I want",
         "meaning": "I want it (the confirmation) (literal Spanish blueprint: It (feminine) I want)",
@@ -889,12 +905,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Do you want the tradition?'",
       "target_answer": "Quieres la tradición",
       "word_bank": [
-        "Quieres",
-        "la",
+        "Quiero",
         "tradición",
-        "el",
         "lo",
-        "Quiero"
+        "el",
+        "la",
+        "Quieres"
       ],
       "explanation": "¿Quieres la tradición? asks the question with rising vocal melody."
     },
@@ -933,7 +949,10 @@ export const ES_LESSONS: Lesson[] = [
       "invitación",
       "situación",
       "atención",
-      "decisión"
+      "decisión",
+      "estación",
+      "la",
+      "no"
     ],
     "hook": {
       "title": "Zero Gender Anxiety",
@@ -998,9 +1017,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How does Spanish spell 'the passion' (remembering single s)?",
         "options": [
+          "el pasión",
           "la pasión",
-          "la passión",
-          "el pasión"
+          "la passión"
         ],
         "target_answer": "la pasión",
         "meaning": "the passion",
@@ -1013,13 +1032,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "No quiero la complicación",
         "meaning": "I don't want the complication",
         "word_bank": [
-          "No",
-          "quiero",
-          "la",
-          "complicación",
           "el",
-          "lo",
-          "pasión"
+          "complicación",
+          "No",
+          "la",
+          "pasión",
+          "quiero",
+          "lo"
         ],
         "explanation": "No + quiero + la complicación.",
         "id": "es201_e4"
@@ -1055,11 +1074,11 @@ export const ES_LESSONS: Lesson[] = [
       "target_answer": "Quiero la invitación",
       "word_bank": [
         "Quiero",
+        "No",
         "la",
         "invitación",
-        "el",
         "lo",
-        "No"
+        "el"
       ],
       "explanation": "Quiero la invitación pairs quiero with the feminine -ción noun."
     }
@@ -1089,7 +1108,9 @@ export const ES_LESSONS: Lesson[] = [
       "colección",
       "tradición",
       "hotel",
-      "casa"
+      "casa",
+      "restaurante",
+      "mesa"
     ],
     "hook": {
       "title": "Mental Muscle Memory",
@@ -1144,9 +1165,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Choose the correct gender pair for 'the tradition' and 'the hotel':",
         "options": [
-          "la tradición, el hotel",
+          "la tradición, la hotel",
           "el tradición, la hotel",
-          "la tradición, la hotel"
+          "la tradición, el hotel"
         ],
         "target_answer": "la tradición, el hotel",
         "meaning": "the tradition, the hotel",
@@ -1159,14 +1180,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero el café y la colección",
         "meaning": "I want the coffee and the collection",
         "word_bank": [
-          "Quiero",
-          "el",
-          "café",
           "y",
-          "la",
+          "el",
+          "hotel",
           "colección",
+          "café",
+          "la",
           "lo",
-          "hotel"
+          "Quiero"
         ],
         "explanation": "Quiero el café y la colección switches cleanly from masculine el to feminine la.",
         "id": "es202_e3"
@@ -1188,15 +1209,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero la casa y el hotel",
         "meaning": "I want the house and the hotel",
         "word_bank": [
-          "Quiero",
-          "la",
-          "casa",
-          "y",
-          "el",
           "hotel",
-          "lo",
+          "casa",
+          "pastel",
           "colección",
-          "pastel"
+          "y",
+          "la",
+          "lo",
+          "Quiero",
+          "el"
         ],
         "explanation": "Quiero la casa y el hotel — toggling feminine la and masculine el in one breath.",
         "id": "es202_e4"
@@ -1231,12 +1252,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Do you want the hotel?'",
       "target_answer": "Quieres el hotel",
       "word_bank": [
-        "Quieres",
-        "el",
-        "hotel",
-        "la",
         "casa",
-        "Quiero"
+        "Quiero",
+        "el",
+        "Quieres",
+        "hotel",
+        "la"
       ],
       "explanation": "¿Quieres el hotel? asks the question with rising intonation."
     }
@@ -1266,7 +1287,9 @@ export const ES_LESSONS: Lesson[] = [
       "celebrar",
       "participar",
       "visitar",
-      "invitar"
+      "invitar",
+      "querer",
+      "lo"
     ],
     "hook": {
       "title": "Converting Nouns into Pure Action",
@@ -1324,9 +1347,9 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Convert 'confirmación' into its infinitive verb by swapping -ación for -ar:",
         "tile_options": [
           "confirm",
-          "ar",
           "ación",
-          "atar"
+          "atar",
+          "ar"
         ],
         "target_answer": "confirmar",
         "meaning": "confirmar (to confirm)",
@@ -1357,12 +1380,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero invitarlo",
         "meaning": "I want to invite him / it",
         "word_bank": [
-          "Quiero",
           "invitarlo",
-          "invitar",
-          "el",
           "la",
-          "celebrar"
+          "celebrar",
+          "Quiero",
+          "invitar",
+          "el"
         ],
         "explanation": "Quiero invitarlo — with an infinitive, the object pronoun hooks cleanly onto the tail.",
         "diagnosis": {
@@ -1377,10 +1400,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "Quiero invitarlo",
         "natural": "I want to invite him",
         "options": [
-          "I want to invite him",
-          "I-want to-invite-him",
           "I want him to invite",
-          "Him I want invite"
+          "Him I want invite",
+          "I-want to-invite-him",
+          "I want to invite him"
         ],
         "target_answer": "I-want to-invite-him",
         "meaning": "I want to invite him (literal Spanish blueprint: I-want to-invite-him)",
@@ -1401,13 +1424,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Do you want to participate, a little?'",
       "target_answer": "Quieres participar, un poco",
       "word_bank": [
-        "Quieres",
-        "participar",
         "un",
-        "poco",
         "celebrar",
+        "participar",
+        "Quieres",
+        "Quiero",
         "la",
-        "Quiero"
+        "poco"
       ],
       "explanation": "¿Quieres participar, un poco? stacks question verb, infinitive, and qualifier."
     },
@@ -1444,7 +1467,8 @@ export const ES_LESSONS: Lesson[] = [
       "organizar",
       "reservar",
       "imaginar",
-      "explicar"
+      "explicar",
+      "querer"
     ],
     "hook": {
       "title": "The English '-ate' Ghost Syllable Trap",
@@ -1500,9 +1524,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Which form is the real Spanish infinitive for 'to celebrate'?",
         "options": [
+          "celebrate",
           "celebrar",
-          "celebratar",
-          "celebrate"
+          "celebratar"
         ],
         "target_answer": "celebrar",
         "meaning": "to celebrate",
@@ -1524,11 +1548,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero explicar",
         "meaning": "I want to explain",
         "word_bank": [
-          "Quiero",
-          "explicar",
-          "celebrar",
           "reservar",
-          "la"
+          "la",
+          "celebrar",
+          "Quiero",
+          "explicar"
         ],
         "explanation": "Quiero + explicar (from explicación).",
         "id": "es301_e4"
@@ -1562,13 +1586,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Do you want to reserve, a little?'",
       "target_answer": "Quieres reservar, un poco",
       "word_bank": [
-        "Quieres",
-        "reservar",
-        "un",
-        "poco",
         "celebrar",
+        "poco",
+        "el",
         "Quiero",
-        "el"
+        "un",
+        "reservar",
+        "Quieres"
       ],
       "explanation": "¿Quieres reservar, un poco? combines question verb, infinitive, and tag."
     }
@@ -1597,7 +1621,8 @@ export const ES_LESSONS: Lesson[] = [
       "visitar",
       "participar",
       "terminar",
-      "café"
+      "café",
+      "querer"
     ],
     "hook": {
       "title": "Flowing Two-Verb Chains",
@@ -1663,13 +1688,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero preparar el café",
         "meaning": "I want to prepare the coffee",
         "word_bank": [
-          "Quiero",
-          "preparar",
-          "el",
           "café",
-          "la",
+          "preparar",
+          "considerar",
           "visitar",
-          "considerar"
+          "Quiero",
+          "el",
+          "la"
         ],
         "explanation": "Quiero + preparar + el café — direct verb-to-verb stacking.",
         "id": "es302_e3"
@@ -1689,11 +1714,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero considerar",
         "meaning": "I want to consider",
         "word_bank": [
-          "Quiero",
-          "considerar",
           "preparar",
-          "el",
-          "café"
+          "considerar",
+          "café",
+          "Quiero",
+          "el"
         ],
         "explanation": "Quiero considerar — two Spanish words for four English words.",
         "id": "es302_e4"
@@ -1728,13 +1753,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Do you want to prepare the coffee?'",
       "target_answer": "Quieres preparar el café",
       "word_bank": [
-        "Quieres",
-        "preparar",
-        "el",
-        "café",
-        "la",
         "lo",
-        "Quiero"
+        "Quiero",
+        "Quieres",
+        "la",
+        "café",
+        "preparar",
+        "el"
       ],
       "explanation": "¿Quieres preparar el café? asks the question by intonation."
     }
@@ -1762,7 +1787,9 @@ export const ES_LESSONS: Lesson[] = [
       "comprender",
       "vender",
       "vivir",
-      "decidir"
+      "decidir",
+      "abrir",
+      "querer"
     ],
     "hook": {
       "title": "Beyond -ar: The -er and -ir Families",
@@ -1834,10 +1861,10 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Convert the noun 'decisión' into its -ir verb ('to decide'):",
         "tile_options": [
-          "decid",
-          "ir",
+          "sión",
           "ar",
-          "sión"
+          "ir",
+          "decid"
         ],
         "target_answer": "decidir",
         "meaning": "decidir (to decide)",
@@ -1850,13 +1877,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero comer y beber",
         "meaning": "I want to eat and drink",
         "word_bank": [
-          "Quiero",
-          "comer",
-          "y",
+          "la",
           "beber",
-          "vivir",
           "el",
-          "la"
+          "Quiero",
+          "vivir",
+          "y",
+          "comer"
         ],
         "explanation": "Quiero comer y beber — -er infinitives stack after quiero just like -ar verbs.",
         "id": "es303_e4"
@@ -1875,11 +1902,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Comprendo",
         "meaning": "I understand",
         "word_bank": [
-          "Comprendo",
-          "Comprender",
-          "Quiero",
           "Vivo",
-          "el"
+          "Quiero",
+          "el",
+          "Comprender",
+          "Comprendo"
         ],
         "explanation": "Comprendo — one word for 'I understand'!",
         "diagnosis": {
@@ -1902,11 +1929,11 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I want to decide'",
       "target_answer": "Quiero decidir",
       "word_bank": [
-        "Quiero",
         "decidir",
-        "comprender",
+        "la",
+        "Quiero",
         "el",
-        "la"
+        "comprender"
       ],
       "explanation": "Quiero decidir stacks want + -ir infinitive."
     }
@@ -1934,7 +1961,9 @@ export const ES_LESSONS: Lesson[] = [
       "nunca",
       "nadie",
       "querer",
-      "lo"
+      "lo",
+      "pastel",
+      "comprender"
     ],
     "hook": {
       "title": "The Simplicity of Spanish Negation",
@@ -1991,9 +2020,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Where does 'no' go when an object pronoun like 'lo' is present?",
         "options": [
-          "Before the pronoun: No lo quiero",
+          "After the verb: *Lo quiero no",
           "Between pronoun and verb: *Lo no quiero",
-          "After the verb: *Lo quiero no"
+          "Before the pronoun: No lo quiero"
         ],
         "target_answer": "Before the pronoun: No lo quiero",
         "meaning": "I don't want it",
@@ -2006,13 +2035,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "No quiero el pastel",
         "meaning": "I don't want the cake",
         "word_bank": [
+          "lo",
           "No",
-          "quiero",
-          "el",
-          "pastel",
           "la",
-          "nada",
-          "lo"
+          "quiero",
+          "pastel",
+          "el",
+          "nada"
         ],
         "explanation": "No + quiero + el pastel.",
         "id": "es4_e3"
@@ -2034,9 +2063,9 @@ export const ES_LESSONS: Lesson[] = [
         "word_bank": [
           "No",
           "quiero",
+          "nunca",
           "nada",
           "lo",
-          "nunca",
           "pastel"
         ],
         "explanation": "No quiero nada — double negation is standard and mandatory in Spanish when nada follows the verb.",
@@ -2052,10 +2081,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "No lo quiero",
         "natural": "I don't want it",
         "options": [
-          "I don't want it",
+          "It not I want",
           "Not it I-want",
-          "I not want it",
-          "It not I want"
+          "I don't want it",
+          "I not want it"
         ],
         "target_answer": "Not it I-want",
         "meaning": "I don't want it (literal Spanish blueprint: Not it I-want)",
@@ -2076,11 +2105,11 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I don't understand'",
       "target_answer": "No comprendo",
       "word_bank": [
-        "No",
-        "comprendo",
         "quiero",
-        "lo",
-        "nada"
+        "No",
+        "nada",
+        "comprendo",
+        "lo"
       ],
       "explanation": "No comprendo negates comprendo with one clean word."
     },
@@ -2119,7 +2148,10 @@ export const ES_LESSONS: Lesson[] = [
       "nunca",
       "nadie",
       "celebrar",
-      "participar"
+      "participar",
+      "invitar",
+      "comer",
+      "querer"
     ],
     "hook": {
       "title": "Double Negation Is Good Grammar in Spanish",
@@ -2174,8 +2206,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I don't eat anything' in natural Spanish?",
         "options": [
-          "No como nada",
           "Como nada",
+          "No como nada",
           "No como algo"
         ],
         "target_answer": "No como nada",
@@ -2189,12 +2221,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "No quiero participar",
         "meaning": "I don't want to participate",
         "word_bank": [
-          "No",
-          "quiero",
           "participar",
+          "No",
           "celebrar",
-          "nada",
-          "lo"
+          "lo",
+          "quiero",
+          "nada"
         ],
         "explanation": "No + quiero + participar.",
         "id": "es401_e3"
@@ -2214,12 +2246,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "No quiero celebrar",
         "meaning": "I don't want to celebrate",
         "word_bank": [
+          "participar",
           "No",
           "quiero",
           "celebrar",
-          "participar",
-          "nada",
-          "el"
+          "el",
+          "nada"
         ],
         "explanation": "No quiero celebrar — clean refusal of a stacked infinitive.",
         "id": "es401_e4"
@@ -2254,12 +2286,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'You don't want to participate'",
       "target_answer": "No quieres participar",
       "word_bank": [
-        "No",
+        "celebrar",
         "quieres",
         "participar",
         "quiero",
-        "nada",
-        "celebrar"
+        "No",
+        "nada"
       ],
       "explanation": "No quieres participar switches the verb to informal tú."
     }
@@ -2290,7 +2322,10 @@ export const ES_LESSONS: Lesson[] = [
       "la",
       "confirmar",
       "organizar",
-      "comprender"
+      "comprender",
+      "ver",
+      "comprar",
+      "querer"
     ],
     "hook": {
       "title": "The Shield in Front of the Pronoun",
@@ -2340,10 +2375,10 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Hook 'lo' ('it') onto the tail of 'comprar' ('to buy') to form 'to buy it':",
         "tile_options": [
-          "comprar",
+          "no",
           "lo",
           "el",
-          "no"
+          "comprar"
         ],
         "target_answer": "comprarlo",
         "meaning": "comprarlo (to buy it)",
@@ -2356,12 +2391,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "No la quiero",
         "meaning": "I don't want it (feminine)",
         "word_bank": [
-          "No",
+          "el",
           "la",
           "quiero",
-          "lo",
+          "No",
           "confirmar",
-          "el"
+          "lo"
         ],
         "explanation": "No + la + quiero.",
         "id": "es402_e3"
@@ -2382,12 +2417,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "No lo quiero",
         "meaning": "I don't want it",
         "word_bank": [
+          "el",
           "No",
-          "lo",
-          "quiero",
           "la",
+          "lo",
           "comprender",
-          "el"
+          "quiero"
         ],
         "explanation": "No lo quiero — no shields the front of the lo quiero block.",
         "id": "es402_e4"
@@ -2398,10 +2433,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "No la quiero",
         "natural": "I don't want it (feminine)",
         "options": [
+          "I don't want her to",
           "I don't want it (feminine)",
-          "Not it (feminine) I-want",
           "It not I want",
-          "I don't want her to"
+          "Not it (feminine) I-want"
         ],
         "target_answer": "Not it (feminine) I-want",
         "meaning": "I don't want it (feminine) (literal Spanish blueprint: Not it (feminine) I-want)",
@@ -2422,12 +2457,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I don't want to confirm it'",
       "target_answer": "No quiero confirmarlo",
       "word_bank": [
-        "No",
-        "quiero",
-        "confirmarlo",
+        "comprar",
         "la",
+        "confirmarlo",
+        "quiero",
         "lo",
-        "comprar"
+        "No"
       ],
       "explanation": "With the infinitive, lo hooks onto the tail: No quiero confirmarlo."
     }
@@ -2459,7 +2494,13 @@ export const ES_LESSONS: Lesson[] = [
       "soy",
       "eres",
       "es",
-      "estoy"
+      "estoy",
+      "estás",
+      "está",
+      "muy",
+      "bueno",
+      "contento",
+      "caliente"
     ],
     "hook": {
       "title": "Two Ways of Looking at Existence",
@@ -2514,7 +2555,7 @@ export const ES_LESSONS: Lesson[] = [
       },
       {
         "type": "reverse_cognate",
-        "prompt": "Spanish estar ('to be in a state or location') comes from Latin stāre ('to stand'). Which common English noun meaning 'condition' comes from the exact same Latin root?",
+        "prompt": "Spanish 'estar' ('to be in a condition or location') comes from Latin 'stāre' ('to stand'). Which common five-letter English noun meaning 'condition' comes from the exact same Latin root?",
         "target_answer": "state",
         "meaning": "estar literally tells you what 'state' or 'station' something is in!",
         "explanation": "Latin stāre ('to stand') gave English state, status, station, and Spanish estar.",
@@ -2525,8 +2566,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "The coffee is hot right now (a thermal state). How do you say 'The coffee is hot'?",
         "options": [
           "El café está caliente",
-          "El café es caliente",
-          "El café está bueno"
+          "El café está bueno",
+          "El café es caliente"
         ],
         "target_answer": "El café está caliente",
         "meaning": "The coffee is hot",
@@ -2550,13 +2591,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Estoy muy contento",
         "meaning": "I am very happy",
         "word_bank": [
+          "contento",
+          "es",
+          "Soy",
           "Estoy",
           "muy",
-          "contento",
-          "Soy",
-          "es",
-          "bueno",
-          "caliente"
+          "caliente",
+          "bueno"
         ],
         "explanation": "Estoy muy contento — emotions and moods are states, so they take estar.",
         "diagnosis": {
@@ -2571,9 +2612,9 @@ export const ES_LESSONS: Lesson[] = [
         "german": "El café está caliente",
         "natural": "The coffee is hot",
         "options": [
-          "The coffee is hot",
-          "The coffee stands hot",
           "The coffee is essence hot",
+          "The coffee stands hot",
+          "The coffee is hot",
           "Hot is the coffee"
         ],
         "target_answer": "The coffee stands hot",
@@ -2595,12 +2636,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'It is not good (characteristic)'",
       "target_answer": "No es bueno",
       "word_bank": [
-        "No",
         "es",
+        "caliente",
         "bueno",
-        "está",
         "muy",
-        "caliente"
+        "está",
+        "No"
       ],
       "explanation": "No es bueno negates characteristic es."
     },
@@ -2635,7 +2676,12 @@ export const ES_LESSONS: Lesson[] = [
       "eres",
       "estás",
       "soy",
-      "estoy"
+      "estoy",
+      "aquí",
+      "allí",
+      "bueno",
+      "contento",
+      "frío"
     ],
     "hook": {
       "title": "Side-by-Side Discrimination",
@@ -2690,9 +2736,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you ask a friend 'How are you?' (asking about their current state)?",
         "options": [
-          "¿Cómo estás?",
           "¿Cómo eres?",
-          "¿Dónde eres?"
+          "¿Dónde eres?",
+          "¿Cómo estás?"
         ],
         "target_answer": "¿Cómo estás?",
         "meaning": "How are you?",
@@ -2705,11 +2751,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Estoy aquí",
         "meaning": "I am here",
         "word_bank": [
-          "Estoy",
           "aquí",
-          "Soy",
+          "allí",
+          "Estoy",
           "es",
-          "allí"
+          "Soy"
         ],
         "explanation": "Estoy + aquí — location always uses estar.",
         "id": "es501_e3"
@@ -2731,12 +2777,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "El hotel está allí",
         "meaning": "The hotel is there",
         "word_bank": [
-          "El",
           "hotel",
           "está",
+          "aquí",
           "allí",
           "es",
-          "aquí",
+          "El",
           "grande"
         ],
         "explanation": "El hotel está allí — even a massive building uses está for its location!",
@@ -2776,9 +2822,9 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'You are very good (character)'",
       "target_answer": "Eres muy bueno",
       "word_bank": [
-        "Eres",
         "muy",
         "bueno",
+        "Eres",
         "Estás",
         "aquí",
         "contento"
@@ -2809,7 +2855,9 @@ export const ES_LESSONS: Lesson[] = [
       "contento",
       "contenta",
       "grande",
-      "pequeño"
+      "pequeño",
+      "caliente",
+      "frío"
     ],
     "hook": {
       "title": "Harmony Between Noun and Adjective",
@@ -2865,8 +2913,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Complete with the matching adjective form: 'La confirmación es ___.'",
         "options": [
           "buena",
-          "bueno",
-          "buenos"
+          "buenos",
+          "bueno"
         ],
         "target_answer": "buena",
         "meaning": "The confirmation is good",
@@ -2879,13 +2927,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "La tradición es buena",
         "meaning": "The tradition is good",
         "word_bank": [
-          "La",
-          "tradición",
-          "es",
-          "buena",
           "bueno",
+          "está",
+          "tradición",
+          "La",
           "El",
-          "está"
+          "buena",
+          "es"
         ],
         "explanation": "La tradición es buena — full feminine concord.",
         "id": "es502_e3"
@@ -2907,12 +2955,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Está muy contenta",
         "meaning": "She is very happy",
         "word_bank": [
-          "Está",
-          "muy",
-          "contenta",
           "contento",
+          "contenta",
+          "buena",
+          "Está",
           "Es",
-          "buena"
+          "muy"
         ],
         "explanation": "Está muy contenta — estar for emotional state + -a for a female subject.",
         "id": "es502_e4"
@@ -2947,12 +2995,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The soup is hot'",
       "target_answer": "La sopa está caliente",
       "word_bank": [
-        "La",
-        "sopa",
-        "está",
-        "caliente",
-        "es",
         "bueno",
+        "La",
+        "caliente",
+        "está",
+        "es",
+        "sopa",
         "El"
       ],
       "explanation": "La sopa está caliente — state takes está, and caliente ends in -e."
@@ -2983,7 +3031,11 @@ export const ES_LESSONS: Lesson[] = [
       "rico",
       "seguro",
       "bueno",
-      "ser"
+      "ser",
+      "estar",
+      "es",
+      "está",
+      "estoy"
     ],
     "hook": {
       "title": "When the Verb Flips the Adjective's Meaning",
@@ -3047,8 +3099,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "You are at the door with your coat on. How do you say 'I am ready' (male speaker)?",
         "options": [
-          "Estoy listo",
           "Soy listo",
+          "Estoy listo",
           "Estoy rico"
         ],
         "target_answer": "Estoy listo",
@@ -3060,9 +3112,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "You take a bite of cake and want to say 'The cake is delicious!'. Which verb makes rico mean 'delicious'?",
         "options": [
-          "El pastel está muy rico",
+          "El pastel soy rico",
           "El pastel es muy rico",
-          "El pastel soy rico"
+          "El pastel está muy rico"
         ],
         "target_answer": "El pastel está muy rico",
         "meaning": "The cake is delicious",
@@ -3075,11 +3127,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Estoy seguro",
         "meaning": "I am sure / certain",
         "word_bank": [
-          "Estoy",
-          "seguro",
           "Soy",
+          "aburrido",
+          "seguro",
           "listo",
-          "aburrido"
+          "Estoy"
         ],
         "explanation": "Estoy seguro = 'I am sure/certain' (state of mind); Es seguro = 'It is safe'.",
         "id": "es503_e4"
@@ -3099,12 +3151,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Estoy lista",
         "meaning": "I am ready (female speaker)",
         "word_bank": [
-          "Estoy",
-          "lista",
-          "Soy",
           "listo",
+          "segura",
+          "Soy",
+          "Estoy",
           "rica",
-          "segura"
+          "lista"
         ],
         "explanation": "Estoy lista — estar makes lista mean 'ready' rather than 'clever'.",
         "diagnosis": {
@@ -3127,11 +3179,11 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'He is bored'",
       "target_answer": "Está aburrido",
       "word_bank": [
-        "Está",
-        "aburrido",
         "Es",
-        "listo",
-        "rico"
+        "Está",
+        "rico",
+        "aburrido",
+        "listo"
       ],
       "explanation": "Está aburrido = 'He is bored' (current feeling); Es aburrido = 'He is boring'."
     }
@@ -3163,7 +3215,10 @@ export const ES_LESSONS: Lesson[] = [
       "ciudad",
       "realidad",
       "verdad",
-      "libertad"
+      "libertad",
+      "exactamente",
+      "naturalmente",
+      "perfectamente"
     ],
     "hook": {
       "title": "Two More Floors of the Conversion Warehouse",
@@ -3221,8 +3276,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Build 'perfectly' in Spanish by combining the feminine adjective stem and -mente:",
         "tile_options": [
           "perfecta",
-          "mente",
           "perfecto",
+          "mente",
           "dad"
         ],
         "target_answer": "perfectamente",
@@ -3255,10 +3310,10 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "I understand perfectly",
         "word_bank": [
           "Comprendo",
-          "perfectamente",
+          "verdad",
           "exactamente",
-          "naturalmente",
-          "verdad"
+          "perfectamente",
+          "naturalmente"
         ],
         "explanation": "Comprendo perfectamente — two Latinate cognates working together.",
         "diagnosis": {
@@ -3297,12 +3352,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The city is big'",
       "target_answer": "La ciudad es grande",
       "word_bank": [
-        "La",
-        "ciudad",
         "es",
-        "grande",
-        "El",
         "está",
+        "ciudad",
+        "El",
+        "grande",
+        "La",
         "universidad"
       ],
       "explanation": "La ciudad es grande — ciudad is feminine (-dad)."
@@ -3341,7 +3396,9 @@ export const ES_LESSONS: Lesson[] = [
       "ciudad",
       "realidad",
       "verdad",
-      "libertad"
+      "libertad",
+      "hermoso",
+      "importante"
     ],
     "hook": {
       "title": "Another Airtight Gender Rule",
@@ -3416,12 +3473,12 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "The city is beautiful",
         "word_bank": [
           "La",
+          "está",
           "ciudad",
-          "es",
-          "hermosa",
-          "El",
           "hermoso",
-          "está"
+          "El",
+          "es",
+          "hermosa"
         ],
         "explanation": "La ciudad es hermosa — hermosa agrees in the feminine with la ciudad.",
         "id": "es601_e4"
@@ -3444,13 +3501,13 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "Freedom is very important",
         "word_bank": [
           "La",
-          "libertad",
-          "es",
-          "muy",
-          "importante",
           "El",
+          "es",
           "está",
-          "verdad"
+          "importante",
+          "muy",
+          "verdad",
+          "libertad"
         ],
         "explanation": "La libertad es muy importante — Spanish uses the definite article la before abstract nouns like libertad!",
         "diagnosis": {
@@ -3474,11 +3531,11 @@ export const ES_LESSONS: Lesson[] = [
       "target_answer": "Es una posibilidad",
       "word_bank": [
         "Es",
+        "realidad",
         "una",
         "posibilidad",
-        "un",
         "Está",
-        "realidad"
+        "un"
       ],
       "explanation": "Es una posibilidad uses feminine una."
     }
@@ -3507,7 +3564,8 @@ export const ES_LESSONS: Lesson[] = [
       "perfectamente",
       "totalmente",
       "rápidamente",
-      "fácilmente"
+      "fácilmente",
+      "actualmente"
     ],
     "hook": {
       "title": "Two-in-One Words: Why Tildes Survive on -mente",
@@ -3562,8 +3620,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build 'totally' in Spanish from the invariable adjective 'total':",
         "tile_options": [
-          "total",
           "mente",
+          "total",
           "a",
           "dad"
         ],
@@ -3591,13 +3649,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Actualmente vivo en Madrid",
         "meaning": "Currently I live in Madrid",
         "word_bank": [
-          "Actualmente",
-          "vivo",
           "en",
           "Madrid",
           "Exactamente",
-          "vivir",
-          "el"
+          "el",
+          "vivo",
+          "Actualmente",
+          "vivir"
         ],
         "explanation": "Actualmente ('Currently') + vivo ('I live') + en Madrid.",
         "id": "es602_e4"
@@ -3632,12 +3690,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I understand it perfectly'",
       "target_answer": "Lo comprendo perfectamente",
       "word_bank": [
+        "perfectamente",
+        "quiero",
+        "totalmente",
         "Lo",
         "comprendo",
-        "perfectamente",
-        "La",
-        "totalmente",
-        "quiero"
+        "La"
       ],
       "explanation": "Lo comprendo perfectamente places lo before comprendo."
     }
@@ -3667,7 +3725,11 @@ export const ES_LESSONS: Lesson[] = [
       "quién",
       "cuándo",
       "cuánto",
-      "cómo"
+      "cómo",
+      "por_qué",
+      "porque",
+      "aquí",
+      "estar"
     ],
     "hook": {
       "title": "Why Spanish Puts ¿ at the Front Door",
@@ -3724,8 +3786,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Choose the pair that properly separates 'Why?' from 'Because':",
         "options": [
-          "¿Por qué? — Porque...",
           "¿Porque? — Por qué...",
+          "¿Por qué? — Porque...",
           "¿Por que? — Porqué..."
         ],
         "target_answer": "¿Por qué? — Porque...",
@@ -3739,12 +3801,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Dónde está el hotel",
         "meaning": "Where is the hotel?",
         "word_bank": [
+          "la",
+          "hotel",
           "Dónde",
           "está",
           "el",
-          "hotel",
           "es",
-          "la",
           "aquí"
         ],
         "explanation": "¿Dónde está el hotel? — location always takes está.",
@@ -3765,11 +3827,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Qué quieres",
         "meaning": "What do you want?",
         "word_bank": [
-          "Qué",
-          "quieres",
-          "Dónde",
           "quiero",
+          "Qué",
+          "Dónde",
           "porque",
+          "quieres",
           "el"
         ],
         "explanation": "¿Qué quieres? — two words where English needs four ('What do you want?').",
@@ -3781,10 +3843,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "¿Por qué no quieres?",
         "natural": "Why don't you want to?",
         "options": [
-          "Why don't you want to?",
           "For what not want-you?",
-          "Because not you want?",
-          "What for do you want?"
+          "What for do you want?",
+          "Why don't you want to?",
+          "Because not you want?"
         ],
         "target_answer": "For what not want-you?",
         "meaning": "Why don't you want to? (literal Spanish blueprint: For what not want-you?)",
@@ -3805,12 +3867,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Because it is very important'",
       "target_answer": "Porque es muy importante",
       "word_bank": [
-        "Porque",
         "es",
-        "muy",
-        "importante",
-        "Por",
+        "Porque",
         "qué",
+        "Por",
+        "importante",
+        "muy",
         "está"
       ],
       "explanation": "Porque (one word, no accent) means 'because'."
@@ -3848,7 +3910,10 @@ export const ES_LESSONS: Lesson[] = [
       "quién",
       "cuándo",
       "cuánto",
-      "cuál"
+      "cuál",
+      "cómo",
+      "estar",
+      "ser"
     ],
     "hook": {
       "title": "The Full Interrogative Crew",
@@ -3904,8 +3969,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "How do you ask 'What is the problem?' in natural Spanish?",
         "options": [
           "¿Cuál es el problema?",
-          "¿Qué está el problema?",
-          "¿Quién es el problema?"
+          "¿Quién es el problema?",
+          "¿Qué está el problema?"
         ],
         "target_answer": "¿Cuál es el problema?",
         "meaning": "What is the problem?",
@@ -3918,11 +3983,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quién es",
         "meaning": "Who is he / she?",
         "word_bank": [
-          "Quién",
-          "es",
-          "Dónde",
           "está",
-          "Qué"
+          "Qué",
+          "Quién",
+          "Dónde",
+          "es"
         ],
         "explanation": "¿Quién es? asks for identity, so it pairs with es (ser).",
         "id": "es701_e3"
@@ -3944,14 +4009,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Dónde está el restaurante",
         "meaning": "Where is the restaurant?",
         "word_bank": [
-          "Dónde",
           "está",
-          "el",
           "restaurante",
-          "Qué",
+          "casa",
+          "el",
+          "Dónde",
           "es",
           "la",
-          "casa"
+          "Qué"
         ],
         "explanation": "¿Dónde está el restaurante? — dónde + está + subject.",
         "id": "es701_e4"
@@ -3986,12 +4051,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Where is the house?'",
       "target_answer": "Dónde está la casa",
       "word_bank": [
-        "Dónde",
         "está",
-        "la",
         "casa",
         "es",
         "Qué",
+        "la",
+        "Dónde",
         "el"
       ],
       "explanation": "¿Dónde está la casa? uses está for location."
@@ -4019,7 +4084,8 @@ export const ES_LESSONS: Lesson[] = [
       "querer",
       "comprender",
       "no",
-      "importante"
+      "importante",
+      "posible"
     ],
     "hook": {
       "title": "A Space and an Accent Mark",
@@ -4069,9 +4135,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Fill in the question and answer: '¿___ no vas? — ___ no puedo.'",
         "options": [
+          "Por que / Porqué",
           "Por qué / Porque",
-          "Porque / Por qué",
-          "Por que / Porqué"
+          "Porque / Por qué"
         ],
         "target_answer": "Por qué / Porque",
         "meaning": "Why aren't you going? — Because I can't.",
@@ -4084,15 +4150,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Por qué no quieres el café",
         "meaning": "Why don't you want the coffee?",
         "word_bank": [
-          "Por",
+          "Porque",
           "qué",
-          "no",
-          "quieres",
           "el",
           "café",
-          "Porque",
-          "quiero",
-          "la"
+          "Por",
+          "no",
+          "quieres",
+          "la",
+          "quiero"
         ],
         "explanation": "¿Por qué + no + quieres + el café?",
         "id": "es702_e3"
@@ -4115,10 +4181,10 @@ export const ES_LESSONS: Lesson[] = [
         "word_bank": [
           "Porque",
           "quiero",
+          "confirmación",
           "confirmar",
-          "Por",
           "qué",
-          "confirmación"
+          "Por"
         ],
         "explanation": "Porque quiero confirmar — one word for 'because' + stacked verb.",
         "id": "es702_e4"
@@ -4153,13 +4219,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Why is it important?'",
       "target_answer": "Por qué es importante",
       "word_bank": [
-        "Por",
+        "Porque",
         "qué",
+        "está",
         "es",
         "importante",
-        "Porque",
-        "está",
-        "no"
+        "no",
+        "Por"
       ],
       "explanation": "¿Por qué es importante? asks why with two words."
     }
@@ -4192,7 +4258,11 @@ export const ES_LESSONS: Lesson[] = [
       "básico",
       "económico",
       "clásico",
-      "fantástico"
+      "fantástico",
+      "natural",
+      "central",
+      "formal",
+      "personal"
     ],
     "hook": {
       "title": "Two Instant Adjective Bridges",
@@ -4249,10 +4319,10 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Convert 'fantastic' into Spanish by snapping the accented stem and -ico together:",
         "tile_options": [
-          "fantást",
-          "ico",
           "ic",
-          "al"
+          "fantást",
+          "al",
+          "ico"
         ],
         "target_answer": "fantástico",
         "meaning": "fantástico (fantastic)",
@@ -4274,15 +4344,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "El hotel es central y fantástico",
         "meaning": "The hotel is central and fantastic",
         "word_bank": [
-          "El",
-          "hotel",
           "es",
-          "central",
-          "y",
+          "fantástica",
           "fantástico",
+          "y",
+          "El",
           "La",
+          "hotel",
           "está",
-          "fantástica"
+          "central"
         ],
         "explanation": "El hotel es central (invariable -al) y fantástico (masculine -ico).",
         "id": "es8_e4"
@@ -4304,13 +4374,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Es una opinión personal",
         "meaning": "It is a personal opinion",
         "word_bank": [
+          "personal",
+          "mágico",
+          "público",
+          "opinión",
           "Es",
           "una",
-          "opinión",
-          "personal",
-          "un",
-          "público",
-          "mágico"
+          "un"
         ],
         "explanation": "Es una opinión personal — personal follows opinión and needs no -a ending because it ends in -l!",
         "diagnosis": {
@@ -4333,13 +4403,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The music is fantastic'",
       "target_answer": "La música es fantástica",
       "word_bank": [
-        "La",
         "música",
-        "es",
         "fantástica",
+        "La",
         "fantástico",
-        "El",
-        "está"
+        "es",
+        "está",
+        "El"
       ],
       "explanation": "La música (feminine) triggers fantástica (-ica)."
     },
@@ -4377,7 +4447,9 @@ export const ES_LESSONS: Lesson[] = [
       "básico",
       "económico",
       "clásico",
-      "fantástico"
+      "fantástico",
+      "música",
+      "libro"
     ],
     "hook": {
       "title": "Why Spanish Accent Marks Are Your Best Friend",
@@ -4441,9 +4513,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Complete with feminine agreement: 'La música es ___.'",
         "options": [
-          "fantástica",
+          "fantastica",
           "fantástico",
-          "fantastica"
+          "fantástica"
         ],
         "target_answer": "fantástica",
         "meaning": "The music is fantastic",
@@ -4457,11 +4529,11 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "It is a classic book",
         "word_bank": [
           "Es",
+          "clásico",
           "un",
           "libro",
-          "clásico",
-          "una",
           "clásica",
+          "una",
           "la"
         ],
         "explanation": "Es un libro clásico — noun first, adjective second.",
@@ -4497,13 +4569,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The tradition is magical'",
       "target_answer": "La tradición es mágica",
       "word_bank": [
-        "La",
         "tradición",
-        "es",
+        "El",
+        "está",
+        "La",
         "mágica",
         "mágico",
-        "El",
-        "está"
+        "es"
       ],
       "explanation": "La tradición (feminine) pairs with mágica."
     }
@@ -4533,7 +4605,9 @@ export const ES_LESSONS: Lesson[] = [
       "formal",
       "personal",
       "internacional",
-      "cultural"
+      "cultural",
+      "tren",
+      "opinión"
     ],
     "hook": {
       "title": "Identical Spelling, Invariable Gender",
@@ -4588,9 +4662,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build 'international' in Spanish (remembering -tion- → -cion-):",
         "tile_options": [
+          "al",
           "inter",
           "nacion",
-          "al",
           "tion"
         ],
         "target_answer": "internacional",
@@ -4603,8 +4677,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Choose the correct phrase for 'the international organization':",
         "options": [
           "la organización internacional",
-          "la organización internacionala",
-          "la internacional organización"
+          "la internacional organización",
+          "la organización internacionala"
         ],
         "target_answer": "la organización internacional",
         "meaning": "the international organization",
@@ -4617,13 +4691,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Es un tren internacional",
         "meaning": "It is an international train",
         "word_bank": [
-          "Es",
-          "un",
-          "tren",
           "internacional",
-          "una",
           "la",
-          "personal"
+          "tren",
+          "Es",
+          "personal",
+          "una",
+          "un"
         ],
         "explanation": "Es un tren internacional.",
         "id": "es802_e4"
@@ -4658,13 +4732,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The station is central'",
       "target_answer": "La estación es central",
       "word_bank": [
-        "La",
+        "personal",
         "estación",
         "es",
-        "central",
+        "La",
         "El",
         "está",
-        "personal"
+        "central"
       ],
       "explanation": "La estación es central describes a permanent characteristic of the station."
     }
@@ -4694,7 +4768,11 @@ export const ES_LESSONS: Lesson[] = [
       "hola",
       "gracias",
       "por_favor",
-      "adiós"
+      "adiós",
+      "señor",
+      "señora",
+      "estar",
+      "querer"
     ],
     "hook": {
       "title": "How 'Your Mercy' Became Usted",
@@ -4751,8 +4829,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Why does 'usted' take 3rd-person verb forms (está, quiere, habla)?",
         "options": [
-          "It evolved from 'Vuestra Merced' ('Your Mercy'), a 3rd-person title",
           "It is a plural pronoun",
+          "It evolved from 'Vuestra Merced' ('Your Mercy'), a 3rd-person title",
           "It comes from Latin tū"
         ],
         "target_answer": "It evolved from 'Vuestra Merced' ('Your Mercy'), a 3rd-person title",
@@ -4766,12 +4844,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Cómo está usted",
         "meaning": "How are you (formal)?",
         "word_bank": [
-          "Cómo",
-          "está",
+          "es",
           "usted",
           "estás",
+          "Cómo",
           "tú",
-          "es"
+          "está"
         ],
         "explanation": "¿Cómo está usted? — drops the -s of estás and adds usted for clarity.",
         "id": "es9_e3"
@@ -4794,10 +4872,10 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "What do you want, sir?",
         "word_bank": [
           "Qué",
-          "quiere",
           "señor",
           "quieres",
           "tú",
+          "quiere",
           "señora",
           "estás"
         ],
@@ -4814,10 +4892,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "¿Cómo está usted?",
         "natural": "How are you (formal)?",
         "options": [
-          "How are you (formal)?",
-          "How stands Your-Mercy?",
           "How are thou?",
-          "What is your mercy?"
+          "What is your mercy?",
+          "How stands Your-Mercy?",
+          "How are you (formal)?"
         ],
         "target_answer": "How stands Your-Mercy?",
         "meaning": "How are you (formal)? (literal Spanish blueprint: How stands Your-Mercy?)",
@@ -4838,12 +4916,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'What do you (formal) wish?'",
       "target_answer": "Qué desea usted",
       "word_bank": [
-        "Qué",
+        "Cómo",
+        "deseas",
         "desea",
         "usted",
-        "deseas",
         "tú",
-        "Cómo"
+        "Qué"
       ],
       "explanation": "¿Qué desea usted? uses desear ('to wish/desire') in the polite 3rd-person form."
     },
@@ -4881,7 +4959,11 @@ export const ES_LESSONS: Lesson[] = [
       "estás",
       "está",
       "eres",
-      "es"
+      "es",
+      "querer",
+      "desear",
+      "señor",
+      "señora"
     ],
     "hook": {
       "title": "The '-s' Switch",
@@ -4951,13 +5033,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiere usted el café",
         "meaning": "Do you (formal) want the coffee?",
         "word_bank": [
-          "Quiere",
-          "usted",
-          "el",
           "café",
+          "el",
           "Quieres",
           "tú",
-          "la"
+          "Quiere",
+          "la",
+          "usted"
         ],
         "explanation": "¿Quiere usted el café? — polite offer.",
         "id": "es901_e3"
@@ -4979,12 +5061,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Cómo está señora",
         "meaning": "How are you, madam?",
         "word_bank": [
-          "Cómo",
-          "está",
-          "señora",
           "estás",
+          "Cómo",
+          "señora",
           "señor",
-          "es"
+          "es",
+          "está"
         ],
         "explanation": "¿Cómo está, señora? — polite 3rd-person verb without -s.",
         "id": "es901_e4"
@@ -5019,13 +5101,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Are you (formal) from Madrid?'",
       "target_answer": "Es usted de Madrid",
       "word_bank": [
-        "Es",
-        "usted",
-        "de",
         "Madrid",
         "Eres",
+        "de",
         "Está",
-        "tú"
+        "usted",
+        "tú",
+        "Es"
       ],
       "explanation": "¿Es usted de Madrid? uses es (ser) for origin."
     }
@@ -5055,7 +5137,11 @@ export const ES_LESSONS: Lesson[] = [
       "mucho",
       "por_favor",
       "adiós",
-      "buenos_días"
+      "buenos_días",
+      "buenas_tardes",
+      "buenas_noches",
+      "señor",
+      "señora"
     ],
     "hook": {
       "title": "Why 'Buenos Días' Is Masculine While 'Buenas Tardes' Is Feminine",
@@ -5110,9 +5196,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Why do we say 'buenos días' with -os instead of *-as?",
         "options": [
+          "Because días is an adverb",
           "Because el día is grammatically masculine (from Latin diēs)",
-          "Because morning is longer than night",
-          "Because días is an adverb"
+          "Because morning is longer than night"
         ],
         "target_answer": "Because el día is grammatically masculine (from Latin diēs)",
         "meaning": "good morning",
@@ -5126,11 +5212,11 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "Good morning, sir",
         "word_bank": [
           "Buenos",
-          "días",
-          "señor",
-          "Buenas",
           "tardes",
-          "el"
+          "el",
+          "días",
+          "Buenas",
+          "señor"
         ],
         "explanation": "Buenos días, señor — no article before señor when speaking directly to him.",
         "id": "es902_e3"
@@ -5150,12 +5236,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Muchas gracias señora",
         "meaning": "Thank you very much, madam",
         "word_bank": [
-          "Muchas",
-          "gracias",
           "señora",
-          "Muchos",
+          "gracias",
           "Muy",
-          "señor"
+          "señor",
+          "Muchas",
+          "Muchos"
         ],
         "explanation": "Muchas gracias, señora — muchas agrees in gender and number with feminine plural gracias.",
         "id": "es902_e4"
@@ -5191,12 +5277,12 @@ export const ES_LESSONS: Lesson[] = [
       "target_answer": "Buenas noches hasta mañana",
       "word_bank": [
         "Buenas",
-        "noches",
+        "Buenos",
+        "por",
+        "días",
         "hasta",
         "mañana",
-        "Buenos",
-        "días",
-        "por"
+        "noches"
       ],
       "explanation": "Buenas noches, hasta mañana."
     }
@@ -5225,7 +5311,10 @@ export const ES_LESSONS: Lesson[] = [
       "tienes",
       "tiene",
       "tenemos",
-      "tienen"
+      "tienen",
+      "hay",
+      "problema",
+      "tiempo"
     ],
     "hook": {
       "title": "How 'To Hold' Took Over 'To Have'",
@@ -5290,9 +5379,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'There is no problem' (remembering Greek -ma nouns like el problema are masculine)?",
         "options": [
-          "No hay problema",
+          "No tiene problema",
           "No es problema",
-          "No tiene problema"
+          "No hay problema"
         ],
         "target_answer": "No hay problema",
         "meaning": "There is no problem",
@@ -5305,13 +5394,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "No tengo tiempo hoy",
         "meaning": "I don't have time today",
         "word_bank": [
-          "No",
-          "tengo",
-          "tiempo",
           "hoy",
-          "tienes",
+          "tengo",
           "hay",
-          "problema"
+          "tienes",
+          "problema",
+          "No",
+          "tiempo"
         ],
         "explanation": "No + tengo + tiempo + hoy.",
         "id": "es10_e4"
@@ -5331,12 +5420,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tienes la confirmación",
         "meaning": "Do you have the confirmation?",
         "word_bank": [
-          "Tienes",
+          "Hay",
+          "el",
           "la",
           "confirmación",
-          "Tengo",
-          "Hay",
-          "el"
+          "Tienes",
+          "Tengo"
         ],
         "explanation": "¿Tienes la confirmación? — rising intonation turns tienes into a question.",
         "diagnosis": {
@@ -5360,11 +5449,11 @@ export const ES_LESSONS: Lesson[] = [
       "target_answer": "Tenemos tiempo hoy",
       "word_bank": [
         "Tenemos",
-        "tiempo",
         "hoy",
         "Tengo",
         "Tienes",
-        "no"
+        "no",
+        "tiempo"
       ],
       "explanation": "Tenemos ('we have') keeps the unchanged stem vowel -e-!"
     },
@@ -5402,7 +5491,11 @@ export const ES_LESSONS: Lesson[] = [
       "tienes",
       "tiene",
       "tenemos",
-      "tienen"
+      "tienen",
+      "llave",
+      "billete",
+      "reservación",
+      "tiempo"
     ],
     "hook": {
       "title": "Why 'Tenemos' Keeps a Single 'e'",
@@ -5457,10 +5550,10 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build 'we have' from the unstressed stem of tener and the nosotros ending:",
         "tile_options": [
-          "ten",
-          "emos",
           "tien",
-          "go"
+          "ten",
+          "go",
+          "emos"
         ],
         "target_answer": "tenemos",
         "meaning": "tenemos (we have)",
@@ -5473,14 +5566,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tengo la llave y el billete",
         "meaning": "I have the key and the ticket",
         "word_bank": [
-          "Tengo",
-          "la",
-          "llave",
           "y",
           "el",
+          "Tengo",
           "billete",
-          "Tienes",
-          "lo"
+          "lo",
+          "llave",
+          "la",
+          "Tienes"
         ],
         "explanation": "Tengo la llave (feminine) y el billete (masculine).",
         "id": "es1001_e3"
@@ -5501,12 +5594,12 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "Do you (formal) have a reservation?",
         "word_bank": [
           "Tiene",
-          "usted",
-          "una",
           "reservación",
+          "una",
           "Tienes",
-          "un",
-          "tengo"
+          "usted",
+          "tengo",
+          "un"
         ],
         "explanation": "¿Tiene usted una reservación? — drop the -s from tienes for usted.",
         "id": "es1001_e4"
@@ -5541,12 +5634,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Do you have the key?'",
       "target_answer": "Tienes la llave",
       "word_bank": [
-        "Tienes",
-        "la",
-        "llave",
         "Tengo",
         "el",
-        "billete"
+        "billete",
+        "llave",
+        "Tienes",
+        "la"
       ],
       "explanation": "¿Tienes la llave?"
     }
@@ -5574,7 +5667,9 @@ export const ES_LESSONS: Lesson[] = [
       "café",
       "mesa",
       "restaurante",
-      "nada"
+      "nada",
+      "nadie",
+      "aquí"
     ],
     "hook": {
       "title": "One Word for Singular and Plural",
@@ -5630,8 +5725,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Why do we say 'Hay UN problema' instead of *una problema?",
         "options": [
           "Greek nouns ending in -ma (problema, sistema, programa) are masculine in Spanish",
-          "Because hay forces masculine gender",
-          "Because problema ends in a consonant"
+          "Because problema ends in a consonant",
+          "Because hay forces masculine gender"
         ],
         "target_answer": "Greek nouns ending in -ma (problema, sistema, programa) are masculine in Spanish",
         "meaning": "There is a problem",
@@ -5644,13 +5739,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Hay un restaurante bueno aquí",
         "meaning": "There is a good restaurant here",
         "word_bank": [
+          "una",
           "Hay",
-          "un",
           "restaurante",
           "bueno",
           "aquí",
           "Está",
-          "una",
+          "un",
           "allí"
         ],
         "explanation": "Hay ('There is') + un restaurante bueno + aquí.",
@@ -5673,13 +5768,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "No hay nadie aquí",
         "meaning": "There is nobody here",
         "word_bank": [
-          "No",
           "hay",
-          "nadie",
           "aquí",
-          "nada",
+          "problema",
+          "nadie",
           "está",
-          "problema"
+          "nada",
+          "No"
         ],
         "explanation": "No hay nadie aquí — double negation with hay + nadie.",
         "id": "es1002_e4"
@@ -5714,13 +5809,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'There is nothing here'",
       "target_answer": "No hay nada aquí",
       "word_bank": [
-        "No",
+        "está",
         "hay",
         "nada",
-        "aquí",
+        "es",
+        "No",
         "nadie",
-        "está",
-        "es"
+        "aquí"
       ],
       "explanation": "No hay nada aquí."
     }
@@ -5750,7 +5845,11 @@ export const ES_LESSONS: Lesson[] = [
       "puedo",
       "puedes",
       "dormir",
-      "empezar"
+      "empezar",
+      "pedir",
+      "preferir",
+      "tener",
+      "tenemos"
     ],
     "hook": {
       "title": "Not 'Irregular' — Just Stress-Driven!",
@@ -5901,13 +6000,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Puedes confirmar la reservación",
         "meaning": "Can you confirm the reservation?",
         "word_bank": [
-          "Puedes",
           "confirmar",
           "la",
           "reservación",
           "Puedo",
+          "el",
           "Podemos",
-          "el"
+          "Puedes"
         ],
         "explanation": "¿Puedes ('Can you') + confirmar ('confirm', bare infinitive) + la reservación?",
         "id": "es1003_e4"
@@ -5929,13 +6028,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero pedir un café",
         "meaning": "I want to order a coffee",
         "word_bank": [
-          "Quiero",
           "pedir",
-          "un",
-          "café",
-          "puedo",
           "dormir",
-          "la"
+          "la",
+          "café",
+          "un",
+          "Quiero",
+          "puedo"
         ],
         "explanation": "Quiero pedir un café — pedir already means 'to ask FOR / to order', so never add *por after pedir!",
         "diagnosis": {
@@ -5958,13 +6057,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I cannot go today'",
       "target_answer": "No puedo ir hoy",
       "word_bank": [
+        "mañana",
+        "ir",
         "No",
         "puedo",
-        "ir",
         "hoy",
-        "puedes",
         "quiero",
-        "mañana"
+        "puedes"
       ],
       "explanation": "No puedo ir hoy chains no puedo + bare infinitive ir."
     }
@@ -5994,7 +6093,11 @@ export const ES_LESSONS: Lesson[] = [
       "hotel",
       "blanco",
       "negro",
-      "verde"
+      "verde",
+      "rojo",
+      "azul",
+      "nuevo",
+      "hermoso"
     ],
     "hook": {
       "title": "Painting the Noun First, Coloring It Second",
@@ -6049,7 +6152,7 @@ export const ES_LESSONS: Lesson[] = [
       },
       {
         "type": "reverse_cognate",
-        "prompt": "Spanish hermoso ('beautiful') evolved from Latin formōsus ('finely formed', with initial f- turning into silent h-!). Which island was named Ilha Formosa ('Beautiful Island') by 16th-century navigators?",
+        "prompt": "Spanish 'hermoso' ('beautiful') evolved from Latin 'formōsus' ('finely shaped', with initial f- turning into silent h-!). What historical Portuguese name ('Beautiful Island') was given to Taiwan by 16th-century navigators?",
         "target_answer": "Formosa",
         "meaning": "Formosa (historical name of Taiwan) is the exact same word as Spanish hermosa!",
         "explanation": "Latin formōsus kept its f- in Portuguese Formosa and English 'form', and turned f- into silent h- in Spanish hermoso.",
@@ -6059,9 +6162,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you form the plural of 'el hotel azul' ('the blue hotel' → 'the blue hotels')?",
         "options": [
+          "las hoteles azules",
           "los hoteles azules",
-          "el hoteles azuls",
-          "las hoteles azules"
+          "el hoteles azuls"
         ],
         "target_answer": "los hoteles azules",
         "meaning": "the blue hotels",
@@ -6074,13 +6177,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero un café negro",
         "meaning": "I want a black coffee",
         "word_bank": [
-          "Quiero",
           "un",
-          "café",
-          "negro",
+          "Quiero",
           "negra",
           "una",
-          "blanco"
+          "café",
+          "blanco",
+          "negro"
         ],
         "explanation": "Quiero + un café (masculine) + negro (after the noun).",
         "id": "es11_e4"
@@ -6091,10 +6194,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "Una casa blanca y nueva",
         "natural": "A new white house",
         "options": [
-          "A new white house",
           "A house white and new",
-          "A white and house new",
-          "White a new house"
+          "A new white house",
+          "White a new house",
+          "A white and house new"
         ],
         "target_answer": "A house white and new",
         "meaning": "A new white house (literal Spanish blueprint: A house white and new)",
@@ -6115,15 +6218,15 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The house is white and beautiful'",
       "target_answer": "La casa es blanca y hermosa",
       "word_bank": [
-        "La",
-        "casa",
         "es",
-        "blanca",
-        "y",
-        "hermosa",
+        "casa",
         "blanco",
+        "hermosa",
         "hermoso",
-        "El"
+        "La",
+        "El",
+        "blanca",
+        "y"
       ],
       "explanation": "blanca and hermosa agree with feminine la casa."
     },
@@ -6161,7 +6264,11 @@ export const ES_LESSONS: Lesson[] = [
       "hotel",
       "mesa",
       "rojo",
-      "blanco"
+      "blanco",
+      "negro",
+      "verde",
+      "azul",
+      "nuevo"
     ],
     "hook": {
       "title": "Canvas First, Paint Second",
@@ -6231,13 +6338,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tengo el libro rojo",
         "meaning": "I have the red book",
         "word_bank": [
-          "Tengo",
-          "el",
-          "libro",
           "rojo",
-          "roja",
           "la",
-          "blanco"
+          "blanco",
+          "Tengo",
+          "libro",
+          "el",
+          "roja"
         ],
         "explanation": "Tengo + el libro + rojo.",
         "id": "es1101_e3"
@@ -6259,11 +6366,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero una casa nueva",
         "meaning": "I want a new house",
         "word_bank": [
-          "Quiero",
-          "una",
-          "casa",
           "nueva",
+          "una",
           "un",
+          "casa",
+          "Quiero",
           "nuevo",
           "blanca"
         ],
@@ -6300,14 +6407,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The green book is here'",
       "target_answer": "El libro verde está aquí",
       "word_bank": [
-        "El",
-        "libro",
-        "verde",
-        "está",
         "aquí",
+        "El",
+        "está",
         "La",
+        "libro",
         "es",
-        "roja"
+        "roja",
+        "verde"
       ],
       "explanation": "verde ends in -e and fits both masculine and feminine."
     }
@@ -6339,7 +6446,11 @@ export const ES_LESSONS: Lesson[] = [
       "libro",
       "casa",
       "grande",
-      "hermoso"
+      "hermoso",
+      "nuevo",
+      "importante",
+      "son",
+      "están"
     ],
     "hook": {
       "title": "Every Piece Pluralizes Together",
@@ -6390,9 +6501,9 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Pluralize 'la ciudad' ('the city' → 'the cities') by adding the consonant-stem plural ending:",
         "tile_options": [
           "las",
-          "ciudad",
+          "s",
           "es",
-          "s"
+          "ciudad"
         ],
         "target_answer": "lasciudades",
         "meaning": "las ciudades (the cities)",
@@ -6403,8 +6514,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Choose the correct plural of 'La tradición es importante':",
         "options": [
-          "Las tradiciones son importantes",
           "La tradiciones es importante",
+          "Las tradiciones son importantes",
           "Los tradiciones son importantes"
         ],
         "target_answer": "Las tradiciones son importantes",
@@ -6418,13 +6529,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Las ciudades son hermosas",
         "meaning": "The cities are beautiful",
         "word_bank": [
-          "Las",
           "ciudades",
-          "son",
           "hermosas",
-          "Los",
+          "es",
+          "Las",
           "hermosos",
-          "es"
+          "Los",
+          "son"
         ],
         "explanation": "Las ciudades + son + hermosas.",
         "id": "es1102_e4"
@@ -6446,13 +6557,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Los hoteles son grandes",
         "meaning": "The hotels are big",
         "word_bank": [
-          "Los",
-          "hoteles",
-          "son",
-          "grandes",
+          "es",
           "Las",
+          "Los",
+          "grandes",
+          "hoteles",
           "grande",
-          "es"
+          "son"
         ],
         "explanation": "Los hoteles son grandes — hotel (+es), son, grandes (+s).",
         "id": "es1102_e5"
@@ -6471,13 +6582,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Where are the books?'",
       "target_answer": "Dónde están los libros",
       "word_bank": [
-        "Dónde",
-        "están",
         "los",
-        "libros",
-        "está",
         "el",
-        "son"
+        "están",
+        "Dónde",
+        "son",
+        "libros",
+        "está"
       ],
       "explanation": "¿Dónde están los libros? uses plural están for location."
     }
@@ -6505,7 +6616,9 @@ export const ES_LESSONS: Lesson[] = [
       "pesadilla",
       "limón",
       "un_poco",
-      "agua"
+      "agua",
+      "queso",
+      "café"
     ],
     "hook": {
       "title": "Suffixes That Show Affection — and Invent New Words!",
@@ -6562,12 +6675,12 @@ export const ES_LESSONS: Lesson[] = [
       },
       {
         "type": "morpheme_tiles",
-        "prompt": "Build 'bocadillo' ('sandwich') from 'bocado' ('mouthful', dropping -o) and the diminutive suffix:",
+        "prompt": "Build the Spanish noun for 'sandwich / snack' from 'bocado' ('mouthful', dropping -o) plus the diminutive suffix:",
         "tile_options": [
           "bocad",
-          "illo",
           "ito",
-          "ón"
+          "ón",
+          "illo"
         ],
         "target_answer": "bocadillo",
         "meaning": "el bocadillo (the sandwich)",
@@ -6578,9 +6691,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "What literal image hides inside 'la pesadilla' ('the nightmare')?",
         "options": [
-          "pesado ('heavy') + -illa ('a heavy little weight pressing on the sleeper')",
           "pescado ('fish') + -illa",
-          "paso ('step') + -illa"
+          "paso ('step') + -illa",
+          "pesado ('heavy') + -illa ('a heavy little weight pressing on the sleeper')"
         ],
         "target_answer": "pesado ('heavy') + -illa ('a heavy little weight pressing on the sleeper')",
         "meaning": "the nightmare",
@@ -6594,13 +6707,13 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "I want a cheese sandwich",
         "word_bank": [
           "Quiero",
-          "un",
-          "bocadillo",
-          "de",
-          "queso",
           "una",
+          "un",
+          "queso",
           "pesadilla",
-          "limón"
+          "bocadillo",
+          "limón",
+          "de"
         ],
         "explanation": "Quiero un bocadillo de queso — de links the sandwich to its filling.",
         "id": "es1103_e4"
@@ -6623,14 +6736,14 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "A little bit of water, please",
         "word_bank": [
           "Un",
+          "por",
           "poquito",
+          "favor",
+          "mucho",
           "de",
           "agua",
-          "por",
-          "favor",
           "bocadillo",
-          "la",
-          "mucho"
+          "la"
         ],
         "explanation": "Un poquito de agua, por favor — poquito sounds warm and polite across the whole Spanish-speaking world.",
         "id": "es1103_e5"
@@ -6649,14 +6762,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Water with lemon, please'",
       "target_answer": "Agua con limón por favor",
       "word_bank": [
+        "pesadilla",
         "Agua",
         "con",
-        "limón",
         "por",
-        "favor",
         "sin",
         "queso",
-        "pesadilla"
+        "favor",
+        "limón"
       ],
       "explanation": "Agua con limón, por favor."
     }
@@ -6689,7 +6802,12 @@ export const ES_LESSONS: Lesson[] = [
       "vas",
       "va",
       "vamos",
-      "van"
+      "van",
+      "a",
+      "mañana",
+      "hoy",
+      "visitar",
+      "celebrar"
     ],
     "hook": {
       "title": "Speak About the Future Right Now",
@@ -6746,10 +6864,10 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build the near-future frame 'I am going to visit' from its three parts:",
         "tile_options": [
-          "Voy",
-          "a",
           "visitar",
-          "de"
+          "a",
+          "de",
+          "Voy"
         ],
         "target_answer": "Voyavisitar",
         "meaning": "Voy a visitar (I am going to visit)",
@@ -6775,14 +6893,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Mañana voy a visitar Madrid",
         "meaning": "Tomorrow I am going to visit Madrid",
         "word_bank": [
-          "Mañana",
-          "voy",
-          "a",
           "visitar",
+          "a",
           "Madrid",
+          "voy",
           "vas",
+          "hoy",
           "de",
-          "hoy"
+          "Mañana"
         ],
         "explanation": "Mañana + voy + a + visitar + Madrid.",
         "id": "es12_e4"
@@ -6804,13 +6922,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Vamos a celebrar hoy",
         "meaning": "We are going to celebrate today",
         "word_bank": [
+          "de",
+          "Voy",
+          "celebrar",
           "Vamos",
           "a",
-          "celebrar",
-          "hoy",
-          "Voy",
-          "de",
-          "mañana"
+          "mañana",
+          "hoy"
         ],
         "explanation": "Vamos a celebrar hoy — vamos a + infinitive also means 'Let's celebrate today!'",
         "diagnosis": {
@@ -6833,11 +6951,11 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Are you going to participate?'",
       "target_answer": "Vas a participar",
       "word_bank": [
-        "Vas",
-        "a",
-        "participar",
         "Voy",
+        "a",
         "de",
+        "Vas",
+        "participar",
         "celebrar"
       ],
       "explanation": "¿Vas a participar? asks about future plans."
@@ -6879,7 +6997,12 @@ export const ES_LESSONS: Lesson[] = [
       "vas",
       "va",
       "vamos",
-      "van"
+      "van",
+      "a",
+      "restaurante",
+      "hotel",
+      "organizar",
+      "preparar"
     ],
     "hook": {
       "title": "Going to Places vs Going to Act",
@@ -6934,8 +7057,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Contract 'a + el restaurante' ('to the restaurant') into natural Spanish:",
         "tile_options": [
-          "al",
           "restaurante",
+          "al",
           "a el",
           "del"
         ],
@@ -6948,9 +7071,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'We are going to the hotel'?",
         "options": [
+          "Vamos a la hotel",
           "Vamos al hotel",
-          "Vamos a el hotel",
-          "Vamos a la hotel"
+          "Vamos a el hotel"
         ],
         "target_answer": "Vamos al hotel",
         "meaning": "We are going to the hotel",
@@ -6958,22 +7081,27 @@ export const ES_LESSONS: Lesson[] = [
         "id": "es1201_e3"
       },
       {
-        "type": "syntax_builder",
-        "prompt": "Assemble: 'I am going to prepare the coffee'",
-        "target_answer": "Voy a preparar el café",
-        "meaning": "I am going to prepare the coffee",
-        "word_bank": [
-          "Voy",
-          "a",
-          "preparar",
-          "el",
-          "café",
-          "Vas",
-          "al",
-          "la"
+        "id": "es1201_e4",
+        "type": "spoken_turn_reply",
+        "prompt": "Answer the question in the negative in Spanish:",
+        "spoken_question": "¿Hablas alemán en casa?",
+        "question_meaning": "Do you speak German at home?",
+        "reply_idea": "Reply that no, you speak Spanish.",
+        "cues": [
+          "Open with No hablo...",
+          "Finish with español."
         ],
-        "explanation": "Voy + a + preparar + el café.",
-        "id": "es1201_e4"
+        "word_bank": [
+          "español",
+          "casa",
+          "hablo",
+          "sí",
+          "alemán",
+          "No"
+        ],
+        "target_answer": "No hablo español",
+        "meaning": "No, I speak Spanish",
+        "explanation": "Spanish negation simply places no directly before the conjugated verb."
       },
       {
         "type": "dictation",
@@ -7006,11 +7134,11 @@ export const ES_LESSONS: Lesson[] = [
       "target_answer": "Vas al hotel",
       "word_bank": [
         "Vas",
-        "al",
-        "hotel",
+        "el",
         "Voy",
+        "al",
         "a",
-        "el"
+        "hotel"
       ],
       "explanation": "¿Vas al hotel? uses al (a + el)."
     }
@@ -7043,7 +7171,12 @@ export const ES_LESSONS: Lesson[] = [
       "voy",
       "vas",
       "va",
-      "vamos"
+      "vamos",
+      "van",
+      "ver",
+      "comprar",
+      "comer",
+      "terminar"
     ],
     "hook": {
       "title": "Why 'Mañana' Means Both 'Tomorrow' and 'Morning'",
@@ -7098,9 +7231,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "What does 'mañana por la mañana' mean in English?",
         "options": [
-          "tomorrow morning",
+          "yesterday morning",
           "every morning",
-          "yesterday morning"
+          "tomorrow morning"
         ],
         "target_answer": "tomorrow morning",
         "meaning": "tomorrow morning",
@@ -7113,13 +7246,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Hoy voy a terminar",
         "meaning": "Today I am going to finish",
         "word_bank": [
-          "Hoy",
-          "voy",
           "a",
+          "voy",
+          "Hoy",
           "terminar",
-          "Mañana",
+          "de",
           "vas",
-          "de"
+          "Mañana"
         ],
         "explanation": "Hoy + voy + a + terminar.",
         "id": "es1202_e3"
@@ -7142,14 +7275,14 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "Tomorrow we are going to buy the book",
         "word_bank": [
           "Mañana",
+          "la",
           "vamos",
-          "a",
-          "comprar",
-          "el",
           "libro",
-          "Hoy",
           "voy",
-          "la"
+          "Hoy",
+          "comprar",
+          "a",
+          "el"
         ],
         "explanation": "Mañana vamos a comprar el libro.",
         "id": "es1202_e4"
@@ -7184,14 +7317,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Tomorrow I am going to see Madrid'",
       "target_answer": "Mañana voy a ver Madrid",
       "word_bank": [
-        "Mañana",
-        "voy",
-        "a",
-        "ver",
         "Madrid",
+        "de",
+        "voy",
+        "ver",
         "Hoy",
+        "a",
         "vas",
-        "de"
+        "Mañana"
       ],
       "explanation": "Mañana voy a ver Madrid."
     }
@@ -7220,7 +7353,10 @@ export const ES_LESSONS: Lesson[] = [
       "ver",
       "comprar",
       "confirmar",
-      "preparar"
+      "preparar",
+      "voy",
+      "querer",
+      "puedo"
     ],
     "hook": {
       "title": "Two Legal Parking Spots for 'It'",
@@ -7270,10 +7406,10 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Hook 'la' ('it', feminine) onto the tail of 'preparar' to form 'to prepare it':",
         "tile_options": [
-          "preparar",
-          "la",
+          "a",
           "lo",
-          "a"
+          "preparar",
+          "la"
         ],
         "target_answer": "prepararla",
         "meaning": "prepararla (to prepare it)",
@@ -7299,13 +7435,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Lo voy a comprar",
         "meaning": "I am going to buy it",
         "word_bank": [
-          "Lo",
           "voy",
-          "a",
+          "Lo",
           "comprar",
           "La",
           "comprarlo",
-          "de"
+          "de",
+          "a"
         ],
         "explanation": "Lo + voy + a + comprar — pronoun walks in front of the whole verb chain.",
         "id": "es1203_e4"
@@ -7327,14 +7463,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Voy a verlo hoy",
         "meaning": "I am going to see it today",
         "word_bank": [
-          "Voy",
-          "a",
           "verlo",
-          "hoy",
-          "ver",
-          "lo",
+          "Voy",
           "mañana",
-          "la"
+          "la",
+          "a",
+          "lo",
+          "ver",
+          "hoy"
         ],
         "explanation": "Voy a verlo hoy — hooking onto the infinitive keeps the thought flowing in English-like order!",
         "diagnosis": {
@@ -7357,12 +7493,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I cannot see it'",
       "target_answer": "No puedo verlo",
       "word_bank": [
-        "No",
-        "puedo",
-        "verlo",
         "ver",
-        "la",
-        "voy"
+        "No",
+        "verlo",
+        "puedo",
+        "voy",
+        "la"
       ],
       "explanation": "No puedo verlo (or No lo puedo ver)."
     }
@@ -7391,7 +7527,10 @@ export const ES_LESSONS: Lesson[] = [
       "regalo",
       "invitación",
       "gracias",
-      "mañana"
+      "mañana",
+      "aquí",
+      "comprender",
+      "mi"
     ],
     "hook": {
       "title": "Why English 'For' Hides Two Opposite Directions",
@@ -7448,8 +7587,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "You bought a present to give to your mother (she is the recipient). Which preposition do you use?",
         "options": [
-          "Es un regalo para mi madre",
           "Es un regalo por mi madre",
+          "Es un regalo para mi madre",
           "Es un regalo a mi madre"
         ],
         "target_answer": "Es un regalo para mi madre",
@@ -7461,9 +7600,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "You are thanking someone BECAUSE OF their invitation. Which preposition follows gracias?",
         "options": [
-          "Gracias por la invitación",
           "Gracias para la invitación",
-          "Gracias de la invitación"
+          "Gracias de la invitación",
+          "Gracias por la invitación"
         ],
         "target_answer": "Gracias por la invitación",
         "meaning": "Thanks for the invitation",
@@ -7476,14 +7615,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Es un regalo para mañana",
         "meaning": "It is a gift for tomorrow",
         "word_bank": [
-          "Es",
-          "un",
           "regalo",
-          "para",
-          "mañana",
+          "Es",
           "por",
-          "una",
-          "ayer"
+          "un",
+          "ayer",
+          "mañana",
+          "para",
+          "una"
         ],
         "explanation": "Deadlines and target dates point forward with para: para mañana.",
         "id": "es13_e4"
@@ -7505,13 +7644,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Gracias por el café",
         "meaning": "Thank you for the coffee",
         "word_bank": [
-          "Gracias",
-          "por",
-          "el",
+          "regalo",
           "café",
-          "para",
           "la",
-          "regalo"
+          "el",
+          "Gracias",
+          "para",
+          "por"
         ],
         "explanation": "Gracias por el café — gracias ALWAYS takes por!",
         "diagnosis": {
@@ -7534,11 +7673,11 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'It is for you (informal: para ti)'",
       "target_answer": "Es para ti",
       "word_bank": [
+        "tú",
         "Es",
-        "para",
         "ti",
         "por",
-        "tú",
+        "para",
         "Está"
       ],
       "explanation": "After a preposition like para or por, tú becomes ti: para ti!"
@@ -7576,7 +7715,10 @@ export const ES_LESSONS: Lesson[] = [
       "mañana",
       "comprender",
       "hablar",
-      "vivir"
+      "vivir",
+      "terminar",
+      "madre",
+      "amigo"
     ],
     "hook": {
       "title": "Four Targets of the Para Arrow",
@@ -7627,8 +7769,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "How do you say 'I want time in order to finish'?",
         "options": [
           "Quiero tiempo para terminar",
-          "Quiero tiempo a terminar",
-          "Quiero tiempo por terminar"
+          "Quiero tiempo por terminar",
+          "Quiero tiempo a terminar"
         ],
         "target_answer": "Quiero tiempo para terminar",
         "meaning": "I want time in order to finish",
@@ -7641,47 +7783,41 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "El regalo es para mi madre",
         "meaning": "The gift is for my mother",
         "word_bank": [
-          "El",
-          "regalo",
           "es",
           "para",
-          "mi",
-          "madre",
-          "por",
+          "El",
+          "está",
+          "regalo",
           "La",
-          "está"
+          "por",
+          "madre",
+          "mi"
         ],
         "explanation": "El regalo es para mi madre — recipient takes para.",
         "id": "es1301_e3"
       },
       {
-        "type": "transcribe",
-        "prompt": "Tell me:",
-        "idea": "say that the confirmation is for tomorrow",
+        "id": "es1301_e4",
+        "type": "spoken_turn_reply",
+        "prompt": "Reply to the question in Spanish:",
+        "spoken_question": "¿Dónde está la estación de tren?",
+        "question_meaning": "Where is the train station?",
+        "reply_idea": "Reply that the station is here.",
         "cues": [
-          "The confirmation → La confirmación",
-          "is → es",
-          "for tomorrow (deadline) → para mañana"
+          "Start with La estación...",
+          "Use está (location) + aquí."
         ],
-        "idea_parts": [
-          "subject → La confirmación",
-          "verb → es",
-          "deadline → para mañana"
-        ],
-        "target_answer": "La confirmación es para mañana",
-        "meaning": "The confirmation is for tomorrow",
         "word_bank": [
-          "La",
-          "confirmación",
+          "estación",
           "es",
-          "para",
-          "mañana",
-          "por",
-          "hoy",
-          "el"
+          "está",
+          "allí",
+          "La",
+          "aquí"
         ],
-        "explanation": "La confirmación es para mañana — deadline takes para.",
-        "id": "es1301_e4"
+        "target_answer": "La estación está aquí",
+        "meaning": "The station is here",
+        "explanation": "Physical location always uses estar (está), never ser (es): La estación está aquí."
       },
       {
         "type": "dictation",
@@ -7713,13 +7849,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'In order to understand Spanish'",
       "target_answer": "Para comprender el español",
       "word_bank": [
-        "Para",
-        "comprender",
-        "el",
+        "a",
         "español",
         "Por",
-        "a",
-        "la"
+        "la",
+        "el",
+        "Para",
+        "comprender"
       ],
       "explanation": "Para comprender el español."
     }
@@ -7748,7 +7884,10 @@ export const ES_LESSONS: Lesson[] = [
       "invitación",
       "por_favor",
       "mañana",
-      "noche"
+      "noche",
+      "aquí",
+      "allí",
+      "diez"
     ],
     "hook": {
       "title": "The Scale and the Tunnel",
@@ -7803,8 +7942,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Contrast the two phrases: what is the difference between 'para mañana' and 'por la mañana'?",
         "options": [
-          "para mañana = 'for/by tomorrow' (deadline); por la mañana = 'in the morning' (part of day)",
           "They mean the exact same thing",
+          "para mañana = 'for/by tomorrow' (deadline); por la mañana = 'in the morning' (part of day)",
           "para mañana = 'in the morning'; por la mañana = 'for tomorrow'"
         ],
         "target_answer": "para mañana = 'for/by tomorrow' (deadline); por la mañana = 'in the morning' (part of day)",
@@ -7819,12 +7958,12 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "Is there a hotel around here?",
         "word_bank": [
           "Hay",
+          "para",
+          "aquí",
+          "Está",
           "un",
           "hotel",
           "por",
-          "aquí",
-          "para",
-          "Está",
           "la"
         ],
         "explanation": "¿Hay un hotel por aquí? — por aquí means 'around here / through this area'.",
@@ -7846,14 +7985,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Muchas gracias por la invitación",
         "meaning": "Thank you very much for the invitation",
         "word_bank": [
-          "Muchas",
-          "gracias",
           "por",
           "la",
-          "invitación",
-          "para",
           "el",
-          "regalo"
+          "Muchas",
+          "gracias",
+          "regalo",
+          "invitación",
+          "para"
         ],
         "explanation": "Muchas gracias por la invitación.",
         "id": "es1302_e4"
@@ -7889,14 +8028,14 @@ export const ES_LESSONS: Lesson[] = [
       "target_answer": "Compro el libro por diez euros",
       "word_bank": [
         "Compro",
-        "el",
-        "libro",
-        "por",
-        "diez",
+        "a",
         "euros",
-        "para",
         "la",
-        "a"
+        "diez",
+        "para",
+        "por",
+        "el",
+        "libro"
       ],
       "explanation": "Price/exchange on the scale always takes por: por diez euros."
     }
@@ -7926,7 +8065,11 @@ export const ES_LESSONS: Lesson[] = [
       "su",
       "nuestro",
       "padre",
-      "madre"
+      "madre",
+      "hermano",
+      "amigo",
+      "casa",
+      "libro"
     ],
     "hook": {
       "title": "Look at the Possession, Not the Owner!",
@@ -7991,9 +8134,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'my friends' in Spanish?",
         "options": [
-          "mis amigos",
           "mi amigos",
-          "mis amigo"
+          "mis amigo",
+          "mis amigos"
         ],
         "target_answer": "mis amigos",
         "meaning": "my friends",
@@ -8006,13 +8149,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Nuestra familia es grande",
         "meaning": "Our family is big",
         "word_bank": [
-          "Nuestra",
-          "familia",
-          "es",
           "grande",
-          "Nuestro",
+          "Nuestra",
           "Nuestras",
-          "está"
+          "familia",
+          "Nuestro",
+          "está",
+          "es"
         ],
         "explanation": "la familia is feminine singular, so nuestro becomes nuestra: Nuestra familia es grande.",
         "id": "es14_e4"
@@ -8032,14 +8175,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Dónde está tu casa",
         "meaning": "Where is your house?",
         "word_bank": [
-          "Dónde",
-          "está",
-          "tu",
-          "casa",
+          "es",
           "tú",
           "tus",
-          "es",
-          "mi"
+          "tu",
+          "mi",
+          "casa",
+          "Dónde",
+          "está"
         ],
         "explanation": "¿Dónde está tu casa? — unaccented tu means 'your'.",
         "diagnosis": {
@@ -8062,12 +8205,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'They are my friends'",
       "target_answer": "Son mis amigos",
       "word_bank": [
-        "Son",
-        "mis",
-        "amigos",
         "Es",
-        "mi",
-        "Están"
+        "Son",
+        "amigos",
+        "Están",
+        "mis",
+        "mi"
       ],
       "explanation": "Son mis amigos — plural verb son + plural mis amigos."
     },
@@ -8105,7 +8248,11 @@ export const ES_LESSONS: Lesson[] = [
       "su",
       "nuestro",
       "amigo",
-      "hermano"
+      "hermano",
+      "padre",
+      "madre",
+      "libro",
+      "llave"
     ],
     "hook": {
       "title": "One Owner, Many Possessions",
@@ -8175,13 +8322,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tengo mis llaves aquí",
         "meaning": "I have my keys here",
         "word_bank": [
+          "está",
           "Tengo",
-          "mis",
           "llaves",
           "aquí",
           "mi",
           "llave",
-          "está"
+          "mis"
         ],
         "explanation": "Tengo + mis llaves (plural) + aquí.",
         "id": "es1401_e3"
@@ -8203,14 +8350,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Mis padres viven en Madrid",
         "meaning": "My parents live in Madrid",
         "word_bank": [
-          "Mis",
-          "padres",
-          "viven",
-          "en",
-          "Madrid",
           "Mi",
+          "Madrid",
+          "vivo",
           "padre",
-          "vivo"
+          "Mis",
+          "en",
+          "padres",
+          "viven"
         ],
         "explanation": "Mis padres viven en Madrid.",
         "id": "es1401_e4"
@@ -8245,13 +8392,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Where are your keys?'",
       "target_answer": "Dónde están tus llaves",
       "word_bank": [
-        "Dónde",
+        "llaves",
+        "mi",
         "están",
         "tus",
-        "llaves",
         "tu",
         "está",
-        "mi"
+        "Dónde"
       ],
       "explanation": "¿Dónde están tus llaves? uses plural están + tus llaves."
     }
@@ -8280,7 +8427,10 @@ export const ES_LESSONS: Lesson[] = [
       "padre",
       "madre",
       "amigo",
-      "casa"
+      "casa",
+      "libro",
+      "usted",
+      "de"
     ],
     "hook": {
       "title": "The Five-in-One Word: su / sus",
@@ -8330,9 +8480,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Two brothers own ONE house together. How do you say 'their house' using su/sus?",
         "options": [
+          "sus casas",
           "su casa (singular because there is only ONE house!)",
-          "sus casa",
-          "sus casas"
+          "sus casa"
         ],
         "target_answer": "su casa (singular because there is only ONE house!)",
         "meaning": "their house",
@@ -8341,17 +8491,17 @@ export const ES_LESSONS: Lesson[] = [
       },
       {
         "type": "syntax_builder",
-        "prompt": "Assemble: 'María is looking for her brother (tiene su libro -> María tiene su libro)'",
+        "prompt": "Assemble in Spanish: 'María has her book':",
         "target_answer": "María tiene su libro",
         "meaning": "María has her (or his/your) book",
         "word_bank": [
-          "María",
-          "tiene",
-          "su",
-          "libro",
           "sus",
           "la",
-          "libros"
+          "libro",
+          "libros",
+          "tiene",
+          "su",
+          "María"
         ],
         "explanation": "María tiene su libro — one book takes singular su.",
         "id": "es1402_e3"
@@ -8371,13 +8521,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tiene usted su billete",
         "meaning": "Do you (formal) have your ticket?",
         "word_bank": [
-          "Tiene",
-          "usted",
-          "su",
-          "billete",
-          "tu",
           "sus",
-          "Tienes"
+          "Tiene",
+          "Tienes",
+          "billete",
+          "su",
+          "tu",
+          "usted"
         ],
         "explanation": "¿Tiene usted su billete? — usted always pairs with su/sus, never tu/tus!",
         "diagnosis": {
@@ -8416,13 +8566,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'She has her keys'",
       "target_answer": "Ella tiene sus llaves",
       "word_bank": [
-        "Ella",
-        "tiene",
-        "sus",
-        "llaves",
         "su",
+        "sus",
         "llave",
-        "mis"
+        "tiene",
+        "mis",
+        "llaves",
+        "Ella"
       ],
       "explanation": "Plural llaves requires plural sus: sus llaves."
     }
@@ -8452,7 +8602,11 @@ export const ES_LESSONS: Lesson[] = [
       "aquel",
       "aquí",
       "allí",
-      "libro"
+      "libro",
+      "mesa",
+      "casa",
+      "hotel",
+      "café"
     ],
     "hook": {
       "title": "English Has Two Distances ('This' vs 'That'); Spanish Has Three!",
@@ -8516,9 +8670,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'this coffee' (masculine singular noun)?",
         "options": [
-          "este café",
+          "esta café",
           "*esto café",
-          "esta café"
+          "este café"
         ],
         "target_answer": "este café",
         "meaning": "this coffee",
@@ -8531,15 +8685,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero este libro y esa mesa",
         "meaning": "I want this book and that table",
         "word_bank": [
-          "Quiero",
           "este",
-          "libro",
-          "y",
-          "esa",
-          "mesa",
           "esto",
+          "libro",
           "ese",
-          "esta"
+          "mesa",
+          "Quiero",
+          "esta",
+          "esa",
+          "y"
         ],
         "explanation": "Quiero este libro (m., near me) y esa mesa (f., near you).",
         "id": "es1403_e3"
@@ -8559,11 +8713,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Comprendo eso",
         "meaning": "I understand that",
         "word_bank": [
-          "Comprendo",
-          "eso",
           "ese",
           "esa",
-          "este"
+          "este",
+          "Comprendo",
+          "eso"
         ],
         "explanation": "Comprendo eso — when 'that' refers to a whole statement or idea without a gendered noun, use neuter eso!",
         "diagnosis": {
@@ -8602,12 +8756,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'What is this (unnamed thing)?'",
       "target_answer": "Qué es esto",
       "word_bank": [
-        "Qué",
-        "es",
-        "esto",
+        "está",
         "este",
+        "esto",
+        "Qué",
         "esta",
-        "está"
+        "es"
       ],
       "explanation": "¿Qué es esto? uses neuter esto because the object hasn't been named yet."
     }
@@ -8642,7 +8796,16 @@ export const ES_LESSONS: Lesson[] = [
       "tres",
       "cuatro",
       "cinco",
-      "seis"
+      "seis",
+      "siete",
+      "ocho",
+      "nueve",
+      "diez",
+      "veinte",
+      "treinta",
+      "cien",
+      "año",
+      "tengo"
     ],
     "hook": {
       "title": "Why You 'Have' Your Years in Spanish",
@@ -8714,12 +8877,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tengo treinta años",
         "meaning": "I am thirty years old",
         "word_bank": [
-          "Tengo",
+          "Soy",
           "treinta",
           "años",
-          "Soy",
           "Estoy",
-          "veinte"
+          "veinte",
+          "Tengo"
         ],
         "explanation": "Tengo + treinta + años.",
         "id": "es15_e3"
@@ -8740,13 +8903,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Cuántos años tienes",
         "meaning": "How old are you?",
         "word_bank": [
-          "Cuántos",
+          "Cuánto",
           "años",
           "tienes",
-          "Cuánto",
           "eres",
-          "estás",
-          "tengo"
+          "tengo",
+          "Cuántos",
+          "estás"
         ],
         "explanation": "¿Cuántos años tienes? — cuántos agrees in masculine plural with años.",
         "diagnosis": {
@@ -8761,9 +8924,9 @@ export const ES_LESSONS: Lesson[] = [
         "german": "Tengo treinta años",
         "natural": "I am thirty years old",
         "options": [
-          "I am thirty years old",
-          "I-have thirty years",
           "I am thirty of years",
+          "I-have thirty years",
+          "I am thirty years old",
           "Thirty years I stand"
         ],
         "target_answer": "I-have thirty years",
@@ -8785,11 +8948,11 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'He is ten years old'",
       "target_answer": "Tiene diez años",
       "word_bank": [
+        "Está",
         "Tiene",
         "diez",
-        "años",
         "Es",
-        "Está",
+        "años",
         "Tengo"
       ],
       "explanation": "Tiene diez años ('He/she has ten years')."
@@ -8830,7 +8993,13 @@ export const ES_LESSONS: Lesson[] = [
       "tres",
       "cuatro",
       "cinco",
-      "seis"
+      "seis",
+      "siete",
+      "ocho",
+      "nueve",
+      "diez",
+      "veinte",
+      "treinta"
     ],
     "hook": {
       "title": "Why 'Uno' Drops Its '-o' Before Masculine Nouns",
@@ -8885,9 +9054,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'one book' vs 'one table'?",
         "options": [
-          "un libro / una mesa",
+          "un libro / un mesa",
           "uno libro / una mesa",
-          "un libro / un mesa"
+          "un libro / una mesa"
         ],
         "target_answer": "un libro / una mesa",
         "meaning": "one book / one table",
@@ -8900,14 +9069,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tengo dos hermanos y tres hermanas",
         "meaning": "I have two brothers and three sisters",
         "word_bank": [
+          "uno",
+          "hermanos",
+          "tres",
+          "cuatro",
           "Tengo",
           "dos",
-          "hermanos",
-          "y",
-          "tres",
           "hermanas",
-          "uno",
-          "cuatro",
+          "y",
           "hermano"
         ],
         "explanation": "Tengo dos hermanos y tres hermanas.",
@@ -8929,12 +9098,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Cinco minutos por favor",
         "meaning": "Five minutes, please",
         "word_bank": [
+          "minuto",
           "Cinco",
+          "Cuatro",
           "minutos",
           "por",
           "favor",
-          "Cuatro",
-          "minuto",
           "gracias"
         ],
         "explanation": "Cinco minutos, por favor.",
@@ -8970,13 +9139,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Ten minutes, please'",
       "target_answer": "Diez minutos por favor",
       "word_bank": [
-        "Diez",
-        "minutos",
         "por",
-        "favor",
         "Nueve",
+        "gracias",
+        "minutos",
+        "favor",
         "minuto",
-        "gracias"
+        "Diez"
       ],
       "explanation": "Diez minutos, por favor."
     }
@@ -9006,7 +9175,11 @@ export const ES_LESSONS: Lesson[] = [
       "cien",
       "año",
       "tener",
-      "tengo"
+      "tengo",
+      "tienes",
+      "tiene",
+      "cuánto",
+      "hermano"
     ],
     "hook": {
       "title": "Joining Tens and Ones with 'y' (31–99)",
@@ -9062,9 +9235,9 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Build 'thirty-five' in Spanish from its three parts:",
         "tile_options": [
           "treinta",
-          "y",
+          "de",
           "cinco",
-          "de"
+          "y"
         ],
         "target_answer": "treintaycinco",
         "meaning": "treinta y cinco (thirty-five)",
@@ -9077,14 +9250,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Mi hermano tiene veinte años",
         "meaning": "My brother is twenty years old",
         "word_bank": [
-          "Mi",
+          "está",
+          "es",
           "hermano",
           "tiene",
-          "veinte",
           "años",
-          "es",
-          "está",
-          "tengo"
+          "tengo",
+          "Mi",
+          "veinte"
         ],
         "explanation": "Mi hermano + tiene + veinte + años.",
         "id": "es1502_e3"
@@ -9105,12 +9278,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Cien por cien",
         "meaning": "One hundred percent",
         "word_bank": [
-          "Cien",
+          "años",
           "por",
-          "cien",
           "para",
           "treinta",
-          "años"
+          "Cien",
+          "cien"
         ],
         "explanation": "Cien por cien (or cien por ciento) — por expresses rates and percentages.",
         "id": "es1502_e4"
@@ -9145,12 +9318,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Are you twenty years old?'",
       "target_answer": "Tienes veinte años",
       "word_bank": [
-        "Tienes",
-        "veinte",
-        "años",
-        "Eres",
+        "Tengo",
         "Estás",
-        "Tengo"
+        "años",
+        "Tienes",
+        "Eres",
+        "veinte"
       ],
       "explanation": "¿Tienes veinte años?"
     }
@@ -9182,7 +9355,11 @@ export const ES_LESSONS: Lesson[] = [
       "razón",
       "frío",
       "tiempo",
-      "mucho"
+      "mucho",
+      "tener",
+      "tengo",
+      "tienes",
+      "tiene"
     ],
     "hook": {
       "title": "Why You Are Not 'Hungry' or 'Right' — You Have Hunger and Reason!",
@@ -9264,11 +9441,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tienes razón",
         "meaning": "You are right (lit. You have reason)",
         "word_bank": [
-          "Tienes",
-          "razón",
-          "Eres",
           "Estás",
-          "hambre"
+          "Tienes",
+          "hambre",
+          "Eres",
+          "razón"
         ],
         "explanation": "Tienes razón — 'to be right' is tener razón.",
         "id": "es1503_e4"
@@ -9288,13 +9465,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tienes hambre y sed",
         "meaning": "Are you hungry and thirsty?",
         "word_bank": [
-          "Tienes",
-          "hambre",
-          "y",
-          "sed",
-          "Estás",
           "Eres",
-          "razón"
+          "sed",
+          "hambre",
+          "Tienes",
+          "y",
+          "razón",
+          "Estás"
         ],
         "explanation": "¿Tienes hambre y sed? — one tienes governs both nouns.",
         "diagnosis": {
@@ -9317,12 +9494,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I am very thirsty'",
       "target_answer": "Tengo mucha sed",
       "word_bank": [
-        "Tengo",
-        "mucha",
-        "sed",
-        "muy",
         "mucho",
-        "Estoy"
+        "sed",
+        "Estoy",
+        "muy",
+        "Tengo",
+        "mucha"
       ],
       "explanation": "la sed is feminine, so 'very thirsty' is Tengo mucha sed ('I have much thirst')."
     }
@@ -9352,7 +9529,11 @@ export const ES_LESSONS: Lesson[] = [
       "miércoles",
       "jueves",
       "viernes",
-      "sábado"
+      "sábado",
+      "domingo",
+      "semana",
+      "enero",
+      "el"
     ],
     "hook": {
       "title": "The Seven Planets Inside Your Week",
@@ -9409,9 +9590,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I am going to Madrid on Monday' in Spanish?",
         "options": [
+          "*Voy a Madrid a lunes",
           "Voy a Madrid el lunes",
-          "*Voy a Madrid en lunes",
-          "*Voy a Madrid a lunes"
+          "*Voy a Madrid en lunes"
         ],
         "target_answer": "Voy a Madrid el lunes",
         "meaning": "I am going to Madrid on Monday",
@@ -9425,13 +9606,13 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "On Friday we are going to celebrate",
         "word_bank": [
           "El",
+          "sábado",
+          "La",
           "viernes",
+          "En",
           "vamos",
           "a",
-          "celebrar",
-          "En",
-          "La",
-          "sábado"
+          "celebrar"
         ],
         "explanation": "El viernes ('On Friday') + vamos a celebrar ('we are going to celebrate').",
         "id": "es16_e3"
@@ -9452,13 +9633,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tengo tiempo esta semana",
         "meaning": "I have time this week",
         "word_bank": [
+          "semana",
+          "lunes",
           "Tengo",
           "tiempo",
-          "esta",
-          "semana",
           "este",
-          "lunes",
-          "en"
+          "en",
+          "esta"
         ],
         "explanation": "Tengo tiempo esta semana — la semana is feminine, so 'this week' is esta semana.",
         "id": "es16_e4"
@@ -9493,13 +9674,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'In January it is cold (hay frío -> tengo frío)'",
       "target_answer": "En enero tengo frío",
       "word_bank": [
-        "En",
         "enero",
-        "tengo",
-        "frío",
         "El",
+        "En",
         "lunes",
-        "hambre"
+        "hambre",
+        "tengo",
+        "frío"
       ],
       "explanation": "Months take en: En enero tengo frío."
     },
@@ -9535,7 +9716,9 @@ export const ES_LESSONS: Lesson[] = [
       "miércoles",
       "jueves",
       "viernes",
-      "sábado"
+      "sábado",
+      "domingo",
+      "semana"
     ],
     "hook": {
       "title": "Why Lunes–Viernes End in '-es'",
@@ -9591,8 +9774,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "How do you say 'on Mondays' (every Monday) vs 'on Sundays' (every Sunday)?",
         "options": [
           "los lunes / los domingos",
-          "los luneses / los domingos",
-          "en lunes / en domingos"
+          "en lunes / en domingos",
+          "los luneses / los domingos"
         ],
         "target_answer": "los lunes / los domingos",
         "meaning": "on Mondays / on Sundays",
@@ -9605,11 +9788,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Hoy es viernes",
         "meaning": "Today is Friday",
         "word_bank": [
-          "Hoy",
-          "es",
-          "viernes",
           "está",
           "el",
+          "es",
+          "Hoy",
+          "viernes",
           "jueves"
         ],
         "explanation": "Hoy es viernes — naming what day today is uses es without an article.",
@@ -9631,14 +9814,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "El sábado vamos al cine",
         "meaning": "On Saturday we are going to the movies",
         "word_bank": [
-          "El",
-          "sábado",
-          "vamos",
-          "al",
-          "cine",
-          "En",
           "domingo",
-          "la"
+          "al",
+          "En",
+          "vamos",
+          "la",
+          "sábado",
+          "El",
+          "cine"
         ],
         "explanation": "El sábado vamos al cine.",
         "id": "es1601_e4"
@@ -9674,14 +9857,14 @@ export const ES_LESSONS: Lesson[] = [
       "target_answer": "El martes voy a visitar Madrid",
       "word_bank": [
         "El",
-        "martes",
-        "voy",
-        "a",
-        "visitar",
         "Madrid",
-        "En",
+        "voy",
         "miércoles",
-        "vas"
+        "En",
+        "visitar",
+        "vas",
+        "a",
+        "martes"
       ],
       "explanation": "El martes = 'On Tuesday'."
     }
@@ -9711,7 +9894,11 @@ export const ES_LESSONS: Lesson[] = [
       "diez",
       "veinte",
       "lunes",
-      "martes"
+      "martes",
+      "semana",
+      "de",
+      "en",
+      "el"
     ],
     "hook": {
       "title": "How Spanish Builds Any Date: 'El [Number] de [Month]'",
@@ -9761,11 +9948,11 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build 'on the fifth of January' in Spanish:",
         "tile_options": [
-          "el",
-          "cinco",
-          "de",
           "enero",
-          "en"
+          "cinco",
+          "el",
+          "en",
+          "de"
         ],
         "target_answer": "elcincodeenero",
         "meaning": "el cinco de enero (on January 5th)",
@@ -9776,9 +9963,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'on January 10th'?",
         "options": [
+          "*el décimo de enero",
           "el diez de enero",
-          "*en el diez enero",
-          "*el décimo de enero"
+          "*en el diez enero"
         ],
         "target_answer": "el diez de enero",
         "meaning": "on January 10th",
@@ -9791,14 +9978,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Voy a Madrid en enero",
         "meaning": "I am going to Madrid in January",
         "word_bank": [
-          "Voy",
-          "a",
-          "Madrid",
-          "en",
           "enero",
-          "el",
+          "a",
           "de",
-          "lunes"
+          "en",
+          "lunes",
+          "Voy",
+          "el",
+          "Madrid"
         ],
         "explanation": "Voy a Madrid + en enero.",
         "id": "es1602_e4"
@@ -9833,14 +10020,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'On Monday I am going to confirm'",
       "target_answer": "El lunes voy a confirmar",
       "word_bank": [
-        "El",
-        "lunes",
         "voy",
-        "a",
-        "confirmar",
         "En",
+        "enero",
+        "lunes",
+        "El",
+        "confirmar",
         "de",
-        "enero"
+        "a"
       ],
       "explanation": "El lunes voy a confirmar."
     }
@@ -9873,7 +10060,12 @@ export const ES_LESSONS: Lesson[] = [
       "ha",
       "hemos",
       "hablado",
-      "comido"
+      "comido",
+      "hecho",
+      "visto",
+      "confirmar",
+      "comer",
+      "vivir"
     ],
     "hook": {
       "title": "Why Spanish Has Two Words for 'Have': Tener vs Haber",
@@ -9930,9 +10122,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build 'I have spoken' from the 1st-person auxiliary of haber and the participle of hablar:",
         "tile_options": [
-          "He",
           "hablado",
           "Tengo",
+          "He",
           "hablar"
         ],
         "target_answer": "Hehablado",
@@ -9944,9 +10136,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I have not eaten today' (keeping haber and comido glued together)?",
         "options": [
-          "No he comido hoy",
+          "*No tengo comido hoy",
           "*He no comido hoy",
-          "*No tengo comido hoy"
+          "No he comido hoy"
         ],
         "target_answer": "No he comido hoy",
         "meaning": "I have not eaten today",
@@ -9959,13 +10151,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Has hablado con María",
         "meaning": "Have you spoken with María?",
         "word_bank": [
-          "Has",
           "hablado",
-          "con",
-          "María",
+          "hablar",
           "Tienes",
-          "He",
-          "hablar"
+          "con",
+          "Has",
+          "María",
+          "He"
         ],
         "explanation": "¿Has hablado con María? — has + hablado stays glued together even in questions!",
         "id": "es17_e4"
@@ -9986,12 +10178,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Hemos comido aquí hoy",
         "meaning": "We have eaten here today",
         "word_bank": [
-          "Hemos",
-          "comido",
-          "aquí",
           "hoy",
+          "aquí",
           "Tenemos",
+          "Hemos",
           "comer",
+          "comido",
           "hablado"
         ],
         "explanation": "Hemos comido aquí hoy — hemos + comido.",
@@ -10015,12 +10207,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I haven't seen it'",
       "target_answer": "No lo he visto",
       "word_bank": [
+        "he",
+        "tengo",
+        "la",
         "No",
         "lo",
-        "he",
-        "visto",
-        "tengo",
-        "la"
+        "visto"
       ],
       "explanation": "No + lo + he visto — pronoun and negation stand in front of he visto."
     },
@@ -10061,7 +10253,11 @@ export const ES_LESSONS: Lesson[] = [
       "hecho",
       "visto",
       "he",
-      "has"
+      "has",
+      "hacer",
+      "ver",
+      "vivir",
+      "confirmar"
     ],
     "hook": {
       "title": "Regular -ado / -ido and the Two Cognate Irregulars: Hecho & Visto",
@@ -10114,7 +10310,7 @@ export const ES_LESSONS: Lesson[] = [
       },
       {
         "type": "reverse_cognate",
-        "prompt": "Spanish hecho ('done/made' and 'el hecho = the fact', from Latin factum via f-→h- and -ct-→-ch-) is the exact twin of which four-letter English noun?",
+        "prompt": "Spanish 'el hecho' ('that which is done', from Latin 'factum' via f-→h- and -ct-→-ch-) is the exact twin of which four-letter English noun meaning 'a proven truth'?",
         "target_answer": "fact",
         "meaning": "a fact (Latin factum) is literally 'a thing done' (hecho)!",
         "explanation": "Latin facere ('to do/make') → participle factum → English fact/feat and Spanish hecho.",
@@ -10124,9 +10320,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Convert 'confirmar' into its past participle ('confirmed') by swapping -ar for -ado:",
         "tile_options": [
-          "confirm",
           "ado",
           "ido",
+          "confirm",
           "ar"
         ],
         "target_answer": "confirmado",
@@ -10140,13 +10336,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Lo he hecho hoy",
         "meaning": "I have done it today",
         "word_bank": [
-          "Lo",
-          "he",
-          "hecho",
+          "hacer",
           "hoy",
           "La",
+          "he",
+          "hecho",
           "tengo",
-          "hacer"
+          "Lo"
         ],
         "explanation": "Lo + he + hecho + hoy.",
         "id": "es1701_e4"
@@ -10167,13 +10363,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Has visto la casa",
         "meaning": "Have you seen the house?",
         "word_bank": [
-          "Has",
-          "visto",
-          "la",
           "casa",
           "He",
+          "hecho",
           "ver",
-          "hecho"
+          "Has",
+          "la",
+          "visto"
         ],
         "explanation": "¿Has visto la casa? — visto stays invariable (-o) even though la casa is feminine!",
         "diagnosis": {
@@ -10196,13 +10392,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'We have seen the city'",
       "target_answer": "Hemos visto la ciudad",
       "word_bank": [
-        "Hemos",
-        "visto",
-        "la",
-        "ciudad",
         "Tenemos",
+        "visto",
+        "Hemos",
         "vista",
-        "el"
+        "la",
+        "el",
+        "ciudad"
       ],
       "explanation": "Hemos visto la ciudad."
     }
@@ -10232,7 +10428,11 @@ export const ES_LESSONS: Lesson[] = [
       "ha",
       "hemos",
       "hablado",
-      "comido"
+      "comido",
+      "hecho",
+      "visto",
+      "nunca",
+      "hoy"
     ],
     "hook": {
       "title": "The Silent-H Rhythm: he, has, ha, hemos, han",
@@ -10283,8 +10483,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Where does 'nunca' ('never') go in 'I have never seen that'?",
         "options": [
           "Nunca he visto eso (or No he visto eso nunca)",
-          "*He nunca visto eso",
-          "*Nunca tengo visto eso"
+          "*Nunca tengo visto eso",
+          "*He nunca visto eso"
         ],
         "target_answer": "Nunca he visto eso (or No he visto eso nunca)",
         "meaning": "I have never seen that",
@@ -10297,15 +10497,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Ella ha hablado con mi madre",
         "meaning": "She has spoken with my mother",
         "word_bank": [
+          "madre",
+          "mi",
           "Ella",
           "ha",
           "hablado",
+          "tiene",
           "con",
-          "mi",
-          "madre",
           "he",
-          "has",
-          "tiene"
+          "has"
         ],
         "explanation": "Ella ha hablado con mi madre.",
         "id": "es1702_e3"
@@ -10327,12 +10527,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Lo hemos hecho hoy",
         "meaning": "We have done it today",
         "word_bank": [
-          "Lo",
-          "hemos",
-          "hecho",
           "hoy",
+          "hemos",
           "Tenemos",
           "he",
+          "Lo",
+          "hecho",
           "visto"
         ],
         "explanation": "Lo hemos hecho hoy.",
@@ -10368,12 +10568,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Have you eaten today?'",
       "target_answer": "Has comido hoy",
       "word_bank": [
-        "Has",
-        "comido",
-        "hoy",
-        "Tienes",
         "He",
-        "comer"
+        "comido",
+        "comer",
+        "Tienes",
+        "hoy",
+        "Has"
       ],
       "explanation": "¿Has comido hoy?"
     }
@@ -10403,7 +10603,11 @@ export const ES_LESSONS: Lesson[] = [
       "fue",
       "ayer",
       "visitar",
-      "celebrar"
+      "celebrar",
+      "comer",
+      "vivir",
+      "ser",
+      "ir"
     ],
     "hook": {
       "title": "One Word for a Completed Dot on the Timeline",
@@ -10455,8 +10659,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "What is the difference between 'hablo' (no accent) and 'habló' (with an acute accent)?",
         "options": [
-          "hablo = 'I speak' (present); habló = 'he/she/usted spoke' (preterite past)",
           "Both mean 'I spoke'",
+          "hablo = 'I speak' (present); habló = 'he/she/usted spoke' (preterite past)",
           "hablo = 'he spoke'; habló = 'I speak'"
         ],
         "target_answer": "hablo = 'I speak' (present); habló = 'he/she/usted spoke' (preterite past)",
@@ -10471,13 +10675,13 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "Yesterday I spoke with my mother",
         "word_bank": [
           "Ayer",
-          "hablé",
-          "con",
-          "mi",
-          "madre",
-          "hablaba",
           "he",
-          "mañana"
+          "mi",
+          "mañana",
+          "con",
+          "madre",
+          "hablé",
+          "hablaba"
         ],
         "explanation": "Ayer ('Yesterday' — closed past dot) triggers the preterite hablé.",
         "id": "es18_e3"
@@ -10498,14 +10702,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Ayer comí en este restaurante",
         "meaning": "Yesterday I ate at this restaurant",
         "word_bank": [
-          "Ayer",
           "comí",
-          "en",
           "este",
+          "ese",
+          "en",
+          "comido",
           "restaurante",
           "como",
-          "comido",
-          "ese"
+          "Ayer"
         ],
         "explanation": "Ayer comí en este restaurante — comí is the 1st-person preterite of comer.",
         "diagnosis": {
@@ -10544,12 +10748,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Yesterday it was fantastic'",
       "target_answer": "Ayer fue fantástico",
       "word_bank": [
-        "Ayer",
-        "fue",
-        "fantástico",
+        "mañana",
         "es",
+        "fue",
         "está",
-        "mañana"
+        "Ayer",
+        "fantástico"
       ],
       "explanation": "Ayer fue fantástico."
     },
@@ -10587,7 +10791,9 @@ export const ES_LESSONS: Lesson[] = [
       "visitar",
       "confirmar",
       "celebrar",
-      "comprar"
+      "comprar",
+      "terminar",
+      "preparar"
     ],
     "hook": {
       "title": "Every Converted -ar Verb Now Has a Past Tense!",
@@ -10643,9 +10849,9 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Form 'I visited' (1st person singular preterite of visitar):",
         "tile_options": [
           "visit",
+          "ar",
           "é",
-          "ó",
-          "ar"
+          "ó"
         ],
         "target_answer": "visité",
         "meaning": "visité (I visited)",
@@ -10656,9 +10862,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'She confirmed the reservation yesterday'?",
         "options": [
-          "Ayer ella confirmó la reservación",
+          "Ayer ella confirmé la reservación",
           "Ayer ella confirme la reservación",
-          "Ayer ella confirmé la reservación"
+          "Ayer ella confirmó la reservación"
         ],
         "target_answer": "Ayer ella confirmó la reservación",
         "meaning": "Yesterday she confirmed the reservation",
@@ -10671,14 +10877,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Ayer hablé con mi padre",
         "meaning": "Yesterday I spoke with my father",
         "word_bank": [
-          "Ayer",
+          "madre",
           "hablé",
-          "con",
-          "mi",
-          "padre",
-          "hablo",
           "mañana",
-          "madre"
+          "mi",
+          "Ayer",
+          "hablo",
+          "padre",
+          "con"
         ],
         "explanation": "Ayer hablé con mi padre.",
         "id": "es1801_e4"
@@ -10713,11 +10919,11 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Yesterday I spoke'",
       "target_answer": "Ayer hablé",
       "word_bank": [
-        "Ayer",
         "hablé",
-        "Hoy",
+        "he",
         "hablaba",
-        "he"
+        "Ayer",
+        "Hoy"
       ],
       "explanation": "Ayer hablé."
     }
@@ -10746,7 +10952,10 @@ export const ES_LESSONS: Lesson[] = [
       "ir",
       "hacer",
       "tener",
-      "ayer"
+      "ayer",
+      "comí",
+      "madre",
+      "restaurante"
     ],
     "hook": {
       "title": "One Preterite for Two Verbs: Why Ser and Ir Both Become 'Fui / Fue'!",
@@ -10797,8 +11006,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "What does 'Fue a Madrid y fue fantástico' mean?",
         "options": [
           "He/she went to Madrid and it was fantastic",
-          "It was Madrid and he went fantastic",
-          "He goes to Madrid and it is fantastic"
+          "He goes to Madrid and it is fantastic",
+          "It was Madrid and he went fantastic"
         ],
         "target_answer": "He/she went to Madrid and it was fantastic",
         "meaning": "He/she went to Madrid and it was fantastic",
@@ -10814,10 +11023,10 @@ export const ES_LESSONS: Lesson[] = [
           "Ayer",
           "fue",
           "al",
-          "restaurante",
+          "la",
           "es",
-          "va",
-          "la"
+          "restaurante",
+          "va"
         ],
         "explanation": "Ayer + fue + al (a + el) + restaurante.",
         "id": "es1802_e3"
@@ -10839,12 +11048,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "La reservación fue un éxito",
         "meaning": "The reservation was a success",
         "word_bank": [
-          "La",
-          "reservación",
-          "fue",
           "un",
-          "éxito",
           "es",
+          "reservación",
+          "La",
+          "fue",
+          "éxito",
           "una",
           "salida"
         ],
@@ -10881,12 +11090,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'It was a success'",
       "target_answer": "Fue un éxito",
       "word_bank": [
-        "Fue",
-        "un",
+        "salida",
         "éxito",
-        "Es",
         "una",
-        "salida"
+        "un",
+        "Es",
+        "Fue"
       ],
       "explanation": "Fue un éxito ('It was a success')."
     }
@@ -10916,7 +11125,11 @@ export const ES_LESSONS: Lesson[] = [
       "estaba",
       "fue",
       "hablé",
-      "ser"
+      "ser",
+      "estar",
+      "vivir",
+      "comer",
+      "tiempo"
     ],
     "hook": {
       "title": "The Line vs The Dot in the Past",
@@ -10966,7 +11179,7 @@ export const ES_LESSONS: Lesson[] = [
       },
       {
         "type": "reverse_cognate",
-        "prompt": "Spanish era ('was / used to be', the imperfect of ser from Latin erat) is spelled identically to which English noun for a long, ongoing historical period?",
+        "prompt": "Spanish 'yo/él _____' ('was / used to be', the imperfect of ser from Latin 'erat') is spelled identically to which three-letter English noun for a long historical period?",
         "target_answer": "era",
         "meaning": "an 'era' is literally an ongoing stretch of past time — the exact job of the Spanish imperfect!",
         "explanation": "Thinking of an 'era' reminds you that era (unlike single-event fue) describes ongoing background traits in the past.",
@@ -10995,14 +11208,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "El café estaba muy caliente",
         "meaning": "The coffee was very hot",
         "word_bank": [
+          "muy",
+          "fue",
+          "era",
           "El",
           "café",
           "estaba",
-          "muy",
-          "caliente",
-          "era",
-          "fue",
-          "es"
+          "es",
+          "caliente"
         ],
         "explanation": "Thermal state in the past uses the imperfect of estar: estaba.",
         "id": "es19_e4"
@@ -11024,15 +11237,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Estaba aquí y hablé con María",
         "meaning": "I was here and I spoke with María",
         "word_bank": [
-          "Estaba",
           "aquí",
-          "y",
-          "hablé",
-          "con",
+          "Estaba",
           "María",
           "Era",
           "hablaba",
-          "estoy"
+          "estoy",
+          "y",
+          "con",
+          "hablé"
         ],
         "explanation": "Estaba aquí (background stage) + y hablé con María (the action that happened on that stage)!",
         "diagnosis": {
@@ -11055,12 +11268,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'It was a beautiful city (background description)'",
       "target_answer": "Era una ciudad hermosa",
       "word_bank": [
-        "Era",
-        "una",
+        "Es",
         "ciudad",
         "hermosa",
         "Estaba",
-        "Es",
+        "una",
+        "Era",
         "hermoso"
       ],
       "explanation": "Era una ciudad hermosa."
@@ -11098,7 +11311,10 @@ export const ES_LESSONS: Lesson[] = [
       "estaba",
       "vivir",
       "comer",
-      "tener"
+      "tener",
+      "querer",
+      "poder",
+      "casa"
     ],
     "hook": {
       "title": "Only Three Irregular Verbs in the Whole Language!",
@@ -11148,10 +11364,10 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build the imperfect of 'estar' ('I/he/she was in a state or place') using the regular -ar imperfect ending:",
         "tile_options": [
+          "ar",
           "est",
           "aba",
-          "ía",
-          "ar"
+          "ía"
         ],
         "target_answer": "estaba",
         "meaning": "estaba (was - state/location)",
@@ -11162,9 +11378,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Which tense and verb do you use for 'I used to speak every day'?",
         "options": [
+          "He hablado todos los días",
           "Hablaba todos los días",
-          "Hablé todos los días",
-          "He hablado todos los días"
+          "Hablé todos los días"
         ],
         "target_answer": "Hablaba todos los días",
         "meaning": "I used to speak every day",
@@ -11172,21 +11388,27 @@ export const ES_LESSONS: Lesson[] = [
         "id": "es1901_e3"
       },
       {
-        "type": "syntax_builder",
-        "prompt": "Assemble: 'She was very happy (ongoing past state)'",
-        "target_answer": "Ella estaba muy contenta",
-        "meaning": "She was very happy",
-        "word_bank": [
-          "Ella",
-          "estaba",
-          "muy",
-          "contenta",
-          "era",
-          "fue",
-          "contento"
+        "id": "es1901_e4",
+        "type": "spoken_turn_reply",
+        "prompt": "Answer the question in the compound past (pretérito perfecto):",
+        "spoken_question": "¿Qué has preparado hoy?",
+        "question_meaning": "What have you prepared today?",
+        "reply_idea": "Reply that you have prepared the coffee.",
+        "cues": [
+          "Start with He preparado...",
+          "Finish with el café."
         ],
-        "explanation": "Ella estaba muy contenta — emotional state in the past uses estaba.",
-        "id": "es1901_e4"
+        "word_bank": [
+          "He",
+          "has",
+          "preparado",
+          "café",
+          "el",
+          "hoy"
+        ],
+        "target_answer": "He preparado el café",
+        "meaning": "I have prepared the coffee",
+        "explanation": "haber (he) + the -ado participle (preparado) forms an unbreakable unit in Spanish."
       },
       {
         "type": "dictation",
@@ -11219,12 +11441,12 @@ export const ES_LESSONS: Lesson[] = [
       "target_answer": "La casa era pequeña",
       "word_bank": [
         "La",
+        "pequeño",
+        "fue",
         "casa",
         "era",
-        "pequeña",
         "estaba",
-        "fue",
-        "pequeño"
+        "pequeña"
       ],
       "explanation": "La casa era pequeña describes an ongoing past characteristic."
     }
@@ -11254,7 +11476,11 @@ export const ES_LESSONS: Lesson[] = [
       "hablaba",
       "fue",
       "hablé",
-      "comí"
+      "comí",
+      "ayer",
+      "casa",
+      "restaurante",
+      "hotel"
     ],
     "hook": {
       "title": "Stage Lighting vs The Actor Entering",
@@ -11304,9 +11530,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "In 'I was at the house when I spoke with my mother', which pair of verbs matches 'was' (background location) and 'spoke' (completed event)?",
         "options": [
-          "Estaba / hablé",
+          "Era / hablé",
           "Fui / hablaba",
-          "Era / hablé"
+          "Estaba / hablé"
         ],
         "target_answer": "Estaba / hablé",
         "meaning": "I was (there) / I spoke",
@@ -11319,17 +11545,17 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Estaba en el restaurante y comí el pastel",
         "meaning": "I was at the restaurant and I ate the cake",
         "word_bank": [
-          "Estaba",
-          "en",
           "el",
-          "restaurante",
-          "y",
-          "comí",
-          "el",
-          "pastel",
-          "Era",
+          "como",
           "Fue",
-          "como"
+          "en",
+          "Estaba",
+          "comí",
+          "Era",
+          "pastel",
+          "y",
+          "el",
+          "restaurante"
         ],
         "explanation": "Estaba (background location) + y comí (completed action).",
         "id": "es1902_e3"
@@ -11350,20 +11576,20 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "El hotel era muy bueno y ayer hablé con mi amigo",
         "meaning": "The hotel was very good and yesterday I spoke with my friend",
         "word_bank": [
-          "El",
-          "hotel",
-          "era",
-          "muy",
-          "bueno",
-          "y",
-          "ayer",
-          "hablé",
           "con",
-          "mi",
-          "amigo",
+          "era",
           "estaba",
+          "ayer",
+          "amigo",
+          "hotel",
+          "buena",
           "hablaba",
-          "buena"
+          "hablé",
+          "y",
+          "El",
+          "muy",
+          "mi",
+          "bueno"
         ],
         "explanation": "El hotel era muy bueno (description) + y ayer hablé con mi amigo (event).",
         "id": "es1902_e4"
@@ -11397,12 +11623,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I was speaking when he went'",
       "target_answer": "Yo hablaba cuando fue",
       "word_bank": [
-        "Yo",
+        "es",
+        "hablé",
+        "fue",
         "hablaba",
         "cuando",
-        "fue",
-        "hablé",
-        "es",
+        "Yo",
         "era"
       ],
       "explanation": "Yo hablaba (ongoing) cuando fue (event)."
@@ -11433,7 +11659,11 @@ export const ES_LESSONS: Lesson[] = [
       "estar",
       "estoy",
       "aquí",
-      "año"
+      "año",
+      "semana",
+      "lunes",
+      "tres",
+      "dos"
     ],
     "hook": {
       "title": "Why 'I Have Lived Here for Three Years' Is Present Tense in Spanish!",
@@ -11499,15 +11729,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Vivo aquí desde hace tres años",
         "meaning": "I have lived here for three years",
         "word_bank": [
-          "Vivo",
+          "tres",
+          "Viví",
           "aquí",
           "desde",
-          "hace",
-          "tres",
-          "años",
-          "Viví",
           "por",
-          "para"
+          "años",
+          "para",
+          "hace",
+          "Vivo"
         ],
         "explanation": "Vivo (present!) + aquí + desde hace + tres años.",
         "id": "es20_e3"
@@ -11529,13 +11759,13 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "I have been here since Monday",
         "word_bank": [
           "Estoy",
-          "aquí",
           "desde",
-          "el",
+          "por",
           "lunes",
           "Estuve",
           "hace",
-          "por"
+          "el",
+          "aquí"
         ],
         "explanation": "Estoy aquí desde el lunes — starting point ('Monday') uses bare desde without hace.",
         "diagnosis": {
@@ -11550,10 +11780,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "Vivo aquí desde hace tres años",
         "natural": "I have lived here for three years",
         "options": [
-          "I have lived here for three years",
-          "I-live here since it-makes three years",
+          "I lived here since three years",
           "I have lived here by three years",
-          "I lived here since three years"
+          "I have lived here for three years",
+          "I-live here since it-makes three years"
         ],
         "target_answer": "I-live here since it-makes three years",
         "meaning": "I have lived here for three years (literal Spanish blueprint: I-live here since it-makes three years)",
@@ -11574,13 +11804,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I have been here since January'",
       "target_answer": "Estoy aquí desde enero",
       "word_bank": [
-        "Estoy",
-        "aquí",
-        "desde",
-        "enero",
         "hace",
+        "enero",
+        "aquí",
         "Soy",
-        "por"
+        "por",
+        "desde",
+        "Estoy"
       ],
       "explanation": "Estoy aquí desde enero."
     },
@@ -11618,7 +11848,11 @@ export const ES_LESSONS: Lesson[] = [
       "estoy",
       "está",
       "lunes",
-      "enero"
+      "enero",
+      "año",
+      "semana",
+      "dos",
+      "tres"
     ],
     "hook": {
       "title": "Point on the Calendar vs Span on the Stopwatch",
@@ -11668,8 +11902,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Complete the sentence: 'Vivo en esta casa ___ diez años.'",
         "options": [
-          "desde hace",
           "desde",
+          "desde hace",
           "para"
         ],
         "target_answer": "desde hace",
@@ -11684,49 +11918,43 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "She has been in Madrid since Monday",
         "word_bank": [
           "Ella",
+          "lunes",
           "está",
+          "el",
+          "por",
+          "desde",
           "en",
           "Madrid",
-          "desde",
-          "el",
-          "lunes",
-          "hace",
           "es",
-          "por"
+          "hace"
         ],
         "explanation": "Ella está (present!) + en Madrid + desde el lunes.",
         "id": "es2001_e3"
       },
       {
-        "type": "transcribe",
-        "prompt": "Tell me:",
-        "idea": "say that you have lived in this city for two years",
-        "cues": [
-          "I live (present) → Vivo",
-          "in this city → en esta ciudad",
-          "for two years → desde hace dos años"
+        "id": "es2001_e4",
+        "type": "pronoun_compression",
+        "prompt": "Fold the direct object noun phrase into a Spanish pre-verbal pronoun:",
+        "shift_hint": "lo / la / los / las",
+        "full_sentence": "Veo el libro y compro el libro hoy",
+        "compressed_parts": [
+          {
+            "noun": "el libro",
+            "pronoun": "lo",
+            "role": "direct object"
+          }
         ],
-        "idea_parts": [
-          "I live in this city → Vivo en esta ciudad",
-          "for two years → desde hace dos años"
-        ],
-        "target_answer": "Vivo en esta ciudad desde hace dos años",
-        "meaning": "I have lived in this city for two years",
         "word_bank": [
-          "Vivo",
-          "en",
-          "esta",
-          "ciudad",
-          "desde",
-          "hace",
-          "dos",
-          "años",
-          "este",
-          "por",
-          "para"
+          "libro",
+          "la",
+          "hoy",
+          "le",
+          "compro",
+          "Lo"
         ],
-        "explanation": "Vivo en esta ciudad desde hace dos años.",
-        "id": "es2001_e4"
+        "target_answer": "Lo compro hoy",
+        "meaning": "I buy it today",
+        "explanation": "In Spanish, a conjugated verb pulls its direct object pronoun (lo) directly in front of itself: Lo compro hoy."
       },
       {
         "type": "dictation",
@@ -11758,14 +11986,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'He has been here for three days'",
       "target_answer": "Está aquí desde hace tres días",
       "word_bank": [
-        "Está",
-        "aquí",
-        "desde",
-        "hace",
         "tres",
+        "por",
+        "hace",
+        "desde",
         "días",
         "Es",
-        "por",
+        "Está",
+        "aquí",
         "para"
       ],
       "explanation": "Está aquí desde hace tres días."
@@ -11795,7 +12023,10 @@ export const ES_LESSONS: Lesson[] = [
       "estoy",
       "aquí",
       "año",
-      "semana"
+      "semana",
+      "dos",
+      "tres",
+      "ciudad"
     ],
     "hook": {
       "title": "Carrying Time on Your Back: Llevo Tres Años Aquí",
@@ -11840,9 +12071,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "What does a native speaker in Madrid mean by 'Llevo dos años en Madrid'?",
         "options": [
-          "I have been (living) in Madrid for two years",
+          "I left Madrid two years ago",
           "I will go to Madrid in two years",
-          "I left Madrid two years ago"
+          "I have been (living) in Madrid for two years"
         ],
         "target_answer": "I have been (living) in Madrid for two years",
         "meaning": "I have been in Madrid for two years",
@@ -11855,50 +12086,45 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Vivo en esta casa desde hace tres años",
         "meaning": "I have lived in this house for three years",
         "word_bank": [
-          "Vivo",
-          "en",
-          "esta",
-          "casa",
-          "desde",
           "hace",
-          "tres",
-          "años",
-          "este",
+          "esta",
+          "en",
+          "para",
+          "desde",
+          "Vivo",
           "por",
-          "para"
+          "casa",
+          "años",
+          "tres",
+          "este"
         ],
         "explanation": "Vivo en esta casa desde hace tres años.",
         "id": "es2002_e3"
       },
       {
-        "type": "transcribe",
-        "prompt": "Tell me:",
-        "idea": "say that we have been in the city since Monday",
-        "cues": [
-          "We are (location) → Estamos",
-          "in the city → en la ciudad",
-          "since Monday → desde el lunes"
+        "id": "es2002_e4",
+        "type": "pronoun_compression",
+        "prompt": "Fold the indirect receiver into its Spanish dative pronoun:",
+        "shift_hint": "me / te / le / nos / les",
+        "full_sentence": "Ella habla al médico por la mañana",
+        "compressed_parts": [
+          {
+            "noun": "al médico",
+            "pronoun": "le",
+            "role": "indirect receiver"
+          }
         ],
-        "idea_parts": [
-          "We are in the city → Estamos en la ciudad",
-          "since Monday → desde el lunes"
-        ],
-        "target_answer": "Estamos en la ciudad desde el lunes",
-        "meaning": "We have been in the city since Monday",
         "word_bank": [
-          "Estamos",
-          "en",
-          "la",
-          "ciudad",
-          "desde",
-          "el",
-          "lunes",
-          "Somos",
-          "hace",
-          "por"
+          "Ella",
+          "lo",
+          "se",
+          "le",
+          "médico",
+          "habla"
         ],
-        "explanation": "Estamos en la ciudad desde el lunes.",
-        "id": "es2002_e4"
+        "target_answer": "Ella le habla",
+        "meaning": "She speaks to him",
+        "explanation": "The indirect receiver al médico folds into the pre-verbal dative clitic le: Ella le habla."
       },
       {
         "type": "dictation",
@@ -11930,15 +12156,15 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I have been here for two weeks'",
       "target_answer": "Estoy aquí desde hace dos semanas",
       "word_bank": [
-        "Estoy",
-        "aquí",
-        "desde",
-        "hace",
+        "para",
         "dos",
-        "semanas",
         "Soy",
+        "semanas",
+        "hace",
+        "aquí",
         "por",
-        "para"
+        "Estoy",
+        "desde"
       ],
       "explanation": "Estoy aquí desde hace dos semanas."
     }
@@ -11967,7 +12193,10 @@ export const ES_LESSONS: Lesson[] = [
       "mejor",
       "peor",
       "tan",
-      "como"
+      "como",
+      "grande",
+      "importante",
+      "bueno"
     ],
     "hook": {
       "title": "Why Spanish Never Adds '-er' to Adjectives",
@@ -12047,15 +12276,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Madrid es más grande que Toledo",
         "meaning": "Madrid is bigger than Toledo",
         "word_bank": [
-          "Madrid",
-          "es",
-          "más",
-          "grande",
-          "que",
           "Toledo",
-          "menos",
+          "es",
+          "Madrid",
+          "mejor",
           "como",
-          "mejor"
+          "grande",
+          "menos",
+          "que",
+          "más"
         ],
         "explanation": "Madrid es + más grande + que + Toledo.",
         "id": "es21_e4"
@@ -12077,16 +12306,16 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Este libro es tan importante como ese",
         "meaning": "This book is as important as that one",
         "word_bank": [
-          "Este",
-          "libro",
-          "es",
-          "tan",
-          "importante",
-          "como",
-          "ese",
-          "más",
           "que",
-          "esto"
+          "como",
+          "esto",
+          "ese",
+          "tan",
+          "libro",
+          "más",
+          "Este",
+          "importante",
+          "es"
         ],
         "explanation": "Este libro es tan importante como ese — equality uses tan... como (without an accent on como!).",
         "diagnosis": {
@@ -12110,11 +12339,11 @@ export const ES_LESSONS: Lesson[] = [
       "target_answer": "Hoy es peor",
       "word_bank": [
         "Hoy",
+        "tan",
         "es",
-        "peor",
-        "mejor",
         "más",
-        "tan"
+        "mejor",
+        "peor"
       ],
       "explanation": "Hoy es peor."
     },
@@ -12151,7 +12380,10 @@ export const ES_LESSONS: Lesson[] = [
       "grande",
       "pequeño",
       "importante",
-      "económico"
+      "económico",
+      "hermoso",
+      "ciudad",
+      "hotel"
     ],
     "hook": {
       "title": "How 'Bigger' Becomes 'The Biggest' Just by Adding 'El / La'!",
@@ -12201,8 +12433,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'It is the most important city'?",
         "options": [
-          "Es la ciudad más importante",
           "*Es la más importante ciudad",
+          "Es la ciudad más importante",
           "*Es la ciudad muy importante"
         ],
         "target_answer": "Es la ciudad más importante",
@@ -12216,16 +12448,16 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Este hotel es más económico que ese",
         "meaning": "This hotel is more economical than that one",
         "word_bank": [
-          "Este",
-          "hotel",
-          "es",
-          "más",
-          "económico",
-          "que",
           "ese",
+          "es",
           "menos",
+          "que",
+          "hotel",
           "como",
-          "esto"
+          "más",
+          "Este",
+          "esto",
+          "económico"
         ],
         "explanation": "Este hotel es + más económico + que + ese.",
         "id": "es2101_e3"
@@ -12246,14 +12478,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Es la casa más grande",
         "meaning": "It is the biggest house",
         "word_bank": [
-          "Es",
+          "el",
+          "que",
+          "mejor",
+          "grande",
           "la",
           "casa",
-          "más",
-          "grande",
-          "el",
-          "mejor",
-          "que"
+          "Es",
+          "más"
         ],
         "explanation": "Es la casa más grande.",
         "id": "es2101_e4"
@@ -12288,12 +12520,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'It is less important'",
       "target_answer": "Es menos importante",
       "word_bank": [
-        "Es",
-        "menos",
-        "importante",
+        "que",
         "más",
+        "Es",
         "tan",
-        "que"
+        "menos",
+        "importante"
       ],
       "explanation": "Es menos importante."
     }
@@ -12323,7 +12555,11 @@ export const ES_LESSONS: Lesson[] = [
       "mejor",
       "peor",
       "bueno",
-      "grande"
+      "grande",
+      "importante",
+      "amigo",
+      "vino",
+      "café"
     ],
     "hook": {
       "title": "Why 'Mejor' and 'Peor' Can Stand Before the Noun",
@@ -12373,9 +12609,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'He is my best friend'?",
         "options": [
-          "Es mi mejor amigo",
+          "*Es mi mejor que amigo",
           "*Es mi más bueno amigo",
-          "*Es mi mejor que amigo"
+          "Es mi mejor amigo"
         ],
         "target_answer": "Es mi mejor amigo",
         "meaning": "He is my best friend",
@@ -12388,15 +12624,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Este vino es mejor que ese",
         "meaning": "This wine is better than that one",
         "word_bank": [
-          "Este",
-          "vino",
-          "es",
-          "mejor",
           "que",
+          "Este",
+          "mejor",
+          "vino",
           "ese",
+          "es",
           "bueno",
-          "como",
-          "esto"
+          "esto",
+          "como"
         ],
         "explanation": "Este vino es mejor que ese.",
         "id": "es2102_e3"
@@ -12418,17 +12654,17 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "El café es tan bueno como el vino",
         "meaning": "The coffee is as good as the wine",
         "word_bank": [
-          "El",
-          "café",
-          "es",
-          "tan",
-          "bueno",
           "como",
-          "el",
-          "vino",
           "más",
+          "el",
+          "bueno",
+          "es",
+          "café",
           "que",
-          "buena"
+          "El",
+          "buena",
+          "tan",
+          "vino"
         ],
         "explanation": "El café es tan bueno como el vino.",
         "id": "es2102_e4"
@@ -12463,13 +12699,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'He is my best friend'",
       "target_answer": "Es mi mejor amigo",
       "word_bank": [
-        "Es",
-        "mi",
-        "mejor",
-        "amigo",
-        "más",
         "bueno",
-        "que"
+        "que",
+        "mejor",
+        "más",
+        "amigo",
+        "mi",
+        "Es"
       ],
       "explanation": "Es mi mejor amigo."
     }
@@ -12499,7 +12735,11 @@ export const ES_LESSONS: Lesson[] = [
       "nos",
       "le",
       "se",
-      "lo"
+      "lo",
+      "la",
+      "dar",
+      "decir",
+      "explicar"
     ],
     "hook": {
       "title": "People Before Things: The Pronoun Highway",
@@ -12579,12 +12819,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Te lo digo",
         "meaning": "I tell it to you",
         "word_bank": [
-          "Te",
+          "Lo",
+          "le",
           "lo",
           "digo",
-          "Lo",
-          "te",
-          "le"
+          "Te",
+          "te"
         ],
         "explanation": "Te ('to you', person first) + lo ('it', thing second) + digo ('I tell').",
         "id": "es22_e4"
@@ -12595,10 +12835,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "Se lo doy hoy",
         "natural": "I give it to him/her today",
         "options": [
+          "It to-him I give today",
           "I give it to him/her today",
           "To-him/her it I-give today",
-          "Himself it gives today",
-          "It to-him I give today"
+          "Himself it gives today"
         ],
         "target_answer": "To-him/her it I-give today",
         "meaning": "I give it to him/her today (literal Spanish blueprint: To-him/her it I-give today)",
@@ -12619,13 +12859,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I give it to him today'",
       "target_answer": "Se lo doy hoy",
       "word_bank": [
-        "Se",
         "lo",
-        "doy",
-        "hoy",
+        "digo",
+        "Se",
         "Le",
         "me",
-        "digo"
+        "doy",
+        "hoy"
       ],
       "explanation": "Se lo doy hoy (never *Le lo doy!)."
     },
@@ -12663,7 +12903,11 @@ export const ES_LESSONS: Lesson[] = [
       "nos",
       "lo",
       "la",
-      "dar"
+      "dar",
+      "decir",
+      "comprar",
+      "explicar",
+      "verdad"
     ],
     "hook": {
       "title": "Person First, Thing Second, Verb Third",
@@ -12713,9 +12957,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Referring to 'la llave' (feminine), how do you say 'I give it to you'?",
         "options": [
-          "Te la doy",
           "*La te doy",
-          "Te lo doy"
+          "Te lo doy",
+          "Te la doy"
         ],
         "target_answer": "Te la doy",
         "meaning": "I give it (the key) to you",
@@ -12728,12 +12972,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Nos lo explica",
         "meaning": "He explains it to us",
         "word_bank": [
-          "Nos",
-          "lo",
           "explica",
-          "Lo",
+          "lo",
+          "me",
+          "Nos",
           "nos",
-          "me"
+          "Lo"
         ],
         "explanation": "Nos ('to us') + lo ('it') + explica ('he/she explains').",
         "id": "es2201_e3"
@@ -12755,12 +12999,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Me lo da",
         "meaning": "He gives it to me",
         "word_bank": [
-          "Me",
-          "lo",
-          "da",
-          "Lo",
           "te",
-          "doy"
+          "Lo",
+          "doy",
+          "da",
+          "Me",
+          "lo"
         ],
         "explanation": "Me lo da — person before thing before verb.",
         "id": "es2201_e4"
@@ -12795,12 +13039,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I do not tell it to you'",
       "target_answer": "No te lo digo",
       "word_bank": [
+        "lo",
         "No",
         "te",
-        "lo",
-        "digo",
-        "Te",
         "no",
+        "Te",
+        "digo",
         "la"
       ],
       "explanation": "No te lo digo."
@@ -12831,7 +13075,11 @@ export const ES_LESSONS: Lesson[] = [
       "lo",
       "la",
       "dar",
-      "decir"
+      "decir",
+      "explicar",
+      "confirmar",
+      "voy",
+      "querer"
     ],
     "hook": {
       "title": "Se Lo Works for Him, Her, Usted, AND Them!",
@@ -12882,8 +13130,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Transform 'le + lo + digo' into real Spanish by applying the 'se lo' softening rule:",
         "tile_options": [
           "Se",
-          "lo",
           "digo",
+          "lo",
           "Le"
         ],
         "target_answer": "Selodigo",
@@ -12911,10 +13159,10 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "I explain it to him / her",
         "word_bank": [
           "Se",
-          "lo",
           "explico",
-          "Le",
           "me",
+          "Le",
+          "lo",
           "la"
         ],
         "explanation": "Se + lo + explico.",
@@ -12950,14 +13198,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I am going to explain it to her'",
       "target_answer": "Se lo voy a explicar",
       "word_bank": [
-        "Se",
-        "lo",
-        "voy",
-        "a",
+        "de",
         "explicar",
+        "voy",
+        "Se",
+        "a",
         "Le",
-        "me",
-        "de"
+        "lo",
+        "me"
       ],
       "explanation": "Se lo voy a explicar."
     }
@@ -12987,7 +13235,11 @@ export const ES_LESSONS: Lesson[] = [
       "le",
       "dar",
       "decir",
-      "ver"
+      "ver",
+      "invitar",
+      "conocer",
+      "a",
+      "amigo"
     ],
     "hook": {
       "title": "Direct Target (lo / la) vs Recipient Person (le / les)",
@@ -13044,8 +13296,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Compare 'I visit Madrid' and 'I visit my mother'. Why does only the second one require 'a'?",
         "options": [
-          "Visito Madrid (place = no 'a') vs Visito a mi madre (specific person = requires the personal 'a'!)",
           "Because madre is feminine",
+          "Visito Madrid (place = no 'a') vs Visito a mi madre (specific person = requires the personal 'a'!)",
           "Because Madrid starts with M"
         ],
         "target_answer": "Visito Madrid (place = no 'a') vs Visito a mi madre (specific person = requires the personal 'a'!)",
@@ -13059,14 +13311,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero invitar a mi amigo",
         "meaning": "I want to invite my friend",
         "word_bank": [
-          "Quiero",
           "invitar",
           "a",
-          "mi",
-          "amigo",
-          "para",
+          "el",
           "por",
-          "el"
+          "Quiero",
+          "para",
+          "mi",
+          "amigo"
         ],
         "explanation": "Quiero invitar + a (personal 'a'!) + mi amigo.",
         "id": "es23_e3"
@@ -13089,14 +13341,14 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "I give the book to María",
         "word_bank": [
           "Le",
-          "doy",
-          "el",
-          "libro",
-          "a",
-          "María",
-          "Lo",
+          "para",
           "La",
-          "para"
+          "doy",
+          "libro",
+          "Lo",
+          "a",
+          "el",
+          "María"
         ],
         "explanation": "Le doy el libro a María — Spanish loves announcing the recipient twice: with le before the verb AND a María after it!",
         "diagnosis": {
@@ -13111,9 +13363,9 @@ export const ES_LESSONS: Lesson[] = [
         "german": "Le doy el libro a María",
         "natural": "I give the book to María",
         "options": [
+          "It I give the book María",
           "I give the book to María",
           "To-her I-give the book to María",
-          "It I give the book María",
           "She gives the book to María"
         ],
         "target_answer": "To-her I-give the book to María",
@@ -13135,13 +13387,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I know your father'",
       "target_answer": "Conozco a tu padre",
       "word_bank": [
-        "Conozco",
-        "a",
-        "tu",
         "padre",
+        "tu",
         "el",
-        "por",
-        "tú"
+        "a",
+        "Conozco",
+        "tú",
+        "por"
       ],
       "explanation": "Conozco + a (personal 'a') + tu padre."
     },
@@ -13179,7 +13431,11 @@ export const ES_LESSONS: Lesson[] = [
       "conocer",
       "invitar",
       "visitar",
-      "hermano"
+      "hermano",
+      "amigo",
+      "padre",
+      "madre",
+      "hotel"
     ],
     "hook": {
       "title": "Respecting People in Grammar",
@@ -13244,13 +13500,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Veo a mis amigos aquí",
         "meaning": "I see my friends here",
         "word_bank": [
+          "mis",
+          "los",
+          "aquí",
+          "amigos",
+          "el",
           "Veo",
           "a",
-          "mis",
-          "amigos",
-          "aquí",
-          "el",
-          "los",
           "por"
         ],
         "explanation": "Veo + a (personal 'a') + mis amigos + aquí.",
@@ -13271,14 +13527,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero invitar a mi madre",
         "meaning": "I want to invite my mother",
         "word_bank": [
+          "mi",
+          "para",
+          "padre",
           "Quiero",
           "invitar",
           "a",
-          "mi",
-          "madre",
           "la",
-          "para",
-          "padre"
+          "madre"
         ],
         "explanation": "Quiero invitar a mi madre.",
         "id": "es2301_e4"
@@ -13313,12 +13569,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I see the gentleman (al señor)'",
       "target_answer": "Veo al señor",
       "word_bank": [
+        "por",
         "Veo",
         "al",
-        "señor",
         "el",
         "la",
-        "por"
+        "señor"
       ],
       "explanation": "a + el señor contracts to al señor: Veo al señor."
     }
@@ -13348,7 +13604,11 @@ export const ES_LESSONS: Lesson[] = [
       "te",
       "nos",
       "dar",
-      "decir"
+      "decir",
+      "explicar",
+      "hablar",
+      "a",
+      "amigo"
     ],
     "hook": {
       "title": "Why Spanish Announces the Recipient Twice",
@@ -13398,9 +13658,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How does a native speaker say 'I tell the truth to my father'?",
         "options": [
+          "Lo digo la verdad a mi padre",
           "Le digo la verdad a mi padre",
-          "Digo la verdad para mi padre",
-          "Lo digo la verdad a mi padre"
+          "Digo la verdad para mi padre"
         ],
         "target_answer": "Le digo la verdad a mi padre",
         "meaning": "I tell the truth to my father",
@@ -13413,16 +13673,16 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Le doy la llave a mi madre",
         "meaning": "I give the key to my mother",
         "word_bank": [
-          "Le",
-          "doy",
-          "la",
-          "llave",
-          "a",
-          "mi",
           "madre",
-          "La",
+          "llave",
+          "para",
+          "doy",
           "Lo",
-          "para"
+          "mi",
+          "la",
+          "Le",
+          "La",
+          "a"
         ],
         "explanation": "Le (previewing the recipient) + doy + la llave + a mi madre.",
         "id": "es2302_e3"
@@ -13444,16 +13704,16 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Le explico la situación a mi amigo",
         "meaning": "I explain the situation to my friend",
         "word_bank": [
-          "Le",
+          "Lo",
+          "por",
           "explico",
-          "la",
           "situación",
           "a",
-          "mi",
-          "amigo",
-          "Lo",
           "para",
-          "por"
+          "mi",
+          "la",
+          "Le",
+          "amigo"
         ],
         "explanation": "Le explico la situación a mi amigo.",
         "id": "es2302_e4"
@@ -13488,12 +13748,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'He gives me the book'",
       "target_answer": "Me da el libro",
       "word_bank": [
+        "doy",
+        "libro",
         "Me",
         "da",
-        "el",
-        "libro",
         "Le",
-        "doy",
+        "el",
         "la"
       ],
       "explanation": "Me da el libro ('He gives me the book')."
@@ -13523,7 +13783,10 @@ export const ES_LESSONS: Lesson[] = [
       "dónde",
       "qué",
       "hablar",
-      "hermano"
+      "hermano",
+      "amigo",
+      "ciudad",
+      "a"
     ],
     "hook": {
       "title": "Two Ways of 'Knowing' That English Blurs Together",
@@ -13595,9 +13858,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I know how to speak Spanish' in natural Spanish?",
         "options": [
-          "Sé hablar español",
+          "*Conozco hablar español",
           "*Sé cómo hablar español",
-          "*Conozco hablar español"
+          "Sé hablar español"
         ],
         "target_answer": "Sé hablar español",
         "meaning": "I know how to speak Spanish",
@@ -13610,16 +13873,16 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Conozco Madrid y conozco a tu hermano",
         "meaning": "I know Madrid and I know your brother",
         "word_bank": [
-          "Conozco",
+          "a",
+          "el",
+          "tú",
           "Madrid",
           "y",
-          "conozco",
-          "a",
           "tu",
+          "Conozco",
           "hermano",
-          "Sé",
-          "el",
-          "tú"
+          "conozco",
+          "Sé"
         ],
         "explanation": "Conozco Madrid (city = no 'a') y conozco a tu hermano (person = personal 'a'!).",
         "id": "es2303_e4"
@@ -13640,15 +13903,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "No sé dónde está la estación",
         "meaning": "I don't know where the station is",
         "word_bank": [
-          "No",
-          "sé",
           "dónde",
-          "está",
-          "la",
-          "estación",
+          "No",
           "conozco",
           "se",
-          "es"
+          "estación",
+          "sé",
+          "es",
+          "la",
+          "está"
         ],
         "explanation": "No sé dónde está la estación — notice sé ('I know') wears an accent mark to distinguish it from se ('himself/herself')!",
         "diagnosis": {
@@ -13671,12 +13934,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Do you know where it is?'",
       "target_answer": "Sabes dónde está",
       "word_bank": [
-        "Sabes",
         "dónde",
+        "es",
+        "Sé",
         "está",
         "Conoces",
-        "es",
-        "Sé"
+        "Sabes"
       ],
       "explanation": "¿Sabes dónde está? uses saber before a clause."
     }
@@ -13708,7 +13971,11 @@ export const ES_LESSONS: Lesson[] = [
       "llamar",
       "me_llamo",
       "me",
-      "te"
+      "te",
+      "se",
+      "nos",
+      "ocho",
+      "siete"
     ],
     "hook": {
       "title": "You Have Spoken Reflexive Spanish Since Day One!",
@@ -13774,8 +14041,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "How do you say 'I get up at seven o'clock'?",
         "options": [
           "Me levanto a las siete",
-          "*Levanto a las siete",
-          "*Se levanto a las siete"
+          "*Se levanto a las siete",
+          "*Levanto a las siete"
         ],
         "target_answer": "Me levanto a las siete",
         "meaning": "I get up at seven o'clock",
@@ -13788,12 +14055,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Me levanto a las ocho",
         "meaning": "I get up at eight o'clock",
         "word_bank": [
-          "Me",
-          "levanto",
-          "a",
           "las",
-          "ocho",
           "Te",
+          "ocho",
+          "Me",
+          "a",
+          "levanto",
           "se",
           "el"
         ],
@@ -13817,11 +14084,11 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "See you tomorrow (lit. We see each other tomorrow)",
         "word_bank": [
           "Nos",
-          "vemos",
           "mañana",
-          "Me",
           "Se",
-          "ayer"
+          "vemos",
+          "ayer",
+          "Me"
         ],
         "explanation": "¡Nos vemos mañana! — in plural, nos and se also express reciprocal 'each other'!",
         "diagnosis": {
@@ -13844,12 +14111,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'What is your name? (How do you call yourself?)'",
       "target_answer": "Cómo te llamas",
       "word_bank": [
-        "Cómo",
-        "te",
-        "llamas",
-        "me",
         "se",
-        "llamo"
+        "me",
+        "llamas",
+        "llamo",
+        "te",
+        "Cómo"
       ],
       "explanation": "¿Cómo te llamas?"
     },
@@ -13888,7 +14155,12 @@ export const ES_LESSONS: Lesson[] = [
       "me",
       "te",
       "se",
-      "nos"
+      "nos",
+      "siete",
+      "ocho",
+      "diez",
+      "mañana",
+      "noche"
     ],
     "hook": {
       "title": "From 'Me Levanto' to 'Me Acuesto'",
@@ -13938,10 +14210,10 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Hook the 1st-person reflexive pronoun ('myself') onto 'levantar' to say 'to get (myself) up':",
         "tile_options": [
-          "levantar",
-          "me",
           "se",
-          "te"
+          "te",
+          "levantar",
+          "me"
         ],
         "target_answer": "levantarme",
         "meaning": "levantarme (to get myself up)",
@@ -13952,8 +14224,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I want to go to bed now'?",
         "options": [
-          "Quiero acostarme ahora (or Me quiero acostar ahora)",
           "*Quiero acostarse ahora",
+          "Quiero acostarme ahora (or Me quiero acostar ahora)",
           "*Quiero acuesto ahora"
         ],
         "target_answer": "Quiero acostarme ahora (or Me quiero acostar ahora)",
@@ -13967,17 +14239,17 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Me levanto a las siete de la mañana",
         "meaning": "I get up at seven in the morning",
         "word_bank": [
+          "Te",
+          "mañana",
+          "la",
+          "por",
+          "de",
           "Me",
-          "levanto",
           "a",
           "las",
           "siete",
-          "de",
-          "la",
-          "mañana",
-          "Te",
-          "por",
-          "noche"
+          "noche",
+          "levanto"
         ],
         "explanation": "Me levanto + a las siete + de la mañana (use de la mañana when a specific clock hour is stated!).",
         "id": "es2401_e4"
@@ -14012,12 +14284,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I am going to get up'",
       "target_answer": "Voy a levantarme",
       "word_bank": [
-        "Voy",
-        "a",
-        "levantarme",
-        "levantarse",
         "te",
-        "de"
+        "levantarme",
+        "Voy",
+        "de",
+        "a",
+        "levantarse"
       ],
       "explanation": "Voy a levantarme (or Me voy a levantar)."
     }
@@ -14047,7 +14319,11 @@ export const ES_LESSONS: Lesson[] = [
       "me",
       "te",
       "se",
-      "nos"
+      "nos",
+      "ver",
+      "hablar",
+      "mañana",
+      "hoy"
     ],
     "hook": {
       "title": "How 'Ir' ('To Go') Becomes 'Irse' ('To Leave / Head Out')!",
@@ -14097,9 +14373,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "You are standing up from a café table to head home. What do you say for 'I'm leaving now'?",
         "options": [
-          "Me voy ahora",
           "*Voy ahora",
-          "*Se voy ahora"
+          "*Se voy ahora",
+          "Me voy ahora"
         ],
         "target_answer": "Me voy ahora",
         "meaning": "I'm leaving now",
@@ -14112,13 +14388,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Nos vemos el lunes",
         "meaning": "We'll see each other on Monday",
         "word_bank": [
+          "en",
+          "Me",
+          "Se",
           "Nos",
           "vemos",
           "el",
-          "lunes",
-          "Me",
-          "Se",
-          "en"
+          "lunes"
         ],
         "explanation": "Nos vemos + el lunes ('on Monday').",
         "id": "es2402_e3"
@@ -14139,10 +14415,10 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "I am leaving today",
         "word_bank": [
           "Me",
-          "voy",
           "hoy",
-          "Te",
           "vas",
+          "voy",
+          "Te",
           "mañana"
         ],
         "explanation": "Me voy hoy.",
@@ -14179,10 +14455,10 @@ export const ES_LESSONS: Lesson[] = [
       "word_bank": [
         "Te",
         "vas",
-        "hoy",
         "Me",
-        "voy",
-        "ayer"
+        "ayer",
+        "hoy",
+        "voy"
       ],
       "explanation": "¿Te vas hoy?"
     }
@@ -14212,7 +14488,11 @@ export const ES_LESSONS: Lesson[] = [
       "encantar",
       "me",
       "te",
-      "nos"
+      "nos",
+      "le",
+      "café",
+      "música",
+      "libro"
     ],
     "hook": {
       "title": "Why You Don't 'Like' Coffee in Spanish — Coffee Pleases You!",
@@ -14289,11 +14569,11 @@ export const ES_LESSONS: Lesson[] = [
         "word_bank": [
           "Me",
           "gusta",
-          "la",
-          "música",
           "Yo",
+          "la",
           "gusto",
-          "el"
+          "el",
+          "música"
         ],
         "explanation": "Me gusta + la música (always include the definite article el/la/los/las with general nouns after gustar!).",
         "id": "es25_e4"
@@ -14304,10 +14584,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "Me gustan los libros",
         "natural": "I like books",
         "options": [
-          "I like books",
-          "To-me are-pleasing the books",
           "I like the books",
-          "Me pleases the books"
+          "Me pleases the books",
+          "To-me are-pleasing the books",
+          "I like books"
         ],
         "target_answer": "To-me are-pleasing the books",
         "meaning": "I like books (literal Spanish blueprint: To-me are-pleasing the books)",
@@ -14328,13 +14608,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Do you like the coffee?'",
       "target_answer": "Te gusta el café",
       "word_bank": [
+        "la",
         "Te",
-        "gusta",
-        "el",
         "café",
         "Tú",
+        "el",
         "gustas",
-        "la"
+        "gusta"
       ],
       "explanation": "¿Te gusta el café?"
     },
@@ -14373,7 +14653,12 @@ export const ES_LESSONS: Lesson[] = [
       "me",
       "te",
       "nos",
-      "le"
+      "le",
+      "café",
+      "libro",
+      "ciudad",
+      "visitar",
+      "comer"
     ],
     "hook": {
       "title": "What If You Like Doing Actions (Infinitives)? Always Singular 'Gusta'!",
@@ -14423,9 +14708,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Complete: 'Me ___ visitar las ciudades hermosas.' (Look carefully at what immediately follows: the infinitive visitar!)",
         "options": [
-          "gusta",
           "gustan",
-          "gusto"
+          "gusto",
+          "gusta"
         ],
         "target_answer": "gusta",
         "meaning": "I like visiting beautiful cities",
@@ -14439,42 +14724,45 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "I like the cities",
         "word_bank": [
           "Me",
+          "Yo",
           "gustan",
-          "las",
-          "ciudades",
-          "gusta",
           "los",
-          "Yo"
+          "gusta",
+          "ciudades",
+          "las"
         ],
         "explanation": "las ciudades is plural, so gusta adds -n: Me gustan las ciudades.",
         "id": "es2501_e3"
       },
       {
-        "type": "transcribe",
-        "prompt": "Tell me:",
-        "idea": "say that we like eating here ('Nos gusta comer aquí')",
-        "cues": [
-          "To us → Nos",
-          "is pleasing (with infinitive) → gusta",
-          "to eat here → comer aquí"
+        "id": "es2501_e4",
+        "type": "pronoun_compression",
+        "prompt": "Fold both noun phrases and apply the Spanish le → se sound law:",
+        "shift_hint": "le + lo → se lo",
+        "full_sentence": "Doy el libro a mi amigo",
+        "compressed_parts": [
+          {
+            "noun": "a mi amigo",
+            "pronoun": "se",
+            "role": "indirect receiver (le → se)"
+          },
+          {
+            "noun": "el libro",
+            "pronoun": "lo",
+            "role": "direct object"
+          }
         ],
-        "idea_parts": [
-          "We like → Nos gusta",
-          "to eat here → comer aquí"
-        ],
-        "target_answer": "Nos gusta comer aquí",
-        "meaning": "We like eating here",
         "word_bank": [
-          "Nos",
-          "gusta",
-          "comer",
-          "aquí",
-          "gustan",
-          "Nosotros",
-          "comemos"
+          "amigo",
+          "la",
+          "le",
+          "doy",
+          "lo",
+          "Se"
         ],
-        "explanation": "Nos gusta comer aquí — infinitive comer takes singular gusta.",
-        "id": "es2501_e4"
+        "target_answer": "Se lo doy",
+        "meaning": "I give it to him",
+        "explanation": "When le meets lo/la, Latin illi illum evolved into Spanish se lo to avoid the tongue-twister *le lo: Se lo doy."
       },
       {
         "type": "dictation",
@@ -14506,13 +14794,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Do you like the books?'",
       "target_answer": "Te gustan los libros",
       "word_bank": [
-        "Te",
-        "gustan",
+        "el",
         "los",
         "libros",
         "gusta",
-        "el",
-        "libro"
+        "libro",
+        "gustan",
+        "Te"
       ],
       "explanation": "¿Te gustan los libros?"
     }
@@ -14543,7 +14831,12 @@ export const ES_LESSONS: Lesson[] = [
       "gusta",
       "cabeza",
       "me",
-      "te"
+      "te",
+      "nos",
+      "le",
+      "música",
+      "libro",
+      "no"
     ],
     "hook": {
       "title": "One Blueprint Unlocks a Whole Family of Verbs!",
@@ -14591,7 +14884,7 @@ export const ES_LESSONS: Lesson[] = [
       },
       {
         "type": "reverse_cognate",
-        "prompt": "Spanish encantar ('to love something', literally 'to enchant / cast a charm over me') is the exact cognate of which English verb?",
+        "prompt": "Spanish 'encantar' ('to delight / cast a spell over') is the exact cognate of which seven-letter English verb meaning 'to charm or delight'?",
         "target_answer": "enchant",
         "meaning": "Me encanta el chocolate literally means 'Chocolate enchants me'!",
         "explanation": "Latin incantāre ('to sing a spell upon') gave English enchant and Spanish encantar.",
@@ -14617,11 +14910,11 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "I love music",
         "word_bank": [
           "Me",
-          "encanta",
-          "la",
           "música",
-          "encantan",
+          "encanta",
           "Yo",
+          "la",
+          "encantan",
           "el"
         ],
         "explanation": "Me + encanta + la música.",
@@ -14643,13 +14936,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Me encantan los libros",
         "meaning": "I love books",
         "word_bank": [
-          "Me",
-          "encantan",
-          "los",
-          "libros",
-          "encanta",
           "el",
-          "libro"
+          "encanta",
+          "los",
+          "libro",
+          "libros",
+          "encantan",
+          "Me"
         ],
         "explanation": "Me encantan los libros.",
         "id": "es2502_e5"
@@ -14668,13 +14961,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'My head hurts'",
       "target_answer": "Me duele la cabeza",
       "word_bank": [
-        "Me",
-        "duele",
-        "la",
-        "cabeza",
-        "mi",
         "mano",
-        "gusta"
+        "la",
+        "gusta",
+        "duele",
+        "Me",
+        "mi",
+        "cabeza"
       ],
       "explanation": "Me duele la cabeza."
     }
@@ -14704,7 +14997,11 @@ export const ES_LESSONS: Lesson[] = [
       "ojalá",
       "querer",
       "tener",
-      "reservar"
+      "reservar",
+      "hablar",
+      "comer",
+      "mesa",
+      "importante"
     ],
     "hook": {
       "title": "Two Moods Beyond Plain Fact: The Conditional (-ía) & The Subjunctive",
@@ -14756,10 +15053,10 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build 'would like / would please' by gluing the conditional ending '-ía' onto the full infinitive 'gustar':",
         "tile_options": [
-          "gustar",
-          "ía",
+          "ó",
           "aba",
-          "ó"
+          "gustar",
+          "ía"
         ],
         "target_answer": "gustaría",
         "meaning": "gustaría (would please / would like)",
@@ -14770,8 +15067,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How does Spanish express 'I want you to speak Spanish' (literally 'I want that you speak Spanish')?",
         "options": [
-          "Quiero que hables español",
           "*Quiero tú hablar español",
+          "Quiero que hables español",
           "*Quiero que hablas español"
         ],
         "target_answer": "Quiero que hables español",
@@ -14785,14 +15082,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Me gustaría reservar una mesa",
         "meaning": "I would like to reserve a table",
         "word_bank": [
-          "Me",
           "gustaría",
-          "reservar",
           "una",
-          "mesa",
-          "gusta",
           "un",
-          "el"
+          "gusta",
+          "reservar",
+          "el",
+          "mesa",
+          "Me"
         ],
         "explanation": "Me gustaría ('I would like') + reservar una mesa.",
         "id": "es26_e4"
@@ -14803,10 +15100,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "Quiero que hables conmigo",
         "natural": "I want you to speak with me",
         "options": [
-          "I want you to speak with me",
-          "I-want that you-speak(subj.) with-me",
+          "You want that I speak with me",
           "I want to speak with you",
-          "You want that I speak with me"
+          "I-want that you-speak(subj.) with-me",
+          "I want you to speak with me"
         ],
         "target_answer": "I-want that you-speak(subj.) with-me",
         "meaning": "I want you to speak with me (literal Spanish blueprint: I-want that you-speak(subj.) with-me)",
@@ -14827,15 +15124,15 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I would like a coffee, please'",
       "target_answer": "Me gustaría un café por favor",
       "word_bank": [
-        "Me",
-        "gustaría",
-        "un",
         "café",
-        "por",
-        "favor",
         "gusta",
+        "Me",
         "una",
-        "gracias"
+        "favor",
+        "por",
+        "un",
+        "gracias",
+        "gustaría"
       ],
       "explanation": "Me gustaría un café, por favor."
     },
@@ -14873,7 +15170,11 @@ export const ES_LESSONS: Lesson[] = [
       "reservar",
       "hablar",
       "ver",
-      "comer"
+      "comer",
+      "mesa",
+      "café",
+      "por_favor",
+      "fantástico"
     ],
     "hook": {
       "title": "How '-ía' Turns Any Verb into 'Would [Verb]'",
@@ -14939,13 +15240,13 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "I would like to see the house",
         "word_bank": [
           "Me",
+          "visto",
           "gustaría",
-          "ver",
           "la",
           "casa",
-          "gusta",
+          "ver",
           "el",
-          "visto"
+          "gusta"
         ],
         "explanation": "Me gustaría + ver + la casa.",
         "id": "es2601_e3"
@@ -14965,14 +15266,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Podrías hablar con mi hermano",
         "meaning": "Could you speak with my brother?",
         "word_bank": [
-          "Podrías",
-          "hablar",
+          "a",
           "con",
-          "mi",
-          "hermano",
           "Puedo",
           "hablé",
-          "a"
+          "hablar",
+          "hermano",
+          "mi",
+          "Podrías"
         ],
         "explanation": "¿Podrías hablar con mi hermano?",
         "id": "es2601_e4"
@@ -15007,12 +15308,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I would like to eat here'",
       "target_answer": "Me gustaría comer aquí",
       "word_bank": [
+        "comí",
         "Me",
         "gustaría",
-        "comer",
         "aquí",
         "gusta",
-        "comí",
+        "comer",
         "allí"
       ],
       "explanation": "Me gustaría comer aquí."
@@ -15042,7 +15343,10 @@ export const ES_LESSONS: Lesson[] = [
       "hablar",
       "comer",
       "vivir",
-      "tener"
+      "tener",
+      "tengo",
+      "confirmar",
+      "celebrar"
     ],
     "hook": {
       "title": "Why the Subjunctive Is Built from the 'Yo' Form + the Opposite Vowel",
@@ -15093,8 +15397,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Build the tú subjunctive of 'tener' ('that you have') from 'yo tengo' (drop -o, add opposite -as):",
         "tile_options": [
           "teng",
-          "as",
           "es",
+          "as",
           "tien"
         ],
         "target_answer": "tengas",
@@ -15106,9 +15410,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Complete with the opposite-vowel subjunctive: 'Es importante que tú ___ (confirmar) la reservación.'",
         "options": [
+          "confirmar",
           "confirmes",
-          "confirmas",
-          "confirmar"
+          "confirmas"
         ],
         "target_answer": "confirmes",
         "meaning": "It is important that you confirm the reservation",
@@ -15121,15 +15425,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Es importante que hables con María",
         "meaning": "It is important that you speak with María",
         "word_bank": [
-          "Es",
-          "importante",
-          "que",
-          "hables",
           "con",
           "María",
           "hablas",
+          "está",
+          "hables",
+          "que",
           "hablar",
-          "está"
+          "importante",
+          "Es"
         ],
         "explanation": "Es importante que + hables (opposite vowel -es!).",
         "id": "es2602_e4"
@@ -15149,12 +15453,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero que comas",
         "meaning": "I want you to eat",
         "word_bank": [
-          "Quiero",
           "que",
-          "comas",
-          "comes",
+          "comí",
+          "Quiero",
           "comer",
-          "comí"
+          "comas",
+          "comes"
         ],
         "explanation": "Quiero que comas — -er verb comer flips to -as in the subjunctive.",
         "id": "es2602_e5"
@@ -15173,15 +15477,15 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'It is important that you have the key'",
       "target_answer": "Es importante que tengas la llave",
       "word_bank": [
-        "Es",
-        "importante",
-        "que",
-        "tengas",
-        "la",
         "llave",
+        "Es",
+        "el",
+        "la",
+        "que",
+        "importante",
         "tienes",
-        "tengo",
-        "el"
+        "tengas",
+        "tengo"
       ],
       "explanation": "Es importante que tengas la llave."
     }
@@ -15211,7 +15515,11 @@ export const ES_LESSONS: Lesson[] = [
       "tengo",
       "ser",
       "estar",
-      "bueno"
+      "bueno",
+      "buenos_días",
+      "tiempo",
+      "posible",
+      "llave"
     ],
     "hook": {
       "title": "From Arabic 'Inshallah' to Spanish 'Ojalá'!",
@@ -15261,9 +15569,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Why does 'ojalá' ALWAYS require a subjunctive verb after it (e.g., ¡Ojalá tengas tiempo!)?",
         "options": [
-          "Because ojalá comes from Arabic 'may God will it' — it is inherently a wish/hope rather than a declared fact!",
           "Because ojalá is past tense",
-          "Because ojalá is an adjective"
+          "Because ojalá is an adjective",
+          "Because ojalá comes from Arabic 'may God will it' — it is inherently a wish/hope rather than a declared fact!"
         ],
         "target_answer": "Because ojalá comes from Arabic 'may God will it' — it is inherently a wish/hope rather than a declared fact!",
         "meaning": "hopefully / God willing",
@@ -15276,13 +15584,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Ojalá tengas tiempo hoy",
         "meaning": "I hope you have time today!",
         "word_bank": [
-          "Ojalá",
-          "tengas",
           "tiempo",
-          "hoy",
-          "tienes",
+          "tengas",
           "tengo",
-          "ayer"
+          "Ojalá",
+          "ayer",
+          "hoy",
+          "tienes"
         ],
         "explanation": "¡Ojalá + tengas (subjunctive of tener) + tiempo hoy!",
         "id": "es2603_e3"
@@ -15303,15 +15611,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Es bueno que tengas la llave",
         "meaning": "It is good that you have the key",
         "word_bank": [
-          "Es",
-          "bueno",
           "que",
-          "tengas",
           "la",
           "llave",
           "tienes",
-          "buena",
-          "el"
+          "el",
+          "tengas",
+          "bueno",
+          "Es",
+          "buena"
         ],
         "explanation": "Es bueno que tengas la llave.",
         "id": "es2603_e4"
@@ -15346,13 +15654,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Hopefully you have the confirmation'",
       "target_answer": "Ojalá tengas la confirmación",
       "word_bank": [
-        "Ojalá",
-        "tengas",
-        "la",
-        "confirmación",
+        "tengo",
         "tienes",
+        "tengas",
+        "confirmación",
+        "la",
         "el",
-        "tengo"
+        "Ojalá"
       ],
       "explanation": "¡Ojalá tengas la confirmación!"
     }
@@ -15388,7 +15696,13 @@ export const ES_LESSONS: Lesson[] = [
       "hierro",
       "hambre",
       "hermoso",
-      "noche"
+      "noche",
+      "leche",
+      "ocho",
+      "hecho",
+      "llave",
+      "lluvia",
+      "lleno"
     ],
     "hook": {
       "title": "Three Sound Shifts That Unlock Deep Spanish Etymology",
@@ -15462,8 +15776,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Which single Spanish word demonstrates BOTH the 'f- → silent h-' shift AND the '-ct- → -ch-' shift from Latin 'factum'?",
         "options": [
           "hecho ('done / fact')",
-          "leche ('milk')",
-          "hijo ('son')"
+          "hijo ('son')",
+          "leche ('milk')"
         ],
         "target_answer": "hecho ('done / fact')",
         "meaning": "done / made; the fact",
@@ -15476,15 +15790,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "El restaurante está lleno esta noche",
         "meaning": "The restaurant is full tonight",
         "word_bank": [
+          "lleno",
+          "llena",
+          "esta",
+          "es",
+          "este",
           "El",
           "restaurante",
           "está",
-          "lleno",
-          "esta",
-          "noche",
-          "es",
-          "llena",
-          "este"
+          "noche"
         ],
         "explanation": "El restaurante está lleno ('is full' — current state takes está!) + esta noche ('tonight').",
         "id": "es27_e5"
@@ -15503,12 +15817,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'He is my son'",
       "target_answer": "Es mi hijo",
       "word_bank": [
-        "Es",
         "mi",
         "hijo",
         "Está",
-        "hambre",
-        "hierro"
+        "Es",
+        "hierro",
+        "hambre"
       ],
       "explanation": "Es mi hijo (Latin fīlius → hijo)."
     },
@@ -15546,7 +15860,9 @@ export const ES_LESSONS: Lesson[] = [
       "hierro",
       "hambre",
       "hermoso",
-      "hecho"
+      "hecho",
+      "reservación",
+      "tengo"
     ],
     "hook": {
       "title": "Seeing the Invisible 'F' Behind Silent 'H'",
@@ -15609,9 +15925,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I want to make a reservation' in Spanish?",
         "options": [
+          "*Quiero hecho una reservación",
           "Quiero hacer una reservación",
-          "*Quiero fabricar una reservación",
-          "*Quiero hecho una reservación"
+          "*Quiero fabricar una reservación"
         ],
         "target_answer": "Quiero hacer una reservación",
         "meaning": "I want to make a reservation",
@@ -15624,13 +15940,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Ellos tienen dos hijos",
         "meaning": "They have two children / sons",
         "word_bank": [
-          "Ellos",
-          "tienen",
-          "dos",
           "hijos",
           "son",
+          "Ellos",
+          "tienen",
           "hambre",
-          "hierro"
+          "hierro",
+          "dos"
         ],
         "explanation": "Ellos tienen dos hijos.",
         "id": "es2701_e4"
@@ -15665,13 +15981,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The iron key (La llave de hierro)'",
       "target_answer": "La llave de hierro",
       "word_bank": [
-        "La",
-        "llave",
-        "de",
         "hierro",
+        "hecho",
+        "de",
         "El",
         "hambre",
-        "hecho"
+        "La",
+        "llave"
       ],
       "explanation": "La llave de hierro."
     }
@@ -15704,7 +16020,11 @@ export const ES_LESSONS: Lesson[] = [
       "ocho",
       "hecho",
       "llave",
-      "lluvia"
+      "lluvia",
+      "lleno",
+      "llamar",
+      "me_llamo",
+      "café"
     ],
     "hook": {
       "title": "Why '-ct-' Became '-ch-' and 'pl-/cl-' Became 'll-'",
@@ -15767,9 +16087,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "What Latin initial cluster turned into Spanish 'll-' in 'la llave' ('key') and 'llamar' ('to call')?",
         "options": [
-          "cl- (clāvis → llave, clāmāre → llamar)",
           "ct- (noctem → noche)",
-          "f- (facere → hacer)"
+          "f- (facere → hacer)",
+          "cl- (clāvis → llave, clāmāre → llamar)"
         ],
         "target_answer": "cl- (clāvis → llave, clāmāre → llamar)",
         "meaning": "key / to call",
@@ -15783,14 +16103,14 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "The hotel is full tonight",
         "word_bank": [
           "El",
-          "hotel",
-          "está",
-          "lleno",
           "esta",
+          "lluvia",
           "noche",
-          "es",
+          "lleno",
+          "hotel",
           "llena",
-          "lluvia"
+          "es",
+          "está"
         ],
         "explanation": "El hotel está lleno esta noche.",
         "id": "es2702_e4"
@@ -15825,15 +16145,15 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I have the key and the milk'",
       "target_answer": "Tengo la llave y la leche",
       "word_bank": [
-        "Tengo",
-        "la",
-        "llave",
-        "y",
         "la",
         "leche",
         "el",
+        "llave",
         "lluvia",
-        "noche"
+        "noche",
+        "Tengo",
+        "y",
+        "la"
       ],
       "explanation": "Tengo la llave y la leche."
     }
@@ -15863,7 +16183,11 @@ export const ES_LESSONS: Lesson[] = [
       "lo",
       "conocer",
       "querer",
-      "comprender"
+      "comprender",
+      "decir",
+      "hablar",
+      "amigo",
+      "libro"
     ],
     "hook": {
       "title": "Why Unaccented 'Que' Is the Glue of the Spanish Language",
@@ -15928,9 +16252,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I understand what you want' (where 'what' means 'the thing that', not a question)?",
         "options": [
+          "*Comprendo que quieres",
           "Comprendo lo que quieres",
-          "*Comprendo qué quieres",
-          "*Comprendo que quieres"
+          "*Comprendo qué quieres"
         ],
         "target_answer": "Comprendo lo que quieres",
         "meaning": "I understand what you want",
@@ -15943,14 +16267,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Es el libro que quiero",
         "meaning": "It is the book that I want",
         "word_bank": [
-          "Es",
-          "el",
-          "libro",
-          "que",
           "quiero",
-          "quien",
+          "Está",
+          "el",
           "lo",
-          "Está"
+          "que",
+          "quien",
+          "libro",
+          "Es"
         ],
         "explanation": "Es el libro + que + quiero.",
         "id": "es28_e4"
@@ -15961,10 +16285,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "Comprendo lo que quieres",
         "natural": "I understand what you want",
         "options": [
-          "I understand what you want",
-          "I-understand that-which you-want",
           "I understand it what you want",
-          "What you want I understand it"
+          "What you want I understand it",
+          "I understand what you want",
+          "I-understand that-which you-want"
         ],
         "target_answer": "I-understand that-which you-want",
         "meaning": "I understand what you want (literal Spanish blueprint: I-understand that-which you-want)",
@@ -15985,14 +16309,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I have the book that you want'",
       "target_answer": "Tengo el libro que quieres",
       "word_bank": [
-        "Tengo",
-        "el",
         "libro",
-        "que",
+        "lo",
+        "quiero",
         "quieres",
         "quien",
-        "lo",
-        "quiero"
+        "el",
+        "Tengo",
+        "que"
       ],
       "explanation": "Tengo el libro que quieres."
     },
@@ -16030,7 +16354,11 @@ export const ES_LESSONS: Lesson[] = [
       "hermano",
       "libro",
       "café",
-      "casa"
+      "casa",
+      "ciudad",
+      "vivir",
+      "hablar",
+      "querer"
     ],
     "hook": {
       "title": "One Word for 'Who', 'Whom', 'Which', and 'That'",
@@ -16076,8 +16404,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Translate 'The friend who lives in Madrid':",
         "options": [
           "El amigo que vive en Madrid",
-          "*El amigo quien vive en Madrid",
-          "*El amigo vive en Madrid"
+          "*El amigo vive en Madrid",
+          "*El amigo quien vive en Madrid"
         ],
         "target_answer": "El amigo que vive en Madrid",
         "meaning": "The friend who lives in Madrid",
@@ -16090,15 +16418,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "La casa que quiero es grande",
         "meaning": "The house that I want is big",
         "word_bank": [
-          "La",
-          "casa",
-          "que",
-          "quiero",
           "es",
-          "grande",
-          "quien",
+          "casa",
           "está",
-          "El"
+          "grande",
+          "La",
+          "quien",
+          "que",
+          "El",
+          "quiero"
         ],
         "explanation": "La casa + que quiero + es grande.",
         "id": "es2801_e3"
@@ -16118,15 +16446,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Es la ciudad que quiero visitar",
         "meaning": "It is the city that I want to visit",
         "word_bank": [
+          "quiero",
+          "quien",
+          "que",
           "Es",
           "la",
-          "ciudad",
-          "que",
-          "quiero",
-          "visitar",
-          "quien",
+          "Está",
           "el",
-          "Está"
+          "visitar",
+          "ciudad"
         ],
         "explanation": "Es la ciudad que quiero visitar.",
         "id": "es2801_e4"
@@ -16161,13 +16489,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The coffee that I want'",
       "target_answer": "El café que quiero",
       "word_bank": [
-        "El",
-        "café",
         "que",
-        "quiero",
-        "quien",
         "la",
-        "quieres"
+        "El",
+        "quieres",
+        "café",
+        "quiero",
+        "quien"
       ],
       "explanation": "El café que quiero."
     }
@@ -16196,7 +16524,10 @@ export const ES_LESSONS: Lesson[] = [
       "comprender",
       "querer",
       "decir",
-      "hacer"
+      "hacer",
+      "importante",
+      "verdad",
+      "saber"
     ],
     "hook": {
       "title": "Why 'Lo' + 'Que' Means 'What' ('The Thing That')",
@@ -16246,10 +16577,10 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build 'what I want' ('the thing that I want') from its three Spanish words:",
         "tile_options": [
-          "lo",
-          "que",
           "quiero",
-          "la"
+          "la",
+          "que",
+          "lo"
         ],
         "target_answer": "loquequiero",
         "meaning": "lo que quiero (what I want)",
@@ -16260,9 +16591,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'What I want is the truth'?",
         "options": [
+          "*El que quiero es la verdad",
           "Lo que quiero es la verdad",
-          "*Qué quiero es la verdad",
-          "*El que quiero es la verdad"
+          "*Qué quiero es la verdad"
         ],
         "target_answer": "Lo que quiero es la verdad",
         "meaning": "What I want is the truth",
@@ -16275,13 +16606,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Sé lo que quieres",
         "meaning": "I know what you want",
         "word_bank": [
-          "Sé",
-          "lo",
-          "que",
-          "quieres",
           "Conozco",
-          "la",
-          "quiero"
+          "lo",
+          "quieres",
+          "Sé",
+          "que",
+          "quiero",
+          "la"
         ],
         "explanation": "Sé + lo que + quieres.",
         "id": "es2802_e4"
@@ -16316,14 +16647,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I don't understand what you want'",
       "target_answer": "No comprendo lo que quieres",
       "word_bank": [
-        "No",
-        "comprendo",
-        "lo",
-        "que",
+        "quiero",
         "quieres",
+        "No",
+        "lo",
         "la",
+        "comprendo",
         "quien",
-        "quiero"
+        "que"
       ],
       "explanation": "No comprendo lo que quieres."
     }
@@ -16352,7 +16683,10 @@ export const ES_LESSONS: Lesson[] = [
       "suponer",
       "tener",
       "mantener",
-      "obtener"
+      "obtener",
+      "mostrar",
+      "demostrar",
+      "traer"
     ],
     "hook": {
       "title": "One Root × Five Prefixes = Twenty Verbs for Free!",
@@ -16494,9 +16828,9 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Build 'to maintain' ('to hold in the hand') from its hand-prefix and the root 'tener':",
         "tile_options": [
           "man",
-          "tener",
           "poner",
-          "tain"
+          "tain",
+          "tener"
         ],
         "target_answer": "mantener",
         "meaning": "mantener (to maintain)",
@@ -16507,9 +16841,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Since 'yo pongo' means 'I put', how do you say 'I suppose' (from suponer)?",
         "options": [
-          "yo supongo",
+          "*yo supuso",
           "*yo supono",
-          "*yo supuso"
+          "yo supongo"
         ],
         "target_answer": "yo supongo",
         "meaning": "I suppose",
@@ -16522,13 +16856,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero mantener la tradición",
         "meaning": "I want to maintain the tradition",
         "word_bank": [
-          "Quiero",
-          "mantener",
-          "la",
-          "tradición",
           "poner",
+          "obtener",
+          "tradición",
+          "la",
+          "Quiero",
           "el",
-          "obtener"
+          "mantener"
         ],
         "explanation": "Quiero + mantener + la tradición.",
         "id": "es2803_e5"
@@ -16547,13 +16881,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I want to obtain the confirmation'",
       "target_answer": "Quiero obtener la confirmación",
       "word_bank": [
+        "confirmación",
+        "el",
+        "mantener",
         "Quiero",
         "obtener",
-        "la",
-        "confirmación",
-        "mantener",
-        "el",
-        "poner"
+        "poner",
+        "la"
       ],
       "explanation": "Quiero obtener la confirmación."
     }
@@ -16583,7 +16917,11 @@ export const ES_LESSONS: Lesson[] = [
       "ojalá",
       "azul",
       "hambre",
-      "razón"
+      "razón",
+      "hecho",
+      "comer",
+      "ir",
+      "buenos_días"
     ],
     "hook": {
       "title": "Idioms Are Metaphors That Became Grammar",
@@ -16636,8 +16974,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Remembering that 'actualmente' means 'currently', how do you say 'in fact / actually' in Spanish using 'hecho' ('fact')?",
         "options": [
           "de hecho (or en realidad)",
-          "actualmente",
-          "por hecho"
+          "por hecho",
+          "actualmente"
         ],
         "target_answer": "de hecho (or en realidad)",
         "meaning": "in fact, actually",
@@ -16648,8 +16986,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Remembering that 'realizar' means 'to carry out/fulfill a project', what literal metaphor does Spanish use for 'to realize (notice) a fact'?",
         "options": [
-          "darse cuenta de ('to give oneself an account/count of')",
           "realizar",
+          "darse cuenta de ('to give oneself an account/count of')",
           "recordar"
         ],
         "target_answer": "darse cuenta de ('to give oneself an account/count of')",
@@ -16663,14 +17001,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tienes razón, tengo mucha hambre",
         "meaning": "You are right, I am very hungry",
         "word_bank": [
-          "Tienes",
           "razón",
+          "Estoy",
           "tengo",
-          "mucha",
-          "hambre",
           "Eres",
-          "muy",
-          "Estoy"
+          "Tienes",
+          "hambre",
+          "mucha",
+          "muy"
         ],
         "explanation": "Tienes razón + tengo mucha hambre.",
         "id": "es29_e4"
@@ -16705,14 +17043,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'In reality it is the truth'",
       "target_answer": "En realidad es la verdad",
       "word_bank": [
-        "En",
-        "realidad",
+        "verdad",
+        "el",
+        "Actualmente",
         "es",
         "la",
-        "verdad",
-        "Actualmente",
-        "está",
-        "el"
+        "realidad",
+        "En",
+        "está"
       ],
       "explanation": "En realidad ('Actually / In reality') es la verdad."
     },
@@ -16750,7 +17088,11 @@ export const ES_LESSONS: Lesson[] = [
       "tienes",
       "cuenta",
       "hecho",
-      "razón"
+      "razón",
+      "hambre",
+      "sed",
+      "comer",
+      "visitar"
     ],
     "hook": {
       "title": "Expressing 'I Feel Like...' and 'In Fact'",
@@ -16800,9 +17142,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "What are you asking the waiter for when you say '¿Me trae la cuenta, por favor?'?",
         "options": [
-          "The bill / check ('the count')",
+          "The salt",
           "The menu",
-          "The salt"
+          "The bill / check ('the count')"
         ],
         "target_answer": "The bill / check ('the count')",
         "meaning": "Will you bring me the bill, please?",
@@ -16815,15 +17157,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Me traes la cuenta por favor",
         "meaning": "Will you bring me the bill, please?",
         "word_bank": [
+          "cuenta",
           "Me",
           "traes",
-          "la",
-          "cuenta",
           "por",
-          "favor",
-          "traer",
           "el",
-          "gracias"
+          "la",
+          "gracias",
+          "favor",
+          "traer"
         ],
         "explanation": "¿Me traes la cuenta, por favor? (from traer 'to bring').",
         "id": "es2901_e3"
@@ -16843,13 +17185,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tienes razón, quiero comer",
         "meaning": "You are right, I want to eat",
         "word_bank": [
-          "Tienes",
-          "razón",
+          "hambre",
+          "Eres",
+          "como",
           "quiero",
           "comer",
-          "Eres",
-          "hambre",
-          "como"
+          "razón",
+          "Tienes"
         ],
         "explanation": "Tienes razón, quiero comer.",
         "id": "es2901_e4"
@@ -16884,13 +17226,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The bill, please'",
       "target_answer": "La cuenta por favor",
       "word_bank": [
-        "La",
-        "cuenta",
-        "por",
-        "favor",
-        "El",
         "cuento",
-        "gracias"
+        "favor",
+        "gracias",
+        "por",
+        "El",
+        "cuenta",
+        "La"
       ],
       "explanation": "La cuenta, por favor."
     }
@@ -16920,7 +17262,11 @@ export const ES_LESSONS: Lesson[] = [
       "limón",
       "café",
       "mesa",
-      "tener"
+      "tener",
+      "tengo",
+      "amigo",
+      "hablar",
+      "mañana"
     ],
     "hook": {
       "title": "Eight Centuries of Shared History in Your Mouth",
@@ -16971,8 +17317,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Which everyday Spanish preposition meaning 'until' (as in '¡___ mañana!' and '¡___ la vista!') came from Arabic 'ḥattā'?",
         "options": [
           "hasta",
-          "para",
-          "desde"
+          "desde",
+          "para"
         ],
         "target_answer": "hasta",
         "meaning": "until",
@@ -16985,12 +17331,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Adiós hasta mañana",
         "meaning": "Goodbye, until tomorrow!",
         "word_bank": [
-          "Adiós",
-          "hasta",
-          "mañana",
-          "por",
           "ayer",
-          "desde"
+          "por",
+          "mañana",
+          "hasta",
+          "desde",
+          "Adiós"
         ],
         "explanation": "¡Adiós, hasta mañana!",
         "id": "es2902_e3"
@@ -17011,16 +17357,16 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Ojalá tengas tiempo para hablar con mi amigo",
         "meaning": "I hope you have time to speak with my friend",
         "word_bank": [
-          "Ojalá",
           "tengas",
-          "tiempo",
           "para",
-          "hablar",
-          "con",
-          "mi",
+          "por",
           "amigo",
           "tienes",
-          "por",
+          "Ojalá",
+          "con",
+          "tiempo",
+          "hablar",
+          "mi",
           "a"
         ],
         "explanation": "¡Ojalá tengas tiempo para hablar con mi amigo!",
@@ -17056,14 +17402,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Water with lemon, please'",
       "target_answer": "Agua con limón por favor",
       "word_bank": [
-        "Agua",
         "con",
-        "limón",
-        "por",
         "favor",
+        "por",
+        "Agua",
         "sin",
-        "leche",
-        "gracias"
+        "limón",
+        "gracias",
+        "leche"
       ],
       "explanation": "Agua con limón, por favor."
     }
@@ -17105,7 +17451,13 @@ export const ES_LESSONS: Lesson[] = [
       "tradición",
       "confirmación",
       "perfectamente",
-      "mágico"
+      "mágico",
+      "central",
+      "hecho",
+      "lleno",
+      "gustar",
+      "gustaría",
+      "conocer"
     ],
     "hook": {
       "title": "Look How Far Across the Bridge You Have Walked",
@@ -17160,9 +17512,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "In 'Actualmente vivo en Madrid desde hace dos años', why is 'vivo' in the present tense and what does 'actualmente' mean?",
         "options": [
+          "actualmente means 'formerly'",
           "actualmente means 'currently', and Spanish uses the present tense (vivo) with desde hace for actions that began in the past and continue right now!",
-          "actualmente means 'actually', and vivo is past tense",
-          "actualmente means 'formerly'"
+          "actualmente means 'actually', and vivo is past tense"
         ],
         "target_answer": "actualmente means 'currently', and Spanish uses the present tense (vivo) with desde hace for actions that began in the past and continue right now!",
         "meaning": "Currently I have lived in Madrid for two years",
@@ -17175,19 +17527,19 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Me encanta esta ciudad mágica y comprendo lo que dices",
         "meaning": "I love this magical city and I understand what you say",
         "word_bank": [
-          "Me",
           "encanta",
           "esta",
           "ciudad",
-          "mágica",
-          "y",
+          "mágico",
           "comprendo",
+          "mágica",
           "lo",
+          "este",
           "que",
           "dices",
-          "encantan",
-          "este",
-          "mágico"
+          "Me",
+          "y",
+          "encantan"
         ],
         "explanation": "Me encanta esta ciudad mágica + y comprendo lo que dices.",
         "id": "es30_e3"
@@ -17207,19 +17559,19 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tengo la confirmación y se la voy a dar hoy",
         "meaning": "I have the confirmation and I am going to give it to him today",
         "word_bank": [
-          "Tengo",
-          "la",
-          "confirmación",
-          "y",
-          "se",
           "la",
           "voy",
-          "a",
-          "dar",
+          "se",
           "hoy",
-          "le",
+          "Tengo",
           "lo",
-          "de"
+          "le",
+          "dar",
+          "confirmación",
+          "y",
+          "a",
+          "de",
+          "la"
         ],
         "explanation": "Tengo la confirmación y se la voy a dar hoy — combining tener, -ción, se la, and ir a + infinitive!",
         "diagnosis": {
@@ -17258,14 +17610,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Hopefully you have a fantastic day!'",
       "target_answer": "Ojalá tengas un día fantástico",
       "word_bank": [
-        "Ojalá",
-        "tengas",
-        "un",
         "día",
+        "fantástica",
+        "Ojalá",
         "fantástico",
-        "tienes",
         "una",
-        "fantástica"
+        "tienes",
+        "tengas",
+        "un"
       ],
       "explanation": "¡Ojalá tengas un día fantástico!"
     },
@@ -17305,7 +17657,12 @@ export const ES_LESSONS: Lesson[] = [
       "restaurante",
       "café",
       "estaba",
-      "era"
+      "era",
+      "fue",
+      "hablé",
+      "comí",
+      "encantar",
+      "amigo"
     ],
     "hook": {
       "title": "Morning to Night in Madrid",
@@ -17355,9 +17712,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "In 'El día era hermoso, el café estaba caliente y la cena fue fantástica', why do all three English 'was' clauses use a different Spanish verb?",
         "options": [
-          "era = ongoing past characteristic (ser); estaba = ongoing past thermal state (estar); fue = final verdict on a completed past event (preterite of ser)!",
+          "Because día, café, and cena have different genders",
           "They are interchangeable synonyms",
-          "Because día, café, and cena have different genders"
+          "era = ongoing past characteristic (ser); estaba = ongoing past thermal state (estar); fue = final verdict on a completed past event (preterite of ser)!"
         ],
         "target_answer": "era = ongoing past characteristic (ser); estaba = ongoing past thermal state (estar); fue = final verdict on a completed past event (preterite of ser)!",
         "meaning": "Three lenses on 'was'",
@@ -17370,19 +17727,19 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Ayer hablé con mi amigo y comí en el restaurante",
         "meaning": "Yesterday I spoke with my friend and ate at the restaurant",
         "word_bank": [
-          "Ayer",
-          "hablé",
-          "con",
-          "mi",
-          "amigo",
-          "y",
-          "comí",
-          "en",
-          "el",
           "restaurante",
-          "hablaba",
           "como",
-          "al"
+          "amigo",
+          "con",
+          "al",
+          "y",
+          "hablaba",
+          "en",
+          "mi",
+          "hablé",
+          "el",
+          "comí",
+          "Ayer"
         ],
         "explanation": "Ayer hablé con mi amigo y comí en el restaurante.",
         "id": "es3001_e3"
@@ -17402,16 +17759,16 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "El hotel era central y la ciudad era hermosa",
         "meaning": "The hotel was central and the city was beautiful",
         "word_bank": [
+          "hermosa",
+          "era",
+          "y",
+          "central",
+          "ciudad",
           "El",
+          "la",
+          "estaba",
           "hotel",
           "era",
-          "central",
-          "y",
-          "la",
-          "ciudad",
-          "era",
-          "hermosa",
-          "estaba",
           "fue",
           "hermoso"
         ],
@@ -17448,18 +17805,18 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The coffee was hot and the cake was delicious'",
       "target_answer": "El café estaba caliente y el pastel estaba rico",
       "word_bank": [
-        "El",
-        "café",
-        "estaba",
-        "caliente",
-        "y",
-        "el",
-        "pastel",
-        "estaba",
-        "rico",
         "era",
+        "rica",
+        "caliente",
+        "estaba",
+        "pastel",
+        "y",
+        "estaba",
+        "el",
         "fue",
-        "rica"
+        "rico",
+        "El",
+        "café"
       ],
       "explanation": "Both hotness and tasting delicious are states, so both use estaba!"
     }
@@ -17491,7 +17848,11 @@ export const ES_LESSONS: Lesson[] = [
       "librería",
       "éxito",
       "asistir",
-      "recordar"
+      "recordar",
+      "sensible",
+      "sopa",
+      "libro",
+      "hermano"
     ],
     "hook": {
       "title": "Disarming Every False Friend on the Trail",
@@ -17559,8 +17920,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "What is the difference between 'sensible' and 'la sopa' in Spanish?",
         "options": [
-          "sensible = 'sensitive (tender-hearted)'; la sopa = 'soup' (never soap!)",
           "sensible = 'level-headed'; la sopa = 'soap'",
+          "sensible = 'sensitive (tender-hearted)'; la sopa = 'soup' (never soap!)",
           "Both are adjectives"
         ],
         "target_answer": "sensible = 'sensitive (tender-hearted)'; la sopa = 'soup' (never soap!)",
@@ -17574,15 +17935,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero comprar el libro en la librería",
         "meaning": "I want to buy the book at the bookstore",
         "word_bank": [
-          "Quiero",
-          "comprar",
           "el",
-          "libro",
-          "en",
           "la",
+          "libro",
+          "comprar",
           "librería",
-          "biblioteca",
-          "asistir"
+          "asistir",
+          "en",
+          "Quiero",
+          "biblioteca"
         ],
         "explanation": "You buy books at la librería (bookstore) and borrow them at la biblioteca (library)!",
         "id": "es3002_e4"
@@ -17602,13 +17963,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero recordar esta noche mágica",
         "meaning": "I want to remember this magical night",
         "word_bank": [
-          "Quiero",
-          "recordar",
-          "esta",
-          "noche",
-          "mágica",
-          "este",
           "mágico",
+          "esta",
+          "recordar",
+          "mágica",
+          "Quiero",
+          "este",
+          "noche",
           "asistir"
         ],
         "explanation": "Quiero recordar esta noche mágica.",
@@ -17628,14 +17989,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'He is a very sensitive person'",
       "target_answer": "Es una persona muy sensible",
       "word_bank": [
-        "Es",
-        "una",
-        "persona",
-        "muy",
-        "sensible",
         "Está",
-        "un",
-        "sopa"
+        "sopa",
+        "una",
+        "muy",
+        "Es",
+        "sensible",
+        "persona",
+        "un"
       ],
       "explanation": "la persona is always feminine (una persona muy sensible), even when referring to a man!"
     }
@@ -17677,7 +18038,13 @@ export const ES_LESSONS: Lesson[] = [
       "saber",
       "conocer",
       "gustar",
-      "gustaría"
+      "gustaría",
+      "ojalá",
+      "poner",
+      "mantener",
+      "hecho",
+      "se",
+      "lo"
     ],
     "hook": {
       "title": "The Complete Architecture of Spanish in Your Hands",
@@ -17692,8 +18059,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Assemble the polite conditional 'would please / would like' from its infinitive and ending:",
         "tile_options": [
-          "gustar",
           "ía",
+          "gustar",
           "aba",
           "ó"
         ],
@@ -17802,10 +18169,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "Se lo voy a dar a mi madre",
         "natural": "I am going to give it to my mother",
         "options": [
-          "I am going to give it to my mother",
-          "To-her it I-go to to-give to my mother",
           "Herself it goes to give my mother",
-          "It to her I give to my mother"
+          "It to her I give to my mother",
+          "I am going to give it to my mother",
+          "To-her it I-go to to-give to my mother"
         ],
         "target_answer": "To-her it I-go to to-give to my mother",
         "meaning": "I am going to give it to my mother (literal Spanish blueprint: To-her it I-go to to-give to my mother)",
@@ -17830,20 +18197,20 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "I know Madrid, I know your brother, and I know where the station is",
         "word_bank": [
           "Conozco",
-          "Madrid",
-          "conozco",
-          "a",
-          "tu",
-          "hermano",
           "y",
-          "sé",
-          "dónde",
-          "está",
-          "la",
-          "estación",
+          "a",
+          "Madrid",
           "Sé",
+          "la",
           "el",
-          "es"
+          "hermano",
+          "tu",
+          "estación",
+          "está",
+          "es",
+          "dónde",
+          "conozco",
+          "sé"
         ],
         "explanation": "Conozco Madrid (city), conozco a tu hermano (person + a), y sé dónde está la estación (fact clause + estar for location)!",
         "id": "es3003_e5"
@@ -17862,14 +18229,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I understand perfectly what you want'",
       "target_answer": "Comprendo perfectamente lo que quieres",
       "word_bank": [
-        "Comprendo",
+        "que",
         "perfectamente",
         "lo",
-        "que",
         "quieres",
-        "perfecto",
+        "quiero",
+        "Comprendo",
         "la",
-        "quiero"
+        "perfecto"
       ],
       "explanation": "Comprendo perfectamente lo que quieres."
     }
@@ -17897,7 +18264,9 @@ export const ES_LESSONS: Lesson[] = [
       "mucho",
       "por_favor",
       "adiós",
-      "usted"
+      "usted",
+      "estás",
+      "está"
     ],
     "hook": {
       "title": "The Warmth of Iberian and Latin American Greeting",
@@ -17967,12 +18336,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Un café, por favor",
         "meaning": "A coffee, please",
         "word_bank": [
-          "Un",
           "café",
-          "por",
-          "favor",
+          "Un",
           "Una",
+          "por",
           "gracias",
+          "favor",
           "adiós"
         ],
         "explanation": "Un café, por favor — the classic Spanish café order.",
@@ -17993,12 +18362,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Hola, cómo estás",
         "meaning": "Hello, how are you?",
         "word_bank": [
-          "Hola",
-          "cómo",
-          "estás",
-          "gracias",
           "usted",
-          "eres"
+          "Hola",
+          "estás",
+          "cómo",
+          "eres",
+          "gracias"
         ],
         "explanation": "¡Hola, ¿cómo estás?! — everyday informal greeting.",
         "id": "es5011_e4"
@@ -18009,10 +18378,10 @@ export const ES_LESSONS: Lesson[] = [
         "german": "Muchas gracias, por favor",
         "natural": "Many thanks, please",
         "options": [
-          "Many thanks, please",
-          "Many graces, by favor",
           "Much thank you, for please",
-          "Very thanks, for favor"
+          "Many graces, by favor",
+          "Very thanks, for favor",
+          "Many thanks, please"
         ],
         "target_answer": "Many graces, by favor",
         "meaning": "Many thanks, please (literal Spanish blueprint: Many graces, by favor)",
@@ -18034,11 +18403,11 @@ export const ES_LESSONS: Lesson[] = [
       "target_answer": "Adiós, muchas gracias",
       "word_bank": [
         "Adiós",
-        "muchas",
         "gracias",
-        "por",
         "favor",
-        "muchos"
+        "muchos",
+        "por",
+        "muchas"
       ],
       "explanation": "¡Adiós, muchas gracias!"
     }
@@ -18067,7 +18436,8 @@ export const ES_LESSONS: Lesson[] = [
       "cómo",
       "letra",
       "buenos_días",
-      "buenas_tardes"
+      "buenas_tardes",
+      "buenas_noches"
     ],
     "hook": {
       "title": "Introducing Yourself with an Action: Me Llamo",
@@ -18132,14 +18502,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Buenos días, me llamo Alex",
         "meaning": "Good morning, my name is Alex",
         "word_bank": [
-          "Buenos",
-          "días",
-          "me",
-          "llamo",
-          "Alex",
-          "Buenas",
+          "te",
           "tardes",
-          "te"
+          "me",
+          "Alex",
+          "llamo",
+          "Buenas",
+          "Buenos",
+          "días"
         ],
         "explanation": "¡Buenos días, me llamo Alex!",
         "id": "es5012_e3"
@@ -18160,12 +18530,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Cómo te llamas",
         "meaning": "What is your name?",
         "word_bank": [
+          "llamo",
           "Cómo",
-          "te",
           "llamas",
           "me",
-          "llamo",
-          "Dónde"
+          "Dónde",
+          "te"
         ],
         "explanation": "¿Cómo te llamas? — literally 'How do you call yourself?'.",
         "id": "es5012_e4"
@@ -18177,8 +18547,8 @@ export const ES_LESSONS: Lesson[] = [
         "natural": "My name is Alex",
         "options": [
           "My name is Alex",
-          "Myself I-call Alex",
           "Me calls Alex",
+          "Myself I-call Alex",
           "My name calls Alex"
         ],
         "target_answer": "Myself I-call Alex",
@@ -18200,13 +18570,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Good afternoon, how are you?'",
       "target_answer": "Buenas tardes, cómo estás",
       "word_bank": [
+        "Buenos",
         "Buenas",
-        "tardes",
+        "eres",
         "cómo",
         "estás",
-        "Buenos",
         "días",
-        "eres"
+        "tardes"
       ],
       "explanation": "¡Buenas tardes! ¿Cómo estás?"
     }
@@ -18236,7 +18606,9 @@ export const ES_LESSONS: Lesson[] = [
       "agua",
       "noche",
       "leche",
-      "ocho"
+      "ocho",
+      "café",
+      "con"
     ],
     "hook": {
       "title": "The Crystalline Five: a, e, i, o, u",
@@ -18300,8 +18672,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Why does Spanish say 'el agua' in the singular even though 'agua' is feminine?",
         "options": [
           "To avoid the vocal collision of 'la' before a noun starting with a stressed 'a-' (A-gua)",
-          "Because water is masculine in Spanish",
-          "Because agua ends in -a"
+          "Because agua ends in -a",
+          "Because water is masculine in Spanish"
         ],
         "target_answer": "To avoid the vocal collision of 'la' before a noun starting with a stressed 'a-' (A-gua)",
         "meaning": "the water",
@@ -18314,14 +18686,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Café con leche, por favor",
         "meaning": "Coffee with milk, please",
         "word_bank": [
-          "Café",
           "con",
+          "sin",
           "leche",
           "por",
           "favor",
-          "sin",
-          "vino",
-          "el"
+          "el",
+          "Café",
+          "vino"
         ],
         "explanation": "Café con leche, por favor — the classic Spanish order.",
         "id": "es5021_e4"
@@ -18357,9 +18729,9 @@ export const ES_LESSONS: Lesson[] = [
       "target_answer": "Buenas noches",
       "word_bank": [
         "Buenas",
-        "noches",
         "Buenos",
         "leche",
+        "noches",
         "vino"
       ],
       "explanation": "¡Buenas noches!"
@@ -18392,7 +18764,11 @@ export const ES_LESSONS: Lesson[] = [
       "éxito",
       "asistir",
       "recordar",
-      "sensible"
+      "sensible",
+      "sopa",
+      "embarazada",
+      "momento",
+      "reservación"
     ],
     "hook": {
       "title": "Words That Look Like Allies but Tell a Different Story",
@@ -18447,8 +18823,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "What does 'La sopa está caliente' mean in English?",
         "options": [
-          "The soup is hot",
           "The soap is hot",
+          "The soup is hot",
           "The supper is cold"
         ],
         "target_answer": "The soup is hot",
@@ -18463,10 +18839,10 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "I want to attend (be present)",
         "word_bank": [
           "Quiero",
-          "asistir",
           "recordar",
-          "el",
-          "éxito"
+          "asistir",
+          "éxito",
+          "el"
         ],
         "explanation": "Quiero asistir = 'I want to attend'.",
         "id": "es5031_e3"
@@ -18487,11 +18863,11 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "She is pregnant",
         "word_bank": [
           "Ella",
-          "está",
-          "embarazada",
-          "es",
           "sensible",
-          "sopa"
+          "sopa",
+          "es",
+          "está",
+          "embarazada"
         ],
         "explanation": "Ella está embarazada — state takes está, and embarazada means pregnant!",
         "id": "es5031_e4"
@@ -18526,13 +18902,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I want to remember the moment'",
       "target_answer": "Quiero recordar el momento",
       "word_bank": [
+        "éxito",
         "Quiero",
-        "recordar",
         "el",
+        "recordar",
         "momento",
-        "asistir",
         "la",
-        "éxito"
+        "asistir"
       ],
       "explanation": "Quiero recordar el momento."
     }
@@ -18562,7 +18938,11 @@ export const ES_LESSONS: Lesson[] = [
       "señor",
       "señora",
       "estás",
-      "está"
+      "está",
+      "son",
+      "están",
+      "querer",
+      "desear"
     ],
     "hook": {
       "title": "Tú, Usted, and Plural Ustedes Across the Spanish-Speaking World",
@@ -18612,9 +18992,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you ask a group of people 'Where are you all from?' using universal 'ustedes'?",
         "options": [
-          "¿De dónde son ustedes?",
           "*¿De dónde es ustedes?",
-          "*¿De dónde eres ustedes?"
+          "*¿De dónde eres ustedes?",
+          "¿De dónde son ustedes?"
         ],
         "target_answer": "¿De dónde son ustedes?",
         "meaning": "Where are you all from?",
@@ -18627,11 +19007,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Cómo están ustedes",
         "meaning": "How are you all?",
         "word_bank": [
-          "Cómo",
-          "están",
-          "ustedes",
-          "está",
           "estás",
+          "están",
+          "está",
+          "ustedes",
+          "Cómo",
           "son"
         ],
         "explanation": "¿Cómo están ustedes?",
@@ -18654,12 +19034,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Qué desea señor",
         "meaning": "What would you like, sir?",
         "word_bank": [
-          "Qué",
+          "señora",
           "desea",
           "señor",
           "deseas",
-          "tú",
-          "señora"
+          "Qué",
+          "tú"
         ],
         "explanation": "¿Qué desea, señor?",
         "id": "es5041_e4"
@@ -18694,13 +19074,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Do you all (ustedes) have a reservation?'",
       "target_answer": "Tienen ustedes una reservación",
       "word_bank": [
-        "Tienen",
-        "ustedes",
-        "una",
-        "reservación",
-        "Tiene",
         "Tienes",
-        "un"
+        "reservación",
+        "un",
+        "Tiene",
+        "una",
+        "Tienen",
+        "ustedes"
       ],
       "explanation": "¿Tienen ustedes una reservación?"
     }
@@ -18730,7 +19110,11 @@ export const ES_LESSONS: Lesson[] = [
       "aquí",
       "allí",
       "hotel",
-      "restaurante"
+      "restaurante",
+      "estación",
+      "universidad",
+      "ciudad",
+      "por"
     ],
     "hook": {
       "title": "Navigating a Spanish City",
@@ -18796,13 +19180,13 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "Where is the central hotel?",
         "word_bank": [
           "Dónde",
-          "está",
-          "el",
-          "hotel",
-          "central",
           "es",
+          "está",
+          "central",
+          "la",
+          "el",
           "hay",
-          "la"
+          "hotel"
         ],
         "explanation": "¿Dónde está el hotel central?",
         "id": "es5051_e3"
@@ -18823,13 +19207,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "La estación está allí",
         "meaning": "The station is over there",
         "word_bank": [
-          "La",
+          "aquí",
           "estación",
-          "está",
-          "allí",
           "es",
           "hay",
-          "aquí"
+          "allí",
+          "La",
+          "está"
         ],
         "explanation": "La estación está allí.",
         "id": "es5051_e4"
@@ -18864,13 +19248,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The university is here'",
       "target_answer": "La universidad está aquí",
       "word_bank": [
-        "La",
-        "universidad",
-        "está",
         "aquí",
         "es",
+        "allí",
+        "está",
+        "La",
         "hay",
-        "allí"
+        "universidad"
       ],
       "explanation": "La universidad está aquí."
     }
@@ -18900,7 +19284,11 @@ export const ES_LESSONS: Lesson[] = [
       "diez",
       "veinte",
       "treinta",
-      "cien"
+      "cien",
+      "comprar",
+      "pedir",
+      "cuenta",
+      "por"
     ],
     "hook": {
       "title": "Asking the Price: ¿Cuánto Es? & ¿Cuánto Cuesta?",
@@ -18955,8 +19343,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I want to buy this book for twenty euros'?",
         "options": [
-          "Quiero comprar este libro por veinte euros",
           "*Quiero comprar este libro para veinte euros",
+          "Quiero comprar este libro por veinte euros",
           "*Quiero comprar esto libro por veinte euros"
         ],
         "target_answer": "Quiero comprar este libro por veinte euros",
@@ -18970,11 +19358,11 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Cuánto es esto",
         "meaning": "How much is this?",
         "word_bank": [
-          "Cuánto",
-          "es",
-          "esto",
-          "este",
           "está",
+          "esto",
+          "Cuánto",
+          "este",
+          "es",
           "esta"
         ],
         "explanation": "¿Cuánto es esto? uses neuter esto when pointing at an item.",
@@ -18996,12 +19384,12 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero pedir la cuenta",
         "meaning": "I want to ask for the bill",
         "word_bank": [
-          "Quiero",
-          "pedir",
           "la",
           "cuenta",
-          "por",
+          "Quiero",
           "para",
+          "por",
+          "pedir",
           "el"
         ],
         "explanation": "Quiero pedir la cuenta.",
@@ -19037,11 +19425,11 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'It is ten euros (Son diez euros)'",
       "target_answer": "Son diez euros",
       "word_bank": [
+        "Están",
         "Son",
-        "diez",
         "euros",
         "Es",
-        "Están",
+        "diez",
         "veinte"
       ],
       "explanation": "Son diez euros."
@@ -19075,7 +19463,12 @@ export const ES_LESSONS: Lesson[] = [
       "ha",
       "hemos",
       "hablado",
-      "comido"
+      "comido",
+      "hecho",
+      "visto",
+      "terminar",
+      "no",
+      "nunca"
     ],
     "hook": {
       "title": "The Golden Rule of the Spanish Perfect Past: Never Split 'He + Participle'!",
@@ -19125,10 +19518,10 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build 'I have not finished' by placing 'no' in front of the welded 'he + terminado' block:",
         "tile_options": [
-          "No",
-          "he",
+          "tengo",
           "terminado",
-          "tengo"
+          "he",
+          "No"
         ],
         "target_answer": "Noheterminado",
         "meaning": "No he terminado (I haven't finished)",
@@ -19139,9 +19532,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Which of these is the ONLY grammatical way to say 'Have you seen my brother?'?",
         "options": [
-          "¿Has visto a mi hermano?",
+          "*¿Tienes visto a mi hermano?",
           "*¿Has tú visto a mi hermano?",
-          "*¿Tienes visto a mi hermano?"
+          "¿Has visto a mi hermano?"
         ],
         "target_answer": "¿Has visto a mi hermano?",
         "meaning": "Have you seen my brother?",
@@ -19154,14 +19547,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "No lo he hecho hoy",
         "meaning": "I haven't done it today",
         "word_bank": [
-          "No",
-          "lo",
-          "he",
-          "hecho",
           "hoy",
+          "lo",
           "Tengo",
+          "hacer",
+          "hecho",
+          "No",
           "la",
-          "hacer"
+          "he"
         ],
         "explanation": "No + lo + he hecho + hoy.",
         "id": "es5071_e4"
@@ -19196,13 +19589,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'We have not eaten today'",
       "target_answer": "No hemos comido hoy",
       "word_bank": [
-        "No",
-        "hemos",
-        "comido",
-        "hoy",
-        "tenemos",
         "comer",
-        "he"
+        "No",
+        "hoy",
+        "hemos",
+        "tenemos",
+        "he",
+        "comido"
       ],
       "explanation": "No hemos comido hoy."
     }
@@ -19232,7 +19625,11 @@ export const ES_LESSONS: Lesson[] = [
       "dormir",
       "empezar",
       "mañana",
-      "noche"
+      "noche",
+      "siete",
+      "ocho",
+      "diez",
+      "me"
     ],
     "hook": {
       "title": "A Full Day in Spanish",
@@ -19297,17 +19694,17 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Por la mañana me levanto a las siete",
         "meaning": "In the morning I get up at seven",
         "word_bank": [
-          "Por",
-          "la",
           "mañana",
-          "me",
-          "levanto",
-          "a",
-          "las",
-          "siete",
           "Para",
+          "me",
+          "a",
+          "siete",
           "te",
-          "noche"
+          "las",
+          "la",
+          "levanto",
+          "noche",
+          "Por"
         ],
         "explanation": "Por la mañana + me levanto + a las siete.",
         "id": "es5081_e3"
@@ -19328,14 +19725,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Empiezo a comprender el español",
         "meaning": "I am starting to understand Spanish",
         "word_bank": [
-          "Empiezo",
-          "a",
-          "comprender",
           "el",
-          "español",
-          "Empezar",
+          "Empiezo",
+          "comprender",
           "de",
-          "la"
+          "español",
+          "a",
+          "la",
+          "Empezar"
         ],
         "explanation": "Empiezo a comprender el español.",
         "id": "es5081_e4"
@@ -19371,14 +19768,14 @@ export const ES_LESSONS: Lesson[] = [
       "target_answer": "Empiezo a comer a las ocho",
       "word_bank": [
         "Empiezo",
-        "a",
         "comer",
-        "a",
-        "las",
-        "ocho",
         "de",
+        "ocho",
+        "a",
+        "duermo",
+        "las",
         "Empezar",
-        "duermo"
+        "a"
       ],
       "explanation": "Empiezo a comer a las ocho."
     }
@@ -19408,7 +19805,11 @@ export const ES_LESSONS: Lesson[] = [
       "lo",
       "dónde",
       "con",
-      "para"
+      "para",
+      "amigo",
+      "hablar",
+      "vivir",
+      "comprender"
     ],
     "hook": {
       "title": "Never End a Spanish Sentence with a Dangling Preposition!",
@@ -19458,9 +19859,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How does Spanish express 'the friend I am speaking with'?",
         "options": [
+          "*el amigo quien hablo con",
           "el amigo con quien hablo (or con el que hablo)",
-          "*el amigo que hablo con",
-          "*el amigo quien hablo con"
+          "*el amigo que hablo con"
         ],
         "target_answer": "el amigo con quien hablo (or con el que hablo)",
         "meaning": "the friend with whom I speak",
@@ -19473,14 +19874,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Es la ciudad donde vivo",
         "meaning": "It is the city where I live",
         "word_bank": [
-          "Es",
-          "la",
-          "ciudad",
-          "donde",
-          "vivo",
-          "quien",
           "lo",
-          "Está"
+          "vivo",
+          "Está",
+          "donde",
+          "ciudad",
+          "quien",
+          "la",
+          "Es"
         ],
         "explanation": "Es la ciudad + donde (unstressed connector) + vivo.",
         "id": "es5091_e3"
@@ -19503,13 +19904,13 @@ export const ES_LESSONS: Lesson[] = [
         "word_bank": [
           "Es",
           "el",
-          "amigo",
+          "donde",
+          "para",
           "con",
           "quien",
-          "hablo",
           "que",
-          "para",
-          "donde"
+          "amigo",
+          "hablo"
         ],
         "explanation": "Es el amigo con quien hablo.",
         "id": "es5091_e4"
@@ -19544,14 +19945,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The friend with whom I live'",
       "target_answer": "El amigo con quien vivo",
       "word_bank": [
+        "vivo",
+        "donde",
+        "para",
+        "que",
         "El",
         "amigo",
         "con",
-        "quien",
-        "vivo",
-        "que",
-        "para",
-        "donde"
+        "quien"
       ],
       "explanation": "El amigo con quien vivo."
     }
@@ -19581,7 +19982,11 @@ export const ES_LESSONS: Lesson[] = [
       "ojalá",
       "vivir",
       "comprar",
-      "ir"
+      "ir",
+      "visitar",
+      "ciudad",
+      "casa",
+      "tener"
     ],
     "hook": {
       "title": "Dreaming and Planning with '-ía'",
@@ -19631,10 +20036,10 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build 'I / he would buy' by attaching '-ía' to the full infinitive 'comprar':",
         "tile_options": [
-          "comprar",
           "ía",
-          "aba",
-          "é"
+          "comprar",
+          "é",
+          "aba"
         ],
         "target_answer": "compraría",
         "meaning": "compraría (would buy)",
@@ -19645,9 +20050,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I would go to Madrid tomorrow' (from the infinitive ir)?",
         "options": [
-          "Iría a Madrid mañana",
           "*Voyía a Madrid mañana",
-          "*Fuería a Madrid mañana"
+          "*Fuería a Madrid mañana",
+          "Iría a Madrid mañana"
         ],
         "target_answer": "Iría a Madrid mañana",
         "meaning": "I would go to Madrid tomorrow",
@@ -19660,14 +20065,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Me gustaría comprar esta casa",
         "meaning": "I would like to buy this house",
         "word_bank": [
-          "Me",
-          "gustaría",
-          "comprar",
           "esta",
-          "casa",
-          "gusta",
           "este",
-          "compré"
+          "gusta",
+          "casa",
+          "compré",
+          "Me",
+          "comprar",
+          "gustaría"
         ],
         "explanation": "Me gustaría + comprar + esta casa.",
         "id": "es5101_e4"
@@ -19702,12 +20107,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Could you (formal) confirm?'",
       "target_answer": "Podría usted confirmar",
       "word_bank": [
-        "Podría",
-        "usted",
         "confirmar",
+        "confirmas",
+        "Podría",
         "Puedes",
-        "tú",
-        "confirmas"
+        "usted",
+        "tú"
       ],
       "explanation": "¿Podría usted confirmar?"
     }
@@ -19737,7 +20142,11 @@ export const ES_LESSONS: Lesson[] = [
       "puedes",
       "dormir",
       "empezar",
-      "preferir"
+      "preferir",
+      "querer",
+      "tener",
+      "tenemos",
+      "mostrar"
     ],
     "hook": {
       "title": "Mastering the Two Diphthong Boots: o→ue and e→ie",
@@ -19787,8 +20196,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build 'I prefer' from 'preferir' by splitting the second 'e' into 'ie' and adding '-o':",
         "tile_options": [
-          "pref",
           "ier",
+          "pref",
           "o",
           "er"
         ],
@@ -19816,16 +20225,16 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Prefiero el café, pero podemos beber agua",
         "meaning": "I prefer the coffee, but we can drink water",
         "word_bank": [
-          "Prefiero",
+          "la",
           "el",
-          "café",
-          "pero",
           "podemos",
           "beber",
-          "agua",
-          "Prefero",
           "puedemos",
-          "la"
+          "Prefiero",
+          "Prefero",
+          "café",
+          "pero",
+          "agua"
         ],
         "explanation": "Prefiero (stressed stem → ie) + pero podemos (unstressed stem → o).",
         "id": "es5111_e4"
@@ -19860,14 +20269,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Can you show me the house?'",
       "target_answer": "Me puedes mostrar la casa",
       "word_bank": [
-        "Me",
+        "el",
         "puedes",
+        "muestro",
+        "casa",
+        "Me",
         "mostrar",
         "la",
-        "casa",
-        "podemos",
-        "muestro",
-        "el"
+        "podemos"
       ],
       "explanation": "¿Me puedes mostrar la casa?"
     }
@@ -19899,7 +20308,11 @@ export const ES_LESSONS: Lesson[] = [
       "hacer",
       "poner",
       "tener",
-      "tengo"
+      "tengo",
+      "traer",
+      "verdad",
+      "mesa",
+      "café"
     ],
     "hook": {
       "title": "The 'Yo -go' Squad: Tengo, Hago, Pongo, Digo, Traigo",
@@ -19955,9 +20368,9 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "Build 'I order / I ask for' (1st person singular of pedir, with e→i):",
         "tile_options": [
           "p",
-          "i",
+          "e",
           "do",
-          "e"
+          "i"
         ],
         "target_answer": "pido",
         "meaning": "pido (I order / ask for)",
@@ -19968,9 +20381,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I put the book on the table' (using poner)?",
         "options": [
+          "*Puesto el libro en la mesa",
           "Pongo el libro en la mesa",
-          "*Pono el libro en la mesa",
-          "*Puesto el libro en la mesa"
+          "*Pono el libro en la mesa"
         ],
         "target_answer": "Pongo el libro en la mesa",
         "meaning": "I put the book on the table",
@@ -19979,16 +20392,16 @@ export const ES_LESSONS: Lesson[] = [
       },
       {
         "type": "syntax_builder",
-        "prompt": "Assemble: 'I always tell the truth (Digo la verdad)'",
+        "prompt": "Assemble in Spanish: 'I always tell the truth':",
         "target_answer": "Digo la verdad",
         "meaning": "I tell the truth",
         "word_bank": [
-          "Digo",
-          "la",
-          "verdad",
+          "el",
           "Deco",
-          "Pido",
-          "el"
+          "la",
+          "Digo",
+          "verdad",
+          "Pido"
         ],
         "explanation": "Digo ('I say/tell') + la verdad ('the truth').",
         "id": "es5112_e4"
@@ -20023,12 +20436,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'What are you doing today? (¿Qué haces hoy?)'",
       "target_answer": "Qué haces hoy",
       "word_bank": [
-        "Qué",
-        "haces",
-        "hoy",
-        "hago",
+        "Dónde",
         "hacer",
-        "Dónde"
+        "hago",
+        "hoy",
+        "haces",
+        "Qué"
       ],
       "explanation": "¿Qué haces hoy? (only yo has the -g-: yo hago, tú haces, él hace!)."
     }
@@ -20058,7 +20471,11 @@ export const ES_LESSONS: Lesson[] = [
       "cuenta",
       "reservar",
       "pedir",
-      "traer"
+      "traer",
+      "para",
+      "dos",
+      "por_favor",
+      "gracias"
     ],
     "hook": {
       "title": "From Walking In to Paying the Bill",
@@ -20108,9 +20525,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "When the waiter asks what you want, how do you say 'For me, a coffee, please'?",
         "options": [
-          "Para mí, un café, por favor",
+          "*Para yo, un café, por favor",
           "*Por mi, un café, por favor",
-          "*Para yo, un café, por favor"
+          "Para mí, un café, por favor"
         ],
         "target_answer": "Para mí, un café, por favor",
         "meaning": "For me, a coffee, please",
@@ -20123,15 +20540,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Quiero reservar una mesa para dos",
         "meaning": "I want to reserve a table for two",
         "word_bank": [
-          "Quiero",
-          "reservar",
-          "una",
-          "mesa",
-          "para",
-          "dos",
+          "tres",
           "por",
           "un",
-          "tres"
+          "una",
+          "dos",
+          "Quiero",
+          "reservar",
+          "para",
+          "mesa"
         ],
         "explanation": "Quiero reservar + una mesa + para dos.",
         "id": "es5121_e3"
@@ -20152,15 +20569,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Me trae la cuenta por favor",
         "meaning": "Will you bring me the bill, please?",
         "word_bank": [
-          "Me",
+          "por",
+          "traigo",
+          "gracias",
           "trae",
           "la",
           "cuenta",
-          "por",
+          "Me",
           "favor",
-          "traigo",
-          "el",
-          "gracias"
+          "el"
         ],
         "explanation": "¿Me trae la cuenta, por favor?",
         "id": "es5121_e4"
@@ -20195,13 +20612,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The bill, please'",
       "target_answer": "La cuenta por favor",
       "word_bank": [
-        "La",
-        "cuenta",
-        "por",
+        "mesa",
         "favor",
         "El",
-        "mesa",
-        "gracias"
+        "gracias",
+        "por",
+        "La",
+        "cuenta"
       ],
       "explanation": "La cuenta, por favor."
     }
@@ -20231,7 +20648,11 @@ export const ES_LESSONS: Lesson[] = [
       "vino",
       "agua",
       "sopa",
-      "bocadillo"
+      "bocadillo",
+      "frío",
+      "caliente",
+      "rico",
+      "con"
     ],
     "hook": {
       "title": "The Secret of 'El Agua Fría': Masculine Disguise, Feminine Soul!",
@@ -20282,8 +20703,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "How do you say 'The water is cold' in Spanish?",
         "options": [
           "El agua está fría",
-          "*El agua está frío",
-          "*La agua está fría"
+          "*La agua está fría",
+          "*El agua está frío"
         ],
         "target_answer": "El agua está fría",
         "meaning": "The water is cold",
@@ -20297,15 +20718,15 @@ export const ES_LESSONS: Lesson[] = [
         "meaning": "I want a cheese sandwich and cold water",
         "word_bank": [
           "Quiero",
+          "una",
+          "frío",
+          "fría",
+          "y",
+          "queso",
           "un",
           "bocadillo",
-          "de",
-          "queso",
-          "y",
           "agua",
-          "fría",
-          "frío",
-          "una",
+          "de",
           "con"
         ],
         "explanation": "Quiero un bocadillo de queso + y agua fría.",
@@ -20327,15 +20748,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "La sopa está caliente y muy rica",
         "meaning": "The soup is hot and very delicious",
         "word_bank": [
-          "La",
-          "sopa",
-          "está",
           "caliente",
-          "y",
-          "muy",
-          "rica",
-          "es",
           "rico",
+          "está",
+          "rica",
+          "muy",
+          "La",
+          "es",
+          "y",
+          "sopa",
           "el"
         ],
         "explanation": "La sopa está caliente y muy rica.",
@@ -20371,14 +20792,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'The water is very cold'",
       "target_answer": "El agua está muy fría",
       "word_bank": [
-        "El",
-        "agua",
-        "está",
+        "frío",
         "muy",
-        "fría",
-        "La",
         "es",
-        "frío"
+        "La",
+        "agua",
+        "El",
+        "está",
+        "fría"
       ],
       "explanation": "El agua está muy fría."
     }
@@ -20410,7 +20831,11 @@ export const ES_LESSONS: Lesson[] = [
       "billete",
       "ocho",
       "nueve",
-      "diez"
+      "diez",
+      "para",
+      "comprar",
+      "tener",
+      "dónde"
     ],
     "hook": {
       "title": "Why 'La Estación' Means Both 'Train Station' and 'Season'",
@@ -20460,8 +20885,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I want to buy a train ticket for Madrid'?",
         "options": [
-          "Quiero comprar un billete de tren para Madrid",
           "*Quiero comprar un tren billete por Madrid",
+          "Quiero comprar un billete de tren para Madrid",
           "*Quiero comprar una billete de tren"
         ],
         "target_answer": "Quiero comprar un billete de tren para Madrid",
@@ -20475,14 +20900,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Dónde está la estación de tren",
         "meaning": "Where is the train station?",
         "word_bank": [
-          "Dónde",
-          "está",
           "la",
-          "estación",
-          "de",
           "tren",
           "es",
+          "está",
           "el",
+          "de",
+          "Dónde",
+          "estación",
           "por"
         ],
         "explanation": "¿Dónde está la estación de tren?",
@@ -20504,18 +20929,18 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Tengo mi billete para el tren a las ocho",
         "meaning": "I have my ticket for the train at eight",
         "word_bank": [
-          "Tengo",
-          "mi",
-          "billete",
-          "para",
-          "el",
-          "tren",
-          "a",
-          "las",
-          "ocho",
           "tu",
-          "por",
-          "son"
+          "ocho",
+          "el",
+          "son",
+          "mi",
+          "para",
+          "tren",
+          "Tengo",
+          "las",
+          "billete",
+          "a",
+          "por"
         ],
         "explanation": "Tengo mi billete para el tren a las ocho.",
         "id": "es5131_e4"
@@ -20550,14 +20975,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I have my train ticket'",
       "target_answer": "Tengo mi billete de tren",
       "word_bank": [
-        "Tengo",
         "mi",
-        "billete",
-        "de",
-        "tren",
         "mis",
-        "por",
-        "la"
+        "billete",
+        "la",
+        "Tengo",
+        "tren",
+        "de",
+        "por"
       ],
       "explanation": "Tengo mi billete de tren."
     }
@@ -20587,7 +21012,11 @@ export const ES_LESSONS: Lesson[] = [
       "estación",
       "ir",
       "voy",
-      "para"
+      "para",
+      "dos",
+      "mañana",
+      "hoy",
+      "por_favor"
     ],
     "hook": {
       "title": "Decoding Station Boards: Ida y Vuelta, Salida & Llegada",
@@ -20637,9 +21066,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "At the airport or train station, you see a sign that says 'SALIDA'. What does it mean (and how does it contrast with 'éxito')?",
         "options": [
-          "la salida = 'exit / departure' (whereas el éxito = 'success'!)",
+          "la salida = 'success'",
           "la salida = 'salad'",
-          "la salida = 'success'"
+          "la salida = 'exit / departure' (whereas el éxito = 'success'!)"
         ],
         "target_answer": "la salida = 'exit / departure' (whereas el éxito = 'success'!)",
         "meaning": "exit / departure",
@@ -20652,14 +21081,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Dos billetes para Madrid, por favor",
         "meaning": "Two tickets for Madrid, please",
         "word_bank": [
-          "Dos",
-          "billetes",
-          "para",
           "Madrid",
-          "por",
-          "favor",
           "billete",
-          "el"
+          "Dos",
+          "para",
+          "por",
+          "el",
+          "favor",
+          "billetes"
         ],
         "explanation": "Dos billetes + para Madrid, por favor.",
         "id": "es5132_e3"
@@ -20680,15 +21109,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Mañana voy a Madrid en tren",
         "meaning": "Tomorrow I am going to Madrid by train",
         "word_bank": [
-          "Mañana",
-          "voy",
-          "a",
-          "Madrid",
           "en",
-          "tren",
           "por",
+          "Mañana",
+          "vas",
+          "a",
+          "tren",
+          "voy",
           "el",
-          "vas"
+          "Madrid"
         ],
         "explanation": "Mañana voy a Madrid en tren — Spanish uses en + vehicle (en tren, en coche, en autobús) for 'by train / by car'!",
         "id": "es5132_e4"
@@ -20723,14 +21152,14 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I am going to the station today'",
       "target_answer": "Voy a la estación hoy",
       "word_bank": [
-        "Voy",
-        "a",
-        "la",
-        "estación",
-        "hoy",
-        "al",
         "en",
-        "mañana"
+        "mañana",
+        "a",
+        "estación",
+        "Voy",
+        "al",
+        "hoy",
+        "la"
       ],
       "explanation": "Voy a la estación hoy."
     }
@@ -20760,7 +21189,11 @@ export const ES_LESSONS: Lesson[] = [
       "eres",
       "es",
       "somos",
-      "padre"
+      "padre",
+      "madre",
+      "hermano",
+      "universidad",
+      "bueno"
     ],
     "hook": {
       "title": "Why Spanish Says 'Soy Profesor' (Without 'Un')!",
@@ -20811,8 +21244,8 @@ export const ES_LESSONS: Lesson[] = [
         "prompt": "How do you say 'My father is a teacher at the university' in natural Spanish?",
         "options": [
           "Mi padre es profesor en la universidad",
-          "*Mi padre es un profesor en la universidad",
-          "*Mi padre está profesor en la universidad"
+          "*Mi padre está profesor en la universidad",
+          "*Mi padre es un profesor en la universidad"
         ],
         "target_answer": "Mi padre es profesor en la universidad",
         "meaning": "My father is a teacher at the university",
@@ -20825,14 +21258,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Soy profesor en la universidad",
         "meaning": "I am a teacher at the university",
         "word_bank": [
-          "Soy",
-          "profesor",
-          "en",
-          "la",
           "universidad",
-          "un",
           "Estoy",
-          "el"
+          "un",
+          "Soy",
+          "en",
+          "el",
+          "profesor",
+          "la"
         ],
         "explanation": "Soy + profesor (no un!) + en la universidad.",
         "id": "es5141_e3"
@@ -20853,15 +21286,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Ella es una doctora muy buena",
         "meaning": "She is a very good doctor",
         "word_bank": [
-          "Ella",
-          "es",
-          "una",
-          "doctora",
           "muy",
           "buena",
-          "está",
+          "es",
+          "un",
           "bueno",
-          "un"
+          "doctora",
+          "una",
+          "Ella",
+          "está"
         ],
         "explanation": "Ella es una doctora muy buena — adding muy buena brings back una!",
         "id": "es5141_e4"
@@ -20896,11 +21329,11 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Are you a teacher?'",
       "target_answer": "Eres profesor",
       "word_bank": [
-        "Eres",
-        "profesor",
+        "Soy",
         "un",
+        "Eres",
         "Estás",
-        "Soy"
+        "profesor"
       ],
       "explanation": "¿Eres profesor?"
     }
@@ -20932,7 +21365,11 @@ export const ES_LESSONS: Lesson[] = [
       "libro",
       "gustar",
       "gusta",
-      "encantar"
+      "encantar",
+      "clásico",
+      "mucho",
+      "ir",
+      "vamos"
     ],
     "hook": {
       "title": "Why Spanish Always Says 'Me Gusta LA Música' (With the Article)!",
@@ -20982,8 +21419,8 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I love classical music' in Spanish?",
         "options": [
-          "Me encanta la música clásica",
           "*Me encanta música clásica",
+          "Me encanta la música clásica",
           "*Yo encanto la música clásica"
         ],
         "target_answer": "Me encanta la música clásica",
@@ -20997,14 +21434,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Vamos al cine esta noche",
         "meaning": "Let's go to the movies tonight",
         "word_bank": [
-          "Vamos",
+          "este",
           "al",
-          "cine",
-          "esta",
+          "Vamos",
           "noche",
-          "a",
+          "esta",
           "el",
-          "este"
+          "cine",
+          "a"
         ],
         "explanation": "Vamos + al (a + el) + cine + esta noche.",
         "id": "es5142_e3"
@@ -21025,14 +21462,14 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Me gustan mucho los libros clásicos",
         "meaning": "I like classic books very much",
         "word_bank": [
-          "Me",
-          "gustan",
-          "mucho",
-          "los",
           "libros",
           "clásicos",
-          "gusta",
           "el",
+          "Me",
+          "gusta",
+          "los",
+          "mucho",
+          "gustan",
           "clásico"
         ],
         "explanation": "Me gustan mucho los libros clásicos.",
@@ -21068,11 +21505,11 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'Do you like cinema?'",
       "target_answer": "Te gusta el cine",
       "word_bank": [
-        "Te",
-        "gusta",
-        "el",
         "cine",
+        "gusta",
+        "Te",
         "gustan",
+        "el",
         "la",
         "Tú"
       ],
@@ -21104,7 +21541,11 @@ export const ES_LESSONS: Lesson[] = [
       "corazón",
       "me",
       "te",
-      "le"
+      "le",
+      "de",
+      "con",
+      "el",
+      "la"
     ],
     "hook": {
       "title": "Meet Spanish's Famous Feminine Rebel in '-o': La Mano!",
@@ -21162,9 +21603,9 @@ export const ES_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Which phrase is 100% grammatically accurate for 'my cold hands' / 'the small hand'?",
         "options": [
-          "la mano pequeña / las manos frías",
           "*el mano pequeño / los manos fríos",
-          "*la mano pequeño"
+          "*la mano pequeño",
+          "la mano pequeña / las manos frías"
         ],
         "target_answer": "la mano pequeña / las manos frías",
         "meaning": "the small hand / the cold hands",
@@ -21177,13 +21618,13 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Me duele la cabeza hoy",
         "meaning": "My head hurts today",
         "word_bank": [
-          "Me",
-          "duele",
-          "la",
           "cabeza",
-          "hoy",
+          "Me",
           "mi",
+          "duele",
           "el",
+          "la",
+          "hoy",
           "gusta"
         ],
         "explanation": "Me duele + la cabeza + hoy.",
@@ -21219,12 +21660,12 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I have cold hands (Tengo las manos frías)'",
       "target_answer": "Tengo las manos frías",
       "word_bank": [
-        "Tengo",
-        "las",
         "manos",
-        "frías",
         "los",
+        "Tengo",
+        "frías",
         "fríos",
+        "las",
         "el"
       ],
       "explanation": "Tengo las manos frías — feminine plural las + frías agrees with manos!"
@@ -21255,7 +21696,11 @@ export const ES_LESSONS: Lesson[] = [
       "negro",
       "rojo",
       "azul",
-      "blanco"
+      "blanco",
+      "verde",
+      "nuevo",
+      "hermoso",
+      "comprar"
     ],
     "hook": {
       "title": "Why 'To Wear' Is 'To Carry' (Llevar) in Spanish",
@@ -21303,7 +21748,7 @@ export const ES_LESSONS: Lesson[] = [
       },
       {
         "type": "reverse_cognate",
-        "prompt": "Spanish el vestido ('dress / garment', from Latin vestītus) shares its root with which English word for a sleeveless garment worn under a suit jacket?",
+        "prompt": "Spanish 'el vestido' ('dress / garment') shares its Latin clothing root with which four-letter English word for a sleeveless garment worn under a suit jacket?",
         "target_answer": "vest",
         "meaning": "vest, vestment, and invest ('to clothe your money in something') all come from the root of vestido!",
         "explanation": "Latin vestīre ('to clothe') gave Spanish vestir / el vestido and English vest and vestment.",
@@ -21328,15 +21773,15 @@ export const ES_LESSONS: Lesson[] = [
         "target_answer": "Es un vestido rojo muy hermoso",
         "meaning": "It is a very beautiful red dress",
         "word_bank": [
-          "Es",
           "un",
+          "roja",
+          "hermoso",
+          "Es",
+          "muy",
           "vestido",
           "rojo",
-          "muy",
-          "hermoso",
-          "una",
-          "roja",
-          "hermosa"
+          "hermosa",
+          "una"
         ],
         "explanation": "el vestido is a masculine noun (-o), so both rojo and hermoso stay masculine!",
         "id": "es5152_e4"
@@ -21371,13 +21816,13 @@ export const ES_LESSONS: Lesson[] = [
       "prompt": "Assemble: 'I have a black coat'",
       "target_answer": "Tengo un abrigo negro",
       "word_bank": [
-        "Tengo",
         "un",
-        "abrigo",
         "negro",
         "una",
-        "negra",
-        "la"
+        "abrigo",
+        "la",
+        "Tengo",
+        "negra"
       ],
       "explanation": "Tengo un abrigo negro."
     }

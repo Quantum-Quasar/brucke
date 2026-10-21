@@ -1,9 +1,12 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { CheckCircle2, ArrowRight, Sparkles, BookOpen, AlertCircle, Repeat } from "lucide-react";
+import { CheckCircle2, ArrowRight, Sparkles, BookOpen, AlertCircle, Repeat, Volume2 } from "lucide-react";
 import type { VocabHint } from "@/lib/types";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
+import { useAppStore } from "@/lib/store";
+import { getLanguageDefinition } from "@/data/languages";
+import { playTargetAudio } from "@/lib/audio";
 
 interface LiteralGlossPair {
   literal: string;
@@ -21,6 +24,12 @@ interface SuccessFeedbackSheetProps {
   variant?: "exact" | "almost";
   userAttempt?: string;
   warningNote?: string;
+  /** Optional override for the answer language label (e.g. "english cognate:" on reverse_cognate) */
+  answerLabel?: string;
+  /** Optional override for the spoken text when clicking the speaker button */
+  audioText?: string;
+  /** Optional override for the TTS locale when clicking the speaker button */
+  audioLocale?: string;
   /** TM-3 process affirmation — the correct answer restates the process (guidebook §1.7). */
   affirmation?: string;
   /** TM-2 literal-gloss reveal: the word-for-word English beside its natural form. */
@@ -44,6 +53,9 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
   variant = "exact",
   userAttempt,
   warningNote,
+  answerLabel,
+  audioText,
+  audioLocale,
   affirmation,
   literalPair,
   onFlagGuessed,
@@ -52,6 +64,10 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
   const continueBtnRef = React.useRef<HTMLButtonElement>(null);
   const dialogRef = React.useRef<HTMLDivElement>(null);
   const isAlmost = variant === "almost";
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
+  const spokenText = audioText ?? targetAnswer;
+  const spokenLocale = audioLocale ?? language.ttsLocale;
 
   useDialogFocus({
     open: true,
@@ -142,7 +158,7 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
           <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-2.5">
             <div>
               <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block">
-                built the german way:
+                built the {language.name.toLowerCase()} way:
               </span>
               <div className="text-lg font-bold text-[var(--main-color)] font-mono">
                 {literalPair.literal.split(/(\s+)/).map((token, i) =>
@@ -165,13 +181,26 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
           </div>
         ) : (
           <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-2.5">
-            <div>
-              <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block">
-                german:
-              </span>
-              <div className="text-xl font-bold text-[var(--main-color)] font-mono">
-                {targetAnswer}
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block">
+                  {answerLabel ?? `${language.name.toLowerCase()}:`}
+                </span>
+                <div className="text-xl font-bold text-[var(--main-color)] font-mono">
+                  {targetAnswer}
+                </div>
               </div>
+              {spokenText && (
+                <button
+                  type="button"
+                  onClick={() => playTargetAudio(spokenText, spokenLocale)}
+                  className="shrink-0 p-1.5 rounded bg-[var(--bg-color)] hover:bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--sub-color)]/20 transition cursor-pointer"
+                  title="Listen to pronunciation"
+                  aria-label="Listen to pronunciation"
+                >
+                  <Volume2 className="w-4 h-4" />
+                </button>
+              )}
             </div>
 
             {meaning && (

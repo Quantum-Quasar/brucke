@@ -30,6 +30,15 @@ export interface WordEntity {
   etymology_derivation: string;
   /** Thematic domain (family, colors, food, …) used by the Review Hub domain decks. */
   domain?: string;
+  /**
+   * Declarative capability list: which review modes this entity supports.
+   * Standard words support all 4 modes; article-drill entities declare ["mcq"].
+   */
+  supportedModes?: ReviewMode[];
+  /** Fixed MCQ option set (e.g. ["der", "die", "das", "den"] for article review). */
+  customMcqOptions?: string[];
+  /** Optional custom prompt badge shown on the review card (e.g. "pick the article"). */
+  promptLabel?: string;
 }
 
 export interface ShiftFamily {
@@ -98,12 +107,161 @@ export type ExerciseType =
   | "literal_gloss"
   | "dictation"
   | "family_matrix"
-  | "variant_english";
+  | "variant_english"
+  | "pronoun_compression"
+  | "spoken_turn_reply";
 
-export const PRODUCTION_TYPES: ExerciseType[] = ["derive", "reverse_cognate", "transcribe", "dictation", "family_matrix"];
+export interface ExerciseCapabilitySpec {
+  type: ExerciseType;
+  label: string;
+  /** Which review modes correspond to or can practice this exercise's skill */
+  supportedReviewModes: ReviewMode[];
+  /** Whether this exercise type is allowed as exercise[0] (cold open) of a lesson */
+  allowColdOpen: boolean;
+  /** Whether this exercise demands active target-language production */
+  isProduction: boolean;
+  /** Whether this exercise plays spoken audio as part of its prompt */
+  hasAudio: boolean;
+  /** Whether retryVariant can shuffle its options/tiles/chips on retry */
+  supportsRetryShuffle: boolean;
+}
 
-/** Types that must never open a lesson — they demand production, not recognition. */
-export const COLD_OPEN_FORBIDDEN: ExerciseType[] = ["derive", "reverse_cognate", "transcribe", "literal_gloss", "dictation", "family_matrix", "variant_english"];
+/**
+ * Single declarative registry where every exercise type declares its supported
+ * modes, cold-open eligibility, production status, and audio/retry behavior.
+ */
+export const EXERCISE_CAPABILITIES: Record<ExerciseType, ExerciseCapabilitySpec> = {
+  morpheme_tiles: {
+    type: "morpheme_tiles",
+    label: "morpheme assembly",
+    supportedReviewModes: ["tiles", "flashcard"],
+    allowColdOpen: true,
+    isProduction: false,
+    hasAudio: false,
+    supportsRetryShuffle: true,
+  },
+  matching_pairs: {
+    type: "matching_pairs",
+    label: "cognate matching",
+    supportedReviewModes: ["mcq", "flashcard"],
+    allowColdOpen: true,
+    isProduction: false,
+    hasAudio: false,
+    supportsRetryShuffle: true,
+  },
+  shift_select: {
+    type: "shift_select",
+    label: "shift recognition",
+    supportedReviewModes: ["mcq", "flashcard"],
+    allowColdOpen: true,
+    isProduction: false,
+    hasAudio: false,
+    supportsRetryShuffle: true,
+  },
+  syntax_builder: {
+    type: "syntax_builder",
+    label: "sentence builder",
+    supportedReviewModes: ["tiles", "mcq", "typing"],
+    allowColdOpen: true,
+    isProduction: false,
+    hasAudio: false,
+    supportsRetryShuffle: true,
+  },
+  derive: {
+    type: "derive",
+    label: "rule application",
+    supportedReviewModes: ["typing", "tiles", "mcq", "flashcard"],
+    allowColdOpen: false,
+    isProduction: true,
+    hasAudio: false,
+    supportsRetryShuffle: false,
+  },
+  reverse_cognate: {
+    type: "reverse_cognate",
+    label: "reverse cognate",
+    supportedReviewModes: ["typing", "mcq", "flashcard"],
+    allowColdOpen: false,
+    isProduction: true,
+    hasAudio: false,
+    supportsRetryShuffle: false,
+  },
+  transcribe: {
+    type: "transcribe",
+    label: "transcribe the thought",
+    supportedReviewModes: ["typing", "tiles", "mcq", "flashcard"],
+    allowColdOpen: false,
+    isProduction: true,
+    hasAudio: false,
+    supportsRetryShuffle: true,
+  },
+  literal_gloss: {
+    type: "literal_gloss",
+    label: "direct translation",
+    supportedReviewModes: ["mcq"],
+    allowColdOpen: false,
+    isProduction: false,
+    hasAudio: false,
+    supportsRetryShuffle: true,
+  },
+  dictation: {
+    type: "dictation",
+    label: "listen and write",
+    supportedReviewModes: ["typing", "tiles"],
+    allowColdOpen: false,
+    isProduction: true,
+    hasAudio: true,
+    supportsRetryShuffle: false,
+  },
+  family_matrix: {
+    type: "family_matrix",
+    label: "the family grid",
+    supportedReviewModes: ["typing", "mcq"],
+    allowColdOpen: false,
+    isProduction: true,
+    hasAudio: false,
+    supportsRetryShuffle: false,
+  },
+  variant_english: {
+    type: "variant_english",
+    label: "every way to say it",
+    supportedReviewModes: ["mcq"],
+    allowColdOpen: false,
+    isProduction: false,
+    hasAudio: false,
+    supportsRetryShuffle: true,
+  },
+  pronoun_compression: {
+    type: "pronoun_compression",
+    label: "compress the clause",
+    supportedReviewModes: ["tiles", "typing", "mcq"],
+    allowColdOpen: false,
+    isProduction: true,
+    hasAudio: false,
+    supportsRetryShuffle: true,
+  },
+  spoken_turn_reply: {
+    type: "spoken_turn_reply",
+    label: "question & answer turn",
+    supportedReviewModes: ["typing", "tiles", "mcq"],
+    allowColdOpen: false,
+    isProduction: true,
+    hasAudio: true,
+    supportsRetryShuffle: true,
+  },
+};
+
+export const PRODUCTION_TYPES: ExerciseType[] = (
+  Object.values(EXERCISE_CAPABILITIES) as ExerciseCapabilitySpec[]
+)
+  .filter((spec) => spec.isProduction)
+  .map((spec) => spec.type);
+
+/** Types that must never open a lesson — derived directly from EXERCISE_CAPABILITIES. */
+export const COLD_OPEN_FORBIDDEN: ExerciseType[] = (
+  Object.values(EXERCISE_CAPABILITIES) as ExerciseCapabilitySpec[]
+)
+  .filter((spec) => !spec.allowColdOpen)
+  .map((spec) => spec.type);
 
 export interface MatchingPairItem {
   id: string;
@@ -121,6 +279,15 @@ export interface VocabHint {
 export interface ExerciseDiagnosis {
   slip: string;
   cue: string;
+}
+
+export interface CompressedNounPart {
+  /** The full noun phrase in the unfolded sentence (e.g., "das Haus", "le livre", "la carta") */
+  noun: string;
+  /** The compact pronoun it folds into (e.g., "es", "le", "la") */
+  pronoun: string;
+  /** Short grammatical role label (e.g., "direct object", "indirect object") */
+  role: string;
 }
 
 export interface ExerciseItem {
@@ -142,6 +309,8 @@ export interface ExerciseItem {
   affirmation?: string;
   /** TM-3: authored override for the common wrong answer on this exercise. */
   diagnosis?: ExerciseDiagnosis;
+  /** Optional per-exercise declaration overriding which review modes it supports */
+  supportedModes?: ReviewMode[];
   // --- transcribe (TM-1): the thought the learner must render into German ---
   idea?: string;
   cues?: string[]; // 1–3 scaled prompts, ordered easy→late, revealed on demand or on failure
@@ -165,6 +334,13 @@ export interface ExerciseItem {
   task?: { row: number; column: number };
   row_law?: string;
   column_law?: string;
+  // --- pronoun_compression: visual, numeral-free noun-to-pronoun clause folding ---
+  full_sentence?: string;
+  compressed_parts?: CompressedNounPart[];
+  // --- spoken_turn_reply: conversational question & answer turn ---
+  spoken_question?: string;
+  question_meaning?: string;
+  reply_idea?: string;
 }
 
 /**

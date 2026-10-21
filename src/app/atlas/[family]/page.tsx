@@ -1,6 +1,7 @@
 import { ConstellationDetailClient } from "@/components/atlas/ConstellationDetailClient";
 import { compendium as data } from "@/data/compendium";
 import { frenchCompendium } from "@/data/french/compendium-fr";
+import { spanishCompendium } from "@/data/spanish/compendium-es";
 import { getAtlasFamilies } from "@/lib/atlas-families";
 import { notFound } from "next/navigation";
 
@@ -14,7 +15,11 @@ export const dynamicParams = false;
 // family id serves every course.
 export function generateStaticParams() {
   const ids = new Set<string>();
-  for (const family of [...getAtlasFamilies(data), ...getAtlasFamilies(frenchCompendium)]) {
+  for (const family of [
+    ...getAtlasFamilies(data),
+    ...getAtlasFamilies(frenchCompendium),
+    ...getAtlasFamilies(spanishCompendium),
+  ]) {
     ids.add(family.id);
   }
   return [...ids].map((family) => ({ family }));
@@ -28,7 +33,8 @@ export default async function ConstellationDetailPage({ params }: PageProps) {
   const { family } = await params;
   const known =
     getAtlasFamilies(data).some((f) => f.id === family) ||
-    getAtlasFamilies(frenchCompendium).some((f) => f.id === family);
+    getAtlasFamilies(frenchCompendium).some((f) => f.id === family) ||
+    getAtlasFamilies(spanishCompendium).some((f) => f.id === family);
   if (!known) notFound();
   return <ConstellationDetailClient familyId={family} />;
 }

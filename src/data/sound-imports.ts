@@ -1,15 +1,13 @@
 // ponytail: sound import (guidebook §1.4 — "often 'new' sounds are not new at all")
 //
-// Language Transfer's point: almost every German sound that frightens an English
-// speaker is a sound they already make, behaving slightly differently. Teaching
-// that halves the cognitive load of pronunciation and hands the freed attention
-// back to grammar. The rule here is the guidebook's: name the ENGLISH WORD that
-// already contains the sound, never a mouth-position lecture.
-//
-// Derived from taught IPA in src/data/phonetics.ts and the trail's own letter law.
+// Language Transfer's point: almost every target-language sound that frightens an
+// English speaker is a sound they already make, behaving slightly differently.
+// Teaching that halves the cognitive load of pronunciation and hands the freed
+// attention back to grammar. The rule here is the guidebook's: name the ENGLISH
+// WORD that already contains the sound, never a mouth-position lecture.
 
 export interface SoundImport {
-  /** the German letter or cluster */
+  /** the target-language letter or cluster */
   grapheme: string;
   /** the sound, as the trail writes it */
   sound: string;
@@ -137,6 +135,110 @@ export const SOUND_IMPORTS: SoundImport[] = [
     taughtIn: 5,
   },
 ];
+
+export const FRENCH_SOUND_IMPORTS: SoundImport[] = [
+  {
+    grapheme: "ch",
+    sound: "/ʃ/",
+    englishSource: "sh",
+    sourceWord: "changer → the sh in 'machine' or 'chef'",
+    whatsNew: "English already kept the French sound in 'chef' and 'champagne' — French simply uses it for every ch.",
+    taughtIn: 3,
+  },
+  {
+    grapheme: "gn",
+    sound: "/ɲ/",
+    englishSource: "ny",
+    sourceWord: "montagne → the ny in 'canyon' or 'onion'",
+    whatsNew: "You already make this palatal n in 'onion'. French spells it gn.",
+    taughtIn: 4,
+  },
+  {
+    grapheme: "ou",
+    sound: "/u/",
+    englishSource: "oo",
+    sourceWord: "couleur → the oo in 'soup' or 'group'",
+    whatsNew: "English borrowed 'soup' and 'group' from French — ou is always a pure 'oo'.",
+    taughtIn: 4,
+  },
+  {
+    grapheme: "u",
+    sound: "/y/",
+    englishSource: "ee",
+    sourceWord: "tu / rue → say 'ee' as in 'see' and round your lips",
+    whatsNew: "Keep your tongue on 'ee' while rounding your lips as if to whistle — that single contrast separates tu from tout.",
+    taughtIn: 1,
+  },
+  {
+    grapheme: "é",
+    sound: "/e/",
+    englishSource: "ay",
+    sourceWord: "café → the crisp a in 'café' without the trailing y-glide",
+    whatsNew: "Stop your mouth before it glides into an 'ee' at the end — short and level.",
+    taughtIn: 1,
+  },
+  {
+    grapheme: "h",
+    sound: "/∅/",
+    englishSource: "silent h",
+    sourceWord: "hôtel / heure → the silent h in English 'hour' and 'honest'",
+    whatsNew: "English kept silent h in 'hour' and 'honour' because they came from French. French never pronounces h at all.",
+    taughtIn: 2,
+  },
+];
+
+export const SPANISH_SOUND_IMPORTS: SoundImport[] = [
+  {
+    grapheme: "ñ",
+    sound: "/ɲ/",
+    englishSource: "ny",
+    sourceWord: "español / mañana → the ny in 'canyon'",
+    whatsNew: "English 'canyon' is literally a respelling of Spanish cañón — you already say ñ effortlessly.",
+    taughtIn: 1,
+  },
+  {
+    grapheme: "h",
+    sound: "/∅/",
+    englishSource: "silent h",
+    sourceWord: "hacer / hablar → the silent h in 'hour' or 'herb'",
+    whatsNew: "Spanish H is completely silent everywhere — treat it as an etymological footprint of Latin F.",
+    taughtIn: 3,
+  },
+  {
+    grapheme: "j",
+    sound: "/x/",
+    englishSource: "h",
+    sourceWord: "trabajo / noche → a stronger h as in 'aha!' or Scottish 'loch'",
+    whatsNew: "Spanish J (and G before e/i) is a breathy back-of-the-throat H, never the English J in 'jump'.",
+    taughtIn: 5,
+  },
+  {
+    grapheme: "ll",
+    sound: "/ʝ/",
+    englishSource: "y",
+    sourceWord: "llave / llegar → the y in 'yes' or 'tortilla'",
+    whatsNew: "You already pronounce ll as Y every time you say 'tortilla' — apply that same sound to every ll.",
+    taughtIn: 4,
+  },
+  {
+    grapheme: "r / rr",
+    sound: "/ɾ/ /r/",
+    englishSource: "tt / dd",
+    sourceWord: "pero → the quick tongue tap of 'butter' or 'ladder' in American English",
+    whatsNew: "Single Spanish r between vowels is the exact same single tongue-tap you already use for 'tt' in 'butter'.",
+    taughtIn: 2,
+  },
+];
+
+const SOUND_IMPORTS_BY_LANG: Record<string, SoundImport[]> = {
+  de: SOUND_IMPORTS,
+  fr: FRENCH_SOUND_IMPORTS,
+  es: SPANISH_SOUND_IMPORTS,
+};
+
+export function getSoundImportsForLanguage(languageId: string): SoundImport[] {
+  return SOUND_IMPORTS_BY_LANG[languageId] ?? SOUND_IMPORTS;
+}
 
 /** The line rendered on a lesson or a word card: "you already say this — here's where." */
 export function importLineFor(sound: SoundImport): string {

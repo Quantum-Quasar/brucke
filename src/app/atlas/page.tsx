@@ -51,6 +51,20 @@ export default function AtlasPage() {
   }
   const totalUnseen = totalWords - (totalMastered + totalEncountered + totalExplored);
 
+  const atlasTitle =
+    activeLanguageId === "fr"
+      ? "Conversion Bridge Families"
+      : activeLanguageId === "es"
+      ? "Castilian Sound Shift Families"
+      : "Sound Shift Families";
+
+  const atlasSub =
+    activeLanguageId === "fr"
+      ? "The 9 conversion bridge families linking English cognates to French vocabulary — plus every dictionary word that sits outside them."
+      : activeLanguageId === "es"
+      ? "The 9 historical sound and suffix shift families linking English & Latin cognates to Spanish vocabulary — plus every dictionary word that sits outside them."
+      : "The 9 historical sound shift families linking English cognates to High German vocabulary — plus every dictionary word that sits outside them.";
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 space-y-6 font-sans">
       {/* Header */}
@@ -60,13 +74,9 @@ export default function AtlasPage() {
             <Compass className="w-3.5 h-3.5" /> phonological atlas
           </span>
           <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-color)] tracking-tight mt-0.5">
-            {activeLanguageId === "fr" ? "Conversion Bridge Families" : "Sound Shift Families"}
+            {atlasTitle}
           </h1>
-          <p className="text-xs sm:text-sm text-[var(--sub-color)] mt-0.5">
-            {activeLanguageId === "fr"
-              ? "The 9 conversion bridge families linking English cognates to French vocabulary — plus every dictionary word that sits outside them."
-              : "The 9 historical sound shift families linking English cognates to High German vocabulary — plus every dictionary word that sits outside them."}
-          </p>
+          <p className="text-xs sm:text-sm text-[var(--sub-color)] mt-0.5">{atlasSub}</p>
         </div>
 
         {/* Search / Filter input */}
@@ -119,7 +129,7 @@ export default function AtlasPage() {
             Master Web — every word, phrase &amp; shift, linked
           </h3>
           <p className="text-xs text-[var(--sub-color)] mt-0.5">
-            One graph joining all shift families, compounds, false friends and expressions like „Es tut mir leid." to the words within them.
+            One graph joining all shift families, compounds, false friends and expressions to the words within them.
           </p>
         </div>
         <ChevronRight className="w-5 h-5 text-[var(--main-color)] shrink-0 group-hover:translate-x-0.5 transition" />

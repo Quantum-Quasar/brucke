@@ -81,7 +81,7 @@ describe("Progressive Bite-Sized Exercise Architecture", () => {
   });
 
   it("validates that helper words like 'mit' contain explicit vocab_hints", () => {
-    const l1Syntax = LESSONS[0].exercises.find((e) => e.id === "l1_e5");
+    const l1Syntax = LESSONS.find((l) => l.id === 1)?.exercises.find((e) => e.id === "l1_e5");
     expect(l1Syntax).toBeDefined();
     expect(l1Syntax?.vocab_hints).toBeDefined();
     const mitHint = l1Syntax?.vocab_hints?.find((h) => h.word === "mit");
@@ -111,7 +111,7 @@ describe("Progressive Bite-Sized Exercise Architecture", () => {
   });
 
   it("simulates Duolingo-style end-of-lesson retry queue where missed and typo questions are re-asked at the end", () => {
-    const lesson = LESSONS[0]; // 5 exercises
+    const lesson = LESSONS.find((l) => l.id === 1)!; // the opening lesson (id 1) — 5 exercises
     expect(lesson.exercises.length).toBe(5);
 
     const retryQueue: any[] = [];

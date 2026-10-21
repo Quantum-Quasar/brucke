@@ -368,6 +368,32 @@ export function saveState(state: AppState) {
 
 const initialSaved = loadSavedState();
 
+function sanitizeImportedSrsCard(raw: Record<string, unknown>, fallbackId: string): SRSCard {
+  const clampNum = (v: unknown, def: number, min: number, max: number) =>
+    typeof v === "number" && Number.isFinite(v) ? Math.min(max, Math.max(min, v)) : def;
+  const wordId = typeof raw.word_id === "string" && raw.word_id ? raw.word_id : fallbackId;
+  const interval = clampNum(raw.interval, 1, 0, 36500);
+  const repetitions = clampNum(raw.repetitions ?? raw.repetition, 0, 0, 10000);
+  const easeFactor = clampNum(raw.ease_factor ?? raw.efactor, 2.5, 1.3, 5.0);
+  const lapses = clampNum(raw.lapses, 0, 0, 10000);
+  const dueDate =
+    typeof raw.due_date === "string" && /^\d{4}-\d{2}-\d{2}/.test(raw.due_date)
+      ? raw.due_date
+      : typeof raw.dueDate === "string" && /^\d{4}-\d{2}-\d{2}/.test(raw.dueDate)
+      ? raw.dueDate
+      : new Date().toISOString().split("T")[0];
+  return {
+    ...(raw as unknown as SRSCard),
+    word_id: wordId,
+    interval,
+    repetitions,
+    ease_factor: easeFactor,
+    lapses,
+    due_date: dueDate,
+    last_reviewed: typeof raw.last_reviewed === "string" ? raw.last_reviewed : null,
+  };
+}
+
 export const useAppStore = create<AppState>((set, get) => ({
   activeLanguageId: initialSaved.activeLanguageId || DEFAULT_LANGUAGE_ID,
   progressByLanguage: initialSaved.progressByLanguage || {},
@@ -942,7 +968,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           if (c && typeof c === "object" && "id" in c) {
             const cardId = c.id;
             if (typeof cardId === "string" && cardId && !isDangerousKey(cardId)) {
-              cardMap[cardId] = c as unknown as SRSCard;
+              cardMap[cardId] = sanitizeImportedSrsCard(c as Record<string, unknown>, cardId);
             }
           }
         });
@@ -951,7 +977,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         let cardMap: Record<string, SRSCard> = { ...s.srsCards };
         for (const [cardId, card] of Object.entries(payload.srsCards)) {
           if (cardId && !isDangerousKey(cardId) && card && typeof card === "object") {
-            cardMap[cardId] = card as unknown as SRSCard;
+            cardMap[cardId] = sanitizeImportedSrsCard(card as Record<string, unknown>, cardId);
           }
         }
         srsCards = cardMap;
@@ -990,7 +1016,7 @@ export const useAppStore = create<AppState>((set, get) => ({
               const safeCards: Record<string, SRSCard> = {};
               for (const [cId, card] of Object.entries(cleanSlice.srsCards)) {
                 if (cId && !isDangerousKey(cId)) {
-                  safeCards[cId] = card;
+                  if (card && typeof card === "object") safeCards[cId] = sanitizeImportedSrsCard(card as unknown as Record<string, unknown>, cId);
                 }
               }
               cleanSlice.srsCards = safeCards;

@@ -87,7 +87,6 @@ export const FamilyMatrixExercise: React.FC<FamilyMatrixExerciseProps> = ({
       setAlmostWarningNote(evaluation.warningNote);
       setRevealed(true);
       setShowSuccessSheet(true);
-      onSuccess();
       if (evaluation.accuracy === "almost" && (evaluation.reason === "typo" || evaluation.reason === "umlaut")) {
         onQueueRetry?.();
       }
@@ -151,7 +150,7 @@ export const FamilyMatrixExercise: React.FC<FamilyMatrixExerciseProps> = ({
                       : "border-dashed border-[var(--sub-color)]/30 text-[var(--sub-color)]",
                   ].join(" ")}
                 >
-                  {isTask ? (
+                  {isTask && !revealed ? (
                     <span className="text-[11px] uppercase tracking-wider">you build this</span>
                   ) : show && cell ? (
                     <>
@@ -225,6 +224,18 @@ export const FamilyMatrixExercise: React.FC<FamilyMatrixExerciseProps> = ({
             I don&rsquo;t know — show the family
           </button>
         )}
+        {revealed && !showSuccessSheet && !showErrorSheet && (
+          <button
+            onClick={() => {
+              setUserInput("");
+              setRevealed(false);
+              onSuccess();
+            }}
+            className="w-full py-3 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-semibold"
+          >
+            Continue
+          </button>
+        )}
       </div>
 
       {showSuccessSheet && (
@@ -240,6 +251,7 @@ export const FamilyMatrixExercise: React.FC<FamilyMatrixExerciseProps> = ({
             setShowSuccessSheet(false);
             setUserInput("");
             setRevealed(false);
+            onSuccess();
           }}
         />
       )}
@@ -254,6 +266,9 @@ export const FamilyMatrixExercise: React.FC<FamilyMatrixExerciseProps> = ({
             setShowErrorSheet(false);
             setRevealed(true);
             setUserInput("");
+            if (!isRetry) {
+              onSuccess();
+            }
           }}
         />
       )}

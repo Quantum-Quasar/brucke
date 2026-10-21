@@ -1,4 +1,7 @@
 // ponytail: concise character-level diff comparing user input against expected target
+// with LCS alignment and automatic active-language grading rules (de / es / fr / en)
+
+import { useAppStore } from "./store";
 
 export interface DiffChar {
   char: string;
@@ -21,35 +24,77 @@ export function computeLetterDiff(userInput: string, expected: string): {
     };
   }
 
-  // Character-by-character alignment
-  const maxLen = Math.max(user.length, target.length);
-  const userChars: DiffChar[] = [];
-  const expectedChars: DiffChar[] = [];
+  const m = user.length;
+  const n = target.length;
 
-  for (let i = 0; i < maxLen; i++) {
-    const u = user[i];
-    const t = target[i];
-
-    if (u !== undefined && t !== undefined) {
-      if (u === t) {
-        userChars.push({ char: u, status: "correct" });
-        expectedChars.push({ char: t, status: "correct" });
-      } else {
+  // Guard for very long inputs: fall back to positional comparison
+  if (m > 200 || n > 200) {
+    const maxLen = Math.max(m, n);
+    const userChars: DiffChar[] = [];
+    const expectedChars: DiffChar[] = [];
+    for (let i = 0; i < maxLen; i++) {
+      const u = user[i];
+      const t = target[i];
+      if (u !== undefined && t !== undefined) {
+        const status = u === t ? "correct" : "incorrect";
+        userChars.push({ char: u, status });
+        expectedChars.push({ char: t, status });
+      } else if (u !== undefined) {
         userChars.push({ char: u, status: "incorrect" });
-        expectedChars.push({ char: t, status: "incorrect" });
+      } else if (t !== undefined) {
+        expectedChars.push({ char: t, status: "missing" });
       }
-    } else if (u !== undefined && t === undefined) {
-      // Extra characters in user input
-      userChars.push({ char: u, status: "incorrect" });
-    } else if (u === undefined && t !== undefined) {
-      // Missing characters in user input
-      expectedChars.push({ char: t, status: "missing" });
+    }
+    return { userChars, expectedChars, isMatch: false };
+  }
+
+  // LCS dynamic programming table so a single missing or extra letter early in a
+  // sentence doesn't shift and mark the rest of the sentence incorrect.
+  const dp: number[][] = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (user[i - 1] === target[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+  }
+
+  const userCharsRev: DiffChar[] = [];
+  const expectedCharsRev: DiffChar[] = [];
+  let i = m;
+  let j = n;
+
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && user[i - 1] === target[j - 1]) {
+      userCharsRev.push({ char: user[i - 1], status: "correct" });
+      expectedCharsRev.push({ char: target[j - 1], status: "correct" });
+      i--;
+      j--;
+    } else if (
+      i > 0 &&
+      j > 0 &&
+      dp[i][j - 1] === dp[i - 1][j] &&
+      dp[i - 1][j - 1] === dp[i][j - 1]
+    ) {
+      // 1-for-1 character substitution at the same aligned slot
+      userCharsRev.push({ char: user[i - 1], status: "incorrect" });
+      expectedCharsRev.push({ char: target[j - 1], status: "incorrect" });
+      i--;
+      j--;
+    } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+      expectedCharsRev.push({ char: target[j - 1], status: "missing" });
+      j--;
+    } else {
+      userCharsRev.push({ char: user[i - 1], status: "incorrect" });
+      i--;
     }
   }
 
   return {
-    userChars,
-    expectedChars,
+    userChars: userCharsRev.reverse(),
+    expectedChars: expectedCharsRev.reverse(),
     isMatch: false,
   };
 }
@@ -99,29 +144,154 @@ export interface EvaluationResult {
 export interface EvaluationOptions {
   umlautTolerance?: boolean;
   capitalizationTolerance?: boolean;
+  /** Optional explicit override; otherwise auto-detected from activeLanguageId in store. */
+  languageId?: string;
+}
+
+interface LanguageGradingSpec {
+  id: "de" | "es" | "fr" | "en";
+  name: string;
+  nounsCapitalized: boolean;
+  diacriticWarningLabel: string;
+  stripLeadingPunctuation: (s: string) => string;
+  normalizeDiacritics: (s: string) => string;
+  matchesDiacritics: (userLower: string, targetLower: string) => boolean;
+  infinitiveEndings: string[];
+  stripArticle: (s: string) => string;
+}
+
+const normalizeGermanUmlauts = (s: string) =>
+  s.replace(/ä/g, "a").replace(/ö/g, "o").replace(/ü/g, "u").replace(/ß/g, "ss");
+
+const normalizeGermanDigraphs = (s: string) =>
+  s.replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss");
+
+const normalizeSpanishDiacritics = (s: string) =>
+  s
+    .replace(/á/g, "a")
+    .replace(/é/g, "e")
+    .replace(/í/g, "i")
+    .replace(/ó/g, "o")
+    .replace(/ú/g, "u")
+    .replace(/ü/g, "u")
+    .replace(/ñ/g, "n");
+
+const normalizeFrenchDiacritics = (s: string) =>
+  s
+    .replace(/[éèêë]/g, "e")
+    .replace(/[àâ]/g, "a")
+    .replace(/[ùûü]/g, "u")
+    .replace(/[îï]/g, "i")
+    .replace(/ô/g, "o")
+    .replace(/ç/g, "c")
+    .replace(/œ/g, "oe")
+    .replace(/æ/g, "ae");
+
+const normalizeEnglishDiacritics = (s: string) =>
+  s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+const LANGUAGE_GRADING_SPECS: Record<string, LanguageGradingSpec> = {
+  de: {
+    id: "de",
+    name: "German",
+    nounsCapitalized: true,
+    diacriticWarningLabel: "umlauts",
+    stripLeadingPunctuation: (s) => s,
+    normalizeDiacritics: normalizeGermanUmlauts,
+    matchesDiacritics: (userLower, targetLower) =>
+      normalizeGermanUmlauts(userLower) === normalizeGermanUmlauts(targetLower) ||
+      normalizeGermanDigraphs(userLower) === normalizeGermanDigraphs(targetLower) ||
+      normalizeGermanUmlauts(userLower.replace(/ae/g, "a").replace(/oe/g, "o").replace(/ue/g, "u")) ===
+        normalizeGermanUmlauts(targetLower.replace(/ae/g, "a").replace(/oe/g, "o").replace(/ue/g, "u")),
+    infinitiveEndings: ["en", "n"],
+    stripArticle: (s) =>
+      s
+        .replace(
+          /^(der|die|das|den|dem|des|ein|eine|einen|einem|einer|eines|kein|keine|keinen|keinem|keiner|keines)\s+/i,
+          ""
+        )
+        .trim(),
+  },
+  es: {
+    id: "es",
+    name: "Spanish",
+    nounsCapitalized: false,
+    diacriticWarningLabel: "accents and ñ",
+    stripLeadingPunctuation: (s) => s.replace(/^[¿¡\s]+/, ""),
+    normalizeDiacritics: normalizeSpanishDiacritics,
+    matchesDiacritics: (userLower, targetLower) =>
+      normalizeSpanishDiacritics(userLower) === normalizeSpanishDiacritics(targetLower),
+    infinitiveEndings: ["ar", "er", "ir"],
+    stripArticle: (s) =>
+      s.replace(/^(el|la|los|las|un|una|unos|unas)\s+/i, "").trim(),
+  },
+  fr: {
+    id: "fr",
+    name: "French",
+    nounsCapitalized: false,
+    diacriticWarningLabel: "accents",
+    stripLeadingPunctuation: (s) => s,
+    normalizeDiacritics: normalizeFrenchDiacritics,
+    matchesDiacritics: (userLower, targetLower) =>
+      normalizeFrenchDiacritics(userLower) === normalizeFrenchDiacritics(targetLower),
+    infinitiveEndings: ["er", "ir", "re"],
+    stripArticle: (s) =>
+      s
+        .replace(/^(de\s+l['’]|de\s+la\s+|du\s+|des\s+|le\s+|la\s+|les\s+|un\s+|une\s+|l['’])/i, "")
+        .trim(),
+  },
+  en: {
+    id: "en",
+    name: "English",
+    nounsCapitalized: false,
+    diacriticWarningLabel: "accents",
+    stripLeadingPunctuation: (s) => s,
+    normalizeDiacritics: normalizeEnglishDiacritics,
+    matchesDiacritics: (userLower, targetLower) =>
+      normalizeEnglishDiacritics(userLower) === normalizeEnglishDiacritics(targetLower),
+    infinitiveEndings: [],
+    stripArticle: (s) => s.replace(/^(to|the|a|an)\s+/i, "").trim(),
+  },
+};
+
+function resolveActiveGradingSpec(options?: EvaluationOptions): LanguageGradingSpec {
+  const activeId =
+    options?.languageId ??
+    (typeof useAppStore?.getState === "function" ? useAppStore.getState().activeLanguageId : "de") ??
+    "de";
+  return LANGUAGE_GRADING_SPECS[activeId] ?? LANGUAGE_GRADING_SPECS.de;
 }
 
 const stripTrailingPunctuation = (s: string) => s.replace(/[.,!?;:]+$/, "").trim();
 
 // Commas inside a sentence are punctuation, not spelling. Tile exercises cannot
 // produce them (tiles drop trailing punctuation) and a learner who types a
-// sentence without them has still said the German correctly, so they are
+// sentence without them has still said the sentence correctly, so they are
 // ignored when comparing — the learner still sees the target with its commas.
-const foldCommas = (s: string) =>
-  stripTrailingPunctuation(s).replace(/\s*,\s*/g, " ").replace(/\s{2,}/g, " ").trim();
+const foldCommas = (s: string, spec: LanguageGradingSpec) =>
+  spec
+    .stripLeadingPunctuation(stripTrailingPunctuation(s))
+    .replace(/\s*,\s*/g, " ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
 
 export function evaluateAnswerAccuracy(
   userInput: string,
   expected: string,
   options?: EvaluationOptions
 ): EvaluationResult {
-  const result = evaluateFolded(foldCommas(userInput), foldCommas(expected), options);
+  const spec = resolveActiveGradingSpec(options);
+  const foldedUser = foldCommas(userInput, spec);
+  const foldedTarget = foldCommas(expected, spec);
+  const result = evaluateFolded(foldedUser, foldedTarget, spec, options);
   if (result.warningNote) {
     // keep the commas visible when we quote the target back to the learner
-    const folded = foldCommas(expected);
-    const shown = stripTrailingPunctuation(expected);
-    if (folded !== shown) {
-      return { ...result, warningNote: result.warningNote.split(`"${folded}"`).join(`"${shown}"`) };
+    const shown = spec.stripLeadingPunctuation(stripTrailingPunctuation(expected));
+    if (foldedTarget !== shown) {
+      return {
+        ...result,
+        warningNote: result.warningNote.split(`"${foldedTarget}"`).join(`"${shown}"`),
+      };
     }
   }
   return result;
@@ -139,7 +309,10 @@ export function evaluateBestOf(
   expected: string,
   options?: EvaluationOptions
 ): { result: EvaluationResult; answer: string } {
-  let best = { result: evaluateAnswerAccuracy(candidates[0] ?? "", expected, options), answer: candidates[0] ?? "" };
+  let best = {
+    result: evaluateAnswerAccuracy(candidates[0] ?? "", expected, options),
+    answer: candidates[0] ?? "",
+  };
   for (const candidate of candidates.slice(1)) {
     const result = evaluateAnswerAccuracy(candidate, expected, options);
     if (ACCURACY_RANK[result.accuracy] > ACCURACY_RANK[best.result.accuracy]) {
@@ -152,9 +325,9 @@ export function evaluateBestOf(
 function evaluateFolded(
   user: string,
   target: string,
+  spec: LanguageGradingSpec,
   options?: EvaluationOptions
 ): EvaluationResult {
-
   // ponytail: guard against huge pasted text
   if (Math.abs(user.length - target.length) > 10 || user.length > 200) {
     return { accuracy: "incorrect" };
@@ -168,9 +341,12 @@ function evaluateFolded(
   const userLower = user.toLowerCase();
   const targetLower = target.toLowerCase();
 
-  // 2. Case difference (e.g. German noun not capitalized)
+  // 2. Case difference:
+  // - In French, Spanish & English (nounsCapitalized === false), case differences are always accepted as exact.
+  // - In German (nounsCapitalized === true), case differences are accepted without retry as "almost"
+  //   (or "exact" when capitalizationTolerance is on).
   if (userLower === targetLower) {
-    if (options?.capitalizationTolerance) {
+    if (!spec.nounsCapitalized || options?.capitalizationTolerance) {
       return { accuracy: "exact" };
     }
     return {
@@ -180,33 +356,22 @@ function evaluateFolded(
     };
   }
 
-  const normalizeUmlauts = (s: string) =>
-    s.replace(/ä/g, "a").replace(/ö/g, "o").replace(/ü/g, "u").replace(/ß/g, "ss");
-
-  const normalizeDigraphs = (s: string) =>
-    s.replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss");
-
-  const matchesUmlauts =
-    normalizeUmlauts(userLower) === normalizeUmlauts(targetLower) ||
-    normalizeDigraphs(userLower) === normalizeDigraphs(targetLower) ||
-    normalizeUmlauts(userLower.replace(/ae/g, "a").replace(/oe/g, "o").replace(/ue/g, "u")) ===
-      normalizeUmlauts(targetLower.replace(/ae/g, "a").replace(/oe/g, "o").replace(/ue/g, "u"));
-
-  // 3. Umlaut difference (e.g. a/ae instead of ä, or ss instead of ß)
-  if (matchesUmlauts) {
+  // 3. Diacritic / umlaut difference (language-specific normalization)
+  if (spec.matchesDiacritics(userLower, targetLower)) {
     if (options?.umlautTolerance) {
-      // If umlauts are tolerated, check if capitalization tolerance is also respected or if case matches
-      // capitalization style must match (all-lower vs capitalized-first vs
-      // other): "WASSER" must not count as case-correct just for containing caps
-      const lettersOf = (s: string) => s.replace(/[^A-Za-zÄÖÜäöüß]/g, "");
+      if (!spec.nounsCapitalized || options.capitalizationTolerance) {
+        return { accuracy: "exact" };
+      }
+      const lettersOf = (s: string) => s.replace(/[^\p{L}]/gu, "");
       const caseStyle = (s: string) => {
         const l = lettersOf(s);
+        if (!l) return "lower";
         if (l === l.toLowerCase()) return "lower";
         if (l[0] === l[0].toUpperCase() && l.slice(1) === l.slice(1).toLowerCase()) return "capitalized";
         return "other";
       };
       const caseMatches = caseStyle(user) === caseStyle(target);
-      if (options.capitalizationTolerance || caseMatches) {
+      if (caseMatches) {
         return { accuracy: "exact" };
       }
       return {
@@ -218,61 +383,55 @@ function evaluateFolded(
     return {
       accuracy: "almost",
       reason: "umlaut",
-      warningNote: `Almost right! Note that standard German spelling uses umlauts: "${target}"`,
+      warningNote: `Almost right! Note that standard ${spec.name} spelling uses ${spec.diacriticWarningLabel}: "${target}"`,
     };
   }
 
-  // 4. Missing verb infinitive ending (-en or -n, e.g. "trink" instead of "trinken") -> Yellow
-  if (targetLower.endsWith("en")) {
-    const stem = targetLower.slice(0, -2);
-    if (
-      userLower === stem ||
-      normalizeUmlauts(userLower) === normalizeUmlauts(stem)
-    ) {
-      return {
-        accuracy: "almost",
-        reason: "infinitive",
-        warningNote: `Almost right! German verbs use the infinitive ending "-en": "${target}" (you wrote the stem "${user}")`,
-      };
+  // 4. Language-specific verb infinitive ending check
+  for (const ending of spec.infinitiveEndings) {
+    if (targetLower.endsWith(ending) && targetLower.length > ending.length + 1) {
+      const stem = targetLower.slice(0, -ending.length);
+      if (
+        userLower === stem ||
+        spec.normalizeDiacritics(userLower) === spec.normalizeDiacritics(stem)
+      ) {
+        return {
+          accuracy: "almost",
+          reason: "infinitive",
+          warningNote: `Almost right! ${spec.name} verbs use the infinitive ending "-${ending}": "${target}" (you wrote the stem "${user}")`,
+        };
+      }
+      if (ending.length === 2) {
+        const conjugatedShort = targetLower.slice(0, -1); // e.g. "trinke" vs "trinken", "habla" vs "hablar", "parle" vs "parler"
+        if (
+          userLower === conjugatedShort ||
+          spec.normalizeDiacritics(userLower) === spec.normalizeDiacritics(conjugatedShort)
+        ) {
+          return {
+            accuracy: "almost",
+            reason: "infinitive",
+            warningNote: `Almost right! Note the infinitive ending is "-${ending}": "${target}" (you wrote "${user}")`,
+          };
+        }
+      }
+      break;
     }
-    const conjugatedE = targetLower.slice(0, -1); // e.g. "trinke" instead of "trinken"
-    if (
-      userLower === conjugatedE ||
-      normalizeUmlauts(userLower) === normalizeUmlauts(conjugatedE)
-    ) {
+  }
+
+  // Also check if user typed an infinitive ending when target was bare stem
+  for (const ending of spec.infinitiveEndings) {
+    if (userLower.endsWith(ending) && userLower.slice(0, -ending.length) === targetLower) {
       return {
         accuracy: "almost",
         reason: "infinitive",
-        warningNote: `Almost right! Note the infinitive ending is "-en": "${target}" (you wrote "${user}")`,
-      };
-    }
-  } else if (targetLower.endsWith("n")) {
-    const stem = targetLower.slice(0, -1);
-    if (
-      userLower === stem ||
-      normalizeUmlauts(userLower) === normalizeUmlauts(stem)
-    ) {
-      return {
-        accuracy: "almost",
-        reason: "infinitive",
-        warningNote: `Almost right! German verbs use the infinitive ending "-n": "${target}" (you wrote the stem "${user}")`,
+        warningNote: `Almost right! The prompt called for the bare stem: "${target}"`,
       };
     }
   }
 
-  // Also check if user typed infinitive when target was bare stem (e.g. "trinken" when target was "trink")
-  if (userLower.endsWith("en") && userLower.slice(0, -2) === targetLower) {
-    return {
-      accuracy: "almost",
-      reason: "infinitive",
-      warningNote: `Almost right! The prompt called for the bare stem: "${target}"`,
-    };
-  }
-
-  // 5. Gender article inclusion or omission (e.g. "Wasser" vs "das Wasser") -> Yellow
-  const stripArticle = (s: string) => s.replace(/^(der|die|das|den|dem|des|ein|eine|einen|einem|einer|eines|kein|keine|keinen|keinem|keiner|keines)\s+/i, "").trim();
-  const targetStripped = stripArticle(targetLower);
-  const userStripped = stripArticle(userLower);
+  // 5. Language-specific gender article inclusion or omission
+  const targetStripped = spec.stripArticle(targetLower);
+  const userStripped = spec.stripArticle(userLower);
 
   if (userLower === targetStripped && userLower !== targetLower) {
     return {

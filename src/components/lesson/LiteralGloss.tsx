@@ -9,6 +9,7 @@ import React, { useState, useEffect } from "react";
 import { Check, Sparkles } from "lucide-react";
 import { ErrorFeedbackSheet } from "./ErrorFeedbackSheet";
 import { SuccessFeedbackSheet } from "./SuccessFeedbackSheet";
+import { arrangeTilesDeterministically } from "./ExerciseWidgets";
 import { evaluateAnswerAccuracy } from "@/lib/letter-diff";
 import { affirmationFor } from "@/lib/shift-diagnosis";
 import { useAppStore } from "@/lib/store";
@@ -46,7 +47,7 @@ export const LiteralGloss: React.FC<LiteralGlossProps> = ({
   const settings = useAppStore((s) => s.settings);
   const tolerance = useAppStore((s) => s.tolerance);
 
-  const options = exercise.options ?? [];
+  const options = React.useMemo(() => arrangeTilesDeterministically(exercise.options ?? [], `${exercise.id}#lg`, exercise.target_answer), [exercise.options, exercise.id, exercise.target_answer]);
   const german = exercise.german ?? "";
   const natural = exercise.natural ?? "";
 

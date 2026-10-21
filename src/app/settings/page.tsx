@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { SettingItem } from "@/components/settings/SettingItem";
+import { VoiceStatusBanner } from "@/components/common/VoiceStatusBanner";
 import { THEME_LIST } from "@/data/themes";
 import { FONT_LIST } from "@/data/fonts";
 import { LANGUAGES, getLanguageDefinition } from "@/data/languages";
@@ -48,12 +49,16 @@ const SECTIONS = [
   { id: "sound", label: "sound", icon: Volume2 },
   { id: "theme", label: "theme", icon: Palette },
   { id: "hide_elements", label: "visibility", icon: EyeOff },
+  { id: "backup", label: "backup & json", icon: Download },
   { id: "danger_zone", label: "danger zone", icon: ShieldAlert },
 ] as const;
 
 export default function SettingsPage() {
   const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [backupStatusNote, setBackupStatusNote] = useState<string | null>(null);
+  const [jsonPasteOpen, setJsonPasteOpen] = useState(false);
+  const [jsonPasteText, setJsonPasteText] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -488,6 +493,7 @@ export default function SettingsPage() {
             <Volume2 className="w-4 h-4 text-[var(--main-color)]" />
             <span>sound</span>
           </div>
+          <VoiceStatusBanner showWhenAvailable />
 
           {/* sound volume */}
           <SettingItem
@@ -754,37 +760,94 @@ export default function SettingsPage() {
             <span>danger zone</span>
           </div>
 
-          {/* Backup & Restore */}
-          <SettingItem
-            id="export-import"
-            icon={Download}
-            title="backup & restore"
-            description="Export all your settings, SRS spaced-repetition schedules, and word mastery to a JSON file, or restore from a previous backup."
-            matchesSearch={matches(["backup", "export", "import", "restore", "json"])}
-          >
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleExportBackup}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono bg-[var(--sub-alt-color)] text-[var(--text-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 transition cursor-pointer"
-              >
-                <Download className="w-3.5 h-3.5 text-[var(--main-color)]" />
-                <span>export json</span>
-              </button>
+          {/* Dedicated Progress Backup & Restore (JSON File + Raw JSON) */}
+          <div id="backup" className="space-y-2">
+            <SettingItem
+              id="export-import"
+              icon={Download}
+              title="export & import progress as json"
+              description="Export all your settings, completed lessons, SRS spaced-repetition schedules, and word mastery across all languages to a portable JSON file (or copy/paste raw JSON)."
+              matchesSearch={matches(["backup", "export", "import", "restore", "json", "progress"])}
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleExportBackup();
+                    setBackupStatusNote("Exported progress backup JSON file.");
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono bg-[var(--sub-alt-color)] text-[var(--text-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 transition cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5 text-[var(--main-color)]" />
+                  <span>export json</span>
+                </button>
 
-              <label className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono bg-[var(--sub-alt-color)] text-[var(--text-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 transition cursor-pointer">
-                <Upload className="w-3.5 h-3.5 text-[var(--main-color)]" />
-                <span>import json</span>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".json"
-                  onChange={handleImportBackup}
-                  className="hidden"
+                <label className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono bg-[var(--sub-alt-color)] text-[var(--text-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 transition cursor-pointer">
+                  <Upload className="w-3.5 h-3.5 text-[var(--main-color)]" />
+                  <span>import json</span>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".json"
+                    onChange={handleImportBackup}
+                    className="hidden"
+                  />
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() => setJsonPasteOpen((v) => !v)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono bg-[var(--sub-alt-color)] text-[var(--sub-color)] hover:text-[var(--text-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 transition cursor-pointer"
+                >
+                  <span>{jsonPasteOpen ? "hide raw json" : "paste json"}</span>
+                </button>
+              </div>
+            </SettingItem>
+
+            {backupStatusNote && (
+              <p className="text-xs font-mono text-[var(--main-color)] pl-2" role="status">
+                {backupStatusNote}
+              </p>
+            )}
+
+            {jsonPasteOpen && (
+              <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/25 space-y-2.5 font-mono text-xs">
+                <p className="text-[var(--sub-color)]">
+                  Paste a Brücke JSON backup below to restore your progress directly without a file picker:
+                </p>
+                <textarea
+                  value={jsonPasteText}
+                  onChange={(e) => setJsonPasteText(e.target.value)}
+                  rows={4}
+                  placeholder={'{"version": 2, "activeLanguageId": "de", ...}'}
+                  className="w-full p-2.5 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/30 text-[var(--text-color)] text-xs font-mono outline-none focus:border-[var(--main-color)]"
                 />
-              </label>
-            </div>
-          </SettingItem>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      try {
+                        const parsed = JSON.parse(jsonPasteText);
+                        if (parsed && typeof parsed === "object" && useAppStore.getState().importBackupState(parsed)) {
+                          setBackupStatusNote("Progress restored from pasted JSON!");
+                          setJsonPasteText("");
+                          setJsonPasteOpen(false);
+                        } else {
+                          setBackupStatusNote("Could not restore: JSON does not contain valid Brücke progress fields.");
+                        }
+                      } catch {
+                        setBackupStatusNote("Invalid JSON syntax.");
+                      }
+                    }}
+                    disabled={!jsonPasteText.trim()}
+                    className="px-3.5 py-1.5 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-bold text-xs transition cursor-pointer disabled:opacity-40"
+                  >
+                    restore pasted json
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Reset Settings to Default */}
           <SettingItem

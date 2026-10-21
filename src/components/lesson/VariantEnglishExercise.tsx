@@ -9,13 +9,14 @@
 //
 // Deliberate design constraint: nothing is marked wrong for being "less literal".
 // A rendering is only a trap when it changes the thought (wrong person, wrong
-// tense, wrong object) or smuggles in a word German never said.
+// tense, wrong object) or smuggles in a word the target language never said.
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Languages, Check, X } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { soundEngine } from "@/lib/sound";
 import { affirmationFor } from "@/lib/shift-diagnosis";
+import { getLanguageDefinition } from "@/data/languages";
 import type { ExerciseItem } from "@/lib/types";
 
 interface VariantEnglishExerciseProps {
@@ -46,11 +47,12 @@ export const VariantEnglishExercise: React.FC<VariantEnglishExerciseProps> = ({
   onSuccess,
   onError,
   onQueueRetry,
-  onFlagGuessed,
 }) => {
   const [picked, setPicked] = useState<string[]>([]);
   const [state, setState] = useState<"idle" | "correct" | "wrong">("idle");
   const settings = useAppStore((s) => s.settings);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
 
   const renderings = exercise.renderings ?? [];
   const traps = exercise.traps ?? [];
@@ -59,6 +61,11 @@ export const VariantEnglishExercise: React.FC<VariantEnglishExerciseProps> = ({
     [exercise.id]
   );
   const affirmation = affirmationFor(exercise.affirmation, exercise.shift_hint);
+
+  useEffect(() => {
+    setPicked([]);
+    setState("idle");
+  }, [exercise.id]);
 
   const toggle = (opt: string) => {
     if (state !== "idle") return;
@@ -71,7 +78,6 @@ export const VariantEnglishExercise: React.FC<VariantEnglishExerciseProps> = ({
     if (exact) {
       setState("correct");
       void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
-      onSuccess();
     } else {
       setState("wrong");
       void soundEngine.playError(settings.playSoundOnError, settings.soundVolume);
@@ -149,7 +155,7 @@ export const VariantEnglishExercise: React.FC<VariantEnglishExerciseProps> = ({
       {state === "correct" && (
         <div className="space-y-2">
           <p className="text-sm text-[var(--main-color)] font-semibold">
-            {affirmation || "Every one of those is the same thought. German has one shape for all of them."}
+            {affirmation || `Every one of those is the same thought. ${language.name} has one shape for all of them.`}
           </p>
           {exercise.explanation && (
             <p className="text-xs text-[var(--sub-color)] leading-relaxed">{exercise.explanation}</p>
@@ -158,6 +164,7 @@ export const VariantEnglishExercise: React.FC<VariantEnglishExerciseProps> = ({
             onClick={() => {
               setState("idle");
               setPicked([]);
+              onSuccess();
             }}
             className="w-full py-3 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-semibold"
           >
@@ -178,6 +185,9 @@ export const VariantEnglishExercise: React.FC<VariantEnglishExerciseProps> = ({
             onClick={() => {
               setState("idle");
               setPicked([]);
+              if (!isRetry) {
+                onSuccess();
+              }
             }}
             className="w-full py-3 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-semibold"
           >

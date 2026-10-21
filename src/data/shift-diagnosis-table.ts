@@ -1,8 +1,7 @@
 // TM-3 slip diagnosis: message table keyed by shift-family id (or detected slip id).
-// German rows live here; other languages define their own tables in their
-// language-content module and pass them to diagnoseAttempt. Every cue states a real
-// law from §1 of word_connections.md or the trail's taught patterns — no invented
-// connections (P7).
+// Each language defines its own diagnosis table mapped to the sound shifts and
+// structural rules taught on its trail. Every cue states a real law from the
+// language's compendium and lessons — no invented connections (P7).
 
 export interface DiagnosisRow {
   slip: string;
@@ -61,4 +60,84 @@ export const GERMAN_DIAGNOSIS: Record<string, DiagnosisRow> = {
     slip: "wrong word, right idea",
     cue: "The thought was right — a bank word the sentence doesn't need slipped in. Say it to yourself and keep only the words the thought calls for.",
   },
+};
+
+export const SPANISH_DIAGNOSIS: Record<string, DiagnosisRow> = {
+  tion_to_cion: {
+    slip: "the English -tion survived",
+    cue: "Latin -tio became -ción in Spanish — nación, situación, información.",
+  },
+  ty_to_dad: {
+    slip: "the English -ty ending survived",
+    cue: "English -ty corresponds to Spanish -dad — universidad, ciudad, realidad.",
+  },
+  f_to_h: {
+    slip: "the Latin F wasn't silenced to H",
+    cue: "Castilian turned initial Latin F- into silent H- — hacer, hablar, hijo, horno.",
+  },
+  ct_to_ch: {
+    slip: "the Latin -CT- cluster survived",
+    cue: "Latin -ct- palatalized into -ch- in Spanish — noche, leche, hecho, ocho.",
+  },
+  pl_cl_to_ll: {
+    slip: "the initial cluster wasn't melted to LL",
+    cue: "Initial pl-/cl-/fl- melted into ll- in Spanish — llave, llegar, llamar, lleno.",
+  },
+  li_to_j: {
+    slip: "the palatal -J- shift was missed",
+    cue: "Latin -li-/-cl- rasped into Spanish j — mujer, ojo, mejor, trabajar.",
+  },
+  no_at_in_ar: {
+    slip: "the English -at- stem crept in",
+    cue: "Strip all of -ate before adding -ar — celebrar, crear, separar (never *celebratar).",
+  },
+  word_order: {
+    slip: "the elements are in English order",
+    cue: "Spanish places object pronouns before a conjugated verb (lo tengo) or welded to the infinitive (tenerlo), and descriptive adjectives after the noun.",
+  },
+  wrong_word: {
+    slip: "wrong word, right idea",
+    cue: "The thought was right — a bank word the sentence doesn't need slipped in. Say it to yourself and keep only the words the thought calls for.",
+  },
+};
+
+export const FRENCH_DIAGNOSIS: Record<string, DiagnosisRow> = {
+  ty_to_ite: {
+    slip: "the English -ty kept its English ending",
+    cue: "English -ty is Old French -té, modern French -ité — université, liberté, qualité.",
+  },
+  or_to_eur: {
+    slip: "the Latin -or wasn't softened to -eur",
+    cue: "Latin/English -or became -eur in French — couleur, docteur, acteur, erreur.",
+  },
+  s_drop_circumflex: {
+    slip: "the vanished S reappeared",
+    cue: "Old French dropped S before a consonant and left a circumflex hat (ˆ) in its place — forêt, hôpital, fête, île, côte.",
+  },
+  w_to_gu_g: {
+    slip: "the Germanic W survived",
+    cue: "Old French hardened Frankish W- into GU-/G- — guerre (war), garder (ward), garantir (warrant).",
+  },
+  c_to_ch: {
+    slip: "the Latin CA- wasn't softened to CH-",
+    cue: "Francien softened Latin ca- into ch- — chanter, chambre, château, chien.",
+  },
+  ation_to_er: {
+    slip: "the noun suffix wasn't trimmed to -er",
+    cue: "Drop -ation and add -er for the French verb — préparer, présenter, organiser, imaginer.",
+  },
+  word_order: {
+    slip: "the elements are in English order",
+    cue: "French wraps ne … pas around the conjugated verb and places object pronouns directly before the verb (je le vois).",
+  },
+  wrong_word: {
+    slip: "wrong word, right idea",
+    cue: "The thought was right — a bank word the sentence doesn't need slipped in. Say it to yourself and keep only the words the thought calls for.",
+  },
+};
+
+export const DIAGNOSIS_BY_LANGUAGE: Record<string, Record<string, DiagnosisRow>> = {
+  de: GERMAN_DIAGNOSIS,
+  es: SPANISH_DIAGNOSIS,
+  fr: FRENCH_DIAGNOSIS,
 };

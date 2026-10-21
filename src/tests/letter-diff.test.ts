@@ -154,3 +154,64 @@ describe("Sentence punctuation and tile readings", () => {
     expect(best.answer).toBe("ich lernt");
   });
 });
+
+
+describe("LCS Alignment & Automatic Language-Aware Grading (de / es / fr)", () => {
+  it("aligns characters via LCS so an early missing letter does not turn the rest of the sentence red", () => {
+    const diff = computeLetterDiff("Ich kome morgen", "Ich komme morgen");
+    expect(diff.isMatch).toBe(false);
+    // Every character the user typed is actually in the target sentence in order
+    expect(diff.userChars.every((c) => c.status === "correct")).toBe(true);
+    // Exactly one character ("m") is marked missing in expectedChars
+    const missing = diff.expectedChars.filter((c) => c.status === "missing");
+    expect(missing).toHaveLength(1);
+    expect(missing[0].char).toBe("m");
+  });
+
+  it("automatically applies Spanish article, infinitive, accent, and inverted punctuation rules when language is es", () => {
+    // Leading inverted punctuation is stripped automatically in Spanish
+    expect(evaluateAnswerAccuracy("Dónde está el tren", "¿Dónde está el tren?", { languageId: "es" })).toEqual({
+      accuracy: "exact",
+    });
+
+    // Spanish article detection (el / la / los / las / un / una)
+    const art = evaluateAnswerAccuracy("libro", "el libro", { languageId: "es" });
+    expect(art.accuracy).toBe("almost");
+    expect(art.reason).toBe("article");
+
+    // Spanish infinitive detection (-ar / -er / -ir)
+    const inf = evaluateAnswerAccuracy("habla", "hablar", { languageId: "es" });
+    expect(inf.accuracy).toBe("almost");
+    expect(inf.reason).toBe("infinitive");
+    expect(inf.warningNote).toContain("-ar");
+
+    // Spanish diacritic detection (á/é/í/ó/ú/ñ)
+    const acc = evaluateAnswerAccuracy("nacion", "nación", { languageId: "es" });
+    expect(acc.accuracy).toBe("almost");
+    expect(acc.reason).toBe("umlaut");
+    expect(acc.warningNote).toContain("Spanish");
+  });
+
+  it("automatically applies French article (including l' elision), infinitive, and accent rules when language is fr", () => {
+    // French article detection including elided l'
+    const art1 = evaluateAnswerAccuracy("train", "le train", { languageId: "fr" });
+    expect(art1.accuracy).toBe("almost");
+    expect(art1.reason).toBe("article");
+
+    const art2 = evaluateAnswerAccuracy("eau", "l'eau", { languageId: "fr" });
+    expect(art2.accuracy).toBe("almost");
+    expect(art2.reason).toBe("article");
+
+    // French infinitive detection (-er / -ir / -re)
+    const inf = evaluateAnswerAccuracy("parle", "parler", { languageId: "fr" });
+    expect(inf.accuracy).toBe("almost");
+    expect(inf.reason).toBe("infinitive");
+    expect(inf.warningNote).toContain("-er");
+
+    // French accent / circumflex detection
+    const acc = evaluateAnswerAccuracy("foret", "forêt", { languageId: "fr" });
+    expect(acc.accuracy).toBe("almost");
+    expect(acc.reason).toBe("umlaut");
+    expect(acc.warningNote).toContain("French");
+  });
+});

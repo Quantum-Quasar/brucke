@@ -2,8 +2,8 @@
 // Thinking Method upgrade §8): every word_ids / table_word_ids entry must
 // resolve against the compendium, and every German token in authored surfaces
 // — transcribe (target_answer + word_bank), twist (target_answer + word_bank),
-// literal_gloss (german) — must resolve against the compendium, a vocab_hint,
-// or the closed function-word list below.
+// literal_gloss (german), pronoun_compression, spoken_turn_reply — must resolve
+// against the compendium, a vocab_hint, or the closed function-word list below.
 //
 // Shared by the Vitest integrity suite (src/tests/word-refs.test.ts) and the
 // CLI pretty-printer (scripts/audit-word-refs.ts), so `bun run test` and the
@@ -21,7 +21,7 @@ const compendiumTargets = new Set(Object.values(compendium.words).map((w) => w.t
 const FUNCTION_WORDS = new Set(
   [
     "ich", "du", "er", "sie", "es", "wir", "ihr",
-    "mich", "dir", "mir", "ihm", "ihnen",
+    "mich", "dich", "ihn", "dir", "mir", "ihm", "ihnen",
     "der", "die", "das", "den", "dem", "ein", "eine", "einen", "einem", "einer",
     "kein", "keine", "keinen", "mein", "meine", "meinen", "dein", "deine",
     "ist", "bin", "bist", "sind", "war", "waren", "hat", "habe", "haben", "hatte",
@@ -158,6 +158,30 @@ export function findUnresolvedWordRefs(): WordRefMiss[] {
       if (ex.type === "variant_english" && ex.german) {
         for (const t of germanTokens(ex.german)) {
           if (!resolves(t)) misses.push({ lesson: lesson.id, where: `variant_english ${ex.id} german`, token: t });
+        }
+      }
+      // pronoun_compression: full_sentence, target_answer, and word_bank must resolve
+      if (ex.type === "pronoun_compression") {
+        for (const t of germanTokens(ex.full_sentence ?? "")) {
+          if (!resolves(t)) misses.push({ lesson: lesson.id, where: `pronoun_compression ${ex.id} full_sentence`, token: t });
+        }
+        for (const t of germanTokens(ex.target_answer)) {
+          if (!resolves(t)) misses.push({ lesson: lesson.id, where: `pronoun_compression ${ex.id} answer`, token: t });
+        }
+        for (const chip of ex.word_bank ?? []) {
+          if (!resolves(chip)) misses.push({ lesson: lesson.id, where: `pronoun_compression ${ex.id} bank`, token: chip });
+        }
+      }
+      // spoken_turn_reply: spoken_question, target_answer, and word_bank must resolve
+      if (ex.type === "spoken_turn_reply") {
+        for (const t of germanTokens(ex.spoken_question ?? "")) {
+          if (!resolves(t)) misses.push({ lesson: lesson.id, where: `spoken_turn_reply ${ex.id} question`, token: t });
+        }
+        for (const t of germanTokens(ex.target_answer)) {
+          if (!resolves(t)) misses.push({ lesson: lesson.id, where: `spoken_turn_reply ${ex.id} answer`, token: t });
+        }
+        for (const chip of ex.word_bank ?? []) {
+          if (!resolves(chip)) misses.push({ lesson: lesson.id, where: `spoken_turn_reply ${ex.id} bank`, token: chip });
         }
       }
     }

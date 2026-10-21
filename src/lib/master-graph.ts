@@ -28,7 +28,7 @@ const HEIGHT = 2000;
 function tokensOf(s: string): string[] {
   return s
     .toLowerCase()
-    .replace(/[^a-zäöüß\s-]/g, " ")
+    .replace(/[^\p{L}\s-]/gu, " ")
     .split(/\s+/)
     .filter((t) => t.length >= 2);
 }

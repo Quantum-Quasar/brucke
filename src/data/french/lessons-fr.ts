@@ -31,7 +31,10 @@ export const FR_LESSONS: Lesson[] = [
       "café",
       "vouloir",
       "le",
-      "la"
+      "la",
+      "tu",
+      "je",
+      "un_peu"
     ],
     "hook": {
       "title": "You Already Speak Half of This",
@@ -133,11 +136,11 @@ export const FR_LESSONS: Lesson[] = [
           "question? → rising voice only: Tu le veux ?"
         ],
         "word_bank": [
-          "Tu",
           "le",
+          "Tu",
+          "est",
           "veux",
-          "la",
-          "est"
+          "la"
         ],
         "explanation": "Tu le veux ? — the it borrows the cake's article (le, not la), then walks in front of veux.",
         "diagnosis": {
@@ -152,9 +155,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Je le veux",
         "natural": "I want it",
         "options": [
-          "I want it",
           "I it want",
-          "I want to it"
+          "I want to it",
+          "I want it"
         ],
         "target_answer": "I it want",
         "meaning": "I want it (the odd English is the lesson — never a model to produce)",
@@ -181,13 +184,13 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "One more, no safety net — 'I want the coffee, a little'?",
       "target_answer": "Je veux le café, un peu",
       "word_bank": [
-        "Je",
-        "veux",
-        "le",
-        "café",
-        "un",
-        "peu",
         "la",
+        "veux",
+        "café",
+        "peu",
+        "le",
+        "Je",
+        "un",
         "est"
       ],
       "explanation": "un peu rides at the end, exactly where English puts it. You just said your first sentence with a tag on it."
@@ -231,7 +234,11 @@ export const FR_LESSONS: Lesson[] = [
       "bleu",
       "rouge",
       "bon",
-      "grand"
+      "grand",
+      "cœur",
+      "table",
+      "restaurant",
+      "petit"
     ],
     "hook": {
       "title": "Zero-Shift Words",
@@ -327,12 +334,12 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Le cœur est rouge",
         "meaning": "The heart is red",
         "word_bank": [
-          "Le",
           "cœur",
-          "est",
           "rouge",
           "bleu",
-          "la"
+          "Le",
+          "la",
+          "est"
         ],
         "explanation": "Le cœur est rouge — adjective after the noun, the default French position. (est arrives for real in lesson 5; borrow it here.)"
       },
@@ -361,6 +368,19 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "When a word needs no rule, recognition is the whole skill — your eye first, then your mouth.",
       "curiosity_teaser": "Up next on Le Pont ([102] First Sentences Gym): see how Hidden Twins: Places & Colors leads directly into First Sentences Gym."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"The heart is red\" in French:",
+      "target_answer": "Le cœur est rouge",
+      "word_bank": [
+        "rouge",
+        "pas",
+        "est",
+        "cœur",
+        "ne",
+        "Le"
+      ],
+      "explanation": "Re-constructing \"Le cœur est rouge\" from the underlying rule cements the pattern of Hidden Twins: Places & Colors."
     }
   },
   {
@@ -382,7 +402,9 @@ export const FR_LESSONS: Lesson[] = [
       "vouloir",
       "gâteau",
       "café",
-      "un_peu"
+      "un_peu",
+      "le",
+      "la"
     ],
     "hook": {
       "title": "One Verb, Many Sentences",
@@ -399,9 +421,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "When 'it' refers to 'le café', where does the pronoun 'le' stand in 'I want it'?",
         "options": [
-          "Je le veux",
           "Je veux le",
-          "Le je veux"
+          "Le je veux",
+          "Je le veux"
         ],
         "target_answer": "Je le veux",
         "meaning": "I want it (literally: I it want)",
@@ -420,11 +442,11 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je le veux",
         "meaning": "I want it",
         "word_bank": [
-          "Je",
           "le",
+          "est",
+          "Je",
           "veux",
-          "la",
-          "est"
+          "la"
         ],
         "idea_parts": [
           "who wants? → je",
@@ -446,11 +468,11 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Tu la veux",
         "meaning": "Do you want it? (the collection)",
         "word_bank": [
+          "est",
           "Tu",
           "la",
           "veux",
-          "le",
-          "est"
+          "le"
         ],
         "idea_parts": [
           "who? → tu",
@@ -470,9 +492,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Tu la veux",
         "natural": "Do you want it?",
         "options": [
-          "You want it",
           "You it want",
-          "Want you it"
+          "Want you it",
+          "You want it"
         ],
         "target_answer": "You it want",
         "meaning": "Do you want it? (feminine object pronoun before the verb)",
@@ -496,6 +518,18 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Check the noun's article, then let the pronoun walk: the check-then-move habit is the whole pronoun system in embryo.",
       "curiosity_teaser": "Up next on Le Pont ([103] The Register Ladder): see how First Sentences Gym leads directly into The Register Ladder."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I want it\" in French:",
+      "target_answer": "Je le veux",
+      "word_bank": [
+        "Je",
+        "ne",
+        "pas",
+        "le",
+        "veux"
+      ],
+      "explanation": "Re-constructing \"Je le veux\" from the underlying rule cements the pattern of First Sentences Gym."
     }
   },
   {
@@ -521,7 +555,9 @@ export const FR_LESSONS: Lesson[] = [
       "demander",
       "entrer",
       "arriver",
-      "préférer"
+      "préférer",
+      "continuer",
+      "vouloir"
     ],
     "hook": {
       "title": "Two Shelves in Your Own Head",
@@ -611,12 +647,12 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je veux entrer ici",
         "meaning": "I want to go in here",
         "word_bank": [
-          "Je",
           "veux",
+          "la",
+          "aller",
           "entrer",
           "ici",
-          "aller",
-          "la"
+          "Je"
         ],
         "explanation": "Je veux entrer ici replaces the two-word English 'go in' with one clean French verb.",
         "diagnosis": {
@@ -649,6 +685,19 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "When a two-word English verb blocks you, step up to its one-word formal synonym — that word is already French.",
       "curiosity_teaser": "Up next on Le Pont ([2] The -ION Bridge): see how The Register Ladder leads directly into The -ION Bridge."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I want to go in here\" in French:",
+      "target_answer": "Je veux entrer ici",
+      "word_bank": [
+        "ici",
+        "Je",
+        "entrer",
+        "ne",
+        "veux",
+        "pas"
+      ],
+      "explanation": "Re-constructing \"Je veux entrer ici\" from the underlying rule cements the pattern of The Register Ladder."
     }
   },
   {
@@ -677,7 +726,12 @@ export const FR_LESSONS: Lesson[] = [
       "tradition",
       "confirmation",
       "opinion",
-      "invitation"
+      "invitation",
+      "organisation",
+      "réservation",
+      "complication",
+      "passion",
+      "la"
     ],
     "hook": {
       "title": "One Ending, a Whole Warehouse",
@@ -709,12 +763,12 @@ export const FR_LESSONS: Lesson[] = [
       {
         "id": "fr2_e1",
         "type": "morpheme_tiles",
-        "prompt": "Assemble the French noun for 'opinion' (opin + ion):",
+        "prompt": "Assemble the French feminine noun meaning 'viewpoint / belief' (opin + ion):",
         "tile_options": [
           "opin",
-          "ion",
           "ation",
-          "ment"
+          "ment",
+          "ion"
         ],
         "target_answer": "opinion",
         "meaning": "opinion",
@@ -725,9 +779,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "'The opinion' — pick the correct rendering:",
         "options": [
-          "la opinion",
+          "le opinion",
           "l'opinion",
-          "le opinion"
+          "la opinion"
         ],
         "target_answer": "l'opinion",
         "meaning": "the opinion",
@@ -786,11 +840,11 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je la veux",
         "meaning": "I want it (the confirmation)",
         "word_bank": [
-          "Je",
           "la",
           "veux",
-          "le",
-          "pas"
+          "pas",
+          "Je",
+          "le"
         ],
         "idea_parts": [
           "who? → je",
@@ -824,11 +878,11 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded, just to feel it — 'Do you want the invitation?'",
       "target_answer": "Tu veux l'invitation",
       "word_bank": [
-        "Tu",
-        "veux",
-        "l'invitation",
+        "le",
         "la",
-        "le"
+        "Tu",
+        "l'invitation",
+        "veux"
       ],
       "explanation": "l'invitation — the elision fires again. Notice how the question needed no new machinery: just the voice."
     },
@@ -871,7 +925,9 @@ export const FR_LESSONS: Lesson[] = [
       "opinion",
       "organisation",
       "hôtel",
-      "eau"
+      "eau",
+      "la",
+      "le"
     ],
     "hook": {
       "title": "French Hates a Vowel Collision",
@@ -896,9 +952,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "'The organization' — correct rendering?",
         "options": [
+          "le organisation",
           "la organisation",
-          "l'organisation",
-          "le organisation"
+          "l'organisation"
         ],
         "target_answer": "l'organisation",
         "meaning": "the organization",
@@ -909,9 +965,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "'The water' — correct rendering?",
         "options": [
-          "la eau",
           "l'eau",
-          "le eau"
+          "le eau",
+          "la eau"
         ],
         "target_answer": "l'eau",
         "meaning": "the water",
@@ -938,10 +994,10 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je la veux",
         "meaning": "I want it (the opinion)",
         "word_bank": [
+          "l'",
+          "veux",
           "Je",
           "la",
-          "veux",
-          "l'",
           "le"
         ],
         "idea_parts": [
@@ -969,11 +1025,11 @@ export const FR_LESSONS: Lesson[] = [
           }
         ],
         "word_bank": [
+          "la",
           "Je",
-          "veux",
           "de",
           "l'eau",
-          "la",
+          "veux",
           "le"
         ],
         "explanation": "de l'eau — 'of the water' is how French says 'some water'. A small preview of the partitive, revisited in topic 13."
@@ -987,6 +1043,18 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "The apostrophe is a vowel's tombstone: la opinion → l'opinion, but the walking pronoun never elides.",
       "curiosity_teaser": "Up next on Le Pont ([202] -ION Discrimination Drills): see how L'Elision Gym leads directly into -ION Discrimination Drills."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I want it (the opinion)\" in French:",
+      "target_answer": "Je la veux",
+      "word_bank": [
+        "la",
+        "ne",
+        "pas",
+        "Je",
+        "veux"
+      ],
+      "explanation": "Re-constructing \"Je la veux\" from the underlying rule cements the pattern of L'Elision Gym."
     }
   },
   {
@@ -1010,7 +1078,9 @@ export const FR_LESSONS: Lesson[] = [
       "collection",
       "invitation",
       "réservation",
-      "complication"
+      "complication",
+      "passion",
+      "tradition"
     ],
     "hook": {
       "title": "Mixed Set, One Rule",
@@ -1041,8 +1111,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "'The invitation':",
         "options": [
           "la invitation",
-          "l'invitation",
-          "le invitation"
+          "le invitation",
+          "l'invitation"
         ],
         "target_answer": "l'invitation",
         "meaning": "the invitation",
@@ -1069,11 +1139,11 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je la veux",
         "meaning": "I want it (the reservation)",
         "word_bank": [
-          "Je",
-          "la",
-          "veux",
           "l'",
-          "le"
+          "le",
+          "veux",
+          "la",
+          "Je"
         ],
         "explanation": "Third it today — and the move is identical every time: check the article, walk it left.",
         "idea_parts": [
@@ -1107,6 +1177,18 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Two glances per noun: -ION → feminine; vowel → elide. The rule is in the word, not in a list.",
       "curiosity_teaser": "Up next on Le Pont ([3] The -ation Engine): see how -ION Discrimination Drills leads directly into The -ation Engine."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I want it (the reservation)\" in French:",
+      "target_answer": "Je la veux",
+      "word_bank": [
+        "pas",
+        "veux",
+        "Je",
+        "la",
+        "ne"
+      ],
+      "explanation": "Re-constructing \"Je la veux\" from the underlying rule cements the pattern of -ION Discrimination Drills."
     }
   },
   {
@@ -1133,7 +1215,10 @@ export const FR_LESSONS: Lesson[] = [
       "organiser",
       "célébrer",
       "participer",
-      "visiter"
+      "visiter",
+      "inviter",
+      "réserver",
+      "vouloir"
     ],
     "hook": {
       "title": "The Verbs Were Hiding in the Nouns",
@@ -1167,8 +1252,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Strip -ation from 'confirmation' and attach the French infinitive ending:",
         "tile_options": [
-          "confirm",
           "er",
+          "confirm",
           "ation",
           "ir"
         ],
@@ -1197,11 +1282,11 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je veux célébrer",
         "meaning": "I want to celebrate",
         "word_bank": [
-          "Je",
           "veux",
-          "célébrer",
+          "célébrater",
           "confirmer",
-          "célébrater"
+          "Je",
+          "célébrer"
         ],
         "idea_parts": [
           "the want → je veux",
@@ -1221,9 +1306,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Je veux visiter Paris",
         "natural": "I want to visit Paris",
         "options": [
-          "I want to visit Paris",
           "I want visit Paris",
-          "I want Paris to visit"
+          "I want Paris to visit",
+          "I want to visit Paris"
         ],
         "target_answer": "I want visit Paris",
         "meaning": "The odd English is the lesson: French joins want + visit directly with no 'to'.",
@@ -1267,13 +1352,13 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — how would you say 'I want to reserve the table'?",
       "target_answer": "Je veux réserver la table",
       "word_bank": [
-        "Je",
-        "veux",
-        "réserver",
         "la",
-        "table",
         "le",
-        "réservation"
+        "réservation",
+        "réserver",
+        "veux",
+        "table",
+        "Je"
       ],
       "explanation": "réservation → réserver, chained directly after je veux with no extra word for 'to'."
     }
@@ -1299,7 +1384,11 @@ export const FR_LESSONS: Lesson[] = [
     "table_word_ids": [
       "célébrer",
       "confirmer",
-      "réserver"
+      "réserver",
+      "organiser",
+      "inviter",
+      "visiter",
+      "table"
     ],
     "hook": {
       "title": "Where the Mind Cuts Corners",
@@ -1316,9 +1405,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "célébration → the correct French verb:",
         "options": [
-          "célébrater",
+          "célébrationner",
           "célébrer",
-          "célébrationner"
+          "célébrater"
         ],
         "target_answer": "célébrer",
         "meaning": "to celebrate",
@@ -1330,8 +1419,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "participation → the correct French verb:",
         "options": [
           "participater",
-          "participer",
-          "particionner"
+          "particionner",
+          "participer"
         ],
         "target_answer": "participer",
         "meaning": "to participate",
@@ -1373,13 +1462,13 @@ export const FR_LESSONS: Lesson[] = [
           }
         ],
         "word_bank": [
+          "la",
           "Je",
-          "veux",
+          "réserverater",
+          "table",
           "réserver",
           "une",
-          "table",
-          "réserverater",
-          "la"
+          "veux"
         ],
         "idea_parts": [
           "the want → je veux",
@@ -1397,6 +1486,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "The -ation noun is the test and the vehicle: convert it, then strip it whole.",
       "curiosity_teaser": "Up next on Le Pont ([302] Je veux + Infinitive Gym): see how The Célébrer Trap leads directly into Je veux + Infinitive Gym."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I want to reserve a table\" in French:",
+      "target_answer": "Je veux réserver une table",
+      "word_bank": [
+        "une",
+        "pas",
+        "Je",
+        "ne",
+        "veux",
+        "table",
+        "réserver"
+      ],
+      "explanation": "Re-constructing \"Je veux réserver une table\" from the underlying rule cements the pattern of The Célébrer Trap."
     }
   },
   {
@@ -1420,7 +1523,9 @@ export const FR_LESSONS: Lesson[] = [
       "vouloir",
       "visiter",
       "participer",
-      "organiser"
+      "organiser",
+      "confirmer",
+      "un_peu"
     ],
     "hook": {
       "title": "The Want-Verb Is a Train Engine",
@@ -1439,12 +1544,12 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Tu veux visiter Paris",
         "meaning": "You want to visit Paris",
         "word_bank": [
-          "Tu",
-          "veux",
           "visiter",
-          "Paris",
+          "Tu",
           "visites",
-          "la"
+          "la",
+          "veux",
+          "Paris"
         ],
         "explanation": "veux bends, visiter doesn't — the infinitive stays in the dictionary."
       },
@@ -1462,12 +1567,12 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "I want to get involved a little",
         "word_bank": [
           "Je",
-          "veux",
-          "participer",
           "un",
+          "participer",
           "peu",
-          "participes",
-          "la"
+          "veux",
+          "la",
+          "participes"
         ],
         "idea_parts": [
           "the want → je veux",
@@ -1489,11 +1594,11 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Tu veux organiser l'invitation",
         "meaning": "You want to organize the invitation",
         "word_bank": [
-          "Tu",
           "veux",
-          "organiser",
-          "l'invitation",
           "la",
+          "l'invitation",
+          "Tu",
+          "organiser",
           "le"
         ],
         "idea_parts": [
@@ -1549,6 +1654,19 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Only the want-verb bends. The infinitive is parked freight — and every -ation noun is a new car.",
       "curiosity_teaser": "Up next on Le Pont ([303] The -ir & -re Verb Bridges): see how Je veux + Infinitive Gym leads directly into The -ir & -re Verb Bridges."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"You want to visit Paris\" in French:",
+      "target_answer": "Tu veux visiter Paris",
+      "word_bank": [
+        "pas",
+        "visiter",
+        "Tu",
+        "ne",
+        "veux",
+        "Paris"
+      ],
+      "explanation": "Re-constructing \"Tu veux visiter Paris\" from the underlying rule cements the pattern of Je veux + Infinitive Gym."
     }
   },
   {
@@ -1575,7 +1693,10 @@ export const FR_LESSONS: Lesson[] = [
       "choisir",
       "vendre",
       "répondre",
-      "attendre"
+      "attendre",
+      "vouloir",
+      "café",
+      "maison"
     ],
     "hook": {
       "title": "Where English -ish Came From",
@@ -1637,10 +1758,10 @@ export const FR_LESSONS: Lesson[] = [
         "tile_options": [
           "Je",
           "veux",
-          "finir",
           "le",
-          "café",
-          "finisser"
+          "finisser",
+          "finir",
+          "café"
         ],
         "target_answer": "Jeveuxfinirlecafé",
         "meaning": "Je veux finir le café",
@@ -1672,13 +1793,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Tu veux choisir le gâteau",
         "meaning": "Do you want to choose the cake?",
         "word_bank": [
-          "Tu",
-          "veux",
           "choisir",
-          "le",
-          "gâteau",
           "la",
-          "un"
+          "le",
+          "veux",
+          "Tu",
+          "un",
+          "gâteau"
         ],
         "explanation": "Tu veux choisir le gâteau chains the -ir infinitive directly after veux.",
         "diagnosis": {
@@ -1711,6 +1832,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "English -ish verbs are French -ir verbs in disguise, and they chain after je veux just like -er verbs.",
       "curiosity_teaser": "Up next on Le Pont ([4] Ne...Pas: The Sandwich): see how The -ir & -re Verb Bridges leads directly into Ne...Pas: The Sandwich."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"Do you want to choose the cake\" in French:",
+      "target_answer": "Tu veux choisir le gâteau",
+      "word_bank": [
+        "gâteau",
+        "veux",
+        "Tu",
+        "choisir",
+        "ne",
+        "pas",
+        "le"
+      ],
+      "explanation": "Re-constructing \"Tu veux choisir le gâteau\" from the underlying rule cements the pattern of The -ir & -re Verb Bridges."
     }
   },
   {
@@ -1730,7 +1865,9 @@ export const FR_LESSONS: Lesson[] = [
     "table_word_ids": [
       "pas",
       "ne",
-      "vouloir"
+      "vouloir",
+      "gâteau",
+      "café"
     ],
     "hook": {
       "title": "Two Halves, One Hug",
@@ -1764,11 +1901,11 @@ export const FR_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Wrap 'veux' inside the two slices of the French negation sandwich ('I do not want'):",
         "tile_options": [
-          "Je",
+          "pas",
+          "non",
           "ne",
           "veux",
-          "pas",
-          "non"
+          "Je"
         ],
         "target_answer": "Jeneveuxpas",
         "meaning": "Je ne veux pas (I don't want)",
@@ -1787,12 +1924,12 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je ne le veux pas",
         "meaning": "I don't want it",
         "word_bank": [
-          "Je",
-          "ne",
           "le",
-          "veux",
           "pas",
           "la",
+          "ne",
+          "veux",
+          "Je",
           "un"
         ],
         "idea_parts": [
@@ -1813,9 +1950,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Tu ne veux pas le café",
         "natural": "You don't want the coffee",
         "options": [
-          "You do not want the coffee",
           "You not want the coffee",
-          "Not you want the coffee"
+          "Not you want the coffee",
+          "You do not want the coffee"
         ],
         "target_answer": "You not want the coffee",
         "meaning": "The odd English is the lesson: French negates the verb itself, no do-support.",
@@ -1851,12 +1988,12 @@ export const FR_LESSONS: Lesson[] = [
       "target_answer": "Tu ne veux pas l'invitation",
       "word_bank": [
         "Tu",
+        "la",
         "ne",
         "veux",
-        "pas",
+        "le",
         "l'invitation",
-        "la",
-        "le"
+        "pas"
       ],
       "explanation": "Everything you own in one sentence: the sandwich, the elision, the -ION noun, the intonation question."
     },
@@ -1894,7 +2031,8 @@ export const FR_LESSONS: Lesson[] = [
     "table_word_ids": [
       "pas",
       "ne",
-      "aller"
+      "aller",
+      "un_peu"
     ],
     "hook": {
       "title": "A Negation You Can Picture",
@@ -1965,13 +2103,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je ne veux pas célébrer",
         "meaning": "I don't want to celebrate",
         "word_bank": [
-          "Je",
-          "ne",
           "veux",
           "pas",
-          "célébrer",
           "célébrater",
-          "un"
+          "célébrer",
+          "Je",
+          "un",
+          "ne"
         ],
         "idea_parts": [
           "the refusal → je ne veux pas",
@@ -2019,6 +2157,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Negation is a refused noun with a history — and the sandwich always grips the conjugated verb, never the parked one.",
       "curiosity_teaser": "Up next on Le Pont ([402] Negation in the Wild): see how Pas Un Pas leads directly into Negation in the Wild."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I don't want to celebrate\" in French:",
+      "target_answer": "Je ne veux pas célébrer",
+      "word_bank": [
+        "ne",
+        "célébrer",
+        "pas",
+        "très",
+        "veux",
+        "ici",
+        "Je"
+      ],
+      "explanation": "Re-constructing \"Je ne veux pas célébrer\" from the underlying rule cements the pattern of Pas Un Pas."
     }
   },
   {
@@ -2041,7 +2193,10 @@ export const FR_LESSONS: Lesson[] = [
       "pas",
       "ne",
       "vouloir",
-      "cest"
+      "cest",
+      "être",
+      "avoir",
+      "jai"
     ],
     "hook": {
       "title": "One Move, Repeated",
@@ -2058,9 +2213,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "When 'C'est bon' flips to the negative, how does the negation sandwich wrap 'est'?",
         "options": [
-          "Ce n'est pas bon",
+          "Ne c'est pas bon",
           "C'est ne pas bon",
-          "Ne c'est pas bon"
+          "Ce n'est pas bon"
         ],
         "target_answer": "Ce n'est pas bon",
         "meaning": "It is not good",
@@ -2088,14 +2243,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je ne veux pas la complication",
         "meaning": "I don't want the complication",
         "word_bank": [
-          "Je",
           "ne",
+          "Je",
+          "un",
+          "la",
           "veux",
           "pas",
-          "la",
           "complication",
-          "le",
-          "un"
+          "le"
         ],
         "idea_parts": [
           "the refusal → je ne veux pas",
@@ -2110,8 +2265,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "In casual everyday speech, how is 'I don't want' typically shortened?",
         "options": [
           "Je veux pas",
-          "Je ne veux",
-          "Pas je veux"
+          "Pas je veux",
+          "Je ne veux"
         ],
         "target_answer": "Je veux pas",
         "meaning": "Spoken French drops the ne",
@@ -2142,6 +2297,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "The flip is two words around the verb. Even c'est un-fuses to be hugged.",
       "curiosity_teaser": "Up next on Le Pont ([5] être & Its Secrets): see how Negation in the Wild leads directly into être & Its Secrets."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I don't want the complication\" in French:",
+      "target_answer": "Je ne veux pas la complication",
+      "word_bank": [
+        "Je",
+        "veux",
+        "la",
+        "très",
+        "ne",
+        "pas",
+        "complication",
+        "ici"
+      ],
+      "explanation": "Re-constructing \"Je ne veux pas la complication\" from the underlying rule cements the pattern of Negation in the Wild."
     }
   },
   {
@@ -2166,7 +2336,8 @@ export const FR_LESSONS: Lesson[] = [
       "suis",
       "es",
       "est",
-      "très"
+      "très",
+      "vous"
     ],
     "hook": {
       "title": "The Oldest Cognate on the Trail",
@@ -2246,10 +2417,10 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "It's very good",
         "word_bank": [
           "C'est",
+          "bien",
           "très",
-          "bon",
           "est",
-          "bien"
+          "bon"
         ],
         "explanation": "c'est + très + bon — three conversions deep (fusion, trans-root, bonus)."
       },
@@ -2273,11 +2444,11 @@ export const FR_LESSONS: Lesson[] = [
           }
         ],
         "word_bank": [
-          "C'est",
-          "ma",
-          "sœur",
           "Marie",
           "est",
+          "ma",
+          "C'est",
+          "sœur",
           "la"
         ],
         "idea_parts": [
@@ -2308,17 +2479,17 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'It's not very good, but that's life.'",
       "target_answer": "Ce n'est pas très bon, mais c'est la vie",
       "word_bank": [
-        "Ce",
-        "n'est",
-        "pas",
-        "très",
         "bon",
-        "mais",
+        "très",
+        "le",
+        "Ce",
         "c'est",
-        "la",
+        "mais",
         "vie",
         "il",
-        "le"
+        "pas",
+        "la",
+        "n'est"
       ],
       "explanation": "The sandwich un-fuses c'est, mais re-fuses it two words later. You are now assembling philosophy."
     },
@@ -2365,7 +2536,13 @@ export const FR_LESSONS: Lesson[] = [
       "es",
       "est",
       "grand",
-      "petit"
+      "petit",
+      "être",
+      "elle",
+      "content",
+      "très",
+      "ici",
+      "là"
     ],
     "hook": {
       "title": "Being as Following",
@@ -2414,11 +2591,11 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je suis très grand",
         "meaning": "I am very tall",
         "word_bank": [
-          "Je",
+          "grande",
           "suis",
           "très",
+          "Je",
           "grand",
-          "grande",
           "la"
         ],
         "explanation": "Male speaker → grand stays masculine. très slides in before the adjective."
@@ -2437,11 +2614,11 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "She is very happy",
         "word_bank": [
           "Elle",
-          "est",
-          "très",
           "contente",
+          "est",
           "content",
-          "la"
+          "la",
+          "très"
         ],
         "idea_parts": [
           "who? → elle",
@@ -2496,6 +2673,19 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "je suis = I follow — and every description after être agrees with the person it paints.",
       "curiosity_teaser": "Up next on Le Pont ([502] C'est Gym): see how je suis: I Follow leads directly into C'est Gym."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I am very tall\" in French:",
+      "target_answer": "Je suis très grand",
+      "word_bank": [
+        "très",
+        "suis",
+        "pas",
+        "ne",
+        "grand",
+        "Je"
+      ],
+      "explanation": "Re-constructing \"Je suis très grand\" from the underlying rule cements the pattern of je suis: I Follow."
     }
   },
   {
@@ -2517,7 +2707,9 @@ export const FR_LESSONS: Lesson[] = [
       "cest",
       "est_ce_que",
       "bon",
-      "très"
+      "très",
+      "est",
+      "être"
     ],
     "hook": {
       "title": "The Most Useful Two Letters in French",
@@ -2543,9 +2735,9 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "Assemble the question machine from its parts (is + it + that):",
         "tile_options": [
           "est",
-          "ce",
           "que",
           "pas",
+          "ce",
           "ne"
         ],
         "target_answer": "estceque",
@@ -2559,14 +2751,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Est-ce que tu veux le gâteau",
         "meaning": "Do you want the cake?",
         "word_bank": [
-          "Est-ce",
-          "que",
-          "tu",
-          "veux",
-          "le",
           "gâteau",
           "la",
-          "un"
+          "Est-ce",
+          "le",
+          "que",
+          "tu",
+          "un",
+          "veux"
         ],
         "explanation": "Statement in, question out — the words inside never move."
       },
@@ -2583,12 +2775,12 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Est-ce que c'est bon",
         "meaning": "Is it good?",
         "word_bank": [
-          "Est-ce",
-          "que",
-          "c'est",
-          "bon",
           "très",
-          "la"
+          "bon",
+          "que",
+          "la",
+          "Est-ce",
+          "c'est"
         ],
         "idea_parts": [
           "the machine → est-ce que",
@@ -2602,9 +2794,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "'That's life' — the French:",
         "options": [
+          "Elle est la vie",
           "C'est la vie",
-          "Il est la vie",
-          "Elle est la vie"
+          "Il est la vie"
         ],
         "target_answer": "C'est la vie",
         "meaning": "That's life",
@@ -2635,6 +2827,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "c'est points, est-ce que asks — and neither disturbs the sentence underneath.",
       "curiosity_teaser": "Up next on Le Pont ([6] The -ité & -ance Bridges): see how C'est Gym leads directly into The -ité & -ance Bridges."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"Do you want the cake\" in French:",
+      "target_answer": "Est-ce que tu veux le gâteau",
+      "word_bank": [
+        "pas",
+        "Est-ce",
+        "que",
+        "le",
+        "gâteau",
+        "tu",
+        "ne",
+        "veux"
+      ],
+      "explanation": "Re-constructing \"Est-ce que tu veux le gâteau\" from the underlying rule cements the pattern of C'est Gym."
     }
   },
   {
@@ -2664,7 +2871,12 @@ export const FR_LESSONS: Lesson[] = [
       "possibilité",
       "liberté",
       "réalité",
-      "qualité"
+      "qualité",
+      "différence",
+      "importance",
+      "expérience",
+      "patience",
+      "chance"
     ],
     "hook": {
       "title": "Two More Floors of the Feminine Warehouse",
@@ -2725,8 +2937,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "Convert 'reality' to French by swapping -ity for -ité:",
         "tile_options": [
           "réal",
-          "ité",
           "ity",
+          "ité",
           "ance"
         ],
         "target_answer": "réalité",
@@ -2760,13 +2972,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "La liberté est très importante",
         "meaning": "Freedom is very important",
         "word_bank": [
-          "La",
-          "liberté",
-          "est",
-          "très",
           "importante",
+          "très",
           "Le",
-          "important"
+          "important",
+          "est",
+          "liberté",
+          "La"
         ],
         "explanation": "La liberté triggers feminine agreement on importante.",
         "diagnosis": {
@@ -2805,12 +3017,12 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'It is a big difference'?",
       "target_answer": "C'est une grande différence",
       "word_bank": [
+        "un",
+        "grand",
+        "différence",
         "C'est",
         "une",
-        "grande",
-        "différence",
-        "un",
-        "grand"
+        "grande"
       ],
       "explanation": "la différence is feminine, so both une and grande wear their feminine -e."
     },
@@ -2849,7 +3061,10 @@ export const FR_LESSONS: Lesson[] = [
       "possibilité",
       "liberté",
       "différence",
-      "importance"
+      "importance",
+      "expérience",
+      "patience",
+      "chance"
     ],
     "hook": {
       "title": "Reading Gender Off the Tail of the Word",
@@ -2909,9 +3124,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Which adjective form correctly completes 'L'université est ___' ('The university is big')?",
         "options": [
-          "grande",
+          "grands",
           "grand",
-          "grands"
+          "grande"
         ],
         "target_answer": "grande",
         "meaning": "L'université est grande",
@@ -2944,12 +3159,12 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "C'est une bonne expérience",
         "meaning": "It is a good experience",
         "word_bank": [
-          "C'est",
+          "bon",
           "une",
-          "bonne",
-          "expérience",
           "un",
-          "bon"
+          "C'est",
+          "expérience",
+          "bonne"
         ],
         "explanation": "expérience ends in -ence (feminine), triggering une bonne.",
         "diagnosis": {
@@ -2982,6 +3197,19 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Glance at the suffix first: -ion, -ité, -ance, -ence = 100% feminine.",
       "curiosity_teaser": "Up next on Le Pont ([602] Liberté & Society Sentences): see how The Feminine Squad leads directly into Liberté & Society Sentences."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"It is a good experience\" in French:",
+      "target_answer": "C'est une bonne expérience",
+      "word_bank": [
+        "ne",
+        "expérience",
+        "C'est",
+        "pas",
+        "bonne",
+        "une"
+      ],
+      "explanation": "Re-constructing \"C'est une bonne expérience\" from the underlying rule cements the pattern of The Feminine Squad."
     }
   },
   {
@@ -3009,7 +3237,10 @@ export const FR_LESSONS: Lesson[] = [
       "société",
       "ville",
       "réalité",
-      "qualité"
+      "qualité",
+      "différence",
+      "être",
+      "très"
     ],
     "hook": {
       "title": "Abstract Ideas in Everyday Conversation",
@@ -3066,9 +3297,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "La liberté est importante",
         "natural": "Freedom is important",
         "options": [
-          "Freedom is important",
           "The liberty is important",
-          "Liberty be important"
+          "Liberty be important",
+          "Freedom is important"
         ],
         "target_answer": "The liberty is important",
         "meaning": "Literal structure: The liberty is important",
@@ -3081,13 +3312,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "La ville est très grande",
         "meaning": "The city is very big",
         "word_bank": [
-          "La",
           "ville",
-          "est",
-          "très",
-          "grande",
+          "La",
           "Le",
-          "grand"
+          "est",
+          "grand",
+          "très",
+          "grande"
         ],
         "explanation": "la ville is feminine, so grande takes -e.",
         "id": "fr602_e3"
@@ -3109,14 +3340,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "La réalité est très différente ici",
         "meaning": "Reality is very different here",
         "word_bank": [
-          "La",
           "réalité",
-          "est",
           "très",
           "différente",
+          "est",
           "ici",
-          "différent",
-          "la"
+          "La",
+          "la",
+          "différent"
         ],
         "explanation": "La réalité requires the article La and feminine différente.",
         "diagnosis": {
@@ -3149,6 +3380,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Never leave an abstract noun bare in French: 'Freedom' is always La liberté.",
       "curiosity_teaser": "Up next on Le Pont ([603] The -ment & -able Twin Bridges): see how Liberté & Society Sentences leads directly into The -ment & -able Twin Bridges."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"The city is very big\" in French:",
+      "target_answer": "La ville est très grande",
+      "word_bank": [
+        "pas",
+        "ville",
+        "ne",
+        "La",
+        "est",
+        "très",
+        "grande"
+      ],
+      "explanation": "Re-constructing \"La ville est très grande\" from the underlying rule cements the pattern of Liberté & Society Sentences."
     }
   },
   {
@@ -3180,7 +3425,14 @@ export const FR_LESSONS: Lesson[] = [
       "naturellement",
       "rapidement",
       "vraiment",
-      "heureusement"
+      "heureusement",
+      "finalement",
+      "possible",
+      "impossible",
+      "capable",
+      "adorable",
+      "visible",
+      "terrible"
     ],
     "hook": {
       "title": "Why Adverbs Are Built From a Feminine 'Mind'",
@@ -3233,7 +3485,7 @@ export const FR_LESSONS: Lesson[] = [
       },
       {
         "type": "family_matrix",
-        "prompt": "Complete the Adjective → Feminine → -ment Adverb matrix for 'heureusement' ('fortunately/happily'):",
+        "prompt": "Complete the Adjective → Feminine → -ment Adverb matrix for 'fortunately / happily' (from heureux → heureuse):",
         "rows": [
           "exact (exact)",
           "naturel (natural)",
@@ -3335,11 +3587,11 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "It is really possible today",
         "word_bank": [
           "C'est",
-          "vraiment",
-          "possible",
-          "aujourd'hui",
+          "la",
           "vrai",
-          "la"
+          "vraiment",
+          "aujourd'hui",
+          "possible"
         ],
         "explanation": "vraiment modifies possible right after C'est.",
         "diagnosis": {
@@ -3372,6 +3624,19 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "English -ly is French feminine + -ment, and -able/-ible words cross unchanged.",
       "curiosity_teaser": "Up next on Le Pont ([7] Questions à la Française): see how The -ment & -able Twin Bridges leads directly into Questions à la Française."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"It is really possible today\" in French:",
+      "target_answer": "C'est vraiment possible aujourd'hui",
+      "word_bank": [
+        "aujourd'hui",
+        "vraiment",
+        "pas",
+        "C'est",
+        "ne",
+        "possible"
+      ],
+      "explanation": "Re-constructing \"C'est vraiment possible aujourd'hui\" from the underlying rule cements the pattern of The -ment & -able Twin Bridges."
     }
   },
   {
@@ -3396,7 +3661,10 @@ export const FR_LESSONS: Lesson[] = [
       "où",
       "pourquoi",
       "quand",
-      "comment"
+      "comment",
+      "combien",
+      "quel",
+      "parce_que"
     ],
     "hook": {
       "title": "Three Ways to Ask the Exact Same Question",
@@ -3458,9 +3726,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Où est-ce que tu es",
         "natural": "Where are you?",
         "options": [
-          "Where are you?",
+          "Where do you be",
           "Where is-it that you are",
-          "Where do you be"
+          "Where are you?"
         ],
         "target_answer": "Where is-it that you are",
         "meaning": "Literal structure: Where is-it that you are",
@@ -3471,9 +3739,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you answer 'Pourquoi tu veux partir ?' ('Why do you want to leave?') with 'Because it is late'?",
         "options": [
-          "Parce que c'est tard",
           "Pourquoi c'est tard",
-          "Est-ce que c'est tard"
+          "Est-ce que c'est tard",
+          "Parce que c'est tard"
         ],
         "target_answer": "Parce que c'est tard",
         "meaning": "Because it is late",
@@ -3497,11 +3765,11 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Où est le café",
         "meaning": "Where is the café?",
         "word_bank": [
+          "café",
+          "le",
+          "Pourquoi",
           "Où",
           "est",
-          "le",
-          "café",
-          "Pourquoi",
           "la"
         ],
         "explanation": "Short questions with être simply invert: Où est le café ?",
@@ -3541,13 +3809,13 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — ask 'When do you want to confirm?' using est-ce que:",
       "target_answer": "Quand est-ce que tu veux confirmer",
       "word_bank": [
-        "Quand",
         "est-ce",
-        "que",
-        "tu",
-        "veux",
-        "confirmer",
         "Où",
+        "confirmer",
+        "que",
+        "Quand",
+        "veux",
+        "tu",
         "la"
       ],
       "explanation": "Quand + est-ce que + tu veux confirmer — zero word-order inversion needed."
@@ -3581,7 +3849,8 @@ export const FR_LESSONS: Lesson[] = [
       "vouloir",
       "avoir",
       "aller",
-      "parler"
+      "parler",
+      "français"
     ],
     "hook": {
       "title": "The Zero-Inversion Question Opener",
@@ -3637,8 +3906,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "How do you turn 'Il a compris' ('He understood') into an est-ce que question?",
         "options": [
           "Est-ce qu'il a compris",
-          "Est-ce que il a compris",
-          "Est-ce qu'a-t-il compris"
+          "Est-ce qu'a-t-il compris",
+          "Est-ce que il a compris"
         ],
         "target_answer": "Est-ce qu'il a compris",
         "meaning": "Did he understand?",
@@ -3651,9 +3920,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Est-ce que tu parles français",
         "natural": "Do you speak French?",
         "options": [
-          "Do you speak French?",
+          "Speak you the French",
           "Is-it that you speak French",
-          "Speak you the French"
+          "Do you speak French?"
         ],
         "target_answer": "Is-it that you speak French",
         "meaning": "Literal structure: Is-it that you speak French",
@@ -3677,14 +3946,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Est-ce que vous avez une réservation",
         "meaning": "Do you have a reservation?",
         "word_bank": [
-          "Est-ce",
-          "que",
-          "vous",
-          "avez",
           "une",
           "réservation",
+          "avez",
+          "vous",
+          "la",
+          "que",
           "as",
-          "la"
+          "Est-ce"
         ],
         "explanation": "Est-ce que + vous avez une réservation keeps normal word order.",
         "diagnosis": {
@@ -3717,6 +3986,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Est-ce que absorbs the inversion so your sentence never has to move.",
       "curiosity_teaser": "Up next on Le Pont ([702] Question-Word Twins): see how Est-ce que Drills leads directly into Question-Word Twins."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"Do you have a reservation\" in French:",
+      "target_answer": "Est-ce que vous avez une réservation",
+      "word_bank": [
+        "ne",
+        "Est-ce",
+        "avez",
+        "réservation",
+        "une",
+        "pas",
+        "vous",
+        "que"
+      ],
+      "explanation": "Re-constructing \"Est-ce que vous avez une réservation\" from the underlying rule cements the pattern of Est-ce que Drills."
     }
   },
   {
@@ -3741,7 +4025,10 @@ export const FR_LESSONS: Lesson[] = [
       "pourquoi",
       "quand",
       "comment",
-      "combien"
+      "combien",
+      "quel",
+      "parce_que",
+      "heure"
     ],
     "hook": {
       "title": "Every Question Word Has an English Cousin",
@@ -3809,9 +4096,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Because 'l'heure' ('the hour/time') is feminine, how do you write 'What time is it?'",
         "options": [
-          "Quelle heure est-il",
+          "Quoi heure est-il",
           "Quel heure est-il",
-          "Quoi heure est-il"
+          "Quelle heure est-il"
         ],
         "target_answer": "Quelle heure est-il",
         "meaning": "What time is it? (lit. Which hour is it?)",
@@ -3835,14 +4122,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Quand est-ce que tu vas arriver",
         "meaning": "When are you going to arrive?",
         "word_bank": [
-          "Quand",
           "est-ce",
-          "que",
-          "tu",
           "vas",
-          "arriver",
+          "tu",
+          "la",
           "Où",
-          "la"
+          "arriver",
+          "Quand",
+          "que"
         ],
         "explanation": "Quand + est-ce que + tu vas arriver.",
         "diagnosis": {
@@ -3875,6 +4162,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "où = ubiquitous, quel = quality, pourquoi = wherefore.",
       "curiosity_teaser": "Up next on Le Pont ([8] The -eur Bridge): see how Question-Word Twins leads directly into The -eur Bridge."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"When are you going to arrive\" in French:",
+      "target_answer": "Quand est-ce que tu vas arriver",
+      "word_bank": [
+        "vas",
+        "que",
+        "ne",
+        "arriver",
+        "tu",
+        "est-ce",
+        "pas",
+        "Quand"
+      ],
+      "explanation": "Re-constructing \"Quand est-ce que tu vas arriver\" from the underlying rule cements the pattern of Question-Word Twins."
     }
   },
   {
@@ -3903,7 +4205,12 @@ export const FR_LESSONS: Lesson[] = [
       "acteur",
       "directeur",
       "professeur",
-      "honneur"
+      "honneur",
+      "couleur",
+      "erreur",
+      "peur",
+      "chaleur",
+      "bonheur"
     ],
     "hook": {
       "title": "Where English -or and -er Re-Merge",
@@ -3972,8 +4279,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "Which article belongs with 'couleur' ('color') in 'I like the color'?",
         "options": [
           "la couleur",
-          "le couleur",
-          "l'couleur"
+          "l'couleur",
+          "le couleur"
         ],
         "target_answer": "la couleur",
         "meaning": "the color (feminine quality noun)",
@@ -3995,17 +4302,17 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Le docteur est ici et le directeur est là",
         "meaning": "The doctor is here and the director is there",
         "word_bank": [
-          "Le",
-          "docteur",
-          "est",
-          "ici",
           "et",
-          "le",
-          "directeur",
           "est",
-          "là",
+          "Le",
+          "la",
+          "ici",
           "La",
-          "la"
+          "directeur",
+          "docteur",
+          "le",
+          "est",
+          "là"
         ],
         "explanation": "Both docteur and directeur are human agent nouns in -eur, so both take le.",
         "diagnosis": {
@@ -4044,12 +4351,12 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'Happiness is simple' (use le bonheur):",
       "target_answer": "Le bonheur est simple",
       "word_bank": [
-        "Le",
-        "bonheur",
-        "est",
-        "simple",
         "La",
-        "bon"
+        "simple",
+        "bon",
+        "est",
+        "Le",
+        "bonheur"
       ],
       "explanation": "bonheur (bon 'good' + heur 'fortune/augury') is masculine: Le bonheur est simple."
     },
@@ -4085,7 +4392,9 @@ export const FR_LESSONS: Lesson[] = [
       "erreur",
       "peur",
       "chaleur",
-      "fleur"
+      "fleur",
+      "heure",
+      "bon"
     ],
     "hook": {
       "title": "Why Abstract Qualities in -eur Are Feminine",
@@ -4145,9 +4454,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'a beautiful color' in French?",
         "options": [
+          "une beau couleur",
           "une belle couleur",
-          "un beau couleur",
-          "une beau couleur"
+          "un beau couleur"
         ],
         "target_answer": "une belle couleur",
         "meaning": "a beautiful color",
@@ -4178,13 +4487,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Cette couleur est très belle",
         "meaning": "This color is very beautiful",
         "word_bank": [
+          "Ce",
+          "belle",
           "Cette",
           "couleur",
-          "est",
           "très",
-          "belle",
-          "Ce",
-          "beau"
+          "beau",
+          "est"
         ],
         "explanation": "couleur is feminine, triggering Cette and belle.",
         "diagnosis": {
@@ -4218,6 +4527,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "People in -eur are le; qualities and sensations in -eur are la.",
       "curiosity_teaser": "Up next on Le Pont ([802] -eur Discrimination Drills): see how Couleur: The Famous Rebel leads directly into -eur Discrimination Drills."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"This color is very beautiful\" in French:",
+      "target_answer": "Cette couleur est très belle",
+      "word_bank": [
+        "Cette",
+        "très",
+        "ne",
+        "pas",
+        "belle",
+        "couleur",
+        "est"
+      ],
+      "explanation": "Re-constructing \"Cette couleur est très belle\" from the underlying rule cements the pattern of Couleur: The Famous Rebel."
     }
   },
   {
@@ -4244,7 +4567,10 @@ export const FR_LESSONS: Lesson[] = [
       "acteur",
       "directeur",
       "professeur",
-      "honneur"
+      "honneur",
+      "bonheur",
+      "couleur",
+      "erreur"
     ],
     "hook": {
       "title": "Fast Sorting: Masculine Agents vs. Feminine Qualities",
@@ -4304,9 +4630,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Which sentence has the correct gender agreement?",
         "options": [
-          "C'est un bon acteur et une grande erreur",
+          "C'est un bon acteur et un grand erreur",
           "C'est une bonne acteur et un grand erreur",
-          "C'est un bon acteur et un grand erreur"
+          "C'est un bon acteur et une grande erreur"
         ],
         "target_answer": "C'est un bon acteur et une grande erreur",
         "meaning": "He is a good actor (m.) and it's a big mistake (f.)",
@@ -4337,15 +4663,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Le directeur et le professeur sont ici",
         "meaning": "The director and the professor are here",
         "word_bank": [
-          "Le",
-          "directeur",
-          "et",
-          "le",
-          "professeur",
-          "sont",
           "ici",
+          "sont",
+          "le",
+          "directeur",
           "La",
-          "est"
+          "Le",
+          "est",
+          "professeur",
+          "et"
         ],
         "explanation": "Both human agent nouns take le, and together they take plural sont.",
         "diagnosis": {
@@ -4378,6 +4704,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Check un/une when l' hides the article: un acteur, un honneur, une erreur.",
       "curiosity_teaser": "Up next on Le Pont ([9] vous & tu): see how -eur Discrimination Drills leads directly into vous & tu."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"The director and the professor are here\" in French:",
+      "target_answer": "Le directeur et le professeur sont ici",
+      "word_bank": [
+        "Le",
+        "professeur",
+        "sont",
+        "pas",
+        "et",
+        "ici",
+        "directeur",
+        "ne",
+        "le"
+      ],
+      "explanation": "Re-constructing \"Le directeur et le professeur sont ici\" from the underlying rule cements the pattern of -eur Discrimination Drills."
     }
   },
   {
@@ -4403,7 +4745,11 @@ export const FR_LESSONS: Lesson[] = [
       "tu",
       "voulez",
       "êtes",
-      "avez"
+      "avez",
+      "allez",
+      "bonjour",
+      "merci",
+      "sil_vous_plait"
     ],
     "hook": {
       "title": "Why One Person Is Called 'You All'",
@@ -4496,9 +4842,9 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Vous êtes prêt",
         "meaning": "Are you ready? (polite)",
         "word_bank": [
+          "prêt",
           "Vous",
           "êtes",
-          "prêt",
           "Tu",
           "es"
         ],
@@ -4538,12 +4884,12 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — politely tell a stranger 'You are very kind' (use gentil):",
       "target_answer": "Vous êtes très gentil",
       "word_bank": [
-        "Vous",
-        "êtes",
         "très",
+        "es",
         "gentil",
+        "êtes",
         "Tu",
-        "es"
+        "Vous"
       ],
       "explanation": "When vous addresses one person, the adjective stays singular (gentil) even though the verb êtes is plural!"
     },
@@ -4578,7 +4924,10 @@ export const FR_LESSONS: Lesson[] = [
       "merci",
       "oui",
       "sil_vous_plait",
-      "vous"
+      "vous",
+      "tu",
+      "voudrais",
+      "café"
     ],
     "hook": {
       "title": "Politeness as a Complete French Circuit",
@@ -4635,9 +4984,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "s'il vous plaît",
         "natural": "please",
         "options": [
-          "please",
+          "if you please it",
           "if it to-you pleases",
-          "if you please it"
+          "please"
         ],
         "target_answer": "if it to-you pleases",
         "meaning": "Literal structure: if it to-you pleases",
@@ -4650,13 +4999,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Bonjour, un café, s'il vous plaît",
         "meaning": "Hello, a coffee, please",
         "word_bank": [
-          "Bonjour",
-          "un",
+          "tu",
           "café",
-          "s'il",
+          "un",
+          "Bonjour",
           "vous",
           "plaît",
-          "tu",
+          "s'il",
           "la"
         ],
         "explanation": "Open with Bonjour, name the item, close with s'il vous plaît.",
@@ -4678,12 +5027,12 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "Yes, thank you, it is very good",
         "word_bank": [
           "Oui",
-          "merci",
-          "c'est",
+          "la",
           "très",
           "bon",
           "est",
-          "la"
+          "merci",
+          "c'est"
         ],
         "explanation": "Oui, merci, c'est très bon is a natural response at the table.",
         "diagnosis": {
@@ -4717,6 +5066,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Always open with Bonjour before asking a question in France.",
       "curiosity_teaser": "Up next on Le Pont ([902] The vous Register): see how Merci & Bonjour Gym leads directly into The vous Register."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"Hello, a coffee, please\" in French:",
+      "target_answer": "Bonjour, un café, s'il vous plaît",
+      "word_bank": [
+        "café",
+        "Bonjour",
+        "plaît",
+        "s'il",
+        "vous",
+        "pas",
+        "un",
+        "ne"
+      ],
+      "explanation": "Re-constructing \"Bonjour, un café, s'il vous plaît\" from the underlying rule cements the pattern of Merci & Bonjour Gym."
     }
   },
   {
@@ -4741,7 +5105,10 @@ export const FR_LESSONS: Lesson[] = [
       "tu",
       "voulez",
       "êtes",
-      "avez"
+      "avez",
+      "allez",
+      "parler",
+      "français"
     ],
     "hook": {
       "title": "Switching Gears Between tu and vous in the Same Room",
@@ -4801,9 +5168,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "You are talking to two close friends at once. Which pronoun and verb do you use for 'Are you two going to the cinema?'",
         "options": [
-          "Vous allez au cinéma",
+          "Vous vas au cinéma",
           "Tu vas au cinéma",
-          "Vous vas au cinéma"
+          "Vous allez au cinéma"
         ],
         "target_answer": "Vous allez au cinéma",
         "meaning": "Are you (plural) going to the cinema?",
@@ -4834,12 +5201,12 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Vous parlez français ou anglais",
         "meaning": "Do you speak French or English?",
         "word_bank": [
-          "Vous",
-          "parlez",
-          "français",
           "ou",
+          "français",
+          "parlez",
           "anglais",
           "où",
+          "Vous",
           "parles"
         ],
         "explanation": "ou ('or') has no accent, whereas où ('where') has a grave accent!",
@@ -4873,6 +5240,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "One friend is tu; one stranger is vous; two of anybody is vous.",
       "curiosity_teaser": "Up next on Le Pont ([10] avoir & the H It Lost): see how The vous Register leads directly into avoir & the H It Lost."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"Do you speak French or English\" in French:",
+      "target_answer": "Vous parlez français ou anglais",
+      "word_bank": [
+        "pas",
+        "ne",
+        "Vous",
+        "ou",
+        "français",
+        "anglais",
+        "parlez"
+      ],
+      "explanation": "Re-constructing \"Vous parlez français ou anglais\" from the underlying rule cements the pattern of The vous Register."
     }
   },
   {
@@ -4905,7 +5286,16 @@ export const FR_LESSONS: Lesson[] = [
       "jai",
       "as",
       "a",
-      "avons"
+      "avons",
+      "avez",
+      "hôtel",
+      "hôpital",
+      "homme",
+      "hiver",
+      "histoire",
+      "pain",
+      "eau",
+      "ami"
     ],
     "hook": {
       "title": "The Letter French Writes Only for Memory",
@@ -4965,10 +5355,10 @@ export const FR_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Fuse 'je' + 'ai' ('I have') using the elision rule:",
         "tile_options": [
-          "j'",
-          "ai",
           "je",
-          "as"
+          "ai",
+          "as",
+          "j'"
         ],
         "target_answer": "j'ai",
         "meaning": "I have",
@@ -5000,13 +5390,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "J'ai un bon ami ici",
         "meaning": "I have a good friend here",
         "word_bank": [
-          "J'ai",
-          "un",
-          "bon",
-          "ami",
-          "ici",
           "Je",
-          "ai"
+          "bon",
+          "J'ai",
+          "ici",
+          "ai",
+          "un",
+          "ami"
         ],
         "explanation": "J'ai un bon ami ici — in speech, the n of bon links smoothly onto ami.",
         "diagnosis": {
@@ -5045,13 +5435,13 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'I don't have the confirmation' (wrap n'...pas around ai):",
       "target_answer": "Je n'ai pas la confirmation",
       "word_bank": [
+        "la",
         "Je",
         "n'ai",
+        "ne",
         "pas",
-        "la",
         "confirmation",
-        "J'ai",
-        "ne"
+        "J'ai"
       ],
       "explanation": "When ne steps in before ai, je gets its vowel back and ne elides instead: Je n'ai pas!"
     },
@@ -5088,7 +5478,10 @@ export const FR_LESSONS: Lesson[] = [
       "hôpital",
       "homme",
       "hiver",
-      "histoire"
+      "histoire",
+      "heure",
+      "habiter",
+      "avoir"
     ],
     "hook": {
       "title": "Why French H Never Makes a Sound",
@@ -5181,13 +5574,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "L'homme habite près de l'hôpital",
         "meaning": "The man lives near the hospital",
         "word_bank": [
-          "L'homme",
           "habite",
+          "homme",
           "près",
-          "de",
-          "l'hôpital",
           "Le",
-          "homme"
+          "l'hôpital",
+          "L'homme",
+          "de"
         ],
         "explanation": "Both l'homme and l'hôpital elide because of mute H.",
         "diagnosis": {
@@ -5220,6 +5613,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "To a French ear, Latin H is invisible — elide and link right through it.",
       "curiosity_teaser": "Up next on Le Pont ([1002] J'ai Gym): see how The H-Drop Doublets leads directly into J'ai Gym."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"The man lives near the hospital\" in French:",
+      "target_answer": "L'homme habite près de l'hôpital",
+      "word_bank": [
+        "habite",
+        "pas",
+        "ne",
+        "près",
+        "l'hôpital",
+        "L'homme",
+        "de"
+      ],
+      "explanation": "Re-constructing \"L'homme habite près de l'hôpital\" from the underlying rule cements the pattern of The H-Drop Doublets."
     }
   },
   {
@@ -5247,7 +5654,13 @@ export const FR_LESSONS: Lesson[] = [
       "jai",
       "as",
       "a",
-      "avons"
+      "avons",
+      "avez",
+      "pain",
+      "eau",
+      "ans",
+      "peur",
+      "faim"
     ],
     "hook": {
       "title": "Running avoir Across Possessions, Ages, and Feelings",
@@ -5309,9 +5722,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Elle a vingt ans",
         "natural": "She is twenty years old",
         "options": [
-          "She is twenty years old",
+          "She is twenty of years",
           "She has twenty years",
-          "She is twenty of years"
+          "She is twenty years old"
         ],
         "target_answer": "She has twenty years",
         "meaning": "Literal structure: She has twenty years",
@@ -5322,9 +5735,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Flip 'J'ai une table' ('I have a table') into the negative ('I don't have a table'):",
         "options": [
-          "Je n'ai pas de table",
+          "Je n'ai pas une table",
           "J'ai ne pas une table",
-          "Je n'ai pas une table"
+          "Je n'ai pas de table"
         ],
         "target_answer": "Je n'ai pas de table",
         "meaning": "I don't have a table",
@@ -5347,15 +5760,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Nous avons une réservation pour ce soir",
         "meaning": "We have a reservation for tonight",
         "word_bank": [
-          "Nous",
-          "avons",
+          "pour",
           "une",
           "réservation",
-          "pour",
-          "ce",
+          "la",
           "soir",
-          "avez",
-          "la"
+          "Nous",
+          "avons",
+          "ce",
+          "avez"
         ],
         "explanation": "Nous avons + une réservation + pour ce soir.",
         "diagnosis": {
@@ -5388,6 +5801,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "J'ai flips to Je n'ai pas de in the negative.",
       "curiosity_teaser": "Up next on Le Pont ([1003] Liaison & Silent Consonants: CaReFuL): see how J'ai Gym leads directly into Liaison & Silent Consonants: CaReFuL."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"We have a reservation for tonight\" in French:",
+      "target_answer": "Nous avons une réservation pour ce soir",
+      "word_bank": [
+        "ce",
+        "avons",
+        "soir",
+        "Nous",
+        "réservation",
+        "ne",
+        "pas",
+        "pour",
+        "une"
+      ],
+      "explanation": "Re-constructing \"Nous avons une réservation pour ce soir\" from the underlying rule cements the pattern of J'ai Gym."
     }
   },
   {
@@ -5414,7 +5843,12 @@ export const FR_LESSONS: Lesson[] = [
       "avez",
       "êtes",
       "nous",
-      "avons"
+      "avons",
+      "sont",
+      "ami",
+      "hôtel",
+      "ans",
+      "bon"
     ],
     "hook": {
       "title": "The Sleeping Consonant at the End of the Word",
@@ -5482,8 +5916,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Which word below pronounces its final consonant even when standing alone (the CaReFuL rule)?",
         "options": [
-          "neuf (ends in F)",
           "grand (ends in D)",
+          "neuf (ends in F)",
           "vous (ends in S)"
         ],
         "target_answer": "neuf (ends in F)",
@@ -5506,12 +5940,12 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Vous avez deux amis ici",
         "meaning": "You have two friends here",
         "word_bank": [
+          "Tu",
           "Vous",
           "avez",
-          "deux",
           "amis",
           "ici",
-          "Tu",
+          "deux",
           "as"
         ],
         "explanation": "Both Vous‿avez and deux‿amis link with a /z/ buzz.",
@@ -5545,6 +5979,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Final consonants sleep unless they are CaReFuL — or unless the next word's vowel wakes them up.",
       "curiosity_teaser": "Up next on Le Pont ([11] Adjectives & the Silent -s): see how Liaison & Silent Consonants: CaReFuL leads directly into Adjectives & the Silent -s."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"You have two friends here\" in French:",
+      "target_answer": "Vous avez deux amis ici",
+      "word_bank": [
+        "ici",
+        "deux",
+        "Vous",
+        "ne",
+        "pas",
+        "amis",
+        "avez"
+      ],
+      "explanation": "Re-constructing \"Vous avez deux amis ici\" from the underlying rule cements the pattern of Liaison & Silent Consonants: CaReFuL."
     }
   },
   {
@@ -5571,7 +6019,12 @@ export const FR_LESSONS: Lesson[] = [
       "petit",
       "bon",
       "vert",
-      "blanc"
+      "blanc",
+      "bleu",
+      "rouge",
+      "noir",
+      "jaune",
+      "jardin"
     ],
     "hook": {
       "title": "Why the Masculine Form Sounds Shorter Than the Feminine",
@@ -5633,9 +6086,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Le jardin vert",
         "natural": "The green garden",
         "options": [
+          "Green the garden",
           "The green garden",
-          "The garden green",
-          "Green the garden"
+          "The garden green"
         ],
         "target_answer": "The garden green",
         "meaning": "Literal structure: The garden green",
@@ -5648,13 +6101,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "La maison blanche est grande",
         "meaning": "The white house is big",
         "word_bank": [
-          "La",
-          "maison",
           "blanche",
-          "est",
-          "grande",
+          "grand",
           "blanc",
-          "grand"
+          "maison",
+          "est",
+          "La",
+          "grande"
         ],
         "explanation": "la maison takes feminine blanche right after the noun, and feminine grande after est.",
         "id": "fr11_e3"
@@ -5675,14 +6128,14 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "I want a black coffee, please",
         "word_bank": [
           "Je",
-          "veux",
-          "un",
+          "s'il",
+          "plaît",
           "café",
           "noir",
-          "s'il",
-          "vous",
-          "plaît",
           "noire",
+          "un",
+          "vous",
+          "veux",
           "la"
         ],
         "explanation": "noir follows café because color adjectives sit after the noun.",
@@ -5721,13 +6174,13 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'The red table is small':",
       "target_answer": "La table rouge est petite",
       "word_bank": [
+        "est",
+        "Le",
+        "rouge",
+        "petit",
         "La",
         "table",
-        "rouge",
-        "est",
-        "petite",
-        "petit",
-        "Le"
+        "petite"
       ],
       "explanation": "rouge already ends in -e in both genders; petite adds -e to agree with la table."
     },
@@ -5762,7 +6215,10 @@ export const FR_LESSONS: Lesson[] = [
       "petit",
       "vert",
       "blanc",
-      "content"
+      "content",
+      "bon",
+      "maison",
+      "jardin"
     ],
     "hook": {
       "title": "The Consonant That Sleeps in the Masculine and Wakes in the Feminine",
@@ -5855,17 +6311,17 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Elle est très contente et il est très grand",
         "meaning": "She is very happy and he is very tall",
         "word_bank": [
-          "Elle",
-          "est",
-          "très",
-          "contente",
           "et",
-          "il",
-          "est",
-          "très",
-          "grand",
+          "Elle",
           "content",
-          "grande"
+          "est",
+          "grand",
+          "est",
+          "contente",
+          "très",
+          "très",
+          "grande",
+          "il"
         ],
         "explanation": "Elle takes feminine contente; il takes masculine grand.",
         "diagnosis": {
@@ -5898,6 +6354,24 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Four written forms (grand, grands, grande, grandes), only two spoken sounds (/ɡʁɑ̃/ and /ɡʁɑ̃d/).",
       "curiosity_teaser": "Up next on Le Pont ([1102] Color & Size Gym): see how The e and the s leads directly into Color & Size Gym."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"She is very happy and he is very tall\" in French:",
+      "target_answer": "Elle est très contente et il est très grand",
+      "word_bank": [
+        "pas",
+        "est",
+        "Elle",
+        "ne",
+        "et",
+        "très",
+        "est",
+        "contente",
+        "très",
+        "grand",
+        "il"
+      ],
+      "explanation": "Re-constructing \"Elle est très contente et il est très grand\" from the underlying rule cements the pattern of The e and the s."
     }
   },
   {
@@ -5925,7 +6399,13 @@ export const FR_LESSONS: Lesson[] = [
       "blanc",
       "bleu",
       "rouge",
-      "noir"
+      "noir",
+      "jaune",
+      "grand",
+      "petit",
+      "jardin",
+      "maison",
+      "table"
     ],
     "hook": {
       "title": "Painting Nouns From Behind: Colors After the Noun",
@@ -5987,9 +6467,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Un petit café noir",
         "natural": "A small black coffee",
         "options": [
-          "A small black coffee",
+          "A coffee small black",
           "A small coffee black",
-          "A coffee small black"
+          "A small black coffee"
         ],
         "target_answer": "A small coffee black",
         "meaning": "Literal structure: A small coffee black",
@@ -6000,9 +6480,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Which color adjective below does NOT change spelling between masculine and feminine?",
         "options": [
-          "rouge (and jaune)",
           "blanc",
-          "vert"
+          "vert",
+          "rouge (and jaune)"
         ],
         "target_answer": "rouge (and jaune)",
         "meaning": "Already ends in -e in the masculine!",
@@ -6025,12 +6505,12 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "I want a small black coffee",
         "word_bank": [
           "Je",
-          "veux",
           "un",
           "petit",
-          "café",
           "noir",
           "noire",
+          "veux",
+          "café",
           "la"
         ],
         "explanation": "petit stands before café and noir stands after it.",
@@ -6064,6 +6544,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Size in front, color in back: un petit café noir.",
       "curiosity_teaser": "Up next on Le Pont ([1103] BAGS: Adjectives Before the Noun): see how Color & Size Gym leads directly into BAGS: Adjectives Before the Noun."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I want a small black coffee\" in French:",
+      "target_answer": "Je veux un petit café noir",
+      "word_bank": [
+        "noir",
+        "ne",
+        "café",
+        "pas",
+        "veux",
+        "un",
+        "petit",
+        "Je"
+      ],
+      "explanation": "Re-constructing \"Je veux un petit café noir\" from the underlying rule cements the pattern of Color & Size Gym."
     }
   },
   {
@@ -6091,7 +6586,13 @@ export const FR_LESSONS: Lesson[] = [
       "joli",
       "jeune",
       "vieux",
-      "bon"
+      "bon",
+      "petit",
+      "grand",
+      "nouveau",
+      "ville",
+      "hôtel",
+      "restaurant"
     ],
     "hook": {
       "title": "Why Short Everyday Adjectives Step in Front: BAGS",
@@ -6153,8 +6654,8 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Une petite maison blanche",
         "natural": "A small white house",
         "options": [
-          "A small white house",
           "A small house white",
+          "A small white house",
           "A house small white"
         ],
         "target_answer": "A small house white",
@@ -6166,8 +6667,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'a beautiful hotel' (l'hôtel is masculine and starts with a mute H)?",
         "options": [
-          "un bel hôtel",
           "un beau hôtel",
+          "un bel hôtel",
           "un hôtel beau"
         ],
         "target_answer": "un bel hôtel",
@@ -6190,16 +6691,16 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "C'est une belle ville et un bon restaurant",
         "meaning": "It is a beautiful city and a good restaurant",
         "word_bank": [
-          "C'est",
-          "une",
-          "belle",
-          "ville",
-          "et",
-          "un",
-          "bon",
           "restaurant",
+          "bon",
+          "la",
+          "ville",
+          "une",
+          "et",
+          "C'est",
+          "un",
           "beau",
-          "la"
+          "belle"
         ],
         "explanation": "Both belle and bon belong to BAGS and precede their nouns.",
         "diagnosis": {
@@ -6232,6 +6733,23 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "BAGS steps in front, colors stay in back — and beau/nouveau/vieux wear -l before a masculine vowel.",
       "curiosity_teaser": "Up next on Le Pont ([12] The Near Future): see how BAGS: Adjectives Before the Noun leads directly into The Near Future."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"It is a beautiful city and a good restaurant\" in French:",
+      "target_answer": "C'est une belle ville et un bon restaurant",
+      "word_bank": [
+        "C'est",
+        "ne",
+        "une",
+        "ville",
+        "pas",
+        "un",
+        "bon",
+        "belle",
+        "et",
+        "restaurant"
+      ],
+      "explanation": "Re-constructing \"C'est une belle ville et un bon restaurant\" from the underlying rule cements the pattern of BAGS: Adjectives Before the Noun."
     }
   },
   {
@@ -6259,7 +6777,13 @@ export const FR_LESSONS: Lesson[] = [
       "je_vais",
       "vas",
       "va",
-      "allons"
+      "allons",
+      "allez",
+      "on",
+      "demain",
+      "ce_soir",
+      "voir",
+      "faire"
     ],
     "hook": {
       "title": "How 'I Am Going to...' Gives You the Whole Future Tense",
@@ -6322,8 +6846,8 @@ export const FR_LESSONS: Lesson[] = [
         "natural": "We're going to celebrate tonight",
         "options": [
           "We're going to celebrate tonight",
-          "One goes celebrate this evening",
-          "We go to celebrating tonight"
+          "We go to celebrating tonight",
+          "One goes celebrate this evening"
         ],
         "target_answer": "One goes celebrate this evening",
         "meaning": "Literal structure: One goes celebrate this evening",
@@ -6358,13 +6882,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Demain, je vais visiter Paris",
         "meaning": "Tomorrow, I am going to visit Paris",
         "word_bank": [
-          "Demain",
-          "je",
-          "vais",
-          "visiter",
-          "Paris",
           "à",
-          "vas"
+          "Paris",
+          "vas",
+          "vais",
+          "je",
+          "Demain",
+          "visiter"
         ],
         "explanation": "Demain, je vais visiter Paris chains vais directly to visiter.",
         "diagnosis": {
@@ -6406,11 +6930,11 @@ export const FR_LESSONS: Lesson[] = [
         "Tu",
         "vas",
         "voir",
-        "mon",
         "ami",
+        "la",
         "demain",
-        "vais",
-        "la"
+        "mon",
+        "vais"
       ],
       "explanation": "tu vas + voir ('to see') + mon ami + demain."
     },
@@ -6447,7 +6971,12 @@ export const FR_LESSONS: Lesson[] = [
       "je_vais",
       "vas",
       "va",
-      "allons"
+      "allons",
+      "allez",
+      "on",
+      "où",
+      "gare",
+      "train"
     ],
     "hook": {
       "title": "Why aller Has Two Ancient Families Inside One Verb",
@@ -6515,8 +7044,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you ask a friend 'Where are you going?'",
         "options": [
-          "Où est-ce que tu vas",
           "Où est-ce que tu vais",
+          "Où est-ce que tu vas",
           "Où est-ce que tu aller"
         ],
         "target_answer": "Où est-ce que tu vas",
@@ -6525,34 +7054,28 @@ export const FR_LESSONS: Lesson[] = [
         "id": "fr1201_e3"
       },
       {
-        "type": "transcribe",
-        "prompt": "Tell me:",
-        "idea": "we are going to the train station (use Nous allons)",
+        "id": "fr1201_e4",
+        "type": "spoken_turn_reply",
+        "prompt": "Answer the question in the negative using ne ... pas:",
+        "spoken_question": "Est-ce que tu parles allemand ?",
+        "question_meaning": "Do you speak German?",
+        "reply_idea": "Reply that you do not speak German.",
         "cues": [
-          "We are going → Nous allons",
-          "to the train station → à la gare"
+          "Begin with Je ne parle pas...",
+          "Add allemand at the end."
         ],
-        "idea_parts": [
-          "subject + verb → Nous allons",
-          "destination → à la gare"
-        ],
-        "target_answer": "Nous allons à la gare",
-        "meaning": "We are going to the train station",
         "word_bank": [
-          "Nous",
-          "allons",
-          "à",
-          "la",
-          "gare",
-          "au",
-          "allez"
+          "ne",
+          "oui",
+          "français",
+          "Je",
+          "parle",
+          "allemand",
+          "pas"
         ],
-        "explanation": "la gare is feminine, so à la gare does not fuse.",
-        "diagnosis": {
-          "slip": "used au gare or allez",
-          "cue": "Use Nous allons à la gare."
-        },
-        "id": "fr1201_e4"
+        "target_answer": "Je ne parle pas allemand",
+        "meaning": "I do not speak German",
+        "explanation": "French wraps ne and pas tightly around the conjugated verb parle."
       },
       {
         "type": "dictation",
@@ -6578,6 +7101,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "je vais (/vɛ/), tu vas (/va/), il/on va (/va/), nous allons, vous allez.",
       "curiosity_teaser": "Up next on Le Pont ([1202] Future Gym): see how Amble & Go leads directly into Future Gym."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I am going to the cinema with my friend\" in French:",
+      "target_answer": "Je vais au cinéma avec mon ami",
+      "word_bank": [
+        "Je",
+        "avec",
+        "vais",
+        "cinéma",
+        "ami",
+        "pas",
+        "ne",
+        "mon",
+        "au"
+      ],
+      "explanation": "Re-constructing \"Je vais au cinéma avec mon ami\" from the underlying rule cements the pattern of Amble & Go."
     }
   },
   {
@@ -6608,7 +7147,14 @@ export const FR_LESSONS: Lesson[] = [
       "je_vais",
       "vas",
       "va",
-      "allons"
+      "allons",
+      "allez",
+      "confirmer",
+      "organiser",
+      "visiter",
+      "préparer",
+      "demain",
+      "ce_soir"
     ],
     "hook": {
       "title": "Chaining Near-Future Plans With Your -ation Verbs",
@@ -6668,9 +7214,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Negate 'On va attendre' ('We are going to wait'):",
         "options": [
-          "On ne va pas attendre",
           "On va ne pas attendre",
-          "On ne va attendre pas"
+          "On ne va attendre pas",
+          "On ne va pas attendre"
         ],
         "target_answer": "On ne va pas attendre",
         "meaning": "We are not going to wait",
@@ -6701,14 +7247,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je vais préparer la réservation demain",
         "meaning": "I am going to prepare the reservation tomorrow",
         "word_bank": [
-          "Je",
           "vais",
-          "préparer",
-          "la",
           "réservation",
+          "Je",
+          "la",
           "demain",
-          "vas",
-          "le"
+          "préparer",
+          "le",
+          "vas"
         ],
         "explanation": "préparer stays in its infinitive form after Je vais.",
         "diagnosis": {
@@ -6741,6 +7287,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Conjugate aller, park the infinitive, and hug aller with ne...pas when negating.",
       "curiosity_teaser": "Up next on Le Pont ([13] à, de, chez): see how Future Gym leads directly into à, de, chez."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I am going to prepare the reservation tomorrow\" in French:",
+      "target_answer": "Je vais préparer la réservation demain",
+      "word_bank": [
+        "la",
+        "Je",
+        "vais",
+        "ne",
+        "réservation",
+        "demain",
+        "préparer",
+        "pas"
+      ],
+      "explanation": "Re-constructing \"Je vais préparer la réservation demain\" from the underlying rule cements the pattern of Future Gym."
     }
   },
   {
@@ -6770,7 +7331,15 @@ export const FR_LESSONS: Lesson[] = [
       "de",
       "au",
       "du",
-      "des"
+      "des",
+      "chez",
+      "avec",
+      "dans",
+      "pour",
+      "sans",
+      "vin",
+      "fromage",
+      "soupe"
     ],
     "hook": {
       "title": "Two Little Words That Run Half of French Grammar",
@@ -6870,15 +7439,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je vais chez mon ami ce soir",
         "meaning": "I'm going to my friend's place tonight",
         "word_bank": [
-          "Je",
-          "vais",
-          "chez",
-          "mon",
           "ami",
-          "ce",
-          "soir",
+          "chez",
           "au",
-          "la"
+          "ce",
+          "vais",
+          "la",
+          "soir",
+          "Je",
+          "mon"
         ],
         "explanation": "With a person (mon ami), French uses chez rather than à/au.",
         "diagnosis": {
@@ -6917,14 +7486,14 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'I am coming with you to the cinema' (use Je viens):",
       "target_answer": "Je viens avec toi au cinéma",
       "word_bank": [
-        "Je",
-        "viens",
-        "avec",
-        "toi",
         "au",
-        "cinéma",
+        "le",
         "à",
-        "le"
+        "avec",
+        "cinéma",
+        "viens",
+        "Je",
+        "toi"
       ],
       "explanation": "avec toi ('with you', stressed pronoun) + au cinéma (à + le cinéma)."
     },
@@ -6961,7 +7530,12 @@ export const FR_LESSONS: Lesson[] = [
       "de",
       "au",
       "du",
-      "des"
+      "des",
+      "café",
+      "restaurant",
+      "gare",
+      "hôtel",
+      "cinéma"
     ],
     "hook": {
       "title": "Why à + le and de + le Fuse on Impact",
@@ -7021,9 +7595,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Complete the sentence: 'I am coming from the restaurant and going to the station' (le restaurant, la gare):",
         "options": [
-          "Je viens du restaurant et je vais à la gare",
           "Je viens de le restaurant et je vais à la gare",
-          "Je viens du restaurant et je vais au gare"
+          "Je viens du restaurant et je vais au gare",
+          "Je viens du restaurant et je vais à la gare"
         ],
         "target_answer": "Je viens du restaurant et je vais à la gare",
         "meaning": "from the restaurant (du) and to the station (à la)",
@@ -7040,38 +7614,28 @@ export const FR_LESSONS: Lesson[] = [
         "id": "fr1301_e3"
       },
       {
-        "type": "transcribe",
-        "prompt": "Tell me:",
-        "idea": "the train arrives from Paris and goes to the airport (use à l'aéroport)",
+        "id": "fr1301_e4",
+        "type": "spoken_turn_reply",
+        "prompt": "Reply to the question in French:",
+        "spoken_question": "Où est-ce que vous habitez maintenant ?",
+        "question_meaning": "Where do you live now?",
+        "reply_idea": "Reply that we live in Paris now.",
         "cues": [
-          "The train arrives from Paris → Le train arrive de Paris",
-          "and goes to the airport → et va à l'aéroport"
+          "Start with Nous habitons...",
+          "Place à Paris maintenant after the verb."
         ],
-        "idea_parts": [
-          "first clause → Le train arrive de Paris",
-          "second clause → et va à l'aéroport"
-        ],
-        "target_answer": "Le train arrive de Paris et va à l'aéroport",
-        "meaning": "The train arrives from Paris and goes to the airport",
         "word_bank": [
-          "Le",
-          "train",
-          "arrive",
-          "de",
-          "Paris",
-          "et",
-          "va",
+          "habitons",
+          "où",
+          "ils",
+          "Nous",
           "à",
-          "l'aéroport",
-          "au",
-          "la"
+          "Paris",
+          "maintenant"
         ],
-        "explanation": "Cities take bare à/de (de Paris), and vowel-initial aéroport takes à l'.",
-        "diagnosis": {
-          "slip": "used au before l'aéroport",
-          "cue": "Vowel-initial nouns take à l': à l'aéroport."
-        },
-        "id": "fr1301_e4"
+        "target_answer": "Nous habitons à Paris maintenant",
+        "meaning": "We live in Paris now",
+        "explanation": "To answer an où question with a city, French pairs habiter with the preposition à: Nous habitons à Paris."
       },
       {
         "type": "dictation",
@@ -7097,6 +7661,24 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Vowel → à l' / de l'; Feminine → à la / de la; Masculine → au / du.",
       "curiosity_teaser": "Up next on Le Pont ([1302] Chez, the House Word): see how au & du Fusions leads directly into Chez, the House Word."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"We are going to the restaurant next to the station\" in French:",
+      "target_answer": "Nous allons au restaurant à côté de la gare",
+      "word_bank": [
+        "la",
+        "gare",
+        "pas",
+        "restaurant",
+        "au",
+        "Nous",
+        "côté",
+        "de",
+        "ne",
+        "allons",
+        "à"
+      ],
+      "explanation": "Re-constructing \"Nous allons au restaurant à côté de la gare\" from the underlying rule cements the pattern of au & du Fusions."
     }
   },
   {
@@ -7123,7 +7705,12 @@ export const FR_LESSONS: Lesson[] = [
       "moi",
       "toi",
       "lui",
-      "elle"
+      "elle",
+      "nous",
+      "vous",
+      "docteur",
+      "ami",
+      "rester"
     ],
     "hook": {
       "title": "Why People Take chez Where Buildings Take à",
@@ -7184,8 +7771,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "How do you say 'I am staying at home tonight'?",
         "options": [
           "Je reste chez moi ce soir",
-          "Je reste à moi ce soir",
-          "Je reste chez je ce soir"
+          "Je reste chez je ce soir",
+          "Je reste à moi ce soir"
         ],
         "target_answer": "Je reste chez moi ce soir",
         "meaning": "I am staying at home tonight",
@@ -7198,9 +7785,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "On dîne chez Marie",
         "natural": "We're having dinner at Marie's",
         "options": [
-          "We're having dinner at Marie's",
+          "We dine to Marie",
           "One dines at-the-house-of Marie",
-          "We dine to Marie"
+          "We're having dinner at Marie's"
         ],
         "target_answer": "One dines at-the-house-of Marie",
         "meaning": "Literal structure: One dines at-the-house-of Marie",
@@ -7222,14 +7809,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Tu vas chez le docteur aujourd'hui",
         "meaning": "Are you going to the doctor's office today?",
         "word_bank": [
-          "Tu",
           "vas",
+          "aujourd'hui",
+          "docteur",
+          "la",
           "chez",
           "le",
-          "docteur",
-          "aujourd'hui",
           "au",
-          "la"
+          "Tu"
         ],
         "explanation": "Because le docteur is a person, French uses chez le docteur rather than au.",
         "diagnosis": {
@@ -7262,6 +7849,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Places take au / à la; people take chez.",
       "curiosity_teaser": "Up next on Le Pont ([1303] The Partitive: du, de la & Negative de): see how Chez, the House Word leads directly into The Partitive: du, de la & Negative de."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"Are you going to the doctor's office today\" in French:",
+      "target_answer": "Tu vas chez le docteur aujourd'hui",
+      "word_bank": [
+        "pas",
+        "le",
+        "docteur",
+        "aujourd'hui",
+        "Tu",
+        "vas",
+        "ne",
+        "chez"
+      ],
+      "explanation": "Re-constructing \"Tu vas chez le docteur aujourd'hui\" from the underlying rule cements the pattern of Chez, the House Word."
     }
   },
   {
@@ -7288,7 +7890,12 @@ export const FR_LESSONS: Lesson[] = [
       "de",
       "des",
       "pain",
-      "vin"
+      "vin",
+      "fromage",
+      "soupe",
+      "eau",
+      "pas",
+      "vouloir"
     ],
     "hook": {
       "title": "Why French Never Leaves Mass Nouns Naked: du, de la, de l', des",
@@ -7345,9 +7952,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Je veux du pain et de l'eau",
         "natural": "I want bread and water",
         "options": [
+          "I want the bread and the water",
           "I want bread and water",
-          "I want of-the bread and of the water",
-          "I want the bread and the water"
+          "I want of-the bread and of the water"
         ],
         "target_answer": "I want of-the bread and of the water",
         "meaning": "Literal structure: I want of-the bread and of the water",
@@ -7359,8 +7966,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "Flip 'Je veux du fromage' ('I want some cheese') into the negative ('I don't want any cheese'):",
         "options": [
           "Je ne veux pas de fromage",
-          "Je ne veux pas du fromage",
-          "Je ne veux pas fromage"
+          "Je ne veux pas fromage",
+          "Je ne veux pas du fromage"
         ],
         "target_answer": "Je ne veux pas de fromage",
         "meaning": "I don't want any cheese",
@@ -7382,18 +7989,18 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je veux du pain et du fromage, s'il vous plaît",
         "meaning": "I want some bread and cheese, please",
         "word_bank": [
-          "Je",
-          "veux",
-          "du",
-          "pain",
-          "et",
-          "du",
           "fromage",
+          "la",
+          "et",
+          "pain",
           "s'il",
-          "vous",
-          "plaît",
+          "veux",
           "le",
-          "la"
+          "vous",
+          "du",
+          "du",
+          "plaît",
+          "Je"
         ],
         "explanation": "Both pain and fromage take masculine partitive du.",
         "diagnosis": {
@@ -7427,6 +8034,25 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Use du / de la / de l' / des for 'some', and collapse to bare de after pas.",
       "curiosity_teaser": "Up next on Le Pont ([14] Possessives Agree with the Thing): see how The Partitive: du, de la & Negative de leads directly into Possessives Agree with the Thing."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I want some bread and cheese, please\" in French:",
+      "target_answer": "Je veux du pain et du fromage, s'il vous plaît",
+      "word_bank": [
+        "pas",
+        "veux",
+        "s'il",
+        "du",
+        "vous",
+        "fromage",
+        "plaît",
+        "pain",
+        "ne",
+        "du",
+        "Je",
+        "et"
+      ],
+      "explanation": "Re-constructing \"Je veux du pain et du fromage, s'il vous plaît\" from the underlying rule cements the pattern of The Partitive: du, de la & Negative de."
     }
   },
   {
@@ -7456,7 +8082,15 @@ export const FR_LESSONS: Lesson[] = [
       "ma",
       "mes",
       "ton",
-      "son"
+      "son",
+      "sa",
+      "notre",
+      "votre",
+      "père",
+      "mère",
+      "frère",
+      "sœur",
+      "famille"
     ],
     "hook": {
       "title": "The Owner's Gender Is a Red Herring",
@@ -7516,9 +8150,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Marie is talking about her brother (le frère) and Paul is talking about his house (la maison). Which pair is correct?",
         "options": [
+          "sa frère / sa maison",
           "son frère / sa maison",
-          "sa frère / son maison",
-          "sa frère / sa maison"
+          "sa frère / son maison"
         ],
         "target_answer": "son frère / sa maison",
         "meaning": "her brother (son frère) / his house (sa maison)",
@@ -7529,9 +8163,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Because 'opinion' is feminine but starts with a vowel, how does French say 'my opinion'?",
         "options": [
-          "mon opinion",
           "ma opinion",
-          "m'opinion"
+          "m'opinion",
+          "mon opinion"
         ],
         "target_answer": "mon opinion",
         "meaning": "my opinion",
@@ -7554,15 +8188,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Mon père et ma mère sont ici",
         "meaning": "My father and my mother are here",
         "word_bank": [
-          "Mon",
-          "père",
-          "et",
-          "ma",
-          "mère",
-          "sont",
-          "ici",
           "Ma",
-          "est"
+          "et",
+          "sont",
+          "est",
+          "père",
+          "Mon",
+          "ici",
+          "mère",
+          "ma"
         ],
         "explanation": "Mon père (m.) + ma mère (f.) = plural 'they', taking sont.",
         "diagnosis": {
@@ -7601,13 +8235,13 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'Our family is very big' (use Notre):",
       "target_answer": "Notre famille est très grande",
       "word_bank": [
-        "Notre",
-        "famille",
         "est",
         "très",
+        "Notre",
         "grande",
-        "Nos",
-        "grand"
+        "famille",
+        "grand",
+        "Nos"
       ],
       "explanation": "notre ('our', as in Notre-Dame) serves both masculine and feminine singular nouns."
     },
@@ -7647,7 +8281,15 @@ export const FR_LESSONS: Lesson[] = [
       "ma",
       "mes",
       "ton",
-      "son"
+      "son",
+      "sa",
+      "père",
+      "mère",
+      "frère",
+      "sœur",
+      "opinion",
+      "histoire",
+      "ami"
     ],
     "hook": {
       "title": "Why 'Her Brother' Is son frère and 'My Opinion' Is mon opinion",
@@ -7720,9 +8362,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Paul is talking about his mother (la mère), and Marie is talking about her father (le père). Which pair is right?",
         "options": [
+          "sa mère / sa père",
           "sa mère / son père",
-          "son mère / sa père",
-          "sa mère / sa père"
+          "son mère / sa père"
         ],
         "target_answer": "sa mère / son père",
         "meaning": "his mother (sa mère) / her father (son père)",
@@ -7744,15 +8386,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "C'est mon opinion et c'est son histoire",
         "meaning": "It is my opinion and it is her story",
         "word_bank": [
-          "C'est",
-          "mon",
-          "opinion",
-          "et",
-          "c'est",
-          "son",
           "histoire",
+          "c'est",
+          "mon",
           "ma",
-          "sa"
+          "sa",
+          "opinion",
+          "son",
+          "C'est",
+          "et"
         ],
         "explanation": "Both opinion and histoire take mon/son because they start with a vowel/mute H!",
         "diagnosis": {
@@ -7785,6 +8427,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Ignore the owner's gender, and use mon/ton/son before every vowel.",
       "curiosity_teaser": "Up next on Le Pont ([1402] Famille Gym): see how The Trap Named leads directly into Famille Gym."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"It is my opinion and it is her story\" in French:",
+      "target_answer": "C'est mon opinion et c'est son histoire",
+      "word_bank": [
+        "histoire",
+        "son",
+        "pas",
+        "opinion",
+        "C'est",
+        "et",
+        "mon",
+        "ne",
+        "c'est"
+      ],
+      "explanation": "Re-constructing \"C'est mon opinion et c'est son histoire\" from the underlying rule cements the pattern of The Trap Named."
     }
   },
   {
@@ -7815,7 +8473,16 @@ export const FR_LESSONS: Lesson[] = [
       "ma",
       "mes",
       "ton",
-      "son"
+      "son",
+      "sa",
+      "notre",
+      "votre",
+      "leur",
+      "père",
+      "mère",
+      "frère",
+      "sœur",
+      "famille"
     ],
     "hook": {
       "title": "The Complete Possessive Matrix Across the Family Tree",
@@ -7997,14 +8664,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Mes parents sont avec leurs amis",
         "meaning": "My parents are with their friends",
         "word_bank": [
-          "Mes",
+          "avec",
+          "leur",
           "parents",
           "sont",
-          "avec",
-          "leurs",
           "amis",
+          "Mes",
           "Mon",
-          "leur"
+          "leurs"
         ],
         "explanation": "Plural parents takes Mes, and plural amis takes leurs.",
         "diagnosis": {
@@ -8037,6 +8704,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "mon/ton/son split m/f/pl; notre/votre/leur only split singular vs. plural.",
       "curiosity_teaser": "Up next on Le Pont ([1403] Demonstratives & Stressed Pronouns): see how Famille Gym leads directly into Demonstratives & Stressed Pronouns."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"My parents are with their friends\" in French:",
+      "target_answer": "Mes parents sont avec leurs amis",
+      "word_bank": [
+        "Mes",
+        "amis",
+        "pas",
+        "sont",
+        "ne",
+        "leurs",
+        "avec",
+        "parents"
+      ],
+      "explanation": "Re-constructing \"Mes parents sont avec leurs amis\" from the underlying rule cements the pattern of Famille Gym."
     }
   },
   {
@@ -8066,7 +8748,15 @@ export const FR_LESSONS: Lesson[] = [
       "moi",
       "toi",
       "lui",
-      "elle"
+      "elle",
+      "nous",
+      "vous",
+      "avec",
+      "pour",
+      "chez",
+      "hôtel",
+      "ville",
+      "livre"
     ],
     "hook": {
       "title": "Pointers (ce/cet/cette/ces) and Stressed Pronouns (moi, toi, lui, elle)",
@@ -8126,9 +8816,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Which demonstrative correctly completes '___ homme et ___ femme' ('this man and this woman')?",
         "options": [
-          "cet homme et cette femme",
           "ce homme et cette femme",
-          "cette homme et cette femme"
+          "cette homme et cette femme",
+          "cet homme et cette femme"
         ],
         "target_answer": "cet homme et cette femme",
         "meaning": "this man (cet before mute H) and this woman (cette, f.)",
@@ -8140,8 +8830,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "How do you say 'This coffee is for me, and that cake is for you (informal)'?",
         "options": [
           "Ce café est pour moi et ce gâteau est pour toi",
-          "Ce café est pour me et ce gâteau est pour te",
-          "Cette café est pour moi et cette gâteau est pour toi"
+          "Cette café est pour moi et cette gâteau est pour toi",
+          "Ce café est pour me et ce gâteau est pour te"
         ],
         "target_answer": "Ce café est pour moi et ce gâteau est pour toi",
         "meaning": "This coffee is for me and that cake is for you",
@@ -8163,15 +8853,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je viens avec toi à cet hôtel",
         "meaning": "I am coming with you to this hotel",
         "word_bank": [
-          "Je",
           "viens",
-          "avec",
-          "toi",
-          "à",
-          "cet",
+          "Je",
           "hôtel",
           "te",
-          "ce"
+          "avec",
+          "à",
+          "toi",
+          "ce",
+          "cet"
         ],
         "explanation": "avec takes stressed toi, and masculine mute-H hôtel takes cet.",
         "diagnosis": {
@@ -8204,6 +8894,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "ce becomes cet before a masculine vowel, and prepositions always take moi, toi, lui, elle.",
       "curiosity_teaser": "Up next on Le Pont ([15] Numbers & the Four-Twenties): see how Demonstratives & Stressed Pronouns leads directly into Numbers & the Four-Twenties."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I am coming with you to this hotel\" in French:",
+      "target_answer": "Je viens avec toi à cet hôtel",
+      "word_bank": [
+        "à",
+        "toi",
+        "Je",
+        "ne",
+        "avec",
+        "cet",
+        "viens",
+        "pas",
+        "hôtel"
+      ],
+      "explanation": "Re-constructing \"Je viens avec toi à cet hôtel\" from the underlying rule cements the pattern of Demonstratives & Stressed Pronouns."
     }
   },
   {
@@ -8236,7 +8942,18 @@ export const FR_LESSONS: Lesson[] = [
       "deux",
       "trois",
       "quatre",
-      "cinq"
+      "cinq",
+      "six",
+      "sept",
+      "huit",
+      "neuf",
+      "dix",
+      "vingt",
+      "trente",
+      "soixante",
+      "quatre_vingts",
+      "cent",
+      "ans"
     ],
     "hook": {
       "title": "Why French Counts Like the Gettysburg Address",
@@ -8331,13 +9048,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Mon frère a vingt ans",
         "meaning": "My brother is twenty years old",
         "word_bank": [
-          "Mon",
-          "frère",
-          "a",
           "vingt",
+          "frère",
           "ans",
-          "est",
-          "trente"
+          "trente",
+          "a",
+          "Mon",
+          "est"
         ],
         "explanation": "Mon frère a vingt ans uses il a ('has') + vingt ans.",
         "diagnosis": {
@@ -8376,12 +9093,12 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — ask a friend 'How old are you?' (literally 'Which age have you?' using Quel âge):",
       "target_answer": "Tu as quel âge",
       "word_bank": [
-        "Tu",
-        "as",
-        "quel",
-        "âge",
         "es",
-        "quelle"
+        "Tu",
+        "quel",
+        "as",
+        "quelle",
+        "âge"
       ],
       "explanation": "Because you 'have' your age, 'How old are you?' is Tu as quel âge ? (or Quel âge as-tu ?)."
     },
@@ -8419,7 +9136,13 @@ export const FR_LESSONS: Lesson[] = [
       "deux",
       "trois",
       "quatre",
-      "cinq"
+      "cinq",
+      "six",
+      "sept",
+      "huit",
+      "neuf",
+      "dix",
+      "vingt"
     ],
     "hook": {
       "title": "Every French Number Has an English Twin",
@@ -8487,9 +9210,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "In 'sept jours' ('seven days'), which letter in 'sept' is completely silent?",
         "options": [
-          "The p (/sɛt/, never /sɛpt/)",
           "The t (/sɛp/)",
-          "The s (/ɛpt/)"
+          "The s (/ɛpt/)",
+          "The p (/sɛt/, never /sɛpt/)"
         ],
         "target_answer": "The p (/sɛt/, never /sɛpt/)",
         "meaning": "The p of sept is always silent; the t is always pronounced (/sɛt/)!",
@@ -8511,14 +9234,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "J'ai cinq minutes et dix euros",
         "meaning": "I have five minutes and ten euros",
         "word_bank": [
-          "J'ai",
-          "cinq",
-          "minutes",
-          "et",
-          "dix",
           "euros",
+          "cinq",
           "sept",
-          "la"
+          "la",
+          "J'ai",
+          "dix",
+          "minutes",
+          "et"
         ],
         "explanation": "dix‿euros links with a /z/ buzz.",
         "diagnosis": {
@@ -8551,6 +9274,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Numbers 1–20 are Latin cognates you already own in English.",
       "curiosity_teaser": "Up next on Le Pont ([1502] Four Score & Seven): see how Counting Cognates Gym leads directly into Four Score & Seven."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I have five minutes and ten euros\" in French:",
+      "target_answer": "J'ai cinq minutes et dix euros",
+      "word_bank": [
+        "minutes",
+        "et",
+        "ne",
+        "J'ai",
+        "cinq",
+        "pas",
+        "dix",
+        "euros"
+      ],
+      "explanation": "Re-constructing \"J'ai cinq minutes et dix euros\" from the underlying rule cements the pattern of Counting Cognates Gym."
     }
   },
   {
@@ -8575,7 +9313,10 @@ export const FR_LESSONS: Lesson[] = [
       "trente",
       "soixante",
       "quatre_vingts",
-      "cent"
+      "cent",
+      "ans",
+      "avoir",
+      "jai"
     ],
     "hook": {
       "title": "Counting by Twenties and Carrying Your Years",
@@ -8637,8 +9378,8 @@ export const FR_LESSONS: Lesson[] = [
         "german": "quatre-vingts ans",
         "natural": "eighty years",
         "options": [
-          "eighty years",
           "four-twenties years",
+          "eighty years",
           "four-twenty of years"
         ],
         "target_answer": "four-twenties years",
@@ -8650,8 +9391,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'one hundred euros' in French?",
         "options": [
-          "cent euros",
           "un cent euros",
+          "cent euros",
           "cents euros"
         ],
         "target_answer": "cent euros",
@@ -8673,13 +9414,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Mon père a soixante ans",
         "meaning": "My father is sixty years old",
         "word_bank": [
-          "Mon",
+          "est",
           "père",
+          "ans",
+          "trente",
           "a",
           "soixante",
-          "ans",
-          "est",
-          "trente"
+          "Mon"
         ],
         "explanation": "Use avoir (a) + soixante ans.",
         "diagnosis": {
@@ -8712,6 +9453,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "70 is sixty-ten, 80 is four-twenties, and 100 is bare cent.",
       "curiosity_teaser": "Up next on Le Pont ([16] Days, Months & Dates): see how Four Score & Seven leads directly into Days, Months & Dates."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"My father is sixty years old\" in French:",
+      "target_answer": "Mon père a soixante ans",
+      "word_bank": [
+        "Mon",
+        "père",
+        "ne",
+        "pas",
+        "soixante",
+        "ans",
+        "a"
+      ],
+      "explanation": "Re-constructing \"Mon père a soixante ans\" from the underlying rule cements the pattern of Four Score & Seven."
     }
   },
   {
@@ -8741,7 +9496,15 @@ export const FR_LESSONS: Lesson[] = [
       "mardi",
       "mercredi",
       "jeudi",
-      "vendredi"
+      "vendredi",
+      "samedi",
+      "dimanche",
+      "janvier",
+      "juillet",
+      "aujourdhui",
+      "demain",
+      "hier",
+      "semaine"
     ],
     "hook": {
       "title": "Five Roman Gods, the Sabbath, and the Lord's Day",
@@ -8801,9 +9564,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "What is the difference between 'Je travaille samedi' and 'Je travaille le samedi'?",
         "options": [
-          "'on Saturday' (this once) vs. 'on Saturdays' (every Saturday)",
           "'last Saturday' vs. 'next Saturday'",
-          "They mean the exact same thing"
+          "They mean the exact same thing",
+          "'on Saturday' (this once) vs. 'on Saturdays' (every Saturday)"
         ],
         "target_answer": "'on Saturday' (this once) vs. 'on Saturdays' (every Saturday)",
         "meaning": "le + weekday expresses a recurring habit",
@@ -8815,8 +9578,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "How do you say 'in July' in French?",
         "options": [
           "en juillet",
-          "dans juillet",
-          "à juillet"
+          "à juillet",
+          "dans juillet"
         ],
         "target_answer": "en juillet",
         "meaning": "in July",
@@ -8838,15 +9601,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Aujourd'hui, c'est lundi et demain, c'est mardi",
         "meaning": "Today is Monday and tomorrow is Tuesday",
         "word_bank": [
+          "c'est",
+          "la",
           "Aujourd'hui",
-          "c'est",
-          "lundi",
           "et",
-          "demain",
-          "c'est",
           "mardi",
+          "lundi",
           "hier",
-          "la"
+          "demain",
+          "c'est"
         ],
         "explanation": "French uses c'est + weekday to state what day it is.",
         "diagnosis": {
@@ -8885,13 +9648,13 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'A week has seven days' (use jours):",
       "target_answer": "Une semaine a sept jours",
       "word_bank": [
-        "Une",
-        "semaine",
         "a",
-        "sept",
-        "jours",
+        "est",
         "Un",
-        "est"
+        "jours",
+        "Une",
+        "sept",
+        "semaine"
       ],
       "explanation": "la semaine (from Latin septimāna, 'group of seven') + a ('has') + sept jours."
     },
@@ -8926,7 +9689,10 @@ export const FR_LESSONS: Lesson[] = [
       "mardi",
       "mercredi",
       "jeudi",
-      "vendredi"
+      "vendredi",
+      "samedi",
+      "dimanche",
+      "semaine"
     ],
     "hook": {
       "title": "Walking the Planetary Week From Moon to Sun",
@@ -8986,9 +9752,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I arrive on Friday' vs. 'I work on Fridays (every Friday)'?",
         "options": [
+          "J'arrive sur vendredi / Je travaille chaque le vendredi",
           "J'arrive vendredi / Je travaille le vendredi",
-          "J'arrive le vendredi / Je travaille vendredi",
-          "J'arrive sur vendredi / Je travaille chaque le vendredi"
+          "J'arrive le vendredi / Je travaille vendredi"
         ],
         "target_answer": "J'arrive vendredi / Je travaille le vendredi",
         "meaning": "Bare weekday = this Friday; le + weekday = every Friday",
@@ -9019,12 +9785,12 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "We're going to the cinema on Saturday",
         "word_bank": [
           "On",
-          "va",
           "au",
-          "cinéma",
+          "dimanche",
           "samedi",
+          "va",
           "sur",
-          "dimanche"
+          "cinéma"
         ],
         "explanation": "samedi stands bare at the end with no preposition.",
         "diagnosis": {
@@ -9057,6 +9823,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Five Roman gods + Sabbath + Lord's Day = the French week.",
       "curiosity_teaser": "Up next on Le Pont ([1602] En janvier Gym): see how The Sky Calendar leads directly into En janvier Gym."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"We're going to the cinema on Saturday\" in French:",
+      "target_answer": "On va au cinéma samedi",
+      "word_bank": [
+        "ne",
+        "pas",
+        "On",
+        "samedi",
+        "au",
+        "va",
+        "cinéma"
+      ],
+      "explanation": "Re-constructing \"On va au cinéma samedi\" from the underlying rule cements the pattern of The Sky Calendar."
     }
   },
   {
@@ -9080,7 +9860,9 @@ export const FR_LESSONS: Lesson[] = [
       "juillet",
       "aujourdhui",
       "demain",
-      "hier"
+      "hier",
+      "semaine",
+      "en_pron"
     ],
     "hook": {
       "title": "Months with en, Dates with le, and the Time Anchors",
@@ -9135,9 +9917,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'in January' vs. 'on January 10th'?",
         "options": [
-          "en janvier / le dix janvier",
           "dans janvier / le dix de janvier",
-          "en janvier / le dixième janvier"
+          "en janvier / le dixième janvier",
+          "en janvier / le dix janvier"
         ],
         "target_answer": "en janvier / le dix janvier",
         "meaning": "en + month; le + number + month (with no 'de'!)",
@@ -9150,9 +9932,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "aujourd'hui",
         "natural": "today",
         "options": [
-          "today",
           "on-the-day of-today",
-          "at the hour of now"
+          "at the hour of now",
+          "today"
         ],
         "target_answer": "on-the-day of-today",
         "meaning": "Literal structure: on-the-day of-today",
@@ -9174,14 +9956,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je vais visiter Paris en juillet",
         "meaning": "I am going to visit Paris in July",
         "word_bank": [
-          "Je",
           "vais",
-          "visiter",
-          "Paris",
-          "en",
-          "juillet",
+          "Je",
           "dans",
-          "la"
+          "visiter",
+          "juillet",
+          "la",
+          "en",
+          "Paris"
         ],
         "explanation": "Months always take en: en juillet.",
         "diagnosis": {
@@ -9214,6 +9996,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "en + month ('en juillet'); le + number + month ('le quatorze juillet').",
       "curiosity_teaser": "Up next on Le Pont ([17] The -é Past): see how En janvier Gym leads directly into The -é Past."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I am going to visit Paris in July\" in French:",
+      "target_answer": "Je vais visiter Paris en juillet",
+      "word_bank": [
+        "en",
+        "pas",
+        "vais",
+        "visiter",
+        "ne",
+        "Je",
+        "Paris",
+        "juillet"
+      ],
+      "explanation": "Re-constructing \"Je vais visiter Paris en juillet\" from the underlying rule cements the pattern of En janvier Gym."
     }
   },
   {
@@ -9245,7 +10042,15 @@ export const FR_LESSONS: Lesson[] = [
       "décidé",
       "parlé",
       "trouvé",
-      "donné"
+      "donné",
+      "aimé",
+      "fini",
+      "compris",
+      "pris",
+      "fait",
+      "vu",
+      "déjà",
+      "hier"
     ],
     "hook": {
       "title": "One Tense for Both 'I Ate' and 'I Have Eaten'",
@@ -9305,10 +10110,10 @@ export const FR_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build 'I spoke / I have spoken' using avoir + the -é participle of parler:",
         "tile_options": [
-          "J'",
           "ai",
-          "parlé",
           "parler",
+          "parlé",
+          "J'",
           "suis"
         ],
         "target_answer": "J'aiparlé",
@@ -9322,9 +10127,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "J'ai déjà vu ce film",
         "natural": "I already saw this movie",
         "options": [
-          "I already saw this movie",
+          "I already saw that film",
           "I have already seen this film",
-          "I already saw that film"
+          "I already saw this movie"
         ],
         "target_answer": "I have already seen this film",
         "meaning": "Literal structure: I have already seen this film",
@@ -9346,12 +10151,12 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Hier, j'ai mangé le gâteau",
         "meaning": "Yesterday, I ate the cake",
         "word_bank": [
-          "Hier",
-          "j'ai",
-          "mangé",
-          "le",
           "gâteau",
+          "le",
+          "Hier",
+          "mangé",
           "je",
+          "j'ai",
           "manger"
         ],
         "explanation": "Hier, j'ai mangé le gâteau uses two words (j'ai mangé) for English 'I ate'.",
@@ -9391,12 +10196,12 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'I made a reservation' (use J'ai fait):",
       "target_answer": "J'ai fait une réservation",
       "word_bank": [
-        "J'ai",
         "fait",
-        "une",
+        "J'ai",
         "réservation",
+        "un",
         "faire",
-        "un"
+        "une"
       ],
       "explanation": "faire → fait ('done/made'): J'ai fait une réservation."
     },
@@ -9434,7 +10239,13 @@ export const FR_LESSONS: Lesson[] = [
       "décidé",
       "parlé",
       "trouvé",
-      "donné"
+      "donné",
+      "aimé",
+      "fini",
+      "compris",
+      "pris",
+      "fait",
+      "vu"
     ],
     "hook": {
       "title": "The Three Participle Families: -é, -i, and the Short Irregulars",
@@ -9502,9 +10313,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I have already seen this film / I already saw this film'?",
         "options": [
-          "J'ai déjà vu ce film",
+          "J'ai vu déjà ce film",
           "Je déjà vu ce film",
-          "J'ai vu déjà ce film"
+          "J'ai déjà vu ce film"
         ],
         "target_answer": "J'ai déjà vu ce film",
         "meaning": "I have already seen this film",
@@ -9526,17 +10337,17 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "J'ai trouvé la maison et j'ai pris un café",
         "meaning": "I found the house and had a coffee",
         "word_bank": [
-          "J'ai",
-          "trouvé",
-          "la",
-          "maison",
-          "et",
-          "j'ai",
-          "pris",
+          "le",
           "un",
-          "café",
+          "la",
+          "pris",
           "prendre",
-          "le"
+          "et",
+          "café",
+          "j'ai",
+          "maison",
+          "J'ai",
+          "trouvé"
         ],
         "explanation": "Both verbs repeat their auxiliary (J'ai trouvé... et j'ai pris).",
         "diagnosis": {
@@ -9569,6 +10380,24 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Short adverbs like déjà sit between avoir and the participle: J'ai déjà vu.",
       "curiosity_teaser": "Up next on Le Pont ([1702] Hier j'ai… Story Drills): see how Participle Twins leads directly into Hier j'ai… Story Drills."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I found the house and had a coffee\" in French:",
+      "target_answer": "J'ai trouvé la maison et j'ai pris un café",
+      "word_bank": [
+        "ne",
+        "J'ai",
+        "la",
+        "pas",
+        "et",
+        "j'ai",
+        "café",
+        "pris",
+        "un",
+        "maison",
+        "trouvé"
+      ],
+      "explanation": "Re-constructing \"J'ai trouvé la maison et j'ai pris un café\" from the underlying rule cements the pattern of Participle Twins."
     }
   },
   {
@@ -9595,7 +10424,12 @@ export const FR_LESSONS: Lesson[] = [
       "parlé",
       "visiter",
       "trouvé",
-      "aimé"
+      "aimé",
+      "pris",
+      "fait",
+      "vu",
+      "hier",
+      "avec"
     ],
     "hook": {
       "title": "Narrating a Full Day in the Passé Composé",
@@ -9678,20 +10512,20 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Hier, j'ai parlé avec mon ami et nous avons mangé au restaurant",
         "meaning": "Yesterday, I spoke with my friend and we ate at the restaurant",
         "word_bank": [
-          "Hier",
-          "j'ai",
+          "avons",
+          "ami",
           "parlé",
+          "j'ai",
+          "et",
+          "parler",
+          "la",
           "avec",
           "mon",
-          "ami",
-          "et",
-          "nous",
-          "avons",
-          "mangé",
+          "Hier",
           "au",
+          "nous",
           "restaurant",
-          "parler",
-          "la"
+          "mangé"
         ],
         "explanation": "Both parlé and mangé take -é after avoir.",
         "diagnosis": {
@@ -9724,6 +10558,27 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "In speech, je vais /vizite/ and j'ai /vizite/ differ only by vais vs. ai; in writing, vais takes -er and ai takes -é.",
       "curiosity_teaser": "Up next on Le Pont ([18] Motion Takes être): see how Hier j'ai… Story Drills leads directly into Motion Takes être."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"Yesterday, I spoke with my friend and we ate at the restaurant\" in French:",
+      "target_answer": "Hier, j'ai parlé avec mon ami et nous avons mangé au restaurant",
+      "word_bank": [
+        "mon",
+        "avec",
+        "nous",
+        "mangé",
+        "ami",
+        "au",
+        "restaurant",
+        "avons",
+        "ne",
+        "pas",
+        "parlé",
+        "Hier",
+        "et",
+        "j'ai"
+      ],
+      "explanation": "Re-constructing \"Hier, j'ai parlé avec mon ami et nous avons mangé au restaurant\" from the underlying rule cements the pattern of Hier j'ai… Story Drills."
     }
   },
   {
@@ -9754,7 +10609,14 @@ export const FR_LESSONS: Lesson[] = [
       "arrivé",
       "venu",
       "parti",
-      "sorti"
+      "sorti",
+      "monté",
+      "descendu",
+      "resté",
+      "tombé",
+      "né",
+      "être",
+      "suis"
     ],
     "hook": {
       "title": "Why 'I Went' Is Literally 'I Am Gone'",
@@ -9816,9 +10678,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Elle est arrivée hier",
         "natural": "She arrived yesterday",
         "options": [
-          "She arrived yesterday",
+          "She has arrived yesterday",
           "She is arrived yesterday",
-          "She has arrived yesterday"
+          "She arrived yesterday"
         ],
         "target_answer": "She is arrived yesterday",
         "meaning": "Literal structure: She is arrived yesterday",
@@ -9829,9 +10691,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Marie is speaking: how does she write 'I went to the café'?",
         "options": [
-          "Je suis allée au café",
           "J'ai allé au café",
-          "Je suis allé au café"
+          "Je suis allé au café",
+          "Je suis allée au café"
         ],
         "target_answer": "Je suis allée au café",
         "meaning": "I went to the café (female speaker)",
@@ -9853,14 +10715,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Elle est venue avec son frère",
         "meaning": "She came with her brother",
         "word_bank": [
-          "Elle",
+          "frère",
           "est",
           "venue",
-          "avec",
+          "venu",
           "son",
-          "frère",
+          "Elle",
           "a",
-          "venu"
+          "avec"
         ],
         "explanation": "venir takes être, and elle adds feminine -e to venu → venue.",
         "diagnosis": {
@@ -9898,12 +10760,12 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'We stayed here' (masculine plural: Nous sommes restés):",
       "target_answer": "Nous sommes restés ici",
       "word_bank": [
-        "Nous",
-        "sommes",
         "restés",
-        "ici",
         "avons",
-        "resté"
+        "ici",
+        "Nous",
+        "resté",
+        "sommes"
       ],
       "explanation": "rester ('to stay') lives in the être house, and plural nous adds -s to restés."
     },
@@ -9941,7 +10803,13 @@ export const FR_LESSONS: Lesson[] = [
       "arrivé",
       "venu",
       "parti",
-      "sorti"
+      "sorti",
+      "monté",
+      "descendu",
+      "resté",
+      "tombé",
+      "né",
+      "être"
     ],
     "hook": {
       "title": "Touring the être House: Opposite Pairs of Motion",
@@ -10034,18 +10902,18 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Nous sommes arrivés ce matin et nous sommes restés ici",
         "meaning": "We arrived this morning and stayed here",
         "word_bank": [
+          "matin",
+          "nous",
+          "arrivés",
+          "restés",
+          "ce",
           "Nous",
           "sommes",
-          "arrivés",
-          "ce",
-          "matin",
-          "et",
-          "nous",
-          "sommes",
-          "restés",
           "ici",
-          "avons",
-          "la"
+          "sommes",
+          "la",
+          "et",
+          "avons"
         ],
         "explanation": "Both arriver and rester take être (Nous sommes), with plural -s.",
         "diagnosis": {
@@ -10078,6 +10946,25 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Remember the être house in opposite pairs: go/come, arrive/leave, enter/exit, up/down.",
       "curiosity_teaser": "Up next on Le Pont ([1802] Agreement Drills): see how The être House leads directly into Agreement Drills."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"We arrived this morning and stayed here\" in French:",
+      "target_answer": "Nous sommes arrivés ce matin et nous sommes restés ici",
+      "word_bank": [
+        "pas",
+        "arrivés",
+        "et",
+        "sommes",
+        "restés",
+        "ce",
+        "ne",
+        "sommes",
+        "Nous",
+        "nous",
+        "ici",
+        "matin"
+      ],
+      "explanation": "Re-constructing \"Nous sommes arrivés ce matin et nous sommes restés ici\" from the underlying rule cements the pattern of The être House."
     }
   },
   {
@@ -10105,7 +10992,13 @@ export const FR_LESSONS: Lesson[] = [
       "arrivé",
       "venu",
       "parti",
-      "sorti"
+      "sorti",
+      "resté",
+      "être",
+      "suis",
+      "elle",
+      "nous",
+      "vous"
     ],
     "hook": {
       "title": "Participle Agreement Inside the être House",
@@ -10165,9 +11058,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Compare 'She went to the café' (être) vs. 'She ate at the café' (avoir). Which written pair is right?",
         "options": [
+          "Elle est allé au café / Elle a mangé au café",
           "Elle est allée au café / Elle a mangé au café",
-          "Elle est allée au café / Elle a mangée au café",
-          "Elle est allé au café / Elle a mangé au café"
+          "Elle est allée au café / Elle a mangée au café"
         ],
         "target_answer": "Elle est allée au café / Elle a mangé au café",
         "meaning": "être agrees with Elle (allée); avoir does NOT agree with Elle (mangé)!",
@@ -10198,18 +11091,18 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Marie est arrivée hier et elle est restée chez moi",
         "meaning": "Marie arrived yesterday and stayed at my place",
         "word_bank": [
-          "Marie",
-          "est",
-          "arrivée",
+          "resté",
+          "moi",
           "hier",
-          "et",
+          "arrivée",
+          "arrivé",
           "elle",
           "est",
-          "restée",
+          "et",
+          "Marie",
           "chez",
-          "moi",
-          "arrivé",
-          "resté"
+          "restée",
+          "est"
         ],
         "explanation": "Both arrivée and restée add -e to agree with Marie / elle.",
         "diagnosis": {
@@ -10242,6 +11135,25 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "être participles agree with the subject (Elle est allée); avoir participles do not (Elle a mangé).",
       "curiosity_teaser": "Up next on Le Pont ([19] The Storytelling Past): see how Agreement Drills leads directly into The Storytelling Past."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"Marie arrived yesterday and stayed at my place\" in French:",
+      "target_answer": "Marie est arrivée hier et elle est restée chez moi",
+      "word_bank": [
+        "est",
+        "ne",
+        "hier",
+        "et",
+        "Marie",
+        "est",
+        "pas",
+        "elle",
+        "restée",
+        "arrivée",
+        "moi",
+        "chez"
+      ],
+      "explanation": "Re-constructing \"Marie est arrivée hier et elle est restée chez moi\" from the underlying rule cements the pattern of Agreement Drills."
     }
   },
   {
@@ -10267,7 +11179,11 @@ export const FR_LESSONS: Lesson[] = [
       "avais",
       "habitais",
       "voulais",
-      "habiter"
+      "habiter",
+      "utiliser",
+      "cest",
+      "avoir",
+      "vouloir"
     ],
     "hook": {
       "title": "The Movie Camera vs. the Snapshot",
@@ -10327,9 +11243,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "You want to say 'The coffee was very good' (describing its state/quality in the past). Which tense fits?",
         "options": [
-          "Le café était très bon",
           "Le café a été très bon",
-          "Le café est très bon"
+          "Le café est très bon",
+          "Le café était très bon"
         ],
         "target_answer": "Le café était très bon",
         "meaning": "The coffee was very good",
@@ -10367,15 +11283,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "C'était très bon et je voulais rester",
         "meaning": "It was very good and I wanted to stay",
         "word_bank": [
-          "C'était",
-          "très",
+          "la",
           "bon",
+          "très",
+          "C'était",
           "et",
-          "je",
-          "voulais",
           "rester",
+          "voulais",
           "C'est",
-          "la"
+          "je"
         ],
         "explanation": "Both c'était and je voulais paint ongoing past states, so both use the imparfait.",
         "diagnosis": {
@@ -10413,17 +11329,17 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — combine both pasts: 'I wanted to come, but I did not have the time' (use mais je n'avais pas le temps):",
       "target_answer": "Je voulais venir, mais je n'avais pas le temps",
       "word_bank": [
-        "Je",
-        "voulais",
         "venir",
-        "mais",
-        "je",
-        "n'avais",
+        "la",
         "pas",
         "le",
+        "n'avais",
+        "je",
+        "mais",
         "temps",
-        "la",
-        "un"
+        "un",
+        "voulais",
+        "Je"
       ],
       "explanation": "Ongoing past desire (je voulais) + ongoing past lack of time (je n'avais pas le temps)."
     },
@@ -10458,7 +11374,10 @@ export const FR_LESSONS: Lesson[] = [
       "avais",
       "habitais",
       "voulais",
-      "cest"
+      "cest",
+      "il_y_a",
+      "très",
+      "bon"
     ],
     "hook": {
       "title": "Painting the Past Background with c'était and il y avait",
@@ -10537,39 +11456,27 @@ export const FR_LESSONS: Lesson[] = [
         "id": "fr1901_e3"
       },
       {
-        "type": "transcribe",
-        "prompt": "Tell me:",
-        "idea": "it was very good and there was music (de la musique)",
+        "id": "fr1901_e4",
+        "type": "spoken_turn_reply",
+        "prompt": "Answer the question in the passé composé:",
+        "spoken_question": "Qu’est-ce que tu as préparé hier ?",
+        "question_meaning": "What did you prepare yesterday?",
+        "reply_idea": "Reply that you prepared the coffee.",
         "cues": [
-          "It was very good → C'était très bon",
-          "and there was some music → et il y avait de la musique"
+          "Start with J’ai préparé...",
+          "Finish with le café."
         ],
-        "idea_parts": [
-          "evaluation → C'était très bon",
-          "scene existence → et il y avait de la musique"
-        ],
-        "target_answer": "C'était très bon et il y avait de la musique",
-        "meaning": "It was very good and there was music",
         "word_bank": [
-          "C'était",
-          "très",
-          "bon",
-          "et",
-          "il",
-          "y",
-          "avait",
-          "de",
-          "la",
-          "musique",
-          "a",
-          "le"
+          "J’ai",
+          "le",
+          "hier",
+          "préparé",
+          "suis",
+          "café"
         ],
-        "explanation": "c'était and il y avait paint the past scene together.",
-        "diagnosis": {
-          "slip": "used il y a",
-          "cue": "Use il y avait for 'there was'."
-        },
-        "id": "fr1901_e4"
+        "target_answer": "J’ai préparé le café",
+        "meaning": "I prepared the coffee",
+        "explanation": "The auxiliary ai plus the past participle préparé answers the passé composé question directly."
       },
       {
         "type": "dictation",
@@ -10595,6 +11502,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "c'est → c'était ('it was'); il y a → il y avait ('there was/were').",
       "curiosity_teaser": "Up next on Le Pont ([1902] Imparfait vs Composé): see how Was & Was-Ing leads directly into Imparfait vs Composé."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"When I was young, I lived in this town\" in French:",
+      "target_answer": "Quand j'étais jeune, j'habitais dans cette ville",
+      "word_bank": [
+        "Quand",
+        "j'étais",
+        "ville",
+        "cette",
+        "jeune",
+        "ne",
+        "pas",
+        "j'habitais",
+        "dans"
+      ],
+      "explanation": "Re-constructing \"Quand j'étais jeune, j'habitais dans cette ville\" from the underlying rule cements the pattern of Was & Was-Ing."
     }
   },
   {
@@ -10620,7 +11543,11 @@ export const FR_LESSONS: Lesson[] = [
       "avais",
       "habitais",
       "voulais",
-      "arrivé"
+      "arrivé",
+      "vu",
+      "pris",
+      "fait",
+      "hier"
     ],
     "hook": {
       "title": "Weaving Background Canvas (Imparfait) and Event Dot (Passé Composé)",
@@ -10675,9 +11602,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "In 'I was waiting for the bus when he arrived', which tense pair is right?",
         "options": [
+          "J'attendais le bus quand il arrivait",
           "J'attendais le bus quand il est arrivé",
-          "J'ai attendu le bus quand il arrivait",
-          "J'attendais le bus quand il arrivait"
+          "J'ai attendu le bus quand il arrivait"
         ],
         "target_answer": "J'attendais le bus quand il est arrivé",
         "meaning": "'was waiting' = ongoing imparfait (J'attendais); 'arrived' = completed event (il est arrivé)",
@@ -10716,16 +11643,16 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Quand j'habitais à Lyon, j'ai vu ce film",
         "meaning": "When I lived in Lyon, I saw this film",
         "word_bank": [
-          "Quand",
-          "j'habitais",
-          "à",
-          "Lyon",
           "j'ai",
-          "vu",
-          "ce",
+          "Lyon",
           "film",
-          "habité",
-          "la"
+          "ce",
+          "à",
+          "Quand",
+          "vu",
+          "la",
+          "j'habitais",
+          "habité"
         ],
         "explanation": "Quand j'habitais (imparfait) + j'ai vu (passé composé).",
         "diagnosis": {
@@ -10758,6 +11685,23 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Background state = Imparfait (-ais/-ait); Foreground action = Passé composé.",
       "curiosity_teaser": "Up next on Le Pont ([20] depuis & the Perfect Split): see how Imparfait vs Composé leads directly into depuis & the Perfect Split."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"When I lived in Lyon, I saw this film\" in French:",
+      "target_answer": "Quand j'habitais à Lyon, j'ai vu ce film",
+      "word_bank": [
+        "pas",
+        "ce",
+        "vu",
+        "j'habitais",
+        "j'ai",
+        "Lyon",
+        "film",
+        "à",
+        "Quand",
+        "ne"
+      ],
+      "explanation": "Re-constructing \"Quand j'habitais à Lyon, j'ai vu ce film\" from the underlying rule cements the pattern of Imparfait vs Composé."
     }
   },
   {
@@ -10782,7 +11726,10 @@ export const FR_LESSONS: Lesson[] = [
       "habiter",
       "ans",
       "semaine",
-      "heure"
+      "heure",
+      "quand",
+      "ici",
+      "attendre"
     ],
     "hook": {
       "title": "If It Is Still True Right Now, Keep It in the Present!",
@@ -10807,9 +11754,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "You started waiting for the bus ten minutes ago and you are STILL waiting. How do you say 'I have been waiting for ten minutes'?",
         "options": [
-          "J'attends depuis dix minutes",
+          "Je vais attendre depuis dix minutes",
           "J'ai attendu depuis dix minutes",
-          "Je vais attendre depuis dix minutes"
+          "J'attends depuis dix minutes"
         ],
         "target_answer": "J'attends depuis dix minutes",
         "meaning": "I've been waiting for ten minutes",
@@ -10822,9 +11769,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "J'habite ici depuis trois ans",
         "natural": "I have been living here for three years",
         "options": [
-          "I have been living here for three years",
           "I live here since three years",
-          "I have lived here during three years"
+          "I have lived here during three years",
+          "I have been living here for three years"
         ],
         "target_answer": "I live here since three years",
         "meaning": "Literal structure: I live here since three years",
@@ -10862,12 +11809,12 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "J'habite à Paris depuis deux ans",
         "meaning": "I have lived in Paris for two years",
         "word_bank": [
-          "J'habite",
-          "à",
-          "Paris",
-          "depuis",
           "deux",
+          "J'habite",
+          "depuis",
           "ans",
+          "Paris",
+          "à",
           "J'ai",
           "habité"
         ],
@@ -10907,12 +11854,12 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'We have been here since Monday' (use Nous sommes):",
       "target_answer": "Nous sommes ici depuis lundi",
       "word_bank": [
-        "Nous",
-        "sommes",
         "ici",
-        "depuis",
-        "lundi",
+        "Nous",
         "avons",
+        "lundi",
+        "depuis",
+        "sommes",
         "été"
       ],
       "explanation": "Because we are still here now, French says 'We are here since Monday': Nous sommes ici depuis lundi."
@@ -10948,7 +11895,10 @@ export const FR_LESSONS: Lesson[] = [
       "habiter",
       "apprendre",
       "attendre",
-      "ans"
+      "ans",
+      "semaine",
+      "heure",
+      "ici"
     ],
     "hook": {
       "title": "Defusing the #1 English Transfer Trap: Present + depuis",
@@ -11003,8 +11953,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Translate 'I have known your brother for ten years' (and still know him!):",
         "options": [
-          "Je connais ton frère depuis dix ans",
           "J'ai connu ton frère depuis dix ans",
+          "Je connais ton frère depuis dix ans",
           "Je connais ton frère pour dix ans"
         ],
         "target_answer": "Je connais ton frère depuis dix ans",
@@ -11018,9 +11968,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Elle attend le bus depuis dix minutes",
         "natural": "She has been waiting for the bus for ten minutes",
         "options": [
+          "She waited the bus during ten minutes",
           "She has been waiting for the bus for ten minutes",
-          "She waits-for the bus since ten minutes",
-          "She waited the bus during ten minutes"
+          "She waits-for the bus since ten minutes"
         ],
         "target_answer": "She waits-for the bus since ten minutes",
         "meaning": "Literal structure: She waits-for the bus since ten minutes",
@@ -11028,35 +11978,29 @@ export const FR_LESSONS: Lesson[] = [
         "id": "fr2001_e3"
       },
       {
-        "type": "transcribe",
-        "prompt": "Tell me:",
-        "idea": "I have been learning French for six months (depuis six mois)",
-        "cues": [
-          "I learn the French → J'apprends le français",
-          "for six months → depuis six mois"
+        "id": "fr2001_e4",
+        "type": "pronoun_compression",
+        "prompt": "Fold the direct object noun phrase into its pre-verbal clitic pronoun:",
+        "shift_hint": "le / la / les before the verb",
+        "full_sentence": "Je vois le train et je prends le train",
+        "compressed_parts": [
+          {
+            "noun": "le train",
+            "pronoun": "le",
+            "role": "direct object"
+          }
         ],
-        "idea_parts": [
-          "present verb + object → J'apprends le français",
-          "duration → depuis six mois"
-        ],
-        "target_answer": "J'apprends le français depuis six mois",
-        "meaning": "I have been learning French for six months",
         "word_bank": [
-          "J'apprends",
-          "le",
-          "français",
-          "depuis",
-          "six",
-          "mois",
-          "J'ai",
-          "appris"
+          "prends",
+          "Je",
+          "train",
+          "la",
+          "lui",
+          "le"
         ],
-        "explanation": "Present tense J'apprends + depuis six mois.",
-        "diagnosis": {
-          "slip": "used past tense J'ai appris",
-          "cue": "Keep the verb in the present with depuis: J'apprends."
-        },
-        "id": "fr2001_e4"
+        "target_answer": "Je le prends",
+        "meaning": "I take it",
+        "explanation": "Unlike English, French pulls the object pronoun le directly in front of the conjugated verb: Je le prends."
       },
       {
         "type": "dictation",
@@ -11082,6 +12026,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Ongoing action = Present tense + depuis (for both 'for' and 'since').",
       "curiosity_teaser": "Up next on Le Pont ([2002] Since & For Gym): see how The Trap Lesson leads directly into Since & For Gym."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"My brother has been working here since January\" in French:",
+      "target_answer": "Mon frère travaille ici depuis janvier",
+      "word_bank": [
+        "frère",
+        "Mon",
+        "travaille",
+        "pas",
+        "ne",
+        "ici",
+        "janvier",
+        "depuis"
+      ],
+      "explanation": "Re-constructing \"Mon frère travaille ici depuis janvier\" from the underlying rule cements the pattern of The Trap Lesson."
     }
   },
   {
@@ -11106,7 +12065,10 @@ export const FR_LESSONS: Lesson[] = [
       "quand",
       "combien",
       "habiter",
-      "attendre"
+      "attendre",
+      "parler",
+      "ans",
+      "minute"
     ],
     "hook": {
       "title": "Asking How Long: Depuis quand ? and Depuis combien de temps ?",
@@ -11180,33 +12142,34 @@ export const FR_LESSONS: Lesson[] = [
         "id": "fr2002_e3"
       },
       {
-        "type": "transcribe",
-        "prompt": "Tell me:",
-        "idea": "you have been here since when (using Tu es ici depuis quand)",
-        "cues": [
-          "You are here → Tu es ici + since when → depuis quand"
+        "id": "fr2002_e4",
+        "type": "pronoun_compression",
+        "prompt": "Fold the indirect receiver into the French dative pronoun:",
+        "shift_hint": "lui / leur before the verb",
+        "full_sentence": "Marie parle au docteur ce matin",
+        "compressed_parts": [
+          {
+            "noun": "Marie",
+            "pronoun": "Elle",
+            "role": "subject"
+          },
+          {
+            "noun": "au docteur",
+            "pronoun": "lui",
+            "role": "indirect receiver"
+          }
         ],
-        "idea_parts": [
-          "present state → Tu es ici",
-          "question tag → depuis quand"
-        ],
-        "target_answer": "Tu es ici depuis quand",
-        "meaning": "How long have you been here?",
         "word_bank": [
-          "Tu",
-          "es",
-          "ici",
-          "depuis",
-          "quand",
-          "as",
-          "été"
+          "parle",
+          "leur",
+          "lui",
+          "docteur",
+          "le",
+          "Elle"
         ],
-        "explanation": "Tu es ici depuis quand uses simple present es.",
-        "diagnosis": {
-          "slip": "used as été",
-          "cue": "Use present tense Tu es ici depuis quand."
-        },
-        "id": "fr2002_e4"
+        "target_answer": "Elle lui parle",
+        "meaning": "She speaks to him",
+        "explanation": "Both masculine and feminine singular receivers fold into a single pre-verbal indirect pronoun: lui."
       },
       {
         "type": "dictation",
@@ -11232,6 +12195,24 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "'How long have you...?' is Present Tense + depuis quand ?",
       "curiosity_teaser": "Up next on Le Pont ([21] Plus, Moins, aussi): see how Since & For Gym leads directly into Plus, Moins, aussi."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"How long have you lived in this city\" in French:",
+      "target_answer": "Vous habitez dans cette ville depuis combien de temps",
+      "word_bank": [
+        "ville",
+        "temps",
+        "ne",
+        "dans",
+        "de",
+        "depuis",
+        "habitez",
+        "pas",
+        "combien",
+        "cette",
+        "Vous"
+      ],
+      "explanation": "Re-constructing \"Vous habitez dans cette ville depuis combien de temps\" from the underlying rule cements the pattern of Since & For Gym."
     }
   },
   {
@@ -11258,7 +12239,12 @@ export const FR_LESSONS: Lesson[] = [
       "moins",
       "aussi",
       "que",
-      "meilleur"
+      "meilleur",
+      "pire",
+      "cher",
+      "grand",
+      "petit",
+      "bon"
     ],
     "hook": {
       "title": "Why French Never Adds '-er' to an Adjective",
@@ -11326,8 +12312,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'The wine is better than the coffee'?",
         "options": [
-          "Le vin est meilleur que le café",
           "Le vin est plus bon que le café",
+          "Le vin est meilleur que le café",
           "Le vin est meilleur comme le café"
         ],
         "target_answer": "Le vin est meilleur que le café",
@@ -11350,16 +12336,16 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Cet hôtel est moins cher que le restaurant",
         "meaning": "This hotel is less expensive than the restaurant",
         "word_bank": [
+          "le",
+          "est",
+          "plus",
+          "moins",
+          "restaurant",
+          "la",
           "Cet",
           "hôtel",
-          "est",
-          "moins",
           "cher",
-          "que",
-          "le",
-          "restaurant",
-          "plus",
-          "la"
+          "que"
         ],
         "explanation": "moins cher que = 'less expensive than'.",
         "diagnosis": {
@@ -11398,12 +12384,12 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'The cake is better today':",
       "target_answer": "Le gâteau est meilleur aujourd'hui",
       "word_bank": [
-        "Le",
-        "gâteau",
-        "est",
-        "meilleur",
-        "aujourd'hui",
         "plus",
+        "meilleur",
+        "Le",
+        "est",
+        "aujourd'hui",
+        "gâteau",
         "bon"
       ],
       "explanation": "meilleur replaces plus bon everywhere."
@@ -11440,7 +12426,11 @@ export const FR_LESSONS: Lesson[] = [
       "pire",
       "bon",
       "plus",
-      "moins"
+      "moins",
+      "que",
+      "vin",
+      "café",
+      "gâteau"
     ],
     "hook": {
       "title": "Why 'Good → Better' and 'Bon → Meilleur' Are Historical Twins",
@@ -11500,9 +12490,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'It is the best restaurant in the city'?",
         "options": [
-          "C'est le meilleur restaurant de la ville",
           "C'est le plus bon restaurant dans la ville",
-          "C'est meilleur restaurant de la ville"
+          "C'est meilleur restaurant de la ville",
+          "C'est le meilleur restaurant de la ville"
         ],
         "target_answer": "C'est le meilleur restaurant de la ville",
         "meaning": "It is the best restaurant in the city",
@@ -11533,14 +12523,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Cette boulangerie a le meilleur pain",
         "meaning": "This bakery has the best bread",
         "word_bank": [
-          "Cette",
+          "plus",
+          "pain",
           "boulangerie",
+          "bon",
           "a",
           "le",
           "meilleur",
-          "pain",
-          "plus",
-          "bon"
+          "Cette"
         ],
         "explanation": "le meilleur pain = 'the best bread'.",
         "diagnosis": {
@@ -11573,6 +12563,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Add le/la/les to any comparative to make the superlative: meilleur → le meilleur ('the best').",
       "curiosity_teaser": "Up next on Le Pont ([2102] Comparison Gym): see how The Twin Suppletions leads directly into Comparison Gym."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"This bakery has the best bread\" in French:",
+      "target_answer": "Cette boulangerie a le meilleur pain",
+      "word_bank": [
+        "pas",
+        "a",
+        "meilleur",
+        "ne",
+        "le",
+        "pain",
+        "Cette",
+        "boulangerie"
+      ],
+      "explanation": "Re-constructing \"Cette boulangerie a le meilleur pain\" from the underlying rule cements the pattern of The Twin Suppletions."
     }
   },
   {
@@ -11599,7 +12604,12 @@ export const FR_LESSONS: Lesson[] = [
       "moins",
       "aussi",
       "que",
-      "grand"
+      "grand",
+      "petit",
+      "cher",
+      "possible",
+      "ville",
+      "hôtel"
     ],
     "hook": {
       "title": "Running Comparisons at Speed: plus… que, moins… que, aussi… que",
@@ -11693,16 +12703,16 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Cette ville est plus grande que ma ville",
         "meaning": "This city is bigger than my city",
         "word_bank": [
-          "Cette",
           "ville",
           "est",
-          "plus",
-          "grande",
           "que",
+          "Cette",
+          "plus",
+          "grand",
           "ma",
           "ville",
-          "grand",
-          "la"
+          "la",
+          "grande"
         ],
         "explanation": "la ville is feminine, so grande takes -e.",
         "diagnosis": {
@@ -11735,6 +12745,23 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "'as... as' is aussi... que (never comme), and the adjective agrees with the first noun.",
       "curiosity_teaser": "Up next on Le Pont ([22] en & y): see how Comparison Gym leads directly into en & y."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"This city is bigger than my city\" in French:",
+      "target_answer": "Cette ville est plus grande que ma ville",
+      "word_bank": [
+        "ville",
+        "que",
+        "ma",
+        "Cette",
+        "plus",
+        "grande",
+        "pas",
+        "ville",
+        "est",
+        "ne"
+      ],
+      "explanation": "Re-constructing \"Cette ville est plus grande que ma ville\" from the underlying rule cements the pattern of Comparison Gym."
     }
   },
   {
@@ -11759,7 +12786,10 @@ export const FR_LESSONS: Lesson[] = [
       "y",
       "vouloir",
       "aller",
-      "avoir"
+      "avoir",
+      "pain",
+      "café",
+      "deux"
     ],
     "hook": {
       "title": "Two Tiny Words That Save You From Repeating Whole Phrases",
@@ -11817,8 +12847,8 @@ export const FR_LESSONS: Lesson[] = [
         "natural": "I have two of them",
         "options": [
           "I have two of them",
-          "I of-them have two",
-          "I there have two"
+          "I there have two",
+          "I of-them have two"
         ],
         "target_answer": "I of-them have two",
         "meaning": "Literal structure: I of-them have two",
@@ -11830,8 +12860,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "Someone asks 'Tu vas au restaurant ce soir ?' How do you answer 'Yes, I am going there'?",
         "options": [
           "Oui, j'y vais",
-          "Oui, j'en vais",
-          "Oui, je le vais"
+          "Oui, je le vais",
+          "Oui, j'en vais"
         ],
         "target_answer": "Oui, j'y vais",
         "meaning": "Yes, I am going there",
@@ -11853,10 +12883,10 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "J'en veux",
         "meaning": "I want some (of it)",
         "word_bank": [
-          "J'en",
-          "veux",
-          "J'y",
           "Je",
+          "J'en",
+          "J'y",
+          "veux",
           "le"
         ],
         "explanation": "Because du pain starts with de, en replaces it and je elides to J'en veux.",
@@ -11895,12 +12925,12 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'I don't want any (of it)' (wrap n'...pas around en veux):",
       "target_answer": "Je n'en veux pas",
       "word_bank": [
-        "Je",
         "n'en",
+        "ne",
         "veux",
-        "pas",
         "J'en",
-        "ne"
+        "Je",
+        "pas"
       ],
       "explanation": "Inside the negation sandwich, ne elides before en: Je n'en veux pas!"
     },
@@ -11936,7 +12966,11 @@ export const FR_LESSONS: Lesson[] = [
       "vouloir",
       "avoir",
       "prendre",
-      "pain"
+      "pain",
+      "café",
+      "eau",
+      "deux",
+      "un_peu"
     ],
     "hook": {
       "title": "en: The Pronoun for 'Some', 'Any', and 'Of Them'",
@@ -11998,9 +13032,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "J'en veux un peu",
         "natural": "I want a little of it",
         "options": [
-          "I want a little of it",
+          "I want some a little",
           "I of-it want a little",
-          "I want some a little"
+          "I want a little of it"
         ],
         "target_answer": "I of-it want a little",
         "meaning": "Literal structure: I of-it want a little",
@@ -12011,9 +13045,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Someone asks 'Vous avez des frères ?' ('Do you have brothers?'). How do you answer 'Yes, I have three'?",
         "options": [
-          "Oui, j'en ai trois",
+          "Oui, je les ai trois",
           "Oui, j'ai trois",
-          "Oui, je les ai trois"
+          "Oui, j'en ai trois"
         ],
         "target_answer": "Oui, j'en ai trois",
         "meaning": "Yes, I have three (of them)",
@@ -12034,12 +13068,12 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Oui, j'en veux deux",
         "meaning": "Yes, I want two of them",
         "word_bank": [
-          "Oui",
-          "j'en",
-          "veux",
+          "les",
           "deux",
+          "veux",
           "je",
-          "les"
+          "j'en",
+          "Oui"
         ],
         "explanation": "en walks before veux while deux stays after.",
         "diagnosis": {
@@ -12072,6 +13106,19 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Whenever a number or quantity stands without its noun, en must stand before the verb (J'en ai deux).",
       "curiosity_teaser": "Up next on Le Pont ([2202] y: There): see how en: Of It leads directly into y: There."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"Yes, I want two of them\" in French:",
+      "target_answer": "Oui, j'en veux deux",
+      "word_bank": [
+        "Oui",
+        "ne",
+        "j'en",
+        "veux",
+        "deux",
+        "pas"
+      ],
+      "explanation": "Re-constructing \"Oui, j'en veux deux\" from the underlying rule cements the pattern of en: Of It."
     }
   },
   {
@@ -12097,7 +13144,11 @@ export const FR_LESSONS: Lesson[] = [
       "aller",
       "être",
       "habiter",
-      "rester"
+      "rester",
+      "ville",
+      "gare",
+      "hôtel",
+      "on"
     ],
     "hook": {
       "title": "y: The Pronoun for 'There' and 'To It'",
@@ -12158,8 +13209,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "Where does 'y' go in 'I am going to stay there' (using je vais + rester)?",
         "options": [
           "Je vais y rester",
-          "J'y vais rester",
-          "Je vais rester y"
+          "Je vais rester y",
+          "J'y vais rester"
         ],
         "target_answer": "Je vais y rester",
         "meaning": "I am going to stay there",
@@ -12172,9 +13223,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Nous y sommes déjà",
         "natural": "We are already there",
         "options": [
-          "We are already there",
+          "We are there already",
           "We there are already",
-          "We are there already"
+          "We are already there"
         ],
         "target_answer": "We there are already",
         "meaning": "Literal structure: We there are already",
@@ -12195,14 +13246,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je veux y aller avec toi",
         "meaning": "I want to go there with you",
         "word_bank": [
-          "Je",
-          "veux",
-          "y",
           "aller",
-          "avec",
-          "toi",
           "J'y",
-          "la"
+          "y",
+          "toi",
+          "avec",
+          "veux",
+          "la",
+          "Je"
         ],
         "explanation": "y stands right before the infinitive aller.",
         "diagnosis": {
@@ -12235,6 +13286,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Single verb: J'y vais; Infinitive chain: Je veux y aller.",
       "curiosity_teaser": "Up next on Le Pont ([23] Pronouns Walk Left): see how y: There leads directly into Pronouns Walk Left."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I want to go there with you\" in French:",
+      "target_answer": "Je veux y aller avec toi",
+      "word_bank": [
+        "veux",
+        "Je",
+        "avec",
+        "aller",
+        "ne",
+        "pas",
+        "toi",
+        "y"
+      ],
+      "explanation": "Re-constructing \"Je veux y aller avec toi\" from the underlying rule cements the pattern of y: There."
     }
   },
   {
@@ -12263,7 +13329,14 @@ export const FR_LESSONS: Lesson[] = [
       "te",
       "le",
       "la",
-      "nous"
+      "nous",
+      "vous",
+      "lui",
+      "leur",
+      "voir",
+      "parler",
+      "comprendre",
+      "donné"
     ],
     "hook": {
       "title": "Completing the Left-Walk You Started in Lesson 1",
@@ -12325,9 +13398,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Je te comprends très bien",
         "natural": "I understand you very well",
         "options": [
+          "I to-you understand very well",
           "I understand you very well",
-          "I you understand very well",
-          "I to-you understand very well"
+          "I you understand very well"
         ],
         "target_answer": "I you understand very well",
         "meaning": "Literal structure: I you understand very well",
@@ -12339,8 +13412,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "You want to say 'I am speaking to her' (parler à quelqu'un). Which pronoun goes before parle?",
         "options": [
           "Je lui parle",
-          "Je la parle",
-          "Je elle parle"
+          "Je elle parle",
+          "Je la parle"
         ],
         "target_answer": "Je lui parle",
         "meaning": "I speak to her (or to him)",
@@ -12363,8 +13436,8 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "Do you understand me?",
         "word_bank": [
           "Tu",
-          "me",
           "comprends",
+          "me",
           "moi",
           "comprendre"
         ],
@@ -12404,13 +13477,13 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'He does not see us' (wrap ne...pas around nous voit):",
       "target_answer": "Il ne nous voit pas",
       "word_bank": [
-        "Il",
-        "ne",
-        "nous",
-        "voit",
+        "on",
         "pas",
         "voir",
-        "on"
+        "nous",
+        "ne",
+        "Il",
+        "voit"
       ],
       "explanation": "The negation sandwich hugs both the object pronoun and the verb: Il ne nous voit pas."
     },
@@ -12447,7 +13520,12 @@ export const FR_LESSONS: Lesson[] = [
       "te",
       "le",
       "la",
-      "nous"
+      "nous",
+      "vous",
+      "voir",
+      "comprendre",
+      "inviter",
+      "attendre"
     ],
     "hook": {
       "title": "The Full Left-Walk: Direct Objects Across Every Person",
@@ -12507,9 +13585,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Where does 'you' (te) go in 'I want to see you tonight'?",
         "options": [
+          "Je veux voir te ce soir",
           "Je veux te voir ce soir",
-          "Je te veux voir ce soir",
-          "Je veux voir te ce soir"
+          "Je te veux voir ce soir"
         ],
         "target_answer": "Je veux te voir ce soir",
         "meaning": "I want to see you tonight",
@@ -12523,8 +13601,8 @@ export const FR_LESSONS: Lesson[] = [
         "natural": "I am going to invite him/her",
         "options": [
           "I am going to invite him/her",
-          "I go him/her-to-invite",
-          "I him/her go to invite"
+          "I him/her go to invite",
+          "I go him/her-to-invite"
         ],
         "target_answer": "I go him/her-to-invite",
         "meaning": "Literal structure: I go him/her-to-invite",
@@ -12546,13 +13624,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je t'attends à la gare",
         "meaning": "I am waiting for you at the station",
         "word_bank": [
+          "te",
+          "la",
           "Je",
           "t'attends",
-          "à",
-          "la",
+          "pour",
           "gare",
-          "te",
-          "pour"
+          "à"
         ],
         "explanation": "te elides before attends: Je t'attends.",
         "diagnosis": {
@@ -12585,6 +13663,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Single verb: Je te vois; Infinitive chain: Je veux te voir.",
       "curiosity_teaser": "Up next on Le Pont ([2302] lui & leur): see how The Full Left-Walk leads directly into lui & leur."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I am waiting for you at the station\" in French:",
+      "target_answer": "Je t'attends à la gare",
+      "word_bank": [
+        "ne",
+        "à",
+        "Je",
+        "la",
+        "t'attends",
+        "gare",
+        "pas"
+      ],
+      "explanation": "Re-constructing \"Je t'attends à la gare\" from the underlying rule cements the pattern of The Full Left-Walk."
     }
   },
   {
@@ -12609,7 +13701,10 @@ export const FR_LESSONS: Lesson[] = [
       "leur",
       "parler",
       "répondre",
-      "donné"
+      "donné",
+      "demander",
+      "ami",
+      "sœur"
     ],
     "hook": {
       "title": "lui & leur: One Pronoun for Both 'To Him' and 'To Her'",
@@ -12682,8 +13777,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I am going to speak to them'?",
         "options": [
-          "Je vais leur parler",
           "Je vais leurs parler",
+          "Je vais leur parler",
           "Je vais les parler"
         ],
         "target_answer": "Je vais leur parler",
@@ -12706,14 +13801,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je vais lui parler ce soir",
         "meaning": "I am going to speak to her tonight",
         "word_bank": [
+          "la",
           "Je",
           "vais",
-          "lui",
-          "parler",
           "ce",
+          "lui",
           "soir",
-          "la",
-          "le"
+          "le",
+          "parler"
         ],
         "explanation": "lui replaces both 'to him' and 'to her' and sits before parler.",
         "diagnosis": {
@@ -12746,6 +13841,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "parler, répondre, demander, donner all take à → use lui (him/her) and leur (them).",
       "curiosity_teaser": "Up next on Le Pont ([2303] The Double-Pronoun Highway): see how lui & leur leads directly into The Double-Pronoun Highway."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I am going to speak to her tonight\" in French:",
+      "target_answer": "Je vais lui parler ce soir",
+      "word_bank": [
+        "parler",
+        "soir",
+        "Je",
+        "ne",
+        "lui",
+        "pas",
+        "ce",
+        "vais"
+      ],
+      "explanation": "Re-constructing \"Je vais lui parler ce soir\" from the underlying rule cements the pattern of lui & leur."
     }
   },
   {
@@ -12773,7 +13883,13 @@ export const FR_LESSONS: Lesson[] = [
       "te",
       "le",
       "la",
-      "lui"
+      "lui",
+      "leur",
+      "y",
+      "en_pron",
+      "donné",
+      "parler",
+      "voir"
     ],
     "hook": {
       "title": "What Happens When TWO Pronouns Walk Left at the Same Time?",
@@ -12798,9 +13914,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'There is some (of it)' by combining 'il y a' with 'en'?",
         "options": [
-          "Il y en a",
+          "Il a y en",
           "Il en y a",
-          "Il a y en"
+          "Il y en a"
         ],
         "target_answer": "Il y en a",
         "meaning": "There is some / There are some",
@@ -12813,8 +13929,8 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Tu me le donnes",
         "natural": "You give it to me",
         "options": [
-          "You give it to me",
           "You to-me it give",
+          "You give it to me",
           "You it to-me give"
         ],
         "target_answer": "You to-me it give",
@@ -12915,11 +14031,11 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "You give it to me",
         "word_bank": [
           "Tu",
-          "me",
           "le",
           "donnes",
           "lui",
-          "la"
+          "la",
+          "me"
         ],
         "explanation": "me takes Lane 1 and le takes Lane 2 before donnes.",
         "diagnosis": {
@@ -12952,6 +14068,19 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "me/te/nous/vous go before le/la/les; le/la/les go before lui/leur; and y/en ride at the back.",
       "curiosity_teaser": "Up next on Le Pont ([24] Reflexives & la Routine): see how The Double-Pronoun Highway leads directly into Reflexives & la Routine."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"You give it to me\" in French:",
+      "target_answer": "Tu me le donnes",
+      "word_bank": [
+        "me",
+        "ne",
+        "donnes",
+        "le",
+        "pas",
+        "Tu"
+      ],
+      "explanation": "Re-constructing \"Tu me le donnes\" from the underlying rule cements the pattern of The Double-Pronoun Highway."
     }
   },
   {
@@ -12978,7 +14107,12 @@ export const FR_LESSONS: Lesson[] = [
       "laver",
       "habiller",
       "coucher",
-      "appeler"
+      "appeler",
+      "me",
+      "te",
+      "nous",
+      "vous",
+      "heure"
     ],
     "hook": {
       "title": "Why You 'Lift Yourself' Out of Bed in French",
@@ -13038,8 +14172,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I am going to get up' (near future of se lever)?",
         "options": [
-          "Je vais me lever",
           "Je vais se lever",
+          "Je vais me lever",
           "Je me vais lever"
         ],
         "target_answer": "Je vais me lever",
@@ -13053,9 +14187,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Je me couche tôt",
         "natural": "I go to bed early",
         "options": [
+          "I go to couch early",
           "I go to bed early",
-          "I myself lay-down early",
-          "I go to couch early"
+          "I myself lay-down early"
         ],
         "target_answer": "I myself lay-down early",
         "meaning": "Literal structure: I myself lay-down early",
@@ -13077,13 +14211,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je m'habille rapidement le matin",
         "meaning": "I get dressed quickly in the morning",
         "word_bank": [
-          "Je",
-          "m'habille",
           "rapidement",
-          "le",
+          "Je",
           "matin",
           "me",
-          "s'habille"
+          "s'habille",
+          "m'habille",
+          "le"
         ],
         "explanation": "me elides before mute-H habiller: Je m'habille.",
         "diagnosis": {
@@ -13121,12 +14255,12 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'We see each other tomorrow' (use On se voit):",
       "target_answer": "On se voit demain",
       "word_bank": [
-        "On",
         "se",
-        "voit",
-        "demain",
+        "On",
+        "voir",
         "nous",
-        "voir"
+        "demain",
+        "voit"
       ],
       "explanation": "Reflexive se also expresses reciprocal 'each other': On se voit demain ('We'll see each other tomorrow')!"
     },
@@ -13163,7 +14297,12 @@ export const FR_LESSONS: Lesson[] = [
       "lever",
       "me",
       "te",
-      "nous"
+      "nous",
+      "vous",
+      "on",
+      "voir",
+      "parler",
+      "ami"
     ],
     "hook": {
       "title": "Reflexives for Self-Action and Reciprocal 'Each Other'",
@@ -13225,8 +14364,8 @@ export const FR_LESSONS: Lesson[] = [
         "german": "On se voit ce soir",
         "natural": "We'll see each other tonight",
         "options": [
-          "We'll see each other tonight",
           "One oneself/each-other sees this evening",
+          "We'll see each other tonight",
           "We see us tonight"
         ],
         "target_answer": "One oneself/each-other sees this evening",
@@ -13238,9 +14377,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do two friends say 'We'll call each other tomorrow' using everyday 'on'?",
         "options": [
+          "On appelle demain",
           "On s'appelle demain",
-          "On nous appelle demain",
-          "On appelle demain"
+          "On nous appelle demain"
         ],
         "target_answer": "On s'appelle demain",
         "meaning": "We'll call each other tomorrow",
@@ -13262,15 +14401,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "On se voit au café ce soir",
         "meaning": "We'll see each other at the café tonight",
         "word_bank": [
-          "On",
+          "ce",
+          "la",
           "se",
           "voit",
+          "On",
+          "nous",
           "au",
           "café",
-          "ce",
-          "soir",
-          "nous",
-          "la"
+          "soir"
         ],
         "explanation": "On se voit is the natural everyday way to say 'We'll see each other'.",
         "diagnosis": {
@@ -13303,6 +14442,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "With on/nous/vous, reflexive pronouns also mean 'each other' (On se voit !).",
       "curiosity_teaser": "Up next on Le Pont ([2402] The Morning Round): see how I Call Myself leads directly into The Morning Round."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"We'll see each other at the café tonight\" in French:",
+      "target_answer": "On se voit au café ce soir",
+      "word_bank": [
+        "soir",
+        "voit",
+        "pas",
+        "au",
+        "ne",
+        "On",
+        "ce",
+        "café",
+        "se"
+      ],
+      "explanation": "Re-constructing \"On se voit au café ce soir\" from the underlying rule cements the pattern of I Call Myself."
     }
   },
   {
@@ -13328,7 +14483,11 @@ export const FR_LESSONS: Lesson[] = [
       "laver",
       "habiller",
       "coucher",
-      "me"
+      "me",
+      "te",
+      "main",
+      "tête",
+      "heure"
     ],
     "hook": {
       "title": "Chaining the Morning and Evening Routine — and Body Parts",
@@ -13390,9 +14549,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Je me lave les mains",
         "natural": "I wash my hands",
         "options": [
+          "I wash me my hands",
           "I wash my hands",
-          "I to-myself wash the hands",
-          "I wash me my hands"
+          "I to-myself wash the hands"
         ],
         "target_answer": "I to-myself wash the hands",
         "meaning": "Literal structure: I to-myself wash the hands",
@@ -13404,8 +14563,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "How do you say 'I got up at eight o'clock' in the passé composé?",
         "options": [
           "Je me suis levé à huit heures",
-          "J'ai me levé à huit heures",
-          "Je m'ai levé à huit heures"
+          "Je m'ai levé à huit heures",
+          "J'ai me levé à huit heures"
         ],
         "target_answer": "Je me suis levé à huit heures",
         "meaning": "I got up at eight o'clock",
@@ -13427,15 +14586,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je me lève et je m'habille rapidement",
         "meaning": "I get up and get dressed quickly",
         "word_bank": [
+          "lève",
+          "s'habille",
+          "et",
+          "m'habille",
+          "la",
+          "je",
           "Je",
           "me",
-          "lève",
-          "et",
-          "je",
-          "m'habille",
-          "rapidement",
-          "s'habille",
-          "la"
+          "rapidement"
         ],
         "explanation": "Repeat je + reflexive pronoun on each verb: Je me lève et je m'habille.",
         "diagnosis": {
@@ -13468,6 +14627,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "All reflexives take être in the past (Je me suis levé), and body parts take le/la/les (Je me lave les mains).",
       "curiosity_teaser": "Up next on Le Pont ([25] il y a): see how The Morning Round leads directly into il y a."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I get up and get dressed quickly\" in French:",
+      "target_answer": "Je me lève et je m'habille rapidement",
+      "word_bank": [
+        "ne",
+        "rapidement",
+        "m'habille",
+        "lève",
+        "me",
+        "Je",
+        "et",
+        "pas",
+        "je"
+      ],
+      "explanation": "Re-constructing \"Je me lève et je m'habille rapidement\" from the underlying rule cements the pattern of The Morning Round."
     }
   },
   {
@@ -13493,7 +14668,11 @@ export const FR_LESSONS: Lesson[] = [
       "y",
       "avoir",
       "a",
-      "ans"
+      "ans",
+      "semaine",
+      "minute",
+      "café",
+      "complication"
     ],
     "hook": {
       "title": "Three Tiny Words You Already Own",
@@ -13568,9 +14747,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'She arrived ten minutes ago'?",
         "options": [
-          "Elle est arrivée il y a dix minutes",
+          "Elle arrive il y a dix minutes",
           "Elle est arrivée depuis dix minutes",
-          "Elle arrive il y a dix minutes"
+          "Elle est arrivée il y a dix minutes"
         ],
         "target_answer": "Elle est arrivée il y a dix minutes",
         "meaning": "She arrived ten minutes ago",
@@ -13592,15 +14771,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Il y a un bon restaurant ici",
         "meaning": "There is a good restaurant here",
         "word_bank": [
+          "la",
           "Il",
+          "est",
+          "restaurant",
+          "un",
           "y",
           "a",
-          "un",
           "bon",
-          "restaurant",
-          "ici",
-          "est",
-          "la"
+          "ici"
         ],
         "explanation": "Il y a opens any existence statement.",
         "diagnosis": {
@@ -13641,14 +14820,14 @@ export const FR_LESSONS: Lesson[] = [
         "J'ai",
         "vu",
         "ce",
-        "film",
-        "il",
-        "y",
         "a",
-        "deux",
         "ans",
-        "depuis",
-        "la"
+        "deux",
+        "la",
+        "film",
+        "y",
+        "il",
+        "depuis"
       ],
       "explanation": "J'ai vu ce film (completed past) + il y a deux ans ('two years ago')."
     },
@@ -13684,7 +14863,11 @@ export const FR_LESSONS: Lesson[] = [
       "y",
       "avoir",
       "ans",
-      "semaine"
+      "semaine",
+      "minute",
+      "heure",
+      "café",
+      "gare"
     ],
     "hook": {
       "title": "Space ('There Is') and Time ('Ago') in One Three-Word Formula",
@@ -13746,8 +14929,8 @@ export const FR_LESSONS: Lesson[] = [
         "german": "il y a trois ans",
         "natural": "three years ago",
         "options": [
-          "three years ago",
           "it there has three years",
+          "three years ago",
           "three years before there"
         ],
         "target_answer": "it there has three years",
@@ -13759,8 +14942,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Contrast Topic 20 and Topic 25: 'I have lived here FOR two years' vs. 'I arrived here two years AGO':",
         "options": [
-          "J'habite ici depuis deux ans / Je suis arrivé ici il y a deux ans",
           "J'habite ici il y a deux ans / Je suis arrivé ici depuis deux ans",
+          "J'habite ici depuis deux ans / Je suis arrivé ici il y a deux ans",
           "J'ai habité ici depuis deux ans / J'arrive ici il y a deux ans"
         ],
         "target_answer": "J'habite ici depuis deux ans / Je suis arrivé ici il y a deux ans",
@@ -13769,37 +14952,34 @@ export const FR_LESSONS: Lesson[] = [
         "id": "fr2501_e3"
       },
       {
-        "type": "transcribe",
-        "prompt": "Tell me:",
-        "idea": "he left five minutes ago",
-        "cues": [
-          "He left → Il est parti",
-          "five minutes ago → il y a cinq minutes"
+        "id": "fr2501_e4",
+        "type": "pronoun_compression",
+        "prompt": "Fold both noun phrases into pre-verbal French pronouns:",
+        "shift_hint": "Double Pronoun Compression",
+        "full_sentence": "Tu donnes la lettre à ton ami",
+        "compressed_parts": [
+          {
+            "noun": "la lettre",
+            "pronoun": "la",
+            "role": "direct object"
+          },
+          {
+            "noun": "à ton ami",
+            "pronoun": "lui",
+            "role": "indirect receiver"
+          }
         ],
-        "idea_parts": [
-          "completed past → Il est parti",
-          "ago + time → il y a cinq minutes"
-        ],
-        "target_answer": "Il est parti il y a cinq minutes",
-        "meaning": "He left five minutes ago",
         "word_bank": [
-          "Il",
-          "est",
-          "parti",
-          "il",
-          "y",
-          "a",
-          "cinq",
-          "minutes",
-          "depuis",
-          "la"
+          "lui",
+          "la",
+          "Tu",
+          "donnes",
+          "le",
+          "ami"
         ],
-        "explanation": "Il est parti + il y a cinq minutes ('five minutes ago').",
-        "diagnosis": {
-          "slip": "used depuis",
-          "cue": "For 'ago' with a completed past event, use il y a: il y a cinq minutes."
-        },
-        "id": "fr2501_e4"
+        "target_answer": "Tu la lui donnes",
+        "meaning": "You give it to him",
+        "explanation": "In French, both objects step in front of the verb: the direct object (la) precedes the third-person receiver (lui)."
       },
       {
         "type": "dictation",
@@ -13825,6 +15005,28 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Before a time span in the past, il y a means 'ago'.",
       "curiosity_teaser": "Up next on Le Pont ([2502] il y a Gym): see how It Has There leads directly into il y a Gym."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"There is a train that left ten minutes ago\" in French:",
+      "target_answer": "Il y a un train qui est parti il y a dix minutes",
+      "word_bank": [
+        "Il",
+        "un",
+        "dix",
+        "a",
+        "a",
+        "qui",
+        "minutes",
+        "pas",
+        "est",
+        "y",
+        "il",
+        "train",
+        "parti",
+        "y",
+        "ne"
+      ],
+      "explanation": "Re-constructing \"Il y a un train qui est parti il y a dix minutes\" from the underlying rule cements the pattern of It Has There."
     }
   },
   {
@@ -13850,7 +15052,11 @@ export const FR_LESSONS: Lesson[] = [
       "y",
       "en_pron",
       "pas",
-      "de"
+      "de",
+      "est_ce_que",
+      "complication",
+      "table",
+      "pain"
     ],
     "hook": {
       "title": "Questioning and Negating il y a — Plus Il y en a",
@@ -13910,9 +15116,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'There is no bread'?",
         "options": [
-          "Il n'y a pas de pain",
           "Il n'y a pas du pain",
-          "Il y n'a pas de pain"
+          "Il y n'a pas de pain",
+          "Il n'y a pas de pain"
         ],
         "target_answer": "Il n'y a pas de pain",
         "meaning": "There is no bread",
@@ -13945,17 +15151,17 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Il n'y a pas de réservation pour ce soir",
         "meaning": "There is no reservation for tonight",
         "word_bank": [
-          "Il",
-          "n'y",
-          "a",
-          "pas",
-          "de",
-          "réservation",
-          "pour",
-          "ce",
           "soir",
           "une",
-          "la"
+          "de",
+          "la",
+          "ce",
+          "a",
+          "réservation",
+          "n'y",
+          "pas",
+          "pour",
+          "Il"
         ],
         "explanation": "une réservation collapses to de réservation after Il n'y a pas.",
         "diagnosis": {
@@ -13988,6 +15194,24 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Il y a → Il n'y a pas de (none) → Il y en a (there is some).",
       "curiosity_teaser": "Up next on Le Pont ([26] The Would-World): see how il y a Gym leads directly into The Would-World."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"There is no reservation for tonight\" in French:",
+      "target_answer": "Il n'y a pas de réservation pour ce soir",
+      "word_bank": [
+        "ne",
+        "Il",
+        "pas",
+        "réservation",
+        "très",
+        "a",
+        "de",
+        "ce",
+        "n'y",
+        "pour",
+        "soir"
+      ],
+      "explanation": "Re-constructing \"Il n'y a pas de réservation pour ce soir\" from the underlying rule cements the pattern of il y a Gym."
     }
   },
   {
@@ -14013,7 +15237,11 @@ export const FR_LESSONS: Lesson[] = [
       "pourrais",
       "ferais",
       "vouloir",
-      "faire"
+      "faire",
+      "aller",
+      "avoir",
+      "vin",
+      "café"
     ],
     "hook": {
       "title": "How Future Stem + Imparfait Ending Creates 'Would'",
@@ -14073,9 +15301,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "morpheme_tiles",
         "prompt": "Build the conditional 'I would speak' by attaching the imparfait ending -ais to the infinitive parler:",
         "tile_options": [
-          "parler",
-          "ais",
           "ai",
+          "ais",
+          "parler",
           "é"
         ],
         "target_answer": "parlerais",
@@ -14111,16 +15339,16 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je voudrais réserver une table pour ce soir",
         "meaning": "I would like to reserve a table for tonight",
         "word_bank": [
-          "Je",
-          "voudrais",
-          "réserver",
           "une",
-          "table",
-          "pour",
-          "ce",
+          "voudrais",
           "soir",
+          "ce",
           "veux",
-          "la"
+          "table",
+          "Je",
+          "pour",
+          "la",
+          "réserver"
         ],
         "explanation": "Je voudrais pulls the bare infinitive réserver just like je veux.",
         "diagnosis": {
@@ -14158,12 +15386,12 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'What would you do?' (use Qu'est-ce que tu ferais):",
       "target_answer": "Qu'est-ce que tu ferais",
       "word_bank": [
+        "faire",
+        "tu",
+        "fais",
         "Qu'est-ce",
         "que",
-        "tu",
-        "ferais",
-        "fais",
-        "faire"
+        "ferais"
       ],
       "explanation": "fer- (future stem of faire) + -ais = tu ferais ('you would do')."
     },
@@ -14199,7 +15427,11 @@ export const FR_LESSONS: Lesson[] = [
       "pourrais",
       "ferais",
       "vouloir",
-      "sil_vous_plait"
+      "sil_vous_plait",
+      "table",
+      "café",
+      "vin",
+      "addition"
     ],
     "hook": {
       "title": "Climbing the Politeness Escalator with je voudrais and tu pourrais",
@@ -14259,9 +15491,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "You want to ask the waiter for the bill (l'addition). Which phrasing is most polite and natural?",
         "options": [
+          "Donnez-moi l'addition",
           "Je voudrais l'addition, s'il vous plaît",
-          "Je veux l'addition maintenant",
-          "Donnez-moi l'addition"
+          "Je veux l'addition maintenant"
         ],
         "target_answer": "Je voudrais l'addition, s'il vous plaît",
         "meaning": "I would like the bill, please",
@@ -14292,14 +15524,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Tu pourrais venir avec moi aujourd'hui",
         "meaning": "Could you come with me today?",
         "word_bank": [
-          "Tu",
-          "pourrais",
-          "venir",
-          "avec",
-          "moi",
-          "aujourd'hui",
           "peux",
-          "la"
+          "moi",
+          "la",
+          "Tu",
+          "aujourd'hui",
+          "pourrais",
+          "avec",
+          "venir"
         ],
         "explanation": "Tu pourrais + bare infinitive venir.",
         "diagnosis": {
@@ -14332,6 +15564,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Swap je veux for je voudrais whenever you order or ask a favor.",
       "curiosity_teaser": "Up next on Le Pont ([2602] The -ai Future): see how Je voudrais leads directly into The -ai Future."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"Could you come with me today\" in French:",
+      "target_answer": "Tu pourrais venir avec moi aujourd'hui",
+      "word_bank": [
+        "pas",
+        "Tu",
+        "ne",
+        "venir",
+        "avec",
+        "aujourd'hui",
+        "moi",
+        "pourrais"
+      ],
+      "explanation": "Re-constructing \"Tu pourrais venir avec moi aujourd'hui\" from the underlying rule cements the pattern of Je voudrais."
     }
   },
   {
@@ -14357,7 +15604,11 @@ export const FR_LESSONS: Lesson[] = [
       "avoir",
       "être",
       "faire",
-      "voir"
+      "voir",
+      "venir",
+      "parler",
+      "visiter",
+      "demain"
     ],
     "hook": {
       "title": "The -ai Future: Why Every Future Stem Ends in /ʁ/",
@@ -14415,7 +15666,7 @@ export const FR_LESSONS: Lesson[] = [
       },
       {
         "type": "reverse_cognate",
-        "prompt": "You already know the French future of être ('ce sera' = 'it will be') from which famous song phrase meaning 'Whatever will be, will be'?",
+        "prompt": "The French future of être ('ce _____' = 'it will be') appears in the famous song refrain 'Whatever will be, will be'. Type that four-letter verb form:",
         "target_answer": "sera",
         "meaning": "Que sera, sera ↔ ce sera ('it will be')",
         "explanation": "ser- is the future/conditional stem of être: ce sera ('it will be'), ce serait ('it would be').",
@@ -14425,9 +15676,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Compare 'I will do it' (future) vs. 'I would do it' (conditional) using the stem 'fer-' of faire:",
         "options": [
-          "Je le ferai / Je le ferais",
           "Je le ferais / Je le ferai",
-          "Je le faireai / Je le faireais"
+          "Je le faireai / Je le faireais",
+          "Je le ferai / Je le ferais"
         ],
         "target_answer": "Je le ferai / Je le ferais",
         "meaning": "-ai (from j'ai) = Future 'will'; -ais (from j'avais) = Conditional 'would'!",
@@ -14450,14 +15701,14 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "You will see tomorrow, it will be very good",
         "word_bank": [
           "Tu",
-          "verras",
-          "demain",
           "ce",
-          "sera",
           "très",
+          "demain",
+          "verras",
           "bon",
-          "est",
-          "la"
+          "la",
+          "sera",
+          "est"
         ],
         "explanation": "Tu verras (from voir) and ce sera (from être) are top-frequency future phrases.",
         "diagnosis": {
@@ -14490,6 +15741,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Every future stem ends in -r-; add -ai/-as/-a for 'will' and -ais/-ait for 'would'.",
       "curiosity_teaser": "Up next on Le Pont ([27] il faut): see how The -ai Future leads directly into il faut."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"You will see tomorrow, it will be very good\" in French:",
+      "target_answer": "Tu verras demain, ce sera très bon",
+      "word_bank": [
+        "ce",
+        "Tu",
+        "ne",
+        "pas",
+        "demain",
+        "très",
+        "bon",
+        "sera",
+        "verras"
+      ],
+      "explanation": "Re-constructing \"Tu verras demain, ce sera très bon\" from the underlying rule cements the pattern of The -ai Future."
     }
   },
   {
@@ -14514,7 +15781,10 @@ export const FR_LESSONS: Lesson[] = [
       "soit",
       "que",
       "savoir",
-      "connaître"
+      "connaître",
+      "aller",
+      "faire",
+      "venir"
     ],
     "hook": {
       "title": "How French Says 'Must' Without Saying Who",
@@ -14576,9 +15846,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Il me faut du temps",
         "natural": "I need some time",
         "options": [
-          "I need some time",
           "It to-me is-needed of-the time",
-          "He me needs the time"
+          "He me needs the time",
+          "I need some time"
         ],
         "target_answer": "It to-me is-needed of-the time",
         "meaning": "Literal structure: It to-me is-needed of-the time",
@@ -14589,8 +15859,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'We have to reserve a table' using the everyday impersonal structure?",
         "options": [
-          "Il faut réserver une table",
           "Nous faut réserver une table",
+          "Il faut réserver une table",
           "Il faut à réserver une table"
         ],
         "target_answer": "Il faut réserver une table",
@@ -14613,12 +15883,12 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Il faut que ce soit prêt",
         "meaning": "It has to be ready",
         "word_bank": [
-          "Il",
-          "faut",
-          "que",
-          "ce",
           "soit",
           "prêt",
+          "faut",
+          "ce",
+          "que",
+          "Il",
           "c'est",
           "est"
         ],
@@ -14658,13 +15928,13 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'You must not wait here' (wrap ne...pas around faut):",
       "target_answer": "Il ne faut pas attendre ici",
       "word_bank": [
-        "Il",
+        "attendre",
+        "non",
         "ne",
+        "ici",
         "faut",
         "pas",
-        "attendre",
-        "ici",
-        "non",
+        "Il",
         "la"
       ],
       "explanation": "Il ne faut pas + infinitive means 'must not' (prohibition)."
@@ -14702,7 +15972,12 @@ export const FR_LESSONS: Lesson[] = [
       "me",
       "te",
       "nous",
-      "vous"
+      "vous",
+      "aller",
+      "venir",
+      "confirmer",
+      "billet",
+      "pain"
     ],
     "hook": {
       "title": "il faut: Obligation and Need Without Pointing a Finger",
@@ -14765,8 +16040,8 @@ export const FR_LESSONS: Lesson[] = [
         "natural": "We need two tables",
         "options": [
           "We need two tables",
-          "It to-us is-needed two tables",
-          "We must have two tables"
+          "We must have two tables",
+          "It to-us is-needed two tables"
         ],
         "target_answer": "It to-us is-needed two tables",
         "meaning": "Literal structure: It to-us is-needed two tables",
@@ -14802,13 +16077,13 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "We/you need to confirm the reservation today",
         "word_bank": [
           "Il",
-          "faut",
-          "confirmer",
           "la",
-          "réservation",
+          "le",
           "aujourd'hui",
+          "réservation",
           "Nous",
-          "le"
+          "faut",
+          "confirmer"
         ],
         "explanation": "Il faut + bare infinitive confirmer.",
         "diagnosis": {
@@ -14841,6 +16116,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Il faut + verb = 'must [verb]'; Il me faut + noun = 'I need [noun]'.",
       "curiosity_teaser": "Up next on Le Pont ([2702] The Subjunctive Door): see how It Is Needed leads directly into The Subjunctive Door."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"We/you need to confirm the reservation today\" in French:",
+      "target_answer": "Il faut confirmer la réservation aujourd'hui",
+      "word_bank": [
+        "faut",
+        "aujourd'hui",
+        "pas",
+        "confirmer",
+        "Il",
+        "ne",
+        "réservation",
+        "la"
+      ],
+      "explanation": "Re-constructing \"Il faut confirmer la réservation aujourd'hui\" from the underlying rule cements the pattern of It Is Needed."
     }
   },
   {
@@ -14865,7 +16155,10 @@ export const FR_LESSONS: Lesson[] = [
       "soit",
       "que",
       "vouloir",
-      "aller"
+      "aller",
+      "faire",
+      "venir",
+      "avoir"
     ],
     "hook": {
       "title": "Stepping Through the Subjunctive Door: Il faut que & Je veux que",
@@ -14927,9 +16220,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Je veux que tu viennes avec moi",
         "natural": "I want you to come with me",
         "options": [
-          "I want you to come with me",
+          "I want you coming with me",
           "I want that you come with me",
-          "I want you coming with me"
+          "I want you to come with me"
         ],
         "target_answer": "I want that you come with me",
         "meaning": "Literal structure: I want that you come with me",
@@ -14940,9 +16233,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How does a French speaker say 'I have to go / I've got to get going' using 'Il faut que'?",
         "options": [
-          "Il faut que j'y aille",
           "Il faut moi aller",
-          "Il faut que je vais"
+          "Il faut que je vais",
+          "Il faut que j'y aille"
         ],
         "target_answer": "Il faut que j'y aille",
         "meaning": "I have to go (lit. It is necessary that I go there)",
@@ -14964,15 +16257,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je veux que tu viennes ce soir",
         "meaning": "I want you to come tonight",
         "word_bank": [
-          "Je",
           "veux",
+          "la",
           "que",
-          "tu",
           "viennes",
-          "ce",
-          "soir",
           "viens",
-          "la"
+          "tu",
+          "Je",
+          "soir",
+          "ce"
         ],
         "explanation": "After Je veux que, tu viens steps into subjunctive tu viennes.",
         "diagnosis": {
@@ -15005,6 +16298,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "English 'I want you to [verb]' is ALWAYS French 'Je veux que tu [subjunctive]'.",
       "curiosity_teaser": "Up next on Le Pont ([2703] Savoir vs Connaître): see how The Subjunctive Door leads directly into Savoir vs Connaître."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I want you to come tonight\" in French:",
+      "target_answer": "Je veux que tu viennes ce soir",
+      "word_bank": [
+        "ce",
+        "soir",
+        "pas",
+        "ne",
+        "viennes",
+        "que",
+        "Je",
+        "veux",
+        "tu"
+      ],
+      "explanation": "Re-constructing \"Je veux que tu viennes ce soir\" from the underlying rule cements the pattern of The Subjunctive Door."
     }
   },
   {
@@ -15029,7 +16338,10 @@ export const FR_LESSONS: Lesson[] = [
       "connaître",
       "ville",
       "docteur",
-      "parler"
+      "parler",
+      "où",
+      "pourquoi",
+      "ami"
     ],
     "hook": {
       "title": "Why French Has Two Verbs for 'To Know': savoir vs. connaître",
@@ -15121,18 +16433,18 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je connais ton ami et je sais où il habite",
         "meaning": "I know your friend and I know where he lives",
         "word_bank": [
-          "Je",
-          "connais",
-          "ton",
-          "ami",
-          "et",
           "je",
           "sais",
-          "où",
+          "et",
+          "ton",
+          "le",
           "il",
+          "connais",
           "habite",
+          "où",
+          "ami",
           "la",
-          "le"
+          "Je"
         ],
         "explanation": "ton ami (noun) takes connais; où il habite (clause) takes sais.",
         "diagnosis": {
@@ -15165,6 +16477,25 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "connaître + Noun (people/places); savoir + Clause or Bare Infinitive (facts/skills).",
       "curiosity_teaser": "Up next on Le Pont ([28] qui & que): see how Savoir vs Connaître leads directly into qui & que."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I know your friend and I know where he lives\" in French:",
+      "target_answer": "Je connais ton ami et je sais où il habite",
+      "word_bank": [
+        "sais",
+        "connais",
+        "où",
+        "ton",
+        "habite",
+        "Je",
+        "il",
+        "pas",
+        "je",
+        "ami",
+        "et",
+        "ne"
+      ],
+      "explanation": "Re-constructing \"Je connais ton ami et je sais où il habite\" from the underlying rule cements the pattern of Savoir vs Connaître."
     }
   },
   {
@@ -15192,7 +16523,13 @@ export const FR_LESSONS: Lesson[] = [
       "que",
       "dont",
       "où",
-      "homme"
+      "homme",
+      "parler",
+      "vouloir",
+      "voir",
+      "venir",
+      "tenir",
+      "prendre"
     ],
     "hook": {
       "title": "How French Welds Sentences Without Looking at Human vs. Thing",
@@ -15247,9 +16584,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Fill the two blanks: 'Le train ___ arrive est rapide' ('The train that is arriving is fast').",
         "options": [
+          "Le train que arrive est rapide",
           "Le train qui arrive est rapide",
-          "Le train qu'arrive est rapide",
-          "Le train que arrive est rapide"
+          "Le train qu'arrive est rapide"
         ],
         "target_answer": "Le train qui arrive est rapide",
         "meaning": "The train that arrives is fast",
@@ -15260,9 +16597,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Fill the weld: 'La table ___ j'ai réservée' ('The table [that] I reserved').",
         "options": [
-          "La table que j'ai réservée",
           "La table qui j'ai réservée",
-          "La table j'ai réservée"
+          "La table j'ai réservée",
+          "La table que j'ai réservée"
         ],
         "target_answer": "La table que j'ai réservée",
         "meaning": "The table that I reserved",
@@ -15283,14 +16620,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "L'homme qui parle est mon père",
         "meaning": "The man who is speaking is my father",
         "word_bank": [
-          "L'homme",
+          "que",
+          "père",
           "qui",
           "parle",
+          "la",
           "est",
           "mon",
-          "père",
-          "que",
-          "la"
+          "L'homme"
         ],
         "explanation": "parle has no other subject, so qui bridges L'homme to parle.",
         "diagnosis": {
@@ -15329,14 +16666,14 @@ export const FR_LESSONS: Lesson[] = [
       "target_answer": "Le café que je veux est ici",
       "word_bank": [
         "Le",
-        "café",
         "que",
         "je",
-        "veux",
         "est",
         "ici",
+        "veux",
         "qui",
-        "la"
+        "la",
+        "café"
       ],
       "explanation": "que connects le café (the object wanted) to je veux."
     },
@@ -15372,7 +16709,11 @@ export const FR_LESSONS: Lesson[] = [
       "que",
       "homme",
       "ville",
-      "train"
+      "train",
+      "café",
+      "parler",
+      "vouloir",
+      "aimé"
     ],
     "hook": {
       "title": "qui vs. que: The One-Second Look-Ahead Test",
@@ -15428,8 +16769,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "Fill the two blanks: 'C'est un ami ___ habite à Paris et ___ j'aime beaucoup':",
         "options": [
           "qui habite / que j'aime",
-          "qu'habite / que j'aime",
-          "qui habite / qui j'aime"
+          "qui habite / qui j'aime",
+          "qu'habite / que j'aime"
         ],
         "target_answer": "qui habite / que j'aime",
         "meaning": "Before verb habite → qui; before subject j' → que",
@@ -15460,16 +16801,16 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Le restaurant qui est ici est très bon",
         "meaning": "The restaurant that is here is very good",
         "word_bank": [
-          "Le",
-          "restaurant",
           "qui",
-          "est",
+          "la",
+          "Le",
           "ici",
           "est",
-          "très",
-          "bon",
           "que",
-          "la"
+          "très",
+          "restaurant",
+          "est",
+          "bon"
         ],
         "explanation": "Because the verb est follows the gap, use qui.",
         "diagnosis": {
@@ -15502,6 +16843,23 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Verb after the gap → qui (never elides); Subject after the gap → que / qu' (never omitted).",
       "curiosity_teaser": "Up next on Le Pont ([2802] Que Everywhere): see how The Man That Knows leads directly into Que Everywhere."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"The restaurant that is here is very good\" in French:",
+      "target_answer": "Le restaurant qui est ici est très bon",
+      "word_bank": [
+        "ne",
+        "est",
+        "ici",
+        "est",
+        "bon",
+        "très",
+        "qui",
+        "pas",
+        "restaurant",
+        "Le"
+      ],
+      "explanation": "Re-constructing \"Le restaurant qui est ici est très bon\" from the underlying rule cements the pattern of The Man That Knows."
     }
   },
   {
@@ -15526,7 +16884,10 @@ export const FR_LESSONS: Lesson[] = [
       "cest",
       "savoir",
       "comprendre",
-      "vouloir"
+      "vouloir",
+      "faut",
+      "vraiment",
+      "possible"
     ],
     "hook": {
       "title": "que Everywhere: The Master Glue of French Thought",
@@ -15586,8 +16947,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I think she is ready' in French?",
         "options": [
-          "Je pense qu'elle est prête",
           "Je pense elle est prête",
+          "Je pense qu'elle est prête",
           "Je pense qui elle est prête"
         ],
         "target_answer": "Je pense qu'elle est prête",
@@ -15601,9 +16962,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "C'est demain que je pars",
         "natural": "I'm leaving TOMORROW (emphasis)",
         "options": [
+          "Tomorrow is when I leave",
           "I'm leaving TOMORROW (emphasis)",
-          "It-is tomorrow that I leave",
-          "Tomorrow is when I leave"
+          "It-is tomorrow that I leave"
         ],
         "target_answer": "It-is tomorrow that I leave",
         "meaning": "Literal structure: It-is tomorrow that I leave",
@@ -15625,14 +16986,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je sais que c'est très important",
         "meaning": "I know (that) it is very important",
         "word_bank": [
+          "la",
+          "qui",
+          "important",
+          "c'est",
           "Je",
           "sais",
-          "que",
-          "c'est",
           "très",
-          "important",
-          "qui",
-          "la"
+          "que"
         ],
         "explanation": "que is mandatory between Je sais and c'est.",
         "diagnosis": {
@@ -15665,6 +17026,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "English drops 'that'; French NEVER drops que.",
       "curiosity_teaser": "Up next on Le Pont ([2803] Verb Dynasties: venir, tenir & prendre Matrices): see how Que Everywhere leads directly into Verb Dynasties: venir, tenir & prendre Matrices."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I know (that) it is very important\" in French:",
+      "target_answer": "Je sais que c'est très important",
+      "word_bank": [
+        "pas",
+        "Je",
+        "sais",
+        "ne",
+        "très",
+        "que",
+        "c'est",
+        "important"
+      ],
+      "explanation": "Re-constructing \"Je sais que c'est très important\" from the underlying rule cements the pattern of Que Everywhere."
     }
   },
   {
@@ -15692,7 +17068,13 @@ export const FR_LESSONS: Lesson[] = [
       "revenir",
       "devenir",
       "tenir",
-      "obtenir"
+      "obtenir",
+      "maintenir",
+      "prendre",
+      "comprendre",
+      "apprendre",
+      "compris",
+      "pris"
     ],
     "hook": {
       "title": "Three Roots, Two Dozen Verbs — The Prefix × Root Matrix",
@@ -15847,15 +17229,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "J'apprends le français et je comprends maintenant",
         "meaning": "I am learning French and I understand now",
         "word_bank": [
-          "J'apprends",
+          "apprendre",
+          "je",
           "le",
           "français",
+          "J'apprends",
           "et",
-          "je",
-          "comprends",
           "maintenant",
-          "apprendre",
-          "la"
+          "la",
+          "comprends"
         ],
         "explanation": "Both j'apprends and je comprends follow je prends.",
         "diagnosis": {
@@ -15888,6 +17270,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Learn three roots (venir, tenir, prendre) and six prefixes, and two dozen verbs conjugate themselves.",
       "curiosity_teaser": "Up next on Le Pont ([29] The French Mind): see how Verb Dynasties: venir, tenir & prendre Matrices leads directly into The French Mind."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I am learning French and I understand now\" in French:",
+      "target_answer": "J'apprends le français et je comprends maintenant",
+      "word_bank": [
+        "comprends",
+        "ne",
+        "le",
+        "français",
+        "maintenant",
+        "je",
+        "pas",
+        "et",
+        "J'apprends"
+      ],
+      "explanation": "Re-constructing \"J'apprends le français et je comprends maintenant\" from the underlying rule cements the pattern of Verb Dynasties: venir, tenir & prendre Matrices."
     }
   },
   {
@@ -15916,7 +17314,12 @@ export const FR_LESSONS: Lesson[] = [
       "soif",
       "peur",
       "raison",
-      "besoin"
+      "besoin",
+      "avoir",
+      "jai",
+      "as",
+      "très",
+      "cœur"
     ],
     "hook": {
       "title": "Why You 'Have Hunger' and 'Have Reason' in French",
@@ -15978,9 +17381,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Tu as raison",
         "natural": "You are right",
         "options": [
-          "You are right",
           "You have reason",
-          "You are reasonable"
+          "You are reasonable",
+          "You are right"
         ],
         "target_answer": "You have reason",
         "meaning": "Literal structure: You have reason",
@@ -16018,15 +17421,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "J'ai très faim et tu as raison",
         "meaning": "I am very hungry and you are right",
         "word_bank": [
+          "as",
           "J'ai",
           "très",
           "faim",
+          "es",
           "et",
           "tu",
-          "as",
           "raison",
-          "suis",
-          "es"
+          "suis"
         ],
         "explanation": "Both 'hungry' and 'right' are possessed with avoir in French.",
         "diagnosis": {
@@ -16065,12 +17468,12 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Ungraded — 'I am not afraid' (wrap n'...pas around ai before peur):",
       "target_answer": "Je n'ai pas peur",
       "word_bank": [
-        "Je",
         "n'ai",
-        "pas",
         "peur",
+        "suis",
+        "pas",
         "de",
-        "suis"
+        "Je"
       ],
       "explanation": "Because avoir peur has no article to begin with, the negation is simply Je n'ai pas peur!"
     },
@@ -16107,7 +17510,12 @@ export const FR_LESSONS: Lesson[] = [
       "soif",
       "peur",
       "raison",
-      "besoin"
+      "besoin",
+      "chaleur",
+      "avoir",
+      "jai",
+      "as",
+      "très"
     ],
     "hook": {
       "title": "Possessing Your Sensations: The Complete avoir Idiom Set",
@@ -16167,8 +17575,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "You are sitting outside in winter and shivering. How do you say 'I am cold'?",
         "options": [
-          "J'ai froid",
           "Je suis froid",
+          "J'ai froid",
           "Je fais froid"
         ],
         "target_answer": "J'ai froid",
@@ -16208,15 +17616,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Tu as faim ou tu as soif",
         "meaning": "Are you hungry or are you thirsty?",
         "word_bank": [
-          "Tu",
+          "soif",
           "as",
+          "es",
+          "où",
+          "Tu",
+          "tu",
           "faim",
           "ou",
-          "tu",
-          "as",
-          "soif",
-          "es",
-          "où"
+          "as"
         ],
         "explanation": "Both faim and soif take tu as, linked by ou ('or', no accent).",
         "diagnosis": {
@@ -16249,6 +17657,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "People 'have' hunger, thirst, cold, heat, fear, and reason with avoir.",
       "curiosity_teaser": "Up next on Le Pont ([2902] The Register Ladder Recap): see how Have-Hunger & Co leads directly into The Register Ladder Recap."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"Are you hungry or are you thirsty\" in French:",
+      "target_answer": "Tu as faim ou tu as soif",
+      "word_bank": [
+        "tu",
+        "faim",
+        "Tu",
+        "pas",
+        "ou",
+        "soif",
+        "as",
+        "ne",
+        "as"
+      ],
+      "explanation": "Re-constructing \"Tu as faim ou tu as soif\" from the underlying rule cements the pattern of Have-Hunger & Co."
     }
   },
   {
@@ -16274,7 +17698,11 @@ export const FR_LESSONS: Lesson[] = [
       "confirmer",
       "université",
       "différence",
-      "exactement"
+      "exactement",
+      "docteur",
+      "possible",
+      "hôtel",
+      "mangé"
     ],
     "hook": {
       "title": "Walking All Nine Conversion Bridges in One Circuit",
@@ -16334,9 +17762,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Which sentence below uses four conversion bridges at once without a single error?",
         "options": [
-          "Naturellement, c'est une décision possible à l'université",
+          "Naturelment, c'est une décision possible à l'université",
           "Naturellement, c'est un décision possible à le université",
-          "Naturelment, c'est une décision possible à l'université"
+          "Naturellement, c'est une décision possible à l'université"
         ],
         "target_answer": "Naturellement, c'est une décision possible à l'université",
         "meaning": "Naturally (-ment), it is a possible (-ible) decision (-ion, f.) at the university (-ité, elided)",
@@ -16369,15 +17797,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Heureusement, c'est possible de confirmer la réservation",
         "meaning": "Fortunately, it is possible to confirm the reservation",
         "word_bank": [
-          "Heureusement",
-          "c'est",
           "possible",
+          "un",
+          "réservation",
+          "la",
           "de",
           "confirmer",
-          "la",
-          "réservation",
+          "c'est",
           "le",
-          "un"
+          "Heureusement"
         ],
         "explanation": "Combines -ment, -ible, -ation→-er, and -ion!",
         "diagnosis": {
@@ -16411,6 +17839,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Nine suffix bridges turn your English vocabulary into a live French lexicon.",
       "curiosity_teaser": "Up next on Le Pont ([2903] Spoken French Shortcuts): see how The Register Ladder Recap leads directly into Spoken French Shortcuts."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"Fortunately, it is possible to confirm the reservation\" in French:",
+      "target_answer": "Heureusement, c'est possible de confirmer la réservation",
+      "word_bank": [
+        "possible",
+        "Heureusement",
+        "de",
+        "réservation",
+        "la",
+        "pas",
+        "c'est",
+        "confirmer",
+        "ne"
+      ],
+      "explanation": "Re-constructing \"Heureusement, c'est possible de confirmer la réservation\" from the underlying rule cements the pattern of The Register Ladder Recap."
     }
   },
   {
@@ -16437,7 +17881,12 @@ export const FR_LESSONS: Lesson[] = [
       "nous",
       "pas",
       "tu",
-      "as"
+      "as",
+      "il_y_a",
+      "cest",
+      "vouloir",
+      "aller",
+      "savoir"
     ],
     "hook": {
       "title": "Why Street French Sounds Faster Than Textbook French",
@@ -16493,8 +17942,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "In everyday conversation, how do friends say 'We are here' using 'on'?",
         "options": [
           "On est ici",
-          "On sommes ici",
-          "On êtes ici"
+          "On êtes ici",
+          "On sommes ici"
         ],
         "target_answer": "On est ici",
         "meaning": "We are here (lit. One is here)",
@@ -16533,13 +17982,13 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "We are going to the restaurant tonight",
         "word_bank": [
           "On",
-          "va",
-          "au",
-          "restaurant",
           "ce",
+          "au",
+          "va",
+          "la",
           "soir",
           "allons",
-          "la"
+          "restaurant"
         ],
         "explanation": "On va replaces Nous allons in everyday spoken French.",
         "diagnosis": {
@@ -16572,6 +18021,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "In spoken French, 'we' is on (with the il/elle verb), and ne disappears while pas does the work.",
       "curiosity_teaser": "Up next on Le Pont ([30] Capstone: Le Pont Reading): see how Spoken French Shortcuts leads directly into Capstone: Le Pont Reading."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"We are going to the restaurant tonight\" in French:",
+      "target_answer": "On va au restaurant ce soir",
+      "word_bank": [
+        "soir",
+        "va",
+        "ce",
+        "restaurant",
+        "pas",
+        "On",
+        "au",
+        "ne"
+      ],
+      "explanation": "Re-constructing \"On va au restaurant ce soir\" from the underlying rule cements the pattern of Spoken French Shortcuts."
     }
   },
   {
@@ -16610,7 +18074,14 @@ export const FR_LESSONS: Lesson[] = [
       "université",
       "liberté",
       "différence",
-      "exactement"
+      "exactement",
+      "possible",
+      "docteur",
+      "hôtel",
+      "comprendre",
+      "voudrais",
+      "faut",
+      "depuis"
     ],
     "hook": {
       "title": "Look How Much French Was Already Inside Your Head",
@@ -16672,9 +18143,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Il m'a dit qu'il faut partir",
         "natural": "He told me that we have to leave",
         "options": [
-          "He told me that we have to leave",
+          "He me told that one must leaving",
           "He to-me has said that it is-needed to-leave",
-          "He me told that one must leaving"
+          "He told me that we have to leave"
         ],
         "target_answer": "He to-me has said that it is-needed to-leave",
         "meaning": "Literal structure: He to-me has said that it is-needed to-leave",
@@ -16712,20 +18183,20 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je voudrais réserver une table parce que nous allons célébrer ce soir",
         "meaning": "I would like to reserve a table because we are going to celebrate tonight",
         "word_bank": [
-          "Je",
+          "ce",
           "voudrais",
+          "table",
+          "que",
+          "parce",
+          "la",
+          "célébrer",
+          "nous",
+          "soir",
+          "Je",
+          "veux",
           "réserver",
           "une",
-          "table",
-          "parce",
-          "que",
-          "nous",
-          "allons",
-          "célébrer",
-          "ce",
-          "soir",
-          "veux",
-          "la"
+          "allons"
         ],
         "explanation": "Combines conditional je voudrais + -ation verb réserver + parce que + near future nous allons célébrer.",
         "diagnosis": {
@@ -16763,15 +18234,15 @@ export const FR_LESSONS: Lesson[] = [
       "prompt": "Final spine twist — 'I understand the French that you speak':",
       "target_answer": "Je comprends le français que tu parles",
       "word_bank": [
+        "parles",
+        "la",
+        "français",
+        "tu",
         "Je",
         "comprends",
-        "le",
-        "français",
         "que",
-        "tu",
-        "parles",
-        "qui",
-        "la"
+        "le",
+        "qui"
       ],
       "explanation": "Je comprends + le français + object relative que + tu parles — congratulations on crossing Le Pont!"
     },
@@ -16804,7 +18275,12 @@ export const FR_LESSONS: Lesson[] = [
       "hôtel",
       "gare",
       "train",
-      "restaurant"
+      "restaurant",
+      "café",
+      "ami",
+      "depuis",
+      "était",
+      "arrivé"
     ],
     "hook": {
       "title": "A Day in Paris: Reading & Building Connected Narrative",
@@ -16879,8 +18355,8 @@ export const FR_LESSONS: Lesson[] = [
         "natural": "The friend whom I saw has lived here for two years",
         "options": [
           "The friend whom I saw has lived here for two years",
-          "The-friend that I have seen lives here since two years",
-          "The friend who saw me lived here two years ago"
+          "The friend who saw me lived here two years ago",
+          "The-friend that I have seen lives here since two years"
         ],
         "target_answer": "The-friend that I have seen lives here since two years",
         "meaning": "Literal structure: The-friend that I have seen lives here since two years",
@@ -16902,21 +18378,21 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je suis arrivé à Paris ce matin et la ville est très belle",
         "meaning": "I arrived in Paris this morning and the city is very beautiful",
         "word_bank": [
-          "Je",
-          "suis",
-          "arrivé",
-          "à",
-          "Paris",
-          "ce",
-          "matin",
-          "et",
-          "la",
-          "ville",
-          "est",
-          "très",
-          "belle",
           "ai",
-          "le"
+          "et",
+          "matin",
+          "Je",
+          "arrivé",
+          "belle",
+          "très",
+          "ville",
+          "ce",
+          "la",
+          "suis",
+          "à",
+          "le",
+          "Paris",
+          "est"
         ],
         "explanation": "arriver takes être (Je suis arrivé) and cities take à (à Paris).",
         "diagnosis": {
@@ -16949,6 +18425,28 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Real stories weave Passé composé (events), Imparfait (scene), and Present + depuis (ongoing truths).",
       "curiosity_teaser": "Up next on Le Pont ([3002] Trap Watch: False Friends in the Wild): see how A Day in Paris: Reading leads directly into Trap Watch: False Friends in the Wild."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I arrived in Paris this morning and the city is very beautiful\" in French:",
+      "target_answer": "Je suis arrivé à Paris ce matin et la ville est très belle",
+      "word_bank": [
+        "à",
+        "ne",
+        "Je",
+        "arrivé",
+        "ville",
+        "matin",
+        "la",
+        "très",
+        "est",
+        "pas",
+        "Paris",
+        "ce",
+        "belle",
+        "et",
+        "suis"
+      ],
+      "explanation": "Re-constructing \"Je suis arrivé à Paris ce matin et la ville est très belle\" from the underlying rule cements the pattern of A Day in Paris: Reading."
     }
   },
   {
@@ -16973,7 +18471,10 @@ export const FR_LESSONS: Lesson[] = [
       "trap_librairie",
       "trap_attendre",
       "trap_demander",
-      "trap_raisin"
+      "trap_raisin",
+      "trap_journée",
+      "trap_location",
+      "trap_formidable"
     ],
     "hook": {
       "title": "Trap Watch: Outsmarting the Full False-Friends Deck in Context",
@@ -17039,8 +18540,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "What does 'C'est une voiture de location' mean?",
         "options": [
           "It is a rental car",
-          "It is a car in this location",
-          "It is a local car"
+          "It is a local car",
+          "It is a car in this location"
         ],
         "target_answer": "It is a rental car",
         "meaning": "la location = rental / lease (from louer 'to rent')",
@@ -17079,14 +18580,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "J'attends mon ami devant la librairie",
         "meaning": "I am waiting for my friend in front of the bookshop",
         "word_bank": [
-          "J'attends",
-          "mon",
-          "ami",
-          "devant",
-          "la",
-          "librairie",
           "bibliothèque",
-          "le"
+          "la",
+          "le",
+          "ami",
+          "mon",
+          "J'attends",
+          "librairie",
+          "devant"
         ],
         "explanation": "Combines attendre ('wait for') and la librairie ('bookshop').",
         "diagnosis": {
@@ -17119,6 +18620,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "la journée = the day; le raisin = fresh grape; la location = rental; formidable = wonderful.",
       "curiosity_teaser": "Up next on Le Pont ([3003] The Whole-Trail Review Game): see how Trap Watch: False Friends in the Wild leads directly into The Whole-Trail Review Game."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I am waiting for my friend in front of the bookshop\" in French:",
+      "target_answer": "J'attends mon ami devant la librairie",
+      "word_bank": [
+        "pas",
+        "librairie",
+        "la",
+        "J'attends",
+        "devant",
+        "mon",
+        "ne",
+        "ami"
+      ],
+      "explanation": "Re-constructing \"J'attends mon ami devant la librairie\" from the underlying rule cements the pattern of Trap Watch: False Friends in the Wild."
     }
   },
   {
@@ -17146,7 +18662,13 @@ export const FR_LESSONS: Lesson[] = [
       "aller",
       "avoir",
       "être",
-      "faut"
+      "faut",
+      "voudrais",
+      "depuis",
+      "en_pron",
+      "y",
+      "qui",
+      "que"
     ],
     "hook": {
       "title": "The Whole-Trail Synthesis Game: All 30 Topics in Action",
@@ -17221,9 +18743,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Choose the sentence that is 100% grammatical in French:",
         "options": [
-          "Voici le restaurant dont je t'ai parlé hier",
+          "Voici le restaurant dont j'ai te parlé hier",
           "Voici le restaurant que je t'ai parlé hier",
-          "Voici le restaurant dont j'ai te parlé hier"
+          "Voici le restaurant dont je t'ai parlé hier"
         ],
         "target_answer": "Voici le restaurant dont je t'ai parlé hier",
         "meaning": "parler de triggers dont, and t' stands before ai parlé",
@@ -17245,17 +18767,17 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je voudrais y aller demain parce que c'est très beau",
         "meaning": "I would like to go there tomorrow because it is very beautiful",
         "word_bank": [
-          "Je",
-          "voudrais",
-          "y",
-          "aller",
-          "demain",
-          "parce",
-          "que",
-          "c'est",
           "très",
+          "y",
+          "c'est",
           "beau",
+          "demain",
+          "voudrais",
           "pourquoi",
+          "aller",
+          "Je",
+          "que",
+          "parce",
           "la"
         ],
         "explanation": "y stands right before the infinitive aller, and parce que bridges the reason.",
@@ -17289,6 +18811,25 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Every complex French sentence is built from simple, transparent pieces you now own.",
       "curiosity_teaser": "Up next on Le Pont ([5011] Bonjour & Merci): see how The Whole-Trail Review Game leads directly into Bonjour & Merci."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I would like to go there tomorrow because it is very beautiful\" in French:",
+      "target_answer": "Je voudrais y aller demain parce que c'est très beau",
+      "word_bank": [
+        "beau",
+        "ne",
+        "aller",
+        "parce",
+        "très",
+        "pas",
+        "demain",
+        "que",
+        "c'est",
+        "voudrais",
+        "y",
+        "Je"
+      ],
+      "explanation": "Re-constructing \"Je voudrais y aller demain parce que c'est très beau\" from the underlying rule cements the pattern of The Whole-Trail Review Game."
     }
   },
   {
@@ -17310,7 +18851,9 @@ export const FR_LESSONS: Lesson[] = [
       "bonjour",
       "merci",
       "sil_vous_plait",
-      "vous"
+      "vous",
+      "oui",
+      "tu"
     ],
     "hook": {
       "title": "Words You Must Never Convert",
@@ -17378,9 +18921,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "A stranger at the bakery — which pronoun do you reach for?",
         "options": [
-          "tu",
           "vous",
-          "on"
+          "on",
+          "tu"
         ],
         "target_answer": "vous",
         "meaning": "vous — the safe formal default",
@@ -17399,11 +18942,11 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Un café, s'il vous plaît",
         "meaning": "A coffee, please",
         "word_bank": [
-          "Un",
-          "café",
-          "s'il",
-          "vous",
           "plaît",
+          "café",
+          "vous",
+          "Un",
+          "s'il",
           "tu",
           "la"
         ],
@@ -17421,8 +18964,8 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Ça va ? — Ça va, merci",
         "natural": "How's it going? — Fine, thanks",
         "options": [
-          "It goes? — It goes, thanks",
           "How are you? — I am fine, thanks",
+          "It goes? — It goes, thanks",
           "It goes? — I go, thanks"
         ],
         "target_answer": "It goes? — It goes, thanks",
@@ -17454,6 +18997,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Idioms are items, not formulas — and vous is the pronoun you can't be fired for.",
       "curiosity_teaser": "Up next on Le Pont ([5012] The Alphabet & Je m'appelle): see how Bonjour & Merci leads directly into The Alphabet & Je m'appelle."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"A coffee, please\" in French:",
+      "target_answer": "Un café, s'il vous plaît",
+      "word_bank": [
+        "s'il",
+        "café",
+        "ne",
+        "Un",
+        "vous",
+        "pas",
+        "plaît"
+      ],
+      "explanation": "Re-constructing \"Un café, s'il vous plaît\" from the underlying rule cements the pattern of Bonjour & Merci."
     }
   },
   {
@@ -17470,7 +19027,8 @@ export const FR_LESSONS: Lesson[] = [
     ],
     "table_word_ids": [
       "appeler",
-      "cest"
+      "cest",
+      "vous"
     ],
     "hook": {
       "title": "Twenty-Six Letters, Some Wearing Disguises",
@@ -17534,8 +19092,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "'My name is Marie' — the French:",
         "options": [
           "Je suis Marie",
-          "Je m'appelle Marie",
-          "Mon appelle Marie"
+          "Mon appelle Marie",
+          "Je m'appelle Marie"
         ],
         "target_answer": "Je m'appelle Marie",
         "meaning": "I call myself Marie",
@@ -17569,11 +19127,11 @@ export const FR_LESSONS: Lesson[] = [
           }
         ],
         "word_bank": [
+          "la",
+          "t'appelles",
           "Comment",
           "tu",
-          "t'appelles",
-          "m'appelle",
-          "la"
+          "m'appelle"
         ],
         "idea_parts": [
           "the question word → comment",
@@ -17607,6 +19165,18 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Introductions are reflexive and elided — the same pronoun machinery, pointed at yourself.",
       "curiosity_teaser": "Up next on Le Pont ([5021] Think the N): see how The Alphabet & Je m'appelle leads directly into Think the N."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"What's your name\" in French:",
+      "target_answer": "Comment tu t'appelles",
+      "word_bank": [
+        "t'appelles",
+        "Comment",
+        "pas",
+        "ne",
+        "tu"
+      ],
+      "explanation": "Re-constructing \"Comment tu t'appelles\" from the underlying rule cements the pattern of The Alphabet & Je m'appelle."
     }
   },
   {
@@ -17627,7 +19197,8 @@ export const FR_LESSONS: Lesson[] = [
       "pain",
       "vingt",
       "bon",
-      "on"
+      "on",
+      "ne"
     ],
     "hook": {
       "title": "The Sound of Not Saying",
@@ -17691,9 +19262,9 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "Which word does NOT have a nasal vowel?",
         "options": [
           "pain",
-          "bonjour",
+          "vin",
           "rouge",
-          "vin"
+          "bonjour"
         ],
         "target_answer": "rouge",
         "meaning": "rouge — no N, no nasal",
@@ -17715,12 +19286,12 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Le pain est bon",
         "meaning": "The bread is good",
         "word_bank": [
-          "Le",
-          "pain",
-          "est",
-          "bon",
+          "bonne",
           "la",
-          "bonne"
+          "est",
+          "Le",
+          "bon",
+          "pain"
         ],
         "explanation": "pain (/pɛ̃/) and bon (/bɔ̃/) both lean toward a silent N without landing on it."
       },
@@ -17749,6 +19320,19 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "The N is a direction, not a destination. Unfinished is correct.",
       "curiosity_teaser": "Up next on Le Pont ([5031] Actuellement, Librairie & Co.): see how Think the N leads directly into Actuellement, Librairie & Co.."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"The bread is good\" in French:",
+      "target_answer": "Le pain est bon",
+      "word_bank": [
+        "est",
+        "pas",
+        "bon",
+        "pain",
+        "ne",
+        "Le"
+      ],
+      "explanation": "Re-constructing \"Le pain est bon\" from the underlying rule cements the pattern of Think the N."
     }
   },
   {
@@ -17771,7 +19355,12 @@ export const FR_LESSONS: Lesson[] = [
     "table_word_ids": [
       "trap_actuellement",
       "trap_librairie",
-      "trap_attendre"
+      "trap_attendre",
+      "trap_demander",
+      "trap_blesser",
+      "trap_éventuellement",
+      "venir",
+      "habiter"
     ],
     "hook": {
       "title": "The Words That Lie to Your Face",
@@ -17836,9 +19425,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "'I work in a bookshop' — the correct word:",
         "options": [
-          "la bibliothèque",
+          "la library",
           "la librairie",
-          "la library"
+          "la bibliothèque"
         ],
         "target_answer": "la librairie",
         "meaning": "bookshop — you work there, books are sold",
@@ -17874,11 +19463,11 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je viens éventuellement",
         "meaning": "I might possibly come",
         "word_bank": [
-          "Je",
           "viens",
-          "éventuellement",
+          "la",
+          "Je",
           "finalement",
-          "la"
+          "éventuellement"
         ],
         "idea_parts": [
           "who? → je",
@@ -17916,6 +19505,18 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Spelling converts reliably; meaning converts mostly. The Review Hub keeps the liars in rotation.",
       "curiosity_teaser": "Up next on Le Pont ([5041] Tutoyer & Vouvoyer): see how Actuellement, Librairie & Co. leads directly into Tutoyer & Vouvoyer."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I might possibly come\" in French:",
+      "target_answer": "Je viens éventuellement",
+      "word_bank": [
+        "Je",
+        "viens",
+        "pas",
+        "éventuellement",
+        "ne"
+      ],
+      "explanation": "Re-constructing \"Je viens éventuellement\" from the underlying rule cements the pattern of Actuellement, Librairie & Co.."
     }
   },
   {
@@ -17940,7 +19541,10 @@ export const FR_LESSONS: Lesson[] = [
       "vous",
       "on",
       "nous",
-      "homme"
+      "homme",
+      "parler",
+      "aller",
+      "ami"
     ],
     "hook": {
       "title": "Why French Turned 'tu' and 'vous' Into Action Verbs: tutoyer & vouvoyer",
@@ -18003,9 +19607,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "A new colleague smiles and asks 'On se tutoie ?' What are they inviting you to do?",
         "options": [
-          "Switch from polite 'vous' to informal 'tu'",
+          "Go get a coffee together",
           "Speak English instead of French",
-          "Go get a coffee together"
+          "Switch from polite 'vous' to informal 'tu'"
         ],
         "target_answer": "Switch from polite 'vous' to informal 'tu'",
         "meaning": "se tutoyer = to address each other as 'tu'",
@@ -18026,13 +19630,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "On va au café ensemble",
         "meaning": "We are going to the café together",
         "word_bank": [
-          "On",
-          "va",
-          "au",
-          "café",
-          "ensemble",
           "allons",
-          "à"
+          "ensemble",
+          "à",
+          "va",
+          "café",
+          "On",
+          "au"
         ],
         "explanation": "On va replaces Nous allons in everyday conversation.",
         "diagnosis": {
@@ -18065,6 +19669,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Wait for 'On se tutoie ?' to switch from vous to tu — and use on for everyday 'we'.",
       "curiosity_teaser": "Up next on Le Pont ([5051] Lieu & Direction: ici, là, tout droit): see how Tutoyer & Vouvoyer leads directly into Lieu & Direction: ici, là, tout droit."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"We are going to the café together\" in French:",
+      "target_answer": "On va au café ensemble",
+      "word_bank": [
+        "pas",
+        "va",
+        "On",
+        "ne",
+        "au",
+        "café",
+        "ensemble"
+      ],
+      "explanation": "Re-constructing \"On va au café ensemble\" from the underlying rule cements the pattern of Tutoyer & Vouvoyer."
     }
   },
   {
@@ -18090,7 +19708,11 @@ export const FR_LESSONS: Lesson[] = [
       "là",
       "tout_droit",
       "gauche",
-      "droite"
+      "droite",
+      "gare",
+      "hôtel",
+      "où",
+      "aller"
     ],
     "hook": {
       "title": "Street Navigation: ici, là, tout droit, à gauche, à droite",
@@ -18159,8 +19781,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "How do you tell someone 'Go straight ahead, then to the left' (polite vous)?",
         "options": [
           "Allez tout droit, puis à gauche",
-          "Allez tout droite, puis sur gauche",
-          "Aller tout droit, puis à la gauche"
+          "Aller tout droit, puis à la gauche",
+          "Allez tout droite, puis sur gauche"
         ],
         "target_answer": "Allez tout droit, puis à gauche",
         "meaning": "Go straight ahead, then to the left",
@@ -18182,18 +19804,18 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "La gare est à droite et l'hôtel est à gauche",
         "meaning": "The station is on the right and the hotel is on the left",
         "word_bank": [
-          "La",
-          "gare",
-          "est",
-          "à",
-          "droite",
-          "et",
           "l'hôtel",
           "est",
-          "à",
-          "gauche",
           "droit",
-          "la"
+          "gauche",
+          "à",
+          "la",
+          "à",
+          "droite",
+          "gare",
+          "est",
+          "et",
+          "La"
         ],
         "explanation": "à droite ('on the right') and à gauche ('on the left').",
         "diagnosis": {
@@ -18226,6 +19848,25 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Straight ahead = tout droit; left = à gauche; right = à droite.",
       "curiosity_teaser": "Up next on Le Pont ([5061] C'est combien ?): see how Lieu & Direction: ici, là, tout droit leads directly into C'est combien ?."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"The station is on the right and the hotel is on the left\" in French:",
+      "target_answer": "La gare est à droite et l'hôtel est à gauche",
+      "word_bank": [
+        "pas",
+        "La",
+        "gare",
+        "et",
+        "à",
+        "l'hôtel",
+        "gauche",
+        "à",
+        "droite",
+        "est",
+        "ne",
+        "est"
+      ],
+      "explanation": "Re-constructing \"La gare est à droite et l'hôtel est à gauche\" from the underlying rule cements the pattern of Lieu & Direction: ici, là, tout droit."
     }
   },
   {
@@ -18253,7 +19894,13 @@ export const FR_LESSONS: Lesson[] = [
       "un",
       "deux",
       "cinq",
-      "dix"
+      "dix",
+      "vingt",
+      "trente",
+      "soixante",
+      "quatre_vingts",
+      "cent",
+      "addition"
     ],
     "hook": {
       "title": "Market & Bistro Prices: C'est combien ? and Ça fait… euros",
@@ -18313,9 +19960,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "At the end of a restaurant meal, what do you ask the waiter for?",
         "options": [
+          "La location, s'il vous plaît",
           "L'addition, s'il vous plaît",
-          "La monnaie, s'il vous plaît",
-          "La location, s'il vous plaît"
+          "La monnaie, s'il vous plaît"
         ],
         "target_answer": "L'addition, s'il vous plaît",
         "meaning": "The bill, please (lit. the addition of the items)",
@@ -18328,9 +19975,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Ça fait trente euros",
         "natural": "That comes to thirty euros",
         "options": [
+          "It does thirty euros",
           "That comes to thirty euros",
-          "That makes thirty euros",
-          "It does thirty euros"
+          "That makes thirty euros"
         ],
         "target_answer": "That makes thirty euros",
         "meaning": "Literal structure: That makes thirty euros",
@@ -18352,13 +19999,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "C'est combien pour deux cafés",
         "meaning": "How much is it for two coffees?",
         "word_bank": [
-          "C'est",
-          "combien",
-          "pour",
-          "deux",
           "cafés",
           "comment",
-          "la"
+          "deux",
+          "pour",
+          "C'est",
+          "la",
+          "combien"
         ],
         "explanation": "C'est combien + pour deux cafés.",
         "diagnosis": {
@@ -18391,6 +20038,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "How much = C'est combien ?; Total = Ça fait X euros; Restaurant check = L'addition.",
       "curiosity_teaser": "Up next on Le Pont ([5071] Je n'ai pas mangé): see how C'est combien ? leads directly into Je n'ai pas mangé."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"How much is it for two coffees\" in French:",
+      "target_answer": "C'est combien pour deux cafés",
+      "word_bank": [
+        "pour",
+        "deux",
+        "pas",
+        "ne",
+        "combien",
+        "cafés",
+        "C'est"
+      ],
+      "explanation": "Re-constructing \"C'est combien pour deux cafés\" from the underlying rule cements the pattern of C'est combien ?."
     }
   },
   {
@@ -18418,7 +20079,13 @@ export const FR_LESSONS: Lesson[] = [
       "compris",
       "vu",
       "pris",
-      "fait"
+      "fait",
+      "déjà",
+      "pas",
+      "ne",
+      "rien",
+      "jamais",
+      "avoir"
     ],
     "hook": {
       "title": "Where the Negation Sandwich Sits in the Passé Composé",
@@ -18480,9 +20147,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Je n'ai rien fait",
         "natural": "I didn't do anything",
         "options": [
-          "I didn't do anything",
           "I not-have nothing done",
-          "I did nothing not"
+          "I did nothing not",
+          "I didn't do anything"
         ],
         "target_answer": "I not-have nothing done",
         "meaning": "Literal structure: I not-have nothing done",
@@ -18493,8 +20160,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I have never visited Lyon'?",
         "options": [
-          "Je n'ai jamais visité Lyon",
           "Je n'ai visité jamais Lyon",
+          "Je n'ai jamais visité Lyon",
           "Je jamais n'ai visité Lyon"
         ],
         "target_answer": "Je n'ai jamais visité Lyon",
@@ -18517,14 +20184,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je n'ai pas compris la question",
         "meaning": "I did not understand the question",
         "word_bank": [
-          "Je",
-          "n'ai",
-          "pas",
-          "compris",
-          "la",
           "question",
+          "la",
+          "le",
           "comprendre",
-          "le"
+          "Je",
+          "compris",
+          "pas",
+          "n'ai"
         ],
         "explanation": "n'ai pas hugs the auxiliary ai; compris follows after pas.",
         "diagnosis": {
@@ -18557,6 +20224,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "In the past tense, pas, jamais, rien, and déjà always sit between the auxiliary and the participle.",
       "curiosity_teaser": "Up next on Le Pont ([5081] De matin à soir): see how Je n'ai pas mangé leads directly into De matin à soir."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I did not understand the question\" in French:",
+      "target_answer": "Je n'ai pas compris la question",
+      "word_bank": [
+        "très",
+        "compris",
+        "la",
+        "Je",
+        "ne",
+        "n'ai",
+        "pas",
+        "question"
+      ],
+      "explanation": "Re-constructing \"Je n'ai pas compris la question\" from the underlying rule cements the pattern of Je n'ai pas mangé."
     }
   },
   {
@@ -18582,7 +20264,11 @@ export const FR_LESSONS: Lesson[] = [
       "laver",
       "habiller",
       "coucher",
-      "depuis"
+      "depuis",
+      "heure",
+      "ce_soir",
+      "me",
+      "on"
     ],
     "hook": {
       "title": "From Morning Alarm to Midnight: Full Reflexive Chains",
@@ -18642,9 +20328,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you negate 'Je me couche tard' ('I go to bed late')?",
         "options": [
-          "Je ne me couche pas tard",
           "Je me ne couche pas tard",
-          "Je ne couche pas me tard"
+          "Je ne couche pas me tard",
+          "Je ne me couche pas tard"
         ],
         "target_answer": "Je ne me couche pas tard",
         "meaning": "I don't go to bed late",
@@ -18657,8 +20343,8 @@ export const FR_LESSONS: Lesson[] = [
         "german": "Je ne me lève pas tôt",
         "natural": "I don't get up early",
         "options": [
-          "I don't get up early",
           "I not myself raise step early",
+          "I don't get up early",
           "I myself not get up early"
         ],
         "target_answer": "I not myself raise step early",
@@ -18681,16 +20367,16 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Le dimanche, je ne me lève pas tôt",
         "meaning": "On Sundays, I don't get up early",
         "word_bank": [
-          "Le",
-          "dimanche",
           "je",
           "ne",
-          "me",
-          "lève",
-          "pas",
-          "tôt",
           "la",
-          "le"
+          "Le",
+          "lève",
+          "le",
+          "dimanche",
+          "me",
+          "pas",
+          "tôt"
         ],
         "explanation": "Le dimanche ('on Sundays') + je ne me lève pas tôt.",
         "diagnosis": {
@@ -18724,6 +20410,23 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "ne...pas hugs the reflexive pronoun and verb together: Je ne me lève pas.",
       "curiosity_teaser": "Up next on Le Pont ([5091] Dont & Où): see how De matin à soir leads directly into Dont & Où."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"On Sundays, I don't get up early\" in French:",
+      "target_answer": "Le dimanche, je ne me lève pas tôt",
+      "word_bank": [
+        "très",
+        "lève",
+        "dimanche",
+        "tôt",
+        "me",
+        "ne",
+        "Le",
+        "pas",
+        "ici",
+        "je"
+      ],
+      "explanation": "Re-constructing \"Le dimanche, je ne me lève pas tôt\" from the underlying rule cements the pattern of De matin à soir."
     }
   },
   {
@@ -18749,7 +20452,11 @@ export const FR_LESSONS: Lesson[] = [
       "où",
       "qui",
       "que",
-      "besoin"
+      "besoin",
+      "parler",
+      "ville",
+      "moment",
+      "livre"
     ],
     "hook": {
       "title": "Completing the Relative Quartet: qui, que, dont, où",
@@ -18804,8 +20511,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'That is the thing that I need' (remembering that 'to need' is 'avoir besoin DE')?",
         "options": [
-          "C'est la chose dont j'ai besoin",
           "C'est la chose que j'ai besoin",
+          "C'est la chose dont j'ai besoin",
           "C'est la chose dont j'en ai besoin"
         ],
         "target_answer": "C'est la chose dont j'ai besoin",
@@ -18817,9 +20524,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'the day when we arrived'?",
         "options": [
-          "le jour où nous sommes arrivés",
           "le jour quand nous sommes arrivés",
-          "le jour que nous sommes arrivés"
+          "le jour que nous sommes arrivés",
+          "le jour où nous sommes arrivés"
         ],
         "target_answer": "le jour où nous sommes arrivés",
         "meaning": "the day when (lit. where) we arrived",
@@ -18842,12 +20549,12 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "This is the city where I used to live",
         "word_bank": [
           "C'est",
-          "la",
           "ville",
           "où",
-          "j'habitais",
+          "ou",
           "que",
-          "ou"
+          "j'habitais",
+          "la"
         ],
         "explanation": "où (with grave accent) links la ville to j'habitais.",
         "diagnosis": {
@@ -18880,6 +20587,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "de-verb → dont; place or 'the day when' → où.",
       "curiosity_teaser": "Up next on Le Pont ([5101] Tout le conditionnel): see how Dont & Où leads directly into Tout le conditionnel."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"This is the city where I used to live\" in French:",
+      "target_answer": "C'est la ville où j'habitais",
+      "word_bank": [
+        "la",
+        "ne",
+        "C'est",
+        "j'habitais",
+        "où",
+        "pas",
+        "ville"
+      ],
+      "explanation": "Re-constructing \"C'est la ville où j'habitais\" from the underlying rule cements the pattern of Dont & Où."
     }
   },
   {
@@ -18905,7 +20626,11 @@ export const FR_LESSONS: Lesson[] = [
       "pourrais",
       "ferais",
       "aller",
-      "avoir"
+      "avoir",
+      "être",
+      "parler",
+      "visiter",
+      "aimé"
     ],
     "hook": {
       "title": "The Full Would-World: Building Any Conditional in Two Seconds",
@@ -18966,8 +20691,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "Complete the hypothetical sentence: 'If I had time, I would go to the cinema':",
         "options": [
           "Si j'avais le temps, j'irais au cinéma",
-          "Si j'aurais le temps, j'irais au cinéma",
-          "Si j'ai le temps, j'irais au cinéma"
+          "Si j'ai le temps, j'irais au cinéma",
+          "Si j'aurais le temps, j'irais au cinéma"
         ],
         "target_answer": "Si j'avais le temps, j'irais au cinéma",
         "meaning": "Si + imparfait (j'avais) → conditional (j'irais)",
@@ -18998,15 +20723,15 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Ce serait très bon de visiter Lyon",
         "meaning": "It would be very good to visit Lyon",
         "word_bank": [
+          "la",
           "Ce",
-          "serait",
           "très",
           "bon",
-          "de",
           "visiter",
-          "Lyon",
+          "serait",
           "sera",
-          "la"
+          "de",
+          "Lyon"
         ],
         "explanation": "Ce serait ('it would be') vs. Ce sera ('it will be').",
         "diagnosis": {
@@ -19039,6 +20764,22 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "After si ('if') use the imparfait (Si j'avais); in the result use the conditional (j'irais).",
       "curiosity_teaser": "Up next on Le Pont ([5111] Dormant Consonants Wake Up): see how Tout le conditionnel leads directly into Dormant Consonants Wake Up."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"It would be very good to visit Lyon\" in French:",
+      "target_answer": "Ce serait très bon de visiter Lyon",
+      "word_bank": [
+        "Lyon",
+        "très",
+        "serait",
+        "bon",
+        "ne",
+        "pas",
+        "visiter",
+        "Ce",
+        "de"
+      ],
+      "explanation": "Re-constructing \"Ce serait très bon de visiter Lyon\" from the underlying rule cements the pattern of Tout le conditionnel."
     }
   },
   {
@@ -19065,7 +20806,12 @@ export const FR_LESSONS: Lesson[] = [
       "avez",
       "êtes",
       "nous",
-      "avons"
+      "avons",
+      "cest",
+      "un",
+      "ami",
+      "ans",
+      "on"
     ],
     "hook": {
       "title": "How Dormant Consonants Wake Up Across Word Boundaries",
@@ -19120,9 +20866,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "In 'quand il arrive' ('when he arrives'), what sound does the final -d of 'quand' make in liaison before 'il'?",
         "options": [
+          "A /z/ sound (/kɑ̃.z‿il/)",
           "A crisp /t/ sound (/kɑ̃.t‿il/)",
-          "A /d/ sound (/kɑ̃.d‿il/)",
-          "A /z/ sound (/kɑ̃.z‿il/)"
+          "A /d/ sound (/kɑ̃.d‿il/)"
         ],
         "target_answer": "A crisp /t/ sound (/kɑ̃.t‿il/)",
         "meaning": "Final D devoices to /t/ when waking up in liaison!",
@@ -19133,9 +20879,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Why does French forbid liaison after the word 'et' ('and')?",
         "options": [
-          "Because the -t of 'et' is permanently silent, keeping 'et' distinct from 'est'",
           "Because 'et' ends in a vowel",
-          "Because 'et' only appears at the end of a sentence"
+          "Because 'et' only appears at the end of a sentence",
+          "Because the -t of 'et' is permanently silent, keeping 'et' distinct from 'est'"
         ],
         "target_answer": "Because the -t of 'et' is permanently silent, keeping 'et' distinct from 'est'",
         "meaning": "et (/e/) never links its t, whereas est (/ɛ/) links as /ɛ.t‿/ before a vowel.",
@@ -19157,13 +20903,13 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "On arrive avec un ami",
         "meaning": "We are arriving with a friend",
         "word_bank": [
-          "On",
-          "arrive",
-          "avec",
+          "la",
           "un",
+          "arrive",
           "ami",
-          "une",
-          "la"
+          "avec",
+          "On",
+          "une"
         ],
         "explanation": "Both On‿arrive and un‿ami link with an /n/ sound.",
         "diagnosis": {
@@ -19196,6 +20942,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "S/X → /z/, T/D → /t/, N → /n/, and 'et' never links.",
       "curiosity_teaser": "Up next on Le Pont ([5112] H muet vs H aspiré): see how Dormant Consonants Wake Up leads directly into H muet vs H aspiré."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"We are arriving with a friend\" in French:",
+      "target_answer": "On arrive avec un ami",
+      "word_bank": [
+        "pas",
+        "On",
+        "arrive",
+        "ami",
+        "avec",
+        "ne",
+        "un"
+      ],
+      "explanation": "Re-constructing \"On arrive avec un ami\" from the underlying rule cements the pattern of Dormant Consonants Wake Up."
     }
   },
   {
@@ -19220,7 +20980,10 @@ export const FR_LESSONS: Lesson[] = [
       "hôpital",
       "homme",
       "histoire",
-      "heure"
+      "heure",
+      "hiver",
+      "habiter",
+      "huit"
     ],
     "hook": {
       "title": "Why l'hôtel Elides While le héros Blocks Elision: H muet vs. H aspiré",
@@ -19281,8 +21044,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "Why does French say 'les héros' WITHOUT a /z/ liaison (/le e.ʁo/), unlike 'les‿hommes' (/le.z‿ɔm/)?",
         "options": [
           "Because a /z/ liaison on 'les héros' would sound identical to 'les zéros' ('the zeros')!",
-          "Because the H of héros is pronounced like an English H",
-          "Because héros is feminine"
+          "Because héros is feminine",
+          "Because the H of héros is pronounced like an English H"
         ],
         "target_answer": "Because a /z/ liaison on 'les héros' would sound identical to 'les zéros' ('the zeros')!",
         "meaning": "H aspiré blocks liaison so les héros never sounds like les zéros!",
@@ -19293,8 +21056,8 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Which sentence correctly applies H muet elision across all three words?",
         "options": [
-          "L'homme habite à l'hôtel depuis une heure",
           "Le homme habite à le hôtel depuis une heure",
+          "L'homme habite à l'hôtel depuis une heure",
           "L'homme habite à le hôtel depuis l'heure"
         ],
         "target_answer": "L'homme habite à l'hôtel depuis une heure",
@@ -19318,13 +21081,13 @@ export const FR_LESSONS: Lesson[] = [
         "meaning": "In winter, the man lives at the hotel",
         "word_bank": [
           "En",
-          "hiver",
-          "l'homme",
-          "habite",
-          "à",
           "l'hôtel",
           "Le",
-          "la"
+          "habite",
+          "l'homme",
+          "à",
+          "la",
+          "hiver"
         ],
         "explanation": "hiver, l'homme, habite, and l'hôtel are all Latin H muet words.",
         "diagnosis": {
@@ -19358,6 +21121,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Both H's are silent; Latin H muet elides (l'histoire), while H aspiré stands apart (le héros).",
       "curiosity_teaser": "Up next on Le Pont ([5121] Le Pain, Le Fromage, Le Vin & L'Eau): see how H muet vs H aspiré leads directly into Le Pain, Le Fromage, Le Vin & L'Eau."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"In winter, the man lives at the hotel\" in French:",
+      "target_answer": "En hiver, l'homme habite à l'hôtel",
+      "word_bank": [
+        "ne",
+        "à",
+        "l'hôtel",
+        "l'homme",
+        "En",
+        "hiver",
+        "habite",
+        "pas"
+      ],
+      "explanation": "Re-constructing \"En hiver, l'homme habite à l'hôtel\" from the underlying rule cements the pattern of H muet vs H aspiré."
     }
   },
   {
@@ -19384,7 +21162,12 @@ export const FR_LESSONS: Lesson[] = [
       "fromage",
       "vin",
       "eau",
-      "soupe"
+      "soupe",
+      "café",
+      "du",
+      "de",
+      "le",
+      "la"
     ],
     "hook": {
       "title": "The French Table: Definite Love (le pain) vs. Partitive Plate (du pain)",
@@ -19444,9 +21227,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "Fill the two blanks: 'I love bread, so I am buying some bread' ('J'aime ___ pain, donc j'achète ___ pain'):",
         "options": [
-          "le pain / du pain",
+          "le pain / le pain",
           "du pain / du pain",
-          "le pain / le pain"
+          "le pain / du pain"
         ],
         "target_answer": "le pain / du pain",
         "meaning": "General love takes le pain; buying a portion takes partitive du pain!",
@@ -19476,18 +21259,18 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je préfère le vin, mais aujourd'hui je prends de l'eau",
         "meaning": "I prefer wine, but today I'm having some water",
         "word_bank": [
-          "Je",
-          "préfère",
           "le",
-          "vin",
-          "mais",
-          "aujourd'hui",
-          "je",
-          "prends",
-          "de",
-          "l'eau",
           "du",
-          "la"
+          "mais",
+          "préfère",
+          "vin",
+          "l'eau",
+          "Je",
+          "la",
+          "prends",
+          "je",
+          "aujourd'hui",
+          "de"
         ],
         "explanation": "préférer takes definite le vin; prendre takes partitive de l'eau.",
         "diagnosis": {
@@ -19520,6 +21303,25 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Liking in general = le / la / l'; Eating or ordering some = du / de la / de l'.",
       "curiosity_teaser": "Up next on Le Pont ([5122] Commander au Bistro): see how Le Pain, Le Fromage, Le Vin & L'Eau leads directly into Commander au Bistro."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I prefer wine, but today I'm having some water\" in French:",
+      "target_answer": "Je préfère le vin, mais aujourd'hui je prends de l'eau",
+      "word_bank": [
+        "Je",
+        "prends",
+        "pas",
+        "préfère",
+        "je",
+        "mais",
+        "aujourd'hui",
+        "ne",
+        "vin",
+        "le",
+        "de",
+        "l'eau"
+      ],
+      "explanation": "Re-constructing \"Je préfère le vin, mais aujourd'hui je prends de l'eau\" from the underlying rule cements the pattern of Le Pain, Le Fromage, Le Vin & L'Eau."
     }
   },
   {
@@ -19545,7 +21347,11 @@ export const FR_LESSONS: Lesson[] = [
       "voudrais",
       "addition",
       "table",
-      "restaurant"
+      "restaurant",
+      "café",
+      "vin",
+      "eau",
+      "sil_vous_plait"
     ],
     "hook": {
       "title": "Ordering at a Paris Bistro: Je prends…, Je voudrais…, and L'addition",
@@ -19646,19 +21452,19 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je prends de la soupe et du pain, s'il vous plaît",
         "meaning": "I'll have some soup and some bread, please",
         "word_bank": [
-          "Je",
-          "prends",
-          "de",
-          "la",
-          "soupe",
-          "et",
-          "du",
-          "pain",
           "s'il",
+          "de",
+          "Je",
+          "et",
           "vous",
           "plaît",
+          "le",
+          "soupe",
+          "pain",
           "ai",
-          "le"
+          "la",
+          "du",
+          "prends"
         ],
         "explanation": "Je prends + de la soupe (f.) + et du pain (m.).",
         "diagnosis": {
@@ -19691,6 +21497,26 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "To order food or drink, English 'I'll have' is always French Je prends ('I take').",
       "curiosity_teaser": "Up next on Le Pont ([5131] Le Train, Le Billet & La Gare): see how Commander au Bistro leads directly into Le Train, Le Billet & La Gare."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I'll have some soup and some bread, please\" in French:",
+      "target_answer": "Je prends de la soupe et du pain, s'il vous plaît",
+      "word_bank": [
+        "prends",
+        "Je",
+        "vous",
+        "la",
+        "et",
+        "ne",
+        "pas",
+        "pain",
+        "s'il",
+        "de",
+        "soupe",
+        "du",
+        "plaît"
+      ],
+      "explanation": "Re-constructing \"Je prends de la soupe et du pain, s'il vous plaît\" from the underlying rule cements the pattern of Commander au Bistro."
     }
   },
   {
@@ -19715,7 +21541,10 @@ export const FR_LESSONS: Lesson[] = [
       "billet",
       "gare",
       "réservation",
-      "prendre"
+      "prendre",
+      "attendre",
+      "heure",
+      "quand"
     ],
     "hook": {
       "title": "At the Train Station: Le Train, Le Billet & La Gare",
@@ -19775,9 +21604,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'I am taking the train at eight o'clock'?",
         "options": [
+          "J'ai le train à huit heures",
           "Je prends le train à huit heures",
-          "Je prends du train à huit heures",
-          "J'ai le train à huit heures"
+          "Je prends du train à huit heures"
         ],
         "target_answer": "Je prends le train à huit heures",
         "meaning": "I take the train at eight o'clock",
@@ -19808,18 +21637,18 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "J'ai mon billet et j'attends le train à la gare",
         "meaning": "I have my ticket and I'm waiting for the train at the station",
         "word_bank": [
-          "J'ai",
           "mon",
-          "billet",
-          "et",
-          "j'attends",
-          "le",
-          "train",
-          "à",
           "la",
+          "un",
+          "le",
+          "J'ai",
           "gare",
+          "et",
+          "billet",
           "pour",
-          "un"
+          "à",
+          "j'attends",
+          "train"
         ],
         "explanation": "j'attends le train needs no 'pour'.",
         "diagnosis": {
@@ -19852,6 +21681,25 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "You 'take' both coffee and trains with prendre: Je prends un café, je prends le train.",
       "curiosity_teaser": "Up next on Le Pont ([5132] Départ, Arrivée & Aller-Retour): see how Le Train, Le Billet & La Gare leads directly into Départ, Arrivée & Aller-Retour."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I have my ticket and I'm waiting for the train at the station\" in French:",
+      "target_answer": "J'ai mon billet et j'attends le train à la gare",
+      "word_bank": [
+        "J'ai",
+        "pas",
+        "ne",
+        "le",
+        "mon",
+        "train",
+        "à",
+        "gare",
+        "j'attends",
+        "la",
+        "billet",
+        "et"
+      ],
+      "explanation": "Re-constructing \"J'ai mon billet et j'attends le train à la gare\" from the underlying rule cements the pattern of Le Train, Le Billet & La Gare."
     }
   },
   {
@@ -19876,7 +21724,10 @@ export const FR_LESSONS: Lesson[] = [
       "arriver",
       "parti",
       "revenir",
-      "train"
+      "train",
+      "gare",
+      "billet",
+      "demain"
     ],
     "hook": {
       "title": "Departures, Arrivals & Round-Trip Tickets: Aller simple vs. Aller-retour",
@@ -19939,8 +21790,8 @@ export const FR_LESSONS: Lesson[] = [
         "natural": "a round-trip ticket to Paris",
         "options": [
           "a round-trip ticket to Paris",
-          "a go-return for Paris",
-          "an all-return to Paris"
+          "an all-return to Paris",
+          "a go-return for Paris"
         ],
         "target_answer": "a go-return for Paris",
         "meaning": "Literal structure: a go-return for Paris",
@@ -19952,8 +21803,8 @@ export const FR_LESSONS: Lesson[] = [
         "prompt": "How do you ask the ticket agent for 'a round-trip ticket to Lyon, please'?",
         "options": [
           "Je voudrais un aller-retour pour Lyon, s'il vous plaît",
-          "Je voudrais un aller simple à Lyon, s'il vous plaît",
-          "Je veux aller retourner Lyon"
+          "Je veux aller retourner Lyon",
+          "Je voudrais un aller simple à Lyon, s'il vous plaît"
         ],
         "target_answer": "Je voudrais un aller-retour pour Lyon, s'il vous plaît",
         "meaning": "I would like a round-trip ticket to Lyon, please",
@@ -19975,17 +21826,17 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Le train part ce matin et je reviens demain",
         "meaning": "The train leaves this morning and I'm coming back tomorrow",
         "word_bank": [
-          "Le",
           "train",
-          "part",
-          "ce",
+          "Le",
+          "je",
           "matin",
           "et",
-          "je",
-          "reviens",
+          "ce",
+          "la",
+          "part",
           "demain",
-          "partir",
-          "la"
+          "reviens",
+          "partir"
         ],
         "explanation": "part is the 3rd-person singular of partir; je reviens is from revenir.",
         "diagnosis": {
@@ -20018,6 +21869,24 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "One-way = un aller simple; Round-trip = un aller-retour; Ticket destination = pour [City].",
       "curiosity_teaser": "Up next on Le Pont ([5141] Docteur, Professeur & Acteur): see how Départ, Arrivée & Aller-Retour leads directly into Docteur, Professeur & Acteur."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"The train leaves this morning and I'm coming back tomorrow\" in French:",
+      "target_answer": "Le train part ce matin et je reviens demain",
+      "word_bank": [
+        "demain",
+        "et",
+        "ne",
+        "je",
+        "Le",
+        "train",
+        "part",
+        "reviens",
+        "ce",
+        "matin",
+        "pas"
+      ],
+      "explanation": "Re-constructing \"Le train part ce matin et je reviens demain\" from the underlying rule cements the pattern of Départ, Arrivée & Aller-Retour."
     }
   },
   {
@@ -20042,7 +21911,10 @@ export const FR_LESSONS: Lesson[] = [
       "professeur",
       "acteur",
       "directeur",
-      "être"
+      "être",
+      "suis",
+      "cest",
+      "bon"
     ],
     "hook": {
       "title": "Why French Drops 'a/an' Before Professions After être",
@@ -20102,9 +21974,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'My brother is a teacher' vs. 'He is a very good teacher'?",
         "options": [
+          "Mon frère est professeur / Il est très bon professeur",
           "Mon frère est professeur / C'est un très bon professeur",
-          "Mon frère est un professeur / Il est un très bon professeur",
-          "Mon frère est professeur / Il est très bon professeur"
+          "Mon frère est un professeur / Il est un très bon professeur"
         ],
         "target_answer": "Mon frère est professeur / C'est un très bon professeur",
         "meaning": "Bare after est; C'est un when modified by an adjective!",
@@ -20118,8 +21990,8 @@ export const FR_LESSONS: Lesson[] = [
         "natural": "My mother is a doctor",
         "options": [
           "My mother is a doctor",
-          "My mother is doctor",
-          "My mother has doctor"
+          "My mother has doctor",
+          "My mother is doctor"
         ],
         "target_answer": "My mother is doctor",
         "meaning": "Literal structure: My mother is doctor",
@@ -20141,11 +22013,11 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je suis professeur à l'université",
         "meaning": "I am a professor at the university",
         "word_bank": [
-          "Je",
-          "suis",
           "professeur",
-          "à",
           "l'université",
+          "suis",
+          "à",
+          "Je",
           "un",
           "au"
         ],
@@ -20180,6 +22052,20 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "After je suis / il est, drop 'a/an' before a bare profession (Je suis professeur); with an adjective, use C'est un bon professeur.",
       "curiosity_teaser": "Up next on Le Pont ([5142] La Musique, Le Cinéma & Le Livre): see how Docteur, Professeur & Acteur leads directly into La Musique, Le Cinéma & Le Livre."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I am a professor at the university\" in French:",
+      "target_answer": "Je suis professeur à l'université",
+      "word_bank": [
+        "pas",
+        "suis",
+        "ne",
+        "professeur",
+        "Je",
+        "l'université",
+        "à"
+      ],
+      "explanation": "Re-constructing \"Je suis professeur à l'université\" from the underlying rule cements the pattern of Docteur, Professeur & Acteur."
     }
   },
   {
@@ -20204,7 +22090,10 @@ export const FR_LESSONS: Lesson[] = [
       "cinéma",
       "livre",
       "histoire",
-      "aimé"
+      "aimé",
+      "préférer",
+      "aller",
+      "voir"
     ],
     "hook": {
       "title": "Cultural Passions: La Musique, Le Cinéma & Les Livres",
@@ -20297,19 +22186,19 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "On va au cinéma ce soir parce que j'aime ce film",
         "meaning": "We're going to the cinema tonight because I love this movie",
         "word_bank": [
-          "On",
-          "va",
-          "au",
-          "cinéma",
           "ce",
+          "On",
+          "au",
           "soir",
           "parce",
-          "que",
-          "j'aime",
-          "ce",
-          "film",
+          "cinéma",
+          "va",
           "à",
-          "la"
+          "que",
+          "ce",
+          "la",
+          "film",
+          "j'aime"
         ],
         "explanation": "au cinéma (à + le) + parce que j'aime ce film.",
         "diagnosis": {
@@ -20342,6 +22231,26 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "After aimer/adorer/préférer, always keep le, la, l', les (J'aime la musique).",
       "curiosity_teaser": "Up next on Le Pont ([5151] La Tête, La Main & Le Cœur): see how La Musique, Le Cinéma & Le Livre leads directly into La Tête, La Main & Le Cœur."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"We're going to the cinema tonight because I love this movie\" in French:",
+      "target_answer": "On va au cinéma ce soir parce que j'aime ce film",
+      "word_bank": [
+        "au",
+        "film",
+        "parce",
+        "On",
+        "pas",
+        "ce",
+        "que",
+        "soir",
+        "ne",
+        "ce",
+        "j'aime",
+        "va",
+        "cinéma"
+      ],
+      "explanation": "Re-constructing \"On va au cinéma ce soir parce que j'aime ce film\" from the underlying rule cements the pattern of La Musique, Le Cinéma & Le Livre."
     }
   },
   {
@@ -20367,7 +22276,11 @@ export const FR_LESSONS: Lesson[] = [
       "main",
       "cœur",
       "avoir",
-      "jai"
+      "jai",
+      "à",
+      "au",
+      "la",
+      "le"
     ],
     "hook": {
       "title": "The Body & Aches: La Tête, La Main, Le Cœur & Avoir mal à",
@@ -20437,9 +22350,9 @@ export const FR_LESSONS: Lesson[] = [
         "german": "J'ai mal à la tête",
         "natural": "I have a headache",
         "options": [
-          "I have a headache",
+          "I am bad in my head",
           "I have pain at the head",
-          "I am bad in my head"
+          "I have a headache"
         ],
         "target_answer": "I have pain at the head",
         "meaning": "Literal structure: I have pain at the head",
@@ -20461,14 +22374,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "J'ai mal à la tête aujourd'hui",
         "meaning": "I have a headache today",
         "word_bank": [
-          "J'ai",
-          "mal",
-          "à",
-          "la",
           "tête",
-          "aujourd'hui",
+          "J'ai",
           "ma",
-          "le"
+          "la",
+          "à",
+          "le",
+          "aujourd'hui",
+          "mal"
         ],
         "explanation": "Use à la tête (never *à ma tête).",
         "diagnosis": {
@@ -20501,6 +22414,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Headache = J'ai mal à la tête (never *ma tête).",
       "curiosity_teaser": "Up next on Le Pont ([5152] Le Manteau & La Robe): see how La Tête, La Main & Le Cœur leads directly into Le Manteau & La Robe."
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I have a headache today\" in French:",
+      "target_answer": "J'ai mal à la tête aujourd'hui",
+      "word_bank": [
+        "à",
+        "aujourd'hui",
+        "J'ai",
+        "pas",
+        "mal",
+        "ne",
+        "tête",
+        "la"
+      ],
+      "explanation": "Re-constructing \"J'ai mal à la tête aujourd'hui\" from the underlying rule cements the pattern of La Tête, La Main & Le Cœur."
     }
   },
   {
@@ -20527,7 +22455,12 @@ export const FR_LESSONS: Lesson[] = [
       "robe",
       "bleu",
       "rouge",
-      "noir"
+      "noir",
+      "blanc",
+      "vert",
+      "beau",
+      "nouveau",
+      "cher"
     ],
     "hook": {
       "title": "Wardrobe Doublets & Wearing Clothes: Le Manteau & La Robe",
@@ -20595,9 +22528,9 @@ export const FR_LESSONS: Lesson[] = [
         "type": "shift_select",
         "prompt": "How do you say 'a beautiful white dress' (la robe is feminine)?",
         "options": [
-          "une belle robe blanche",
+          "un beau robe blanc",
           "une robe belle blanche",
-          "un beau robe blanc"
+          "une belle robe blanche"
         ],
         "target_answer": "une belle robe blanche",
         "meaning": "a beautiful white dress",
@@ -20619,14 +22552,14 @@ export const FR_LESSONS: Lesson[] = [
         "target_answer": "Je porte un manteau noir aujourd'hui",
         "meaning": "I am wearing a black coat today",
         "word_bank": [
-          "Je",
-          "porte",
-          "un",
-          "manteau",
-          "noir",
           "aujourd'hui",
+          "manteau",
+          "Je",
+          "un",
           "noire",
-          "la"
+          "noir",
+          "la",
+          "porte"
         ],
         "explanation": "manteau is masculine, so noir stays masculine after it.",
         "diagnosis": {
@@ -20659,6 +22592,21 @@ export const FR_LESSONS: Lesson[] = [
       },
       "takeaway": "Old French -el became modern French -eau (mantle → manteau, castle → château).",
       "curiosity_teaser": "You have completed every core, sprig, and support branch on Le Pont — félicitations !"
+    },
+    "twist": {
+      "prompt": "Think it through again without looking back — express \"I am wearing a black coat today\" in French:",
+      "target_answer": "Je porte un manteau noir aujourd'hui",
+      "word_bank": [
+        "aujourd'hui",
+        "un",
+        "noir",
+        "ne",
+        "manteau",
+        "porte",
+        "Je",
+        "pas"
+      ],
+      "explanation": "Re-constructing \"Je porte un manteau noir aujourd'hui\" from the underlying rule cements the pattern of Le Manteau & La Robe."
     }
   }
 ];

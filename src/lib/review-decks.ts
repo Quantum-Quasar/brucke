@@ -1,7 +1,9 @@
 // Pure helpers for building review decks: what counts as "learned", which words
-// came from the lessons you actually finished, and how to scope/size a session.
+// came from the lessons you actually finished, how to scope/size a session, and
+// the declarative DECK_CAPABILITIES registry where each deck declares which
+// ReviewModes it supports.
 
-import type { Lesson, MasteryState, SRSCard } from "./types";
+import type { Lesson, MasteryState, ReviewMode, SRSCard, WordEntity } from "./types";
 import { shuffleArray } from "./review-modes";
 
 /** Which words a scoped deck (shift family / domain) should include. */
@@ -10,6 +12,103 @@ export type LearnedFilter = "all" | "learned" | "new";
 /** Session size choices; 0 = the whole deck. */
 export const SESSION_SIZES = [10, 20, 50, 0] as const;
 export type SessionSize = (typeof SESSION_SIZES)[number];
+
+export type ReviewDeckType =
+  | "due"
+  | "shift"
+  | "weakest"
+  | "recent"
+  | "compounds"
+  | "sentences"
+  | "articles"
+  | "domain"
+  | "everything";
+
+export interface DeckCapabilitySpec {
+  id: ReviewDeckType;
+  label: string;
+  /** Which review modes this deck supports. Single-mode decks skip the style picker modal. */
+  supportedModes: ReviewMode[];
+  defaultMode: ReviewMode;
+}
+
+export const ALL_REVIEW_MODES: ReviewMode[] = ["flashcard", "mcq", "tiles", "typing"];
+
+export const DECK_CAPABILITIES: Record<ReviewDeckType, DeckCapabilitySpec> = {
+  due: {
+    id: "due",
+    label: "due cards",
+    supportedModes: ALL_REVIEW_MODES,
+    defaultMode: "flashcard",
+  },
+  shift: {
+    id: "shift",
+    label: "shift family",
+    supportedModes: ALL_REVIEW_MODES,
+    defaultMode: "flashcard",
+  },
+  domain: {
+    id: "domain",
+    label: "domain",
+    supportedModes: ALL_REVIEW_MODES,
+    defaultMode: "flashcard",
+  },
+  weakest: {
+    id: "weakest",
+    label: "weakest words",
+    supportedModes: ALL_REVIEW_MODES,
+    defaultMode: "flashcard",
+  },
+  recent: {
+    id: "recent",
+    label: "recent lessons",
+    supportedModes: ALL_REVIEW_MODES,
+    defaultMode: "flashcard",
+  },
+  compounds: {
+    id: "compounds",
+    label: "compounds & traps",
+    supportedModes: ALL_REVIEW_MODES,
+    defaultMode: "flashcard",
+  },
+  sentences: {
+    id: "sentences",
+    label: "sentence patterns",
+    supportedModes: ALL_REVIEW_MODES,
+    defaultMode: "tiles",
+  },
+  articles: {
+    id: "articles",
+    label: "article & gender drill",
+    supportedModes: ["mcq"],
+    defaultMode: "mcq",
+  },
+  everything: {
+    id: "everything",
+    label: "everything",
+    supportedModes: ALL_REVIEW_MODES,
+    defaultMode: "flashcard",
+  },
+};
+
+/**
+ * Resolves the effective ReviewMode for a given card entity inside a deck.
+ * If the card entity declares its own `supportedModes` (e.g. an Article card
+ * which only supports `["mcq"]`), it automatically enforces a supported mode
+ * even inside mixed decks like "Everything" or "Due Today".
+ */
+export function resolveCardReviewMode(
+  entity: WordEntity | undefined,
+  preferredMode: ReviewMode,
+  deckId?: ReviewDeckType | null
+): ReviewMode {
+  const deckModes = deckId ? DECK_CAPABILITIES[deckId]?.supportedModes ?? ALL_REVIEW_MODES : ALL_REVIEW_MODES;
+  const entityModes = entity?.supportedModes && entity.supportedModes.length > 0 ? entity.supportedModes : deckModes;
+  const allowed = entityModes.filter((m) => deckModes.includes(m));
+  const pool = allowed.length > 0 ? allowed : entityModes;
+  if (pool.includes(preferredMode)) return preferredMode;
+  return pool[0] ?? "mcq";
+}
 
 /**
  * A word is "learned" once a lesson showed it or you reviewed it.

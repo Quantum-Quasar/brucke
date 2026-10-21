@@ -1,6 +1,9 @@
 "use client";
 
 // ponytail: lightweight, zero-dependency Web Audio controller for mechanical keyboard clicks & error sounds
+// Pre-warms only a single primary sample per switch pack (1.wav) and uses Web Audio
+// playbackRate micro-pitching for instant acoustic variation while lazily loading
+// secondary variations in the background.
 
 export interface SoundClickOption {
   id: string;
@@ -75,13 +78,15 @@ export class SoundEngine {
     return this.bufferCache.has(url);
   }
 
+  /**
+   * Preloads only the primary sample (1.wav) for the chosen switch pack instead of
+   * downloading all 10 WAV variations upfront — cutting initial audio network payload by ~90%.
+   */
   public async preloadClickSound(clickId: string): Promise<void> {
     const opt = SOUND_CLICK_OPTIONS.find((s) => s.id === clickId);
     if (!opt || opt.count === 0) return;
-    for (let i = 1; i <= opt.count; i++) {
-      const url = `/sounds/click${clickId}/${i}.wav`;
-      fetch(url).catch(() => {});
-    }
+    const primaryUrl = `/sounds/click${clickId}/1.wav`;
+    fetch(primaryUrl).catch(() => {});
   }
 
   public async loadBuffer(url: string): Promise<AudioBuffer | null> {
@@ -106,7 +111,7 @@ export class SoundEngine {
         }
         const arrayBuf = await res.arrayBuffer();
         const audioBuf = await ctx.decodeAudioData(arrayBuf);
-        
+
         // ponytail: FIFO eviction to strictly cap in-memory decoded PCM buffers <= 24
         if (this.bufferCache.size >= SoundEngine.MAX_CACHE) {
           const oldestKey = this.bufferCache.keys().next().value;
@@ -126,7 +131,7 @@ export class SoundEngine {
     return promise;
   }
 
-  private playBuffer(buf: AudioBuffer, volume: number) {
+  private playBuffer(buf: AudioBuffer, volume: number, playbackRate = 1.0) {
     const ctx = this.getAudioContext();
     if (!ctx) return;
     try {
@@ -134,6 +139,9 @@ export class SoundEngine {
       const gainNode = ctx.createGain();
       gainNode.gain.value = Math.max(0, Math.min(1, volume));
       source.buffer = buf;
+      if (playbackRate !== 1.0 && source.playbackRate) {
+        source.playbackRate.value = playbackRate;
+      }
       source.connect(gainNode);
       gainNode.connect(ctx.destination);
 
@@ -183,6 +191,7 @@ export class SoundEngine {
 
     const randomIndex = Math.floor(Math.random() * opt.count) + 1;
     const url = `/sounds/click${clickId}/${randomIndex}.wav`;
+    const primaryUrl = `/sounds/click${clickId}/1.wav`;
 
     const buf = this.bufferCache.get(url);
     if (buf) {
@@ -190,8 +199,18 @@ export class SoundEngine {
       return;
     }
 
-    // Attempt to load and play, fallback to synthetic click
-    const loadedBuf = await this.loadBuffer(url);
+    // If primary sample 1.wav is already cached, play it immediately with subtle pitch variation
+    // while lazily warming the secondary variation in the background
+    const primaryBuf = this.bufferCache.get(primaryUrl);
+    if (primaryBuf) {
+      const rateJitter = 0.96 + Math.random() * 0.08;
+      this.playBuffer(primaryBuf, volume, rateJitter);
+      void this.loadBuffer(url);
+      return;
+    }
+
+    // Attempt to load primary sample first
+    const loadedBuf = await this.loadBuffer(primaryUrl);
     if (loadedBuf) {
       this.playBuffer(loadedBuf, volume);
     } else {

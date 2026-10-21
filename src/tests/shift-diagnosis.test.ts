@@ -140,3 +140,22 @@ describe("TM-4b whisper-cues: sparse, deterministic, never repeated", () => {
     });
   });
 });
+
+
+describe("Language-aware shift diagnosis for Spanish and French", () => {
+  it("diagnoses Spanish sound shifts and the -at- verb stem trap", () => {
+    expect(diagnoseAttempt("nación", "nation", undefined, undefined, "es")?.slip).toContain("-tion");
+    expect(diagnoseAttempt("universidad", "university", undefined, undefined, "es")?.slip).toContain("-ty");
+    expect(diagnoseAttempt("hacer", "facer", undefined, undefined, "es")?.slip).toContain("Latin F");
+    expect(diagnoseAttempt("noche", "nocte", undefined, undefined, "es")?.slip).toContain("-CT-");
+    expect(diagnoseAttempt("celebrar", "celebratar", undefined, undefined, "es")?.slip).toContain("-at-");
+  });
+
+  it("diagnoses French sound shifts and circumflex S-drops", () => {
+    expect(diagnoseAttempt("université", "university", undefined, undefined, "fr")?.slip).toContain("-ty");
+    expect(diagnoseAttempt("docteur", "doctor", undefined, undefined, "fr")?.slip).toContain("-or");
+    expect(diagnoseAttempt("forêt", "forest", undefined, undefined, "fr")?.slip).toContain("vanished S");
+    expect(diagnoseAttempt("guerre", "werre", undefined, undefined, "fr")?.slip).toContain("Germanic W");
+    expect(diagnoseAttempt("préparer", "préparationer", undefined, undefined, "fr")?.slip).toContain("-er");
+  });
+});

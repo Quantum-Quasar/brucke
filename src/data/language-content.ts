@@ -94,6 +94,15 @@ export function getLanguageContent(languageId: string): LanguageContent {
   return CONTENT_MAP[languageId] ?? EMPTY_CONTENT;
 }
 
+/**
+ * Compendium bundle for a language id — the empty bundle when nothing is authored.
+ * Thin accessor over getLanguageContent() for tools that only need word/shift data.
+ */
+export function getCompendium(languageId: string): CompendiumData {
+  const content = getLanguageContent(languageId);
+  return content.compendium ?? EMPTY_COMPENDIUM;
+}
+
 /** Total vocabulary words across the language's compendium (0 when unavailable). */
 export function getTotalWordCount(languageId: string): number {
   const content = getLanguageContent(languageId);

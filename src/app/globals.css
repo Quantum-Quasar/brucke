@@ -1,5 +1,27 @@
-@import "./fonts.css";
 @import "tailwindcss";
+
+/* Base default UI fonts loaded upfront (~90 KB total); all 38 additional
+   Monkeytype webfonts are injected on demand by ensureFontLoaded(fontId). */
+@font-face {
+  font-family: "Lexend_Deca";
+  src: url("/webfonts/LexendDeca-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lexend Deca";
+  src: url("/webfonts/LexendDeca-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Roboto_Mono";
+  src: url("/webfonts/RobotoMono-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Roboto Mono";
+  src: url("/webfonts/RobotoMono-Regular.woff2") format("woff2");
+  font-display: swap;
+}
 
 :root {
   --font-app: "Lexend_Deca", sans-serif;

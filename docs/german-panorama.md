@@ -26,7 +26,7 @@
 | Dative (indirect object) | 20, 2001, 2003, 2903 | taught |
 | `mir ist kalt` — the dative experiencer | 2903 | taught |
 | Two-way prepositions: motion picks the case | 27, 5051, 2701, 2702 | taught |
-| Genitive (possession) | — | **inferred** |
+| Genitive (possession) | 1003, 5102 | taught (was inferred) |
 
 The genitive is the one real hole. It appears in the panorama's diagram because a learner will meet `des`/`der` in reading, but no lesson on the trail names it. The frame is already installed — `des` is `D- + *seiner*`, exactly the same decomposition as `der = D- + *er*` — so it needs one sprig, not a topic.
 
@@ -37,7 +37,7 @@ The genitive is the one real hole. It appears in the panorama's diagram because 
 | `der` = D- + `er`, `die` = D- + `sie`, `das` = D- + `es` | 1003 | taught |
 | The pronoun test (which pronoun replaces the noun?) | 1003, 10 | taught |
 | The ein-family marches in step with der/die/das | 11, 1101 | taught |
-| `die` does two jobs: feminine *and* plural | 1003 (footnote), 23 | partial |
+| `die` does two jobs: feminine *and* plural | 1003, 23 | taught |
 | The article flags case, not gender-as-meaning | 1003 (trap note) | taught |
 
 ## 3. The verb bracket (Satzklammer)
@@ -60,7 +60,7 @@ The genitive is the one real hole. It appears in the panorama's diagram because 
 | Adjective copies the article's ending when `ein` is quiet | 2403 | taught |
 | `-er` echoes `der`, `-es` echoes `das` | 2403 | taught |
 | Strong declension when no article stands in front | 2404 | taught |
-| Predicate adjectives take no ending | 2403 (footnote), 1003 | partial |
+| Predicate adjectives take no ending | 2403, 1003 | taught |
 
 ## 5. Tense, mood and aspect
 

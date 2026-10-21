@@ -10,6 +10,7 @@ import { Zap, Eye, SkipForward, Check, RotateCcw } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { soundEngine } from "@/lib/sound";
 import { getLanguageDefinition } from "@/data/languages";
+import { arrangeTilesDeterministically } from "./ExerciseWidgets";
 import type { LessonTwist } from "@/lib/types";
 
 interface TwistCardProps {
@@ -26,7 +27,10 @@ export const TwistCard: React.FC<TwistCardProps> = ({ twist, onDone }) => {
   const activeLanguageId = useAppStore((s) => s.activeLanguageId);
   const language = getLanguageDefinition(activeLanguageId);
 
-  const wordBank = (twist.word_bank || []).map((w) => w.replace(/[.,!?;:]+$/, ""));
+  const wordBank = React.useMemo(() => {
+    const cleaned = (twist.word_bank || []).map((w) => w.replace(/[.,!?;:]+$/, ""));
+    return arrangeTilesDeterministically(cleaned, `twist#${twist.target_answer}`, twist.target_answer);
+  }, [twist.word_bank, twist.target_answer]);
 
   const insertWord = (word: string) => {
     void soundEngine.playClick(settings.playSoundOnClick, settings.soundVolume);
@@ -80,7 +84,7 @@ export const TwistCard: React.FC<TwistCardProps> = ({ twist, onDone }) => {
               ref={inputRef}
               type="text"
               value={userInput}
-              lang="de"
+              lang={language.id}
               spellCheck={false}
               autoComplete="off"
               autoCorrect="off"
@@ -136,7 +140,7 @@ export const TwistCard: React.FC<TwistCardProps> = ({ twist, onDone }) => {
           <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--main-color)]/30 space-y-2">
             <div>
               <span className="text-[11px] font-mono text-[var(--sub-color)] uppercase tracking-wider block">
-                the german:
+                the {language.name.toLowerCase()}:
               </span>
               <div className="text-xl font-bold text-[var(--main-color)]">
                 {twist.target_answer}

@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect, useRef } from "react";
 import { X, Check } from "lucide-react";
 import { ExerciseWidget } from "@/components/lesson/ExerciseWidgets";
 import { useAppStore } from "@/lib/store";
+import { getLanguageDefinition } from "@/data/languages";
 import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
 import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
 import type { ShiftFamily, ExerciseItem } from "@/lib/types";
@@ -22,6 +23,7 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
   const [currentQuestionFailed, setCurrentQuestionFailed] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
   const data = getLanguageContent(activeLanguageId).compendium ?? EMPTY_COMPENDIUM;
 
   useDialogFocus({
@@ -61,7 +63,7 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
         return {
           id: `drill_${w.id}_${idx}`,
           type: "shift_select",
-          prompt: `Which German word shifted from English "${w.english_cognate}" via ${family.symbol}?`,
+          prompt: `Which ${language.name} word shifted from English "${w.english_cognate}" via ${family.symbol}?`,
           english_hint: `${w.english_cognate} (${family.symbol})`,
           shift_hint: family.symbol,
           target_answer: w.target_word,
@@ -74,7 +76,7 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
         return {
           id: `drill_${w.id}_${idx}`,
           type: "morpheme_tiles",
-          prompt: `Assemble the German cognate for "${w.english_cognate}" using the tiles below:`,
+          prompt: `Assemble the ${language.name} cognate for "${w.english_cognate}" using the tiles below:`,
           english_hint: `${w.english_cognate} (${family.symbol})`,
           shift_hint: family.symbol,
           target_answer: w.target_word,
@@ -86,7 +88,7 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
         return {
           id: `drill_${w.id}_${idx}`,
           type: "shift_select",
-          prompt: `Identify the shifted German cognate for "${w.english_cognate}":`,
+          prompt: `Identify the shifted ${language.name} cognate for "${w.english_cognate}":`,
           english_hint: `${w.english_cognate} (${family.symbol})`,
           shift_hint: family.symbol,
           target_answer: w.target_word,
@@ -97,14 +99,14 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
       return {
         id: `drill_${w.id}_${idx}`,
         type: "derive",
-        prompt: `Apply the ${family.symbol} shift to derive the German word for "${w.english_cognate}":`,
+        prompt: `Apply the ${family.symbol} shift to derive the ${language.name} word for "${w.english_cognate}":`,
         english_hint: `${w.english_cognate} (${family.symbol})`,
         shift_hint: family.symbol,
         target_answer: w.target_word,
         explanation: w.etymology_derivation,
       };
     });
-  }, [family]);
+  }, [family, data, language.name]);
 
   if (!isOpen) return null;
 

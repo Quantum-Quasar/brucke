@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { playTargetAudio } from "@/lib/audio";
+import { playTargetAudio, detectLanguageVoice } from "@/lib/audio";
 
 describe("Native Speech Synthesis Audio Engine", () => {
   it("safely handles server-side or non-browser environments without crashing", () => {
@@ -61,3 +61,16 @@ describe("Native Speech Synthesis Audio Engine", () => {
     delete (globalThis as any).SpeechSynthesisUtterance;
   });
 });
+
+  it("detects when a Linux/Android device has no voice installed for the target language", () => {
+    (globalThis as any).window = {
+      speechSynthesis: {
+        getVoices: () => [{ name: "English Only", lang: "en-US" }],
+      },
+    };
+    const diag = detectLanguageVoice("de-DE");
+    expect(diag.supported).toBe(true);
+    expect(diag.hasLanguageVoice).toBe(false);
+    expect(diag.warningMessage).toContain("German");
+    delete (globalThis as any).window;
+  });

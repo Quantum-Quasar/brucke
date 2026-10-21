@@ -39,9 +39,9 @@ function seededShuffle<T>(arr: T[], seed: number): T[] {
 }
 
 /**
- * The same exercise with a fresh surface: word banks, tile options and multiple-choice
- * options are re-ordered deterministically from the attempt number. The graded answer,
- * the cues and the explanation are untouched.
+ * The same exercise with a fresh surface: word banks, tile options, multiple-choice
+ * options, matching pairs, and compressed noun parts are re-ordered deterministically
+ * from the attempt number. The graded answer, the cues and the explanation are untouched.
  */
 export function retryVariant<T extends { id: string }>(exercise: T, attempt: number): T {
   if (attempt <= 0) return exercise;
@@ -59,6 +59,18 @@ export function retryVariant<T extends { id: string }>(exercise: T, attempt: num
   }
   if (Array.isArray((exercise as Record<string, unknown>).options)) {
     next.options = seededShuffle((exercise as Record<string, unknown>).options as unknown[], seed ^ 0x85ebca6b);
+  }
+  if (Array.isArray((exercise as Record<string, unknown>).matching_pairs)) {
+    next.matching_pairs = seededShuffle(
+      (exercise as Record<string, unknown>).matching_pairs as unknown[],
+      seed ^ 0xc2b2ae35
+    );
+  }
+  if (Array.isArray((exercise as Record<string, unknown>).compressed_parts)) {
+    next.compressed_parts = seededShuffle(
+      (exercise as Record<string, unknown>).compressed_parts as unknown[],
+      seed ^ 0x27d4eb2f
+    );
   }
   return next as T;
 }

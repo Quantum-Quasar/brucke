@@ -14,6 +14,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Volume2, EarOff, Lightbulb, Quote, Sparkles, AlertCircle } from "lucide-react";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
+import { VoiceStatusBanner } from "@/components/common/VoiceStatusBanner";
 import { ErrorFeedbackSheet } from "./ErrorFeedbackSheet";
 import { SuccessFeedbackSheet } from "./SuccessFeedbackSheet";
 import { evaluateAnswerAccuracy } from "@/lib/letter-diff";
@@ -315,6 +316,7 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
       </div>
 
       <p className="text-base text-[var(--text-color)] font-bold leading-snug">{exercise.prompt}</p>
+      <VoiceStatusBanner allowSkipListening />
 
       {/* the prompt is a sound, not a sentence */}
       <div className="p-4 rounded-lg bg-[var(--bg-color)] border-l-4 border-[var(--main-color)] space-y-3">

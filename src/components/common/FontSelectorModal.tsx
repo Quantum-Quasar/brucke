@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useMemo, useRef, useState } from "react";
-import { Search, X, Check, Type } from "lucide-react";
+import { Search, X, Check, Type, Sparkles } from "lucide-react";
 import { useAppStore } from "@/lib/store";
-import { FONT_LIST, filterFonts, type FontMeta } from "@/data/fonts";
+import { FONT_LIST, filterFonts, ensureFontLoaded, type FontMeta } from "@/data/fonts";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
 
 type FontFilterTab = "all" | "mono" | "sans" | "display";
 
-const SAMPLE_TEXT = "Wasser — Brücke & Sob";
+const SAMPLE_TEXT = "Wasser · université · nación";
 
 export const FontSelectorModal: React.FC = () => {
   const isOpen = useAppStore((s) => s.isFontSelectorOpen);
@@ -18,6 +18,8 @@ export const FontSelectorModal: React.FC = () => {
 
   const [query, setQuery] = useState("");
   const [activeTab, setActiveTab] = useState<FontFilterTab>("all");
+  const [previewedIds, setPreviewedIds] = useState<Set<string>>(() => new Set([currentFont]));
+  const [loadAllPreviews, setLoadAllPreviews] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
 
@@ -31,6 +33,23 @@ export const FontSelectorModal: React.FC = () => {
   const filteredFonts = useMemo(() => filterFonts(query, activeTab), [activeTab, query]);
 
   if (!isOpen) return null;
+
+  const previewFont = (fontId: string) => {
+    ensureFontLoaded(fontId);
+    setPreviewedIds((prev) => {
+      if (prev.has(fontId)) return prev;
+      const next = new Set(prev);
+      next.add(fontId);
+      return next;
+    });
+  };
+
+  const handleLoadAllPreviews = () => {
+    for (const f of FONT_LIST) {
+      ensureFontLoaded(f.id);
+    }
+    setLoadAllPreviews(true);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75">
@@ -51,6 +70,17 @@ export const FontSelectorModal: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
+            {!loadAllPreviews && (
+              <button
+                type="button"
+                onClick={handleLoadAllPreviews}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/25 text-[11px] font-mono text-[var(--sub-color)] hover:text-[var(--main-color)] transition cursor-pointer"
+                title="Load all 43 font previews at once"
+              >
+                <Sparkles className="w-3 h-3" />
+                <span>load all previews</span>
+              </button>
+            )}
             <span className="text-xs font-mono text-[var(--sub-color)] hidden sm:inline">[esc] to close</span>
             <button
               type="button"
@@ -77,21 +107,26 @@ export const FontSelectorModal: React.FC = () => {
             />
           </div>
 
-          <div className="flex items-center gap-1.5 overflow-x-auto text-xs font-mono">
-            {(["all", "mono", "sans", "display"] as FontFilterTab[]).map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                onClick={() => setActiveTab(tab)}
-                className={`px-3 py-1 rounded transition cursor-pointer ${
-                  activeTab === tab
-                    ? "bg-[var(--main-color)] text-[var(--bg-color)] font-bold"
-                    : "bg-[var(--sub-alt-color)] text-[var(--sub-color)] hover:text-[var(--text-color)]"
-                }`}
-              >
-                {tab} ({tab === "all" ? FONT_LIST.length : FONT_LIST.filter((f) => f.category === tab).length})
-              </button>
-            ))}
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <div className="flex items-center gap-1.5 overflow-x-auto text-xs font-mono">
+              {(["all", "mono", "sans", "display"] as FontFilterTab[]).map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-3 py-1 rounded transition cursor-pointer ${
+                    activeTab === tab
+                      ? "bg-[var(--main-color)] text-[var(--bg-color)] font-bold"
+                      : "bg-[var(--sub-alt-color)] text-[var(--sub-color)] hover:text-[var(--text-color)]"
+                  }`}
+                >
+                  {tab} ({tab === "all" ? FONT_LIST.length : FONT_LIST.filter((f) => f.category === tab).length})
+                </button>
+              ))}
+            </div>
+            <span className="text-[10px] font-mono text-[var(--sub-color)]">
+              fonts load on demand when hovered or selected
+            </span>
           </div>
         </div>
 
@@ -99,12 +134,24 @@ export const FontSelectorModal: React.FC = () => {
         <div className="flex-1 overflow-y-auto p-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           {filteredFonts.map((font: FontMeta) => {
             const isSelected = currentFont === font.id;
+            const isLoaded =
+              loadAllPreviews ||
+              isSelected ||
+              Boolean(font.systemFont) ||
+              font.id === "Lexend_Deca" ||
+              font.id === "Roboto_Mono" ||
+              previewedIds.has(font.id);
 
             return (
               <button
                 key={font.id}
                 type="button"
-                onClick={() => setFont(font.id)}
+                onMouseEnter={() => previewFont(font.id)}
+                onFocus={() => previewFont(font.id)}
+                onClick={() => {
+                  ensureFontLoaded(font.id);
+                  setFont(font.id);
+                }}
                 className={`p-3 rounded text-left transition border cursor-pointer ${
                   isSelected
                     ? "border-[var(--main-color)] bg-[var(--sub-alt-color)] shadow-sm"
@@ -118,7 +165,10 @@ export const FontSelectorModal: React.FC = () => {
                     {isSelected && <Check className="w-3.5 h-3.5 text-[var(--main-color)]" />}
                   </span>
                 </div>
-                <div className="mt-1.5 truncate text-lg" style={{ fontFamily: font.family }}>
+                <div
+                  className="mt-1.5 truncate text-lg"
+                  style={isLoaded ? { fontFamily: font.family } : undefined}
+                >
                   {SAMPLE_TEXT}
                 </div>
               </button>
@@ -137,7 +187,7 @@ export const FontSelectorModal: React.FC = () => {
           <span>
             Current: <span className="text-[var(--main-color)] font-bold">{currentFont.replace(/_/g, " ")}</span>
           </span>
-          <span>Instant preview · Auto-saved</span>
+          <span>On-demand webfont · Auto-saved</span>
         </div>
       </div>
     </div>
