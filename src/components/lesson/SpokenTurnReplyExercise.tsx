@@ -106,7 +106,7 @@ export const SpokenTurnReplyExercise: React.FC<SpokenTurnReplyExerciseProps> = (
 
   useEffect(() => {
     resetCurrentExercise();
-  }, [exercise]);
+  }, [exercise.id]);
 
   useEffect(() => {
     if (listeningOff || !spokenQuestion) return;
@@ -186,6 +186,7 @@ export const SpokenTurnReplyExercise: React.FC<SpokenTurnReplyExerciseProps> = (
       setShowSuccessSheet(true);
       if (
         evaluation.reason === "typo" ||
+        evaluation.reason === "sharp-s" ||
         (evaluation.reason === "umlaut" && !evalOptions.umlautTolerance)
       ) {
         onQueueRetry?.();
@@ -330,7 +331,8 @@ export const SpokenTurnReplyExercise: React.FC<SpokenTurnReplyExerciseProps> = (
           value={userInput}
           onFocus={() => setIsInputFocused(true)}
           onBlur={() => setIsInputFocused(false)}
-          lang="de"
+          aria-label={exercise.prompt || `Your ${language.name} reply`}
+          lang={language.id}
           spellCheck={false}
           autoComplete="off"
           autoCorrect="off"

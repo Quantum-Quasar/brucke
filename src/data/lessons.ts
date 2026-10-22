@@ -11416,11 +11416,11 @@ export const LESSONS: Lesson[] = [
       {
         "id": "l15_e4",
         "type": "family_matrix",
-        "prompt": "The machen family: what does auf- do when it lands on machen — and what does an- do instead?",
+        "prompt": "One prefix, three bases: what does auf- do to machen, nehmen and kommen — and what does an- do instead?",
         "rows": [
           "machen",
           "nehmen",
-          "sehen"
+          "kommen"
         ],
         "columns": [
           "auf-",
@@ -11445,29 +11445,29 @@ export const LESSONS: Lesson[] = [
           [
             {
               "german": "aufnehmen",
-              "english": "pick up / record"
+              "english": "pick up / record (up-take)"
+            },
+            {
+              "german": "annehmen",
+              "english": "accept (on-take)"
             },
             {
               "german": "mitnehmen",
               "english": "take along"
-            },
-            {
-              "german": "vornehmen",
-              "english": "set oneself to (a task)"
             }
           ],
           [
             {
-              "german": "aufsehen",
-              "english": "look up"
+              "german": "aufkommen",
+              "english": "come up / arise (up-come)"
             },
             {
-              "german": "aussehen",
-              "english": "look (out-see)"
+              "german": "ankommen",
+              "english": "arrive (on-come)"
             },
             {
-              "german": "mitsehen",
-              "english": "see along with"
+              "german": "mitkommen",
+              "english": "come along (with-come)"
             }
           ]
         ],
@@ -11485,12 +11485,34 @@ export const LESSONS: Lesson[] = [
           "row": 0,
           "column": 0
         },
-        "row_law": "the base keeps its meaning — machen is making in every cell",
-        "column_law": "the prefix decides the direction — auf opens up, an touches on, mit brings along",
+        "row_law": "the base keeps its meaning — machen makes, nehmen takes, kommen comes, in every cell",
+        "column_law": "the prefix decides the direction — auf- opens up, an- reaches on, mit- comes along",
         "target_answer": "aufmachen",
         "meaning": "to open — auf (up/on) + machen (make)",
+        "vocab_hints": [
+          {
+            "word": "aufnehmen",
+            "translation": "to pick up / record",
+            "note": "auf- + nehmen (take) — English 'take up'"
+          },
+          {
+            "word": "annehmen",
+            "translation": "to accept",
+            "note": "an- + nehmen — take on/toward yourself"
+          },
+          {
+            "word": "aufkommen",
+            "translation": "to come up / arise",
+            "note": "auf- + kommen (come) — English 'come up'"
+          },
+          {
+            "word": "mitkommen",
+            "translation": "to come along",
+            "note": "mit- + kommen — English 'come with'"
+          }
+        ],
         "shift_hint": "Separable Prefixes",
-        "explanation": "Across the auf- row the direction is the same (upward, opening, visible); down the machen column the base is the same (making). aufmachen is the cell where both laws meet — and English says the identical thing with 'open up'.",
+        "explanation": "Across the auf- row the direction is the same (upward, opening, visible); along the machen row the base is the same (making). aufmachen is the cell where both laws meet — and English says the identical thing with 'open up'.",
         "affirmation": "You read the row and the column and the cell answered itself — that is the German prefix system working, not memory."
       },
       {

@@ -59,7 +59,7 @@ export default function HomePage() {
             </span>
             <span
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/25 text-[var(--sub-color)]"
-              title={`${purpleCount} flawless first-try lessons (purple stars)`}
+              title={`${purpleCount} flawless lessons (purple stars)`}
             >
               <Star
                 className="w-3 h-3"

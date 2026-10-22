@@ -6,6 +6,7 @@ import { FR_TOPICS, FR_TRAIL_BRANCHES, FR_TRAIL_GATES } from "../data/french/cur
 import { FRENCH_INSIGHTS } from "../data/french/insights-fr";
 import { getWordEntityMap } from "../lib/word-entities";
 import { displayArticle } from "../lib/gender";
+import { evaluateAnswerAccuracy } from "../lib/letter-diff";
 import type { Lesson } from "../lib/types";
 
 // The French course is authored as typed TS modules under src/data/french/
@@ -137,6 +138,26 @@ describe("french course content", () => {
       .sort((a, b) => a - b);
     const lessonIds = FR_LESSONS.map((l) => l.id).sort((a, b) => a - b);
     expect(authoredShells).toEqual(lessonIds);
+  });
+
+  it("uses the ASCII apostrophe in every authored French string", () => {
+    // U+2018/U+2019 in a target_answer is graded against an ASCII keyboard, so a
+    // correct answer typed normally was reported as a typo (fr1901_e4).
+    const blob = JSON.stringify(FR_LESSONS);
+    expect(blob).not.toMatch(/[\u2018\u2019]/);
+  });
+
+  it("grades the fr1901_e4 answer typed with an ASCII apostrophe as exact", () => {
+    const lesson = FR_LESSONS.find((l) => l.id === 1901);
+    expect(lesson).toBeDefined();
+    const ex = lesson!.exercises.find((e) => e.id === "fr1901_e4");
+    expect(ex).toBeDefined();
+    expect(ex!.target_answer).toBe("J'ai préparé le café");
+    expect(ex!.word_bank).toContain("J'ai");
+    expect(ex!.spoken_question).toBe("Qu'est-ce que tu as préparé hier ?");
+    expect(evaluateAnswerAccuracy(ex!.target_answer, "J'ai préparé le café", { languageId: "fr" })).toEqual({
+      accuracy: "exact",
+    });
   });
 
   it("keeps german out of the french course", () => {

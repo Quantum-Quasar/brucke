@@ -32,6 +32,8 @@ import { getDueCards, localDateKey, type ReviewGrade } from "@/lib/srs";
 import {
   SESSION_SIZES,
   DECK_CAPABILITIES,
+  ALL_FAMILIES_ID,
+  getAtlasFamilyWordIds,
   resolveCardReviewMode,
   filterByLearned,
   getRecentLessonWordIds,
@@ -43,7 +45,7 @@ import {
   type ReviewDeckType,
 } from "@/lib/review-decks";
 import { generateMCQOptions, generateWordTiles } from "@/lib/review-modes";
-import { getAtlasFamilies } from "@/lib/atlas-families";
+import { getAtlasFamilies, getAtlasFamily } from "@/lib/atlas-families";
 import { playTargetAudio } from "@/lib/audio";
 import { computeLetterDiff, evaluateAnswerAccuracy } from "@/lib/letter-diff";
 import { soundEngine } from "@/lib/sound";
@@ -57,7 +59,7 @@ import { useDialogFocus } from "@/lib/use-dialog-focus";
 type DeckType = ReviewDeckType;
 
 /** Sentinel select value meaning "every family" / "every domain". */
-const ALL_ID = "all";
+const ALL_ID = ALL_FAMILIES_ID;
 
 interface PendingDeckStart {
   deck: DeckType;
@@ -114,13 +116,25 @@ export default function ReviewPage() {
   const data = content.compendium ?? EMPTY_COMPENDIUM;
   const [mounted, setMounted] = useState(false);
   const [activeDeck, setActiveDeck] = useState<DeckType | null>(null);
-  const [selectedShiftId, setSelectedShiftId] = useState<string>("p_to_pf_f");
+  // Seeded from the active compendium's first atlas family: German, French and
+  // Spanish each have their own family ids, so a hard-coded German id left the
+  // select blank (and the deck disabled) for every non-German learner.
+  const [selectedShiftId, setSelectedShiftId] = useState<string>(
+    () => getAtlasFamilies(data)[0]?.id ?? ALL_ID
+  );
   const [selectedDomainId, setSelectedDomainId] = useState<string>("");
   // Scope + size for the open-ended decks (shift family, domain, everything)
   const [learnedFilter, setLearnedFilter] = useState<LearnedFilter>("all");
   const [sessionSize, setSessionSize] = useState<SessionSize>(20);
   const [shuffleSession, setShuffleSession] = useState(true);
   const [sessionCards, setSessionCards] = useState<SRSCard[]>([]);
+  /**
+   * Bumped on every deck start / exit. The per-card reset effect keys on the
+   * card id, index and tile data — none of which change when a new session opens
+   * on the same card the previous one ended on — so without this the tile rack
+   * kept the old session's picked/unpicked tiles.
+   */
+  const [sessionEpoch, setSessionEpoch] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
   const [isCapsLock, setIsCapsLock] = useState(false);
@@ -238,6 +252,23 @@ export default function ReviewPage() {
     return items;
   }, [srsCards, data]);
 
+  /**
+   * Compounds/traps honour the same learned / not-yet-learned scope as the other
+   * open-ended decks — the scope bar promises it applies to "shift family, domain
+   * and everything". They carry synthetic `compound_*` / `trap_*` ids, so they
+   * are scoped by card `word_id` rather than by a compendium word id.
+   */
+  const scopedCompoundCards: SRSCard[] = useMemo(
+    () =>
+      filterByLearned(
+        compoundCards.map((card) => ({ id: card.word_id, card })),
+        learnedFilter,
+        wordMastery,
+        srsCards
+      ).map((entry) => entry.card),
+    [compoundCards, learnedFilter, wordMastery, srsCards]
+  );
+
   const sentenceEntities: WordEntity[] = useMemo(
     () => getSentenceEntities(activeLanguageId),
     [activeLanguageId]
@@ -324,11 +355,23 @@ export default function ReviewPage() {
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [data]);
 
+  // Re-validate the family / domain picks whenever the language (and therefore
+  // the atlas family list or domain groups) changes. Keeping a selection that no
+  // longer exists would render a blank select, an empty rule line and a disabled
+  // deck — exactly what a German-only default did for French/Spanish learners.
   useEffect(() => {
-    if (!selectedDomainId && domainGroups.length > 0) {
-      setSelectedDomainId(domainGroups[0].id);
-    }
-  }, [domainGroups, selectedDomainId]);
+    const ids = atlasFamilies.map((f) => f.id);
+    setSelectedShiftId((prev) =>
+      prev === ALL_ID || ids.includes(prev) ? prev : ids[0] ?? ALL_ID
+    );
+  }, [atlasFamilies]);
+
+  useEffect(() => {
+    const ids = domainGroups.map((g) => g.id);
+    setSelectedDomainId((prev) =>
+      prev === ALL_ID || ids.includes(prev) ? prev : ids[0] ?? ALL_ID
+    );
+  }, [domainGroups]);
 
   /** Every word covered by the atlas, de-duplicated across overlapping families. */
   const allFamilyWordIds = useMemo(
@@ -348,12 +391,19 @@ export default function ReviewPage() {
     [learnedFilter, wordMastery, srsCards]
   );
 
+  /**
+   * The selected family resolved through the atlas. `data.shifts` only holds the
+   * authored families; the virtual `unshifted` family exists only in the atlas
+   * and covers every dictionary word outside them, so reading `data.shifts`
+   * directly made that deck permanently empty.
+   */
+  const selectedShiftFamily = useMemo(
+    () => (selectedShiftId === ALL_ID ? undefined : getAtlasFamily(data, selectedShiftId)),
+    [data, selectedShiftId]
+  );
+
   const shiftWordIds = (shiftId: string): string[] =>
-    scopeIds(
-      shiftId === ALL_ID
-        ? allFamilyWordIds
-        : Array.from(new Set(data.shifts[shiftId]?.word_ids ?? []))
-    );
+    scopeIds(getAtlasFamilyWordIds(data, shiftId));
 
   const domainWordIds = (domainId: string): string[] =>
     scopeIds(
@@ -365,8 +415,12 @@ export default function ReviewPage() {
   const shiftDeckSize = shiftWordIds(selectedShiftId).length;
   const domainDeckSize = domainWordIds(selectedDomainId).length;
   const everythingCount = useMemo(
-    () => scopeIds(data.wordList.map((w) => w.id)).length + compoundCards.length + sentenceCards.length + articleCards.length,
-    [scopeIds, data, compoundCards, sentenceCards, articleCards]
+    () =>
+      scopeIds(data.wordList.map((w) => w.id)).length +
+      scopedCompoundCards.length +
+      sentenceCards.length +
+      articleCards.length,
+    [scopeIds, data, scopedCompoundCards, sentenceCards, articleCards]
   );
 
   // "Recent lessons": words from the last few lessons you actually completed.
@@ -385,6 +439,7 @@ export default function ReviewPage() {
   const startDeck = (deck: DeckType, customCards?: SRSCard[]) => {
     setActiveDeck(deck);
     setCurrentIndex(0);
+    setSessionEpoch((epoch) => epoch + 1);
     setIsRevealed(false);
     setInputGuess("");
     setSelectedOption(null);
@@ -411,13 +466,13 @@ export default function ReviewPage() {
     else if (deck === "weakest") begin(weakestCards);
     else if (deck === "shift") scoped(shiftWordIds(selectedShiftId));
     else if (deck === "recent") begin(recentWordIds.map(blankCard));
-    else if (deck === "compounds") begin(prepareSession(compoundCards, 0, shuffleSession));
+    else if (deck === "compounds") begin(prepareSession(scopedCompoundCards, 0, shuffleSession));
     else if (deck === "sentences") begin(prepareSession(sentenceCards, sessionSize, shuffleSession));
     else if (deck === "articles") begin(prepareSession(articleCards, sessionSize, shuffleSession));
     else if (deck === "domain") scoped(domainWordIds(selectedDomainId));
     else if (deck === "everything") {
       const ids = scopeIds(data.wordList.map((w) => w.id));
-      begin(prepareSession([...ids.map(blankCard), ...compoundCards, ...sentenceCards, ...articleCards], sessionSize, shuffleSession));
+      begin(prepareSession([...ids.map(blankCard), ...scopedCompoundCards, ...sentenceCards, ...articleCards], sessionSize, shuffleSession));
     }
   };
 
@@ -494,7 +549,7 @@ export default function ReviewPage() {
     if (tileData) {
       setAvailableTiles(tileData.tiles);
     }
-  }, [currentCard?.word_id, currentIndex, tileData]);
+  }, [currentCard?.word_id, currentIndex, tileData, sessionEpoch]);
 
   // SM-2 Review Grade Handler
   const handleGrade = (grade: ReviewGrade) => {
@@ -563,6 +618,11 @@ export default function ReviewPage() {
     setIsRevealed(false);
     setCurrentAutoGrade(null);
     setCurrentFeedbackNote(null);
+    // drop the tile rack too, so reopening the same non-shuffled deck cannot
+    // start from the previous session's picked/unpicked state
+    setSelectedTiles([]);
+    if (tileData) setAvailableTiles(tileData.tiles);
+    setSessionEpoch((epoch) => epoch + 1);
   };
 
   /**
@@ -941,6 +1001,20 @@ export default function ReviewPage() {
   const masteredCount = Object.values(wordMastery).filter((m) => m === "mastered").length;
   const activeCount = Object.keys(srsCards).length - masteredCount;
 
+  // Store-derived counts are only trustworthy after hydration. Render the same
+  // "0 / nothing to review" state on the server and on the first client pass so
+  // the markup can never differ, and drive each button's `disabled` from the
+  // same gated value its count span shows.
+  const dueCount = mounted ? dueCards.length : 0;
+  const weakestCount = mounted ? weakestCards.length : 0;
+  const recentCount = mounted ? recentWordIds.length : 0;
+  const everythingTotal = mounted ? everythingCount : 0;
+  const shiftCount = mounted ? shiftDeckSize : 0;
+  const domainCount = mounted ? domainDeckSize : 0;
+  const sentenceCount = mounted ? sentenceCards.length : 0;
+  const articleCount = mounted ? articleCards.length : 0;
+  const compoundCount = mounted ? scopedCompoundCards.length : compoundCards.length;
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
       {/* Header */}
@@ -1305,7 +1379,7 @@ export default function ReviewPage() {
                 type="text"
                 value={inputGuess}
                 onChange={(e) => handleTypingInputChange(e.target.value)}
-                lang="de"
+                lang={language.id}
                 spellCheck={false}
                 autoComplete="off"
                 autoCorrect="off"
@@ -1422,6 +1496,7 @@ export default function ReviewPage() {
                       sentence={currentWord.context_phrase}
                       translation={currentWord.context_translation}
                       word={currentWord.target_word}
+                      lang={language.id}
                     />
                     <button
                       type="button"
@@ -1551,7 +1626,7 @@ export default function ReviewPage() {
                 <Clock className="w-5 h-5 text-[var(--main-color)]" />
                 <h3 className="text-lg font-bold font-mono text-[var(--text-color)]">due today</h3>
                 <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-[var(--main-color)]/15 text-[var(--main-color)] border border-[var(--main-color)]/30">
-                  {mounted ? dueCards.length : 0} cards
+                  {dueCount} cards
                 </span>
               </div>
               <p className="text-xs font-mono text-[var(--sub-color)]">
@@ -1561,14 +1636,14 @@ export default function ReviewPage() {
 
             <button
               onClick={() => requestDeckStart("due")}
-              disabled={dueCards.length === 0}
+              disabled={dueCount === 0}
               className={`px-5 py-2.5 rounded-lg font-mono font-bold text-xs transition ${
-                dueCards.length > 0
+                dueCount > 0
                   ? "bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] cursor-pointer"
                   : "bg-[var(--bg-color)] text-[var(--sub-color)] opacity-40 cursor-not-allowed border border-[var(--sub-color)]/20"
               }`}
             >
-              {dueCards.length > 0 ? "start due review" : "no due reviews"}
+              {dueCount > 0 ? "start due review" : "no due reviews"}
             </button>
           </div>
 
@@ -1661,10 +1736,10 @@ export default function ReviewPage() {
                 <div className="text-[11px] font-mono text-[var(--main-color)]">
                   {selectedShiftId === ALL_ID
                     ? `all ${atlasFamilies.length} families selected`
-                    : `${data.shifts[selectedShiftId]?.phonetic_rule ?? ""}`}
+                    : `${selectedShiftFamily?.phonetic_rule ?? ""}`}
                 </div>
                 <div className="text-[11px] font-mono text-[var(--sub-color)]">
-                  {mounted ? shiftDeckSize : 0} {learnedFilter === "all" ? "" : learnedFilter === "new" ? "unlearned " : "learned "}words in scope
+                  {shiftCount} {learnedFilter === "all" ? "" : learnedFilter === "new" ? "unlearned " : "learned "}words in scope
                 </div>
               </div>
 
@@ -1673,10 +1748,10 @@ export default function ReviewPage() {
                   requestDeckStart(
                     "shift",
                     undefined,
-                    selectedShiftId === ALL_ID ? "every shift family" : data.shifts[selectedShiftId]?.name
+                    selectedShiftId === ALL_ID ? "every shift family" : selectedShiftFamily?.name
                   )
                 }
-                disabled={shiftDeckSize === 0}
+                disabled={shiftCount === 0}
                 className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 review shift family
@@ -1708,7 +1783,7 @@ export default function ReviewPage() {
                   ))}
                 </select>
                 <div className="text-[11px] font-mono text-[var(--sub-color)]">
-                  {mounted ? domainDeckSize : 0} {learnedFilter === "all" ? "" : learnedFilter === "new" ? "unlearned " : "learned "}words in scope
+                  {domainCount} {learnedFilter === "all" ? "" : learnedFilter === "new" ? "unlearned " : "learned "}words in scope
                 </div>
               </div>
 
@@ -1722,7 +1797,7 @@ export default function ReviewPage() {
                       : domainGroups.find((g) => g.id === selectedDomainId)?.label
                   )
                 }
-                disabled={domainDeckSize === 0}
+                disabled={domainCount === 0}
                 className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 review domain
@@ -1740,13 +1815,13 @@ export default function ReviewPage() {
                   words you forgot or only guessed, hardest first.
                 </p>
                 <div className="text-xs font-mono text-[var(--error-color)] pt-1">
-                  {mounted ? weakestCards.length : 0} tricky words
+                  {weakestCount} tricky words
                 </div>
               </div>
 
               <button
                 onClick={() => requestDeckStart("weakest")}
-                disabled={weakestCards.length === 0}
+                disabled={weakestCount === 0}
                 className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition disabled:opacity-40 cursor-pointer"
               >
                 review weakest
@@ -1764,15 +1839,15 @@ export default function ReviewPage() {
                   words from the last three trail lessons you completed, newest first.
                 </p>
                 <div className="text-xs font-mono text-[var(--main-color)] pt-1">
-                  {mounted && recentWordIds.length > 0
-                    ? `${recentWordIds.length} words`
+                  {recentCount > 0
+                    ? `${recentCount} words`
                     : "finish a lesson to unlock"}
                 </div>
               </div>
 
               <button
                 onClick={() => requestDeckStart("recent")}
-                disabled={recentWordIds.length === 0}
+                disabled={recentCount === 0}
                 className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 review recent
@@ -1790,13 +1865,14 @@ export default function ReviewPage() {
                   review literal calques (handschuh, flugzeug) and false friends (gift, bald).
                 </p>
                 <div className="text-xs font-mono text-[var(--sub-color)] pt-1">
-                  {data.compounds.length + data.falseFriends.length} items
+                  {compoundCount} items
                 </div>
               </div>
 
               <button
                 onClick={() => requestDeckStart("compounds")}
-                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer"
+                disabled={compoundCount === 0}
+                className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 review compounds
               </button>
@@ -1822,7 +1898,7 @@ export default function ReviewPage() {
 
               <button
                 onClick={() => requestDeckStart("sentences", undefined, "sentence patterns")}
-                disabled={sentenceCards.length === 0}
+                disabled={sentenceCount === 0}
                 className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--main-color)]/30 text-xs font-mono font-bold text-[var(--main-color)] transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 review sentences
@@ -1849,7 +1925,7 @@ export default function ReviewPage() {
 
               <button
                 onClick={() => requestDeckStart("articles", undefined, "article & gender drill")}
-                disabled={articleCards.length === 0}
+                disabled={articleCount === 0}
                 className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--main-color)]/30 text-xs font-mono font-bold text-[var(--main-color)] transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 start article mcq
@@ -1870,13 +1946,13 @@ export default function ReviewPage() {
                   every word in every family and domain, plus compounds, false friends, sentence patterns, and article drills (each card automatically uses its supported review modes).
                 </p>
                 <div className="text-xs font-mono text-[var(--main-color)] pt-1">
-                  {everythingCount} cards
+                  {everythingTotal} cards
                 </div>
               </div>
 
               <button
                 onClick={() => requestDeckStart("everything", undefined, "everything")}
-                disabled={everythingCount === 0}
+                disabled={everythingTotal === 0}
                 className="w-full py-2 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] text-xs font-mono font-bold transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 review everything
@@ -1913,7 +1989,7 @@ export default function ReviewPage() {
                         : pendingDeck.deck === "shift"
                         ? selectedShiftId === ALL_ID
                           ? "every shift family"
-                          : data.shifts[selectedShiftId]?.name ?? "shift family"
+                          : selectedShiftFamily?.name ?? "shift family"
                         : pendingDeck.deck === "weakest"
                         ? "weakest words"
                         : pendingDeck.deck === "recent"

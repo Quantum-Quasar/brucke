@@ -13,7 +13,10 @@ const executablePath = process.env.CHROMIUM_PATH ?? (fs.existsSync(SYSTEM_CHROMI
 
 export default defineConfig({
   testDir: "./tests/e2e",
-  timeout: 90_000,
+  // A cold Next dev compile of a route can take well over a minute on a busy
+  // machine, and the first goto in a run pays for it. Keep the budget generous
+  // but bounded so a genuinely hung page still fails.
+  timeout: 150_000,
   expect: { timeout: 15_000 },
   retries: process.env.CI ? 1 : 0,
   reporter: [["list"]],
@@ -21,7 +24,7 @@ export default defineConfig({
     baseURL: `http://localhost:${PORT}`,
     headless: true,
     screenshot: "only-on-failure",
-    navigationTimeout: 60_000,
+    navigationTimeout: 120_000,
     ...(executablePath ? { launchOptions: { executablePath } } : {}),
   },
   webServer: {

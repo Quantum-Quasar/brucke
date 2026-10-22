@@ -147,11 +147,15 @@ export function generateMCQOptions(
   count: number = 4
 ): string[] {
   if (targetWord.customMcqOptions && targetWord.customMcqOptions.length > 0) {
-    const base = [...targetWord.customMcqOptions];
-    if (!base.some((o) => o.toLowerCase() === targetWord.target_word.toLowerCase())) {
-      base[base.length - 1] = targetWord.target_word;
-    }
-    return base.slice(0, count);
+    const target = targetWord.target_word;
+    const targetLower = target.toLowerCase();
+    // The correct option goes first and the slice happens *before* the shuffle,
+    // so it can never be truncated away — and never sits at a fixed index
+    // (writing it into base[base.length - 1] pinned the answer to the last slot).
+    const others = targetWord.customMcqOptions.filter(
+      (o) => o.toLowerCase() !== targetLower
+    );
+    return shuffleArray([target, ...others].slice(0, count));
   }
 
   const target = targetWord.target_word;

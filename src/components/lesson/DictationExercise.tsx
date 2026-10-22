@@ -19,6 +19,7 @@ import { ErrorFeedbackSheet } from "./ErrorFeedbackSheet";
 import { SuccessFeedbackSheet } from "./SuccessFeedbackSheet";
 import { evaluateAnswerAccuracy } from "@/lib/letter-diff";
 import { playTargetAudio } from "@/lib/audio";
+import { getLanguageDefinition } from "@/data/languages";
 import { useAppStore } from "@/lib/store";
 import { soundEngine } from "@/lib/sound";
 import { LISTENING_SKIP_MS, isListeningSkipped } from "@/lib/listening";
@@ -61,9 +62,14 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
   const [isCapsLock, setIsCapsLock] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  // one keypress must never verify twice (Enter fires the input handler, then the
+  // window fallback, unless the first verify already advanced the card)
+  const verifyingRef = useRef(false);
   const tolerance = useAppStore((s) => s.tolerance);
   const settings = useAppStore((s) => s.settings);
   const skipListeningFor = useAppStore((s) => s.skipListeningFor);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
 
   const spoken = exercise.spoken ?? exercise.target_answer;
   const target = exercise.target_answer.trim();
@@ -78,8 +84,13 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
   };
 
   const resetCurrentExercise = () => {
+    verifyingRef.current = false;
     setUserInput("");
-    setReplaysUsed(0);
+    // the autoplay that opens the card is a hearing — count it against the budget
+    // (when listening is skipped, no autoplay happens and the count stays 0)
+    setReplaysUsed(
+      isListeningSkipped(useAppStore.getState().settings.listeningSkippedUntil) ? 0 : 1
+    );
     setCuesRevealed(0);
     setStatus("idle");
     setSheetVariant("exact");
@@ -103,9 +114,14 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
   }, [exercise.id]);
 
   // Autoplay once when the card opens and listening is available — the ear leads.
+  // `resetCurrentExercise` already counts that first hearing; the functional update
+  // only matters if listening was toggled back on after the reset.
   useEffect(() => {
     if (listeningOff) return;
-    const t = setTimeout(() => playTargetAudio(spoken), 400);
+    const t = setTimeout(() => {
+      playTargetAudio(spoken);
+      setReplaysUsed((n) => (n < 1 ? 1 : n));
+    }, 400);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exercise.id, listeningOff]);
@@ -126,7 +142,12 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
       if (a === b && attempt.trim() !== target) {
         return {
           slip: "the words are right, the order is not",
-          cue: "German puts the conjugated verb in position 2 and parks the infinitive at the end — listen for which word carries the ending.",
+          cue:
+            activeLanguageId === "de"
+              ? "German puts the conjugated verb in position 2 and parks the infinitive at the end — listen for which word carries the ending."
+              : activeLanguageId === "fr"
+                ? "French keeps object pronouns before the verb and the conjugated verb next to the subject — listen for which word comes first."
+                : "Spanish often drops the subject pronoun and leans on the verb ending — listen for which word comes first.",
         };
       }
     }
@@ -134,12 +155,14 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
   };
 
   const handleVerify = () => {
+    if (verifyingRef.current) return;
     inputRef.current?.blur();
     const answerToCheck = userInput.trim();
     if (!answerToCheck) {
       setFeedbackNote("Write down what you heard before checking.");
       return;
     }
+    verifyingRef.current = true;
 
     const evalOptions = {
       umlautTolerance: Boolean(settings.lazyMode ?? tolerance.umlautTolerance),
@@ -158,11 +181,12 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
           : evaluation.warningNote || `Almost right! Note standard spelling: "${target}"`
       );
       setShowSuccessSheet(true);
-      onSuccess();
-      if (evaluation.accuracy === "almost" && evaluation.reason === "typo") onQueueRetry?.();
+      if (evaluation.accuracy === "almost" && (evaluation.reason === "typo" || evaluation.reason === "sharp-s")) onQueueRetry?.();
       if (evaluation.accuracy === "almost" && evaluation.reason === "umlaut" && !evalOptions.umlautTolerance) {
         onQueueRetry?.();
       }
+      // the parent advances from the success sheet's onContinue, so the sheet
+      // (correct spelling + meaning) actually paints before the widget unmounts
       return;
     }
 
@@ -188,6 +212,16 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
       }
       if (showErrorSheet || showSuccessSheet) return;
       if (e.key === "Enter") {
+        const active = document.activeElement;
+        // a focused button/anchor owns its own Enter (native activation)
+        if (
+          active instanceof HTMLElement &&
+          (active.tagName === "BUTTON" ||
+            active.tagName === "A" ||
+            active.getAttribute("role") === "button")
+        ) {
+          return;
+        }
         const isInput = document.activeElement === inputRef.current;
         if (!isInput && userInput.trim()) {
           e.preventDefault();
@@ -202,6 +236,25 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
 
   const affirmation = affirmationFor(exercise.affirmation, exercise.shift_hint);
 
+  // Success and failure both hand control back to the parent only from the sheet's
+  // onContinue, so the feedback is actually seen (the parent keys the widget on the
+  // practice/retry index and would unmount it on an immediate advance).
+  const handleSuccessContinue = () => {
+    setShowSuccessSheet(false);
+    onSuccess();
+  };
+
+  const handleErrorContinue = () => {
+    setShowErrorSheet(false);
+    if (isRetry) {
+      // stay on this item for another attempt; it is already in the queue
+      resetCurrentExercise();
+    } else {
+      // the miss is already queued for reinforcement — advance the initial run
+      onSuccess();
+    }
+  };
+
   /* ---------------- degraded mode: the learner cannot listen ---------------- */
   if (listeningOff) {
     return (
@@ -210,7 +263,7 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[var(--sub-color)]" />
             <span className="text-xs uppercase tracking-wider text-[var(--sub-color)] font-semibold">
-              {isRetry ? "retry exercise" : "write the German"}
+              {isRetry ? "retry exercise" : `write the ${language.name}`}
             </span>
           </div>
           {exercise.shift_hint && (
@@ -241,7 +294,8 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
             ref={inputRef}
             type="text"
             value={userInput}
-            lang="de"
+            aria-label={`Type the ${language.name} sentence exactly as written`}
+            lang={language.id}
             spellCheck={false}
             autoComplete="off"
             autoCorrect="off"
@@ -250,10 +304,11 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
             onKeyDown={(e) => {
               if (e.key === "Enter" && userInput.trim()) {
                 e.preventDefault();
+                e.stopPropagation();
                 handleVerify();
               }
             }}
-            placeholder="Type the German…"
+            placeholder={`Type the ${language.name}…`}
             className="w-full bg-[var(--bg-color)] border border-[var(--sub-color)]/40 rounded px-4 py-3 text-lg font-mono focus:border-[var(--main-color)] outline-none"
           />
           {userInput.trim() && (
@@ -273,13 +328,11 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
             targetAnswer={target}
             meaning={exercise.meaning}
             explanation={exercise.explanation}
+            variant={sheetVariant}
             userAttempt={verifiedAttemptText}
             warningNote={almostWarningNote}
             affirmation={affirmation}
-            onContinue={() => {
-              setShowSuccessSheet(false);
-              resetCurrentExercise();
-            }}
+            onContinue={handleSuccessContinue}
           />
         )}
         {showErrorSheet && (
@@ -288,10 +341,7 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
             expectedAnswer={target}
             explanation={exercise.explanation}
             diagnosis={failedDiagnosis}
-            onContinue={() => {
-              setShowErrorSheet(false);
-              resetCurrentExercise();
-            }}
+            onContinue={handleErrorContinue}
           />
         )}
       </div>
@@ -399,12 +449,20 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
           ref={inputRef}
           type="text"
           value={userInput}
-          lang="de"
+          aria-label="Write down the sentence you heard"
+          lang={language.id}
           spellCheck={false}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
           onChange={(e) => setUserInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && userInput.trim()) {
+              e.preventDefault();
+              e.stopPropagation();
+              handleVerify();
+            }
+          }}
           placeholder="Write down what you heard…"
           disabled={status === "correct" || status === "almost"}
           className="w-full bg-[var(--bg-color)] border border-[var(--sub-color)]/40 rounded px-4 py-3 pr-4 text-lg font-mono focus:border-[var(--main-color)] outline-none disabled:opacity-50"
@@ -427,16 +485,15 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
 
       {showSuccessSheet && (
         <SuccessFeedbackSheet
+          onFlagGuessed={!isRetry ? onFlagGuessed : undefined}
           targetAnswer={target}
           meaning={exercise.meaning}
           explanation={exercise.explanation}
+          variant={sheetVariant}
           userAttempt={verifiedAttemptText}
           warningNote={almostWarningNote}
           affirmation={affirmation}
-          onContinue={() => {
-            setShowSuccessSheet(false);
-            resetCurrentExercise();
-          }}
+          onContinue={handleSuccessContinue}
         />
       )}
 
@@ -446,10 +503,7 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
           expectedAnswer={target}
           explanation={exercise.explanation}
           diagnosis={failedDiagnosis}
-          onContinue={() => {
-            setShowErrorSheet(false);
-            resetCurrentExercise();
-          }}
+          onContinue={handleErrorContinue}
         />
       )}
     </div>

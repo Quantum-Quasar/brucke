@@ -53,10 +53,19 @@ export const ErrorFeedbackSheet: React.FC<ErrorFeedbackSheetProps> = ({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter" || e.key === " " || e.code === "Space") {
-        e.preventDefault();
-        onContinue();
+      if (e.key !== "Enter" && e.key !== " " && e.code !== "Space") return;
+      // a focused control keeps its native activation (continue, play-audio)
+      const target = e.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.tagName === "BUTTON" ||
+          target.tagName === "A" ||
+          target.getAttribute("role") === "button")
+      ) {
+        return;
       }
+      e.preventDefault();
+      onContinue();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);

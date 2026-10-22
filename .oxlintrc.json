@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "off",
+    "suspicious": "off",
+    "pedantic": "off",
+    "perf": "off",
+    "style": "off"
+  },
+  "plugins": ["react-hooks"],
+  "rules": {
+    "react-hooks/rules-of-hooks": "deny",
+    "react-hooks/exhaustive-deps": "warn"
+  },
+  "ignorePatterns": [
+    "node_modules/**",
+    ".next/**",
+    ".worktrees/**",
+    "docs/**",
+    "old documentation/**",
+    "documented docs/**",
+    "wiki/**",
+    "gui-test-screenshots/**",
+    "test-results/**",
+    "playwright-report/**"
+  ]
+}

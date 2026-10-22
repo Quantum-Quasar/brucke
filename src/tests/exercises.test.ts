@@ -365,3 +365,58 @@ describe("Progressive Bite-Sized Exercise Architecture", () => {
     expect(missing).toEqual([]);
   });
 });
+
+describe("Prefix × base family grids teach the prefix law", () => {
+  const allFamilyMatrices = LESSONS.flatMap((l) =>
+    l.exercises.filter((e) => e.type === "family_matrix").map((e) => ({ lessonId: l.id, ex: e }))
+  );
+
+  it("l15_e4 is a real separable-verb grid (prefix column, base row)", () => {
+    const l15 = LESSONS.find((l) => l.id === 15);
+    expect(l15).toBeDefined();
+    const matrix = l15!.exercises.find((e) => e.id === "l15_e4");
+    expect(matrix).toBeDefined();
+    const ex = matrix!;
+
+    const prefixes = ex.columns!.map((c) => c.replace(/-$/, ""));
+    const bases = ex.rows!;
+    expect(prefixes).toEqual(["auf", "an", "mit"]);
+    expect(bases).toEqual(["machen", "nehmen", "kommen"]);
+
+    // every cell is prefix + base: the column prefix leads, the row base closes
+    ex.cells!.forEach((row, i) => {
+      expect(row.length, `row ${i} width`).toBe(prefixes.length);
+      row.forEach((cell, j) => {
+        expect(cell.german.startsWith(prefixes[j]), `${cell.german} must start with ${prefixes[j]}-`).toBe(true);
+        expect(cell.german.endsWith(bases[i]), `${cell.german} must end with ${bases[i]}`).toBe(true);
+        expect(cell.english.length).toBeGreaterThan(0);
+      });
+    });
+
+    // no duplicates, no non-words from the old grid
+    const cells = ex.cells!.flat().map((c) => c.german);
+    expect(new Set(cells).size).toBe(cells.length);
+    expect(cells).not.toContain("mitsehen");
+
+    // the graded cell is the cell the task points at
+    const { row, column } = ex.task!;
+    expect(ex.cells![row][column].german).toBe(ex.target_answer);
+  });
+
+  it("every prefix-column grid (columns ending in -, bare-verb rows) prefixes its cells", () => {
+    const prefixGrids = allFamilyMatrices
+      .filter(({ ex }) => ex.columns!.every((c) => c.endsWith("-")) && ex.rows!.every((r) => /^[a-zäöüß]+$/.test(r)))
+      .map(({ ex }) => ex);
+    expect(prefixGrids.map((g) => g.id)).toContain("l15_e4");
+    for (const ex of prefixGrids) {
+      const prefixes = ex.columns!.map((c) => c.replace(/-$/, ""));
+      ex.rows!.forEach((base, i) => {
+        ex.cells![i].forEach((cell, j) => {
+          expect(cell.german, `${ex.id} cell`).toBe(`${prefixes[j]}${base}`);
+        });
+      });
+      const cells = ex.cells!.flat().map((c) => c.german);
+      expect(new Set(cells).size, `${ex.id} duplicate cells`).toBe(cells.length);
+    }
+  });
+});

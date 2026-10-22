@@ -32,6 +32,17 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
     onEscape: onClose,
   });
 
+  // The modal stays mounted between openings (it only returns null while
+  // closed), so a fresh open must start a fresh run instead of resuming the
+  // previous question index, score or finished screen.
+  useEffect(() => {
+    if (!isOpen) return;
+    setCurrentIndex(0);
+    setScore(0);
+    setIsFinished(false);
+    setCurrentQuestionFailed(false);
+  }, [isOpen]);
+
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -153,6 +164,7 @@ export const BranchDrillModal: React.FC<BranchDrillModalProps> = ({ family, isOp
           <button
             type="button"
             onClick={onClose}
+            aria-label="Close"
             className="p-1 rounded text-[var(--sub-color)] hover:text-[var(--text-color)] transition cursor-pointer"
           >
             <X className="w-4 h-4" />

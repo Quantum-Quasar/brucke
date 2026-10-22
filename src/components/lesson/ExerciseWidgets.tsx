@@ -262,6 +262,8 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
   const [matchedPairs, setMatchedPairs] = useState<string[]>([]); // list of matched pair IDs
 
   const inputRef = useRef<HTMLInputElement>(null);
+  // a matching grid can take several slips; one item should only count as one miss
+  const reportedErrorRef = useRef(false);
   const tolerance = useAppStore((s) => s.tolerance);
   const settings = useAppStore((s) => s.settings);
   const activeLanguageId = useAppStore((s) => s.activeLanguageId);
@@ -299,6 +301,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
   }, [exercise.options, exercise.id]);
 
   const resetCurrentExercise = () => {
+    reportedErrorRef.current = false;
     setUserInput("");
     setSelectedIndices([]);
     setSelectedEnglish(null);
@@ -320,7 +323,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
 
   useEffect(() => {
     resetCurrentExercise();
-  }, [exercise]);
+  }, [exercise.id]);
 
   // Keyboard shortcut listener for all exercise types:
   // - Enter: verify current answer
@@ -348,6 +351,17 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
 
       // 1. Enter key: verify
       if (e.key === "Enter") {
+        const active = document.activeElement;
+        // a focused option/tile/anchor owns its own Enter (native activation) —
+        // otherwise shift_select and matching_pairs are unanswerable by keyboard
+        if (
+          active instanceof HTMLElement &&
+          (active.tagName === "BUTTON" ||
+            active.tagName === "A" ||
+            active.getAttribute("role") === "button")
+        ) {
+          return;
+        }
         e.preventDefault();
         handleVerify();
         return;
@@ -559,7 +573,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
       setShowSuccessSheet(true);
 
       // If the spelling was wrong (typo or missing umlaut without tolerance), queue for repeat at the end
-      if (evaluation.reason === "typo" || (evaluation.reason === "umlaut" && !evalOptions.umlautTolerance)) {
+      if ((evaluation.reason === "typo" || evaluation.reason === "sharp-s") || (evaluation.reason === "umlaut" && !evalOptions.umlautTolerance)) {
         onQueueRetry?.();
       }
       return;
@@ -609,7 +623,7 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
       setVerifiedAttemptText(option);
       setAlmostWarningNote(evaluation.warningNote);
       setShowSuccessSheet(true);
-      if (evaluation.reason === "typo" || (evaluation.reason === "umlaut" && !evalOptions.umlautTolerance)) {
+      if ((evaluation.reason === "typo" || evaluation.reason === "sharp-s") || (evaluation.reason === "umlaut" && !evalOptions.umlautTolerance)) {
         onQueueRetry?.();
       }
     } else {
@@ -672,8 +686,13 @@ const LegacyExerciseWidget: React.FC<Omit<ExerciseWidgetProps, never>> = ({
       void soundEngine.playError(settings.playSoundOnError, settings.soundVolume);
       setFeedbackNote(`"${selectedEnglish}" does not match "${de}". Try again!`);
       setSelectedEnglish(null);
-      onError("spelling");
-      onQueueRetry?.();
+      // one item, one miss: a 6-pair grid must not burn the mercy prompt or the
+      // purple star on a single slip — report only the first mismatch
+      if (!reportedErrorRef.current) {
+        reportedErrorRef.current = true;
+        onError("spelling");
+        onQueueRetry?.();
+      }
     }
   };
 

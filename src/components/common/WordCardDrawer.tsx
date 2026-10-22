@@ -213,7 +213,7 @@ export const WordCardDrawer: React.FC = () => {
                 onClick={() => playTargetAudio(word.context_phrase, language.ttsLocale)}
                 className="p-1 rounded bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 text-[var(--main-color)] border border-[var(--sub-color)]/20 transition cursor-pointer"
                 title={`Listen to full phrase: "${word.context_phrase}"`}
-                aria-label={`Listen to German context phrase: "${word.context_phrase}"`}
+                aria-label={`Listen to ${language.name} context phrase: "${word.context_phrase}"`}
               >
                 <Volume2 className="w-3.5 h-3.5" />
               </button>
@@ -222,6 +222,7 @@ export const WordCardDrawer: React.FC = () => {
               sentence={word.context_phrase}
               translation={word.context_translation}
               word={word.target_word}
+              lang={language.id}
             />
           </div>
 

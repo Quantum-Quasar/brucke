@@ -26,3 +26,8 @@ jobs:
 
       - name: Typecheck
         run: bun run typecheck
+
+      # The production build is the only step that catches App Router
+      # prerender/SSG breakage, so CI must not skip it.
+      - name: Build
+        run: bun run build

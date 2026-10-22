@@ -47,6 +47,7 @@ export const VariantEnglishExercise: React.FC<VariantEnglishExerciseProps> = ({
   onSuccess,
   onError,
   onQueueRetry,
+  onFlagGuessed,
 }) => {
   const [picked, setPicked] = useState<string[]>([]);
   const [state, setState] = useState<"idle" | "correct" | "wrong">("idle");
@@ -159,6 +160,20 @@ export const VariantEnglishExercise: React.FC<VariantEnglishExerciseProps> = ({
           </p>
           {exercise.explanation && (
             <p className="text-xs text-[var(--sub-color)] leading-relaxed">{exercise.explanation}</p>
+          )}
+          {!isRetry && onFlagGuessed && (
+            <button
+              type="button"
+              onClick={() => {
+                onFlagGuessed();
+                setState("idle");
+                setPicked([]);
+                onSuccess();
+              }}
+              className="w-full py-2 rounded border border-[var(--sub-color)]/30 text-[var(--sub-color)] hover:text-[var(--text-color)] hover:border-[var(--main-color)]/40 font-mono text-[11px] transition cursor-pointer"
+            >
+              I guessed — bring this one back sooner
+            </button>
           )}
           <button
             onClick={() => {

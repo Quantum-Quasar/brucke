@@ -3,7 +3,7 @@
 // ponytail: lightweight zustand store with localStorage persistence and word-level state
 
 import { create } from "zustand";
-import type { LessonProgress, LessonStar, MasteryState, ReviewMode, SRSCard } from "./types";
+import type { LessonProgress, LessonSegment, LessonStar, MasteryState, ReviewMode, SRSCard } from "./types";
 import { createInitialCard, gradeCard, isMastered, type ReviewGrade } from "./srs";
 import { applyTheme, DEFAULT_THEME } from "@/data/themes";
 import { applyFont, DEFAULT_FONT } from "@/data/fonts";
@@ -11,6 +11,7 @@ import { type CustomizationSettings, DEFAULT_SETTINGS } from "@/data/settings";
 import { DEFAULT_LANGUAGE_ID, getLanguageDefinition, isValidLanguageId } from "@/data/languages";
 import { applyAppearanceSettings } from "./appearance";
 import { soundEngine } from "./sound";
+import { STORAGE_KEY, STORAGE_COOKIE_KEY } from "./storage-keys";
 
 export interface ToleranceSettings {
   umlautTolerance: boolean;
@@ -56,7 +57,7 @@ export interface AppState {
   completedLessons: number[];
   currentLessonId: number;
   lessonProgress: Record<number, LessonProgress>;
-  /** gold = completed; purple = flawless first-try run (retry queue untouched). Purple is never downgraded. */
+  /** gold = completed; purple = flawless run (retry queue untouched, including a clean replay). Purple is never downgraded. */
   lessonStars: Record<number, LessonStar>;
   wordMastery: Record<string, MasteryState>;
   srsCards: Record<string, SRSCard>;
@@ -75,6 +76,14 @@ export interface AppState {
   font: string;
   isFontSelectorOpen: boolean;
   settings: CustomizationSettings;
+  /**
+   * Transient (never persisted): true once the client has applied the saved
+   * state — or confirmed there is none. Components that copy store values into
+   * local state at mount (LessonReader's segment/practice position) wait for
+   * this before adopting them, because child effects run before the root
+   * layout's hydration effect.
+   */
+  storeHydrated: boolean;
 
   // Actions
   setActiveLanguage: (languageId: string) => void;
@@ -130,12 +139,18 @@ export interface AppState {
   dismissCapitalizationPrompt: () => void;
   logDailyActivity: () => void;
   resetProgress: () => void;
-  hydrateFromStorage: () => void;
+  /**
+   * Apply persisted state on the client. The first call is authoritative; later
+   * plain calls are no-ops because React Strict Mode runs the mount effect
+   * twice and a second read could re-apply storage that a child effect already
+   * overwrote. Pass `{ reread: true }` to deliberately re-read storage (a
+   * cross-tab `storage` event, or a test that re-seeds storage).
+   */
+  hydrateFromStorage: (options?: { reread?: boolean }) => void;
   importBackupState: (payload: unknown) => boolean;
 }
 
-export const STORAGE_KEY = "brucke_app_state_v1";
-export const STORAGE_COOKIE_KEY = "brucke_progress";
+export { STORAGE_KEY, STORAGE_COOKIE_KEY } from "./storage-keys";
 
 export function getWeekString(date = new Date()): string {
   // purely local time: keyed by the local Monday of that week — never mixes
@@ -152,7 +167,16 @@ export function getWeekString(date = new Date()): string {
 export function getCookie(name: string): string | null {
   if (typeof document === "undefined") return null;
   const match = document.cookie.match(new RegExp("(^|;\\s*)" + name + "=([^;]*)"));
-  return match ? decodeURIComponent(match[2]) : null;
+  if (!match) return null;
+  // A stray "%" in the raw cookie (written by another app, an older build, or
+  // an extension) makes decodeURIComponent throw a URIError. This runs at
+  // module load via loadSavedState, so an unguarded throw is a white screen
+  // before React can mount. Fall back to the captured bytes instead.
+  try {
+    return decodeURIComponent(match[2]);
+  } catch {
+    return match[2];
+  }
 }
 
 export function setCookie(name: string, value: string, days = 365) {
@@ -214,31 +238,335 @@ export function loadSavedState(): Partial<AppState> {
 export const isDangerousKey = (key: string): boolean =>
   key === "__proto__" || key === "constructor" || key === "prototype" || key === "toString" || key === "valueOf";
 
+// --- validated schema -------------------------------------------------------
+// Storage hydration and backup import share one set of validators. A payload
+// repaired on load must never be a payload import rejects, and a junk field must
+// never reach state where an action like setLessonProgress would throw on it.
+
+const LESSON_SEGMENTS: readonly LessonSegment[] = ["hook", "pattern", "table", "practice", "summary"];
+const LESSON_STARS: readonly LessonStar[] = ["gold", "purple"];
+const MASTERY_STATES: readonly MasteryState[] = ["unexplored", "explored", "encountered", "mastered"];
+const VALID_REVIEW_MODES: readonly ReviewMode[] = ["flashcard", "mcq", "tiles", "typing"];
+
+function emptyWeek(): boolean[] {
+  return [false, false, false, false, false, false, false];
+}
+
+function oneOf<T extends string>(value: unknown, allowed: readonly T[], fallback: T): T {
+  return typeof value === "string" && (allowed as readonly string[]).includes(value) ? (value as T) : fallback;
+}
+
+function coerceBoolean(value: unknown, fallback: boolean): boolean {
+  return typeof value === "boolean" ? value : fallback;
+}
+
+function coerceCount(value: unknown, fallback: number): number {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0 ? Math.floor(value) : fallback;
+}
+
+function coerceVolume(value: unknown, fallback: number): number {
+  return typeof value === "number" && Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : fallback;
+}
+
+/** Lesson ids are positive integers. Strings are only coerced for backups,
+ * whose legacy format used "lesson_03"-style ids. */
+function parseLessonId(value: unknown, coerceString = false): number | null {
+  if (typeof value === "number") {
+    return Number.isInteger(value) && value >= 1 ? value : null;
+  }
+  if (coerceString && typeof value === "string") {
+    const parsed = parseInt(value.replace(/[^\d]/g, ""), 10);
+    return Number.isNaN(parsed) || parsed < 1 ? null : parsed;
+  }
+  return null;
+}
+
+function normalizeLessonIdList(raw: unknown, coerceString = false): number[] {
+  if (!Array.isArray(raw)) return [];
+  const ids: number[] = [];
+  for (const item of raw) {
+    const id = parseLessonId(item, coerceString);
+    if (id !== null && !ids.includes(id)) ids.push(id);
+  }
+  return ids;
+}
+
+function normalizeWeeklyActivity(raw: unknown): boolean[] | null {
+  if (!Array.isArray(raw) || raw.length !== 7) return null;
+  return raw.map((day) => day === true);
+}
+
+function normalizeWeekKey(raw: unknown): string | undefined {
+  return typeof raw === "string" && raw.length > 0 ? raw : undefined;
+}
+
+function sanitizeLessonProgressEntry(raw: unknown): LessonProgress | null {
+  if (!isPlausibleStateObject(raw)) return null;
+  const segment = raw.segment;
+  if (typeof segment !== "string" || !(LESSON_SEGMENTS as readonly string[]).includes(segment)) return null;
+  const practiceIndex = raw.practiceIndex;
+  if (typeof practiceIndex !== "number" || !Number.isInteger(practiceIndex) || practiceIndex < 0) return null;
+  const rawCompleted = raw.completedSegments;
+  if (!Array.isArray(rawCompleted)) return null;
+  const completedSegments: LessonSegment[] = [];
+  for (const item of rawCompleted) {
+    if (typeof item !== "string" || !(LESSON_SEGMENTS as readonly string[]).includes(item)) return null;
+    if (!completedSegments.includes(item as LessonSegment)) completedSegments.push(item as LessonSegment);
+  }
+  const entry: LessonProgress = {
+    segment: segment as LessonSegment,
+    practiceIndex,
+    completedSegments,
+  };
+  if (typeof raw.everQueued === "boolean") entry.everQueued = raw.everQueued;
+  return entry;
+}
+
+function normalizeLessonProgress(raw: unknown): Record<number, LessonProgress> {
+  const progress: Record<number, LessonProgress> = {};
+  if (!isPlausibleStateObject(raw)) return progress;
+  for (const [key, value] of Object.entries(raw)) {
+    if (isDangerousKey(key)) continue;
+    const lessonId = parseLessonId(key, true);
+    if (lessonId === null) continue;
+    const entry = sanitizeLessonProgressEntry(value);
+    if (entry) progress[lessonId] = entry;
+  }
+  return progress;
+}
+
+function normalizeLessonStars(raw: unknown): Record<number, LessonStar> {
+  const stars: Record<number, LessonStar> = {};
+  if (!isPlausibleStateObject(raw)) return stars;
+  for (const [key, value] of Object.entries(raw)) {
+    if (isDangerousKey(key)) continue;
+    const lessonId = parseLessonId(key, true);
+    if (lessonId === null) continue;
+    if (typeof value === "string" && (LESSON_STARS as readonly string[]).includes(value)) {
+      stars[lessonId] = value as LessonStar;
+    }
+  }
+  return stars;
+}
+
+function normalizeWordMastery(raw: unknown): Record<string, MasteryState> {
+  const mastery: Record<string, MasteryState> = {};
+  if (!isPlausibleStateObject(raw)) return mastery;
+  for (const [wordId, value] of Object.entries(raw)) {
+    if (!wordId || isDangerousKey(wordId)) continue;
+    if (typeof value === "string" && (MASTERY_STATES as readonly string[]).includes(value)) {
+      mastery[wordId] = value as MasteryState;
+    }
+  }
+  return mastery;
+}
+
+/** Storage-shaped SRS map: entries are re-keyed by their own `word_id` where
+ * available so a truncated/legacy payload cannot leave null cards behind. */
+function normalizeSrsCards(raw: unknown): Record<string, SRSCard> {
+  const cards: Record<string, SRSCard> = {};
+  if (!isPlausibleStateObject(raw)) return cards;
+  for (const [key, value] of Object.entries(raw)) {
+    if (!key || isDangerousKey(key)) continue;
+    const card = sanitizeImportedSrsCard(value, key);
+    if (!card) continue;
+    cards[card.word_id] = card;
+  }
+  return cards;
+}
+
+/** Backup-shaped SRS import: keyed by the backup's own key (or array `id`), so
+ * a card's `word_id` stays metadata instead of silently moving the map key. */
+function importSrsCards(raw: unknown, base: Record<string, SRSCard>): Record<string, SRSCard> {
+  const cards: Record<string, SRSCard> = { ...base };
+  if (Array.isArray(raw)) {
+    for (const entry of raw) {
+      if (!isPlausibleStateObject(entry)) continue;
+      const key = typeof entry.id === "string" && entry.id
+        ? entry.id
+        : typeof entry.word_id === "string" && entry.word_id
+        ? entry.word_id
+        : null;
+      if (!key || isDangerousKey(key)) continue;
+      const card = sanitizeImportedSrsCard(entry, key);
+      if (card) cards[key] = card;
+    }
+  } else if (isPlausibleStateObject(raw)) {
+    for (const [key, entry] of Object.entries(raw)) {
+      if (!key || isDangerousKey(key)) continue;
+      const card = sanitizeImportedSrsCard(entry, key);
+      if (card) cards[key] = card;
+    }
+  }
+  return cards;
+}
+
+function normalizeSettings(raw: unknown, fallback: CustomizationSettings): CustomizationSettings {
+  const source = isPlausibleStateObject(raw) ? raw : {};
+  return {
+    quickRestart: oneOf(source.quickRestart, ["off", "esc"] as const, fallback.quickRestart),
+    lazyMode: coerceBoolean(source.lazyMode, fallback.lazyMode),
+    capitalizationTolerance: coerceBoolean(source.capitalizationTolerance, fallback.capitalizationTolerance),
+    stopOnError: oneOf(source.stopOnError, ["off", "letter"] as const, fallback.stopOnError),
+    confidenceMode: oneOf(source.confidenceMode, ["off", "on"] as const, fallback.confidenceMode),
+    showCharBar: oneOf(source.showCharBar, ["always", "on_focus", "off"] as const, fallback.showCharBar),
+    soundVolume: coerceVolume(source.soundVolume, fallback.soundVolume),
+    playSoundOnClick: typeof source.playSoundOnClick === "string" ? source.playSoundOnClick : fallback.playSoundOnClick,
+    playSoundOnError: typeof source.playSoundOnError === "string" ? source.playSoundOnError : fallback.playSoundOnError,
+    showKeyTips: coerceBoolean(source.showKeyTips, fallback.showKeyTips),
+    capsLockWarning: coerceBoolean(source.capsLockWarning, fallback.capsLockWarning),
+    showMasteryCounter: coerceBoolean(source.showMasteryCounter, fallback.showMasteryCounter),
+    increasedContrast: coerceBoolean(source.increasedContrast, fallback.increasedContrast),
+    showPostureCues: coerceBoolean(source.showPostureCues, fallback.showPostureCues),
+    posturePrimerSeen: coerceBoolean(source.posturePrimerSeen, fallback.posturePrimerSeen),
+    listeningSkippedUntil: coerceCount(source.listeningSkippedUntil, fallback.listeningSkippedUntil),
+  };
+}
+
+function normalizeTolerance(
+  raw: unknown,
+  settings: Pick<CustomizationSettings, "lazyMode" | "capitalizationTolerance"> | null | undefined,
+  fallback: ToleranceSettings
+): ToleranceSettings {
+  const source = isPlausibleStateObject(raw) ? raw : {};
+  const umlautFallback = typeof settings?.lazyMode === "boolean" ? settings.lazyMode : fallback.umlautTolerance;
+  const capitalizationFallback =
+    typeof settings?.capitalizationTolerance === "boolean"
+      ? settings.capitalizationTolerance
+      : fallback.capitalizationTolerance;
+  return {
+    umlautTolerance: coerceBoolean(source.umlautTolerance, umlautFallback),
+    capitalizationTolerance: coerceBoolean(source.capitalizationTolerance, capitalizationFallback),
+    umlautDismissals: coerceCount(source.umlautDismissals, fallback.umlautDismissals),
+    capitalizationDismissals: coerceCount(source.capitalizationDismissals, fallback.capitalizationDismissals),
+  };
+}
+
+function normalizeLanguageSlice(raw: unknown): LanguageProgress {
+  const slice = isPlausibleStateObject(raw) ? raw : {};
+  return {
+    completedLessons: normalizeLessonIdList(slice.completedLessons),
+    currentLessonId: parseLessonId(slice.currentLessonId) ?? 1,
+    lessonProgress: normalizeLessonProgress(slice.lessonProgress),
+    lessonStars: normalizeLessonStars(slice.lessonStars),
+    wordMastery: normalizeWordMastery(slice.wordMastery),
+    srsCards: normalizeSrsCards(slice.srsCards),
+    weeklyActivity: normalizeWeeklyActivity(slice.weeklyActivity) ?? emptyWeek(),
+    lastActivityWeek: normalizeWeekKey(slice.lastActivityWeek),
+  };
+}
+
+function normalizeProgressByLanguage(raw: unknown): Record<string, LanguageProgress> {
+  const slices: Record<string, LanguageProgress> = {};
+  if (!isPlausibleStateObject(raw)) return slices;
+  for (const [langId, slice] of Object.entries(raw)) {
+    if (!isValidLanguageId(langId) || isDangerousKey(langId)) continue;
+    slices[langId] = normalizeLanguageSlice(slice);
+  }
+  return slices;
+}
+
+/** The raw backup slice keeps whatever fields it actually carries; a field the
+ * backup omits must keep the current value instead of being defaulted away. */
+function applyImportedSlice(base: LanguageProgress | undefined, rawSlice: unknown): LanguageProgress {
+  const current = base ?? normalizeLanguageSlice({});
+  if (!isPlausibleStateObject(rawSlice)) return current;
+  const patch: Partial<LanguageProgress> = {};
+  if ("completedLessons" in rawSlice) patch.completedLessons = normalizeLessonIdList(rawSlice.completedLessons);
+  if ("currentLessonId" in rawSlice) {
+    const lessonId = parseLessonId(rawSlice.currentLessonId);
+    if (lessonId !== null) patch.currentLessonId = lessonId;
+  }
+  if ("lessonProgress" in rawSlice) patch.lessonProgress = normalizeLessonProgress(rawSlice.lessonProgress);
+  if ("lessonStars" in rawSlice) patch.lessonStars = normalizeLessonStars(rawSlice.lessonStars);
+  if ("wordMastery" in rawSlice) patch.wordMastery = normalizeWordMastery(rawSlice.wordMastery);
+  if ("srsCards" in rawSlice) patch.srsCards = importSrsCards(rawSlice.srsCards, {});
+  if ("weeklyActivity" in rawSlice) {
+    const week = normalizeWeeklyActivity(rawSlice.weeklyActivity);
+    if (week) patch.weeklyActivity = week;
+  }
+  if ("lastActivityWeek" in rawSlice && typeof rawSlice.lastActivityWeek === "string" && rawSlice.lastActivityWeek) {
+    patch.lastActivityWeek = rawSlice.lastActivityWeek;
+  }
+  return { ...current, ...patch };
+}
+
+/** The active language's slice as currently mirrored on the top-level state. */
+function sliceFromMirrors(state: AppState): LanguageProgress {
+  return {
+    completedLessons: state.completedLessons,
+    currentLessonId: state.currentLessonId,
+    lessonProgress: state.lessonProgress,
+    lessonStars: state.lessonStars,
+    wordMastery: state.wordMastery,
+    srsCards: state.srsCards,
+    weeklyActivity: state.weeklyActivity,
+    lastActivityWeek: state.lastActivityWeek,
+  };
+}
+
+/** Union-merge for re-hydration (cross-tab `storage` events must not delete
+ * progress this tab already holds). */
+function mergeLanguageSlice(current: LanguageProgress, incoming: LanguageProgress): LanguageProgress {
+  return {
+    completedLessons: Array.from(new Set([...current.completedLessons, ...incoming.completedLessons])),
+    currentLessonId: Math.max(current.currentLessonId, incoming.currentLessonId),
+    lessonProgress: { ...current.lessonProgress, ...incoming.lessonProgress },
+    lessonStars: { ...current.lessonStars, ...incoming.lessonStars },
+    wordMastery: { ...current.wordMastery, ...incoming.wordMastery },
+    srsCards: { ...current.srsCards, ...incoming.srsCards },
+    weeklyActivity: incoming.weeklyActivity.some(Boolean) ? incoming.weeklyActivity : current.weeklyActivity,
+    lastActivityWeek: incoming.lastActivityWeek ?? current.lastActivityWeek,
+  };
+}
+
 /** Applies schema defaults & legacy migrations to a parsed persisted-state
  * object (mutates and returns it). */
 function normalizeParsedState(parsed: Record<string, any>): Partial<AppState> {
-  // ponytail: defensive schema defaults preventing corrupted storage crashes
-  if (!Array.isArray(parsed.completedLessons)) parsed.completedLessons = [];
-  if (!parsed.lessonProgress || typeof parsed.lessonProgress !== "object" || Array.isArray(parsed.lessonProgress)) parsed.lessonProgress = {};
-  if (!parsed.lessonStars || typeof parsed.lessonStars !== "object" || Array.isArray(parsed.lessonStars)) parsed.lessonStars = {};
-  if (!parsed.wordMastery || typeof parsed.wordMastery !== "object" || Array.isArray(parsed.wordMastery)) parsed.wordMastery = {};
-  if (!parsed.srsCards || typeof parsed.srsCards !== "object" || Array.isArray(parsed.srsCards)) parsed.srsCards = {};
-  const rawId = Number(parsed.currentLessonId);
-  parsed.currentLessonId = Number.isInteger(rawId) && rawId >= 1 ? rawId : 1;
-  if (!Array.isArray(parsed.weeklyActivity)) parsed.weeklyActivity = [false, false, false, false, false, false, false];
-  if (parsed.settings) {
-    parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
-    // "enter" and "tab" were removed (tab hijacks keyboard focus navigation);
-    // ensure quickRestart is valid
-    if (parsed.settings.quickRestart !== "off" && parsed.settings.quickRestart !== "esc") {
-      parsed.settings.quickRestart = DEFAULT_SETTINGS.quickRestart;
-    }
+  // Top-level (pre-multi-language) progress, validated before it can seed a
+  // language slice or the mirrored state.
+  const topLevelProgress: LanguageProgress = {
+    completedLessons: normalizeLessonIdList(parsed.completedLessons),
+    currentLessonId: parseLessonId(parsed.currentLessonId) ?? 1,
+    lessonProgress: normalizeLessonProgress(parsed.lessonProgress),
+    lessonStars: normalizeLessonStars(parsed.lessonStars),
+    wordMastery: normalizeWordMastery(parsed.wordMastery),
+    srsCards: normalizeSrsCards(parsed.srsCards),
+    weeklyActivity: normalizeWeeklyActivity(parsed.weeklyActivity) ?? emptyWeek(),
+    lastActivityWeek: normalizeWeekKey(parsed.lastActivityWeek),
+  };
+  parsed.completedLessons = topLevelProgress.completedLessons;
+  parsed.currentLessonId = topLevelProgress.currentLessonId;
+  parsed.lessonProgress = topLevelProgress.lessonProgress;
+  parsed.lessonStars = topLevelProgress.lessonStars;
+  parsed.wordMastery = topLevelProgress.wordMastery;
+  parsed.srsCards = topLevelProgress.srsCards;
+  parsed.weeklyActivity = topLevelProgress.weeklyActivity;
+  parsed.lastActivityWeek = topLevelProgress.lastActivityWeek;
+
+  if (isPlausibleStateObject(parsed.settings)) {
+    parsed.settings = normalizeSettings(parsed.settings, DEFAULT_SETTINGS);
+  } else if (parsed.settings !== undefined) {
+    delete parsed.settings;
+  }
+
+  if (parsed.tolerance !== undefined) {
+    parsed.tolerance = normalizeTolerance(parsed.tolerance, parsed.settings, {
+      umlautTolerance: Boolean(parsed.settings?.lazyMode),
+      capitalizationTolerance: Boolean(parsed.settings?.capitalizationTolerance),
+      umlautDismissals: 0,
+      capitalizationDismissals: 0,
+    });
+  }
+
+  if (parsed.preferredReviewMode !== undefined) {
+    parsed.preferredReviewMode = oneOf(parsed.preferredReviewMode, VALID_REVIEW_MODES, "flashcard");
   }
 
   // Language slices: pre-multi-language saves kept progress only on the top
   // level — migrate it into the default language's slice so nobody loses a
-  // day of German progress.
-  if (!parsed.activeLanguageId || !isValidLanguageId(parsed.activeLanguageId)) {
+  // day of progress.
+  if (!isValidLanguageId(parsed.activeLanguageId)) {
     parsed.activeLanguageId = DEFAULT_LANGUAGE_ID;
   }
   // languages without content are hidden from the UI — anyone parked on one
@@ -246,46 +574,39 @@ function normalizeParsedState(parsed: Record<string, any>): Partial<AppState> {
   if (getLanguageDefinition(parsed.activeLanguageId).status !== "available") {
     parsed.activeLanguageId = DEFAULT_LANGUAGE_ID;
   }
-  if (!parsed.progressByLanguage || typeof parsed.progressByLanguage !== "object" || Array.isArray(parsed.progressByLanguage)) {
-    parsed.progressByLanguage = {};
-  }
-  if (!Array.isArray(parsed.seenIntroLanguages)) parsed.seenIntroLanguages = [];
-  if (!parsed.progressByLanguage[parsed.activeLanguageId]) {
-    parsed.progressByLanguage[parsed.activeLanguageId] = {
-      completedLessons: parsed.completedLessons,
-      currentLessonId: parsed.currentLessonId,
-      lessonProgress: parsed.lessonProgress,
-      lessonStars: parsed.lessonStars,
-      wordMastery: parsed.wordMastery,
-      srsCards: parsed.srsCards,
-      weeklyActivity: parsed.weeklyActivity,
-      lastActivityWeek: parsed.lastActivityWeek,
-    };
-  }
-  // The top-level fields always mirror the active language's slice.
-  const activeSlice = parsed.progressByLanguage[parsed.activeLanguageId];
-  if (activeSlice && typeof activeSlice === "object") {
-    if (!Array.isArray(activeSlice.completedLessons)) activeSlice.completedLessons = [];
-    if (!activeSlice.lessonProgress || typeof activeSlice.lessonProgress !== "object" || Array.isArray(activeSlice.lessonProgress)) activeSlice.lessonProgress = {};
-    if (!activeSlice.lessonStars || typeof activeSlice.lessonStars !== "object" || Array.isArray(activeSlice.lessonStars)) activeSlice.lessonStars = {};
-    if (!activeSlice.wordMastery || typeof activeSlice.wordMastery !== "object" || Array.isArray(activeSlice.wordMastery)) activeSlice.wordMastery = {};
-    if (!activeSlice.srsCards || typeof activeSlice.srsCards !== "object" || Array.isArray(activeSlice.srsCards)) activeSlice.srsCards = {};
-    if (!Array.isArray(activeSlice.weeklyActivity)) activeSlice.weeklyActivity = [false, false, false, false, false, false, false];
-    parsed.completedLessons = activeSlice.completedLessons;
-    const rawSliceId = Number(activeSlice.currentLessonId);
-    activeSlice.currentLessonId = Number.isInteger(rawSliceId) && rawSliceId >= 1 ? rawSliceId : parsed.currentLessonId;
-    parsed.currentLessonId = activeSlice.currentLessonId;
-    parsed.lessonProgress = activeSlice.lessonProgress;
-    parsed.lessonStars = activeSlice.lessonStars;
-    parsed.wordMastery = activeSlice.wordMastery;
-    parsed.srsCards = activeSlice.srsCards;
-    parsed.weeklyActivity = activeSlice.weeklyActivity;
-    parsed.lastActivityWeek = activeSlice.lastActivityWeek;
-  }
+
+  const progressByLanguage = normalizeProgressByLanguage(parsed.progressByLanguage);
+  const activeSlice = progressByLanguage[parsed.activeLanguageId] ?? topLevelProgress;
+  progressByLanguage[parsed.activeLanguageId] = activeSlice;
+  parsed.progressByLanguage = progressByLanguage;
+
+  parsed.seenIntroLanguages = Array.isArray(parsed.seenIntroLanguages)
+    ? Array.from(new Set(parsed.seenIntroLanguages.filter((id: unknown): id is string => isValidLanguageId(id))))
+    : [];
+
+  // The top-level fields always mirror the active language's (validated) slice.
+  parsed.completedLessons = activeSlice.completedLessons;
+  parsed.currentLessonId = activeSlice.currentLessonId;
+  parsed.lessonProgress = activeSlice.lessonProgress;
+  parsed.lessonStars = activeSlice.lessonStars;
+  parsed.wordMastery = activeSlice.wordMastery;
+  parsed.srsCards = activeSlice.srsCards;
+  parsed.weeklyActivity = activeSlice.weeklyActivity;
+  parsed.lastActivityWeek = activeSlice.lastActivityWeek;
+
   return parsed;
 }
 
 let lastSerialized = "";
+
+// Read once, before React mounts, so the first hydrate still has the learner's
+// saved state even if a child mount effect has already written defaults back to
+// storage (see hydrateFromStorage). Declared here rather than seeded into the
+// store's initial state: the store must start from deterministic defaults or
+// the client's first render disagrees with the server-rendered HTML.
+const bootSavedState: Partial<AppState> | null =
+  typeof window === "undefined" ? null : loadSavedState();
+let hasHydratedFromStorage = false;
 
 // the auto-open of onboarding on first visit must only ever happen once per
 // page load — cross-tab `storage` events re-run hydrateFromStorage and must
@@ -366,60 +687,71 @@ export function saveState(state: AppState) {
   } catch {}
 }
 
-const initialSaved = loadSavedState();
+function sanitizeImportedSrsCard(raw: unknown, fallbackId: string): SRSCard | null {
+  if (!isPlausibleStateObject(raw)) return null;
+  const clampNum = (v: unknown, min: number, max: number) =>
+    typeof v === "number" && Number.isFinite(v) ? Math.min(max, Math.max(min, v)) : null;
 
-function sanitizeImportedSrsCard(raw: Record<string, unknown>, fallbackId: string): SRSCard {
-  const clampNum = (v: unknown, def: number, min: number, max: number) =>
-    typeof v === "number" && Number.isFinite(v) ? Math.min(max, Math.max(min, v)) : def;
+  const interval = clampNum(raw.interval, 0, 36500);
+  const repetitions = clampNum(raw.repetitions ?? raw.repetition, 0, 10000);
+  const easeFactor = clampNum(raw.ease_factor ?? raw.efactor ?? raw.ease, 1.3, 5);
+  const dueDate = raw.due_date ?? raw.dueDate;
+  const lastReviewed = raw.last_reviewed ?? raw.lastReviewed ?? null;
+
+  // A card without its scheduling fields is not a card: leaving it in the map
+  // makes getDueCards() (and therefore the whole review page) throw on boot.
+  if (interval === null || repetitions === null || easeFactor === null) return null;
+  if (typeof dueDate !== "string" || !/^\d{4}-\d{2}-\d{2}/.test(dueDate)) return null;
+  if (lastReviewed !== null && typeof lastReviewed !== "string") return null;
+
   const wordId = typeof raw.word_id === "string" && raw.word_id ? raw.word_id : fallbackId;
-  const interval = clampNum(raw.interval, 1, 0, 36500);
-  const repetitions = clampNum(raw.repetitions ?? raw.repetition, 0, 0, 10000);
-  const easeFactor = clampNum(raw.ease_factor ?? raw.efactor, 2.5, 1.3, 5.0);
-  const lapses = clampNum(raw.lapses, 0, 0, 10000);
-  const dueDate =
-    typeof raw.due_date === "string" && /^\d{4}-\d{2}-\d{2}/.test(raw.due_date)
-      ? raw.due_date
-      : typeof raw.dueDate === "string" && /^\d{4}-\d{2}-\d{2}/.test(raw.dueDate)
-      ? raw.dueDate
-      : new Date().toISOString().split("T")[0];
-  return {
-    ...(raw as unknown as SRSCard),
+  if (!wordId || isDangerousKey(wordId)) return null;
+
+  const card: SRSCard = {
     word_id: wordId,
-    interval,
-    repetitions,
+    interval: Math.floor(interval),
+    repetitions: Math.floor(repetitions),
     ease_factor: easeFactor,
-    lapses,
     due_date: dueDate,
-    last_reviewed: typeof raw.last_reviewed === "string" ? raw.last_reviewed : null,
+    lapses: Math.floor(clampNum(raw.lapses, 0, 10000) ?? 0),
+    last_reviewed: lastReviewed,
   };
+  const guessed = clampNum(raw.guessed, 0, 1_000_000);
+  if (guessed !== null) card.guessed = Math.floor(guessed);
+  return card;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
-  activeLanguageId: initialSaved.activeLanguageId || DEFAULT_LANGUAGE_ID,
-  progressByLanguage: initialSaved.progressByLanguage || {},
-  seenIntroLanguages: initialSaved.seenIntroLanguages || [],
-  completedLessons: initialSaved.completedLessons || [],
-  currentLessonId: initialSaved.currentLessonId || 1,
-  lessonProgress: initialSaved.lessonProgress || {},
-  lessonStars: initialSaved.lessonStars || {},
-  wordMastery: initialSaved.wordMastery || {},
-  srsCards: initialSaved.srsCards || {},
-  weeklyActivity: initialSaved.weeklyActivity || [false, false, false, false, false, false, false],
-  lastActivityWeek: initialSaved.lastActivityWeek || getWeekString(),
+  // Initialise from DEFAULTS only. Reading storage here made the client's first
+  // render disagree with the server-rendered defaults (hydration mismatch);
+  // persisted state is applied by hydrateFromStorage() from the root layout's
+  // mount effect instead.
+  activeLanguageId: DEFAULT_LANGUAGE_ID,
+  progressByLanguage: {},
+  seenIntroLanguages: [],
+  completedLessons: [],
+  currentLessonId: 1,
+  lessonProgress: {},
+  lessonStars: {},
+  wordMastery: {},
+  srsCards: {},
+  weeklyActivity: emptyWeek(),
+  lastActivityWeek: undefined,
   activeWordDrawerId: null,
-  preferredReviewMode: (initialSaved.preferredReviewMode as ReviewMode) || "flashcard",
-  hasCompletedOnboarding: initialSaved.hasCompletedOnboarding || false,
+  preferredReviewMode: "flashcard",
+  hasCompletedOnboarding: false,
   isOnboardingOpen: false,
   onboardingIntroLanguage: null,
-  hasSeenGenderIntro: initialSaved.hasSeenGenderIntro || false,
-  theme: initialSaved.theme || DEFAULT_THEME,
+  hasSeenGenderIntro: false,
+  theme: DEFAULT_THEME,
   isThemeSelectorOpen: false,
-  font: initialSaved.font || DEFAULT_FONT,
+  font: DEFAULT_FONT,
   isFontSelectorOpen: false,
-  settings: initialSaved.settings ? { ...DEFAULT_SETTINGS, ...initialSaved.settings } : DEFAULT_SETTINGS,
-  tolerance: initialSaved.tolerance || {
-    umlautTolerance: initialSaved.settings?.lazyMode || false,
-    capitalizationTolerance: initialSaved.settings?.capitalizationTolerance || false,
+  settings: DEFAULT_SETTINGS,
+  storeHydrated: false,
+  tolerance: {
+    umlautTolerance: DEFAULT_SETTINGS.lazyMode,
+    capitalizationTolerance: DEFAULT_SETTINGS.capitalizationTolerance,
     umlautDismissals: 0,
     capitalizationDismissals: 0,
   },
@@ -690,21 +1022,25 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   setLessonProgress: (lessonId, progress) => {
+    // a caller (or a restored payload) must not be able to wedge resume state
+    // with an entry missing completedSegments
+    const safeProgress = sanitizeLessonProgressEntry(progress);
+    if (!safeProgress) return;
     set((s) => {
       const current = s.lessonProgress[lessonId];
       if (
         current &&
-        current.segment === progress.segment &&
-        current.practiceIndex === progress.practiceIndex &&
-        current.everQueued === progress.everQueued &&
-        current.completedSegments.length === progress.completedSegments.length &&
-        current.completedSegments.every((segment, index) => segment === progress.completedSegments[index])
+        current.segment === safeProgress.segment &&
+        current.practiceIndex === safeProgress.practiceIndex &&
+        current.everQueued === safeProgress.everQueued &&
+        current.completedSegments.length === safeProgress.completedSegments.length &&
+        current.completedSegments.every((segment, index) => segment === safeProgress.completedSegments[index])
       ) {
         return s;
       }
       const next = {
         ...s,
-        lessonProgress: { ...s.lessonProgress, [lessonId]: progress },
+        lessonProgress: { ...s.lessonProgress, [lessonId]: safeProgress },
       };
       saveState(next);
       return next;
@@ -837,59 +1173,53 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   resetProgress: () => {
-    const emptyState = {
-      activeLanguageId: DEFAULT_LANGUAGE_ID,
-      progressByLanguage: {},
-      seenIntroLanguages: [],
-      completedLessons: [],
-      currentLessonId: 1,
-      lessonProgress: {},
-      lessonStars: {},
-      wordMastery: {},
-      srsCards: {},
-      weeklyActivity: [false, false, false, false, false, false, false],
-      activeWordDrawerId: null,
-      preferredReviewMode: "flashcard" as ReviewMode,
-      hasCompletedOnboarding: false,
-      isOnboardingOpen: false,
-      onboardingIntroLanguage: null,
-      hasSeenGenderIntro: false,
-      theme: DEFAULT_THEME,
-      isThemeSelectorOpen: false,
-      font: DEFAULT_FONT,
-      isFontSelectorOpen: false,
-      settings: DEFAULT_SETTINGS,
-      tolerance: {
-        umlautTolerance: false,
-        capitalizationTolerance: false,
-        umlautDismissals: 0,
-        capitalizationDismissals: 0,
-      },
-    };
-    if (typeof window !== "undefined") {
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-      } catch {}
-      try {
-        deleteCookie(STORAGE_COOKIE_KEY);
-      } catch {}
-    }
-    lastSerialized = "";
-    applyTheme(DEFAULT_THEME);
-    applyFont(DEFAULT_FONT);
-    applyAppearanceSettings(DEFAULT_SETTINGS);
-    set(emptyState);
+    // Reset only what the settings page promises: SRS cards, lesson
+    // completions, and word mastery. Appearance, customization settings,
+    // language choice and onboarding flags are preferences, not progress.
+    set((s) => {
+      const next: AppState = {
+        ...s,
+        progressByLanguage: {},
+        completedLessons: [],
+        currentLessonId: 1,
+        lessonProgress: {},
+        lessonStars: {},
+        wordMastery: {},
+        srsCards: {},
+        weeklyActivity: emptyWeek(),
+        lastActivityWeek: undefined,
+        activeWordDrawerId: null,
+        isOnboardingOpen: false,
+        onboardingIntroLanguage: null,
+        isThemeSelectorOpen: false,
+        isFontSelectorOpen: false,
+      };
+      // wipe the old snapshot first so a failed write can never leave stale
+      // progress behind, then persist the preserved preferences
+      lastSerialized = "";
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+        } catch {}
+        try {
+          deleteCookie(STORAGE_COOKIE_KEY);
+        } catch {}
+      }
+      saveState(next);
+      return next;
+    });
   },
 
   importBackupState: (rawPayload: unknown) => {
     // the boundary type is `unknown` — everything below narrows defensively
     // before use, so a hostile or malformed backup can only be ignored
-    const payload = rawPayload as Record<string, any>;
-    if (!payload || typeof payload !== "object" || Array.isArray(payload)) return false;
+    if (!isPlausibleStateObject(rawPayload)) return false;
+    const payload = rawPayload;
     // an object with none of our fields is not a backup — say so instead of
     // reporting success while restoring nothing
     const RECOGNIZED_FIELDS = [
       "settings",
+      "tolerance",
       "activeLanguageId",
       "progressByLanguage",
       "seenIntroLanguages",
@@ -907,10 +1237,10 @@ export const useAppStore = create<AppState>((set, get) => ({
       "theme",
       "font",
     ];
-    if (!RECOGNIZED_FIELDS.some((field) => field in payload)) return false;
+    if (!RECOGNIZED_FIELDS.some((field) => Object.prototype.hasOwnProperty.call(payload, field))) return false;
     set((s) => {
-      const nextSettings = payload.settings && typeof payload.settings === "object"
-        ? { ...s.settings, ...payload.settings }
+      const nextSettings = isPlausibleStateObject(payload.settings)
+        ? normalizeSettings(payload.settings, s.settings)
         : s.settings;
       const currentTheme = (typeof payload.theme === "string" && payload.theme) || s.theme;
       const currentFont = (typeof payload.font === "string" && payload.font) || s.font;
@@ -918,155 +1248,104 @@ export const useAppStore = create<AppState>((set, get) => ({
       applyTheme(currentTheme);
       applyFont(currentFont);
 
-      let completedLessons = s.completedLessons;
+      // Language identity. A pre-multi-language backup (no progressByLanguage)
+      // carries one language's progress on the top level — attribute it to the
+      // backup's own active language, not whatever is active right now.
+      const backupLanguageId = isValidLanguageId(payload.activeLanguageId)
+        ? payload.activeLanguageId
+        : s.activeLanguageId;
+
+      // Top-level patch: only the fields the backup actually carries, each one
+      // validated so a malformed entry is dropped instead of wedging state.
+      const topLevelPatch: Partial<LanguageProgress> = {};
       if (Array.isArray(payload.completedLessons)) {
-        completedLessons = payload.completedLessons
-          .map((item: unknown) => {
-            if (typeof item === "number") return item;
-            if (typeof item === "string") {
-              const parsed = parseInt(item.replace(/[^\d]/g, ""), 10);
-              return isNaN(parsed) ? null : parsed;
-            }
-            return null;
-          })
-          .filter((n: unknown): n is number => typeof n === "number");
+        topLevelPatch.completedLessons = normalizeLessonIdList(payload.completedLessons, true);
+      }
+      if (payload.currentLessonId !== undefined) {
+        const lessonId = parseLessonId(payload.currentLessonId, true);
+        if (lessonId !== null) topLevelPatch.currentLessonId = lessonId;
+      }
+      if (isPlausibleStateObject(payload.lessonProgress)) {
+        topLevelPatch.lessonProgress = normalizeLessonProgress(payload.lessonProgress);
+      }
+      if (isPlausibleStateObject(payload.lessonStars)) {
+        topLevelPatch.lessonStars = normalizeLessonStars(payload.lessonStars);
+      }
+      if (isPlausibleStateObject(payload.wordMastery)) {
+        topLevelPatch.wordMastery = normalizeWordMastery(payload.wordMastery);
+      }
+      if (Array.isArray(payload.srsCards) || isPlausibleStateObject(payload.srsCards)) {
+        topLevelPatch.srsCards = importSrsCards(payload.srsCards, s.srsCards);
+      }
+      if (Array.isArray(payload.weeklyActivity)) {
+        const week = normalizeWeeklyActivity(payload.weeklyActivity);
+        if (week) topLevelPatch.weeklyActivity = week;
+      }
+      if (typeof payload.lastActivityWeek === "string" && payload.lastActivityWeek) {
+        topLevelPatch.lastActivityWeek = payload.lastActivityWeek;
       }
 
-      let currentLessonId = s.currentLessonId;
-      if (typeof payload.currentLessonId === "number") {
-        currentLessonId = payload.currentLessonId;
-      } else if (typeof payload.currentLessonId === "string") {
-        const parsed = parseInt(payload.currentLessonId.replace(/[^\d]/g, ""), 10);
-        if (!isNaN(parsed)) currentLessonId = parsed;
-      }
-
-      const lessonProgress = payload.lessonProgress && typeof payload.lessonProgress === "object"
-        ? { ...s.lessonProgress, ...payload.lessonProgress }
-        : s.lessonProgress;
-
-      const lessonStars = payload.lessonStars && typeof payload.lessonStars === "object"
-        ? { ...s.lessonStars, ...payload.lessonStars }
-        : s.lessonStars;
-
-      let wordMastery = s.wordMastery;
-      if (payload.wordMastery && typeof payload.wordMastery === "object" && !Array.isArray(payload.wordMastery)) {
-        let masteryMap: Record<string, MasteryState> = { ...s.wordMastery };
-        for (const [k, v] of Object.entries(payload.wordMastery)) {
-          if (k && !isDangerousKey(k)) {
-            masteryMap[k] = v as MasteryState;
-          }
+      // Merge the backup's per-language slices, then apply the top-level patch
+      // to the backup's active language. Every slice is validated field by
+      // field, so junk entries are dropped rather than stored.
+      const progressByLanguage: Record<string, LanguageProgress> = {
+        ...s.progressByLanguage,
+        [s.activeLanguageId]: sliceFromMirrors(s),
+      };
+      if (isPlausibleStateObject(payload.progressByLanguage)) {
+        for (const [langId, rawSlice] of Object.entries(payload.progressByLanguage)) {
+          if (!isValidLanguageId(langId) || isDangerousKey(langId)) continue;
+          progressByLanguage[langId] = applyImportedSlice(progressByLanguage[langId], rawSlice);
         }
-        wordMastery = masteryMap;
       }
+      const activeSlice: LanguageProgress = {
+        ...(progressByLanguage[backupLanguageId] ?? normalizeLanguageSlice({})),
+        ...topLevelPatch,
+      };
+      progressByLanguage[backupLanguageId] = activeSlice;
 
-      let srsCards = s.srsCards;
-      if (Array.isArray(payload.srsCards)) {
-        let cardMap: Record<string, SRSCard> = { ...s.srsCards };
-        payload.srsCards.forEach((c: unknown) => {
-          // "__proto__" and prototype pollution keys via plain assignment swap the object's prototype —
-          // skip them so a hostile backup can't inject inherited SRS state
-          if (c && typeof c === "object" && "id" in c) {
-            const cardId = c.id;
-            if (typeof cardId === "string" && cardId && !isDangerousKey(cardId)) {
-              cardMap[cardId] = sanitizeImportedSrsCard(c as Record<string, unknown>, cardId);
-            }
-          }
-        });
-        srsCards = cardMap;
-      } else if (payload.srsCards && typeof payload.srsCards === "object") {
-        let cardMap: Record<string, SRSCard> = { ...s.srsCards };
-        for (const [cardId, card] of Object.entries(payload.srsCards)) {
-          if (cardId && !isDangerousKey(cardId) && card && typeof card === "object") {
-            cardMap[cardId] = sanitizeImportedSrsCard(card as Record<string, unknown>, cardId);
-          }
-        }
-        srsCards = cardMap;
-      }
-
-      const weeklyActivity = Array.isArray(payload.weeklyActivity) && payload.weeklyActivity.length === 7
-        ? payload.weeklyActivity
-        : s.weeklyActivity;
-
-      const VALID_REVIEW_MODES: ReviewMode[] = ["flashcard", "mcq", "tiles", "typing"];
-      const rawReviewMode = payload.preferredReviewMode as ReviewMode;
-      const nextPreferredReviewMode = VALID_REVIEW_MODES.includes(rawReviewMode)
-        ? rawReviewMode
-        : s.preferredReviewMode;
-      const nextHasCompletedOnboarding =
-        typeof payload.hasCompletedOnboarding === "boolean" ? payload.hasCompletedOnboarding : s.hasCompletedOnboarding;
-      const nextHasSeenGenderIntro =
-        typeof payload.hasSeenGenderIntro === "boolean" ? payload.hasSeenGenderIntro : s.hasSeenGenderIntro;
-      const nextLastActivityWeek = typeof payload.lastActivityWeek === "string" && payload.lastActivityWeek
-        ? payload.lastActivityWeek
-        : s.lastActivityWeek;
-
-      // Language identity & slices. A pre-multi-language backup (no
-      // progressByLanguage) carries one language's progress on the top level —
-      // attribute it to the backup's own active language, not the current one.
-      const backupLanguageId =
-        typeof payload.activeLanguageId === "string" && isValidLanguageId(payload.activeLanguageId)
-          ? payload.activeLanguageId
-          : s.activeLanguageId;
-      let progressByLanguage = { ...s.progressByLanguage };
-      if (payload.progressByLanguage && typeof payload.progressByLanguage === "object" && !Array.isArray(payload.progressByLanguage)) {
-        for (const [langId, slice] of Object.entries(payload.progressByLanguage)) {
-          if (isValidLanguageId(langId) && !isDangerousKey(langId) && slice && typeof slice === "object" && !Array.isArray(slice)) {
-            const cleanSlice: LanguageProgress = { ...(progressByLanguage[langId] || {}), ...(slice as LanguageProgress) };
-            if (cleanSlice.srsCards && typeof cleanSlice.srsCards === "object" && !Array.isArray(cleanSlice.srsCards)) {
-              const safeCards: Record<string, SRSCard> = {};
-              for (const [cId, card] of Object.entries(cleanSlice.srsCards)) {
-                if (cId && !isDangerousKey(cId)) {
-                  if (card && typeof card === "object") safeCards[cId] = sanitizeImportedSrsCard(card as unknown as Record<string, unknown>, cId);
-                }
-              }
-              cleanSlice.srsCards = safeCards;
-            }
-            progressByLanguage[langId] = cleanSlice;
-          }
-        }
-      } else if (
-        backupLanguageId !== s.activeLanguageId &&
-        !isDangerousKey(backupLanguageId) &&
-        (Array.isArray(payload.completedLessons) ||
-          (payload.wordMastery && typeof payload.wordMastery === "object"))
-      ) {
-        progressByLanguage[backupLanguageId] = {
-          completedLessons: Array.isArray(payload.completedLessons) ? completedLessons : progressByLanguage[backupLanguageId]?.completedLessons || [],
-          currentLessonId: typeof currentLessonId === "number" ? currentLessonId : 1,
-          lessonProgress: (payload.lessonProgress && typeof payload.lessonProgress === "object" ? payload.lessonProgress : {}) as Record<number, LessonProgress>,
-          lessonStars: (payload.lessonStars && typeof payload.lessonStars === "object" ? payload.lessonStars : {}) as Record<number, LessonStar>,
-          wordMastery: (payload.wordMastery && typeof payload.wordMastery === "object" ? payload.wordMastery : {}) as Record<string, MasteryState>,
-          srsCards: srsCards as Record<string, SRSCard>,
-          weeklyActivity: Array.isArray(payload.weeklyActivity) ? weeklyActivity : [false, false, false, false, false, false, false],
-          lastActivityWeek: typeof payload.lastActivityWeek === "string" ? payload.lastActivityWeek : undefined,
-        };
-      }
       const nextSeenIntroLanguages = Array.isArray(payload.seenIntroLanguages)
-        ? Array.from(new Set([...s.seenIntroLanguages, ...payload.seenIntroLanguages.filter((x: unknown) => typeof x === "string")]))
+        ? Array.from(
+            new Set([
+              ...s.seenIntroLanguages,
+              ...payload.seenIntroLanguages.filter((id: unknown): id is string => isValidLanguageId(id)),
+            ])
+          )
         : s.seenIntroLanguages;
 
-      const nextTolerance = {
-        ...s.tolerance,
-        umlautTolerance: typeof nextSettings.lazyMode === "boolean" ? nextSettings.lazyMode : s.tolerance.umlautTolerance,
-        capitalizationTolerance: typeof nextSettings.capitalizationTolerance === "boolean" ? nextSettings.capitalizationTolerance : s.tolerance.capitalizationTolerance,
-      };
+      const nextTolerance = normalizeTolerance(payload.tolerance, nextSettings, {
+        umlautTolerance: nextSettings.lazyMode,
+        capitalizationTolerance: nextSettings.capitalizationTolerance,
+        umlautDismissals: s.tolerance.umlautDismissals,
+        capitalizationDismissals: s.tolerance.capitalizationDismissals,
+      });
 
       const next: AppState = {
         ...s,
         activeLanguageId: backupLanguageId,
         progressByLanguage,
         seenIntroLanguages: nextSeenIntroLanguages,
-        completedLessons,
-        currentLessonId,
-        lessonProgress,
-        lessonStars,
-        wordMastery,
-        srsCards,
-        weeklyActivity,
-        lastActivityWeek: nextLastActivityWeek,
-        preferredReviewMode: nextPreferredReviewMode,
-        hasCompletedOnboarding: nextHasCompletedOnboarding,
-        hasSeenGenderIntro: nextHasSeenGenderIntro,
+        // Mirror the backup's merged active slice. saveState() rebuilds that
+        // slice from these fields, so from this point on what gets written back
+        // is exactly what the backup imported — a restored slice can no longer
+        // be overwritten by the previous language's mirrored progress.
+        completedLessons: activeSlice.completedLessons,
+        currentLessonId: activeSlice.currentLessonId,
+        lessonProgress: activeSlice.lessonProgress,
+        lessonStars: activeSlice.lessonStars,
+        wordMastery: activeSlice.wordMastery,
+        srsCards: activeSlice.srsCards,
+        weeklyActivity: activeSlice.weeklyActivity,
+        lastActivityWeek: activeSlice.lastActivityWeek,
+        activeWordDrawerId: backupLanguageId === s.activeLanguageId ? s.activeWordDrawerId : null,
+        preferredReviewMode:
+          payload.preferredReviewMode !== undefined
+            ? oneOf(payload.preferredReviewMode, VALID_REVIEW_MODES, s.preferredReviewMode)
+            : s.preferredReviewMode,
+        hasCompletedOnboarding:
+          typeof payload.hasCompletedOnboarding === "boolean" ? payload.hasCompletedOnboarding : s.hasCompletedOnboarding,
+        hasSeenGenderIntro:
+          typeof payload.hasSeenGenderIntro === "boolean" ? payload.hasSeenGenderIntro : s.hasSeenGenderIntro,
         settings: nextSettings,
         tolerance: nextTolerance,
         theme: currentTheme,
@@ -1080,67 +1359,97 @@ export const useAppStore = create<AppState>((set, get) => ({
     return true;
   },
 
-  hydrateFromStorage: () => {
+  hydrateFromStorage: (options) => {
     if (typeof window === "undefined") return;
-    const saved = loadSavedState();
+    // Strict Mode mounts effects twice; the second mount must not re-read a
+    // storage copy that a child effect may have already overwritten with the
+    // defaults. Only an explicit re-read (cross-tab event, test) is allowed.
+    if (hasHydratedFromStorage && !options?.reread) return;
+    // The FIRST hydration must use the snapshot captured before React mounted.
+    // Child mount effects run before the root layout's effect and some of them
+    // (LessonReader persists the current segment) write the not-yet-hydrated
+    // defaults back to localStorage. Re-reading storage here would then hydrate
+    // from that clobbered copy and lose the learner's real progress. Later calls
+    // (cross-tab) re-read storage on purpose.
+    const fromBoot = !hasHydratedFromStorage && bootSavedState && Object.keys(bootSavedState).length > 0;
+    const saved = fromBoot ? bootSavedState : loadSavedState();
     if (saved && Object.keys(saved).length > 0) {
       set((s) => {
-        const completed = typeof saved.hasCompletedOnboarding === "boolean"
-          ? saved.hasCompletedOnboarding
-          : s.hasCompletedOnboarding;
-        const currentTheme = saved.theme || s.theme || DEFAULT_THEME;
+        const nextSettings = normalizeSettings(saved.settings, s.settings);
+        const currentTheme = typeof saved.theme === "string" && saved.theme ? saved.theme : s.theme || DEFAULT_THEME;
+        const currentFont = typeof saved.font === "string" && saved.font ? saved.font : s.font || DEFAULT_FONT;
         applyTheme(currentTheme);
-
-        const currentFont = saved.font || s.font || DEFAULT_FONT;
         applyFont(currentFont);
 
-        const nextLang = saved.activeLanguageId || s.activeLanguageId;
-        const isLangSwitch = Boolean(saved.activeLanguageId && saved.activeLanguageId !== s.activeLanguageId);
-        const activeSlice = saved.progressByLanguage?.[nextLang];
+        const nextLang = isValidLanguageId(saved.activeLanguageId) ? saved.activeLanguageId : s.activeLanguageId;
+        const isLangSwitch = nextLang !== s.activeLanguageId;
 
-        return {
+        // Seed the merge with the in-memory mirrors: progressByLanguage is not
+        // updated by every action, so the top-level fields are the freshest
+        // copy of the active language's slice.
+        const mergedSlices: Record<string, LanguageProgress> = {
+          ...s.progressByLanguage,
+          [s.activeLanguageId]: sliceFromMirrors(s),
+        };
+        for (const [langId, rawSlice] of Object.entries(saved.progressByLanguage ?? {})) {
+          if (!isValidLanguageId(langId) || isDangerousKey(langId)) continue;
+          const incoming = normalizeLanguageSlice(rawSlice);
+          const existing = mergedSlices[langId];
+          // switching languages restores the parked slice exactly; an
+          // in-place re-hydration (cross-tab event) unions so nothing is lost
+          mergedSlices[langId] =
+            !existing || (isLangSwitch && langId === nextLang)
+              ? incoming
+              : mergeLanguageSlice(existing, incoming);
+        }
+        const activeSlice = mergedSlices[nextLang] ?? normalizeLanguageSlice({});
+        mergedSlices[nextLang] = activeSlice;
+
+        const nextCompletedOnboarding =
+          typeof saved.hasCompletedOnboarding === "boolean" ? saved.hasCompletedOnboarding : s.hasCompletedOnboarding;
+
+        const next: AppState = {
           ...s,
           activeLanguageId: nextLang,
-          progressByLanguage: { ...s.progressByLanguage, ...(saved.progressByLanguage || {}) },
+          progressByLanguage: mergedSlices,
           seenIntroLanguages: Array.isArray(saved.seenIntroLanguages)
-            ? Array.from(new Set([...s.seenIntroLanguages, ...saved.seenIntroLanguages]))
+            ? Array.from(
+                new Set([
+                  ...s.seenIntroLanguages,
+                  ...saved.seenIntroLanguages.filter((id: unknown): id is string => isValidLanguageId(id)),
+                ])
+              )
             : s.seenIntroLanguages,
-          completedLessons: isLangSwitch
-            ? (Array.isArray(saved.completedLessons) ? saved.completedLessons : (activeSlice?.completedLessons ?? []))
-            : (Array.isArray(saved.completedLessons)
-              ? Array.from(new Set([...s.completedLessons, ...saved.completedLessons]))
-              : s.completedLessons),
-          currentLessonId: isLangSwitch
-            ? (saved.currentLessonId ?? activeSlice?.currentLessonId ?? 1)
-            : (saved.currentLessonId ? Math.max(s.currentLessonId, saved.currentLessonId) : s.currentLessonId),
-          lessonProgress: isLangSwitch
-            ? (saved.lessonProgress ?? activeSlice?.lessonProgress ?? {})
-            : { ...s.lessonProgress, ...(saved.lessonProgress || {}) },
-          lessonStars: isLangSwitch
-            ? (saved.lessonStars ?? activeSlice?.lessonStars ?? {})
-            : { ...s.lessonStars, ...(saved.lessonStars || {}) },
-          wordMastery: isLangSwitch
-            ? (saved.wordMastery ?? activeSlice?.wordMastery ?? {})
-            : { ...s.wordMastery, ...(saved.wordMastery || {}) },
-          srsCards: isLangSwitch
-            ? (saved.srsCards ?? activeSlice?.srsCards ?? {})
-            : { ...s.srsCards, ...(saved.srsCards || {}) },
-          weeklyActivity: isLangSwitch
-            ? (Array.isArray(saved.weeklyActivity) ? saved.weeklyActivity : (activeSlice?.weeklyActivity ?? [false, false, false, false, false, false, false]))
-            : (Array.isArray(saved.weeklyActivity) ? saved.weeklyActivity : s.weeklyActivity),
-          lastActivityWeek: isLangSwitch
-            ? (saved.lastActivityWeek ?? activeSlice?.lastActivityWeek ?? undefined)
-            : (saved.lastActivityWeek || s.lastActivityWeek),
+          completedLessons: activeSlice.completedLessons,
+          currentLessonId: activeSlice.currentLessonId,
+          lessonProgress: activeSlice.lessonProgress,
+          lessonStars: activeSlice.lessonStars,
+          wordMastery: activeSlice.wordMastery,
+          srsCards: activeSlice.srsCards,
+          weeklyActivity: activeSlice.weeklyActivity,
+          lastActivityWeek: activeSlice.lastActivityWeek,
+          activeWordDrawerId: isLangSwitch ? null : s.activeWordDrawerId,
+          preferredReviewMode:
+            saved.preferredReviewMode !== undefined
+              ? oneOf(saved.preferredReviewMode, VALID_REVIEW_MODES, s.preferredReviewMode)
+              : s.preferredReviewMode,
+          hasCompletedOnboarding: nextCompletedOnboarding,
+          hasSeenGenderIntro:
+            typeof saved.hasSeenGenderIntro === "boolean" ? saved.hasSeenGenderIntro : s.hasSeenGenderIntro,
           theme: currentTheme,
           font: currentFont,
-          hasCompletedOnboarding: completed,
+          settings: nextSettings,
+          tolerance: normalizeTolerance(saved.tolerance, nextSettings, {
+            umlautTolerance: nextSettings.lazyMode,
+            capitalizationTolerance: nextSettings.capitalizationTolerance,
+            umlautDismissals: s.tolerance.umlautDismissals,
+            capitalizationDismissals: s.tolerance.capitalizationDismissals,
+          }),
           // first visit auto-opens onboarding; later (cross-tab) hydrations
           // must never reopen or close an in-progress intro
-          ...(hasAutoOpenedOnboarding ? {} : { isOnboardingOpen: !completed }),
-          hasSeenGenderIntro: typeof saved.hasSeenGenderIntro === "boolean" ? saved.hasSeenGenderIntro : s.hasSeenGenderIntro,
-          tolerance: saved.tolerance ? { ...s.tolerance, ...saved.tolerance } : s.tolerance,
-          settings: saved.settings ? { ...DEFAULT_SETTINGS, ...saved.settings } : s.settings,
+          ...(hasAutoOpenedOnboarding ? {} : { isOnboardingOpen: !nextCompletedOnboarding }),
         };
+        return next;
       });
       const latestSettings = useAppStore.getState().settings;
       applyAppearanceSettings(latestSettings);
@@ -1155,12 +1464,23 @@ export const useAppStore = create<AppState>((set, get) => ({
       set((s) => ({ ...s, isOnboardingOpen: !s.hasCompletedOnboarding }));
     }
     hasAutoOpenedOnboarding = true;
+    hasHydratedFromStorage = true;
+    if (fromBoot) {
+      // A child mount effect may have written the defaults over the saved
+      // state before this effect ran. Put the hydrated state back, bypassing
+      // saveState's dedupe (it still holds the clobbering payload).
+      lastSerialized = "";
+      saveState(useAppStore.getState());
+    }
+    // Components that seeded local state from the (default) store at mount can
+    // now adopt the real saved values once.
+    set((s) => (s.storeHydrated ? s : { ...s, storeHydrated: true }));
   },
 }));
 
 // Auto-hydrate on client load if running in browser
 if (typeof window !== "undefined") {
-  const initial = loadSavedState();
+  const initial = bootSavedState ?? {};
   applyTheme(initial.theme || DEFAULT_THEME);
   applyFont(initial.font || DEFAULT_FONT);
   if (initial.settings) {

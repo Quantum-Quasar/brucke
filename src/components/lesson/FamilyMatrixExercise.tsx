@@ -12,6 +12,7 @@ import { GermanCharBar } from "@/components/common/GermanCharBar";
 import { ErrorFeedbackSheet } from "./ErrorFeedbackSheet";
 import { SuccessFeedbackSheet } from "./SuccessFeedbackSheet";
 import { evaluateAnswerAccuracy } from "@/lib/letter-diff";
+import { getLanguageDefinition } from "@/data/languages";
 import { useAppStore } from "@/lib/store";
 import { soundEngine } from "@/lib/sound";
 import { affirmationFor } from "@/lib/shift-diagnosis";
@@ -50,6 +51,8 @@ export const FamilyMatrixExercise: React.FC<FamilyMatrixExerciseProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const tolerance = useAppStore((s) => s.tolerance);
   const settings = useAppStore((s) => s.settings);
+  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const language = getLanguageDefinition(activeLanguageId);
 
   const rows = exercise.rows ?? [];
   const columns = exercise.columns ?? [];
@@ -87,7 +90,10 @@ export const FamilyMatrixExercise: React.FC<FamilyMatrixExerciseProps> = ({
       setAlmostWarningNote(evaluation.warningNote);
       setRevealed(true);
       setShowSuccessSheet(true);
-      if (evaluation.accuracy === "almost" && (evaluation.reason === "typo" || evaluation.reason === "umlaut")) {
+      if (
+        evaluation.accuracy === "almost" &&
+        (evaluation.reason === "typo" || evaluation.reason === "sharp-s" || evaluation.reason === "umlaut")
+      ) {
         onQueueRetry?.();
       }
       return;
@@ -187,7 +193,12 @@ export const FamilyMatrixExercise: React.FC<FamilyMatrixExerciseProps> = ({
           ref={inputRef}
           type="text"
           value={userInput}
-          lang="de"
+          aria-label={
+            taskCell
+              ? `The ${columns[task.column]} form of ${rows[task.row]}`
+              : `Family grid cell answer in ${language.name}`
+          }
+          lang={language.id}
           spellCheck={false}
           autoComplete="off"
           autoCorrect="off"

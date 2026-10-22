@@ -11459,22 +11459,22 @@ export const FR_LESSONS: Lesson[] = [
         "id": "fr1901_e4",
         "type": "spoken_turn_reply",
         "prompt": "Answer the question in the passé composé:",
-        "spoken_question": "Qu’est-ce que tu as préparé hier ?",
+        "spoken_question": "Qu'est-ce que tu as préparé hier ?",
         "question_meaning": "What did you prepare yesterday?",
         "reply_idea": "Reply that you prepared the coffee.",
         "cues": [
-          "Start with J’ai préparé...",
+          "Start with J'ai préparé...",
           "Finish with le café."
         ],
         "word_bank": [
-          "J’ai",
+          "J'ai",
           "le",
           "hier",
           "préparé",
           "suis",
           "café"
         ],
-        "target_answer": "J’ai préparé le café",
+        "target_answer": "J'ai préparé le café",
         "meaning": "I prepared the coffee",
         "explanation": "The auxiliary ai plus the past participle préparé answers the passé composé question directly."
       },

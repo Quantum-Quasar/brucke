@@ -19,7 +19,7 @@ class LocalStorageMock {
 }
 
 import { LANGUAGES, DEFAULT_LANGUAGE_ID, getLanguageDefinition, isValidLanguageId } from "@/data/languages";
-import { getLanguageContent, getTotalWordCount, EMPTY_COMPENDIUM } from "@/data/language-content";
+import { getLanguageContent, getTotalWordCount, EMPTY_COMPENDIUM, getNextPlayableLessonIdFor } from "@/data/language-content";
 import { getWordEntity, getWordEntityMap, getWordLessonMap } from "@/lib/word-entities";
 import { loadSavedState, useAppStore, STORAGE_KEY, type LanguageProgress } from "@/lib/store";
 import { TOTAL_TOPICS } from "@/data/curriculum";
@@ -85,6 +85,65 @@ describe("language content registry", () => {
   });
 });
 
+describe("next playable lesson across the trail", () => {
+  const LANGS = ["de", "es", "fr"] as const;
+
+  test("core lessons advance to the next authored core, null only after the last", () => {
+    for (const lang of LANGS) {
+      const content = getLanguageContent(lang);
+      const cores = content.topics
+        .filter((t) => t.id <= content.totalTopics && t.core.authored)
+        .map((t) => t.core.id)
+        .sort((a, b) => a - b);
+      expect(cores.length).toBeGreaterThan(1);
+      for (let i = 0; i < cores.length - 1; i++) {
+        expect(getNextPlayableLessonIdFor(lang, cores[i]), `${lang} core ${cores[i]}`).toBe(cores[i + 1]);
+      }
+      expect(getNextPlayableLessonIdFor(lang, cores[cores.length - 1]), `${lang} last core`).toBeNull();
+    }
+  });
+
+  test("sprig lessons resolve through their owning topic to the next core", () => {
+    for (const lang of LANGS) {
+      const content = getLanguageContent(lang);
+      for (const topic of content.topics) {
+        if (topic.id > content.totalTopics) continue;
+        const expected =
+          content.topics.find(
+            (t) => t.id > topic.id && t.id <= content.totalTopics && t.core.authored
+          )?.core.id ?? null;
+        for (const sprig of topic.sprigs) {
+          expect(getNextPlayableLessonIdFor(lang, sprig.id), `${lang} sprig ${sprig.id}`).toBe(expected);
+        }
+      }
+    }
+  });
+
+  test("branch lessons chain off their attach topic instead of returning null", () => {
+    for (const lang of LANGS) {
+      const content = getLanguageContent(lang);
+      for (const branch of content.trailBranches) {
+        const expected =
+          content.topics.find(
+            (t) => t.id > branch.attach && t.id <= content.totalTopics && t.core.authored
+          )?.core.id ?? null;
+        for (const lesson of branch.lessons) {
+          expect(getNextPlayableLessonIdFor(lang, lesson.id), `${lang} branch ${lesson.id}`).toBe(expected);
+        }
+      }
+    }
+  });
+
+  test("the reported German regressions no longer dead-end before the last topic", () => {
+    expect(getNextPlayableLessonIdFor("de", 101)).toBe(2);
+    expect(getNextPlayableLessonIdFor("de", 1102)).toBe(12);
+    expect(getNextPlayableLessonIdFor("de", 2701)).toBe(28);
+    expect(getNextPlayableLessonIdFor("de", 3003)).toBeNull(); // sprig on the final topic
+    expect(getNextPlayableLessonIdFor("de", 5011)).toBe(3); // branch attached to topic 2
+    expect(getNextPlayableLessonIdFor("de", 5102)).toBeNull(); // branch attached to topic 30
+  });
+});
+
 describe("language-scoped word entities", () => {
   test("german and spanish resolve real words; unconfigured languages resolve nothing", () => {
     expect(getWordEntity("wasser", "de")?.target_word).toBe("Wasser");
@@ -115,6 +174,13 @@ describe("store multi-language progress", () => {
     (globalThis as any).localStorage.clear();
     (globalThis as any).document.cookie = "";
     useAppStore.getState().resetProgress();
+    // resetProgress preserves the active language by design; restore the
+    // default so language-switch tests start from a known state
+    useAppStore.getState().setActiveLanguage(DEFAULT_LANGUAGE_ID);
+    // resetProgress persists an empty snapshot; tests that seed storage by hand
+    // start from a clean slate
+    (globalThis as any).localStorage.clear();
+    (globalThis as any).document.cookie = "";
   });
 
   test("fresh users start on the default language", () => {

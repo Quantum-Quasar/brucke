@@ -83,12 +83,17 @@ export function isMastered(card: SRSCard): boolean {
 }
 
 export function getDueCards(cards: Record<string, SRSCard>, today = localDateKey()): SRSCard[] {
-  return Object.values(cards).filter((c) => c.due_date <= today);
+  // defensive: a null/partial card (truncated store, legacy cookie) must never
+  // break the review queue at boot — the store's normaliser drops them, but
+  // state can also be seeded by callers/tests
+  return Object.values(cards).filter(
+    (c) => c && typeof c.due_date === "string" && c.due_date <= today
+  );
 }
 
 export function getWeakestCards(cards: Record<string, SRSCard>, limit = 15): SRSCard[] {
   return Object.values(cards)
-    .filter((c) => c.lapses > 0)
+    .filter((c) => c && typeof c.lapses === "number" && c.lapses > 0)
     .sort((a, b) => b.lapses - a.lapses)
     .slice(0, limit);
 }

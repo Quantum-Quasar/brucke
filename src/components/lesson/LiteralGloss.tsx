@@ -86,7 +86,7 @@ export const LiteralGloss: React.FC<LiteralGlossProps> = ({
 
   useEffect(() => {
     resetCurrentExercise();
-  }, [exercise]);
+  }, [exercise.id]);
 
   const handleOptionSelect = (option: string) => {
     if (status === "correct" || status === "almost") return;
@@ -107,7 +107,7 @@ export const LiteralGloss: React.FC<LiteralGlossProps> = ({
       setFeedbackNote(evaluation.warningNote || "Almost right!");
       setSheetVariant("almost");
       setShowSuccessSheet(true);
-      if (evaluation.reason === "typo" || (evaluation.reason === "umlaut" && !evalOptions.umlautTolerance)) {
+      if ((evaluation.reason === "typo" || evaluation.reason === "sharp-s") || (evaluation.reason === "umlaut" && !evalOptions.umlautTolerance)) {
         onQueueRetry?.();
       }
     } else {

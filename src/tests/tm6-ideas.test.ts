@@ -508,8 +508,10 @@ describe("TM-6 (#16): the grammar panorama stays honest", () => {
     }
   });
 
-  it("admits the genitive is inferred rather than pretending it is taught", () => {
-    // the one thing this repo genuinely does not teach
-    expect(PANORAMA_DOC).toMatch(/Genitive[\s\S]{0,200}inferred/i);
+  it("marks the genitive as taught, because 1003 and 5102 state des/der + -s", () => {
+    // Verified against the lessons: both pattern cards name the genitive frame,
+    // so the panorama must no longer call it a hole needing a sprig.
+    expect(PANORAMA_DOC).toMatch(/\| Genitive \(possession\) \| 1003, 5102 \| taught \|/);
+    expect(PANORAMA_DOC).not.toMatch(/genitive[^\n]{0,120}one sprig/i);
   });
 });

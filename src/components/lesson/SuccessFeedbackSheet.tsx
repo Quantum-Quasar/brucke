@@ -76,13 +76,23 @@ export const SuccessFeedbackSheet: React.FC<SuccessFeedbackSheetProps> = ({
     onEscape: onContinue,
   });
 
-  // Listen for Enter or Space key to advance immediately
+  // Listen for Enter or Space key to advance immediately. A focused control keeps
+  // its native activation: Enter on "I guessed — bring this one back sooner" must
+  // flag the guess, not be swallowed and advanced past by this window shortcut.
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter" || e.key === " " || e.code === "Space") {
-        e.preventDefault();
-        onContinue();
+      if (e.key !== "Enter" && e.key !== " " && e.code !== "Space") return;
+      const target = e.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.tagName === "BUTTON" ||
+          target.tagName === "A" ||
+          target.getAttribute("role") === "button")
+      ) {
+        return;
       }
+      e.preventDefault();
+      onContinue();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);

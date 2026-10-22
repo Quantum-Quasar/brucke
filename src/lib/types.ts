@@ -464,7 +464,7 @@ export interface TrailBranch {
   lessons: LessonShell[];
 }
 
-/** Golden star for a completed lesson; purple for a flawless first-try run (retry queue untouched). */
+/** Golden star for a completed lesson; purple for a flawless run (retry queue untouched, including a clean replay). */
 export type LessonStar = "gold" | "purple";
 
 /**

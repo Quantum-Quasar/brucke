@@ -1,56 +1,28 @@
-"use client";
-
-import React, { useEffect } from "react";
+import React from "react";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import dynamic from "next/dynamic";
-import { TopNav } from "@/components/navigation/TopNav";
-import { BottomNav } from "@/components/navigation/BottomNav";
-import { useAppStore, STORAGE_KEY, STORAGE_COOKIE_KEY } from "@/lib/store";
+import { AppShell } from "@/components/common/AppShell";
 import { THEME_VARS_CACHE_KEY } from "@/data/themes";
+import { STORAGE_KEY, STORAGE_COOKIE_KEY } from "@/lib/storage-keys";
 
-// ponytail: code-split idle modals & drawer so root chunk doesn't bundle 253KB compendium or 187 themes
-const WordCardDrawer = dynamic(
-  () => import("@/components/common/WordCardDrawer").then((m) => m.WordCardDrawer),
-  { ssr: false }
-);
-const OnboardingModal = dynamic(
-  () => import("@/components/common/OnboardingModal").then((m) => m.OnboardingModal),
-  { ssr: false }
-);
-const ThemeSelectorModal = dynamic(
-  () => import("@/components/common/ThemeSelectorModal").then((m) => m.ThemeSelectorModal),
-  { ssr: false }
-);
-const FontSelectorModal = dynamic(
-  () => import("@/components/common/FontSelectorModal").then((m) => m.FontSelectorModal),
-  { ssr: false }
-);
+export const metadata: Metadata = {
+  title: "Brücke — Cognate Engine",
+  description:
+    "Learn vocabulary across languages through historical sound shifts and etymological cognates. Fast, distraction-free, and keyboard-driven.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // Hydrate local progress from localStorage and cookies on client mount
-  useEffect(() => {
-    useAppStore.getState().hydrateFromStorage();
-
-    const handleStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY) {
-        useAppStore.getState().hydrateFromStorage();
-      }
-    };
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <title>Brücke — Cognate Engine</title>
         <meta name="darkreader-lock" />
         <meta name="color-scheme" content="dark light" />
-        <meta
-          name="description"
-          content="Learn vocabulary across languages through historical sound shifts and etymological cognates. Fast, distraction-free, and keyboard-driven."
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Runs before first paint: restores theme/font/contrast from storage */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -111,18 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body suppressHydrationWarning className="min-h-screen bg-[var(--bg-color)] text-[var(--text-color)] flex flex-col antialiased selection:bg-[var(--main-color)]/30 selection:text-[var(--text-color)] font-sans">
-        <TopNav />
-
-        {/* Main Content Viewport (bottom padding clears the fixed game-style dock) */}
-        <main className="flex-1 pb-28 md:pb-28">{children}</main>
-
-        <BottomNav />
-
-        {/* Global Drawers & Modals */}
-        <WordCardDrawer />
-        <OnboardingModal />
-        <ThemeSelectorModal />
-        <FontSelectorModal />
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

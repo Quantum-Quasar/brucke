@@ -26,9 +26,9 @@
 | Dative (indirect object) | 20, 2001, 2003, 2903 | taught |
 | `mir ist kalt` — the dative experiencer | 2903 | taught |
 | Two-way prepositions: motion picks the case | 27, 5051, 2701, 2702 | taught |
-| Genitive (possession) | 1003, 5102 | taught (was inferred) |
+| Genitive (possession) | 1003, 5102 | taught |
 
-The genitive is the one real hole. It appears in the panorama's diagram because a learner will meet `des`/`der` in reading, but no lesson on the trail names it. The frame is already installed — `des` is `D- + *seiner*`, exactly the same decomposition as `der = D- + *er*` — so it needs one sprig, not a topic.
+The genitive is taught, not inferred: 1003's pattern card states the same D- + pronoun recipe (masculine and neuter take `des` with `-s`/`-es` on the noun, feminine and plural take `der`), and 5102 repeats it with `des Freundes` / `der Schule` plus the prepositions `trotz`, `wegen` and `während`. No extra sprig is needed — the frame arrives attached to the article lesson that installs it.
 
 ## 2. The article as a pronoun wearing a hat
 
@@ -37,7 +37,7 @@ The genitive is the one real hole. It appears in the panorama's diagram because 
 | `der` = D- + `er`, `die` = D- + `sie`, `das` = D- + `es` | 1003 | taught |
 | The pronoun test (which pronoun replaces the noun?) | 1003, 10 | taught |
 | The ein-family marches in step with der/die/das | 11, 1101 | taught |
-| `die` does two jobs: feminine *and* plural | 1003, 23 | taught |
+| `die` does two jobs: feminine *and* plural | 1003 (pattern card; also footnote 1), 23 | taught |
 | The article flags case, not gender-as-meaning | 1003 (trap note) | taught |
 
 ## 3. The verb bracket (Satzklammer)
@@ -60,7 +60,7 @@ The genitive is the one real hole. It appears in the panorama's diagram because 
 | Adjective copies the article's ending when `ein` is quiet | 2403 | taught |
 | `-er` echoes `der`, `-es` echoes `das` | 2403 | taught |
 | Strong declension when no article stands in front | 2404 | taught |
-| Predicate adjectives take no ending | 2403, 1003 | taught |
+| Predicate adjectives take no ending | 2403 (pattern card; also footnote 1), 1003 | taught |
 
 ## 5. Tense, mood and aspect
 
@@ -115,10 +115,9 @@ The passive is out of the trail's declared scope, so `inferred` here means "not 
 
 Everything marked **inferred**:
 
-1. **The genitive** — one sprig. The frame is already installed (`des` = D- + *seiner*); it needs stating, not building.
-2. **The passive** — out of declared scope. Listed for the promise, not as a task.
+1. **The passive** — out of declared scope. Listed for the promise, not as a task.
 
-Everything marked **partial** is a one-sentence fix: move a footnote or trap note into the pattern card so the law is named where the learner looks, rather than where an auditor looks.
+Everything marked **partial** is a one-sentence fix: move a footnote or trap note into the pattern card so the law is named where the learner looks, rather than where an auditor looks. Nothing currently sits in `partial`: the two laws that used to be cited from footnotes alone (`die` = feminine *and* plural, predicate adjectives take no ending) are stated in their pattern cards, so the table records the card as the evidence.
 
 ## Keeping this file honest
 

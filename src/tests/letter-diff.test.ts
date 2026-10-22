@@ -215,3 +215,64 @@ describe("LCS Alignment & Automatic Language-Aware Grading (de / es / fr)", () =
     expect(acc.warningNote).toContain("French");
   });
 });
+
+describe("Sharp s is its own spelling law, not an umlaut", () => {
+  it("labels ß vs ss as sharp-s and never as an umlaut", () => {
+    const r = evaluateAnswerAccuracy("Strasse", "Straße");
+    expect(r.accuracy).toBe("almost");
+    expect(r.reason).toBe("sharp-s");
+    expect(r.warningNote).toContain("ß");
+    expect(r.warningNote).not.toMatch(/umlaut/i);
+
+    // the reverse direction (a typed ß against an ss target) is the same law
+    expect(evaluateAnswerAccuracy("Fuß", "Fuss").reason).toBe("sharp-s");
+    expect(evaluateAnswerAccuracy("gross", "groß").reason).toBe("sharp-s");
+  });
+
+  it("leaves real umlaut errors on the umlaut path", () => {
+    expect(evaluateAnswerAccuracy("Apfel", "Äpfel").reason).toBe("umlaut");
+    expect(evaluateAnswerAccuracy("Kaese", "Käse").reason).toBe("umlaut");
+    // a wrong umlaut AND a missing ß is still fundamentally an umlaut error
+    expect(evaluateAnswerAccuracy("Fusse", "Füße").reason).toBe("umlaut");
+  });
+
+  it("keeps the ß/ss pair covered by lazy (umlaut-tolerance) mode", () => {
+    expect(evaluateAnswerAccuracy("Strasse", "Straße", { umlautTolerance: true })).toEqual({
+      accuracy: "exact",
+    });
+  });
+
+  it("does not use the sharp-s label for Spanish or French", () => {
+    expect(evaluateAnswerAccuracy("nacion", "nación", { languageId: "es" }).reason).toBe("umlaut");
+    expect(evaluateAnswerAccuracy("foret", "forêt", { languageId: "fr" }).reason).toBe("umlaut");
+  });
+});
+
+describe("Typographic single quotes", () => {
+  it("grades a curly apostrophe and an ASCII apostrophe as the same answer", () => {
+    // rich-text paste (U+2019) must not be reported as a typo
+    expect(
+      evaluateAnswerAccuracy("J'ai préparé le café", "J\u2019ai préparé le café", { languageId: "fr" })
+    ).toEqual({ accuracy: "exact" });
+    expect(
+      evaluateAnswerAccuracy("J\u2019ai préparé le café", "J'ai préparé le café", { languageId: "fr" })
+    ).toEqual({ accuracy: "exact" });
+    // the left single quote folds too
+    expect(
+      evaluateAnswerAccuracy("J'ai préparé le café", "J\u2018ai préparé le café", { languageId: "fr" })
+    ).toEqual({ accuracy: "exact" });
+    // German and Spanish get the same folding
+    expect(evaluateAnswerAccuracy("C'est la vie", "C\u2019est la vie", { languageId: "de" })).toEqual({
+      accuracy: "exact",
+    });
+    expect(evaluateAnswerAccuracy("d'accord", "d\u2019accord", { languageId: "es" })).toEqual({
+      accuracy: "exact",
+    });
+  });
+
+  it("still catches a genuinely wrong apostrophe position", () => {
+    const r = evaluateAnswerAccuracy("Jai préparé le café", "J'ai préparé le café", { languageId: "fr" });
+    expect(r.accuracy).toBe("almost");
+    expect(r.reason).toBe("typo");
+  });
+});

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -105,14 +105,49 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   const markWordsEncountered = useAppStore((s) => s.markWordsEncountered);
   const setLessonProgress = useAppStore((s) => s.setLessonProgress);
 
+  const storeHydrated = useAppStore((s) => s.storeHydrated);
+  const restoredPersistedRef = useRef(false);
+
   useEffect(() => {
+    // The store starts from defaults and applies localStorage only after mount,
+    // and child effects run before the root layout's hydration effect (Strict
+    // Mode even re-runs them after it). So on a reload this effect first sees
+    // the initial "hook" position. Before persisting that over the saved state,
+    // adopt the position the store just restored; only then write.
+    if (!restoredPersistedRef.current) {
+      if (!storeHydrated) return;
+      const persisted = useAppStore.getState().lessonProgress[lesson.id];
+      restoredPersistedRef.current = true;
+      if (persisted) {
+        const samePosition =
+          persisted.segment === currentSegment &&
+          persisted.practiceIndex === practiceIndex &&
+          persisted.completedSegments.join("|") === completedSegments.join("|") &&
+          (persisted.everQueued ?? false) === everQueued;
+        if (!samePosition) {
+          setCurrentSegment(persisted.segment);
+          setPracticeIndex(persisted.practiceIndex);
+          setCompletedSegments(persisted.completedSegments);
+          setEverQueued(persisted.everQueued ?? false);
+          return;
+        }
+      }
+    }
     setLessonProgress(lesson.id, {
       segment: currentSegment,
       practiceIndex,
       completedSegments,
       everQueued,
     });
-  }, [lesson.id, currentSegment, practiceIndex, completedSegments, everQueued, setLessonProgress]);
+  }, [
+    lesson.id,
+    currentSegment,
+    practiceIndex,
+    completedSegments,
+    everQueued,
+    storeHydrated,
+    setLessonProgress,
+  ]);
 
   // Global keyboard navigation across lesson reading segments (Hook, Pattern, Table, Summary)
   useEffect(() => {
@@ -152,6 +187,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
           setTwistResurfaced(false);
           setFailCounts({});
           setMercyRevealFor(null);
+          setRetryAttempts({});
           markSegmentDone("table", "practice");
         } else if (e.key === "Backspace" || e.key === "ArrowLeft") {
           e.preventDefault();
@@ -272,9 +308,11 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
     setCurrentSegment(nextSeg);
   };
 
-  const currentExercise = inRetryPhase
-    ? retryVariant(retryQueue[retryIndex], retryAttempts[retryQueue[retryIndex]?.id] ?? 0)
-    : lesson.exercises[practiceIndex];
+  const currentExercise = React.useMemo(() => {
+    if (!inRetryPhase) return lesson.exercises[practiceIndex];
+    const queued = retryQueue[retryIndex] as ExerciseItem;
+    return retryVariant(queued, queued ? retryAttempts[queued.id] ?? 0 : 0);
+  }, [inRetryPhase, retryQueue, retryIndex, retryAttempts, practiceIndex, lesson.exercises]);
 
   return (
     <article className="max-w-4xl mx-auto px-4 py-8 space-y-8">

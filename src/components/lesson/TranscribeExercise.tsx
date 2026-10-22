@@ -97,7 +97,7 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
 
   useEffect(() => {
     resetCurrentExercise();
-  }, [exercise]);
+  }, [exercise.id]);
 
   const insertWord = (word: string) => {
     if (status === "correct" || status === "almost") return;
@@ -170,7 +170,7 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
       setVerifiedAttemptText(answerToCheck);
       setAlmostWarningNote(evaluation.warningNote);
       setShowSuccessSheet(true);
-      if (evaluation.reason === "typo" || (evaluation.reason === "umlaut" && !evalOptions.umlautTolerance)) {
+      if ((evaluation.reason === "typo" || evaluation.reason === "sharp-s") || (evaluation.reason === "umlaut" && !evalOptions.umlautTolerance)) {
         onQueueRetry?.();
       }
       return;
@@ -208,6 +208,16 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
       if (showErrorSheet || showSuccessSheet) return;
       const isInput = document.activeElement === inputRef.current;
       if (e.key === "Enter" && !isInput) {
+        const active = document.activeElement;
+        // a focused button/anchor owns its own Enter (native activation)
+        if (
+          active instanceof HTMLElement &&
+          (active.tagName === "BUTTON" ||
+            active.tagName === "A" ||
+            active.getAttribute("role") === "button")
+        ) {
+          return;
+        }
         e.preventDefault();
         handleVerify();
         return;
@@ -340,7 +350,8 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
           value={userInput}
           onFocus={() => setIsInputFocused(true)}
           onBlur={() => setIsInputFocused(false)}
-          lang="de"
+          aria-label={exercise.prompt || `Build the ${language.name} sentence`}
+          lang={language.id}
           spellCheck={false}
           autoComplete="off"
           autoCorrect="off"
@@ -366,7 +377,7 @@ export const TranscribeExercise: React.FC<TranscribeExerciseProps> = ({
             }
           }}
           readOnly={status === "correct" || status === "almost"}
-          placeholder="build the german sentence..."
+          placeholder={`build the ${language.name.toLowerCase()} sentence...`}
           className="w-full px-4 py-3 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/30 text-[var(--main-color)] text-lg font-bold font-mono outline-none focus:border-[var(--main-color)] transition placeholder:text-[var(--sub-color)]/40"
         />
 

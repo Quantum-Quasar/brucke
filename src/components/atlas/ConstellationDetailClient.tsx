@@ -12,33 +12,114 @@ import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
 import { getAtlasFamily, UNSHIFTED_FAMILY_ID } from "@/lib/atlas-families";
 import type { ShiftFamily } from "@/lib/types";
 
-export function ConstellationDetailClient({ familyId }: { familyId: string }) {
+interface ConstellationDetailClientProps {
+  familyId: string;
+  /**
+   * Language ids whose compendium defines this family id, computed on the
+   * server. The route is prerendered with the default language active, so a
+   * family belonging to another atlas must still render a real page.
+   */
+  ownerLanguageIds: string[];
+}
+
+export function ConstellationDetailClient({ familyId, ownerLanguageIds }: ConstellationDetailClientProps) {
   const [isDrillOpen, setIsDrillOpen] = useState(false);
   const activeLanguageId = useAppStore((s) => s.activeLanguageId);
-  const language = getLanguageDefinition(activeLanguageId);
+  const setActiveLanguage = useAppStore((s) => s.setActiveLanguage);
   const data = getLanguageContent(activeLanguageId).compendium ?? EMPTY_COMPENDIUM;
 
   const family: ShiftFamily | undefined = getAtlasFamily(data, familyId || "");
 
   if (!family) {
-    // German-only shift families are German-only routes: another language's
-    // atlas is empty until its content is authored, so say that instead of
-    // silently rendering German words
-    const comingSoon = language.status !== "available";
+    // The active atlas does not own this route. Show the owning language's
+    // family metadata and offer to switch, so a shared URL (or a prerendered
+    // page for another atlas) is never a dead end.
+    const ownerLanguageId = ownerLanguageIds.find((id) => id !== activeLanguageId) ?? ownerLanguageIds[0];
+    const ownerLanguage = ownerLanguageId ? getLanguageDefinition(ownerLanguageId) : null;
+    const ownerCompendium = ownerLanguageId
+      ? (getLanguageContent(ownerLanguageId).compendium ?? EMPTY_COMPENDIUM)
+      : EMPTY_COMPENDIUM;
+    const ownerFamily = ownerLanguageId ? getAtlasFamily(ownerCompendium, familyId) : undefined;
+    const ownerWords = ownerFamily
+      ? ownerFamily.word_ids
+          .map((id) => ownerCompendium.words[id])
+          .filter(Boolean)
+          .slice(0, 6)
+      : [];
+
     return (
-      <div className="max-w-2xl mx-auto px-4 py-20 text-center space-y-4 font-sans">
-        <h2 className="text-xl font-bold text-[var(--text-color)]">
-          {comingSoon ? `Atlas comes with the ${language.name.toLowerCase()} trail` : "Family Not Found"}
-        </h2>
-        {!comingSoon && (
-          <p className="text-xs font-mono text-[var(--sub-color)]">No shift family exists at this route.</p>
-        )}
+      <div className="max-w-2xl mx-auto px-4 py-16 space-y-6 font-sans">
         <Link
           href="/atlas"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-bold text-xs font-mono"
+          className="inline-flex items-center gap-1.5 text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] transition"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to Atlas
+          <ArrowLeft className="w-3.5 h-3.5" /> back to atlas
         </Link>
+
+        {ownerFamily && ownerLanguage ? (
+          <>
+            <div className="space-y-2">
+              <span className="inline-block text-xs font-mono text-[var(--main-color)] font-bold px-2 py-0.5 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/25">
+                {ownerFamily.symbol}
+              </span>
+              <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-color)] tracking-tight">
+                {ownerFamily.name}
+              </h1>
+              <p className="text-xs sm:text-sm text-[var(--sub-color)] font-mono">{ownerFamily.phonetic_rule}</p>
+            </div>
+
+            <p className="text-xs text-[var(--text-color)]/80 leading-relaxed">
+              This sound shift belongs to the {ownerLanguage.name} atlas.{" "}
+              {ownerLanguage.nativeName} is a different branch of the same cognate engine, so its families live
+              in their own atlas rather than in the one currently open.
+            </p>
+
+            {ownerWords.length > 0 && (
+              <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-2">
+                <div className="flex items-center gap-1.5 text-xs font-mono text-[var(--main-color)] font-semibold">
+                  <BookOpen className="w-3.5 h-3.5" /> sample from the {ownerLanguage.name} atlas
+                </div>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs font-mono">
+                  {ownerWords.map((w) => (
+                    <li key={w.id} className="flex items-center justify-between gap-2">
+                      <span className="text-[var(--sub-color)] truncate">{w.english_cognate}</span>
+                      <span aria-hidden="true" className="text-[var(--sub-color)]/60">
+                        →
+                      </span>
+                      <span className="text-[var(--text-color)] font-semibold truncate">
+                        {w.gender ? `${w.gender} ${w.target_word}` : w.target_word}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-[11px] font-mono text-[var(--sub-color)]">
+                  {ownerFamily.word_ids.length} words in this {ownerLanguage.name} family.
+                </p>
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setActiveLanguage(ownerLanguageId)}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-bold text-xs font-mono cursor-pointer hover:opacity-90 transition"
+            >
+              switch to the {ownerLanguage.name} atlas
+            </button>
+          </>
+        ) : (
+          <div className="space-y-3">
+            <h1 className="text-xl font-bold text-[var(--text-color)]">Atlas family unavailable</h1>
+            <p className="text-xs font-mono text-[var(--sub-color)]">
+              No authored course defines this shift family on this route.
+            </p>
+            <Link
+              href="/atlas"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-bold text-xs font-mono"
+            >
+              <ArrowLeft className="w-4 h-4" /> Back to Atlas
+            </Link>
+          </div>
+        )}
       </div>
     );
   }

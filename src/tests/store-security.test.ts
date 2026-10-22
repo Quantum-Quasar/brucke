@@ -143,7 +143,9 @@ describe("Store Persistence Security & Header Quota Bounds", () => {
 
   it("marks the posture primer seen when onboarding completes or is skipped", () => {
     const store = useAppStore.getState();
-    store.resetProgress();
+    // resetProgress deliberately preserves settings; use resetSettings here to
+    // get back to the "primer unseen" baseline this test asserts
+    store.resetSettings();
     expect(useAppStore.getState().settings.posturePrimerSeen).toBe(false);
 
     useAppStore.getState().completeOnboarding();

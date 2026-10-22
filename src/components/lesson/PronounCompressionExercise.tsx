@@ -98,7 +98,7 @@ export const PronounCompressionExercise: React.FC<PronounCompressionExerciseProp
 
   useEffect(() => {
     resetCurrentExercise();
-  }, [exercise]);
+  }, [exercise.id]);
 
   const appendChip = (word: string) => {
     if (status === "correct" || status === "almost") return;
@@ -233,6 +233,7 @@ export const PronounCompressionExercise: React.FC<PronounCompressionExerciseProp
       setShowSuccessSheet(true);
       if (
         evaluation.reason === "typo" ||
+        evaluation.reason === "sharp-s" ||
         (evaluation.reason === "umlaut" && !evalOptions.umlautTolerance)
       ) {
         onQueueRetry?.();
@@ -365,7 +366,8 @@ export const PronounCompressionExercise: React.FC<PronounCompressionExerciseProp
           value={userInput}
           onFocus={() => setIsInputFocused(true)}
           onBlur={() => setIsInputFocused(false)}
-          lang="de"
+          aria-label={exercise.prompt || `Compressed ${language.name} clause`}
+          lang={language.id}
           spellCheck={false}
           autoComplete="off"
           autoCorrect="off"

@@ -1,5 +1,7 @@
 import { describe, it, expect, beforeEach, beforeAll, afterAll } from "vitest";
-import { useAppStore, STORAGE_KEY, STORAGE_COOKIE_KEY, getCookie, setCookie } from "../lib/store";
+import { useAppStore, loadSavedState, STORAGE_KEY, STORAGE_COOKIE_KEY, getCookie, setCookie } from "../lib/store";
+import { DEFAULT_THEME } from "../data/themes";
+import { DEFAULT_SETTINGS } from "../data/settings";
 
 class LocalStorageMock {
   private store: Record<string, string> = {};
@@ -35,6 +37,14 @@ describe("App Store & User Progress State", () => {
     (globalThis as any).localStorage.clear();
     (globalThis as any).document.cookie = "";
     useAppStore.getState().resetProgress();
+    // resetProgress intentionally preserves preferences; restore the defaults
+    // so every test starts from the same baseline
+    useAppStore.getState().resetSettings();
+    useAppStore.getState().setTheme(DEFAULT_THEME);
+    // resetProgress also persists an empty progress snapshot — tests that seed
+    // storage by hand start from a clean slate instead
+    (globalThis as any).localStorage.clear();
+    (globalThis as any).document.cookie = "";
   });
 
   it("initializes with default values", () => {
@@ -197,8 +207,10 @@ describe("App Store & User Progress State", () => {
     expect(JSON.parse(localRaw!).hasSeenGenderIntro).toBe(true);
   });
 
-  it("resets progress completely, clears storage, and allows subsequent re-persistence without cache collision", () => {
+  it("resets progress, persists the cleared state, and preserves settings/appearance", () => {
     const store = useAppStore.getState();
+    store.setTheme("carbon");
+    store.updateSetting("soundVolume", 0.8);
     store.completeLesson(1);
     store.markWordMastered("Wasser");
 
@@ -206,12 +218,23 @@ describe("App Store & User Progress State", () => {
     expect(localStorage.getItem(STORAGE_KEY)).toBeTruthy();
     expect(getCookie(STORAGE_COOKIE_KEY)).toBeTruthy();
 
-    // Reset
+    // Reset: progress is wiped, preferences are not.
     store.resetProgress();
-    expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
-    expect(getCookie(STORAGE_COOKIE_KEY) || null).toBeNull();
-    expect(useAppStore.getState().completedLessons).toEqual([]);
-    expect(useAppStore.getState().wordMastery).toEqual({});
+    const state = useAppStore.getState();
+    expect(state.completedLessons).toEqual([]);
+    expect(state.wordMastery).toEqual({});
+    expect(state.srsCards).toEqual({});
+    expect(state.currentLessonId).toBe(1);
+    expect(state.theme).toBe("carbon");
+    expect(state.settings.soundVolume).toBe(0.8);
+
+    // The cleared progress is persisted immediately, so a reload cannot
+    // resurrect what was just reset — while the preserved preferences survive.
+    const persisted = JSON.parse(localStorage.getItem(STORAGE_KEY)!);
+    expect(persisted.completedLessons).toEqual([]);
+    expect(persisted.wordMastery).toEqual({});
+    expect(persisted.theme).toBe("carbon");
+    expect(persisted.settings.soundVolume).toBe(0.8);
 
     // Perform action again after reset to ensure lastSerialized didn't block saving
     store.completeLesson(1);
@@ -233,5 +256,76 @@ describe("App Store & User Progress State", () => {
 
     store.setTheme("nord");
     expect(useAppStore.getState().theme).toBe("nord");
+  });
+
+  it("hydrates every persisted field that used to seed the store at import time", () => {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        activeLanguageId: "es",
+        progressByLanguage: {
+          es: {
+            completedLessons: [1, 2],
+            currentLessonId: 3,
+            lessonProgress: {
+              1: { segment: "practice", practiceIndex: 1, completedSegments: ["hook", "pattern", "table"] },
+            },
+            lessonStars: { 1: "gold" },
+            wordMastery: { familia: "encountered" },
+            srsCards: {},
+            weeklyActivity: [true, false, false, false, false, false, false],
+            lastActivityWeek: "2026-W10-05",
+          },
+        },
+        seenIntroLanguages: ["de"],
+        preferredReviewMode: "typing",
+        hasCompletedOnboarding: true,
+        hasSeenGenderIntro: true,
+        theme: "nord",
+        font: "JetBrains_Mono",
+        settings: { soundVolume: 0.9 },
+        tolerance: {
+          umlautTolerance: true,
+          capitalizationTolerance: true,
+          umlautDismissals: 2,
+          capitalizationDismissals: 1,
+        },
+      })
+    );
+
+    useAppStore.getState().hydrateFromStorage({ reread: true });
+    const state = useAppStore.getState();
+
+    expect(state.activeLanguageId).toBe("es");
+    expect(state.completedLessons).toEqual([1, 2]);
+    expect(state.currentLessonId).toBe(3);
+    expect(state.lessonProgress[1]?.practiceIndex).toBe(1);
+    expect(state.lessonStars[1]).toBe("gold");
+    expect(state.wordMastery["familia"]).toBe("encountered");
+    expect(state.weeklyActivity).toEqual([true, false, false, false, false, false, false]);
+    expect(state.lastActivityWeek).toBe("2026-W10-05");
+    expect(state.seenIntroLanguages).toContain("de");
+    expect(state.preferredReviewMode).toBe("typing");
+    expect(state.hasCompletedOnboarding).toBe(true);
+    expect(state.hasSeenGenderIntro).toBe(true);
+    expect(state.theme).toBe("nord");
+    expect(state.font).toBe("JetBrains_Mono");
+    // settings merge over defaults rather than replacing them wholesale
+    expect(state.settings.soundVolume).toBe(0.9);
+    expect(state.settings.showKeyTips).toBe(DEFAULT_SETTINGS.showKeyTips);
+    expect(state.tolerance).toEqual({
+      umlautTolerance: true,
+      capitalizationTolerance: true,
+      umlautDismissals: 2,
+      capitalizationDismissals: 1,
+    });
+  });
+
+  it("does not throw on a cookie value containing a stray percent sign", () => {
+    (globalThis as any).document.cookie = `${STORAGE_COOKIE_KEY}=%E0%A4%A; path=/`;
+    expect(() => getCookie(STORAGE_COOKIE_KEY)).not.toThrow();
+    expect(getCookie(STORAGE_COOKIE_KEY)).toBe("%E0%A4%A");
+    // this path runs at module load through loadSavedState — it must survive too
+    expect(() => loadSavedState()).not.toThrow();
   });
 });

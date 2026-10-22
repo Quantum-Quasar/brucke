@@ -43,15 +43,27 @@ export const TwistCard: React.FC<TwistCardProps> = ({ twist, onDone }) => {
     setRevealed(true);
   };
 
-  // Enter: reveal while answering, confirm "Got it" once revealed
+  // Enter: reveal while answering, confirm "Got it" once revealed — but only when
+  // no control is focused. A focused button ("not yet — meet it again", "skip")
+  // keeps its native Enter activation; the shortcut must not override it.
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const isInput = document.activeElement === inputRef.current;
-      if (e.key === "Enter" && !isInput) {
-        e.preventDefault();
-        if (!revealed) handleReveal();
-        else onDone(false);
+      if (e.key !== "Enter") return;
+      const target = e.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.tagName === "BUTTON" ||
+          target.tagName === "A" ||
+          target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.getAttribute("role") === "button")
+      ) {
+        return;
       }
+      if (document.activeElement === inputRef.current) return;
+      e.preventDefault();
+      if (!revealed) handleReveal();
+      else onDone(false);
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -84,6 +96,7 @@ export const TwistCard: React.FC<TwistCardProps> = ({ twist, onDone }) => {
               ref={inputRef}
               type="text"
               value={userInput}
+              aria-label={twist.prompt || `Your ${language.name} sentence`}
               lang={language.id}
               spellCheck={false}
               autoComplete="off"

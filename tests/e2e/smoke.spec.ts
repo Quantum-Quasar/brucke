@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import type { Page } from "@playwright/test";
 import type { SRSCard } from "@/lib/types";
 
 // Browser smoke suite: onboarding, lesson progress, review + SRS persistence,
@@ -9,11 +10,99 @@ import type { SRSCard } from "@/lib/types";
 const STORAGE_KEY = "brucke_app_state_v1";
 
 /** Read the persisted app state from the page's localStorage. */
-async function readAppState(page: import("@playwright/test").Page): Promise<any> {
+async function readAppState(page: Page): Promise<any> {
   return page.evaluate((key) => {
     const raw = window.localStorage.getItem(key);
     return raw ? JSON.parse(raw) : null;
   }, STORAGE_KEY);
+}
+
+/**
+ * Seed persisted progress before any page script runs. Every test below gets a
+ * fresh browser context, so this is the only way to start the app in a
+ * returning-learner state (the onboarding modal otherwise opens after
+ * hydration and intercepts every click).
+ *
+ * Only an empty store is filled: on a reload the app's own saved state must
+ * survive, otherwise seeded progress would be re-applied over the test's work.
+ */
+async function seedAppState(page: Page, state: Record<string, unknown> = {}) {
+  await page.addInitScript(
+    ([key, value]) => {
+      if (!window.localStorage.getItem(key)) {
+        window.localStorage.setItem(key, value);
+      }
+    },
+    [STORAGE_KEY, JSON.stringify({ hasCompletedOnboarding: true, ...state })] as const
+  );
+}
+
+/**
+ * A learner who has finished the first three trail lessons. The "recent
+ * lessons" deck is built from `completedLessons` (not from SRS history), so
+ * without this the hub button renders `disabled` and Playwright waits forever
+ * on the click. `lessonProgress`/`lessonStars` are seeded too so the stored
+ * state matches what finishing those lessons actually writes.
+ */
+const THREE_FINISHED_LESSONS: Record<string, unknown> = {
+  completedLessons: [1, 2, 3],
+  currentLessonId: 4,
+  lessonProgress: {
+    1: { segment: "summary", practiceIndex: 0, completedSegments: ["hook", "pattern", "table", "practice", "summary"] },
+    2: { segment: "summary", practiceIndex: 0, completedSegments: ["hook", "pattern", "table", "practice", "summary"] },
+    3: { segment: "summary", practiceIndex: 0, completedSegments: ["hook", "pattern", "table", "practice", "summary"] },
+  },
+  lessonStars: { 1: "gold", 2: "gold", 3: "gold" },
+};
+
+/** The session counter, e.g. "card 3 / 29" (rendered uppercase via CSS). */
+const CARD_COUNTER = /^card \d+ \/ \d+$/i;
+
+/** Read the current card position and the deck's size off the session card. */
+async function readCardCounter(page: Page): Promise<{ index: number; total: number }> {
+  const counter = page.getByText(CARD_COUNTER).first();
+  await expect(counter).toBeVisible();
+  const text = (await counter.innerText()).replace(/\s+/g, " ").trim();
+  const match = text.match(/card (\d+) \/ (\d+)/i);
+  if (!match) throw new Error(`unexpected review counter: ${text}`);
+  return { index: Number(match[1]), total: Number(match[2]) };
+}
+
+/** Assert the session is showing the card at `index` (1-based). */
+async function expectCard(page: Page, index: number) {
+  await expect(page.getByText(new RegExp(`^card ${index} \\/ \\d+$`, "i")).first()).toBeVisible();
+}
+
+/**
+ * The word id the session graded, derived by diffing persisted SRS state before
+ * and after a grade — no assumption that the deck's first card is the only one
+ * in storage.
+ */
+function gradedWordId(before: any, after: any): string {
+  const beforeIds = new Set(Object.keys(before?.srsCards ?? {}));
+  const added = Object.keys(after?.srsCards ?? {}).filter((id) => !beforeIds.has(id));
+  if (added.length === 1) return added[0];
+  const reviewed = Object.entries(after?.srsCards ?? {})
+    .filter(([, card]) => Boolean((card as SRSCard | undefined)?.last_reviewed))
+    .map(([id]) => id);
+  if (reviewed.length === 1) return reviewed[0];
+  throw new Error(
+    `expected exactly one graded card, found added=${JSON.stringify(added)} reviewed=${JSON.stringify(reviewed)}`
+  );
+}
+
+/** Open the "recent lessons" deck in recall (flashcard) mode. */
+async function openRecentReviewSession(page: Page) {
+  await page.goto("/review");
+  // enabled only when at least one lesson has been completed
+  const recent = page.getByRole("button", { name: /review recent/i });
+  await expect(recent).toBeEnabled();
+  await recent.click();
+
+  // the review-style selector opens; pick flashcards
+  await expect(page.locator("#review-style-title")).toBeVisible();
+  await page.getByRole("button", { name: /recall \(flashcard\)/i }).click();
+  await expect(page.getByText(CARD_COUNTER).first()).toBeVisible();
 }
 
 test.describe("browser smoke", () => {
@@ -33,24 +122,12 @@ test.describe("browser smoke", () => {
     expect(state?.hasCompletedOnboarding).toBe(true);
   });
 
-  // Every test below gets a fresh browser context, so the persisted state is
-  // seeded before any page script runs — otherwise the onboarding modal opens
-  // after hydration and intercepts every click.
   test.describe("with onboarding already completed", () => {
-    test.beforeEach(async ({ page }) => {
-      await page.addInitScript(
-        ([key]) => {
-          // seed once per context: on reloads the app's own saved state must
-          // survive, so only fill an empty store
-          if (!window.localStorage.getItem(key)) {
-            window.localStorage.setItem(key, JSON.stringify({ hasCompletedOnboarding: true }));
-          }
-        },
-        [STORAGE_KEY]
-      );
-    });
-
+    // Each test seeds the persisted state it needs *before* the first page
+    // script runs; a shared beforeEach would win the "seed only an empty
+    // store" race and the per-test progress would never be applied.
     test("lesson wizard advances a segment and persists progress across reload", async ({ page }) => {
+      await seedAppState(page);
       await page.goto("/trail/1");
       const nextPattern = page.getByRole("button", { name: /next: pattern/i });
       await expect(nextPattern).toBeVisible();
@@ -72,22 +149,21 @@ test.describe("browser smoke", () => {
     });
 
     test("review session: keyboard reveal + SM-2 grading persist to SRS storage", async ({ page }) => {
-      await page.goto("/review");
+      await seedAppState(page, THREE_FINISHED_LESSONS);
+      await openRecentReviewSession(page);
 
-      // start the "recent lessons" deck (always 20 words for the default language)
-      await page.getByRole("button", { name: /review recent/i }).click();
-
-      // the review-style selector opens; pick flashcards
-      await expect(page.locator("#review-style-title")).toBeVisible();
-      await page.getByRole("button", { name: /recall \(flashcard\)/i }).click();
-
-      await expect(page.getByText(/card 1 \/ 20/i)).toBeVisible();
+      // the recent deck is every word from the last three finished lessons —
+      // it is not size-capped, so the size is read from the UI, never assumed
+      const { total } = await readCardCounter(page);
+      expect(total).toBeGreaterThan(1);
 
       // keyboard: space reveals, "3" grades Good → SM-2 advances to card 2
       await page.keyboard.press("Space");
       await expect(page.getByRole("button", { name: /^good/i })).toBeVisible();
       await page.keyboard.press("3");
-      await expect(page.getByText(/card 2 \/ 20/i)).toBeVisible();
+      await expectCard(page, 2);
+      // grading does not shrink or re-shuffle the session
+      expect((await readCardCounter(page)).total).toBe(total);
 
       // the graded card landed in persistent SRS storage
       const state = await readAppState(page);
@@ -98,7 +174,7 @@ test.describe("browser smoke", () => {
 
       // back returns to the first card, which must be un-revealed and answerable
       await page.getByRole("button", { name: /^back/i }).click();
-      await expect(page.getByText(/card 1 \/ 20/i)).toBeVisible();
+      await expectCard(page, 1);
       await expect(page.getByRole("button", { name: /show answer/i })).toBeVisible();
       await expect(page.getByRole("button", { name: /^back/i })).toBeDisabled();
 
@@ -108,47 +184,48 @@ test.describe("browser smoke", () => {
     });
 
     test("review session: back after grading restores the card so the re-grade counts once", async ({ page }) => {
-      await page.goto("/review");
+      await seedAppState(page, THREE_FINISHED_LESSONS);
 
-      // "recent lessons" is deterministic in word order; card 1 is a known word
-      await page.getByRole("button", { name: /review recent/i }).click();
-      await expect(page.locator("#review-style-title")).toBeVisible();
-      await page.getByRole("button", { name: /recall \(flashcard\)/i }).click();
-      await expect(page.getByText(/card 1 \/ 20/i)).toBeVisible();
+      await openRecentReviewSession(page);
+      await expectCard(page, 1);
+      const before = await readAppState(page);
 
       // grade card 1 Easy, then go back and grade it Hard instead
       await page.keyboard.press("Space");
       await page.keyboard.press("4");
-      await expect(page.getByText(/card 2 \/ 20/i)).toBeVisible();
+      await expectCard(page, 2);
 
       const easyState = await readAppState(page);
+      const firstWordId = gradedWordId(before, easyState);
+      // Easy recorded a real SM-2 step before the walk-back
+      expect((easyState?.srsCards?.[firstWordId] as SRSCard | undefined)?.repetitions).toBe(1);
+
       await page.keyboard.press("ArrowLeft");
-      await expect(page.getByText(/card 1 \/ 20/i)).toBeVisible();
+      await expectCard(page, 1);
 
       await page.keyboard.press("Space");
       await page.keyboard.press("2"); // Hard
-      await expect(page.getByText(/card 2 \/ 20/i)).toBeVisible();
+      await expectCard(page, 2);
 
       const state = await readAppState(page);
-      const firstWordId = Object.keys(easyState?.srsCards ?? {})[0];
-      const finalCard = state?.srsCards?.[firstWordId];
+      const finalCard = state?.srsCards?.[firstWordId] as SRSCard | undefined;
 
       // the card went back to its pre-session state, so the Hard grade is the
       // only graded step — interval stays at the first successful step (1 day)
-      // instead of compounding from the Easy schedule
+      // instead of compounding from the Easy schedule (which would be 6 days)
       expect(finalCard?.repetitions).toBe(1);
       expect(finalCard?.lapses).toBe(0);
       expect(finalCard?.interval).toBe(1);
 
       // exactly one card was graded in this session
       const gradedCount = Object.values(state?.srsCards ?? {}).filter(
-        (card) => (card as SRSCard | undefined) !== undefined &&
-          (card as SRSCard).repetitions >= 1
+        (card) => (card as SRSCard | undefined) !== undefined && (card as SRSCard).repetitions >= 1
       ).length;
       expect(gradedCount).toBe(1);
     });
 
     test("static routes render and unknown dynamic params 404", async ({ page }) => {
+      await seedAppState(page);
       // a valid atlas family route (dynamicParams = false must not break it)
       await page.goto("/atlas/th_to_d");
       await expect(page.getByText(/Dental Shift/i).first()).toBeVisible();

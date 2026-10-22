@@ -3,8 +3,25 @@
 // the declarative DECK_CAPABILITIES registry where each deck declares which
 // ReviewModes it supports.
 
-import type { Lesson, MasteryState, ReviewMode, SRSCard, WordEntity } from "./types";
+import type { CompendiumData, Lesson, MasteryState, ReviewMode, SRSCard, WordEntity } from "./types";
 import { shuffleArray } from "./review-modes";
+import { getAtlasFamilies, getAtlasFamily } from "./atlas-families";
+
+/** Sentinel select value meaning "every atlas family". */
+export const ALL_FAMILIES_ID = "all";
+
+/**
+ * Word ids behind a shift-family deck. The atlas — not `data.shifts` — is the
+ * source of truth, because it also carries the virtual `unshifted` family that
+ * wraps every dictionary word outside the authored families. Reading
+ * `data.shifts[shiftId]` made that family's deck permanently empty.
+ */
+export function getAtlasFamilyWordIds(data: CompendiumData, familyId: string): string[] {
+  if (familyId === ALL_FAMILIES_ID) {
+    return Array.from(new Set(getAtlasFamilies(data).flatMap((f) => f.word_ids)));
+  }
+  return Array.from(new Set(getAtlasFamily(data, familyId)?.word_ids ?? []));
+}
 
 /** Which words a scoped deck (shift family / domain) should include. */
 export type LearnedFilter = "all" | "learned" | "new";

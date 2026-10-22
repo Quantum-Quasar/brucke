@@ -8,6 +8,11 @@ import reactHooks from "eslint-plugin-react-hooks";
 // does not support the TypeScript 7 (native) API this repo compiles with
 // (typescript-eslint#10940). Undefined-name checking stays with `tsc`,
 // which is stricter than no-undef anyway.
+//
+// Because no ESLint parser can read TS syntax without that API, this config
+// only covers the plain-JS files (configs, scripts). The TypeScript sources
+// are linted by oxlint (see .oxlintrc.json), which parses TS/TSX natively and
+// enforces react-hooks/rules-of-hooks as an error. `bun run lint` runs both.
 const eslintConfig = [
   // build output and non-source directories are not lintable
   // (wiki/ ships a vendored Obsidian plugin; docs/ dirs are prose archives)

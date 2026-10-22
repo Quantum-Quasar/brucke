@@ -1,5 +1,5 @@
 import { getSentenceEntities, getArticleEntities } from "@/lib/word-entities";
-import { DECK_CAPABILITIES, resolveCardReviewMode } from "@/lib/review-decks";
+import { DECK_CAPABILITIES, getAtlasFamilyWordIds, resolveCardReviewMode } from "@/lib/review-decks";
 import { describe, it, expect } from "vitest";
 import { generateMCQOptions, generateWordTiles, shuffleArray } from "@/lib/review-modes";
 import { compendium as data } from "@/data/compendium";
@@ -119,10 +119,65 @@ describe("Article & Gender MCQ Deck and Capability-Driven Review Modes", () => {
     }
   });
 
+  // Regression: the correct article used to be written into base[base.length - 1]
+  // and returned unshuffled, so every card's answer sat at one predictable slot
+  // ("der,die,das,der Arm" for the same-gender cards). The seeded RNG keeps this
+  // deterministic: for each single article the position must still VARY across
+  // calls, which a fixed slot can never satisfy.
+  it("never pins the correct article to a fixed option index", () => {
+    const originalRandom = Math.random;
+    let seed = 42;
+    Math.random = () => {
+      seed = (seed * 1664525 + 1013904223) % 4294967296;
+      return seed / 4294967296;
+    };
+    try {
+      for (const lang of ["de", "fr", "es"] as const) {
+        for (const article of getArticleEntities(lang).slice(0, 20)) {
+          const positions = new Set<number>();
+          for (let call = 0; call < 12; call++) {
+            const opts = generateMCQOptions(article, words, 4);
+            expect(opts).toHaveLength(4);
+            expect(opts).toContain(article.target_word);
+            expect(new Set(opts).size).toBe(opts.length);
+            positions.add(opts.indexOf(article.target_word));
+          }
+          // a fixed answer slot (the old bug) collapses this to exactly one value
+          expect(positions.size).toBeGreaterThan(1);
+        }
+      }
+    } finally {
+      Math.random = originalRandom;
+    }
+  });
+
   it("enforces MCQ mode for article cards even when reviewing Everything in typing or tiles mode", () => {
     const deArticle = getArticleEntities("de")[0];
     expect(DECK_CAPABILITIES.articles.supportedModes).toEqual(["mcq"]);
     expect(resolveCardReviewMode(deArticle, "typing", "everything")).toBe("mcq");
     expect(resolveCardReviewMode(deArticle, "tiles", "due")).toBe("mcq");
+  });
+});
+
+// Regression for the "unshifted" family deck: it only exists in the atlas, not
+// in `data.shifts`, so resolving a deck through `data.shifts[id]` made its 844
+// German words unreachable (0 words in scope, disabled button).
+describe("Shift-family deck ids resolve through the atlas, including the virtual unshifted family", () => {
+  it("covers the whole unshifted layer instead of returning an empty deck", () => {
+    expect(data.shifts["unshifted"]).toBeUndefined();
+    const unshifted = getAtlasFamilyWordIds(data, "unshifted");
+    expect(unshifted.length).toBeGreaterThan(500);
+    expect(new Set(unshifted).size).toBe(unshifted.length);
+  });
+
+  it("resolves every authored family and 'all' to non-empty, de-duplicated ids", () => {
+    for (const family of Object.values(data.shifts)) {
+      const ids = getAtlasFamilyWordIds(data, family.id);
+      expect(ids.length).toBeGreaterThan(0);
+      expect(new Set(ids).size).toBe(ids.length);
+    }
+    const all = getAtlasFamilyWordIds(data, "all");
+    expect(new Set(all).size).toBe(all.length);
+    expect(all.length).toBe(data.wordList.length);
   });
 });

@@ -3,22 +3,25 @@
 import React from "react";
 import { highlightWord } from "@/lib/sentence";
 
-/** A German example sentence with the taught word highlighted, plus its English translation. */
+/** An example sentence in the active language with the taught word highlighted, plus its translation. */
 export function ExampleSentence({
   sentence,
   translation,
   word,
   className = "",
+  lang = "de",
 }: {
   sentence: string;
   translation?: string;
   word: string;
   className?: string;
+  /** BCP-47 language tag for the sentence (de / fr / es). */
+  lang?: string;
 }) {
   const segments = highlightWord(sentence, word);
   return (
     <div className={`space-y-1 ${className}`}>
-      <p lang="de" className="text-sm text-[var(--text-color)] font-medium">
+      <p lang={lang} className="text-sm text-[var(--text-color)] font-medium">
         &quot;
         {segments.map((seg, i) =>
           seg.hit ? (

@@ -138,7 +138,9 @@ export type AnswerAccuracy = "exact" | "almost" | "incorrect";
 export interface EvaluationResult {
   accuracy: AnswerAccuracy;
   warningNote?: string;
-  reason?: "case" | "umlaut" | "typo" | "infinitive" | "article";
+  // "sharp-s" is deliberately separate from "umlaut": ß/ss is a different
+  // spelling law from ä/ö/ü (and must not inflate the umlaut counter).
+  reason?: "case" | "umlaut" | "sharp-s" | "typo" | "infinitive" | "article";
 }
 
 export interface EvaluationOptions {
@@ -165,6 +167,15 @@ const normalizeGermanUmlauts = (s: string) =>
 
 const normalizeGermanDigraphs = (s: string) =>
   s.replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss");
+
+// ß → ss with the umlauts left alone, so an error that is *only* about the
+// sharp s (Strasse / Straße) can be told apart from a real umlaut error.
+const foldGermanSharpS = (s: string) => s.replace(/ß/g, "ss");
+
+// Rich-text sources (iOS smart punctuation, Word, web copy) hand us U+2019
+// where the learner's keyboard produces ASCII '. Fold them before grading so
+// an apostrophe style can never turn a correct answer into a "typo".
+const normalizeTypographicQuotes = (s: string) => s.replace(/[\u2018\u2019]/g, "'");
 
 const normalizeSpanishDiacritics = (s: string) =>
   s
@@ -270,7 +281,7 @@ const stripTrailingPunctuation = (s: string) => s.replace(/[.,!?;:]+$/, "").trim
 // ignored when comparing — the learner still sees the target with its commas.
 const foldCommas = (s: string, spec: LanguageGradingSpec) =>
   spec
-    .stripLeadingPunctuation(stripTrailingPunctuation(s))
+    .stripLeadingPunctuation(stripTrailingPunctuation(normalizeTypographicQuotes(s)))
     .replace(/\s*,\s*/g, " ")
     .replace(/\s{2,}/g, " ")
     .trim();
@@ -286,7 +297,9 @@ export function evaluateAnswerAccuracy(
   const result = evaluateFolded(foldedUser, foldedTarget, spec, options);
   if (result.warningNote) {
     // keep the commas visible when we quote the target back to the learner
-    const shown = spec.stripLeadingPunctuation(stripTrailingPunctuation(expected));
+    const shown = spec.stripLeadingPunctuation(
+      stripTrailingPunctuation(normalizeTypographicQuotes(expected))
+    );
     if (foldedTarget !== shown) {
       return {
         ...result,
@@ -378,6 +391,17 @@ function evaluateFolded(
         accuracy: "almost",
         reason: "case",
         warningNote: `Almost right! Note that German nouns are capitalized: "${target}"`,
+      };
+    }
+    // German alone distinguishes the sharp s from a plain double s. If the
+    // ONLY difference is ß ↔ ss, report that law instead of the umlaut one.
+    const sharpSOnly =
+      spec.id === "de" && foldGermanSharpS(userLower) === foldGermanSharpS(targetLower);
+    if (sharpSOnly) {
+      return {
+        accuracy: "almost",
+        reason: "sharp-s",
+        warningNote: `Almost right! ß is the sharp s — German keeps it distinct from ss: "${target}" (you typed: "${user}")`,
       };
     }
     return {

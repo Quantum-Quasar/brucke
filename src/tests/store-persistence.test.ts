@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
+import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from "vitest";
 import {
   loadSavedState,
   isPlausibleStateObject,
@@ -7,6 +7,8 @@ import {
   STORAGE_KEY,
   STORAGE_COOKIE_KEY,
 } from "../lib/store";
+import { DEFAULT_LANGUAGE_ID } from "../data/languages";
+import { getDueCards } from "../lib/srs";
 
 // Persistence boundary contract:
 // - a valid-but-incomplete localStorage payload must NOT bury recoverable
@@ -79,6 +81,13 @@ describe("Persistence validation & dual-store fallback merging", () => {
     (globalThis as any).localStorage.clear();
     (globalThis as any).document.cookie = "";
     useAppStore.getState().resetProgress();
+    // resetProgress preserves the active language by design; restore the
+    // default so a language-importing test cannot leak into the next one
+    useAppStore.getState().setActiveLanguage(DEFAULT_LANGUAGE_ID);
+    // resetProgress persists an empty snapshot; these tests seed both stores by
+    // hand, so start from a clean slate
+    (globalThis as any).localStorage.clear();
+    (globalThis as any).document.cookie = "";
   });
 
   describe("isPlausibleStateObject schema guard", () => {
@@ -190,6 +199,32 @@ describe("Persistence validation & dual-store fallback merging", () => {
       expect(saved.theme).toBe("nord");
     });
 
+    it("drops null/partial SRS cards instead of crashing the review queue", () => {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          srsCards: {
+            good: { word_id: "good", interval: 1, repetitions: 0, ease_factor: 2.5, due_date: "2026-01-01", lapses: 0, last_reviewed: null },
+            // three ways storage gets corrupted: a null value, a truncated
+            // card, and a card with a non-numeric interval
+            broken: null,
+            partial: { word_id: "partial" },
+            "also-broken": { word_id: "also-broken", interval: "soon", repetitions: 0, ease_factor: 2.5, due_date: "2026-01-01" },
+            // legacy key that disagrees with its word_id: re-key by word_id
+            legacy: { word_id: "haus", interval: 3, repetitions: 1, ease_factor: 2.6, due_date: "2026-01-02", lapses: 1, last_reviewed: "2026-01-01" },
+          },
+        })
+      );
+
+      const saved = loadSavedState();
+      expect(Object.keys(saved.srsCards ?? {}).sort()).toEqual(["good", "haus"]);
+      expect(saved.srsCards?.["haus"]?.word_id).toBe("haus");
+      expect(saved.progressByLanguage?.de?.srsCards).toEqual(saved.srsCards);
+      // the boot-time queue read no longer throws on the repaired map
+      expect(() => getDueCards(saved.srsCards ?? {}, "2026-01-05")).not.toThrow();
+      expect(getDueCards(saved.srsCards ?? {}, "2026-01-05").map((c) => c.word_id).sort()).toEqual(["good", "haus"]);
+    });
+
     it("repairs a merged cookie+localStorage payload field by field", () => {
       // localStorage kept only srsCards; an older lean cookie kept only the
       // top-level lesson list — the merged payload assembles both halves
@@ -258,6 +293,101 @@ describe("Persistence validation & dual-store fallback merging", () => {
       const saved = loadSavedState();
       expect(saved.completedLessons).toEqual([1]);
       expect(saved.srsCards?.["haus"]).toBeDefined();
+    });
+
+    it("persists the imported slice for the backup's active language", () => {
+      const store = useAppStore.getState();
+      store.completeLesson(1);
+      expect(useAppStore.getState().completedLessons).toEqual([1]);
+
+      // the backup names French as active and carries only the fr slice — the
+      // German mirror must not be written back over it
+      expect(
+        useAppStore.getState().importBackupState({
+          activeLanguageId: "fr",
+          progressByLanguage: {
+            fr: {
+              completedLessons: [1, 2, 3, 4, 5],
+              currentLessonId: 6,
+              lessonProgress: {},
+              lessonStars: {},
+              wordMastery: {},
+              srsCards: {},
+              weeklyActivity: WEEK,
+            },
+          },
+        })
+      ).toBe(true);
+
+      const state = useAppStore.getState();
+      expect(state.activeLanguageId).toBe("fr");
+      expect(state.completedLessons).toEqual([1, 2, 3, 4, 5]);
+      expect(state.currentLessonId).toBe(6);
+
+      // saveState() re-derived the slice from the mirror — it must still be the
+      // imported slice, not the previous language's progress
+      const persisted = JSON.parse(localStorage.getItem(STORAGE_KEY)!);
+      expect(persisted.activeLanguageId).toBe("fr");
+      expect(persisted.progressByLanguage.fr.completedLessons).toEqual([1, 2, 3, 4, 5]);
+      expect(persisted.completedLessons).toEqual([1, 2, 3, 4, 5]);
+    });
+
+    it("drops malformed lessonProgress / lessonStars / wordMastery entries", () => {
+      expect(
+        useAppStore.getState().importBackupState({
+          lessonProgress: {
+            // no completedSegments — this is what made setLessonProgress throw
+            12: { segment: "hook", practiceIndex: 0 },
+            13: { segment: "not-a-segment", practiceIndex: 0, completedSegments: [] },
+            14: { segment: "practice", practiceIndex: -1, completedSegments: ["hook"] },
+            15: { segment: "practice", practiceIndex: 2, completedSegments: ["hook", "bogus"] },
+            16: { segment: "practice", practiceIndex: 2, completedSegments: ["hook", "pattern"], everQueued: true },
+          },
+          lessonStars: { 1: "gold", 2: "silver", 3: "purple" },
+          wordMastery: { haus: "mastered", kaputt: "banana", zahlen: 42 },
+        })
+      ).toBe(true);
+
+      const state = useAppStore.getState();
+      expect(state.lessonProgress[12]).toBeUndefined();
+      expect(state.lessonProgress[13]).toBeUndefined();
+      expect(state.lessonProgress[14]).toBeUndefined();
+      expect(state.lessonProgress[15]).toBeUndefined();
+      expect(state.lessonProgress[16]).toEqual({
+        segment: "practice",
+        practiceIndex: 2,
+        completedSegments: ["hook", "pattern"],
+        everQueued: true,
+      });
+      expect(state.lessonStars).toEqual({ 1: "gold", 3: "purple" });
+      expect(state.wordMastery).toEqual({ haus: "mastered" });
+
+      // even a malformed entry handed straight to the action is ignored now
+      expect(() =>
+        useAppStore.getState().setLessonProgress(99, { segment: "hook", practiceIndex: 0 } as any)
+      ).not.toThrow();
+    });
+  });
+
+  describe("initialisation & hydration", () => {
+    it("starts the store from defaults and applies storage only on hydrate", async () => {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ completedLessons: [2, 3], currentLessonId: 4, hasCompletedOnboarding: true })
+      );
+
+      // a fresh module evaluation is what the client runs before hydration —
+      // it must render the same defaults the server did
+      vi.resetModules();
+      const fresh = await import("../lib/store");
+      expect(fresh.useAppStore.getState().completedLessons).toEqual([]);
+      expect(fresh.useAppStore.getState().currentLessonId).toBe(1);
+      expect(fresh.useAppStore.getState().hasCompletedOnboarding).toBe(false);
+
+      fresh.useAppStore.getState().hydrateFromStorage();
+      expect(fresh.useAppStore.getState().completedLessons).toEqual([2, 3]);
+      expect(fresh.useAppStore.getState().currentLessonId).toBe(4);
+      expect(fresh.useAppStore.getState().hasCompletedOnboarding).toBe(true);
     });
   });
 });

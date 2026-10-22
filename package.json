@@ -11,7 +11,7 @@
     "start": "next start",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "lint": "eslint .",
+    "lint": "eslint . && oxlint -c .oxlintrc.json src tests",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -34,6 +34,7 @@
     "eslint-config-next": "^16.3.8",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.13.0",
+    "oxlint": "1.40.0",
     "postcss": "^8.5.28",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",

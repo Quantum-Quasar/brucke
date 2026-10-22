@@ -90,7 +90,7 @@ export const LessonNodeDrawer: React.FC<LessonNodeDrawerProps> = ({
               </span>
               {star === "purple" ? (
                 <span className="text-[var(--text-color)]">
-                  purple star — flawless first-try run, retry queue untouched. It means you built every answer by thinking it through, first try.
+                  purple star — a flawless run, retry queue untouched. It means you built every answer by thinking it through without a miss (a clean replay counts).
                 </span>
               ) : (
                 <span className="text-[var(--text-color)]">
