@@ -64,3 +64,7 @@ old documentation/
 
 # diagrams stay local — thinking-method.md links them relatively
 docs/thinking-method-images/
+# local-only notes / generated
+next-env.d.ts
+docs/distribution.md
+docs/response.md
