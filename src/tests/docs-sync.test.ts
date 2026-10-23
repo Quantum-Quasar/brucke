@@ -2,9 +2,12 @@ import { describe, it, expect } from "vitest";
 import fs from "fs";
 import path from "path";
 import { LESSONS } from "../data/lessons";
+import { FR_LESSONS } from "../data/french/lessons-fr";
+import { ES_LESSONS } from "../data/spanish/lessons-es";
 import { compendium } from "../data/compendium";
 import { THEMES } from "../data/themes";
 import { FONT_LIST } from "../data/fonts";
+import { getAtlasFamilies } from "../lib/atlas-families";
 
 // Docs-drift guard: README.md, AUDIT_MANIFEST.md, docs/README.md and pitch/*.md
 // quote data counts (words, lessons, tests, themes, fonts) in prose. Those counts
@@ -30,7 +33,18 @@ function readPitchDoc(name: string): string {
 const TEST_FILE_COUNT = fs
   .readdirSync(path.join(ROOT, "src", "tests"))
   .filter((f) => f.endsWith(".test.ts")).length;
-const TEST_COUNT = 346; // update when adding tests
+// Pre-rendered routes are every `page.tsx` outside a dynamic segment (those
+// emit one page per generated param instead, pinned separately below).
+function countStaticRoutes(dir: string): number {
+  return fs.readdirSync(dir, { withFileTypes: true }).reduce((count, entry) => {
+    if (entry.isDirectory()) {
+      return count + (entry.name.startsWith("[") ? 0 : countStaticRoutes(path.join(dir, entry.name)));
+    }
+    return count + (entry.name === "page.tsx" ? 1 : 0);
+  }, 0);
+}
+const STATIC_ROUTE_COUNT = countStaticRoutes(path.join(ROOT, "src", "app"));
+const TEST_COUNT = 355; // update when adding tests
 const THEME_COUNT = Object.keys(THEMES).length;
 const FONT_COUNT = FONT_LIST.length;
 const TAUGHT_WORDS = 656; // update after running scripts/audit-vocab-balance.ts
@@ -62,6 +76,41 @@ describe("Documentation stays in sync with the data", () => {
     );
   });
 
+  it("multi-language counts, route counts, twist coverage, and atlas families stay pinned", () => {
+    const trailIds = new Set([...LESSONS, ...FR_LESSONS, ...ES_LESSONS].map((lesson) => lesson.id));
+    const families = getAtlasFamilies(compendium);
+    expect(FR_LESSONS.length).toBe(123);
+    expect(ES_LESSONS.length).toBe(123);
+    expect(trailIds.size).toBe(178);
+    expect(families.length).toBe(10);
+    expect(STATIC_ROUTE_COUNT).toBe(8);
+
+    const readme = readRootDoc("README.md");
+    expect(readme).toContain(`${STATIC_ROUTE_COUNT} static routes`);
+    expect(readme).toContain(`${FR_LESSONS.length} authored lessons`);
+    expect(readme).toContain(`${trailIds.size} \`/trail/[id]\` pages`);
+    expect(readme).toContain("28 `/atlas/[family]` pages");
+
+    const docsReadme = readRootDoc(path.join("docs", "README.md"));
+    expect(docsReadme).toContain(`${STATIC_ROUTE_COUNT} static routes`);
+    expect(docsReadme).toContain(`${FR_LESSONS.length} lessons authored`);
+    expect(docsReadme).toContain(`${trailIds.size} unique ids`);
+    expect(docsReadme).toContain("28 `/atlas/[family]` pages");
+    expect(docsReadme).toContain("Every authored lesson");
+    expect(docsReadme).toContain("Twist");
+
+    const manifest = readRootDoc("AUDIT_MANIFEST.md");
+    expect(manifest).toContain(`${STATIC_ROUTE_COUNT} static routes`);
+    expect(manifest).toContain(`${trailIds.size} unique pages`);
+    expect(manifest).toContain("28 pages across the three atlases");
+    expect(manifest).toContain("Y / GH");
+    expect(manifest).toContain("-ate / -ize");
+
+    for (const lesson of [...LESSONS, ...FR_LESSONS, ...ES_LESSONS]) {
+      expect(lesson.twist, `lesson ${lesson.id} must end with a Twist card`).toBeTruthy();
+    }
+  });
+
   it("root docs no longer carry the superseded audit numbers", () => {
     for (const doc of ["README.md", "AUDIT_MANIFEST.md"]) {
       const text = readRootDoc(doc);
@@ -69,7 +118,10 @@ describe("Documentation stays in sync with the data", () => {
       expect(text, `${doc} still claims the stale 218-word count`).not.toMatch(/\b218 (core )?words/);
       expect(text, `${doc} still claims 109 lessons`).not.toMatch(/\b109 lessons/);
       expect(text, `${doc} still claims 119 tests`).not.toMatch(/\b119 tests/);
-      expect(text, `${doc} still claims 28 pages`).not.toMatch(/\b28 (static )?pages/);
+      // 28 is now the correct atlas-page count, so the old stale markers are
+      // the pre-fix "9 atlas pages" and "128 trail pages" claims.
+      expect(text, `${doc} still claims 9 atlas pages`).not.toMatch(/\b9 (atlas|family) pages?/);
+      expect(text, `${doc} still claims 128 lesson pages`).not.toMatch(/\b128 (lesson|trail) pages?/);
       expect(text, `${doc} still claims only the first 10 lessons are interactive`).not.toMatch(
         /first 10 foundational/
       );

@@ -77,6 +77,10 @@ const PRE_EXISTING = new Set([
   // l21's compound tile "arzt" (Zahn/arzt/haus/zeug/schuh), l5071's
   // "Herr Braun" — a surname, homonym of the color (the weißt/weiß class).
   "21:arzt", "5071:braun",
+  // Surfaced when the ordering scan grew to dictation / spoken-turn surfaces;
+  // all three are original prose present at e0e9b1a: l13's "Wo wohnst du
+  // jetzt" and l1301's "dort" distractor chip.
+  "13:wohnst", "13:jetzt", "1301:dort",
 ]);
 
 // Weaves that are planned but not yet executed: word -> host lessons that will
@@ -472,6 +476,15 @@ function surfaces(lesson: (typeof LESSONS)[number]): Array<{ where: string; text
     else if (ex.type === "syntax_builder") out.push({ where: w, text: [...(ex.word_bank ?? []), ex.target_answer].join(" ") });
     else if (ex.type === "transcribe") out.push({ where: w, text: [ex.target_answer, ...(ex.word_bank ?? [])].join(" ") });
     else if (ex.type === "literal_gloss") out.push({ where: w, text: [ex.german ?? "", ex.target_answer].join(" ") });
+    else if (ex.type === "family_matrix")
+      out.push({ where: w, text: (ex.cells ?? []).flat().map((c) => c.german).join(" ") });
+    else if (ex.type === "dictation")
+      out.push({ where: w, text: [ex.spoken ?? ex.target_answer, ex.target_answer].join(" ") });
+    else if (ex.type === "variant_english") out.push({ where: w, text: ex.german ?? "" });
+    else if (ex.type === "pronoun_compression")
+      out.push({ where: w, text: [ex.full_sentence ?? "", ex.target_answer, ...(ex.word_bank ?? [])].join(" ") });
+    else if (ex.type === "spoken_turn_reply")
+      out.push({ where: w, text: [ex.spoken_question ?? "", ex.target_answer, ...(ex.word_bank ?? [])].join(" ") });
   }
   if (lesson.twist) out.push({ where: `l${lesson.id}/twist`, text: [lesson.twist.target_answer, ...(lesson.twist.word_bank ?? [])].join(" ") });
   return out;
@@ -479,8 +492,14 @@ function surfaces(lesson: (typeof LESSONS)[number]): Array<{ where: string; text
 let preExistingHits = 0;
 for (const l of trail) {
   const lesson = byId.get(l.id)!;
+  // A vocab hint is an in-place gloss: a word the lesson introduces right where
+  // it uses it counts as introduced here, not as a future-word leak.
+  const hinted = new Set(
+    lesson.exercises.flatMap((ex) => (ex.vocab_hints ?? []).map((h) => h.word.toLowerCase()))
+  );
   for (const surf of surfaces(lesson)) {
     for (const tok of surf.text.split(/[\s—]+/)) {
+      if (hinted.has(tok.toLowerCase().replace(/[.,!?;:)]+$/, ""))) continue;
       const cands = candidates(tok);
       if (!cands.length) continue;
       const firsts = cands.map((c) => firstIntro.get(c)).filter((x): x is number => x !== undefined);

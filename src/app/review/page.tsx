@@ -1013,7 +1013,7 @@ export default function ReviewPage() {
   const domainCount = mounted ? domainDeckSize : 0;
   const sentenceCount = mounted ? sentenceCards.length : 0;
   const articleCount = mounted ? articleCards.length : 0;
-  const compoundCount = mounted ? scopedCompoundCards.length : compoundCards.length;
+  const compoundCount = mounted ? scopedCompoundCards.length : 0;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
@@ -1892,7 +1892,7 @@ export default function ReviewPage() {
                   spaced repetition for full {language.name.toLowerCase()} sentences from every trail lesson — practice word order, brackets, and pronouns in context.
                 </p>
                 <div className="text-xs font-mono text-[var(--main-color)] pt-1">
-                  {mounted ? sentenceCards.length : sentenceEntities.length} sentences in scope
+                  {sentenceCount} sentences in scope
                 </div>
               </div>
 
@@ -1919,7 +1919,7 @@ export default function ReviewPage() {
                   rapid-fire 4-option article mcq ({language.genderSystem ? language.genderSystem.articles.join(" / ") : "der / die / das"}) for every gendered {language.name.toLowerCase()} noun. launches directly into mcq.
                 </p>
                 <div className="text-xs font-mono text-[var(--main-color)] pt-1">
-                  {mounted ? articleCards.length : articleEntities.length} nouns in scope
+                  {articleCount} nouns in scope
                 </div>
               </div>
 

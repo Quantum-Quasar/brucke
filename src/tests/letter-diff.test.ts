@@ -275,4 +275,11 @@ describe("Typographic single quotes", () => {
     expect(r.accuracy).toBe("almost");
     expect(r.reason).toBe("typo");
   });
+
+  it("folds curly double quotes and guillemets", () => {
+    expect(evaluateAnswerAccuracy("\u201Cbonjour\u201D", '"bonjour"')).toEqual({ accuracy: "exact" });
+    expect(evaluateAnswerAccuracy("\u00ABbonjour\u00BB", '"bonjour"', { languageId: "fr" })).toEqual({
+      accuracy: "exact",
+    });
+  });
 });

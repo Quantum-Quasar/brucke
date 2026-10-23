@@ -35,5 +35,9 @@ export function LessonDetailClient({ lessonId }: { lessonId: number }) {
     );
   }
 
-  return <LessonReader lesson={lesson} />;
+  // Remount per lesson (and per language): the lesson route keeps this client
+  // component mounted across /trail/N → /trail/N+1 navigations, so without a
+  // key LessonReader would carry the previous lesson's segment/practice state
+  // into the next one and persist it.
+  return <LessonReader key={`${activeLanguageId}-${lesson.id}`} lesson={lesson} />;
 }

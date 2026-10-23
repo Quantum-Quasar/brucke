@@ -14,7 +14,7 @@
 
 Rather than relying on rote memorization or gamified streaks without substance, Brücke leverages the **Second High German Consonant Shift (500–800 AD)** to reveal that English speakers already understand hundreds of German words.
 
-**French course (open trail).** The same engine now teaches French through the Norman doublets — 1066 left English and French sharing thousands of cognates, and the French trail decodes them the same way: 30 topics (19 lessons authored so far), 9 conversion-bridge families (`-ion`, `-ation→-er`, `-ité`, `-ance`, `-é`, `-ment`, `-eur`, `-able`, doublets), a 115-word compendium with 10 compound calques and 12 false friends, and its own trail/atlas/review layers. It is authored as typed modules in `src/data/french/` (not parsed from `word_connections.md`); the design doc is [`french-course/french-course-design.md`](./french-course/french-course-design.md). <!-- added 2026-10-13 with the French course launch -->
+**French course (open trail).** The same engine now teaches French through the Norman doublets — 1066 left English and French sharing thousands of cognates, and the French trail decodes them the same way: 30 topics (123 lessons authored so far), 9 conversion-bridge families (`-ion`, `-ation→-er`, `-ité`, `-ance`, `-é`, `-ment`, `-eur`, `-able`, doublets), a 306-word compendium with 16 compound calques and 16 false friends, and its own trail/atlas/review layers. It is authored as typed modules in `src/data/french/` (not parsed from `word_connections.md`); the design doc is [`french-course/french-course-design.md`](./french-course/french-course-design.md). <!-- added 2026-10-13 with the French course launch -->
 
 - **Comprehensive Audit Manifest**: See [`AUDIT_MANIFEST.md`](../AUDIT_MANIFEST.md) for full architectural specifications, data schemas, and audit instructions.
 - **North Star**: See [`NORTH_STAR.md`](./NORTH_STAR.md) — Brücke teaches German; etymology is the hook, not the subject. Read before changing content.
@@ -31,7 +31,7 @@ Rather than relying on rote memorization or gamified streaks without substance, 
 - **Styling**: Tailwind CSS v4 (native CSS tokens, dark mode default)
 - **State Management**: [Zustand](https://github.com/pmndrs/zustand) 5 (dual `localStorage` + size-guarded cookie persistence)
 - **Icons**: Lucide React
-- **Testing**: Vitest 5 (`bun run test` → `vitest run`) — 35 test files, 346 automated tests. There is no `bun test` script. <!-- corrected 2026-09-30: was "Vitest / `bun test` (21 test suites, 119 automated tests)" — package.json:12 defines only "test": "vitest run"; counts updated 2026-10-03 with the whole-curriculum integrity, timezone-boundary, persistence-merging, and docs-drift suites -->
+- **Testing**: Vitest 5 (`bun run test` → `vitest run`) — 35 test files, 355 automated tests. There is no `bun test` script. <!-- corrected 2026-09-30: was "Vitest / `bun test` (21 test suites, 119 automated tests)" — package.json:12 defines only "test": "vitest run"; counts updated 2026-10-03 with the whole-curriculum integrity, timezone-boundary, persistence-merging, and docs-drift suites -->
 - **Audio Engine**: Two independent zero-dependency browser-native paths: `window.speechSynthesis` for German pronunciation (`de-DE`, 0.92x) and a Web Audio **sample** engine (`src/lib/sound.ts`) that decodes bundled Monkeytype mechanical-keyboard `.wav` packs with a 24-entry buffer cache and negative URL caching. <!-- corrected 2026-09-30: was "Web Audio click synthesizer" — there is no synthesis; src/lib/sound.ts:48-53 -->
 
 ---
@@ -54,7 +54,7 @@ bun run parse-data
 
 ### Run Automated Tests
 
-Executes the full Vitest suite — 35 test files, 346 automated tests: <!-- corrected 2026-09-30: was "119 unit and integration tests across 21 suites"; counts updated 2026-10-03 -->
+Executes the full Vitest suite — 35 test files, 355 automated tests: <!-- corrected 2026-09-30: was "119 unit and integration tests across 21 suites"; counts updated 2026-10-03 -->
 
 ```bash
 bun run test
@@ -69,7 +69,7 @@ bun run test:e2e
 
 ### Production Build
 
-Pre-renders every route to static HTML (`● SSG`): the 6 static routes, 9 `/atlas/[family]` pages, and one `/trail/[id]` page per authored lesson (168). `bun run build` re-runs `parse-data` first. <!-- corrected 2026-09-30: was "all 28 pages" — /trail/[id]/page.tsx pre-renders every entry of LESSONS; count updated 2026-10-03 from 109 to 128 authored lessons. Unknown /trail/[id] or /atlas/[family] params 404 via dynamicParams = false. -->
+Pre-renders every route to static HTML (`● SSG`): the 8 static routes, 28 `/atlas/[family]` pages (union of the three atlases), and one `/trail/[id]` page per authored lesson (178 unique ids: 169 German plus 9 French/Spanish-only ids). `bun run build` re-runs `parse-data` first. <!-- corrected 2026-10-22: was 9 family pages and 168 trail pages; /trail/[id]/page.tsx now unions de/fr/es ids. Unknown /trail/[id] or /atlas/[family] params 404 via dynamicParams = false. -->
 
 ```bash
 bun run build
@@ -95,7 +95,7 @@ Visit `http://localhost:3000` in your browser.
    - Custom DOM+SVG renderer (no game libraries) with `content-visibility` windowing per topic cluster, sized for hundreds of future lessons.
    - 5-part card-by-card lesson wizard (Hook, Pattern, Transformation Table, Bite-Sized Practice, Summary & Retries) at `/trail/[id]`.
    - Scaffolded exercises across 11 types (`src/lib/types.ts`): morpheme tiles, matching pairs, shift select, syntax builder, derivation typing, reverse-cognate typing, **transcribe** production drills (thought + lexicon + cue ladder), **literal gloss** direct translations, **dictation** listening drills (played audio, capped replays, a 15-minute listening skip), **family grid** prefix × base matrices, and **variant English** "every honest rendering" drills (TM-1/TM-2/TM-6, `docs/THINKING_METHOD_UPGRADE.md`). <!-- updated 2026-10-02: added the Thinking Method exercise types (was "6 types") -->
-   - Core lessons 2–30 end with an ungraded, skippable **Twist** card (deliberate friction, outside the 5-exercise contract) and may whisper up to two **posture cues** per lesson; the onboarding tour ends with a 4-card **Posture Primer** (TM-4/TM-5, same document). <!-- added 2026-10-02 -->
+   - Every authored lesson (cores, sprigs, and branches) ends with an ungraded, skippable **Twist** card (deliberate friction, outside the 5-exercise contract) and may whisper up to two **posture cues** per lesson; the onboarding tour ends with a 4-card **Posture Primer** (TM-4/TM-5, same document). <!-- corrected 2026-10-22: all 169 German lessons have a twist, not just cores 2–30 -->
    - Pre-exercise vocabulary hints (`vocab_hints`) for auxiliary words (e.g., `mit`).
    - End-of-lesson Retry Queue ensuring mastery before progression; a flawless first-try run earns a **purple star** (gold otherwise).
 
@@ -116,9 +116,9 @@ Visit `http://localhost:3000` in your browser.
    - `das` (Neuter): Emerald Green
    - Educational onboarding & dismissible gender guide banners.
 
-5. **Six Star Gates on the spine** (`src/data/curriculum.ts:418`):
+5. **Six Star Gates on the spine** (`src/data/curriculum.ts:695`):
    - Gates sit at the natural family boundaries of the curriculum and close the stretch of topics the next stretch is built on, so the spine cannot be rushed past weak ground.
-   - *The Shift Gate* (after topic 7, 14★ of 25), *The Grammar Gate* (after 10, 6★ of 10), *The Verb-Complex Gate* (after 16, 11★ of 20), *The Past Gate* (after 20, 9★ of 17), *The Atlas Gate* (after 26, 11★ of 20), and *The Capstone Gate* (after 29, 9★ of 13).
+   - *The Shift Gate* (after topic 7, 14★ of 22), *The Grammar Gate* (after 10, 6★ of 9), *The Verb-Complex Gate* (after 16, 11★ of 22), *The Past Gate* (after 20, 9★ of 18), *The Atlas Gate* (after 26, 11★ of 22), and *The Capstone Gate* (after 29, 9★ of 11).
    - Each gate is drawn on the map as a checkpoint pill reading `★ earned/required`; clicking it opens a panel explaining what the stretch covers and why the next one depends on it (`src/components/trail/TrailMap.tsx:203`).
    - A closed gate hard-locks the spine edge but leaves every already-reachable node playable — you can always go back and farm the stars you are missing. <!-- added 2026-09-30: the star-gate system was undocumented -->
 

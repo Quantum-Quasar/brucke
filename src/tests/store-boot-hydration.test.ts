@@ -136,4 +136,117 @@ describe("boot hydration snapshot", () => {
     store.useAppStore.getState().hydrateFromStorage({ reread: true });
     expect(store.useAppStore.getState().completedLessons).toEqual([1, 2, 3, 4, 5]);
   });
+
+  it("adopts a cross-tab reset instead of union-resurrecting the deleted progress", async () => {
+    localStorage.clear();
+    (document as any).cookie = "";
+    const week = [false, false, false, false, false, false, false];
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        activeLanguageId: "de",
+        progressByLanguage: {
+          de: {
+            completedLessons: [1, 2, 3],
+            currentLessonId: 4,
+            lessonProgress: {},
+            lessonStars: {},
+            wordMastery: { haus: "mastered" },
+            srsCards: {},
+            weeklyActivity: week,
+          },
+        },
+        completedLessons: [1, 2, 3],
+        currentLessonId: 4,
+        wordMastery: { haus: "mastered" },
+        hasCompletedOnboarding: true,
+      })
+    );
+    vi.resetModules();
+    const store = await import("../lib/store");
+    store.useAppStore.getState().hydrateFromStorage();
+    expect(store.useAppStore.getState().completedLessons).toEqual([1, 2, 3]);
+
+    // Another tab pressed "reset all progress": same shape, empty slices, and a
+    // newer reset marker that tells this tab this is a deletion, not an addition.
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        activeLanguageId: "de",
+        progressByLanguage: {
+          de: {
+            completedLessons: [],
+            currentLessonId: 1,
+            lessonProgress: {},
+            lessonStars: {},
+            wordMastery: {},
+            srsCards: {},
+            weeklyActivity: week,
+          },
+        },
+        completedLessons: [],
+        currentLessonId: 1,
+        wordMastery: {},
+        progressResetAt: Date.now() + 1000,
+        hasCompletedOnboarding: true,
+      })
+    );
+    store.useAppStore.getState().hydrateFromStorage({ reread: true });
+    expect(store.useAppStore.getState().completedLessons).toEqual([]);
+    expect(store.useAppStore.getState().wordMastery).toEqual({});
+
+    // The next ordinary save in this tab must not write the stale list back.
+    store.useAppStore.getState().setPreferredReviewMode("mcq");
+    const persisted = JSON.parse(localStorage.getItem(STORAGE_KEY)!);
+    expect(persisted.completedLessons).toEqual([]);
+    expect(persisted.progressByLanguage.de.completedLessons).toEqual([]);
+  });
+
+  it("unions a parked slice when another tab switches language", async () => {
+    localStorage.clear();
+    (document as any).cookie = "";
+    const week = [false, false, false, false, false, false, false];
+    const slice = (completedLessons: number[], currentLessonId: number) => ({
+      completedLessons,
+      currentLessonId,
+      lessonProgress: {},
+      lessonStars: {},
+      wordMastery: {},
+      srsCards: {},
+      weeklyActivity: week,
+    });
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        activeLanguageId: "de",
+        progressByLanguage: {
+          de: slice([1], 2),
+          fr: slice([1, 2], 3),
+        },
+        completedLessons: [1],
+        currentLessonId: 2,
+        hasCompletedOnboarding: true,
+      })
+    );
+    vi.resetModules();
+    const store = await import("../lib/store");
+    store.useAppStore.getState().hydrateFromStorage();
+    expect(store.useAppStore.getState().activeLanguageId).toBe("de");
+
+    // The other tab switches to French and saves its own older French slice.
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        activeLanguageId: "fr",
+        progressByLanguage: { fr: slice([3], 4) },
+        completedLessons: [3],
+        currentLessonId: 4,
+        hasCompletedOnboarding: true,
+      })
+    );
+    store.useAppStore.getState().hydrateFromStorage({ reread: true });
+    expect(store.useAppStore.getState().activeLanguageId).toBe("fr");
+    // this tab's fresher [1,2] must survive the other tab's [3]
+    expect(store.useAppStore.getState().completedLessons).toEqual([1, 2, 3]);
+  });
 });

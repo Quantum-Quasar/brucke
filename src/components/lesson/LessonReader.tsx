@@ -40,6 +40,10 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   const router = useRouter();
   const activeLanguageId = useAppStore((s) => s.activeLanguageId);
   const data = getLanguageContent(activeLanguageId).compendium ?? EMPTY_COMPENDIUM;
+  const nextLessonId = React.useMemo(
+    () => getNextPlayableLessonIdFor(activeLanguageId, lesson.id),
+    [activeLanguageId, lesson.id]
+  );
   const savedProgress = useAppStore((s) => s.lessonProgress[lesson.id]);
   const [currentSegment, setCurrentSegment] = useState<LessonSegment>(savedProgress?.segment || "hook");
   const [practiceIndex, setPracticeIndex] = useState(savedProgress?.practiceIndex || 0);
@@ -106,18 +110,23 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   const setLessonProgress = useAppStore((s) => s.setLessonProgress);
 
   const storeHydrated = useAppStore((s) => s.storeHydrated);
-  const restoredPersistedRef = useRef(false);
+  const hydrateEpoch = useAppStore((s) => s.hydrateEpoch);
+  // Epoch of the hydration this component last adopted from. `-1` means the
+  // first pass has not seen a hydrated store yet.
+  const adoptedEpochRef = useRef(-1);
 
   useEffect(() => {
     // The store starts from defaults and applies localStorage only after mount,
     // and child effects run before the root layout's hydration effect (Strict
     // Mode even re-runs them after it). So on a reload this effect first sees
     // the initial "hook" position. Before persisting that over the saved state,
-    // adopt the position the store just restored; only then write.
-    if (!restoredPersistedRef.current) {
-      if (!storeHydrated) return;
+    // adopt the position the store just restored; only then write. The epoch
+    // also makes an open lesson adopt a cross-tab save instead of overwriting it.
+    if (!storeHydrated) return;
+    if (adoptedEpochRef.current !== hydrateEpoch) {
+      const isRehydration = adoptedEpochRef.current !== -1;
+      adoptedEpochRef.current = hydrateEpoch;
       const persisted = useAppStore.getState().lessonProgress[lesson.id];
-      restoredPersistedRef.current = true;
       if (persisted) {
         const samePosition =
           persisted.segment === currentSegment &&
@@ -131,6 +140,18 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
           setEverQueued(persisted.everQueued ?? false);
           return;
         }
+      } else if (isRehydration) {
+        // Another tab reset/imported progress and this lesson's entry is gone:
+        // restart it rather than immediately writing the stale local position back.
+        setCurrentSegment("hook");
+        setPracticeIndex(0);
+        setCompletedSegments([]);
+        setEverQueued(false);
+        setRetryQueue([]);
+        setInRetryPhase(false);
+        setRetryIndex(0);
+        setIsLessonFinished(false);
+        return;
       }
     }
     setLessonProgress(lesson.id, {
@@ -146,19 +167,32 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
     completedSegments,
     everQueued,
     storeHydrated,
+    hydrateEpoch,
     setLessonProgress,
   ]);
 
   // Global keyboard navigation across lesson reading segments (Hook, Pattern, Table, Summary)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const active = document.activeElement;
+      const active = document.activeElement as HTMLElement | null;
       const isInput =
         active instanceof HTMLInputElement ||
         active instanceof HTMLTextAreaElement ||
-        (active as HTMLElement)?.isContentEditable;
+        Boolean(active?.isContentEditable);
 
       if (isInput) return;
+
+      // A focused button/link keeps its native Enter/Space activation. Without
+      // this guard the summary shortcut called preventDefault() on the focused
+      // "mark lesson finished" button and navigated to the next lesson instead.
+      const isActivationKey = e.key === "Enter" || e.key === " " || e.code === "Space";
+      const isInteractive =
+        active instanceof HTMLButtonElement ||
+        active instanceof HTMLAnchorElement ||
+        active instanceof HTMLSelectElement ||
+        active?.getAttribute("role") === "button" ||
+        active?.getAttribute("role") === "link";
+      if (isInteractive && isActivationKey) return;
 
       if (currentSegment === "hook") {
         if (e.key === "Enter" || e.key === " " || e.code === "Space") {
@@ -198,8 +232,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
           if (e.key === "Enter" || e.key === " " || e.code === "Space") {
             e.preventDefault();
             handleCompleteAll();
-            const nextId = getNextPlayableLessonIdFor(activeLanguageId, lesson.id);
-            router.push(nextId ? `/trail/${nextId}` : "/trail");
+            router.push(nextLessonId ? `/trail/${nextLessonId}` : "/trail");
           }
         }
       }
@@ -207,7 +240,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentSegment, retryQueue.length, isLessonFinished, lesson.id, router]);
+  }, [currentSegment, retryQueue.length, isLessonFinished, lesson.id, nextLessonId, router]);
 
   // Register all lesson words as encountered when viewing
   React.useEffect(() => {
@@ -293,7 +326,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   };
 
   const handleCompleteAll = () => {
-    completeLesson(lesson.id, { perfect: !everQueued });
+    completeLesson(lesson.id, { perfect: !everQueued, nextLessonId });
     // Finished-lesson words enter the SM-2 queue so "due today" isn't empty for new learners.
     const allWords = Array.from(new Set([...lesson.word_ids, ...(lesson.table_word_ids ?? [])]));
     const toSeed = allWords.filter((id) => id in data.words);
@@ -904,24 +937,15 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                     </button>
 
                     <Link
-                      href={(() => {
-                        const nextId = getNextPlayableLessonIdFor(activeLanguageId, lesson.id);
-                        return nextId ? `/trail/${nextId}` : "/trail";
-                      })()}
+                      href={nextLessonId ? `/trail/${nextLessonId}` : "/trail"}
                       onClick={(event) => {
                         event.preventDefault();
                         handleCompleteAll();
-                        const nextId = getNextPlayableLessonIdFor(activeLanguageId, lesson.id);
-                        router.push(nextId ? `/trail/${nextId}` : "/trail");
+                        router.push(nextLessonId ? `/trail/${nextLessonId}` : "/trail");
                       }}
                       className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs transition cursor-pointer"
                     >
-                      <span>
-                        {(() => {
-                          const nextId = getNextPlayableLessonIdFor(activeLanguageId, lesson.id);
-                          return nextId ? `next lesson (${nextId})` : "back to the trail";
-                        })()}
-                      </span>
+                      <span>{nextLessonId ? `next lesson (${nextLessonId})` : "back to the trail"}</span>
                       <span className="keycap text-[10px]">enter</span>
                     </Link>
                   </div>

@@ -378,7 +378,7 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--main-color)] text-[var(--bg-color)] font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <Volume2 className="w-4 h-4" />
-            {replaysUsed === 0 ? "Play" : `Play again (${replaysUsed}/${replayBudget})`}
+            {replaysUsed === 0 ? "Play" : `Listen (${replaysUsed}/${replayBudget} used)`}
           </button>
           <div className="flex-1 h-1.5 rounded-full bg-[var(--sub-color)]/20 overflow-hidden">
             <div

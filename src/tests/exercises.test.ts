@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import fs from "fs";
 import path from "path";
 import { LESSONS } from "../data/lessons";
+import { compendium } from "../data/compendium";
 import { evaluateAnswerAccuracy } from "../lib/letter-diff";
 
 describe("Progressive Bite-Sized Exercise Architecture", () => {
@@ -123,8 +124,8 @@ describe("Progressive Bite-Sized Exercise Architecture", () => {
       if (evaluation.accuracy === "incorrect") {
         if (!retryQueue.some((e) => e.id === exercise.id)) retryQueue.push(exercise);
       } else if (evaluation.accuracy === "almost") {
-        // Only spelling typos and umlaut errors get queued for retry; case and infinitive stems are accepted without retry
-        if (evaluation.reason === "typo" || evaluation.reason === "umlaut") {
+        // Only spelling, sharp-s and umlaut errors get queued for retry; case and infinitive stems are accepted without retry
+        if (evaluation.reason === "typo" || evaluation.reason === "sharp-s" || evaluation.reason === "umlaut") {
           if (!retryQueue.some((e) => e.id === exercise.id)) retryQueue.push(exercise);
         }
       }
@@ -163,6 +164,13 @@ describe("Progressive Bite-Sized Exercise Architecture", () => {
       completedRetries.push(retryEx.id);
     }
     expect(completedRetries).toEqual([lesson.exercises[1].id, lesson.exercises[2].id]);
+  });
+
+  it("queues sharp-s respellings for retry like every widget does", () => {
+    const evaluation = evaluateAnswerAccuracy("Strasse", "Straße");
+    expect(evaluation.accuracy).toBe("almost");
+    expect(evaluation.reason).toBe("sharp-s");
+    expect(["typo", "sharp-s", "umlaut"]).toContain(evaluation.reason);
   });
 
   // --- TM-1: transcribe — production from a thought, with a cue ladder ---
@@ -417,6 +425,21 @@ describe("Prefix × base family grids teach the prefix law", () => {
       });
       const cells = ex.cells!.flat().map((c) => c.german);
       expect(new Set(cells).size, `${ex.id} duplicate cells`).toBe(cells.length);
+      // A single-word cell must be a real compendium word or be glossed by this
+      // exercise's own vocab_hints — otherwise the grid invents a form the rest
+      // of the trail never teaches (the `mitmachen` case).
+      const known = new Set([
+        ...Object.keys(compendium.words),
+        ...Object.values(compendium.words).map((w) => w.target_word.toLowerCase()),
+      ]);
+      const hinted = new Set((ex.vocab_hints ?? []).map((h) => h.word.toLowerCase()));
+      for (const cell of cells) {
+        if (cell.includes(" ")) continue;
+        expect(
+          known.has(cell.toLowerCase()) || hinted.has(cell.toLowerCase()),
+          `${ex.id} cell "${cell}" must be a compendium word or introduced in vocab_hints`
+        ).toBe(true);
+      }
     }
   });
 });

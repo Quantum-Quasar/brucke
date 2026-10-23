@@ -6,8 +6,7 @@ import { HelpCircle } from "lucide-react";
 import { ThemeDropdown } from "@/components/common/ThemeDropdown";
 import { useAppStore } from "@/lib/store";
 import { getLanguageDefinition } from "@/data/languages";
-import { getTotalWordCount } from "@/data/language-content";
-
+import { getWordCount } from "@/data/word-counts";
 // Slim identity + customization bar. All destinations live in the bottom dock (BottomNav).
 export const TopNav: React.FC = () => {
   const [mounted, setMounted] = React.useState(false);
@@ -21,7 +20,7 @@ export const TopNav: React.FC = () => {
     setMounted(true);
   }, []);
 
-  const totalWords = mounted ? getTotalWordCount(activeLanguageId) : 0;
+  const totalWords = mounted ? getWordCount(activeLanguageId) : 0;
   const displayMastered = mounted ? masteredCount : 0;
 
   return (

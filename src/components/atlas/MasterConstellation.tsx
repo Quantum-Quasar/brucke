@@ -75,7 +75,7 @@ export const MasterConstellation: React.FC = () => {
                   className="cursor-pointer hover:stroke-[var(--text-color)]"
                   onClick={() => n.wordId && openWordDrawer(n.wordId)}
                 >
-                  <title>{n.label} — {n.sub}</title>
+                  <title>{n.sub ? `${n.label} — ${n.sub}` : n.label}</title>
                 </circle>
               );
             }
@@ -96,7 +96,7 @@ export const MasterConstellation: React.FC = () => {
                 <text x={n.x + 10} y={n.y + 4} fontSize={10} fill={color} fontFamily="monospace">
                   {n.label}
                 </text>
-                <title>{n.label} — {n.sub}</title>
+                <title>{n.sub ? `${n.label} — ${n.sub}` : n.label}</title>
               </g>
             );
           })}

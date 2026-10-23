@@ -31,3 +31,33 @@ jobs:
       # prerender/SSG breakage, so CI must not skip it.
       - name: Build
         run: bun run build
+
+      # `build` re-runs parse-data. If the committed generated artifacts differ,
+      # someone hand-edited them (or the markdown changed without a re-parse).
+      - name: Generated data is committed in sync
+        run: git diff --exit-code -- src/data/compendium.json src/data/insights.json
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: bunx playwright install --with-deps chromium
+
+      # Build first, then let Playwright boot `next start`: the browser suite
+      # must exercise the prerendered output, not just the dev server.
+      - name: Build (SSG output under test)
+        run: bun run build
+
+      - name: Browser smoke suite
+        run: bun run test:e2e
+        env:
+          PLAYWRIGHT_WEB_SERVER: bun run start

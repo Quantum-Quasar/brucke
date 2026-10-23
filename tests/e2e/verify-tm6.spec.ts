@@ -278,7 +278,7 @@ test("the listening drill plays audio and one skip silences it for 15 minutes", 
 
   // e4 — the dictation
   await expect(page.getByText(/^Listen and write/i).first()).toBeVisible({ timeout: 25_000 });
-  const playButton = page.getByRole("button", { name: /^Play( again \(\d+\/\d+\))?$/i }).first();
+  const playButton = page.getByRole("button", { name: /^(Play|Listen \(\d+\/\d+ used\))$/i }).first();
   await expect(playButton).toBeVisible();
   expect(errs, `uncaught page errors: ${errs.join(" | ")}`).toEqual([]);
 

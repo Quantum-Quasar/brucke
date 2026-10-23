@@ -63,6 +63,13 @@ export interface AppState {
   srsCards: Record<string, SRSCard>;
   weeklyActivity: boolean[]; // 7 days Mon-Sun
   lastActivityWeek?: string;
+  /**
+   * Wall-clock marker for the last destructive progress reset/import. Cross-tab
+   * hydration unions progress so one tab's save cannot erase another's, but a
+   * union can never observe a deletion — this marker tells the other tabs that
+   * the incoming snapshot is a replacement, not an addition. Persisted.
+   */
+  progressResetAt: number;
   activeWordDrawerId: string | null;
   tolerance: ToleranceSettings;
   preferredReviewMode: ReviewMode;
@@ -84,6 +91,9 @@ export interface AppState {
    * layout's hydration effect.
    */
   storeHydrated: boolean;
+  /** Transient: increments on every hydration pass so open views can re-adopt
+   * cross-tab progress instead of overwriting it with their mount snapshot. */
+  hydrateEpoch: number;
 
   // Actions
   setActiveLanguage: (languageId: string) => void;
@@ -101,7 +111,7 @@ export interface AppState {
   /** Gives every given word a fresh SM-2 card (due today) unless it already has one, so finished lessons feed "due today". */
   seedSrsCards: (wordIds: string[]) => void;
   markWordMastered: (wordId: string) => void;
-  completeLesson: (lessonId: number, opts?: { perfect?: boolean }) => void;
+  completeLesson: (lessonId: number, opts?: { perfect?: boolean; nextLessonId?: number | null }) => void;
   setLessonProgress: (lessonId: number, progress: LessonProgress) => void;
   recordReview: (wordId: string, grade: ReviewGrade) => void;
   /**
@@ -208,6 +218,17 @@ function parseStoredJson(raw: string | null): unknown {
   }
 }
 
+/** Storage access can throw (privacy modes, blocked cookies/storage). This runs
+ * at module load via `loadSavedState`, so an unguarded getItem would white-screen
+ * the app before React mounts; degrade to "no saved state" instead. */
+function safeStorageGet(key: string): string | null {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
 export function loadSavedState(): Partial<AppState> {
   if (typeof window === "undefined") return {};
 
@@ -215,7 +236,7 @@ export function loadSavedState(): Partial<AppState> {
   // localStorage payload must not bury recoverable cookie data. The cookie
   // write runs in the same saveState pass as localStorage, so it is never
   // staler than the localStorage snapshot it accompanies.
-  const local = parseStoredJson(localStorage.getItem(STORAGE_KEY));
+  const local = parseStoredJson(safeStorageGet(STORAGE_KEY));
   const cookie = parseStoredJson(getCookie(STORAGE_COOKIE_KEY));
 
   let parsed: Record<string, unknown> | null = null;
@@ -593,6 +614,10 @@ function normalizeParsedState(parsed: Record<string, any>): Partial<AppState> {
   parsed.srsCards = activeSlice.srsCards;
   parsed.weeklyActivity = activeSlice.weeklyActivity;
   parsed.lastActivityWeek = activeSlice.lastActivityWeek;
+  parsed.progressResetAt =
+    typeof parsed.progressResetAt === "number" && Number.isFinite(parsed.progressResetAt) && parsed.progressResetAt > 0
+      ? Math.floor(parsed.progressResetAt)
+      : 0;
 
   return parsed;
 }
@@ -607,6 +632,9 @@ let lastSerialized = "";
 const bootSavedState: Partial<AppState> | null =
   typeof window === "undefined" ? null : loadSavedState();
 let hasHydratedFromStorage = false;
+// Highest destructive-reset marker this tab has seen. A snapshot with a newer
+// marker replaces progress instead of union-merging it (see progressResetAt).
+let lastSeenResetAt = 0;
 
 // the auto-open of onboarding on first visit must only ever happen once per
 // page load — cross-tab `storage` events re-run hydrateFromStorage and must
@@ -641,6 +669,7 @@ export function saveState(state: AppState) {
     srsCards: state.srsCards,
     weeklyActivity: state.weeklyActivity,
     lastActivityWeek: state.lastActivityWeek,
+    progressResetAt: state.progressResetAt,
     tolerance: state.tolerance,
     preferredReviewMode: state.preferredReviewMode,
     hasCompletedOnboarding: state.hasCompletedOnboarding,
@@ -681,6 +710,10 @@ export function saveState(state: AppState) {
         font: state.font,
         activeLanguageId: state.activeLanguageId,
         seenIntroLanguages: state.seenIntroLanguages,
+        // keep the onboarding flags in the fallback so losing the larger
+        // payload cannot re-open the wizard for a learner who finished it
+        hasCompletedOnboarding: state.hasCompletedOnboarding,
+        hasSeenGenderIntro: state.hasSeenGenderIntro,
       });
       setCookie(STORAGE_COOKIE_KEY, minimal, 365);
     }
@@ -737,6 +770,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   srsCards: {},
   weeklyActivity: emptyWeek(),
   lastActivityWeek: undefined,
+  progressResetAt: 0,
   activeWordDrawerId: null,
   preferredReviewMode: "flashcard",
   hasCompletedOnboarding: false,
@@ -749,6 +783,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   isFontSelectorOpen: false,
   settings: DEFAULT_SETTINGS,
   storeHydrated: false,
+  hydrateEpoch: 0,
   tolerance: {
     umlautTolerance: DEFAULT_SETTINGS.lazyMode,
     capitalizationTolerance: DEFAULT_SETTINGS.capitalizationTolerance,
@@ -1009,11 +1044,16 @@ export const useAppStore = create<AppState>((set, get) => ({
           : s.lessonStars[lessonId]
           ? s.lessonStars
           : { ...s.lessonStars, [lessonId]: "gold" as LessonStar };
-      if (s.completedLessons.includes(lessonId) && s.currentLessonId >= lessonId + 1 && nextStars === s.lessonStars) return s;
       const completed = s.completedLessons.includes(lessonId)
         ? s.completedLessons
         : [...s.completedLessons, lessonId];
-      const nextLesson = Math.max(s.currentLessonId, lessonId + 1);
+      const nextLesson =
+        opts?.nextLessonId === null
+          ? Math.max(s.currentLessonId, lessonId)
+          : opts?.nextLessonId !== undefined
+            ? Math.max(s.currentLessonId, opts.nextLessonId)
+            : Math.max(s.currentLessonId, lessonId + 1);
+      if (completed === s.completedLessons && s.currentLessonId >= nextLesson && nextStars === s.lessonStars) return s;
       const next = { ...s, completedLessons: completed, currentLessonId: nextLesson, lessonStars: nextStars };
       saveState(next);
       return next;
@@ -1188,6 +1228,10 @@ export const useAppStore = create<AppState>((set, get) => ({
         srsCards: {},
         weeklyActivity: emptyWeek(),
         lastActivityWeek: undefined,
+        // Cross-tab hydration unions progress, so a reset must be explicit:
+        // this marker makes the other tabs adopt the empty snapshot instead of
+        // merging their stale in-memory progress back in.
+        progressResetAt: Math.max(Date.now(), s.progressResetAt + 1),
         activeWordDrawerId: null,
         isOnboardingOpen: false,
         onboardingIntroLanguage: null,
@@ -1254,6 +1298,21 @@ export const useAppStore = create<AppState>((set, get) => ({
       const backupLanguageId = isValidLanguageId(payload.activeLanguageId)
         ? payload.activeLanguageId
         : s.activeLanguageId;
+      // A settings-only backup must not move the learner onto a language it
+      // carries no progress for (that would silently show an empty course).
+      const carriesProgress =
+        [
+          "completedLessons",
+          "currentLessonId",
+          "lessonProgress",
+          "lessonStars",
+          "wordMastery",
+          "srsCards",
+          "weeklyActivity",
+          "lastActivityWeek",
+        ].some((field) => payload[field] !== undefined) ||
+        (isPlausibleStateObject(payload.progressByLanguage) && Object.keys(payload.progressByLanguage).length > 0);
+      const activeTargetLanguageId = carriesProgress ? backupLanguageId : s.activeLanguageId;
 
       // Top-level patch: only the fields the backup actually carries, each one
       // validated so a malformed entry is dropped instead of wedging state.
@@ -1299,10 +1358,10 @@ export const useAppStore = create<AppState>((set, get) => ({
         }
       }
       const activeSlice: LanguageProgress = {
-        ...(progressByLanguage[backupLanguageId] ?? normalizeLanguageSlice({})),
+        ...(progressByLanguage[activeTargetLanguageId] ?? normalizeLanguageSlice({})),
         ...topLevelPatch,
       };
-      progressByLanguage[backupLanguageId] = activeSlice;
+      progressByLanguage[activeTargetLanguageId] = activeSlice;
 
       const nextSeenIntroLanguages = Array.isArray(payload.seenIntroLanguages)
         ? Array.from(
@@ -1322,9 +1381,12 @@ export const useAppStore = create<AppState>((set, get) => ({
 
       const next: AppState = {
         ...s,
-        activeLanguageId: backupLanguageId,
+        activeLanguageId: activeTargetLanguageId,
         progressByLanguage,
         seenIntroLanguages: nextSeenIntroLanguages,
+        // A backup that carries progress replaces it everywhere; tell other
+        // tabs so their union-merge does not resurrect the pre-import state.
+        progressResetAt: carriesProgress ? Math.max(Date.now(), s.progressResetAt + 1) : s.progressResetAt,
         // Mirror the backup's merged active slice. saveState() rebuilds that
         // slice from these fields, so from this point on what gets written back
         // is exactly what the backup imported — a restored slice can no longer
@@ -1337,7 +1399,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         srsCards: activeSlice.srsCards,
         weeklyActivity: activeSlice.weeklyActivity,
         lastActivityWeek: activeSlice.lastActivityWeek,
-        activeWordDrawerId: backupLanguageId === s.activeLanguageId ? s.activeWordDrawerId : null,
+        activeWordDrawerId: activeTargetLanguageId === s.activeLanguageId ? s.activeWordDrawerId : null,
         preferredReviewMode:
           payload.preferredReviewMode !== undefined
             ? oneOf(payload.preferredReviewMode, VALID_REVIEW_MODES, s.preferredReviewMode)
@@ -1383,22 +1445,36 @@ export const useAppStore = create<AppState>((set, get) => ({
 
         const nextLang = isValidLanguageId(saved.activeLanguageId) ? saved.activeLanguageId : s.activeLanguageId;
         const isLangSwitch = nextLang !== s.activeLanguageId;
+        const isCrossTab = Boolean(options?.reread);
+
+        // A newer reset marker means the incoming snapshot deliberately deleted
+        // progress; a union would resurrect it (and the next save would write
+        // the stale progress back to every tab).
+        const incomingResetAt =
+          typeof saved.progressResetAt === "number" && Number.isFinite(saved.progressResetAt)
+            ? saved.progressResetAt
+            : 0;
+        const isReset = incomingResetAt > lastSeenResetAt;
+        if (incomingResetAt > lastSeenResetAt) lastSeenResetAt = incomingResetAt;
 
         // Seed the merge with the in-memory mirrors: progressByLanguage is not
         // updated by every action, so the top-level fields are the freshest
         // copy of the active language's slice.
-        const mergedSlices: Record<string, LanguageProgress> = {
-          ...s.progressByLanguage,
-          [s.activeLanguageId]: sliceFromMirrors(s),
-        };
+        const mergedSlices: Record<string, LanguageProgress> = isReset
+          ? {}
+          : {
+              ...s.progressByLanguage,
+              [s.activeLanguageId]: sliceFromMirrors(s),
+            };
         for (const [langId, rawSlice] of Object.entries(saved.progressByLanguage ?? {})) {
           if (!isValidLanguageId(langId) || isDangerousKey(langId)) continue;
           const incoming = normalizeLanguageSlice(rawSlice);
           const existing = mergedSlices[langId];
-          // switching languages restores the parked slice exactly; an
-          // in-place re-hydration (cross-tab event) unions so nothing is lost
+          // A same-tab language switch restores the parked slice exactly; a
+          // cross-tab re-hydration always unions (so a fresher parked slice in
+          // this tab is not replaced by an older one from the other tab).
           mergedSlices[langId] =
-            !existing || (isLangSwitch && langId === nextLang)
+            !existing || isReset || (isLangSwitch && langId === nextLang && !isCrossTab)
               ? incoming
               : mergeLanguageSlice(existing, incoming);
         }
@@ -1412,6 +1488,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           ...s,
           activeLanguageId: nextLang,
           progressByLanguage: mergedSlices,
+          progressResetAt: Math.max(s.progressResetAt, incomingResetAt),
           seenIntroLanguages: Array.isArray(saved.seenIntroLanguages)
             ? Array.from(
                 new Set([
@@ -1473,8 +1550,9 @@ export const useAppStore = create<AppState>((set, get) => ({
       saveState(useAppStore.getState());
     }
     // Components that seeded local state from the (default) store at mount can
-    // now adopt the real saved values once.
-    set((s) => (s.storeHydrated ? s : { ...s, storeHydrated: true }));
+    // now adopt the real saved values — and an already-open view can re-adopt
+    // after a cross-tab save (hydrateEpoch).
+    set((s) => ({ ...s, storeHydrated: true, hydrateEpoch: s.hydrateEpoch + 1 }));
   },
 }));
 

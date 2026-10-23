@@ -4,9 +4,9 @@ import { ArrowLeft, BookOpen, Compass, RotateCcw, Sliders, ExternalLink } from "
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About | Brücke — German Cognate Learning",
+  title: "About | Brücke — Cognate Engine",
   description:
-    "Learn how Brücke uses the Second High German Consonant Shift to unlock hundreds of German words you already know.",
+    "How Brücke turns historical sound shifts and conversion bridges into a cognate engine for German, French, and Spanish.",
 };
 
 const SHIFT_SAMPLES = [
@@ -34,7 +34,7 @@ export default function AboutPage() {
           About Brücke
         </h1>
         <p className="text-sm text-[var(--sub-color)] font-mono leading-relaxed">
-          The Second High German Consonant Shift as a language acquisition engine.
+          Historical sound shifts and conversion bridges as a language acquisition engine — German, French, and Spanish.
         </p>
       </div>
 
@@ -67,7 +67,8 @@ export default function AboutPage() {
           <p>
             The same engine now drives a <strong>French course</strong>: the Norman conquest of 1066 flooded English with
             French doublets, and the French trail decodes them the same way — conversion bridges instead of consonant
-            shifts, one thought at a time.
+            shifts, one thought at a time. A <strong>Spanish course</strong> applies the same idea to Latin roots and
+            Castilian sound changes (initial f- to silent h-, -ct- to -ch-, -tion to -ción).
           </p>
         </div>
       </section>

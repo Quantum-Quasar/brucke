@@ -280,6 +280,51 @@ describe("Persistence validation & dual-store fallback merging", () => {
       expect(state.completedLessons).toEqual(before);
     });
 
+    it("does not switch to a language a settings-only backup carries no progress for", () => {
+      const store = useAppStore.getState();
+      store.setActiveLanguage("de");
+      store.completeLesson(7);
+      const before = useAppStore.getState().completedLessons;
+
+      expect(
+        useAppStore.getState().importBackupState({ activeLanguageId: "fr", settings: { lazyMode: true } })
+      ).toBe(true);
+      const state = useAppStore.getState();
+      expect(state.activeLanguageId).toBe("de");
+      expect(state.completedLessons).toEqual(before);
+      expect(state.settings.lazyMode).toBe(true);
+    });
+
+    it("keeps onboarding flags in the size-guarded minimal cookie", () => {
+      const state = useAppStore.getState();
+      saveState({
+        ...state,
+        hasCompletedOnboarding: true,
+        hasSeenGenderIntro: true,
+        // force the lean cookie over its 2048-byte budget
+        wordMastery: Object.fromEntries(
+          Array.from({ length: 400 }, (_, i) => [`word_${i}`, "mastered" as const])
+        ),
+      });
+
+      localStorage.clear();
+      const restored = loadSavedState();
+      expect(restored.hasCompletedOnboarding).toBe(true);
+      expect(restored.hasSeenGenderIntro).toBe(true);
+    });
+
+    it("degrades to the cookie when localStorage access throws", () => {
+      const original = localStorage.getItem.bind(localStorage);
+      (localStorage as any).getItem = () => {
+        throw new Error("storage blocked");
+      };
+      try {
+        expect(() => loadSavedState()).not.toThrow();
+      } finally {
+        (localStorage as any).getItem = original;
+      }
+    });
+
     it("round-trips through saveState and rehydrates merged", () => {
       const store = useAppStore.getState();
       store.completeLesson(1);

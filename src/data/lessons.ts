@@ -11509,6 +11509,16 @@ export const LESSONS: Lesson[] = [
             "word": "mitkommen",
             "translation": "to come along",
             "note": "mit- + kommen — English 'come with'"
+          },
+          {
+            "word": "mitmachen",
+            "translation": "to join in",
+            "note": "mit- + machen (make/do) — 'make with' the group"
+          },
+          {
+            "word": "ankommen",
+            "translation": "to arrive",
+            "note": "an- + kommen (come) — 'come on/toward' a place"
           }
         ],
         "shift_hint": "Separable Prefixes",

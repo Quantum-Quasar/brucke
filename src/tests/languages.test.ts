@@ -20,11 +20,22 @@ class LocalStorageMock {
 
 import { LANGUAGES, DEFAULT_LANGUAGE_ID, getLanguageDefinition, isValidLanguageId } from "@/data/languages";
 import { getLanguageContent, getTotalWordCount, EMPTY_COMPENDIUM, getNextPlayableLessonIdFor } from "@/data/language-content";
+import { getWordCount, WORD_COUNTS } from "@/data/word-counts";
 import { getWordEntity, getWordEntityMap, getWordLessonMap } from "@/lib/word-entities";
 import { loadSavedState, useAppStore, STORAGE_KEY, type LanguageProgress } from "@/lib/store";
 import { TOTAL_TOPICS } from "@/data/curriculum";
 
 describe("language registry", () => {
+  test("the root-chunk word counts stay pinned to the real compendia", () => {
+    // TopNav reads WORD_COUNTS instead of importing language-content (which
+    // would put every lesson and compendium in the shared root chunk). This
+    // guard is what keeps those constants from silently drifting.
+    for (const languageId of Object.keys(WORD_COUNTS)) {
+      expect(getWordCount(languageId)).toBe(getTotalWordCount(languageId));
+      expect(getWordCount(languageId)).toBe(getLanguageContent(languageId).compendium!.wordList.length);
+    }
+  });
+
   test("german is the default and fully available", () => {
     const german = getLanguageDefinition("de");
     expect(DEFAULT_LANGUAGE_ID).toBe("de");

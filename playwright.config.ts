@@ -8,6 +8,9 @@ import { defineConfig } from "@playwright/test";
 // Arch). Override either with CHROMIUM_PATH.
 
 const PORT = Number(process.env.PLAYWRIGHT_PORT || 3111);
+// CI runs the suite against the production server (`bun run start`) so the
+// prerendered SSG output is what gets tested; local runs default to dev.
+const WEB_SERVER_COMMAND = process.env.PLAYWRIGHT_WEB_SERVER || "bun run dev";
 const SYSTEM_CHROMIUM = "/usr/sbin/chromium";
 const executablePath = process.env.CHROMIUM_PATH ?? (fs.existsSync(SYSTEM_CHROMIUM) ? SYSTEM_CHROMIUM : undefined);
 
@@ -28,7 +31,7 @@ export default defineConfig({
     ...(executablePath ? { launchOptions: { executablePath } } : {}),
   },
   webServer: {
-    command: "bun run dev",
+    command: WEB_SERVER_COMMAND,
     port: PORT,
     // Next.js dev server binds process.env.PORT
     env: { ...process.env, PORT: String(PORT) },

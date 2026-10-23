@@ -41,16 +41,16 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 
 ### Pillar 2: Sound Shift Atlas (`/atlas` and `/atlas/[family]`)
 - **Visual Exploration**: Radial spatial spoke constellation visualization connecting English cognate seeds to German words.
-- **Scope**: 9 historical consonant shift families:
+- **Scope**: 9 German shift families (each atlas also renders an `unshifted` direct-cognate layer):
   1. $TH \rightarrow D$ (`think` $\rightarrow$ `denken`, `brother` $\rightarrow$ `Bruder`)
   2. $D \rightarrow T$ (`drink` $\rightarrow$ `trinken`, `day` $\rightarrow$ `Tag`)
   3. $P \rightarrow PF / F / FF$ (`pepper` $\rightarrow$ `Pfeffer`, `ship` $\rightarrow$ `Schiff`)
   4. $T \rightarrow S / SS / Z / ß$ (`water` $\rightarrow$ `Wasser`, `two` $\rightarrow$ `zwei`)
   5. $K \rightarrow CH$ (`make` $\rightarrow$ `machen`, `book` $\rightarrow$ `Buch`)
-  6. $V / W \rightarrow B$ (`seven` $\rightarrow$ `sieben`, `give` $\rightarrow$ `geben`)
-  7. $F \rightarrow B$ (`half` $\rightarrow$ `halb`, `calf` $\rightarrow$ `Kalb`)
-  8. $Y \rightarrow G$ (`day` $\rightarrow$ `Tag`, `eye` $\rightarrow$ `Auge`)
-  9. $GH \rightarrow CH$ (`night` $\rightarrow$ `Nacht`, `light` $\rightarrow$ `Licht`)
+  6. $V / F \rightarrow B$ (`seven` $\rightarrow$ `sieben`, `half` $\rightarrow$ `halb`)
+  7. $Y / GH \rightarrow G / CH$ (`day` $\rightarrow$ `Tag`, `night` $\rightarrow$ `Nacht`)
+  8. $-ate / -ize \rightarrow -ieren$ (`organize` $\rightarrow$ `organisieren`)
+  9. Ablaut vowels (`sing / sang / sung` $\rightarrow$ `singen / sang / gesungen`)
 - **Interactive Drill**: 5-question modal practice drill per constellation family.
 
 ### Pillar 3: Spaced Repetition Review Hub (`/review`)
@@ -101,10 +101,14 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 ├── tsconfig.json              # TypeScript config with '@/*' path aliases
 ├── scripts/
 │   ├── parse-compendium.ts    # Parses markdown dictionaries into compendium.json
-│   ├── audit-word-refs.ts     # Every vocabulary reference resolves (incl. the 3 new types)
+│   ├── audit-word-refs.ts     # Every vocabulary reference resolves (incl. family grids and the new types)
 │   ├── audit-teasers.ts       # Title + curiosity_teaser chain drift must stay 0
 │   ├── audit-wording.ts       # No copy-pasted prose/prompt formulas between neighbours
-│   └── audit-vocab-balance.ts # Taught-word balance across the trail
+│   ├── audit-vocab-balance.ts # Taught-word balance across the trail
+│   ├── contrast-audit.ts      # One-off theme-contrast fixer (WCAG is enforced by tests)
+│   ├── export-trail.ts        # `bun run trail` — export the trail graph
+│   ├── capture-demo-images.ts # Local demo screenshots
+│   └── append-words.mjs       # Batch helper for word_connections.md §2
 ├── src/
 │   ├── app/                   # Next.js App Router
 │   │   ├── layout.tsx         # Root HTML structure, dark background, TopNav & BottomNav
@@ -179,7 +183,7 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 
 ## 6. Key Data Entities & Schemas (`src/lib/types.ts`)
 
-- **`WordEntity`**: Primary vocabulary item. Fields: `id`, `target_word`, `english_cognate`, `english_meaning`, `gender` (`der` | `die` | `das` | `null`), `ipa`, `sound_shift_ids`, `shift_rule`, `context_phrase`, `context_translation`, `etymology_derivation`, `lesson_index`.
+- **`WordEntity`**: Primary vocabulary item. Fields: `id`, `target_word`, `english_cognate`, `english_meaning`, `gender` (`der` | `die` | `das` | `null`), `ipa`, `sound_shift_ids`, `shift_rule`, `context_phrase`, `context_translation`, `etymology_derivation`.
 - **`ShiftFamily`**: Consonant shift definition. Fields: `id`, `name`, `symbol`, `phonetic_rule`, `historical_linguistics`, `philological_note`, `literature_source`, `word_ids`.
 - **`SRSCard`**: Spaced repetition tracking card. Fields: `word_id`, `interval`, `repetitions`, `ease_factor`, `due_date`, `lapses`, `last_reviewed`.
 - **`Lesson`**: Curriculum unit. Fields: `id`, `slug`, `title`, `subtitle`, `phase`, `shift_categories`, `word_ids`, `hook`, `pattern`, `table_word_ids`, `exercises`, `summary`.
@@ -191,7 +195,7 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 ## 7. Performance & Resource Optimization Highlights
 
 1. **100% Pre-rendered Static Site Generation (SSG)**:
-   - Dynamic parameter routes `/atlas/[family]` (9 pages) and `/trail/[id]` (128 pages — one per authored lesson) export `generateStaticParams()` and set `dynamicParams = false`, so unknown params 404 instead of triggering dynamic server rendering.
+   - Dynamic parameter routes `/atlas/[family]` (28 pages across the three atlases) and `/trail/[id]` (178 unique pages — 169 German plus 9 French/Spanish-only ids) export `generateStaticParams()` and set `dynamicParams = false`, so unknown params 404 instead of triggering dynamic server rendering.
    - All app routes build to static HTML. Navigation between lessons and atlas families is instantaneous with zero runtime server latency.
 2. **Shift Alignment Memoization**:
    - `alignShiftPair` in `src/lib/shift-annotator.ts` uses an in-memory `Map` cache. Redundant letter parsing is eliminated; test suite executes in < 200ms.
@@ -206,13 +210,13 @@ English and German are sibling West Germanic languages sharing over 60% of core 
 
 ## 8. Verification Commands
 
-All commands should be executed from `/home/shaurya/gemini-tmp/german-app-2`:
+All commands should be executed from `/home/shaurya/gemini-tmp/german-app-thinking-method`:
 
 ```bash
 # 1. Run Data Compilation Pipeline
 bun run parse-data
 
-# 2. Run All Automated Test Suites (35 test files / 346 tests)
+# 2. Run All Automated Test Suites (35 test files / 355 tests)
 bun run test
 
 # 3. Compile Production Build (Turbopack + SSG verification)
@@ -248,5 +252,5 @@ When auditing the codebase, verify:
   - State changes in Zustand persist to `localStorage`.
   - Cookie backup stays within safe browser limits (lean payload ≤ 2048 URL-encoded bytes).
 - [ ] **Build & Tests**:
-  - `bun run test` (Vitest) passes with 0 failures across all 35 test files (346 tests).
-  - `bun run build` generates all static pages (6 static routes + 9 atlas families + 128 lesson pages) without TypeScript or Turbopack errors.
+  - `bun run test` (Vitest) passes with 0 failures across all 35 test files (355 tests).
+  - `bun run build` generates all static pages (8 static routes + 28 atlas family pages + 178 lesson pages) without TypeScript or Turbopack errors.

@@ -175,7 +175,8 @@ const foldGermanSharpS = (s: string) => s.replace(/ß/g, "ss");
 // Rich-text sources (iOS smart punctuation, Word, web copy) hand us U+2019
 // where the learner's keyboard produces ASCII '. Fold them before grading so
 // an apostrophe style can never turn a correct answer into a "typo".
-const normalizeTypographicQuotes = (s: string) => s.replace(/[\u2018\u2019]/g, "'");
+const normalizeTypographicQuotes = (s: string) =>
+  s.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D\u00AB\u00BB]/g, '"');
 
 const normalizeSpanishDiacritics = (s: string) =>
   s
