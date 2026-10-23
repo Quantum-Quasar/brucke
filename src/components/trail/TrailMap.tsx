@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { BookOpen, Check, GitBranch, Lock, Star } from "lucide-react";
+import { ArrowRight, BookOpen, Check, Clock, GitBranch, Lock, Star } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { buildTrailEdgePairs, buildTrailLayout, getTrailState, GERMAN_TRAIL_DATA, type TrailData, type TrailNode, type NodeStatus, type GateView } from "@/lib/trail-map";
 import { getLanguageDefinition } from "@/data/languages";
@@ -11,6 +11,14 @@ import { LessonNodeDrawer, GateDrawer } from "./LessonNodeDrawer";
 
 const GOLD_STAR = "#eab308";
 const PURPLE_STAR = "#a78bfa";
+
+const SEGMENT_LABEL: Record<string, string> = {
+  hook: "Part 1 of 5",
+  pattern: "Part 2 of 5",
+  table: "Part 3 of 5",
+  practice: "Part 4 of 5",
+  summary: "Part 5 of 5",
+};
 
 interface NodeGroup {
   topicId: number;
@@ -72,7 +80,6 @@ export const TrailMap: React.FC = () => {
   const [width, setWidth] = useState(640);
   const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
   const [selectedGateId, setSelectedGateId] = useState<number | null>(null);
-  const autoScrolled = useRef(false);
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -94,37 +101,31 @@ export const TrailMap: React.FC = () => {
   const nodeById = useMemo(() => new Map(layout.nodes.map((n) => [n.id, n])), [layout]);
   const groups = useMemo(() => groupNodesByTopic(layout.nodes, layout.topicAnchors), [layout]);
 
-  // on first load, bring the recommended node into view (skip if already visible)
-  useEffect(() => {
-    if (autoScrolled.current || !state.recommendedId) return;
-    const target = nodeById.get(state.recommendedId);
-    if (!target || !wrapRef.current) return;
-    autoScrolled.current = true;
-    const rect = wrapRef.current.getBoundingClientRect();
-    const absTop = rect.top + window.scrollY + target.y;
-    const viewTop = window.scrollY;
-    const viewBottom = viewTop + window.innerHeight;
-    if (absTop < viewTop + 80 || absTop > viewBottom - 160) {
-      window.scrollTo({ top: Math.max(0, absTop - window.innerHeight * 0.55) });
-    }
-  }, [state.recommendedId, nodeById]);
-
+  // No auto-scroll on load: the map is tall, and jumping thousands of pixels
+  // destroyed the explanatory header above it. The continue card below gives
+  // the same guidance without moving the page under the visitor.
   const recommended = state.recommendedId ? nodeById.get(state.recommendedId) : null;
   const selected = selectedNodeId !== null ? nodeById.get(selectedNodeId) ?? null : null;
   const selectedGate = selectedGateId !== null ? layout.gates.find((g) => g.id === selectedGateId) ?? null : null;
 
   const lockHint = useMemo(() => {
     if (!selected) return null;
-    const neighborIds = edgePairs.filter((e) => e.a === selected.id || e.b === selected.id).map((e) =>
-      e.a === selected.id ? e.b : e.a
+    const neighborIds = edgePairs
+      .filter((e) => e.a === selected.id || e.b === selected.id)
+      .map((e) => (e.a === selected.id ? e.b : e.a));
+    // Only point at neighbours that can actually be played right now.
+    const availableNeighborIds = neighborIds.filter(
+      (id) => state.nodes.get(id)?.status !== "locked"
     );
-    if (neighborIds.length === 0) return null;
-    const parts = neighborIds
+    if (availableNeighborIds.length === 0) {
+      return "This lesson is still ahead on the trail. Complete the previous topic to unlock it.";
+    }
+    const parts = availableNeighborIds
       .map((id) => nodeById.get(id))
       .filter((n): n is TrailNode => Boolean(n))
       .map((n) => (n.kind === "core" ? `topic ${n.topicId}` : `“${n.title}”`));
-    return `Unlocks when you complete any adjacent lesson: ${parts.join(", ")}.`;
-  }, [selected, nodeById, edgePairs]);
+    return `Unlocks when you complete: ${parts.join(", ")}.`;
+  }, [selected, nodeById, edgePairs, state]);
 
   const edgeCenter = useCallback(
     (id: number) => {
@@ -134,8 +135,75 @@ export const TrailMap: React.FC = () => {
     [nodeById]
   );
 
+  const upNextLabel = recommended
+    ? recommended.kind === "core"
+      ? `Topic ${recommended.topicId}`
+      : recommended.kind === "sprig"
+      ? `Extra lesson · Topic ${recommended.topicId}`
+      : `Support branch · Topic ${recommended.topicId}`
+    : "Trail complete";
+  const recommendedProgress = recommended ? lessonProgress[recommended.id] : undefined;
+  const hasAnyProgress =
+    completedLessons.length > 0 || Object.keys(lessonProgress).length > 0;
+
   return (
     <div ref={wrapRef} className="relative w-full">
+      {/* What to do next, and what the map means — always above the canvas */}
+      <div className="mt-3 mb-3 rounded-lg border border-[var(--sub-color)]/25 bg-[var(--sub-alt-color)] p-3.5 flex flex-wrap items-center justify-between gap-3">
+        <div className="min-w-0">
+          <div className="text-[10px] font-mono uppercase tracking-widest text-[var(--main-color)] font-semibold">
+            {recommendedProgress
+              ? "resume where you stopped"
+              : hasAnyProgress
+              ? "continue where you left off"
+              : "start here"}
+          </div>
+          <div className="text-sm font-semibold text-[var(--text-color)] truncate">
+            {upNextLabel}
+            {recommended ? ` — ${recommended.title}` : " · every authored lesson is finished"}
+            {recommendedProgress
+              ? ` · ${SEGMENT_LABEL[recommendedProgress.segment] ?? "in progress"}`
+              : ""}
+          </div>
+          <div className="text-[11px] font-mono text-[var(--sub-color)]">
+            {recommended
+              ? "the highlighted node below is the recommended next step"
+              : "pick any optional lesson below, or revisit a completed one"}
+          </div>
+        </div>
+        {recommended && (
+          <button
+            type="button"
+            onClick={() => router.push(`/trail/${recommended.id}`)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs font-mono transition cursor-pointer shrink-0"
+          >
+            {recommendedProgress ? "resume" : hasAnyProgress ? "continue" : "start lesson"}
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        )}
+      </div>
+
+      <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] font-mono text-[var(--sub-color)]">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="w-3 h-3 rounded-sm bg-[var(--main-color)]" aria-hidden /> main topic
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <BookOpen className="w-3 h-3" aria-hidden /> extra practice
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <GitBranch className="w-3 h-3" aria-hidden /> support branch
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <Lock className="w-3 h-3" aria-hidden /> locked
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <Clock className="w-3 h-3" aria-hidden /> coming soon
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <Star className="w-3 h-3" style={{ color: GOLD_STAR, fill: GOLD_STAR }} aria-hidden /> star gate
+        </span>
+      </div>
+
       <div className="relative mx-auto" style={{ width: layout.width, height: layout.height, maxWidth: "100%" }}>
         {/* faint germanic watermark decorations */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" aria-hidden>
@@ -180,11 +248,11 @@ export const TrailMap: React.FC = () => {
                   key={`${a}-${b}`}
                   d={`M ${ca.x} ${ca.y} Q ${cpx} ${cpy} ${cb.x} ${cb.y}`}
                   fill="none"
-                  stroke="var(--sub-color)"
+                  stroke="var(--text-color)"
                   strokeWidth={2}
                   strokeLinecap="round"
                   strokeDasharray="1 8"
-                  opacity={lit ? 0.55 : 0.16}
+                  opacity={lit ? 0.38 : 0.16}
                   style={{ transition: "opacity 400ms" }}
                 />
               );
@@ -197,11 +265,11 @@ export const TrailMap: React.FC = () => {
                 y1={ca.y}
                 x2={cb.x}
                 y2={cb.y}
-                stroke="var(--sub-color)"
+                stroke="var(--text-color)"
                 strokeWidth={3.25}
                 strokeLinecap="round"
                 strokeDasharray="1 9"
-                opacity={lit ? 0.85 : 0.3}
+                opacity={lit ? 0.55 : 0.24}
                 style={{ transition: "opacity 400ms" }}
               />
             );
@@ -224,7 +292,7 @@ export const TrailMap: React.FC = () => {
                   top: group.anchor.y - group.top,
                 }}
               >
-                <span className="font-mono text-[11px] leading-tight text-[var(--sub-color)]">
+                <span className="font-mono text-[12px] leading-tight text-[var(--text-color)]/75">
                   <span className="text-[var(--main-color)] font-bold">topic {group.topicId}</span>
                   {" — "}
                   {group.anchor.title}
@@ -261,7 +329,7 @@ export const TrailMap: React.FC = () => {
               className={`absolute z-10 flex items-center justify-center gap-1.5 rounded-full font-mono text-[10px] transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--main-color)] ${
                 open
                   ? "bg-[var(--main-color)] border-2 border-[var(--main-color)] text-[var(--bg-color)] shadow-sm"
-                  : "bg-[var(--sub-alt-color)] border border-dashed border-[var(--sub-color)]/50 text-[var(--sub-color)] hover:border-[var(--main-color)]/60"
+                  : "bg-[var(--sub-alt-color)] border border-dashed border-[var(--text-color)]/35 text-[var(--text-color)]/80 hover:border-[var(--main-color)]/60"
               }`}
               style={{ left: gate.x, top: gate.y, width: 168, height: 40 }}
             >
@@ -346,9 +414,9 @@ const MapNode: React.FC<MapNodeProps> = ({ node, sectionTop, view, hasProgress, 
     ? "bg-[var(--main-color)] border-[var(--main-color)] text-[var(--bg-color)] shadow-sm"
     : locked
     ? unwritten
-      ? "bg-[var(--bg-color)] border border-dashed border-[var(--sub-color)]/40 text-[var(--sub-color)] cursor-not-allowed"
-      : "bg-[var(--bg-color)] border border-dashed border-[var(--sub-color)]/50 text-[var(--sub-color)]"
-    : "bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/40 text-[var(--text-color)] hover:border-[var(--main-color)] hover:-translate-y-0.5";
+      ? "bg-[var(--bg-color)] border border-dashed border-[var(--text-color)]/25 text-[var(--text-color)]/55 cursor-not-allowed"
+      : "bg-[var(--bg-color)] border border-dashed border-[var(--text-color)]/35 text-[var(--text-color)]/80"
+    : "bg-[var(--sub-alt-color)] border border-[var(--text-color)]/25 text-[var(--text-color)] hover:border-[var(--main-color)] hover:-translate-y-0.5";
 
   return (
     <button
@@ -380,21 +448,21 @@ const MapNode: React.FC<MapNodeProps> = ({ node, sectionTop, view, hasProgress, 
           >
             {completed ? "✓" : node.topicId}
           </span>
-          <span className="text-[11px] font-semibold leading-tight line-clamp-2">{node.title}</span>
+          <span className="text-[12px] font-semibold leading-tight line-clamp-2">{node.title}</span>
         </span>
       )}
 
       {node.kind === "sprig" && (
         <span className="flex flex-col items-center gap-0.5">
           <BookOpen className="w-3.5 h-3.5" />
-          <span className="font-mono text-[10px] font-bold">{node.id % 100}</span>
+          <span className="font-mono text-[11px] font-bold">{node.id % 100}</span>
         </span>
       )}
 
       {node.kind === "branch" && (
         <span className="flex items-center gap-1.5 px-2 w-full min-w-0">
           <GitBranch className="w-3 h-3 shrink-0 opacity-70" />
-          <span className="text-[10px] font-semibold leading-tight line-clamp-2">{node.title}</span>
+          <span className="text-[11px] font-semibold leading-tight line-clamp-2">{node.title}</span>
         </span>
       )}
 
@@ -409,7 +477,7 @@ const MapNode: React.FC<MapNodeProps> = ({ node, sectionTop, view, hasProgress, 
       )}
 
       {locked && (
-        <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-[var(--bg-color)] border border-[var(--sub-color)]/40 flex items-center justify-center">
+        <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-[var(--bg-color)] border border-[var(--text-color)]/35 flex items-center justify-center">
           <Lock className="w-2.5 h-2.5 text-[var(--sub-color)]" />
         </span>
       )}

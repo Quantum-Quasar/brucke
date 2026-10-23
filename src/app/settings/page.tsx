@@ -53,6 +53,40 @@ const SECTIONS = [
   { id: "danger_zone", label: "danger zone", icon: ShieldAlert },
 ] as const;
 
+/** Union of every setting's search terms, per section. A section with no
+ *  matching setting is hidden entirely while filtering instead of leaving a
+ *  bare heading and unrelated banners behind. */
+const SECTION_TERMS: Record<string, string[]> = {
+  language: ["language", "german", "spanish", "french", "switch language", "learning language"],
+  behavior: [
+    "quick restart", "esc", "restart", "behavior", "lazy mode", "umlaut", "accent", "tolerance",
+    "ae", "oe", "ue", "ss", "capitalization", "noun", "lowercase", "posture", "cues",
+    "pause", "whisper", "reminders",
+  ],
+  input: [
+    "stop on error", "error", "letter", "input", "confidence mode", "backspace", "strict",
+    "character bar", "special character bar", "char bar", "umlaut buttons", "accent",
+  ],
+  sound: [
+    "sound volume", "volume", "loudness", "mute", "sound", "play sound on click", "switch",
+    "mechanical", "cherry", "typewriter", "play sound on error", "error sound", "damage",
+    "voice", "tts", "speech",
+  ],
+  theme: [
+    "color scheme", "theme", "colors", "alduin", "font family", "typeface", "fonts",
+    "typography",
+  ],
+  hide_elements: [
+    "key tips", "hotkey badges", "shortcuts", "hide", "caps lock warning", "caps lock",
+    "mastery counter", "progress counter", "badge", "nav", "contrast", "readability",
+    "muted text", "accessibility",
+  ],
+  danger_zone: [
+    "backup", "export", "import", "restore", "json", "progress", "reset settings", "default",
+    "restore defaults", "reset progress", "clear data", "delete progress",
+  ],
+};
+
 export default function SettingsPage() {
   const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -72,6 +106,7 @@ export default function SettingsPage() {
   const openFontSelector = useAppStore((s) => s.openFontSelector);
   const activeLanguageId = useAppStore((s) => s.activeLanguageId);
   const setActiveLanguage = useAppStore((s) => s.setActiveLanguage);
+  const completeOnboarding = useAppStore((s) => s.completeOnboarding);
   const activeLanguage = getLanguageDefinition(activeLanguageId);
 
   useEffect(() => {
@@ -109,6 +144,14 @@ export default function SettingsPage() {
     if (!normalizedQuery) return true;
     return keywords.some((k) => k.toLowerCase().includes(normalizedQuery));
   };
+
+  const sectionVisible = (id: string) => {
+    if (!normalizedQuery) return true;
+    return (SECTION_TERMS[id] ?? []).some((k) => k.toLowerCase().includes(normalizedQuery));
+  };
+
+  const anySectionVisible = SECTIONS.some((section) => sectionVisible(section.id));
+  const specialChars = activeLanguage.specialChars.map(([char]) => char).join(", ");
 
   const handlePreviewClick = (clickId: string) => {
     void soundEngine.playClick(clickId, settings.soundVolume || 0.5);
@@ -222,7 +265,8 @@ export default function SettingsPage() {
             </Link>
           </div>
 
-          {/* Quick Category Navigation Bar */}
+          {/* Quick Category Navigation Bar (hidden while filtering) */}
+          {!normalizedQuery && (
           <div className="sticky top-14 z-30 bg-[var(--bg-color)]/95 backdrop-blur-xs py-2 border-b border-[var(--sub-color)]/20 -mx-4 px-4 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs font-mono">
             {SECTIONS.filter((sec) => sec.id !== "language" || LANGUAGES.filter((l) => l.status === "available").length > 1).map((sec) => {
               const Icon = sec.icon;
@@ -239,6 +283,7 @@ export default function SettingsPage() {
               );
             })}
           </div>
+          )}
 
           {/* Search bar */}
           <div className="relative">
@@ -263,8 +308,17 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {normalizedQuery && !anySectionVisible && (
+          <div className="p-6 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-center space-y-1">
+            <p className="text-sm font-mono text-[var(--text-color)]">No settings match “{searchQuery}”.</p>
+            <p className="text-xs font-mono text-[var(--sub-color)]">
+              Try “sound”, “theme”, “lazy”, or clear the search.
+            </p>
+          </div>
+        )}
+
         {/* 0. LANGUAGE SECTION — hidden until more than one language ships */}
-        {LANGUAGES.filter((l) => l.status === "available").length > 1 && (
+        {LANGUAGES.filter((l) => l.status === "available").length > 1 && sectionVisible("language") && (
         <section id="language" className="space-y-3 pt-2">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--sub-color)] border-b border-[var(--sub-color)]/20 pb-2">
             <Languages className="w-4 h-4 text-[var(--main-color)]" />
@@ -275,7 +329,7 @@ export default function SettingsPage() {
             id="active-language"
             icon={Languages}
             title={`language you are learning (${activeLanguage.flag} ${activeLanguage.name})`}
-            description="Switch the language you are learning. Each language keeps its own progress, SRS schedule, and introduction — switching never mixes them."
+            description="Switch the language you are learning. Each language keeps its own progress, SRS schedule, and introduction — switching never mixes them. Switching here stays on this page; use Guide to replay the intro."
             matchesSearch={matches(["language", "german", "spanish", "french", "switch language", "learning language"])}
           >
             <div className="flex items-center gap-2 flex-wrap">
@@ -283,7 +337,13 @@ export default function SettingsPage() {
                 <button
                   key={lang.id}
                   type="button"
-                  onClick={() => setActiveLanguage(lang.id)}
+                  onClick={() => {
+                    setActiveLanguage(lang.id);
+                    // Switching from Settings is a deliberate preference change,
+                    // not a request for the full intro. Mark this language seen
+                    // and keep the page in place; Guide can replay the intro.
+                    completeOnboarding();
+                  }}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono transition cursor-pointer border ${
                     lang.id === activeLanguageId
                       ? "bg-[var(--main-color)] text-[var(--bg-color)] font-bold border-[var(--main-color)] shadow-xs"
@@ -304,7 +364,7 @@ export default function SettingsPage() {
         )}
 
         {/* 1. BEHAVIOR SECTION */}
-        <section id="behavior" className="space-y-3 pt-2">
+        <section id="behavior" style={{ display: sectionVisible("behavior") ? undefined : "none" }} className="space-y-3 pt-2">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--sub-color)] border-b border-[var(--sub-color)]/20 pb-2">
             <Zap className="w-4 h-4 text-[var(--main-color)]" />
             <span>behavior</span>
@@ -338,9 +398,18 @@ export default function SettingsPage() {
           <SettingItem
             id="lazy-mode"
             icon={Type}
-            title="lazy mode (umlaut tolerance)"
-            description="Tolerates ae, oe, ue, and ss in place of ä, ö, ü, and ß so you can type quickly on US English keyboards without modifier switching."
-            matchesSearch={matches(["lazy mode", "umlaut", "tolerance", "ae", "oe", "ue", "ss"])}
+            title={
+              activeLanguageId === "de" ? "lazy mode (umlaut tolerance)" : "lazy mode (accent tolerance)"
+            }
+            description={
+              activeLanguageId === "de"
+                ? "Tolerates ae, oe, ue, and ss in place of ä, ö, ü, and ß so you can type quickly on US English keyboards without modifier switching."
+                : `Tolerates unaccented spellings of ${activeLanguage.name}'s special characters (${specialChars}) so you can type quickly without modifier switching.`
+            }
+            matchesSearch={matches([
+              "lazy mode", "umlaut", "accent", "tolerance", "ae", "oe", "ue", "ss",
+              activeLanguage.name.toLowerCase(),
+            ])}
           >
             {[false, true].map((val) => (
               <button
@@ -363,23 +432,37 @@ export default function SettingsPage() {
             id="cap-tolerance"
             icon={Type}
             title="capitalization tolerance"
-            description="Tolerates lowercase German nouns without marking them incorrect, showing only a gentle grammatical reminder."
+            description={
+              activeLanguageId === "de"
+                ? "Tolerates lowercase German nouns without marking them incorrect, showing only a gentle grammatical reminder."
+                : `Only affects German noun capitalization. ${activeLanguage.name} does not capitalize common nouns, so this setting has no effect here.`
+            }
             matchesSearch={matches(["capitalization", "noun", "lowercase", "tolerance"])}
           >
-            {[false, true].map((val) => (
-              <button
-                key={String(val)}
-                type="button"
-                onClick={() => updateSetting("capitalizationTolerance", val)}
-                className={`px-3 py-1.5 rounded text-xs font-mono transition cursor-pointer ${
-                  settings.capitalizationTolerance === val
-                    ? "bg-[var(--main-color)] text-[var(--bg-color)] font-bold shadow-xs"
-                    : "bg-[var(--sub-alt-color)] text-[var(--sub-color)] hover:text-[var(--text-color)]"
-                }`}
-              >
-                {val ? "on" : "off"}
-              </button>
-            ))}
+            <div className="flex items-center gap-1.5">
+              {activeLanguageId !== "de" && (
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--sub-color)] border border-[var(--sub-color)]/25 rounded px-1.5 py-0.5">
+                  German only
+                </span>
+              )}
+              {[false, true].map((val) => (
+                <button
+                  key={String(val)}
+                  type="button"
+                  disabled={activeLanguageId !== "de"}
+                  onClick={() => updateSetting("capitalizationTolerance", val)}
+                  className={`px-3 py-1.5 rounded text-xs font-mono transition ${
+                    activeLanguageId !== "de"
+                      ? "bg-[var(--sub-alt-color)] text-[var(--sub-color)] opacity-40 cursor-not-allowed"
+                      : settings.capitalizationTolerance === val
+                      ? "bg-[var(--main-color)] text-[var(--bg-color)] font-bold shadow-xs cursor-pointer"
+                      : "bg-[var(--sub-alt-color)] text-[var(--sub-color)] hover:text-[var(--text-color)] cursor-pointer"
+                  }`}
+                >
+                  {val ? "on" : "off"}
+                </button>
+              ))}
+            </div>
           </SettingItem>
 
           {/* posture cues (TM-4b) */}
@@ -408,7 +491,7 @@ export default function SettingsPage() {
         </section>
 
         {/* 2. INPUT SECTION */}
-        <section id="input" className="space-y-3 pt-4">
+        <section id="input" style={{ display: sectionVisible("input") ? undefined : "none" }} className="space-y-3 pt-4">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--sub-color)] border-b border-[var(--sub-color)]/20 pb-2">
             <Keyboard className="w-4 h-4 text-[var(--main-color)]" />
             <span>input</span>
@@ -467,8 +550,11 @@ export default function SettingsPage() {
             id="show-char-bar"
             icon={Keyboard}
             title="special character bar"
-            description="Controls when the quick accent bar for the language you are learning (German: ä, ö, ü, ß — French: é, à, ç, ê) is shown beneath typing inputs."
-            matchesSearch={matches(["german character bar", "special character bar", "char bar", "umlaut buttons", "input"])}
+            description={`Controls when the quick character bar for ${activeLanguage.name} (${specialChars}) is shown beneath typing inputs.`}
+            matchesSearch={matches([
+              "character bar", "special character bar", "char bar", "accents", "umlaut buttons",
+              "input", activeLanguage.name.toLowerCase(),
+            ])}
           >
             {(["always", "on_focus", "off"] as ShowCharBar[]).map((mode) => (
               <button
@@ -488,12 +574,14 @@ export default function SettingsPage() {
         </section>
 
         {/* 3. SOUND SECTION */}
-        <section id="sound" className="space-y-3 pt-4">
+        <section id="sound" style={{ display: sectionVisible("sound") ? undefined : "none" }} className="space-y-3 pt-4">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--sub-color)] border-b border-[var(--sub-color)]/20 pb-2">
             <Volume2 className="w-4 h-4 text-[var(--main-color)]" />
             <span>sound</span>
           </div>
-          <VoiceStatusBanner showWhenAvailable />
+          {(!normalizedQuery || /voice|tts|speech/i.test(normalizedQuery)) && (
+            <VoiceStatusBanner showWhenAvailable />
+          )}
 
           {/* sound volume */}
           <SettingItem
@@ -606,7 +694,7 @@ export default function SettingsPage() {
         </section>
 
         {/* 4. THEME & TYPOGRAPHY SECTION */}
-        <section id="theme" className="space-y-3 pt-4">
+        <section id="theme" style={{ display: sectionVisible("theme") ? undefined : "none" }} className="space-y-3 pt-4">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--sub-color)] border-b border-[var(--sub-color)]/20 pb-2">
             <Palette className="w-4 h-4 text-[var(--main-color)]" />
             <span>theme & typography</span>
@@ -650,7 +738,7 @@ export default function SettingsPage() {
         </section>
 
         {/* 7. VISIBILITY & ACCESSIBILITY SECTION */}
-        <section id="hide_elements" className="space-y-3 pt-4">
+        <section id="hide_elements" style={{ display: sectionVisible("hide_elements") ? undefined : "none" }} className="space-y-3 pt-4">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--sub-color)] border-b border-[var(--sub-color)]/20 pb-2">
             <EyeOff className="w-4 h-4 text-[var(--main-color)]" />
             <span>visibility & accessibility</span>
@@ -708,9 +796,9 @@ export default function SettingsPage() {
           <SettingItem
             id="show-mastery-counter"
             icon={Eye}
-            title="mastery counter in nav"
-            description="Show or hide the 'mastered / total' counter badge in the top navigation bar."
-            matchesSearch={matches(["mastery counter", "badge", "nav", "hide"])}
+            title="progress counter in nav"
+            description="Show or hide the words-seen progress badge in the top navigation bar. Words become mastered only after repeated successful reviews."
+            matchesSearch={matches(["mastery counter", "progress counter", "progress", "badge", "nav", "hide"])}
           >
             {[true, false].map((val) => (
               <button
@@ -754,7 +842,7 @@ export default function SettingsPage() {
         </section>
 
         {/* 8. DANGER ZONE SECTION */}
-        <section id="danger_zone" className="space-y-3 pt-4">
+        <section id="danger_zone" style={{ display: sectionVisible("danger_zone") ? undefined : "none" }} className="space-y-3 pt-4">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--error-color)] border-b border-[var(--error-color)]/20 pb-2">
             <ShieldAlert className="w-4 h-4 text-[var(--error-color)]" />
             <span>danger zone</span>

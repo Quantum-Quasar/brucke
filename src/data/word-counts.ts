@@ -8,6 +8,27 @@ export const WORD_COUNTS: Readonly<Record<string, number>> = {
   es: 293,
 };
 
+export interface CourseCounts {
+  topics: number;
+  lessons: number;
+  families: number;
+  words: number;
+}
+
+/** Course-shaped counts for chrome that must not import lesson data. Pinned
+ *  to the real content by `src/tests/languages.test.ts`. */
+export const COURSE_COUNTS: Readonly<Record<string, CourseCounts>> = {
+  de: { topics: 30, lessons: 169, families: 10, words: 1226 },
+  fr: { topics: 30, lessons: 123, families: 10, words: 306 },
+  es: { topics: 30, lessons: 123, families: 10, words: 293 },
+};
+
+const EMPTY_COUNTS: CourseCounts = { topics: 0, lessons: 0, families: 0, words: 0 };
+
+export function getCourseCounts(languageId: string): CourseCounts {
+  return COURSE_COUNTS[languageId] ?? EMPTY_COUNTS;
+}
+
 export function getWordCount(languageId: string): number {
   return WORD_COUNTS[languageId] ?? 0;
 }

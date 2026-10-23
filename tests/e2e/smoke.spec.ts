@@ -20,8 +20,7 @@ async function readAppState(page: Page): Promise<any> {
 /**
  * Seed persisted progress before any page script runs. Every test below gets a
  * fresh browser context, so this is the only way to start the app in a
- * returning-learner state (the onboarding modal otherwise opens after
- * hydration and intercepts every click).
+ * returning-learner state.
  *
  * Only an empty store is filled: on a reload the app's own saved state must
  * survive, otherwise seeded progress would be re-applied over the test's work.
@@ -106,18 +105,24 @@ async function openRecentReviewSession(page: Page) {
 }
 
 test.describe("browser smoke", () => {
-  test("onboarding opens on first visit and stays dismissed after skipping", async ({ page }) => {
+  test("landing page offers the intro and skipping stays dismissed after reload", async ({ page }) => {
     await page.goto("/");
 
-    const dialog = page.locator('div[aria-label="Brücke onboarding"]');
-    await expect(dialog).toBeVisible();
+    // First visit is a landing page, not a modal wall. The hero is server-
+    // rendered, so retry the click until React has hydrated its handler.
+    const dialog = page.locator('div[aria-label="Brücke introduction"]');
+    await expect(dialog).toBeHidden();
+    await expect(async () => {
+      await page.getByRole("button", { name: /60-second intro/i }).click();
+      await expect(dialog).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 45_000 });
 
     await dialog.getByRole("button", { name: /skip/i }).click();
     await expect(dialog).toBeHidden();
 
     // the dismissal must survive a reload (persisted hasCompletedOnboarding)
     await page.reload();
-    await expect(page.locator('div[aria-label="Brücke onboarding"]')).toBeHidden();
+    await expect(page.locator('div[aria-label="Brücke introduction"]')).toBeHidden();
     const state = await readAppState(page);
     expect(state?.hasCompletedOnboarding).toBe(true);
   });

@@ -1,12 +1,18 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, Compass, RotateCcw, Sliders, ExternalLink } from "lucide-react";
+import { ArrowLeft, BookOpen, Compass, RotateCcw, Sliders } from "lucide-react";
 import type { Metadata } from "next";
+import { LESSONS } from "@/data/lessons";
+import { FR_LESSONS } from "@/data/french/lessons-fr";
+import { ES_LESSONS } from "@/data/spanish/lessons-es";
+import { TOTAL_TOPICS } from "@/data/curriculum";
+import { compendium } from "@/data/compendium";
+import { getAtlasFamilies } from "@/lib/atlas-families";
 
 export const metadata: Metadata = {
-  title: "About | Brücke — Cognate Engine",
+  title: "About — Brücke",
   description:
-    "How Brücke turns historical sound shifts and conversion bridges into a cognate engine for German, French, and Spanish.",
+    "How Brücke teaches German, French and Spanish through words you already know, using sound shifts, conversion bridges and spaced review.",
 };
 
 const SHIFT_SAMPLES = [
@@ -19,8 +25,13 @@ const SHIFT_SAMPLES = [
 ];
 
 export default function AboutPage() {
+  const germanLessons = LESSONS.length;
+  const frenchLessons = FR_LESSONS.length;
+  const spanishLessons = ES_LESSONS.length;
+  const familyCount = getAtlasFamilies(compendium).length;
+
   return (
-    <main className="max-w-4xl mx-auto px-4 py-10 space-y-8 font-sans">
+    <div className="max-w-4xl mx-auto px-4 py-10 space-y-8 font-sans">
       {/* Header & Back Link */}
       <div className="space-y-3">
         <Link
@@ -35,6 +46,9 @@ export default function AboutPage() {
         </h1>
         <p className="text-sm text-[var(--sub-color)] font-mono leading-relaxed">
           Historical sound shifts and conversion bridges as a language acquisition engine — German, French, and Spanish.
+        </p>
+        <p className="text-xs font-mono text-[var(--sub-color)]">
+          An independent project · no account · progress stays in your browser.
         </p>
       </div>
 
@@ -114,19 +128,22 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
             <div className="p-3.5 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 space-y-1">
               <div className="font-mono text-xs font-bold text-[var(--main-color)]">The Trail</div>
-              <p className="text-xs text-[var(--sub-color)]">
-                10 progressive lessons scaffolding from direct cognates to modal verbs, compound calques, and complex syntax.
+              <p className="text-sm text-[var(--sub-color)] leading-relaxed">
+                {TOTAL_TOPICS} progressive topics and {germanLessons} authored German lessons
+                scaffolding from direct cognates to modal verbs, compound calques, and complex syntax.
+                French and Spanish add {frenchLessons} lessons each.
               </p>
             </div>
             <div className="p-3.5 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 space-y-1">
               <div className="font-mono text-xs font-bold text-[var(--main-color)]">The Atlas</div>
-              <p className="text-xs text-[var(--sub-color)]">
-                Deep exploration into 9 phonetic shift families with morphological comparisons and literature citations.
+              <p className="text-sm text-[var(--sub-color)] leading-relaxed">
+                Deep exploration into {familyCount} phonetic shift families with morphological
+                comparisons and literature citations.
               </p>
             </div>
             <div className="p-3.5 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 space-y-1">
               <div className="font-mono text-xs font-bold text-[var(--main-color)]">SM-2 Spaced Review</div>
-              <p className="text-xs text-[var(--sub-color)]">
+              <p className="text-sm text-[var(--sub-color)] leading-relaxed">
                 4 review styles (flashcards, MCQ, morpheme tiles, typing) with adaptive intervals to prevent memory decay.
               </p>
             </div>
@@ -142,7 +159,9 @@ export default function AboutPage() {
         >
           <BookOpen className="w-5 h-5 text-[var(--sub-color)] group-hover:text-[var(--main-color)] transition" />
           <span className="text-xs font-mono font-bold text-[var(--text-color)] mt-1">Trail</span>
-          <span className="text-[11px] text-[var(--sub-color)]">10 Lessons</span>
+          <span className="text-[11px] text-[var(--sub-color)]">
+            {TOTAL_TOPICS} topics · {germanLessons} lessons
+          </span>
         </Link>
         <Link
           href="/atlas"
@@ -150,7 +169,7 @@ export default function AboutPage() {
         >
           <Compass className="w-5 h-5 text-[var(--sub-color)] group-hover:text-[var(--main-color)] transition" />
           <span className="text-xs font-mono font-bold text-[var(--text-color)] mt-1">Atlas</span>
-          <span className="text-[11px] text-[var(--sub-color)]">9 Families</span>
+          <span className="text-[11px] text-[var(--sub-color)]">{familyCount} families</span>
         </Link>
         <Link
           href="/review"
@@ -169,6 +188,6 @@ export default function AboutPage() {
           <span className="text-[11px] text-[var(--sub-color)]">Themes & Audio</span>
         </Link>
       </section>
-    </main>
+    </div>
   );
 }

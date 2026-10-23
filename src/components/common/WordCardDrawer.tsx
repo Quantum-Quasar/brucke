@@ -22,7 +22,8 @@ export const WordCardDrawer: React.FC = () => {
   const mastery = useAppStore((s) => (activeWordId ? s.wordMastery[activeWordId] || "unexplored" : "unexplored"));
   const activeLanguageId = useAppStore((s) => s.activeLanguageId);
   const language = getLanguageDefinition(activeLanguageId);
-  const data = getLanguageContent(activeLanguageId).compendium ?? EMPTY_COMPENDIUM;
+  const languageContent = getLanguageContent(activeLanguageId);
+  const data = languageContent.compendium ?? EMPTY_COMPENDIUM;
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useDialogFocus({
@@ -68,6 +69,16 @@ export const WordCardDrawer: React.FC = () => {
 
   const shiftFamily = word.sound_shift_ids[0] ? data.shifts[word.sound_shift_ids[0]] : null;
   const lessonId = word ? getWordLessonMap(activeLanguageId)[word.id] : undefined;
+  const sourceLesson = lessonId ? languageContent.lessons.find((lesson) => lesson.id === lessonId) : undefined;
+  const lessonLabel = sourceLesson
+    ? sourceLesson.id <= 30
+      ? `Topic ${sourceLesson.id} — ${sourceLesson.title}`
+      : sourceLesson.id >= 5000
+      ? `Branch — ${sourceLesson.title}`
+      : `Topic ${Math.floor(sourceLesson.id / 100)} · Sprig ${sourceLesson.id % 100} — ${sourceLesson.title}`
+    : lessonId
+    ? `Lesson ${lessonId}`
+    : null;
   const relatedCompounds = data.compounds.filter(
     (c) => c.compound.toLowerCase().includes(word.target_word.toLowerCase()) || c.literal_morphemes.toLowerCase().includes(word.target_word.toLowerCase())
   );
@@ -167,7 +178,7 @@ export const WordCardDrawer: React.FC = () => {
                 {word.shift_rule}
               </span>
             </div>
-            <p className="text-xs font-mono text-[var(--sub-color)] leading-relaxed pt-1">{word.etymology_derivation}</p>
+            <p className="text-sm font-mono text-[var(--sub-color)] leading-relaxed pt-1">{word.etymology_derivation}</p>
           </div>
 
           {/* Cross-Layer Links */}
@@ -180,9 +191,9 @@ export const WordCardDrawer: React.FC = () => {
                   onClick={closeDrawer}
                   className="flex items-center justify-between p-3 rounded-lg bg-[var(--sub-alt-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--text-color)] transition group"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <BookOpen className="w-4 h-4 text-[var(--main-color)]" />
-                    <span>lesson {lessonId}</span>
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <BookOpen className="w-4 h-4 text-[var(--main-color)] shrink-0" />
+                    <span className="truncate">{lessonLabel}</span>
                   </div>
                   <ExternalLink className="w-3.5 h-3.5 text-[var(--sub-color)] group-hover:text-[var(--main-color)] transition" />
                 </Link>
@@ -237,7 +248,7 @@ export const WordCardDrawer: React.FC = () => {
                       <span className="font-bold text-[var(--main-color)]">{comp.compound}</span>
                       <span className="text-[var(--sub-color)]">{comp.real_meaning}</span>
                     </div>
-                    <p className="text-[var(--sub-color)] text-[11px]">{comp.lore}</p>
+                    <p className="text-[var(--sub-color)] text-xs leading-relaxed">{comp.lore}</p>
                   </div>
                 ))}
               </div>

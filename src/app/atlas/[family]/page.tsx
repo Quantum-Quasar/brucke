@@ -4,6 +4,7 @@ import { frenchCompendium } from "@/data/french/compendium-fr";
 import { spanishCompendium } from "@/data/spanish/compendium-es";
 import { getAtlasFamilies } from "@/lib/atlas-families";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import type { CompendiumData } from "@/lib/types";
 
 // 100% SSG: only the authored shift families plus the unshifted layer may
@@ -41,6 +42,20 @@ export function generateStaticParams() {
 
 interface PageProps {
   params: Promise<{ family: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { family } = await params;
+  for (const [, compendium] of COMPENDIA_BY_LANGUAGE) {
+    const match = getAtlasFamilies(compendium).find((entry) => entry.id === family);
+    if (match) {
+      return {
+        title: `${match.name} — Atlas — Brücke`,
+        description: match.phonetic_rule,
+      };
+    }
+  }
+  return { title: "Atlas — Brücke" };
 }
 
 export default async function ConstellationDetailPage({ params }: PageProps) {

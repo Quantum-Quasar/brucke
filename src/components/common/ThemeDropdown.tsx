@@ -11,6 +11,7 @@ import {
   Sun,
   Shuffle,
   Maximize2,
+  Type,
   X,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store";
@@ -27,6 +28,7 @@ export const ThemeDropdown: React.FC = () => {
   const currentTheme = useAppStore((s) => s.theme);
   const setTheme = useAppStore((s) => s.setTheme);
   const openThemeSelector = useAppStore((s) => s.openThemeSelector);
+  const openFontSelector = useAppStore((s) => s.openFontSelector);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -79,7 +81,10 @@ export const ThemeDropdown: React.FC = () => {
     }
   };
 
-  const displayName = (mounted ? currentTheme : DEFAULT_THEME).replace(/_/g, " ");
+  const shownThemeId = mounted ? currentTheme : DEFAULT_THEME;
+  const displayName =
+    THEME_LIST.find((theme) => theme.id === shownThemeId)?.name ??
+    shownThemeId.replace(/_/g, " ");
 
   return (
     <div className="relative" ref={containerRef}>
@@ -92,13 +97,14 @@ export const ThemeDropdown: React.FC = () => {
             ? "border-[var(--main-color)] text-[var(--text-color)] ring-1 ring-[var(--main-color)]/30"
             : "border-[var(--sub-color)]/20"
         }`}
-        title="Switch color theme"
+        title={`Change theme — current: ${displayName}`}
+        aria-label={`Change theme — current: ${displayName}`}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
         <Palette className="w-3.5 h-3.5 text-[var(--main-color)] shrink-0" />
-        <span className="hidden lg:inline text-[11px] truncate max-w-[90px]">
-          {displayName}
+        <span className="hidden lg:inline text-[11px] truncate max-w-[110px]">
+          <span className="text-[var(--sub-color)]">theme</span> {displayName}
         </span>
         <ChevronDown
           className={`w-3 h-3 text-[var(--sub-color)] transition-transform ${
@@ -270,18 +276,33 @@ export const ThemeDropdown: React.FC = () => {
               <span>random</span>
             </button>
 
-            <button
-              type="button"
-              onClick={() => {
-                setIsOpen(false);
-                openThemeSelector();
-              }}
-              className="inline-flex items-center gap-1 text-[var(--sub-color)] hover:text-[var(--text-color)] px-1.5 py-0.5 rounded transition cursor-pointer"
-              title="Open full grid modal"
-            >
-              <Maximize2 className="w-3 h-3 text-[var(--main-color)]" />
-              <span>all {THEME_LIST.length} grid</span>
-            </button>
+            <div className="flex items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  openFontSelector();
+                }}
+                className="inline-flex items-center gap-1 text-[var(--sub-color)] hover:text-[var(--text-color)] px-1.5 py-0.5 rounded transition cursor-pointer"
+                title="Change font"
+              >
+                <Type className="w-3 h-3 text-[var(--main-color)]" />
+                <span>font</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  openThemeSelector();
+                }}
+                className="inline-flex items-center gap-1 text-[var(--sub-color)] hover:text-[var(--text-color)] px-1.5 py-0.5 rounded transition cursor-pointer"
+                title="Open full grid modal"
+              >
+                <Maximize2 className="w-3 h-3 text-[var(--main-color)]" />
+                <span>all {THEME_LIST.length} grid</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

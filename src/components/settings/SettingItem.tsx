@@ -37,7 +37,7 @@ export const SettingItem: React.FC<SettingItemProps> = ({
               {title}
             </h3>
           </div>
-          <div className="text-xs text-[var(--sub-color)] leading-relaxed">
+          <div className="text-[13px] text-[var(--sub-color)] leading-relaxed">
             {description}
           </div>
         </div>

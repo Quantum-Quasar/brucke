@@ -80,6 +80,11 @@ body {
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
+/* Returning learners never see the first-visit hero flash before hydration. */
+html[data-returning="true"] .first-visit-hero {
+  display: none;
+}
+
 /* Optional readability override; the default theme remains untouched. */
 html[data-contrast="increased"] {
   --sub-color: #cbd5e1 !important;

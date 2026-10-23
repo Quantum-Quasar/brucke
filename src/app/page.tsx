@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Star, Clock } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, PlayCircle, Star, Clock } from "lucide-react";
 import { DailyInsightCard } from "@/components/common/DailyInsightCard";
 import { TrailMap } from "@/components/trail/TrailMap";
 import { useAppStore } from "@/lib/store";
@@ -15,9 +16,12 @@ export default function HomePage() {
   const [mounted, setMounted] = useState(false);
   const [insightIndex, setInsightIndex] = useState(0);
   const completedLessons = useAppStore((s) => s.completedLessons);
+  const lessonProgress = useAppStore((s) => s.lessonProgress);
   const lessonStars = useAppStore((s) => s.lessonStars);
   const logDailyActivity = useAppStore((s) => s.logDailyActivity);
   const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const openOnboarding = useAppStore((s) => s.openOnboarding);
+  const storeHydrated = useAppStore((s) => s.storeHydrated);
 
   const language = getLanguageDefinition(activeLanguageId);
   const content = getLanguageContent(activeLanguageId);
@@ -27,11 +31,41 @@ export default function HomePage() {
     setMounted(true);
     setInsightIndex(new Date().getDate() % (dailyInsights.length || 1));
     logDailyActivity();
-  }, [logDailyActivity]);
+  }, [logDailyActivity, dailyInsights.length]);
+
+  // Keep the pre-paint landing switch honest after a progress reset/import.
+  // Wait for hydration so the default empty store cannot flash the hero back.
+  const hasStartedLesson = Object.keys(lessonProgress).length > 0;
+  useEffect(() => {
+    if (!storeHydrated) return;
+    document.documentElement.setAttribute(
+      "data-returning",
+      completedLessons.length > 0 || hasStartedLesson ? "true" : "false"
+    );
+  }, [storeHydrated, completedLessons.length, hasStartedLesson, activeLanguageId]);
 
   const completed = mounted ? completedLessons.length : 0;
   const purpleCount = mounted ? Object.values(lessonStars).filter((s) => s === "purple").length : 0;
   const todayInsight = dailyInsights[insightIndex] ?? dailyInsights[0];
+
+  // The lessons array is grouped by kind, not trail order. Use the first
+  // authored core topic so "Start topic 1" cannot point at a sprig/branch.
+  const firstTopic =
+    content.topics.find((topic) => topic.core.authored) ?? content.topics[0] ?? null;
+  const firstLessonId = firstTopic?.core.id ?? 1;
+  // Kept progress-independent on the server (empty default) so the landing
+  // copy is in the first paint; the pre-paint script hides it for returning
+  // learners and React removes it once progress hydrates.
+  const isFirstVisit = completedLessons.length === 0 && !hasStartedLesson;
+  const lessonCount = content.lessons.length;
+  const topicCount = content.totalTopics;
+
+  const langLabel =
+    activeLanguageId === "fr"
+      ? "French through English"
+      : activeLanguageId === "es"
+      ? "Spanish through English"
+      : "German through English";
 
   return (
     <div className="max-w-5xl mx-auto px-4 pt-3 pb-6 font-sans">
@@ -41,9 +75,9 @@ export default function HomePage() {
           <span className="text-[10px] font-mono text-[var(--main-color)] font-semibold uppercase tracking-wider">
             the trail
           </span>
-          <h1 className="text-lg sm:text-xl font-bold text-[var(--text-color)] tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-color)] tracking-tight leading-tight">
             {language.status === "available"
-              ? `${content.totalTopics} topics, one bridge`
+              ? `${topicCount} topics, one bridge`
               : `${language.flag} ${language.name} is on the way`}
           </h1>
         </div>
@@ -67,6 +101,7 @@ export default function HomePage() {
                 strokeWidth={0}
               />
               <span className={purpleCount > 0 ? "text-[var(--text-color)] font-bold" : ""}>{purpleCount}</span>
+              <span className="hidden sm:inline">flawless</span>
             </span>
           </div>
         )}
@@ -74,6 +109,53 @@ export default function HomePage() {
 
       {language.status === "available" ? (
         <>
+          {isFirstVisit && (
+            <section className="first-visit-hero mt-2 mb-5 rounded-xl border border-[var(--main-color)]/30 bg-[var(--sub-alt-color)] p-5 sm:p-7 space-y-4">
+              <div className="space-y-2 max-w-2xl">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--main-color)] font-semibold">
+                  {langLabel}
+                </span>
+                <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-color)] tracking-tight">
+                  You already know more {language.name} than you think.
+                </h2>
+                <p className="text-sm text-[var(--sub-color)] leading-relaxed">
+                  {language.onboarding.philosophy.demos.slice(0, 3).map((demo, index) => (
+                    <React.Fragment key={demo.english}>
+                      {index > 0 ? " " : null}
+                      <span className="text-[var(--text-color)] font-mono">
+                        {demo.english} → {demo.target}.
+                      </span>
+                    </React.Fragment>
+                  ))}{" "}
+                  Brücke teaches the patterns behind those pairs, so vocabulary becomes something
+                  you can decode instead of a list you memorize.
+                </p>
+                <p className="text-xs font-mono text-[var(--sub-color)]">
+                  {topicCount} topics · {lessonCount} lessons · {language.flag} {language.name}
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2.5">
+                <Link
+                  href={`/trail/${firstLessonId}`}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-sm font-mono transition"
+                >
+                  Start topic 1 <ArrowRight className="w-4 h-4" />
+                </Link>
+                <button
+                  type="button"
+                  onClick={openOnboarding}
+                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded bg-[var(--bg-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/30 text-[var(--text-color)] font-bold text-sm font-mono transition cursor-pointer"
+                >
+                  <PlayCircle className="w-4 h-4 text-[var(--main-color)]" />
+                  60-second intro
+                </button>
+                <span className="text-[11px] font-mono text-[var(--sub-color)]">
+                  no account · progress stays in this browser
+                </span>
+              </div>
+            </section>
+          )}
+
           <DailyInsightCard insight={todayInsight} languageName={language.name} />
           <TrailMap />
         </>

@@ -39,16 +39,15 @@ export function PanoramaView({ linksByLanguage }: PanoramaViewProps) {
   const current = PANORAMA_BY_LANG[viewedLanguageId];
   const links = linksByLanguage[current.id] ?? [];
 
-  // Viewing a language means choosing it: the trail, the atlas and every lesson
-  // page resolve ids against the store's active language, so a tab that only
-  // changed local state used to open the wrong language's lesson at that id.
+  // Tabs are view-only. The old behaviour silently moved the learner's whole
+  // course (and SRS context) just to read another language's grammar page.
+  // Opening a "where this is taught" link is the explicit switch.
   const view = (languageId: PanoramaLanguageId) => {
     setViewedLanguageId(languageId);
-    setActiveLanguage(languageId);
   };
 
   return (
-    <main className="max-w-5xl mx-auto px-4 py-10 space-y-10 font-mono text-[var(--text-color)]">
+    <div className="max-w-5xl mx-auto px-4 py-10 space-y-10 font-mono text-[var(--text-color)]">
       <header className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <Link
@@ -58,8 +57,9 @@ export function PanoramaView({ linksByLanguage }: PanoramaViewProps) {
             <ArrowLeft className="w-3.5 h-3.5" /> back to the trail
           </Link>
 
-          <div className="flex items-center gap-1.5 bg-[var(--sub-alt-color)] p-1 rounded-lg border border-[var(--sub-color)]/20">
-            {PANORAMA_LANGUAGE_IDS.map((lid) => {
+          <div className="flex flex-col items-end gap-1">
+            <div className="flex items-center gap-1.5 bg-[var(--sub-alt-color)] p-1 rounded-lg border border-[var(--sub-color)]/20">
+              {PANORAMA_LANGUAGE_IDS.map((lid) => {
               const p = PANORAMA_BY_LANG[lid];
               const active = current.id === lid;
               return (
@@ -75,8 +75,12 @@ export function PanoramaView({ linksByLanguage }: PanoramaViewProps) {
                 >
                   {p.name.toLowerCase()}
                 </button>
-              );
-            })}
+                );
+              })}
+            </div>
+            <span className="text-[10px] text-[var(--sub-color)]">
+              viewing only · opening a lesson below switches your course
+            </span>
           </div>
         </div>
 
@@ -103,11 +107,19 @@ export function PanoramaView({ linksByLanguage }: PanoramaViewProps) {
               </p>
             </div>
 
-            <div className="overflow-x-auto rounded-lg border border-[var(--sub-color)]/20 bg-[var(--sub-alt-color)]">
-              <table className="w-full text-left text-xs">
+            <p className="sm:hidden text-[10px] text-[var(--sub-color)] text-right">
+              swipe the table sideways to see all columns →
+            </p>
+            <div
+              className="overflow-x-auto rounded-lg border border-[var(--sub-color)]/20 bg-[var(--sub-alt-color)]"
+              tabIndex={0}
+              role="region"
+              aria-label={`${grid.title} — scroll horizontally to see every column`}
+            >
+              <table className="w-full min-w-[560px] table-fixed text-left text-xs">
                 <thead>
                   <tr className="border-b border-[var(--sub-color)]/20">
-                    <th className="px-3 py-2.5 text-[var(--sub-color)] uppercase tracking-wider text-[10px] font-semibold">
+                    <th className="sticky left-0 z-10 w-[140px] max-w-[140px] bg-[var(--sub-alt-color)] px-3 py-2.5 text-[var(--sub-color)] uppercase tracking-wider text-[10px] font-semibold border-r border-[var(--sub-color)]/20 whitespace-normal">
                       {grid.rowHead}
                     </th>
                     {grid.columnHead.map((h) => (
@@ -123,7 +135,7 @@ export function PanoramaView({ linksByLanguage }: PanoramaViewProps) {
                 <tbody>
                   {grid.rows.map((row) => (
                     <tr key={row.head} className="border-b border-[var(--sub-color)]/10 last:border-0">
-                      <th className="px-3 py-3 font-medium text-[var(--text-color)] align-top whitespace-nowrap">
+                      <th className="sticky left-0 z-10 w-[140px] max-w-[140px] bg-[var(--sub-alt-color)] px-3 py-3 font-medium text-[var(--text-color)] align-top whitespace-normal break-words border-r border-[var(--sub-color)]/20">
                         {row.head}
                       </th>
                       {row.cells.map((cell, i) => (
@@ -155,6 +167,7 @@ export function PanoramaView({ linksByLanguage }: PanoramaViewProps) {
               <Link
                 href={item.href}
                 onClick={() => setActiveLanguage(current.id)}
+                title={`Open this lesson in ${current.name} (switches your active course)`}
                 className="text-[var(--main-color)] hover:underline"
               >
                 {item.label}
@@ -164,6 +177,6 @@ export function PanoramaView({ linksByLanguage }: PanoramaViewProps) {
           ))}
         </ul>
       </footer>
-    </main>
+    </div>
   );
 }

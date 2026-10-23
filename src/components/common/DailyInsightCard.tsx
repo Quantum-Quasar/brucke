@@ -74,16 +74,16 @@ Principle: ${insight.takeaway_principle}`;
         <h4 className="text-base sm:text-lg font-bold font-mono text-[var(--text-color)] tracking-tight">
           {insight.german_expression}
         </h4>
-        <p className="text-xs font-mono text-[var(--main-color)]">{insight.english_meaning}</p>
+        <p className="text-sm font-mono text-[var(--main-color)]">{insight.english_meaning}</p>
       </div>
 
       {/* Cultural Etymology Text */}
-      <p className="text-xs text-[var(--text-color)]/80 leading-relaxed font-sans">
+      <p className="text-sm text-[var(--text-color)]/85 leading-relaxed font-sans">
         {insight.cultural_etymology}
       </p>
 
       {/* Takeaway Principle */}
-      <div className="pt-2 border-t border-[var(--sub-color)]/15 text-xs text-[var(--sub-color)] font-mono">
+      <div className="pt-2 border-t border-[var(--sub-color)]/15 text-sm text-[var(--sub-color)] font-mono">
         <span>heuristic: {insight.takeaway_principle}</span>
       </div>
     </article>

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, Info } from "lucide-react";
+import { ArrowLeft, BookOpen, Info, Search } from "lucide-react";
 import { ConstellationWeb } from "@/components/atlas/ConstellationWeb";
 import { BranchDrillModal } from "@/components/atlas/BranchDrillModal";
 import { ShiftPair } from "@/components/common/ShiftPair";
@@ -24,6 +24,8 @@ interface ConstellationDetailClientProps {
 
 export function ConstellationDetailClient({ familyId, ownerLanguageIds }: ConstellationDetailClientProps) {
   const [isDrillOpen, setIsDrillOpen] = useState(false);
+  const [rosterQuery, setRosterQuery] = useState("");
+  const [visibleCount, setVisibleCount] = useState(60);
   const activeLanguageId = useAppStore((s) => s.activeLanguageId);
   const setActiveLanguage = useAppStore((s) => s.setActiveLanguage);
   const data = getLanguageContent(activeLanguageId).compendium ?? EMPTY_COMPENDIUM;
@@ -125,8 +127,17 @@ export function ConstellationDetailClient({ familyId, ownerLanguageIds }: Conste
   }
 
   const words = family.word_ids.map((id) => data.words[id]).filter(Boolean);
-  // render the roster capped so very large layers (e.g. the unshifted set) stay fast
-  const rosterWords = words.slice(0, 60);
+  // Keep the default roster small, but let the learner search the family and
+  // load it in batches instead of mounting hundreds of cards at once.
+  const rosterQueryText = rosterQuery.trim().toLowerCase();
+  const filteredWords = rosterQueryText
+    ? words.filter(
+        (word) =>
+          word.english_cognate.toLowerCase().includes(rosterQueryText) ||
+          word.target_word.toLowerCase().includes(rosterQueryText)
+      )
+    : words;
+  const rosterWords = filteredWords.slice(0, visibleCount);
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 space-y-6 font-sans">
@@ -187,6 +198,49 @@ export function ConstellationDetailClient({ familyId, ownerLanguageIds }: Conste
           <span className="text-xs text-[var(--sub-color)] font-normal">{words.length} words</span>
         </h2>
 
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative flex-1 min-w-[180px]">
+            <Search className="w-3.5 h-3.5 text-[var(--sub-color)] absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={rosterQuery}
+              onChange={(event) => {
+                setRosterQuery(event.target.value);
+                setVisibleCount(60);
+              }}
+              placeholder={`Filter ${words.length} words...`}
+              className="w-full pl-9 pr-3 py-1.5 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/25 text-xs text-[var(--text-color)] placeholder-[var(--sub-color)] outline-none focus:border-[var(--main-color)] transition font-mono"
+            />
+          </div>
+          <span className="text-[11px] font-mono text-[var(--sub-color)]">
+            {filteredWords.length} {filteredWords.length === 1 ? "word" : "words"}
+          </span>
+          {filteredWords.length > visibleCount && (
+            <button
+              type="button"
+              onClick={() => setVisibleCount((count) => count + 60)}
+              className="px-3 py-1.5 rounded bg-[var(--sub-alt-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer text-[11px] font-mono"
+            >
+              show 60 more
+            </button>
+          )}
+          {visibleCount > 60 && (
+            <button
+              type="button"
+              onClick={() => setVisibleCount(60)}
+              className="px-3 py-1.5 rounded bg-[var(--sub-alt-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 text-[var(--sub-color)] hover:text-[var(--text-color)] transition cursor-pointer text-[11px] font-mono"
+            >
+              show first 60
+            </button>
+          )}
+        </div>
+
+        {filteredWords.length === 0 && (
+          <p className="text-xs font-mono text-[var(--sub-color)] py-4 text-center">
+            No words match “{rosterQuery}”.
+          </p>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
           {rosterWords.map((w) => (
             <div
@@ -204,11 +258,6 @@ export function ConstellationDetailClient({ familyId, ownerLanguageIds }: Conste
             </div>
           ))}
         </div>
-        {words.length > rosterWords.length && (
-          <p className="text-[11px] font-mono text-[var(--sub-color)]">
-            showing first {rosterWords.length} of {words.length} words in this layer.
-          </p>
-        )}
       </div>
 
       {/* 5-Question Branch Practice Drill Modal */}

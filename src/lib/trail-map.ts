@@ -15,9 +15,9 @@ import type { LessonStar, TopicCluster, TrailBranch, TrailGate } from "./types";
 //   · the spine core(n)—core(n+1) is the only required sequence; sprigs and
 //     branches hang off cores, so every side lesson can be skipped
 //
-// Layout rules (bottom → top, like the Baba maps):
-//   · nodes are authored top-down, then the whole map is flipped so topic 1
-//     sits at the bottom and later topics climb upward
+// Layout rules (top → bottom, like a reading page):
+//   · topic 1 sits at the top so a first visit lands on the start of the
+//     trail instead of the end of a 30-topic graph
 //   · a gentle serpentine swings the spine sideways on wide canvases
 //   · sprigs fan out beside their core (left, right, then second row)
 //   · branches chain horizontally on the freer side, falling back to below
@@ -103,12 +103,12 @@ const BRANCH_W = 150;
 const BRANCH_H = 44;
 const GATE_W = 168;
 const GATE_H = 40;
-const LABEL_H = 40;
-const TOPIC_GAP = 78;
+const LABEL_H = 30;
+const TOPIC_GAP = 50;
 const SIDE_GAP = 16;
 const EDGE_PAD = 10;
-const TOP_PAD = 90;
-const BOTTOM_PAD = 110;
+const TOP_PAD = 54;
+const BOTTOM_PAD = 64;
 
 export const nodeSize = (kind: NodeKind) =>
   kind === "core" ? { w: CORE_W, h: CORE_H } : kind === "sprig" ? { w: SPRIG_W, h: SPRIG_H } : { w: BRANCH_W, h: BRANCH_H };
@@ -200,7 +200,7 @@ export function buildTrailLayout(width: number, data: TrailData = GERMAN_TRAIL_D
         plan: sprig.plan,
         authored: Boolean(sprig.authored),
         x: coreX + (side === 1 ? CORE_W + SIDE_GAP : -(SPRIG_W + SIDE_GAP)),
-        y: coreY + (CORE_H - SPRIG_H) / 2 + row * (SPRIG_H + 12),
+        y: coreY + (CORE_H - SPRIG_H) / 2 + row * (SPRIG_H + 9),
         w: SPRIG_W,
         h: SPRIG_H,
       });
@@ -235,13 +235,13 @@ export function buildTrailLayout(width: number, data: TrailData = GERMAN_TRAIL_D
       const sprigSides = topic.sprigs.map((_, j) => (j % 2 === 0 ? -1 : 1));
       const side = sprigSides.filter((s) => s === 1).length <= sprigSides.filter((s) => s === -1).length ? 1 : -1;
       let bx = clampX(shiftedCore.x + side * 12, BRANCH_W, w);
-      let by = clusterBottom + 20;
+      let by = clusterBottom + 12;
       branch.lessons.forEach((lesson, i) => {
         if (i > 0) {
           const nextX = bx + side * (BRANCH_W + 24);
           if (nextX < EDGE_PAD || nextX + BRANCH_W > w - EDGE_PAD) {
             bx = clampX(shiftedCore.x + side * 12, BRANCH_W, w);
-            by += BRANCH_H + 14;
+            by += BRANCH_H + 9;
           } else {
             bx = nextX;
           }
@@ -267,9 +267,16 @@ export function buildTrailLayout(width: number, data: TrailData = GERMAN_TRAIL_D
 
   const height = cursor - TOPIC_GAP + BOTTOM_PAD;
 
-  // flip: topic 1 ends up at the bottom, the trail climbs upward
-  for (const node of nodes) node.y = height - node.y - node.h;
-  for (const anchor of anchors) anchor.y = height - anchor.y - 34;
+  // Topic 1 stays at the top. Integer geometry keeps SSR and client SVG/CSS
+  // output byte-identical.
+  for (const node of nodes) {
+    node.x = Math.round(node.x);
+    node.y = Math.round(node.y);
+  }
+  for (const anchor of anchors) {
+    anchor.x = Math.round(anchor.x);
+    anchor.y = Math.round(anchor.y);
+  }
 
   const decorations = buildDecorations(w, height, decoChars);
 
@@ -282,7 +289,11 @@ export function buildTrailLayout(width: number, data: TrailData = GERMAN_TRAIL_D
     if (!a || !b) continue;
     const midX = (a.x + a.w / 2 + b.x + b.w / 2) / 2 - GATE_W / 2;
     const midY = (a.y + a.h / 2 + b.y + b.h / 2) / 2 - GATE_H / 2;
-    gates.push({ ...gate, x: clampX(midX, GATE_W, w), y: Math.min(Math.max(midY, EDGE_PAD), height - EDGE_PAD - GATE_H) });
+    gates.push({
+      ...gate,
+      x: Math.round(clampX(midX, GATE_W, w)),
+      y: Math.round(Math.min(Math.max(midY, EDGE_PAD), height - EDGE_PAD - GATE_H)),
+    });
   }
 
   return { width: w, height, nodes, edges: buildTrailEdgePairs(data), decorations, topicAnchors: anchors, gates };
@@ -301,8 +312,8 @@ function buildDecorations(width: number, height: number, chars?: string[]): Deco
   };
   for (let i = 0; i < count; i++) {
     out.push({
-      x: 24 + rand() * (width - 48),
-      y: rand() * height,
+      x: Math.round(24 + rand() * (width - 48)),
+      y: Math.round(rand() * height),
       char: decoChars[i % decoChars.length],
       size: 34 + Math.floor(rand() * 80),
       rotate: Math.round(rand() * 50 - 25),

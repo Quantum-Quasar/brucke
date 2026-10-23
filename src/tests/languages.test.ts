@@ -20,7 +20,8 @@ class LocalStorageMock {
 
 import { LANGUAGES, DEFAULT_LANGUAGE_ID, getLanguageDefinition, isValidLanguageId } from "@/data/languages";
 import { getLanguageContent, getTotalWordCount, EMPTY_COMPENDIUM, getNextPlayableLessonIdFor } from "@/data/language-content";
-import { getWordCount, WORD_COUNTS } from "@/data/word-counts";
+import { getCourseCounts, getWordCount, COURSE_COUNTS, WORD_COUNTS } from "@/data/word-counts";
+import { getAtlasFamilies } from "@/lib/atlas-families";
 import { getWordEntity, getWordEntityMap, getWordLessonMap } from "@/lib/word-entities";
 import { loadSavedState, useAppStore, STORAGE_KEY, type LanguageProgress } from "@/lib/store";
 import { TOTAL_TOPICS } from "@/data/curriculum";
@@ -33,6 +34,18 @@ describe("language registry", () => {
     for (const languageId of Object.keys(WORD_COUNTS)) {
       expect(getWordCount(languageId)).toBe(getTotalWordCount(languageId));
       expect(getWordCount(languageId)).toBe(getLanguageContent(languageId).compendium!.wordList.length);
+    }
+  });
+
+  test("the lightweight course counts stay pinned to the real course content", () => {
+    // Onboarding shows topic/lesson/family counts without importing lessons.
+    for (const languageId of Object.keys(COURSE_COUNTS)) {
+      const content = getLanguageContent(languageId);
+      const counts = getCourseCounts(languageId);
+      expect(counts.topics).toBe(content.totalTopics);
+      expect(counts.lessons).toBe(content.lessons.length);
+      expect(counts.words).toBe(content.compendium!.wordList.length);
+      expect(counts.families).toBe(getAtlasFamilies(content.compendium!).length);
     }
   });
 

@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import { TopNav } from "@/components/navigation/TopNav";
 import { BottomNav } from "@/components/navigation/BottomNav";
 import { useAppStore, STORAGE_KEY } from "@/lib/store";
@@ -31,6 +32,10 @@ const FontSelectorModal = dynamic(
  * boot script; this shell is the part that needs browser state.
  */
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  // Lesson routes hide the dock, so they must not reserve dock clearance.
+  const isLessonRoute = pathname.startsWith("/trail/");
+
   // Hydrate local progress from localStorage and cookies on client mount
   useEffect(() => {
     useAppStore.getState().hydrateFromStorage();
@@ -49,7 +54,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <TopNav />
 
       {/* Main Content Viewport (bottom padding clears the fixed game-style dock) */}
-      <main className="flex-1 pb-28 md:pb-28">{children}</main>
+      <main className={`flex-1 ${isLessonRoute ? "pb-8" : "pb-28"}`}>{children}</main>
 
       <BottomNav />
 

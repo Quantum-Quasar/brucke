@@ -5,10 +5,23 @@ import { AppShell } from "@/components/common/AppShell";
 import { THEME_VARS_CACHE_KEY } from "@/data/themes";
 import { STORAGE_KEY, STORAGE_COOKIE_KEY } from "@/lib/storage-keys";
 
+const SITE_TITLE = "Brücke — Learn through the words you already know";
+const SITE_DESCRIPTION =
+  "Learn German, French and Spanish by decoding the words you already know — 30 topics, sound-law lessons and spaced review.";
+
 export const metadata: Metadata = {
-  title: "Brücke — Cognate Engine",
-  description:
-    "Learn vocabulary across languages through historical sound shifts and etymological cognates. Fast, distraction-free, and keyboard-driven.",
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
 };
 
 export const viewport: Viewport = {
@@ -46,6 +59,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       if (cp && cp.font && !fontId) fontId = cp.font;
                     }
                   }
+                  // Landing page vs returning trail: hide the first-visit hero
+                  // before first paint so returning learners get no flash.
+                  var returning = false;
+                  var hasDone = function (slice) {
+                    return Boolean(
+                      slice &&
+                        ((Array.isArray(slice.completedLessons) && slice.completedLessons.length > 0) ||
+                          (slice.lessonProgress && Object.keys(slice.lessonProgress).length > 0))
+                    );
+                  };
+                  if (hasDone(p)) returning = true;
+                  if (p && p.progressByLanguage) {
+                    for (var lang in p.progressByLanguage) {
+                      if (hasDone(p.progressByLanguage[lang])) { returning = true; break; }
+                    }
+                  }
+                  if (!returning && hasDone(cp)) returning = true;
+                  document.documentElement.setAttribute('data-returning', returning ? 'true' : 'false');
                   var safePattern = /^[a-zA-Z0-9_-]+$/;
                   if (themeId && safePattern.test(themeId)) {
                     document.documentElement.setAttribute('data-theme', themeId);

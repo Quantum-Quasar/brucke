@@ -10,7 +10,14 @@ import { getWordCount } from "@/data/word-counts";
 // Slim identity + customization bar. All destinations live in the bottom dock (BottomNav).
 export const TopNav: React.FC = () => {
   const [mounted, setMounted] = React.useState(false);
-  const masteredCount = useAppStore((s) => Object.values(s.wordMastery).filter((m) => m === "mastered").length);
+  const seenCount = useAppStore(
+    (s) =>
+      Object.entries(s.wordMastery).filter(
+        ([id, m]) =>
+          (m === "encountered" || m === "mastered") &&
+          !/^(sentence_|article_|compound_|trap_)/.test(id)
+      ).length
+  );
   const openOnboarding = useAppStore((s) => s.openOnboarding);
   const showMasteryCounter = useAppStore((s) => s.settings.showMasteryCounter);
   const activeLanguageId = useAppStore((s) => s.activeLanguageId);
@@ -21,7 +28,7 @@ export const TopNav: React.FC = () => {
   }, []);
 
   const totalWords = mounted ? getWordCount(activeLanguageId) : 0;
-  const displayMastered = mounted ? masteredCount : 0;
+  const displaySeen = mounted ? seenCount : 0;
 
   return (
     <header className="sticky top-0 z-40 w-full bg-[var(--bg-color)] border-b border-[var(--sub-color)]/20 transition-colors">
@@ -34,18 +41,21 @@ export const TopNav: React.FC = () => {
               brücke
             </span>
             <span className="text-[10px] font-mono text-[var(--sub-color)] hidden sm:inline">
-              {language.name.toLowerCase()} cognates
+              {language.name.toLowerCase()} through english
             </span>
           </div>
         </Link>
 
         {/* Right side: customization & guide (navigation lives in the bottom dock) */}
         <div className="flex items-center gap-2 sm:gap-3 font-mono text-xs">
-          {mounted && showMasteryCounter && (
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded bg-[var(--sub-alt-color)] text-[var(--sub-color)] text-[11px]">
-              <span className="text-[var(--main-color)] font-bold">{displayMastered}</span>
+          {mounted && showMasteryCounter && displaySeen > 0 && (
+            <div
+              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded bg-[var(--sub-alt-color)] text-[var(--sub-color)] text-[11px]"
+              title="Words you have met so far. Words become mastered only after repeated successful reviews."
+            >
+              <span className="text-[var(--main-color)] font-bold">{displaySeen}</span>
               <span>/</span>
-              <span>{totalWords} mastered</span>
+              <span>{totalWords} words seen</span>
             </div>
           )}
 

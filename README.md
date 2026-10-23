@@ -75,7 +75,7 @@ Visit `http://localhost:3000` in your browser.
 1. **The Trail Map (`/` — the homepage)**:
    - Baba Is You-style node map: 30 topic clusters on one linear spine, with skip-able extra-practice nodes ("sprigs") and support-material branches hanging off each cluster.
    - All adjacent nodes unlock at once when a node is completed; the spine itself stays strictly ordered.
-   - Climb the map bottom-to-top; the pulsing theme-colored selector marks your recommended node.
+   - Read the map top-to-bottom from topic 1; the pulsing theme-colored selector marks your recommended node.
    - The entire curriculum is authored: 30 cores + 79 sprigs + 60 branch lessons = **169 lessons** (`src/data/curriculum.ts`, `src/data/lessons.ts`).
    - Custom DOM+SVG renderer (no game libraries) with `content-visibility` windowing per topic cluster, sized for hundreds of future lessons.
    - 5-part card-by-card lesson wizard (Hook, Pattern, Transformation Table, Bite-Sized Practice, Summary & Retries) at `/trail/[id]`.

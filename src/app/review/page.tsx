@@ -3,6 +3,7 @@
 // ponytail: cohesive multi-modal review hub with 4 decks, selectable review styles, and unified SM-2 grading
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import Link from "next/link";
 import {
   RotateCcw,
   Flame,
@@ -26,7 +27,6 @@ import { ShiftPair } from "@/components/common/ShiftPair";
 import { GermanCharBar } from "@/components/common/GermanCharBar";
 import { GenderBadge } from "@/components/common/GenderBadge";
 import { GenderGuideBanner } from "@/components/common/GenderGuideBanner";
-import { VoiceStatusBanner } from "@/components/common/VoiceStatusBanner";
 import { useAppStore } from "@/lib/store";
 import { getDueCards, localDateKey, type ReviewGrade } from "@/lib/srs";
 import {
@@ -161,6 +161,7 @@ export default function ReviewPage() {
   const preferredReviewMode = useAppStore((s) => s.preferredReviewMode);
   const setPreferredReviewMode = useAppStore((s) => s.setPreferredReviewMode);
   const settings = useAppStore((s) => s.settings);
+  const hasSeenGenderIntro = useAppStore((s) => s.hasSeenGenderIntro);
   const [reviewMode, setReviewMode] = useState<ReviewMode>(preferredReviewMode || "flashcard");
   const [isModeSelectorOpen, setIsModeSelectorOpen] = useState(false);
   const [pendingDeck, setPendingDeck] = useState<PendingDeckStart | null>(null);
@@ -191,6 +192,17 @@ export default function ReviewPage() {
   const [currentFeedbackNote, setCurrentFeedbackNote] = useState<string | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const sessionRef = useRef<HTMLDivElement>(null);
+
+  // Starting a deck replaced the setup screen below the fold: scroll the card
+  // into view so the prompt, not the gender explainer, is what the learner sees.
+  useEffect(() => {
+    if (!activeDeck) return;
+    const id = window.requestAnimationFrame(() => {
+      sessionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, [activeDeck]);
 
   const srsCards = useAppStore((s) => s.srsCards);
   const wordMastery = useAppStore((s) => s.wordMastery);
@@ -199,6 +211,21 @@ export default function ReviewPage() {
 
   const completedLessons = useAppStore((s) => s.completedLessons);
   const dueCards = useMemo(() => sortDueCards(getDueCards(srsCards)), [srsCards]);
+  const hasAnyCards = Object.keys(srsCards).length > 0;
+
+  // Language-aware chrome: French uses conversion bridges, Spanish sound
+  // shifts, German consonant shifts. The review mechanics are identical.
+  const familyNoun = activeLanguageId === "fr" ? "conversion family" : "shift family";
+  const recallSource =
+    activeLanguageId === "fr"
+      ? "French conversion bridges"
+      : activeLanguageId === "es"
+      ? "Spanish cognate patterns"
+      : "historical sound shifts";
+  const compoundExamples =
+    data.compounds.slice(0, 2).map((c) => c.compound.toLowerCase()).join(", ") || "compound words";
+  const trapExamples =
+    data.falseFriends.slice(0, 2).map((f) => f.german_word.toLowerCase()).join(", ") || "false friends";
   const weakestCards = useMemo(() => rankWeakestCards(srsCards), [srsCards]);
 
   /** Fresh un-seen SM-2 card, so a word with no history is still reviewable. */
@@ -437,6 +464,8 @@ export default function ReviewPage() {
 
   // 1-Click direct deck start
   const startDeck = (deck: DeckType, customCards?: SRSCard[]) => {
+    // After a due session every card is rescheduled; never open an empty shell.
+    if (deck === "due" && dueCards.length === 0) return;
     setActiveDeck(deck);
     setCurrentIndex(0);
     setSessionEpoch((epoch) => epoch + 1);
@@ -1024,10 +1053,39 @@ export default function ReviewPage() {
           <span>spaced repetition</span>
         </div>
         <h1 className="text-2xl font-bold font-mono text-[var(--text-color)] tracking-tight">review</h1>
-        <p className="text-[var(--sub-color)] text-xs font-mono">
-          recall practice powered by historical sound shifts and the sm-2 interval algorithm.
+        <p className="text-[var(--sub-color)] text-sm font-mono">
+          recall practice powered by {recallSource} and the sm-2 interval algorithm.
         </p>
       </div>
+
+      {mounted && language.status === "available" && !activeDeck && !hasAnyCards && (
+        <section className="p-5 sm:p-6 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--main-color)]/35 space-y-3">
+          <div className="text-[10px] font-mono uppercase tracking-widest text-[var(--main-color)] font-semibold">
+            nothing to review yet
+          </div>
+          <h2 className="text-lg font-bold text-[var(--text-color)]">
+            {completedLessons.length === 0
+              ? "Finish lesson 1 and your first cards appear here."
+              : "Finish another lesson to add cards to the queue."}
+          </h2>
+          <p className="text-sm text-[var(--sub-color)] leading-relaxed max-w-2xl">
+            Every word you meet on the trail becomes an sm-2 card. Review brings each one back just
+            before you would forget it — no cards are created until a lesson is finished, so this
+            page stays quiet until you have something to practise.
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href={`/trail/${content.lessons[0]?.id ?? 1}`}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-bold text-xs font-mono hover:opacity-90 transition"
+            >
+              Start lesson 1 <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+            <span className="text-[11px] font-mono text-[var(--sub-color)]">
+              the decks below are still browseable.
+            </span>
+          </div>
+        </section>
+      )}
 
       {language.status !== "available" && (
         <div className="p-8 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-center space-y-3">
@@ -1035,7 +1093,7 @@ export default function ReviewPage() {
           <h2 className="text-base font-bold font-mono text-[var(--text-color)]">
             review comes with the {language.name.toLowerCase()} trail
           </h2>
-          <p className="text-xs font-mono text-[var(--sub-color)] max-w-md mx-auto leading-relaxed">
+          <p className="text-sm font-mono text-[var(--sub-color)] max-w-md mx-auto leading-relaxed">
             spaced repetition unlocks as soon as {language.name} content is authored. switch languages
             from settings — each language keeps its own review queue.
           </p>
@@ -1044,7 +1102,8 @@ export default function ReviewPage() {
 
       {language.status === "available" && (
       <>
-      {/* Stats Bar */}
+      {/* Stats Bar — day zero has its own empty state instead of three zeros */}
+      {!activeDeck && hasAnyCards && (
       <div className="p-3 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
         <div className="flex items-center gap-6">
           <span className="text-[var(--main-color)] font-bold">{mounted ? masteredCount : 0} mastered</span>
@@ -1052,7 +1111,7 @@ export default function ReviewPage() {
           <span className="text-[var(--text-color)] font-bold">{mounted ? dueCards.length : 0} due today</span>
         </div>
         <div className="flex items-center gap-4">
-          <GenderGuideBanner compact />
+          {hasSeenGenderIntro && <GenderGuideBanner compact />}
           <div className="flex items-center gap-2 text-[var(--sub-color)]">
             <span>style:</span>
             <select
@@ -1084,18 +1143,19 @@ export default function ReviewPage() {
           </div>
         </div>
       </div>
-
-      {/* Gender Guide Banner (Dismissible on first encounter) */}
-      <GenderGuideBanner />
-      <VoiceStatusBanner />
+      )}
 
       {/* ACTIVE REVIEW SESSION MODAL / CARD */}
       {activeDeck && currentCard && currentWord ? (
-        <div className="p-6 sm:p-8 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 shadow-md space-y-6 animate-in fade-in duration-150">
+        <div
+          ref={sessionRef}
+          tabIndex={-1}
+          className="scroll-mt-20 p-6 sm:p-8 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 shadow-md space-y-6 animate-in fade-in duration-150 focus:outline-none"
+        >
           {/* Card Header: Counter, Style Switcher, Exit */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--sub-color)]/15 pb-4">
             <div className="flex items-center gap-3">
-              <span className="text-xs font-mono text-[var(--sub-color)] uppercase tracking-wider">
+              <span className="text-sm font-mono text-[var(--sub-color)] uppercase tracking-wider">
                 card {currentIndex + 1} / {sessionCards.length}
               </span>
 
@@ -1148,7 +1208,7 @@ export default function ReviewPage() {
                 tabIndex={-1}
                 onClick={goBack}
                 disabled={!canGoBack}
-                className="text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-2.5 py-1 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 transition flex items-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                className="text-sm font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-2.5 py-1 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 transition flex items-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                 title="Previous card (←)"
               >
                 <ArrowLeft className="w-3 h-3" />
@@ -1161,7 +1221,7 @@ export default function ReviewPage() {
                 tabIndex={-1}
                 onClick={goForward}
                 disabled={!canGoForward}
-                className="text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-2.5 py-1 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 transition flex items-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                className="text-sm font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-2.5 py-1 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 transition flex items-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                 title="Next card (→)"
               >
                 <span>next</span>
@@ -1176,7 +1236,7 @@ export default function ReviewPage() {
                 onKeyDown={(e) => {
                   if (e.key === " " || e.key === "Enter") e.preventDefault();
                 }}
-                className="text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-2.5 py-1 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 transition cursor-pointer flex items-center gap-1.5"
+                className="text-sm font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-2.5 py-1 rounded bg-[var(--bg-color)] border border-[var(--sub-color)]/20 transition cursor-pointer flex items-center gap-1.5"
                 title="Exit Session (Esc)"
               >
                 <span>exit</span>
@@ -1188,7 +1248,7 @@ export default function ReviewPage() {
           {/* Front Prompt */}
           <div className="text-center space-y-2 py-2">
             <div className="flex flex-wrap items-center justify-center gap-2">
-              <span className="text-xs font-mono text-[var(--sub-color)] uppercase tracking-widest">
+              <span className="text-sm font-mono text-[var(--sub-color)] uppercase tracking-widest">
                 shift: {currentWord.shift_rule}
               </span>
               {currentWord.gender && language.genderSystem && (
@@ -1207,7 +1267,7 @@ export default function ReviewPage() {
             </h2>
             <p className="text-sm font-mono text-[var(--sub-color)]">&quot;{currentWord.english_meaning}&quot;</p>
             {!isRevealed && currentCloze && (
-              <div className="mx-auto max-w-md pt-2 text-xs font-mono text-[var(--sub-color)]">
+              <div className="mx-auto max-w-md pt-2 text-sm font-mono text-[var(--sub-color)]">
                 <p lang={language.ttsLocale} className="text-[var(--text-color)]">{currentCloze}</p>
                 {currentWord.context_translation && <p>{currentWord.context_translation}</p>}
               </div>
@@ -1217,7 +1277,7 @@ export default function ReviewPage() {
           {/* MODE 1: QUICK FLIP (FLASHCARD) */}
           {effectiveReviewMode === "flashcard" && !isRevealed && (
             <div className="space-y-4 max-w-md mx-auto text-center py-4">
-              <p className="text-xs font-mono text-[var(--sub-color)]">
+              <p className="text-sm font-mono text-[var(--sub-color)]">
                 recall the {language.name.toLowerCase()} twin in your mind, then reveal.
               </p>
               <button
@@ -1294,7 +1354,7 @@ export default function ReviewPage() {
               {/* Selected Tiles Assembly Rack */}
               <div className="p-3.5 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/25 min-h-[60px] flex flex-wrap items-center justify-center gap-2">
                 {selectedTiles.length === 0 ? (
-                  <span className="text-xs font-mono text-[var(--sub-color)]/60 italic">{currentWord.id.startsWith("sentence_") ? "tap word tiles below in sentence order (or press 1–9)..." : "tap tiles below to assemble word..."}</span>
+                  <span className="text-sm font-mono text-[var(--sub-color)]/60 italic">{currentWord.id.startsWith("sentence_") ? "tap word tiles below in sentence order (or press 1–9)..." : "tap tiles below to assemble word..."}</span>
                 ) : (
                   selectedTiles.map((tile, idx) => (
                     <button
@@ -1332,7 +1392,7 @@ export default function ReviewPage() {
                       type="button"
                       onClick={handleResetTiles}
                       disabled={selectedTiles.length === 0}
-                      className="px-3 py-1.5 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--sub-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--sub-color)] transition cursor-pointer disabled:opacity-40"
+                      className="px-3 py-1.5 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--sub-color)]/10 border border-[var(--sub-color)]/20 text-sm font-mono text-[var(--sub-color)] transition cursor-pointer disabled:opacity-40"
                     >
                       reset
                     </button>
@@ -1352,7 +1412,7 @@ export default function ReviewPage() {
                     <button
                       type="button"
                       onClick={() => setIsRevealed(true)}
-                      className="px-3 py-1.5 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--sub-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--sub-color)] transition cursor-pointer flex items-center gap-1.5"
+                      className="px-3 py-1.5 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--sub-color)]/10 border border-[var(--sub-color)]/20 text-sm font-mono text-[var(--sub-color)] transition cursor-pointer flex items-center gap-1.5"
                     >
                       <span>show</span>
                       {settings.showKeyTips && (
@@ -1487,9 +1547,9 @@ export default function ReviewPage() {
                       <span className="keycap text-[10px]">r</span>
                     )}
                   </button>
-                  <span className="text-xs font-mono text-[var(--sub-color)]">{currentWord.ipa}</span>
+                  <span className="text-sm font-mono text-[var(--sub-color)]">{currentWord.ipa}</span>
                 </div>
-                <p className="text-xs font-mono text-[var(--sub-color)] max-w-md mx-auto">{currentWord.etymology_derivation}</p>
+                <p className="text-sm font-mono text-[var(--sub-color)] max-w-md mx-auto">{currentWord.etymology_derivation}</p>
                 <div className="p-3 rounded bg-[var(--sub-alt-color)] font-mono max-w-md mx-auto border border-[var(--sub-color)]/15 text-left">
                   <div className="flex items-start justify-between gap-2">
                     <ExampleSentence
@@ -1511,8 +1571,8 @@ export default function ReviewPage() {
                 </div>
               </div>
 
-              {/* SM-2 Grade Buttons */}
-              <div className="space-y-2 pt-2">
+              {/* SM-2 Grade Buttons — sticky on phones so “good” is always reachable */}
+              <div className="space-y-2 pt-2 sticky bottom-20 z-20 -mx-2 px-2 pb-2 rounded-lg bg-[var(--sub-alt-color)]/95 backdrop-blur sm:static sm:mx-0 sm:px-0 sm:pb-0 sm:bg-transparent sm:backdrop-blur-none">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <button
                     type="button"
@@ -1602,17 +1662,38 @@ export default function ReviewPage() {
                 </div>
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
-                  disabled={!completedDeck}
-                  onClick={() => {
-                    if (completedDeck) startDeck(completedDeck);
-                  }}
-                  className="px-4 py-2 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-bold text-xs font-mono hover:opacity-90 transition disabled:opacity-40"
-                >
-                  review again
-                </button>
-                <span className="text-[11px] font-mono text-[var(--sub-color)]">Your next intervals are saved automatically.</span>
+                {completedDeck === "due" && dueCount === 0 ? (
+                  <>
+                    <span className="text-xs font-mono text-[var(--sub-color)]">
+                      All due cards are scheduled. Your next intervals are saved.
+                    </span>
+                    {weakestCount > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => startDeck("weakest")}
+                        className="px-4 py-2 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-bold text-xs font-mono hover:opacity-90 transition"
+                      >
+                        review weakest instead
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      disabled={!completedDeck}
+                      onClick={() => {
+                        if (completedDeck) startDeck(completedDeck);
+                      }}
+                      className="px-4 py-2 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-bold text-xs font-mono hover:opacity-90 transition disabled:opacity-40"
+                    >
+                      review again
+                    </button>
+                    <span className="text-[11px] font-mono text-[var(--sub-color)]">
+                      Your next intervals are saved automatically.
+                    </span>
+                  </>
+                )}
               </div>
             </section>
           )}
@@ -1629,7 +1710,7 @@ export default function ReviewPage() {
                   {dueCount} cards
                 </span>
               </div>
-              <p className="text-xs font-mono text-[var(--sub-color)]">
+              <p className="text-sm font-mono text-[var(--sub-color)]">
                 scheduled by sm-2 spacing interval for optimal memory consolidation.
               </p>
             </div>
@@ -1646,6 +1727,9 @@ export default function ReviewPage() {
               {dueCount > 0 ? "start due review" : "no due reviews"}
             </button>
           </div>
+
+          {/* Gender guide after the due action; compact-only once dismissed. */}
+          {hasAnyCards && !hasSeenGenderIntro && <GenderGuideBanner />}
 
           {/* Scope & session size for the open-ended decks */}
           <div className="p-4 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 flex flex-col lg:flex-row lg:items-center gap-4 text-xs font-mono">
@@ -1701,7 +1785,7 @@ export default function ReviewPage() {
               </label>
             </div>
             <p className="text-[var(--sub-color)] lg:ml-auto">
-              applies to shift family, domain and everything.
+              applies to {familyNoun}, domain and everything.
             </p>
           </div>
 
@@ -1712,16 +1796,16 @@ export default function ReviewPage() {
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-[var(--main-color)]">
                   <Layers className="w-4 h-4" />
-                  <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">by shift family</h4>
+                  <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">by {familyNoun}</h4>
                 </div>
-                <p className="text-xs font-mono text-[var(--sub-color)]">
-                  review all words belonging to a single structural consonant shift — or every family at once.
+                <p className="text-sm font-mono text-[var(--sub-color)] leading-relaxed">
+                  review all words belonging to a single {familyNoun} — or every family at once.
                 </p>
 
                 <select
                   value={selectedShiftId}
                   onChange={(e) => setSelectedShiftId(e.target.value)}
-                  aria-label="Choose a sound-shift family to review"
+                  aria-label={`Choose a ${familyNoun} to review`}
                   className="w-full mt-2 px-3 py-1.5 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--text-color)] outline-none"
                 >
                   <option value={ALL_ID}>
@@ -1748,13 +1832,13 @@ export default function ReviewPage() {
                   requestDeckStart(
                     "shift",
                     undefined,
-                    selectedShiftId === ALL_ID ? "every shift family" : selectedShiftFamily?.name
+                    selectedShiftId === ALL_ID ? `every ${familyNoun}` : selectedShiftFamily?.name
                   )
                 }
                 disabled={shiftCount === 0}
                 className="w-full py-2 rounded-lg bg-[var(--bg-color)] hover:bg-[var(--main-color)]/10 border border-[var(--sub-color)]/20 text-xs font-mono font-bold text-[var(--text-color)] hover:text-[var(--main-color)] transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                review shift family
+                review {familyNoun}
               </button>
             </div>
 
@@ -1765,7 +1849,7 @@ export default function ReviewPage() {
                   <Sparkles className="w-4 h-4" />
                   <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">by domain</h4>
                 </div>
-                <p className="text-xs font-mono text-[var(--sub-color)]">
+                <p className="text-sm font-mono text-[var(--sub-color)]">
                   themed decks from the full compendium — new words appear here even before you meet them in a lesson.
                 </p>
 
@@ -1811,7 +1895,7 @@ export default function ReviewPage() {
                   <Flame className="w-4 h-4" />
                   <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">weakest words</h4>
                 </div>
-                <p className="text-xs font-mono text-[var(--sub-color)]">
+                <p className="text-sm font-mono text-[var(--sub-color)]">
                   words you forgot or only guessed, hardest first.
                 </p>
                 <div className="text-xs font-mono text-[var(--error-color)] pt-1">
@@ -1835,7 +1919,7 @@ export default function ReviewPage() {
                   <CheckCircle2 className="w-4 h-4" />
                   <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">recent lessons</h4>
                 </div>
-                <p className="text-xs font-mono text-[var(--sub-color)]">
+                <p className="text-sm font-mono text-[var(--sub-color)]">
                   words from the last three trail lessons you completed, newest first.
                 </p>
                 <div className="text-xs font-mono text-[var(--main-color)] pt-1">
@@ -1861,10 +1945,10 @@ export default function ReviewPage() {
                   <Sparkles className="w-4 h-4" />
                   <h4 className="text-sm font-bold font-mono text-[var(--text-color)]">compounds & traps</h4>
                 </div>
-                <p className="text-xs font-mono text-[var(--sub-color)]">
-                  review literal calques (handschuh, flugzeug) and false friends (gift, bald).
+                <p className="text-sm font-mono text-[var(--sub-color)] leading-relaxed">
+                  review literal calques ({compoundExamples}) and false friends ({trapExamples}).
                 </p>
-                <div className="text-xs font-mono text-[var(--sub-color)] pt-1">
+                <div className="text-sm font-mono text-[var(--sub-color)] pt-1">
                   {compoundCount} items
                 </div>
               </div>
@@ -1888,7 +1972,7 @@ export default function ReviewPage() {
                     full clauses
                   </span>
                 </div>
-                <p className="text-xs font-mono text-[var(--sub-color)]">
+                <p className="text-sm font-mono text-[var(--sub-color)]">
                   spaced repetition for full {language.name.toLowerCase()} sentences from every trail lesson — practice word order, brackets, and pronouns in context.
                 </p>
                 <div className="text-xs font-mono text-[var(--main-color)] pt-1">
@@ -1915,7 +1999,7 @@ export default function ReviewPage() {
                     mcq only
                   </span>
                 </div>
-                <p className="text-xs font-mono text-[var(--sub-color)]">
+                <p className="text-sm font-mono text-[var(--sub-color)]">
                   rapid-fire 4-option article mcq ({language.genderSystem ? language.genderSystem.articles.join(" / ") : "der / die / das"}) for every gendered {language.name.toLowerCase()} noun. launches directly into mcq.
                 </p>
                 <div className="text-xs font-mono text-[var(--main-color)] pt-1">
@@ -1942,7 +2026,7 @@ export default function ReviewPage() {
                     full run
                   </span>
                 </div>
-                <p className="text-xs font-mono text-[var(--sub-color)]">
+                <p className="text-sm font-mono text-[var(--sub-color)]">
                   every word in every family and domain, plus compounds, false friends, sentence patterns, and article drills (each card automatically uses its supported review modes).
                 </p>
                 <div className="text-xs font-mono text-[var(--main-color)] pt-1">
@@ -1988,8 +2072,8 @@ export default function ReviewPage() {
                         ? "due cards"
                         : pendingDeck.deck === "shift"
                         ? selectedShiftId === ALL_ID
-                          ? "every shift family"
-                          : selectedShiftFamily?.name ?? "shift family"
+                          ? `every ${familyNoun}`
+                          : selectedShiftFamily?.name ?? familyNoun
                         : pendingDeck.deck === "weakest"
                         ? "weakest words"
                         : pendingDeck.deck === "recent"
@@ -2000,7 +2084,7 @@ export default function ReviewPage() {
                     }?`
                   : "how do you want to review?"}
               </h2>
-              <p className="text-xs font-mono text-[var(--sub-color)]">
+              <p className="text-sm font-mono text-[var(--sub-color)]">
                 pick your preferred exercise style below. all styles advance the same sm-2 interval queue.
               </p>
             </div>
@@ -2031,7 +2115,7 @@ export default function ReviewPage() {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs font-mono text-[var(--sub-color)]">
+                  <p className="text-sm font-mono text-[var(--sub-color)]">
                     zero typing. recall in your mind, press space to reveal, rate 1–4.
                   </p>
                 </div>
@@ -2061,7 +2145,7 @@ export default function ReviewPage() {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs font-mono text-[var(--sub-color)]">
+                  <p className="text-sm font-mono text-[var(--sub-color)]">
                     pick the {language.name.toLowerCase()} word from 4 options. press 1–4 keys or click.
                   </p>
                 </div>
@@ -2091,7 +2175,7 @@ export default function ReviewPage() {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs font-mono text-[var(--sub-color)]">
+                  <p className="text-sm font-mono text-[var(--sub-color)]">
                     tap letter and morpheme tiles into place to assemble the cognate.
                   </p>
                 </div>
@@ -2121,7 +2205,7 @@ export default function ReviewPage() {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs font-mono text-[var(--sub-color)]">
+                  <p className="text-sm font-mono text-[var(--sub-color)]">
                     type the {language.name.toLowerCase()} word letter-by-letter with diacritic shortcuts.
                   </p>
                 </div>
@@ -2132,7 +2216,7 @@ export default function ReviewPage() {
             </div>
 
             <div className="flex items-center justify-between pt-2 border-t border-[var(--sub-color)]/20">
-              <label className="flex items-center gap-2 text-xs font-mono text-[var(--sub-color)] cursor-pointer select-none">
+              <label className="flex items-center gap-2 text-sm font-mono text-[var(--sub-color)] cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={rememberPreference}
@@ -2148,7 +2232,7 @@ export default function ReviewPage() {
                   setIsModeSelectorOpen(false);
                   setPendingDeck(null);
                 }}
-                className="text-xs font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-3 py-1.5 rounded hover:bg-[var(--sub-alt-color)] transition cursor-pointer flex items-center gap-1.5"
+                className="text-sm font-mono text-[var(--sub-color)] hover:text-[var(--text-color)] px-3 py-1.5 rounded hover:bg-[var(--sub-alt-color)] transition cursor-pointer flex items-center gap-1.5"
               >
                 <span>cancel</span>
                 <span className="keycap text-[10px]">esc</span>

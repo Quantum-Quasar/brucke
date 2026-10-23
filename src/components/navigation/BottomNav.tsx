@@ -16,6 +16,10 @@ export const BottomNav: React.FC = () => {
 
   const dueCount = mounted ? getDueCards(srsCards).length : 0;
 
+  // Lesson pages own the whole mobile viewport: the dock was covering the
+  // forward action, so taps landed on Review instead of advancing the lesson.
+  if (pathname.startsWith("/trail/")) return null;
+
   const tabs = [
     {
       href: "/",

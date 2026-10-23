@@ -23,8 +23,9 @@ interface WebEdge {
 }
 
 const WIDTH = 640;
-const HEIGHT = 460;
+const HEIGHT = 520;
 const VISIBLE_CAP = 20;
+const LABEL_HEIGHT = 26;
 
 /**
  * Seeded, irregular "actual web" layout: nodes are scattered on a jittered
@@ -34,15 +35,22 @@ const VISIBLE_CAP = 20;
  */
 function buildWeb(
   familyId: string,
-  words: { id: string }[],
+  words: { id: string; english_cognate?: string; target_word?: string }[],
 ): { nodes: WebNode[]; edges: WebEdge[] } {
-  const ids = words.map((w) => w.id).slice(0, VISIBLE_CAP);
+  const visible = words.slice(0, VISIBLE_CAP);
+  const ids = visible.map((w) => w.id);
   const n = ids.length;
   if (n === 0) return { nodes: [], edges: [] };
 
   const rng = mulberry32(hashSeed(familyId + ":" + ids.join(",")));
 
-  // Jittered-grid node positions (random web, but deterministic per family)
+  // Jittered-grid node positions (random web, but deterministic per family).
+  // Labels are wider than nodes, so x is clamped by the estimated label half
+  // width and overlapping labels are separated vertically below.
+  const labelHalfWidths = visible.map((w) => {
+    const label = `${w.english_cognate ?? ""} → ${w.target_word ?? ""}`;
+    return Math.min(120, Math.max(36, (label.length * 6.6 + 22) / 2));
+  });
   const cols = Math.max(2, Math.ceil(Math.sqrt(n * (WIDTH / HEIGHT))));
   const rows = Math.max(2, Math.ceil(n / cols));
   const cellW = WIDTH / cols;
@@ -50,13 +58,43 @@ function buildWeb(
   const nodes: WebNode[] = ids.map((id, i) => {
     const col = i % cols;
     const row = Math.floor(i / cols);
-    const jx = (rng() - 0.5) * cellW * 0.7;
-    const jy = (rng() - 0.5) * cellH * 0.7;
+    const jx = (rng() - 0.5) * cellW * 0.6;
+    const jy = (rng() - 0.5) * cellH * 0.55;
+    const half = labelHalfWidths[i];
     return {
-      x: Math.min(WIDTH - 70, Math.max(70, (col + 0.5) * cellW + jx)),
-      y: Math.min(HEIGHT - 40, Math.max(40, (row + 0.5) * cellH + jy)),
+      x: Math.min(WIDTH - half - 8, Math.max(half + 8, (col + 0.5) * cellW + jx)),
+      y: Math.min(HEIGHT - 30, Math.max(30, (row + 0.5) * cellH + jy)),
     };
   });
+
+  // Greedy label separation: push overlapping labels apart on the y axis.
+  for (let iter = 0; iter < 80; iter++) {
+    let moved = false;
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i];
+        const b = nodes[j];
+        const dx = Math.abs(a.x - b.x);
+        const dy = Math.abs(a.y - b.y);
+        if (dx >= labelHalfWidths[i] + labelHalfWidths[j] + 6) continue;
+        if (dy >= LABEL_HEIGHT) continue;
+        const push = (LABEL_HEIGHT - dy) / 2 + 1;
+        if (a.y <= b.y) {
+          a.y = Math.max(30, a.y - push);
+          b.y = Math.min(HEIGHT - 30, b.y + push);
+        } else {
+          a.y = Math.min(HEIGHT - 30, a.y + push);
+          b.y = Math.max(30, b.y - push);
+        }
+        moved = true;
+      }
+    }
+    if (!moved) break;
+  }
+  for (const node of nodes) {
+    node.x = Math.round(node.x);
+    node.y = Math.round(node.y);
+  }
 
   // Shuffle index order for tree construction so links cross the canvas
   const order = nodes.map((_, i) => i);
@@ -130,7 +168,7 @@ export const ConstellationWeb: React.FC<ConstellationWebProps> = ({
   return (
     <div className="space-y-4 font-sans">
       {/* Desktop Web Canvas */}
-      <div className="hidden md:block relative w-full h-[460px] bg-[var(--sub-alt-color)] rounded-lg border border-[var(--sub-color)]/20 overflow-auto">
+      <div className="hidden md:block relative w-full h-[520px] bg-[var(--sub-alt-color)] rounded-lg border border-[var(--sub-color)]/20 overflow-auto">
         <div className="relative" style={{ width: WIDTH, height: HEIGHT }}>
           <svg className="absolute inset-0 pointer-events-none" width={WIDTH} height={HEIGHT}>
           {web.edges.map((e, i) => (

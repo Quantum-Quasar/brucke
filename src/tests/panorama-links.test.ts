@@ -152,13 +152,13 @@ describe("panorama page wiring", () => {
     expect(VIEW_SOURCE).not.toMatch(/\/trail\/\d+/);
   });
 
-  test("the language tabs drive the store, not just local state", () => {
-    expect(VIEW_SOURCE).toContain("setActiveLanguage");
+  test("language tabs are view-only; opening a lesson is the explicit switch", () => {
+    expect(VIEW_SOURCE).toContain("setViewedLanguageId(languageId)");
     expect(VIEW_SOURCE).not.toContain("setSelectedLang");
-    // picking a tab switches the app language, not just the viewed panorama
+    // picking a tab changes only the viewed panorama
     expect(VIEW_SOURCE).toMatch(/onClick=\{\(\) => view\(lid\)\}/);
-    expect(VIEW_SOURCE).toMatch(/setActiveLanguage\(languageId\)/);
-    // links re-assert the viewed language before navigating
+    expect(VIEW_SOURCE).not.toMatch(/setActiveLanguage\(languageId\)/);
+    // opening a lesson is the explicit course switch
     expect(VIEW_SOURCE).toMatch(/onClick=\{\(\) => setActiveLanguage\(current\.id\)\}/);
   });
 

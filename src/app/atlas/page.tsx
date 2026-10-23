@@ -31,7 +31,15 @@ export default function AtlasPage() {
       s.name.toLowerCase().includes(q) ||
       s.symbol.toLowerCase().includes(q) ||
       s.phonetic_rule.toLowerCase().includes(q) ||
-      s.word_ids.some((wid) => wid.toLowerCase().includes(q))
+      s.word_ids.some((wid) => {
+        if (wid.toLowerCase().includes(q)) return true;
+        const word = data.words[wid];
+        return Boolean(
+          word &&
+            (word.english_cognate.toLowerCase().includes(q) ||
+              word.target_word.toLowerCase().includes(q))
+        );
+      })
     );
   });
 
@@ -58,12 +66,16 @@ export default function AtlasPage() {
       ? "Castilian Sound Shift Families"
       : "Sound Shift Families";
 
+  const familyCount = shiftList.length;
   const atlasSub =
     activeLanguageId === "fr"
-      ? "The 9 conversion bridge families linking English cognates to French vocabulary — plus every dictionary word that sits outside them."
+      ? `The ${familyCount} conversion bridge families linking English cognates to French vocabulary — plus every dictionary word that sits outside them.`
       : activeLanguageId === "es"
-      ? "The 9 historical sound and suffix shift families linking English & Latin cognates to Spanish vocabulary — plus every dictionary word that sits outside them."
-      : "The 9 historical sound shift families linking English cognates to High German vocabulary — plus every dictionary word that sits outside them.";
+      ? `The ${familyCount} historical sound and suffix shift families linking English & Latin cognates to Spanish vocabulary — plus every dictionary word that sits outside them.`
+      : `The ${familyCount} historical sound shift families linking English cognates to High German vocabulary — plus every dictionary word that sits outside them.`;
+
+  const familyWord = activeLanguageId === "fr" ? "conversion families" : "sound shifts";
+  const masterFamilyWord = activeLanguageId === "fr" ? "conversion families" : "shift families";
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 space-y-6 font-sans">
@@ -87,7 +99,7 @@ export default function AtlasPage() {
             type="text"
             value={filterQuery}
             onChange={(e) => setFilterQuery(e.target.value)}
-            placeholder="Filter sound shifts..."
+            placeholder={`Filter ${familyWord}...`}
             className="w-full pl-8 pr-3 py-1.5 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/25 text-xs text-[var(--text-color)] placeholder-[var(--sub-color)] outline-none focus:border-[var(--main-color)] transition font-mono"
           />
         </div>
@@ -128,12 +140,28 @@ export default function AtlasPage() {
           <h3 className="text-sm sm:text-base font-bold text-[var(--text-color)] group-hover:text-[var(--main-color)] transition">
             Master Web — every word, phrase &amp; shift, linked
           </h3>
-          <p className="text-xs text-[var(--sub-color)] mt-0.5">
-            One graph joining all shift families, compounds, false friends and expressions to the words within them.
+          <p className="text-sm text-[var(--sub-color)] mt-0.5 leading-relaxed">
+            One graph joining all {masterFamilyWord}, compounds, false friends and expressions to
+            the words within them.
           </p>
         </div>
         <ChevronRight className="w-5 h-5 text-[var(--main-color)] shrink-0 group-hover:translate-x-0.5 transition" />
       </Link>
+
+      {filteredShifts.length === 0 && (
+        <div className="p-6 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-center space-y-2">
+          <p className="text-sm font-mono text-[var(--text-color)]">
+            No families match “{filterQuery}”.
+          </p>
+          <button
+            type="button"
+            onClick={() => setFilterQuery("")}
+            className="text-xs font-mono text-[var(--main-color)] underline underline-offset-2 cursor-pointer"
+          >
+            clear filter
+          </button>
+        </div>
+      )}
 
       {/* Shift Families Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -173,7 +201,7 @@ export default function AtlasPage() {
                   />
                 </div>
 
-                <p className="text-xs text-[var(--sub-color)] line-clamp-2 leading-relaxed">
+                <p className="text-sm text-[var(--sub-color)] line-clamp-2 leading-relaxed">
                   {family.phonetic_rule}
                 </p>
 

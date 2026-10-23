@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { ProgressBar5, type LessonSegment } from "./ProgressBar5";
 import { ShiftPair } from "@/components/common/ShiftPair";
+import { GenderBadge } from "@/components/common/GenderBadge";
 import { ExerciseWidget } from "./ExerciseWidgets";
 import { TwistCard } from "./TwistCard";
 import { useAppStore } from "@/lib/store";
@@ -34,12 +35,17 @@ import type { Lesson, ExerciseItem } from "@/lib/types";
 
 interface LessonReaderProps {
   lesson: Lesson;
+  /** Locked deep links can be walked as a preview, but must not change progress. */
+  preview?: boolean;
 }
 
-export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
+export const LessonReader: React.FC<LessonReaderProps> = ({ lesson, preview = false }) => {
   const router = useRouter();
   const activeLanguageId = useAppStore((s) => s.activeLanguageId);
-  const data = getLanguageContent(activeLanguageId).compendium ?? EMPTY_COMPENDIUM;
+  const languageContent = getLanguageContent(activeLanguageId);
+  const data = languageContent.compendium ?? EMPTY_COMPENDIUM;
+  const totalTopics = languageContent.totalTopics || 30;
+  const genderSystem = getLanguageDefinition(activeLanguageId).genderSystem;
   const nextLessonId = React.useMemo(
     () => getNextPlayableLessonIdFor(activeLanguageId, lesson.id),
     [activeLanguageId, lesson.id]
@@ -103,10 +109,10 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   const primaryShiftId = lesson.shift_categories && lesson.shift_categories[0];
   const primaryShift = primaryShiftId ? data.shifts[primaryShiftId] : null;
   const isFrench = activeLanguageId === "fr";
+  const familyCount = Object.keys(data.shifts).length;
 
   const completeLesson = useAppStore((s) => s.completeLesson);
   const seedSrsCards = useAppStore((s) => s.seedSrsCards);
-  const markWordsEncountered = useAppStore((s) => s.markWordsEncountered);
   const setLessonProgress = useAppStore((s) => s.setLessonProgress);
 
   const storeHydrated = useAppStore((s) => s.storeHydrated);
@@ -122,6 +128,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
     // the initial "hook" position. Before persisting that over the saved state,
     // adopt the position the store just restored; only then write. The epoch
     // also makes an open lesson adopt a cross-tab save instead of overwriting it.
+    if (preview) return;
     if (!storeHydrated) return;
     if (adoptedEpochRef.current !== hydrateEpoch) {
       const isRehydration = adoptedEpochRef.current !== -1;
@@ -169,6 +176,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
     storeHydrated,
     hydrateEpoch,
     setLessonProgress,
+    preview,
   ]);
 
   // Global keyboard navigation across lesson reading segments (Hook, Pattern, Table, Summary)
@@ -228,7 +236,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
           setCurrentSegment("pattern");
         }
       } else if (currentSegment === "summary") {
-        if (retryQueue.length === 0 || isLessonFinished) {
+        if (!preview && (retryQueue.length === 0 || isLessonFinished)) {
           if (e.key === "Enter" || e.key === " " || e.code === "Space") {
             e.preventDefault();
             handleCompleteAll();
@@ -240,13 +248,10 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentSegment, retryQueue.length, isLessonFinished, lesson.id, nextLessonId, router]);
+  }, [currentSegment, retryQueue.length, isLessonFinished, lesson.id, nextLessonId, router, preview]);
 
-  // Register all lesson words as encountered when viewing
-  React.useEffect(() => {
-    const allWords = Array.from(new Set([...lesson.word_ids, ...(lesson.table_word_ids ?? [])]));
-    markWordsEncountered(allWords);
-  }, [lesson.word_ids, lesson.table_word_ids, markWordsEncountered]);
+  // Opening a lesson must not seed the review queue. Cards are created when the
+  // lesson is actually finished (handleCompleteAll), so Review stays honest.
 
   const handleExerciseError = (exercise: ExerciseItem) => {
     setEverQueued(true);
@@ -326,6 +331,8 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
   };
 
   const handleCompleteAll = () => {
+    if (preview) return;
+    if (!completedSegments.includes("practice")) return;
     completeLesson(lesson.id, { perfect: !everQueued, nextLessonId });
     // Finished-lesson words enter the SM-2 queue so "due today" isn't empty for new learners.
     const allWords = Array.from(new Set([...lesson.word_ids, ...(lesson.table_word_ids ?? [])]));
@@ -335,6 +342,24 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
     setIsLessonFinished(true);
     setCompletedSegments(["hook", "pattern", "table", "practice", "summary"]);
   };
+
+  // Reaching the summary is the completion point. Persist it immediately so
+  // Back to Trail / the Trail tab cannot silently discard a finished lesson.
+  const autoCompletedRef = useRef(false);
+  React.useEffect(() => {
+    if (preview || autoCompletedRef.current) return;
+    if (currentSegment !== "summary" || retryQueue.length > 0) return;
+    // Do not award completion if the learner jumped straight to summary via
+    // the segment bar without finishing the practice.
+    if (!completedSegments.includes("practice")) return;
+    autoCompletedRef.current = true;
+    handleCompleteAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preview, currentSegment, retryQueue.length, completedSegments]);
+
+  const nextLesson = nextLessonId
+    ? languageContent.lessons.find((candidate) => candidate.id === nextLessonId)
+    : undefined;
 
   const markSegmentDone = (seg: LessonSegment, nextSeg: LessonSegment) => {
     setCompletedSegments((prev) => Array.from(new Set([...prev, seg])));
@@ -354,13 +379,13 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
         <div className="flex items-center justify-between">
           <Link
             href="/trail"
-            className="inline-flex items-center gap-2 text-xs font-mono text-[var(--sub-color)] hover:text-[var(--main-color)] transition"
+            className="inline-flex items-center gap-2 text-xs font-mono text-[var(--sub-color)] hover:text-[var(--main-color)] transition px-2.5 py-1.5 rounded border border-[var(--sub-color)]/20 hover:border-[var(--main-color)]/40"
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Back to Trail
           </Link>
           <span className="text-xs font-mono text-[var(--main-color)] font-medium px-2 py-0.5 rounded bg-[var(--main-color)]/10 border border-[var(--main-color)]/20">
             {lesson.id <= 30
-              ? `Topic ${lesson.id} of 30 · Core`
+              ? `Topic ${lesson.id} of ${totalTopics} · Core`
               : lesson.id >= 5000
               ? `Branch Track · ${lesson.id}`
               : `Topic ${Math.floor(lesson.id / 100)} · Sprig ${lesson.id % 100}`}
@@ -377,7 +402,14 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
         {/* Lesson Title */}
         <div className="pt-2">
           <span className="text-xs font-mono text-[var(--main-color)] uppercase tracking-wider font-semibold">
-            Phase {lesson.phase} · {lesson.id <= 30 ? "Core Shift" : lesson.id >= 5000 ? "Support Track" : "Practice Sprig"}
+            Phase {lesson.phase} ·{" "}
+            {lesson.id <= 30
+              ? activeLanguageId === "de"
+                ? "Core Shift"
+                : "Core"
+              : lesson.id >= 5000
+              ? "Support Track"
+              : "Practice Sprig"}
           </span>
           <h1 className="text-3xl sm:text-4xl font-bold font-sans text-[var(--text-color)] tracking-tight mt-1">
             {lesson.title}
@@ -419,7 +451,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                   <div className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-[var(--main-color)] font-semibold">
                     <TriangleAlert className="w-3.5 h-3.5" /> the shortcut your mind will offer
                   </div>
-                  <p className="text-xs text-[var(--sub-color)] leading-relaxed">{lesson.hook.trap_note}</p>
+                  <p className="text-sm text-[var(--sub-color)] leading-relaxed">{lesson.hook.trap_note}</p>
                 </div>
               )}
 
@@ -436,7 +468,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                   <div className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-[var(--main-color)] font-semibold">
                     <Sparkles className="w-3.5 h-3.5" /> remember when this was left open
                   </div>
-                  <p className="text-xs text-[var(--sub-color)] leading-relaxed">{lesson.payoff.text}</p>
+                  <p className="text-sm text-[var(--sub-color)] leading-relaxed">{lesson.payoff.text}</p>
                 </div>
               )}
 
@@ -444,7 +476,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                 <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 space-y-2 lg:hidden font-mono">
                   <span className="text-xs uppercase tracking-wider text-[var(--sub-color)] block">historical notes</span>
                   {lesson.hook.footnotes.map((fn) => (
-                    <div key={fn.marker} className="text-xs text-[var(--sub-color)]">
+                    <div key={fn.marker} className="text-sm text-[var(--sub-color)]">
                       <span className="text-[var(--main-color)] font-bold">[{fn.marker}] {fn.title}:</span> {fn.content}
                       {fn.interest && (
                         <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 text-[var(--sub-color)] uppercase tracking-wider">
@@ -536,9 +568,23 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                 <span className="text-xs font-mono text-[var(--sub-color)]">tap word to inspect</span>
               </div>
 
-              <p className="text-xs font-mono text-[var(--sub-color)]">
+              <p className="text-sm font-mono text-[var(--sub-color)]">
                 shifted consonants highlight historical transformations against english cognates:
               </p>
+
+              {genderSystem && (
+                <div className="space-y-1.5 text-xs font-mono text-[var(--sub-color)]">
+                  <div className="uppercase tracking-wider text-[10px]">articles are colour-coded</div>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+                    {genderSystem.articles.map((article, index) => (
+                      <span key={article} className="inline-flex items-center gap-1.5">
+                        <GenderBadge gender={article} size="sm" />
+                        <span>{genderSystem.labels[index]}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -908,14 +954,27 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                   <div className="p-4 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <div className="space-y-0.5">
                       <div className="text-xs uppercase tracking-wider flex items-center gap-1.5 font-semibold text-[var(--main-color)]">
-                        <Compass className="w-3.5 h-3.5" /> {isFrench ? "conversion bridge atlas" : "sound shift atlas bridge"}
+                        <Compass className="w-3.5 h-3.5" />{" "}
+                        {activeLanguageId === "fr"
+                          ? "conversion bridge atlas"
+                          : activeLanguageId === "es"
+                          ? "sound shift atlas"
+                          : "sound shift atlas bridge"}
                       </div>
-                      <p className="text-xs text-[var(--sub-color)]">
+                      <p className="text-sm text-[var(--sub-color)] leading-relaxed">
                         {primaryShift
-                          ? `explore all ${primaryShift.word_ids.length} cognates governed by ${primaryShift.symbol} ${isFrench ? "across the norman conversion bridges." : "across high german history."}`
-                          : isFrench
-                            ? "explore all 9 conversion bridge families connecting english and french."
-                            : "explore all 9 historical shift families connecting english and german."}
+                          ? `explore all ${primaryShift.word_ids.length} cognates governed by ${primaryShift.symbol} ${
+                              activeLanguageId === "fr"
+                                ? "across the norman conversion bridges."
+                                : activeLanguageId === "es"
+                                ? "across castilian sound history."
+                                : "across high german history."
+                            }`
+                          : activeLanguageId === "fr"
+                          ? `explore all ${familyCount} conversion bridge families connecting english and french.`
+                          : activeLanguageId === "es"
+                          ? `explore all ${familyCount} historical shift families connecting english and spanish.`
+                          : `explore all ${familyCount} historical shift families connecting english and german.`}
                       </p>
                     </div>
                     <Link
@@ -928,26 +987,53 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
                   </div>
 
                   <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <button
-                      type="button"
-                      onClick={handleCompleteAll}
-                      className="w-full sm:w-auto px-5 py-2 rounded-lg bg-[var(--bg-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 text-[var(--text-color)] font-bold text-xs transition cursor-pointer"
-                    >
-                      {isLessonFinished ? "lesson mastered ✓" : "mark lesson finished ✓"}
-                    </button>
+                    {preview ? (
+                      <div className="w-full p-3.5 rounded-lg bg-[var(--bg-color)] border border-dashed border-[var(--main-color)]/40 space-y-1">
+                        <div className="text-[10px] font-mono uppercase tracking-wider text-[var(--main-color)] font-semibold">
+                          preview mode
+                        </div>
+                        <p className="text-sm text-[var(--sub-color)] font-sans leading-relaxed">
+                          This lesson is ahead of your trail, so finishing it here will not mark it
+                          complete or unlock later topics. Return to the earlier topics to count it.
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        {isLessonFinished ? (
+                          <span className="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2 rounded-lg bg-[var(--bg-color)] border border-[var(--main-color)]/30 text-[var(--main-color)] font-bold text-xs">
+                            lesson mastered ✓
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={handleCompleteAll}
+                            disabled={!completedSegments.includes("practice")}
+                            className="w-full sm:w-auto px-5 py-2 rounded-lg bg-[var(--bg-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 text-[var(--text-color)] font-bold text-xs transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                          >
+                            mark lesson finished ✓
+                          </button>
+                        )}
 
-                    <Link
-                      href={nextLessonId ? `/trail/${nextLessonId}` : "/trail"}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        handleCompleteAll();
-                        router.push(nextLessonId ? `/trail/${nextLessonId}` : "/trail");
-                      }}
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs transition cursor-pointer"
-                    >
-                      <span>{nextLessonId ? `next lesson (${nextLessonId})` : "back to the trail"}</span>
-                      <span className="keycap text-[10px]">enter</span>
-                    </Link>
+                        <Link
+                          href={nextLessonId ? `/trail/${nextLessonId}` : "/trail"}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            handleCompleteAll();
+                            router.push(nextLessonId ? `/trail/${nextLessonId}` : "/trail");
+                          }}
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs transition cursor-pointer"
+                        >
+                          <span>
+                            {nextLesson
+                              ? `next: ${nextLesson.title}`
+                              : nextLessonId
+                              ? `next lesson (${nextLessonId})`
+                              : "back to the trail"}
+                          </span>
+                          <span className="keycap text-[10px]">enter</span>
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -960,7 +1046,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson }) => {
             <span className="text-xs uppercase tracking-widest text-[var(--main-color)] flex items-center gap-1.5 font-semibold">
               <BookOpen className="w-3.5 h-3.5" /> margin notes
             </span>
-            <div className="space-y-2.5 text-xs text-[var(--sub-color)] leading-relaxed">
+            <div className="space-y-2.5 text-[13px] text-[var(--sub-color)] leading-relaxed">
               {lesson.hook.footnotes?.map((fn) => (
                 <div key={fn.marker} className="p-3 rounded-lg bg-[var(--bg-color)] border border-[var(--sub-color)]/20 space-y-1">
                   <span className="text-[var(--main-color)] font-bold">[{fn.marker}] {fn.title}</span>

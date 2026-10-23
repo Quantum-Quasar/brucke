@@ -990,8 +990,16 @@ export const useAppStore = create<AppState>((set, get) => ({
       const missing = Array.from(new Set(wordIds.map((w) => w.trim()))).filter((id) => id && !s.srsCards[id]);
       if (missing.length === 0) return s;
       const srsCards = { ...s.srsCards };
-      for (const id of missing) srsCards[id] = createInitialCard(id);
-      const next = { ...s, srsCards };
+      const wordMastery = { ...s.wordMastery };
+      for (const id of missing) {
+        srsCards[id] = createInitialCard(id);
+        // Finished-lesson words are "encountered", not mastered. This keeps the
+        // header progress counter moving without pretending review is done.
+        if (!id.startsWith("sentence_") && !id.startsWith("article_") && wordMastery[id] !== "mastered") {
+          wordMastery[id] = "encountered";
+        }
+      }
+      const next = { ...s, srsCards, wordMastery };
       saveState(next);
       return next;
     });
@@ -1522,9 +1530,10 @@ export const useAppStore = create<AppState>((set, get) => ({
             umlautDismissals: s.tolerance.umlautDismissals,
             capitalizationDismissals: s.tolerance.capitalizationDismissals,
           }),
-          // first visit auto-opens onboarding; later (cross-tab) hydrations
-          // must never reopen or close an in-progress intro
-          ...(hasAutoOpenedOnboarding ? {} : { isOnboardingOpen: !nextCompletedOnboarding }),
+          // The intro is opt-in from the landing page / guide button. Auto-opening
+          // it hijacked shared deep links and hid the homepage on first visit;
+          // language switches still queue their own intro explicitly.
+          ...(hasAutoOpenedOnboarding ? {} : { isOnboardingOpen: false }),
         };
         return next;
       });
@@ -1538,7 +1547,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       applyTheme(DEFAULT_THEME);
       applyFont(DEFAULT_FONT);
       applyAppearanceSettings(DEFAULT_SETTINGS);
-      set((s) => ({ ...s, isOnboardingOpen: !s.hasCompletedOnboarding }));
+      set((s) => ({ ...s, isOnboardingOpen: false }));
     }
     hasAutoOpenedOnboarding = true;
     hasHydratedFromStorage = true;
