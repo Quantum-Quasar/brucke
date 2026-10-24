@@ -7,6 +7,7 @@ import { useAppStore } from "@/lib/store";
 import { buildTrailEdgePairs, buildTrailLayout, getTrailState, GERMAN_TRAIL_DATA, type TrailData, type TrailNode, type NodeStatus, type GateView } from "@/lib/trail-map";
 import { getLanguageDefinition } from "@/data/languages";
 import { getLanguageContent } from "@/data/language-content";
+import { lessonHref } from "@/lib/routes";
 import { LessonNodeDrawer, GateDrawer } from "./LessonNodeDrawer";
 
 const GOLD_STAR = "#eab308";
@@ -78,6 +79,7 @@ export const TrailMap: React.FC = () => {
 
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [width, setWidth] = useState(640);
+  const [mapExpanded, setMapExpanded] = useState(false);
   const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
   const [selectedGateId, setSelectedGateId] = useState<number | null>(null);
 
@@ -174,7 +176,7 @@ export const TrailMap: React.FC = () => {
         {recommended && (
           <button
             type="button"
-            onClick={() => router.push(`/trail/${recommended.id}`)}
+            onClick={() => router.push(lessonHref(activeLanguageId, recommended.id))}
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs font-mono transition cursor-pointer shrink-0"
           >
             {recommendedProgress ? "resume" : hasAnyProgress ? "continue" : "start lesson"}
@@ -204,6 +206,11 @@ export const TrailMap: React.FC = () => {
         </span>
       </div>
 
+      <div
+        className={`relative ${
+          mapExpanded ? "" : "max-h-[70vh] overflow-hidden md:max-h-none md:overflow-visible"
+        }`}
+      >
       <div className="relative mx-auto" style={{ width: layout.width, height: layout.height, maxWidth: "100%" }}>
         {/* faint germanic watermark decorations */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" aria-hidden>
@@ -358,6 +365,22 @@ export const TrailMap: React.FC = () => {
         )}
       </div>
 
+      {!mapExpanded && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--bg-color)] to-transparent md:hidden" />
+      )}
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setMapExpanded((expanded) => !expanded)}
+        className="md:hidden w-full mt-2 px-4 py-2.5 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/25 text-xs font-mono font-bold text-[var(--text-color)] hover:border-[var(--main-color)] transition cursor-pointer"
+        aria-expanded={mapExpanded}
+      >
+        {mapExpanded
+          ? "collapse to the first topics"
+          : `show the full ${trailData.totalTopics}-topic map`}
+      </button>
+
       {selected && (
         <LessonNodeDrawer
           node={selected}
@@ -367,7 +390,7 @@ export const TrailMap: React.FC = () => {
           onClose={() => setSelectedNodeId(null)}
           onStart={(id) => {
             setSelectedNodeId(null);
-            router.push(`/trail/${id}`);
+            router.push(lessonHref(activeLanguageId, id));
           }}
         />
       )}

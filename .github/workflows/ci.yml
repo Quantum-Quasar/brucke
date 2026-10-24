@@ -27,6 +27,13 @@ jobs:
       - name: Typecheck
         run: bun run typecheck
 
+      - name: Content guard-rail audits
+        run: |
+          bun scripts/audit-word-refs.ts
+          bun scripts/audit-teasers.ts
+          bun scripts/audit-wording.ts
+          bun scripts/audit-vocab-balance.ts --strict
+
       # The production build is the only step that catches App Router
       # prerender/SSG breakage, so CI must not skip it.
       - name: Build

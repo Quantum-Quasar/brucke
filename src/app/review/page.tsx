@@ -28,6 +28,7 @@ import { GermanCharBar } from "@/components/common/GermanCharBar";
 import { GenderBadge } from "@/components/common/GenderBadge";
 import { GenderGuideBanner } from "@/components/common/GenderGuideBanner";
 import { useAppStore } from "@/lib/store";
+import { lessonHref } from "@/lib/routes";
 import { getDueCards, localDateKey, type ReviewGrade } from "@/lib/srs";
 import {
   SESSION_SIZES,
@@ -1075,7 +1076,7 @@ export default function ReviewPage() {
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <Link
-              href={`/trail/${content.lessons[0]?.id ?? 1}`}
+              href={lessonHref(activeLanguageId, content.lessons[0]?.id ?? 1)}
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-bold text-xs font-mono hover:opacity-90 transition"
             >
               Start lesson 1 <ArrowRight className="w-3.5 h-3.5" />

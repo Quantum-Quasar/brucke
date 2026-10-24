@@ -31,17 +31,25 @@ import { consciousnessLineFor } from "@/data/consciousness";
 import { getSoundImportsForLanguage, importLineFor, type SoundImport } from "@/data/sound-imports";
 import { getLanguageContent, EMPTY_COMPENDIUM, getNextPlayableLessonIdFor } from "@/data/language-content";
 import { getLanguageDefinition } from "@/data/languages";
+import { lessonHref } from "@/lib/routes";
 import type { Lesson, ExerciseItem } from "@/lib/types";
 
 interface LessonReaderProps {
   lesson: Lesson;
+  /** Language of a language-scoped URL; falls back to the active course. */
+  languageId?: string;
   /** Locked deep links can be walked as a preview, but must not change progress. */
   preview?: boolean;
 }
 
-export const LessonReader: React.FC<LessonReaderProps> = ({ lesson, preview = false }) => {
+export const LessonReader: React.FC<LessonReaderProps> = ({
+  lesson,
+  languageId,
+  preview = false,
+}) => {
   const router = useRouter();
-  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const storeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const activeLanguageId = languageId ?? storeLanguageId;
   const languageContent = getLanguageContent(activeLanguageId);
   const data = languageContent.compendium ?? EMPTY_COMPENDIUM;
   const totalTopics = languageContent.totalTopics || 30;
@@ -128,7 +136,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson, preview = fa
     // the initial "hook" position. Before persisting that over the saved state,
     // adopt the position the store just restored; only then write. The epoch
     // also makes an open lesson adopt a cross-tab save instead of overwriting it.
-    if (preview) return;
+    if (preview || (languageId && storeLanguageId !== languageId)) return;
     if (!storeHydrated) return;
     if (adoptedEpochRef.current !== hydrateEpoch) {
       const isRehydration = adoptedEpochRef.current !== -1;
@@ -177,6 +185,8 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson, preview = fa
     hydrateEpoch,
     setLessonProgress,
     preview,
+    languageId,
+    storeLanguageId,
   ]);
 
   // Global keyboard navigation across lesson reading segments (Hook, Pattern, Table, Summary)
@@ -240,7 +250,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson, preview = fa
           if (e.key === "Enter" || e.key === " " || e.code === "Space") {
             e.preventDefault();
             handleCompleteAll();
-            router.push(nextLessonId ? `/trail/${nextLessonId}` : "/trail");
+            router.push(nextLessonId ? lessonHref(activeLanguageId, nextLessonId) : "/trail");
           }
         }
       }
@@ -348,6 +358,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson, preview = fa
   const autoCompletedRef = useRef(false);
   React.useEffect(() => {
     if (preview || autoCompletedRef.current) return;
+    if (languageId && storeLanguageId !== languageId) return;
     if (currentSegment !== "summary" || retryQueue.length > 0) return;
     // Do not award completion if the learner jumped straight to summary via
     // the segment bar without finishing the practice.
@@ -355,7 +366,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson, preview = fa
     autoCompletedRef.current = true;
     handleCompleteAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [preview, currentSegment, retryQueue.length, completedSegments]);
+  }, [preview, currentSegment, retryQueue.length, completedSegments, languageId, storeLanguageId]);
 
   const nextLesson = nextLessonId
     ? languageContent.lessons.find((candidate) => candidate.id === nextLessonId)
@@ -365,6 +376,45 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson, preview = fa
     setCompletedSegments((prev) => Array.from(new Set([...prev, seg])));
     setCurrentSegment(nextSeg);
   };
+
+  const startPractice = () => {
+    setPracticeIndex(0);
+    setRetryIndex(0);
+    setInRetryPhase(false);
+    setRetryQueue([]);
+    setEverQueued(false);
+    setTwistPhase(false);
+    setTwistCompleted(false);
+    setTwistMeetAgain(false);
+    setTwistResurfaced(false);
+    setFailCounts({});
+    setMercyRevealFor(null);
+    setRetryAttempts({});
+    markSegmentDone("table", "practice");
+  };
+
+  const stickyAction = (() => {
+    if (preview || twistPhase || inRetryPhase) return null;
+    if (currentSegment === "hook") {
+      return { label: "next: pattern", run: () => markSegmentDone("hook", "pattern") };
+    }
+    if (currentSegment === "pattern") {
+      return { label: "next: transformation table", run: () => markSegmentDone("pattern", "table") };
+    }
+    if (currentSegment === "table") {
+      return { label: `start exercises (${lesson.exercises.length})`, run: startPractice };
+    }
+    if (currentSegment === "summary") {
+      return {
+        label: nextLesson ? `next: ${nextLesson.title}` : "back to the trail",
+        run: () => {
+          handleCompleteAll();
+          router.push(nextLessonId ? lessonHref(activeLanguageId, nextLessonId) : "/trail");
+        },
+      };
+    }
+    return null;
+  })();
 
   const currentExercise = React.useMemo(() => {
     if (!inRetryPhase) return lesson.exercises[practiceIndex];
@@ -655,21 +705,7 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson, preview = fa
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
-                    setPracticeIndex(0);
-                    setRetryIndex(0);
-                    setInRetryPhase(false);
-                    setRetryQueue([]);
-                    setEverQueued(false);
-                    setTwistPhase(false);
-                    setTwistCompleted(false);
-                    setTwistMeetAgain(false);
-                    setTwistResurfaced(false);
-                    setFailCounts({});
-                    setMercyRevealFor(null);
-                    setRetryAttempts({});
-                    markSegmentDone("table", "practice");
-                  }}
+                  onClick={startPractice}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-mono font-medium text-sm transition cursor-pointer active:scale-95"
                 >
                   <span>Start Exercises ({lesson.exercises.length} problems)</span>
@@ -1015,11 +1051,11 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson, preview = fa
                         )}
 
                         <Link
-                          href={nextLessonId ? `/trail/${nextLessonId}` : "/trail"}
+                          href={nextLessonId ? lessonHref(activeLanguageId, nextLessonId) : "/trail"}
                           onClick={(event) => {
                             event.preventDefault();
                             handleCompleteAll();
-                            router.push(nextLessonId ? `/trail/${nextLessonId}` : "/trail");
+                            router.push(nextLessonId ? lessonHref(activeLanguageId, nextLessonId) : "/trail");
                           }}
                           className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-xs transition cursor-pointer"
                         >
@@ -1083,6 +1119,19 @@ export const LessonReader: React.FC<LessonReaderProps> = ({ lesson, preview = fa
           </div>
         </aside>
       </div>
+
+      {stickyAction && (
+        <div className="sm:hidden fixed bottom-3 left-3 right-3 z-30">
+          <button
+            type="button"
+            onClick={stickyAction.run}
+            className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[var(--main-color)] text-[var(--bg-color)] font-bold text-sm font-mono shadow-lg shadow-black/20 hover:opacity-90 transition cursor-pointer"
+          >
+            <span className="truncate">{stickyAction.label}</span>
+            <ArrowRight className="w-4 h-4 shrink-0" />
+          </button>
+        </div>
+      )}
     </article>
   );
 };

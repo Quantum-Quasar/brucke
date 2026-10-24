@@ -46,6 +46,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       }
     };
     window.addEventListener("storage", handleStorage);
+    document.documentElement.setAttribute("data-app-ready", "true");
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
@@ -54,7 +55,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <TopNav />
 
       {/* Main Content Viewport (bottom padding clears the fixed game-style dock) */}
-      <main className={`flex-1 ${isLessonRoute ? "pb-8" : "pb-28"}`}>{children}</main>
+      <main className={`flex-1 ${isLessonRoute ? "pb-24 sm:pb-8" : "pb-28"}`}>{children}</main>
 
       <BottomNav />
 

@@ -108,14 +108,18 @@ test.describe("browser smoke", () => {
   test("landing page offers the intro and skipping stays dismissed after reload", async ({ page }) => {
     await page.goto("/");
 
-    // First visit is a landing page, not a modal wall. The hero is server-
-    // rendered, so retry the click until React has hydrated its handler.
+    // First visit is a landing page, not a modal wall. Wait for React hydration
+    // before the one click, then allow the lazy modal chunk to arrive. Retrying
+    // the click is wrong once the modal is open: the overlay blocks the button.
     const dialog = page.locator('div[aria-label="Brücke introduction"]');
     await expect(dialog).toBeHidden();
-    await expect(async () => {
-      await page.getByRole("button", { name: /60-second intro/i }).click();
-      await expect(dialog).toBeVisible({ timeout: 1000 });
-    }).toPass({ timeout: 45_000 });
+    await page.waitForFunction(
+      () => document.documentElement.getAttribute("data-app-ready") === "true",
+      undefined,
+      { timeout: 30_000 }
+    );
+    await page.getByRole("button", { name: /60-second intro/i }).click();
+    await expect(dialog).toBeVisible({ timeout: 45_000 });
 
     await dialog.getByRole("button", { name: /skip/i }).click();
     await expect(dialog).toBeHidden();
@@ -241,5 +245,15 @@ test.describe("browser smoke", () => {
       const familyResponse = await page.goto("/atlas/not_a_family");
       expect(familyResponse?.status()).toBe(404);
     });
+  });
+});
+
+test("language-scoped lesson URL opens the named course", async ({ page }) => {
+  await page.goto("/trail/fr/1");
+  await expect(
+    page.getByRole("heading", { name: /The French Inside Your English/i })
+  ).toBeVisible();
+  await expect(page.locator("header")).toContainText(/french through english/i, {
+    timeout: 15_000,
   });
 });

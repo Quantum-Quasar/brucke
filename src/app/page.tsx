@@ -8,6 +8,7 @@ import { TrailMap } from "@/components/trail/TrailMap";
 import { useAppStore } from "@/lib/store";
 import { getLanguageDefinition } from "@/data/languages";
 import { getLanguageContent } from "@/data/language-content";
+import { lessonHref } from "@/lib/routes";
 import type { DailyInsight } from "@/lib/types";
 
 const PURPLE_STAR = "#a78bfa";
@@ -136,7 +137,7 @@ export default function HomePage() {
               </div>
               <div className="flex flex-wrap items-center gap-2.5">
                 <Link
-                  href={`/trail/${firstLessonId}`}
+                  href={lessonHref(activeLanguageId, firstLessonId)}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded bg-[var(--main-color)] hover:opacity-90 text-[var(--bg-color)] font-bold text-sm font-mono transition"
                 >
                   Start topic 1 <ArrowRight className="w-4 h-4" />

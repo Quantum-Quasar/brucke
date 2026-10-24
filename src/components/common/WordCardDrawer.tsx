@@ -13,6 +13,7 @@ import { getLanguageDefinition } from "@/data/languages";
 import { displayArticle } from "@/lib/gender";
 import { getLanguageContent, EMPTY_COMPENDIUM } from "@/data/language-content";
 import { getWordEntity, getWordLessonMap } from "@/lib/word-entities";
+import { lessonHref } from "@/lib/routes";
 import type { WordEntity } from "@/lib/types";
 import { useDialogFocus } from "@/lib/use-dialog-focus";
 
@@ -187,7 +188,7 @@ export const WordCardDrawer: React.FC = () => {
             <div className="grid grid-cols-1 gap-2">
               {lessonId && (
                 <Link
-                  href={`/trail/${lessonId}`}
+                  href={lessonHref(activeLanguageId, lessonId)}
                   onClick={closeDrawer}
                   className="flex items-center justify-between p-3 rounded-lg bg-[var(--sub-alt-color)] hover:border-[var(--main-color)] border border-[var(--sub-color)]/20 text-xs font-mono text-[var(--text-color)] transition group"
                 >

@@ -92,7 +92,7 @@ describe("panorama lesson links", () => {
         expect(entry, `${languageId}: no lesson titled "${claimedTitle}"`).toBeDefined();
 
         // 2. the href is that lesson's id, by construction and by assertion
-        expect(link.href).toBe(`/trail/${entry!.id}`);
+        expect(link.href).toBe(`/trail/${languageId}/${entry!.id}`);
         expect(link.lessonId).toBe(entry!.id);
 
         // 3. the claimed topic is the topic the lesson id encodes
@@ -110,7 +110,7 @@ describe("panorama lesson links", () => {
         // 5. the destination has content, not a "coming soon" shell
         expect(
           authoredLessonIds.has(entry!.id),
-          `${languageId}: /trail/${entry!.id} has no authored lesson`
+          `${languageId}: /trail/${languageId}/${entry!.id} has no authored lesson`
         ).toBe(true);
       }
     }
@@ -130,7 +130,7 @@ describe("panorama lesson links", () => {
       const link = PANORAMA_LINKS[languageId].find((candidate) => candidate.label.endsWith(` · ${title}`));
       expect(link, `${languageId}: no link for "${title}"`).toBeDefined();
       expect(link!.lessonId, `${languageId}: "${title}"`).toBe(expectedId);
-      expect(link!.href).toBe(`/trail/${expectedId}`);
+      expect(link!.href).toBe(`/trail/${languageId}/${expectedId}`);
       expect(link!.lessonId).not.toBe(oldWrongId);
       // the label is the lesson's own title, so it describes where it lands
       expect(link!.label).toBe(`Topic ${expectedId} · ${title}`);

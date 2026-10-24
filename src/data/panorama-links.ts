@@ -12,6 +12,7 @@
 // the label is the one the lesson id encodes.
 
 import { getLanguageContent } from "./language-content";
+import { lessonHref } from "@/lib/routes";
 import type { PanoramaLanguageId } from "./panorama-data";
 
 /** A link into the trail. The id is looked up from the title, never written. */
@@ -106,7 +107,7 @@ function resolveLink(languageId: PanoramaLanguageId, spec: PanoramaLinkSpec): Pa
 
   const topic = topicNumberOfLessonId(entry.id) ?? entry.topic;
   return {
-    href: `/trail/${entry.id}`,
+    href: lessonHref(languageId, entry.id),
     label: `Topic ${topic} · ${entry.title}`,
     desc: spec.desc,
     lessonId: entry.id,

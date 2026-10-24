@@ -8,7 +8,8 @@ import { buildMasterGraph, type MasterNode } from "@/lib/master-graph";
 
 const WIDTH = 2600;
 const HEIGHT = 2000;
-const MIN_ZOOM = 0.5;
+const MIN_ZOOM = 0.1;
+const LABEL_MIN_ZOOM = 0.5;
 const MAX_ZOOM = 2.6;
 
 const STROKE: Record<string, string> = {
@@ -49,15 +50,27 @@ export const MasterConstellation: React.FC = () => {
   const [zoom, setZoom] = React.useState(1);
   const [selectedNode, setSelectedNode] = React.useState<MasterNode | null>(null);
 
-  // Center the viewport on the graph (which is bunched in the middle).
+  const fitZoom = () => {
+    const el = scrollRef.current;
+    if (!el) return 1;
+    return el.clientWidth < 700 ? Math.max(MIN_ZOOM, el.clientWidth / WIDTH) : 1;
+  };
+
+  // Center the viewport on the graph (which is bunched in the middle). On a
+  // phone, start fitted to the poster width instead of showing 15% of it.
   React.useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    prevZoomRef.current = 1;
-    setZoom(1);
+    const fit = fitZoom();
+    prevZoomRef.current = fit;
+    setZoom(fit);
     setSelectedNode(null);
-    el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
-    el.scrollTop = (el.scrollHeight - el.clientHeight) / 2;
+    requestAnimationFrame(() => {
+      const current = scrollRef.current;
+      if (!current) return;
+      current.scrollLeft = (current.scrollWidth - current.clientWidth) / 2;
+      current.scrollTop = (current.scrollHeight - current.clientHeight) / 2;
+    });
   }, [graph]);
 
   // Keep the same graph point under the viewport centre while zooming.
@@ -87,7 +100,7 @@ export const MasterConstellation: React.FC = () => {
     setZoom((value) => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Number((value + delta).toFixed(1)))));
   };
 
-  const resetZoom = () => setZoom(1);
+  const resetZoom = () => setZoom(fitZoom());
 
   if (!data.wordList.length) {
     return (
@@ -193,16 +206,18 @@ export const MasterConstellation: React.FC = () => {
                       stroke={color}
                       strokeWidth={1.25}
                     />
-                    <text
-                      x={Math.round(node.x) + (anchorEnd ? -10 : 10)}
-                      y={Math.round(node.y) + 4}
-                      textAnchor={anchorEnd ? "end" : "start"}
-                      fontSize={10}
-                      fill={color}
-                      fontFamily="monospace"
-                    >
-                      {node.label}
-                    </text>
+                    {zoom >= LABEL_MIN_ZOOM && (
+                      <text
+                        x={Math.round(node.x) + (anchorEnd ? -10 : 10)}
+                        y={Math.round(node.y) + 4}
+                        textAnchor={anchorEnd ? "end" : "start"}
+                        fontSize={10}
+                        fill={color}
+                        fontFamily="monospace"
+                      >
+                        {node.label}
+                      </text>
+                    )}
                     <title>{node.sub ? `${node.label} — ${node.sub}` : node.label}</title>
                   </g>
                 );
@@ -219,7 +234,10 @@ export const MasterConstellation: React.FC = () => {
         }`}
       >
         <div className="rounded-lg bg-[var(--sub-alt-color)]/90 backdrop-blur border border-[var(--sub-color)]/20 px-3 py-1.5 text-[11px] font-mono text-[var(--sub-color)] leading-relaxed">
-          <span className="text-[10px] uppercase tracking-wider text-[var(--sub-color)]/80">legend</span>{" "}
+          <span className="text-[10px] uppercase tracking-wider text-[var(--sub-color)]/80">legend</span>
+          {zoom < LABEL_MIN_ZOOM && (
+            <span className="text-[10px] text-[var(--main-color)]"> · zoom in for labels</span>
+          )}{" "}
           <span className="text-[var(--main-color)] font-bold">{counts.word} words</span> ·{" "}
           <span style={{ color: STROKE.phrase }}>{counts.phrase} phrases</span> ·{" "}
           <span style={{ color: STROKE.compound }}>{counts.compound} compounds</span> ·{" "}
@@ -256,8 +274,8 @@ export const MasterConstellation: React.FC = () => {
           type="button"
           onClick={resetZoom}
           className="p-1.5 rounded hover:bg-[var(--bg-color)] text-[var(--sub-color)] hover:text-[var(--text-color)] transition cursor-pointer"
-          aria-label="Reset zoom to 100%"
-          title="Reset zoom"
+          aria-label="Fit the graph to the screen"
+          title="Fit graph"
         >
           <RotateCcw className="w-3.5 h-3.5" />
         </button>

@@ -7,9 +7,19 @@ import { LessonReader } from "@/components/lesson/LessonReader";
 import { getLanguageContent } from "@/data/language-content";
 import { useAppStore } from "@/lib/store";
 import { getTrailState } from "@/lib/trail-map";
+import { lessonHref } from "@/lib/routes";
 
-export function LessonDetailClient({ lessonId }: { lessonId: number }) {
-  const activeLanguageId = useAppStore((s) => s.activeLanguageId);
+export function LessonDetailClient({
+  lessonId,
+  languageId,
+}: {
+  lessonId: number;
+  languageId?: string;
+}) {
+  const storeLanguageId = useAppStore((s) => s.activeLanguageId);
+  const storeHydrated = useAppStore((s) => s.storeHydrated);
+  const setActiveLanguage = useAppStore((s) => s.setActiveLanguage);
+  const completeOnboarding = useAppStore((s) => s.completeOnboarding);
   const completedLessons = useAppStore((s) => s.completedLessons);
   const lessonStars = useAppStore((s) => s.lessonStars);
   // Lesson id spaces overlap across languages by design — the active language
@@ -17,7 +27,20 @@ export function LessonDetailClient({ lessonId }: { lessonId: number }) {
   // first client render matches the server HTML.
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const content = getLanguageContent(mounted ? activeLanguageId : "de");
+
+  // A language-scoped URL is authoritative: switch the course silently so
+  // progress and SRS writes land in the same language the URL names. Wait for
+  // the root hydration effect; a child effect can otherwise be overwritten by
+  // the saved active language on first load.
+  useEffect(() => {
+    if (!storeHydrated || !languageId) return;
+    if (useAppStore.getState().activeLanguageId === languageId) return;
+    setActiveLanguage(languageId);
+    completeOnboarding();
+  }, [storeHydrated, languageId, setActiveLanguage, completeOnboarding]);
+
+  const activeLanguageId = languageId ?? (mounted ? storeLanguageId : "de");
+  const content = getLanguageContent(activeLanguageId);
   const lesson = content.lessons.find((l) => l.id === lessonId);
 
   const trailState = useMemo(
@@ -78,7 +101,7 @@ export function LessonDetailClient({ lessonId }: { lessonId: number }) {
               </div>
             </div>
             <Link
-              href={`/trail/${recommendedId ?? 1}`}
+              href={lessonHref(activeLanguageId, recommendedId ?? 1)}
               className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded bg-[var(--main-color)] text-[var(--bg-color)] font-bold text-xs font-mono hover:opacity-90 transition shrink-0"
             >
               <MapPin className="w-3.5 h-3.5" />
@@ -90,6 +113,7 @@ export function LessonDetailClient({ lessonId }: { lessonId: number }) {
       <LessonReader
         key={`${activeLanguageId}-${lesson.id}`}
         lesson={lesson}
+        languageId={activeLanguageId}
         preview={Boolean(isLocked)}
       />
     </>

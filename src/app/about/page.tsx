@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, Compass, RotateCcw, Sliders } from "lucide-react";
+import { ArrowLeft, BookOpen, Compass, ExternalLink, RotateCcw, Sliders } from "lucide-react";
 import type { Metadata } from "next";
 import { LESSONS } from "@/data/lessons";
 import { FR_LESSONS } from "@/data/french/lessons-fr";
@@ -147,6 +147,38 @@ export default function AboutPage() {
                 4 review styles (flashcards, MCQ, morpheme tiles, typing) with adaptive intervals to prevent memory decay.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Creator presence / trust */}
+      <section className="p-6 rounded-lg bg-[var(--sub-alt-color)] border border-[var(--sub-color)]/20 space-y-3">
+        <h2 className="text-base font-bold text-[var(--main-color)] font-mono uppercase tracking-wider">
+          Who built this
+        </h2>
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 rounded-full bg-[var(--main-color)] text-[var(--bg-color)] font-bold font-mono flex items-center justify-center shrink-0">
+            SK
+          </div>
+          <div className="space-y-2 text-sm leading-relaxed text-[var(--text-color)]">
+            <p>
+              Brücke is an independent project by <strong>Shaurya Kad</strong>. The German,
+              French and Spanish curricula are hand-authored, and every word links back to the
+              same compendium.
+            </p>
+            <p className="text-[var(--sub-color)]">
+              No accounts, ads, or tracking. Progress stays in your browser. The source and issue
+              tracker are public.
+            </p>
+            <a
+              href="https://github.com/Quantum-Quasar/brucke"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs font-mono text-[var(--main-color)] hover:underline"
+            >
+              View the source on GitHub
+              <ExternalLink className="w-3 h-3" />
+            </a>
           </div>
         </div>
       </section>

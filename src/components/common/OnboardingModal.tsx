@@ -93,7 +93,7 @@ export const OnboardingModal: React.FC = () => {
     // Starting the course is only the right move when the visitor is already
     // on the homepage. A shared /trail/5 link keeps them on the shared lesson.
     if (wasFirstRun && pathname === "/" && language.status === "available") {
-      router.push("/trail/1");
+      router.push(`/trail/${effectiveLanguageId}/1`);
     }
   };
 

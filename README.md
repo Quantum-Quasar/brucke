@@ -23,7 +23,7 @@ Rather than relying on rote memorization or gamified streaks without substance, 
 - **Styling**: Tailwind CSS v4 (native CSS tokens, dark mode default)
 - **State Management**: [Zustand](https://github.com/pmndrs/zustand) 5 (dual `localStorage` + size-guarded cookie persistence)
 - **Icons**: Lucide React
-- **Testing**: Vitest / `bun run test` (35 test files, 355 automated tests) <!-- corrected 2026-10-08 against the actual vitest run; counts pinned by src/tests/docs-sync.test.ts -->
+- **Testing**: Vitest / `bun run test` (36 test files, 357 automated tests) <!-- corrected 2026-10-08 against the actual vitest run; counts pinned by src/tests/docs-sync.test.ts -->
 - **Audio Engine**: Zero-dependency browser-native Web Speech API (`window.speechSynthesis`) + a Web Audio sample engine that plays bundled `.wav` packs
 
 ---
@@ -46,7 +46,7 @@ bun run parse-data
 
 ### Run Automated Tests
 
-Executes the full Vitest suite — 35 test files, 355 automated tests:
+Executes the full Vitest suite — 36 test files, 357 automated tests:
 
 ```bash
 bun run test
@@ -54,7 +54,7 @@ bun run test
 
 ### Production Build
 
-Pre-renders every route to static HTML (`● SSG`): 8 static routes, 28 `/atlas/[family]` pages (one per family id across the three atlases), and one page per authored lesson (178 `/trail/[id]` pages — 169 German ids plus 9 French/Spanish-only ids; unknown ids 404 via `dynamicParams = false`):
+Pre-renders every route to static HTML (`● SSG`): 8 static routes, 28 `/atlas/[family]` pages (one per family id across the three atlases), one page per authored lesson (178 `/trail/[id]` pages — 169 German ids plus 9 French/Spanish-only ids), and language-scoped aliases at `/trail/[lang]/[id]` so shared lesson links carry their course; unknown ids 404 via `dynamicParams = false`:
 
 ```bash
 bun run build
@@ -65,6 +65,11 @@ bun run build
 ```bash
 bun run dev
 ```
+
+### Deploy
+
+See [`docs/DEPLOYMENT.md`](./docs/DEPLOYMENT.md) for the Vercel setup, the
+`NEXT_PUBLIC_SITE_URL` social-metadata variable, and the pre-deploy audit checklist.
 
 Visit `http://localhost:3000` in your browser.
 
@@ -160,7 +165,7 @@ src/
 │   ├── store.ts          # Zustand store with dual persistence (+ lessonStars)
 │   ├── trail-map.ts      # Map graph, responsive layout engine, unlock/recommend logic
 │   └── types.ts          # Core domain TypeScript interfaces
-└── tests/                # 35 test files (Vitest)
+└── tests/                # 36 test files (Vitest)
 ```
 
 ---
